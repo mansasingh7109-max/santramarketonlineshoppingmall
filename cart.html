@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - SANTRA MALL</title>
+  <style>
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff;--green:#10b981;--red:#ef4444}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding-bottom:70px;}
+    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+    .header h1{color:var(--accent);font-size:20px;}
+    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+    .container{padding:15px;}
+    .cart-item{background:var(--card);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;gap:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .cart-item img{width:80px;height:80px;object-fit:cover;border-radius:6px;}
+    .cart-item-info{flex:1;}
+    .cart-item-info h4{font-size:14px;margin-bottom:4px;}
+    .cart-item-info .price{color:var(--accent);font-weight:bold;font-size:16px;}
+    .qty-control{display:flex;gap:8px;align-items:center;margin-top:8px;}
+    .qty-control button{width:28px;height:28px;border:1px solid #ddd;background:white;border-radius:4px;cursor:pointer;}
+    .qty-control span{min-width:30px;text-align:center;font-weight:bold;}
+    .remove-btn{background:var(--red);color:white;border:none;padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:8px;}
+    .empty-cart{text-align:center;padding:60px 20px;color:#999;}
+    .empty-cart div{font-size:60px;margin-bottom:15px;}
+    .checkout-box{background:var(--card);padding:15px;border-radius:8px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .checkout-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px;}
+    .checkout-row.total{font-size:18px;font-weight:bold;color:var(--accent);border-top:2px solid #eee;padding-top:10px;margin-top:10px;}
+    .checkout-btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px;}
+    .checkout-btn:disabled{background:#ccc;cursor:not-allowed;}
+    .address-form input, .address-form textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #e5e7eb;border-radius:8px;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;}
+    .nav-item.active{color:var(--accent);}
+    .nav-item div{font-size:22px;}
+    .nav-item span{font-size:11px;display:block;margin-top:2px;}
+    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+    .hide{display:none!important;}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back-btn">←</a>
+  <h1>🛒 My Cart</h1>
+  <div style="width:24px;"></div>
+</div>
+
+<div class="container">
+  <div id="cartItems"></div>
+  
+  <div id="checkoutSection" class="hide">
+    <div class="checkout-box">
+      <h3 style="margin-bottom:15px;">📍 Delivery Address</h3>
+      <div class="address-form">
+        <input type="text" id="custName" placeholder="Full Name *" required>
+        <input type="tel" id="custMobile" placeholder="Mobile Number *" required maxlength="10">
+        <textarea id="custAddress" placeholder="Complete Address *" rows="3" required></textarea>
+      </div>
+    </div>
+
+    <div class="checkout-box">
+      <h3 style="margin-bottom:15px;">💰 Price Details</h3>
+      <div class="checkout-row">
+        <span>Subtotal</span>
+        <span id="subtotal">₹0</span>
+      </div>
+      <div class="checkout-row">
+        <span>Delivery Charge</span>
+        <span id="delivery">₹49</span>
+      </div>
+      <div class="checkout-row total">
+        <span>Total Amount</span>
+        <span id="total">₹0</span>
+      </div>
+      <button class="checkout-btn" onclick="placeOrder()">Place Order (COD)</button>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <div>🏠</div>
+    <span>Home</span>
+  </a>
+  <a href="categories.html" class="nav-item">
+    <div>📱</div>
+    <span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item active">
+    <div>🛒</div>
+    <span>Cart</span>
+    <span class="cart-badge" id="cartCount">0</span>
+  </a>
+  <a href="customer-account.html" class="nav-item">
+    <div>👤</div>
+    <span>Account</span>
+  </a>
+</div>
+
+<script src="db.js"></script>
+<script>
+window.onload = function(){
+  let userId = localStorage.getItem('currentUserId');
+  if(!userId){
+    alert('Please login first!');
+    window.location.href = 'customer-account.html';
+    return;
+  }
+  loadCart();
+  updateCartCount();
+}
+
+function loadCart(){
+  let userId = parseInt(localStorage.getItem('currentUserId'));
+  let userCart = DB.cart.filter(c => c.uid == userId);
+  let container = document.getElementById('cartItems');
+  
+  if(userCart.length === 0){
+    container.innerHTML = '<div class="empty-cart"><div>🛒</div><p>Your cart is empty</p><button onclick="window.location.href=\'index.html\'" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Continue Shopping</button></div>';
+    document.getElementById('checkoutSection').classList.add('hide');
+    return;
+  }
+  
+  container.innerHTML = '';
+  let subtotal = 0;
+  
+  userCart.forEach(item => {
+    let product = DB.products.find(p => p.id == item.pid);
+    let itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+    
+    container.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <div class="price">₹${item.price} x ${item.qty} = ₹${itemTotal}</div>
+          <div class="qty-control">
+            <button onclick="updateQty(${item.id}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button onclick="updateQty(${item.id}, 1)" ${item.qty >= (product?.stock || 999) ? 'disabled' : ''}>+</button>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+        </div>
+      </div>
+    `;
+  });
+  
+  let delivery = subtotal >= DB.settings.freeDeliveryAbove ? 0 : DB.settings.delivery;
+  let total = subtotal + delivery;
+  
+  document.getElementById('subtotal').innerText = '₹' + subtotal;
+  document.getElementById('delivery').innerText = delivery === 0 ? 'FREE' : '₹' + delivery;
+  document.getElementById('total').innerText = '₹' + total;
+  document.getElementById('checkoutSection').classList.remove('hide');
+  
+  let user = DB.users.find(u => u.id == userId);
+  if(user){
+    document.getElementById('custName').value = user.name;
+    document.getElementById('custMobile').value = user.mobile || '';
+  }
+}
+
+function updateQty(cartId, change){
+  let item = DB.cart.find(c => c.id == cartId);
+  if(!item) return;
+  
+  let product = DB.products.find(p => p.id == item.pid);
+  let newQty = item.qty + change;
+  
+  if(newQty < 1){
+    removeItem(cartId);
+    return;
+  }
+  
+  if(product && newQty > product.stock){
+    alert('No more stock available!');
+    return;
+  }
+  
+  item.qty = newQty;
+  saveDB();
+  loadCart();
+  updateCartCount();
+}
+
+function removeItem(cartId){
+  if(confirm('Remove this item?')){
+    DB.cart = DB.cart.filter(c => c.id != cartId);
+    saveDB();
+    loadCart();
+    updateCartCount();
+  }
+}
+
+function placeOrder(){
+  let name = document.getElementById('custName').value.trim();
+  let mobile = document.getElementById('custMobile').value.trim();
+  let address = document.getElementById('custAddress').value.trim();
+  
+  if(!name || !mobile || !address){
+    alert('Please fill all address fields!');
+    return;
+  }
+  
+  if(mobile.length !== 10){
+    alert('Please enter valid 10-digit mobile number!');
+    return;
+  }
+  
+  let userId = parseInt(localStorage.getItem('currentUserId'));
+  let userCart = DB.cart.filter(c => c.uid == userId);
+  
+  if(userCart.length === 0){
+    alert('Cart is empty!');
+    return;
+  }
+  
+  let subtotal = userCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  let delivery = subtotal >= DB.settings.freeDeliveryAbove ? 0 : DB.settings.delivery;
+  let total = subtotal + delivery;
+  
+  let order = {
+    id: Date.now(),
+    uid: userId,
+    customerName: name,
+    mobile: mobile,
+    address: address,
+    total: total,
+    status: 'Placed',
+    time: new Date().toISOString(),
+    items: userCart.map(item => ({
+      pid: item.pid,
+      name: item.name,
+      price: item.price,
+      qty: item.qty,
+      img: item.img
+    }))
+  };
+  
+  DB.orders.push(order);
+  
+  userCart.forEach(item => {
+    let product = DB.products.find(p => p.id == item.pid);
+    if(product){
+      product.stock -= item.qty;
+    }
+  });
+  
+  DB.cart = DB.cart.filter(c => c.uid != userId);
+  saveDB();
+  
+  alert('✅ Order Placed Successfully!\n\nOrder ID: #' + order.id + '\nTotal: ₹' + total + '\n\nCash on Delivery');
+  window.location.href = 'index.html';
+}
+
+function updateCartCount(){
+  let userId = localStorage.getItem('currentUserId');
+  if(!userId) return;
+  userId = parseInt(userId);
+  let userCart = DB.cart.filter(c => c.uid == userId);
+  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = total;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories - SANTRA MALL</title>
+  <style>
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding-bottom:70px;}
+    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+    .header h1{color:var(--accent);font-size:20px;}
+    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+    .container{padding:15px;}
+    .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+    .cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
+    .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
+    .cat-card h4{font-size:14px;color:#333;}
+    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;}
+    .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
+    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
+    .product-card .price{color:var(--accent);font-weight:bold;font-size:16px;}
+    .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;}
+    .nav-item.active{color:var(--accent);}
+    .nav-item div{font-size:22px;}
+    .nav-item span{font-size:11px;display:block;margin-top:2px;}
+    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+    .hide{display:none!important;}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back-btn">←</a>
+  <h1 id="pageTitle">📱 Categories</h1>
+  <div style="width:24px;"></div>
+</div>
+
+<div class="container">
+  <div id="catView">
+    <h3 style="margin-bottom:15px;">Shop by Category</h3>
+    <div id="catList" class="cat-grid"></div>
+  </div>
+  
+  <div id="productView" class="hide">
+    <h3 style="margin-bottom:15px;" id="catTitle"></h3>
+    <div id="productList" class="product-grid"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <div>🏠</div>
+    <span>Home</span>
+  </a>
+  <a href="categories.html" class="nav-item active">
+    <div>📱</div>
+    <span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item">
+    <div>🛒</div>
+    <span>Cart</span>
+    <span class="cart-badge" id="cartCount">0</span>
+  </a>
+  <a href="customer-account.html" class="nav-item">
+    <div>👤</div>
+    <span>Account</span>
+  </a>
+</div>
+
+<script src="db.js"></script>
+<script>
+window.onload = function(){
+  loadCategories();
+  updateCartCount();
+  
+  let urlParams = new URLSearchParams(window.location.search);
+  let catName = urlParams.get('cat');
+  if(catName) showCategoryProducts(decodeURIComponent(catName));
+}
+
+function loadCategories(){
+  let container = document.getElementById('catList');
+  container.innerHTML = '';
+  
+  if(!DB.categories || DB.categories.length === 0){
+    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No categories yet</p>';
+    return;
+  }
+  
+  DB.categories.forEach(cat => {
+    let count = DB.products.filter(p => p.category === cat.name).length;
+    container.innerHTML += `
+      <div class="cat-card" onclick="showCategoryProducts('${cat.name}')">
+        <img src="${cat.img}" alt="${cat.name}">
+        <h4>${cat.name}</h4>
+        <p style="font-size:12px;color:#999;">${count} Products</p>
+      </div>
+    `;
+  });
+}
+
+function showCategoryProducts(catName){
+  document.getElementById('catView').classList.add('hide');
+  document.getElementById('productView').classList.remove('hide');
+  document.getElementById('catTitle').innerText = catName;
+  document.getElementById('pageTitle').innerText = catName;
+  
+  let container = document.getElementById('productList');
+  let products = DB.products.filter(p => p.category === catName);
+  
+  if(products.length === 0){
+    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products in this category</p>';
+    return;
+  }
+  
+  container.innerHTML = '';
+  products.forEach(p => {
+    container.innerHTML += `
+      <div class="product-card">
+        <img src="${p.img}" alt="${p.name}">
+        <h4>${p.name}</h4>
+        <div class="price">₹${p.price}</div>
+        <button onclick="addToCart(${p.id})" ${p.stock<=0?'disabled style="background:#ccc"':''}>${p.stock<=0?'Out of Stock':'Add to Cart'}</button>
+      </div>
+    `;
+  });
+}
+
+function addToCart(pid){
+  let userId = localStorage.getItem('currentUserId');
+  if(!userId){
+    alert('Please login first!');
+    window.location.href = 'customer-account.html';
+    return;
+  }
+  
+  userId = parseInt(userId);
+  let product = DB.products.find(p => p.id == pid);
+  if(!product || product.stock<=0) {
+    alert('Product out of stock!');
+    return;
+  }
+  
+  let cartItem = DB.cart.find(c => c.pid == pid && c.uid == userId);
+  if(cartItem){
+    if(cartItem.qty >= product.stock){ alert('No more stock available!'); return; }
+    cartItem.qty += 1;
+  } else {
+    DB.cart.push({
+      id: Date.now(),
+      uid: userId, 
+      pid: pid,
+      name: product.name,
+      price: product.price,
+      img: product.img,
+      qty: 1
+    });
+  }
+  saveDB();
+  updateCartCount();
+  alert('Added to cart!');
+}
+
+function updateCartCount(){
+  let userId = localStorage.getItem('currentUserId');
+  if(!userId) return;
+  userId = parseInt(userId);
+  let userCart = DB.cart.filter(c => c.uid == userId);
+  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = total;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account - SANTRA MALL</title>
+  <style>
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff;--green:#10b981;--red:#ef4444;--blue:#3b82f6}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding-bottom:70px;}
+    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+    .header h1{color:var(--accent);font-size:20px;}
+    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+    .container{padding:15px;}
+    .login-box{background:var(--card);padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);max-width:400px;margin:20px auto;}
+    .login-box h2{color:var(--accent);text-align:center;margin-bottom:20px;}
+    .login-box input{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px;}
+    .login-box button{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px;}
+    .toggle-link{text-align:center;margin-top:15px;color:var(--accent);cursor:pointer;font-size:14px;}
+    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+    .msg-success{background:#d4edda;color:#155724}
+    .msg-error{background:#f8d7da;color:#721c24}
+    .account-box{background:var(--card);padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:15px;}
+    .account-box h3{color:var(--accent);margin-bottom:15px;display:flex;align-items:center;gap:10px;}
+    .account-box p{margin:8px 0;font-size:14px;}
+    .account-box b{color:#333;}
+    .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
+    .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
+    .order-box h4{color:var(--accent);font-size:16px;}
+    .order-box-date{font-size:12px;color:#666;}
+    .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
+    .status-placed{background:#4caf50;color:white;}
+    .status-shipped{background:#2196F3;color:white;}
+    .status-delivered{background:#4caf50;color:white;}
+    .status-canceled{background:#f44336;color:white;}
+    .status-returned{background:#ff9800;color:white;}
+    .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
+    .order-info p{margin:5px 0;}
+    .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
+    .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
+    .order-item-info{flex:1;}
+    .order-item-info h5{font-size:13px;margin-bottom:3px;}
+    .order-item-info p{font-size:12px;color:#666;}
+    .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
+    .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
+    .btn-track{background:#2196F3;color:white;}
+    .btn-cancel{background:#f44336;color:white;}
+    .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
+    .logout-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
+    .nav-item.active{color:var(--accent);}
+    .nav-item div{font-size:22px;}
+    .nav-item span{font-size:11px;display:block;margin-top:2px;}
+    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+    .hide{display:none!important;}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back-btn">←</a>
+  <h1>👤 My Account</h1>
+  <div style="width:24px;"></div>
+</div>
+
+<div class="container">
+  <div id="loginSection">
+    <div class="login-box">
+      <h2 id="formTitle">Customer Login</h2>
+      <div id="loginForm">
+        <input type="email" id="custEmail" placeholder="Email">
+        <input type="password" id="custPassword" placeholder="Password">
+        <div id="loginMsg"></div>
+        <button onclick="customerLogin()">Login</button>
+        <div class="toggle-link" onclick="showRegister()">New User? Register Here</div>
+      </div>
+      
+      <div id="registerForm" class="hide">
+        <input type="text" id="regName" placeholder="Full Name *">
+        <input type="email" id="regEmail" placeholder="Email *">
+        <input type="tel" id="regMobile" placeholder="Mobile Number *" maxlength="10">
+        <input type="password" id="regPassword" placeholder="Password *">
+        <input type="password" id="regConfirm" placeholder="Confirm Password *">
+        <div id="regMsg"></div>
+        <button onclick="customerRegister()">Register</button>
+        <div class="toggle-link" onclick="showLogin()">Already have account? Login</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="accountSection" class="hide">
+    <div class="account-box">
+      <h3>👤 Profile</h3>
+      <p><b>Name:</b> <span id="profileName"></span></p>
+      <p><b>Email:</b> <span id="profileEmail"></span></p>
+      <p><b>Mobile:</b> <span id="profileMobile"></span></p>
+    </div>
+
+    <div class="account-box">
+      <h3>📦 My Orders</h3>
+      <div id="myOrdersList"></div>
+    </div>
+
+    <button class="logout-btn" onclick="customerLogout()">Logout</button>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <div>🏠</div>
+    <span>Home</span>
+  </a>
+  <a href="categories.html" class="nav-item">
+    <div>📱</div>
+    <span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item">
+    <div>🛒</div>
+    <span>Cart</span>
+    <span class="cart-badge" id="cartCount">0</span>
+  </a>
+  <a href="customer-account.html" class="nav-item active">
+    <div>👤</div>
+    <span>Account</span>
+  </a>
+</div>
+
+<script src="db.js"></script>
+<script>
+window.onload = function(){
+  document.documentElement.style.setProperty('--accent', DB.settings.primaryColor);
+  let userId = localStorage.getItem('currentUserId');
+  if(userId){
+    showAccount();
+  }
+  updateCartCount();
+}
+
+function showRegister(){
+  document.getElementById('loginForm').classList.add('hide');
+  document.getElementById('registerForm').classList.remove('hide');
+  document.getElementById('formTitle').innerText = 'Customer Register';
+}
+
+function showLogin(){
+  document.getElementById('registerForm').classList.add('hide');
+  document.getElementById('loginForm').classList.remove('hide');
+  document.getElementById('formTitle').innerText = 'Customer Login';
+}
+
+function customerLogin(){
+  let email = document.getElementById('custEmail').value.trim();
+  let pass = document.getElementById('custPassword').value.trim();
+  let msg = document.getElementById('loginMsg');
+  
+  let user = DB.users.find(u => u.email === email && u.pass === pass && u.role === 'customer');
+  
+  if(user){
+    localStorage.setItem('currentUserId', user.id);
+    msg.innerHTML = '<div class="msg msg-success">Login successful!</div>';
+    setTimeout(() => {
+      showAccount();
+    }, 500);
+  } else {
+    msg.innerHTML = '<div class="msg msg-error">❌ Invalid Email or Password!</div>';
+  }
+}
+
+function customerRegister(){
+  let name = document.getElementById('regName').value.trim();
+  let email = document.getElementById('regEmail').value.trim();
+  let mobile = document.getElementById('regMobile').value.trim();
+  let pass = document.getElementById('regPassword').value.trim();
+  let confirm = document.getElementById('regConfirm').value.trim();
+  let msg = document.getElementById('regMsg');
+  
+  if(!name || !email || !mobile || !pass){
+    msg.innerHTML = '<div class="msg msg-error">Please fill all fields!</div>';
+    return;
+  }
+  
+  if(pass !== confirm){
+    msg.innerHTML = '<div class="msg msg-error">Passwords do not match!</div>';
+    return;
+  }
+  
+  if(pass.length < 6){
+    msg.innerHTML = '<div class="msg msg-error">Password must be 6+ characters!</div>';
+    return;
+  }
+  
+  if(mobile.length !== 10){
+    msg.innerHTML = '<div class="msg msg-error">Enter valid 10-digit mobile!</div>';
+    return;
+  }
+  
+  if(DB.users.find(u => u.email === email)){
+    msg.innerHTML = '<div class="msg msg-error">Email already registered!</div>';
+    return;
+  }
+  
+  let newUser = {
+    id: Date.now(),
+    name: name,
+    email: email,
+    mobile: mobile,
+    pass: pass,
+    role: 'customer',
+    mobileVerified: false
+  };
+  
+  DB.users.push(newUser);
+  saveDB();
+  
+  msg.innerHTML = '<div class="msg msg-success">✅ Registration successful! Please login.</div>';
+  setTimeout(() => {
+    showLogin();
+    document.getElementById('custEmail').value = email;
+  }, 1500);
+}
+
+function showAccount(){
+  let userId = parseInt(localStorage.getItem('currentUserId'));
+  let user = DB.users.find(u => u.id === userId);
+  
+  if(!user){
+    customerLogout();
+    return;
+  }
+  
+  document.getElementById('loginSection').classList.add('hide');
+  document.getElementById('accountSection').classList.remove('hide');
+  
+  document.getElementById('profileName').innerText = user.name;
+  document.getElementById('profileEmail').innerText = user.email;
+  document.getElementById('profileMobile').innerText = user.mobile || '-';
+  
+  loadMyOrders();
+}
+
+function loadMyOrders(){
+  let userId = parseInt(localStorage.getItem('currentUserId'));
+  let myOrders = DB.orders.filter(o => o.uid === userId).reverse();
+  let container = document.getElementById('myOrdersList');
+  
+  if(myOrders.length === 0){
+    container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No orders yet<br><button onclick="window.location.href=\'index.html\'" style="margin-top:10px;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Start Shopping</button></p>';
+    return;
+  }
+  
+  container.innerHTML = '';
+  myOrders.forEach(order => {
+    let statusClass = order.status.toLowerCase();
+    let canCancel = ['Placed', 'Shipped'].includes(order.status);
+    let canReturn = order.status === 'Delivered';
+    
+    let itemsHtml = order.items.map(item => `
+      <div class="order-item-box">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="order-item-info">
+          <h5>${item.name}</h5>
+          <p>Qty: ${item.qty} x ₹${item.price} = ₹${item.price * item.qty}</p>
+        </div>
+      </div>
+    `).join('');
+    
+    container.innerHTML += `
+      <div class="order-box">
+        <div class="order-box-header">
+          <div>
+            <h4>Order #${order.id}</h4>
+            <p class="order-box-date">${new Date(order.time).toLocaleString()}</p>
+          </div>
+          <span class="status-badge status-${statusClass}">${order.status}</span>
+        </div>
+        
+        <div class="order-info">
+          <p><b>Name:</b> ${order.customerName}</p>
+          <p><b>Mobile:</b> ${order.mobile}</p>
+          <p><b>Address:</b> ${order.address}</p>
+          <p><b>Total:</b> ₹${order.total}</p>
+          ${order.requestReason ? `<p style="color:#ff9800"><b>Request:</b> ${order.requestReason}</p>` : ''}
+        </div>
+        
+        <details>
+          <summary style="cursor:pointer;color:var(--accent);font-weight:bold;font-size:13px;margin:8px 0;">▶ Items (${order.items.length})</summary>
+          ${itemsHtml}
+        </details>
+        
+        <div class="action-grid">
+          <button class="action-btn btn-track" onclick="trackOrder(${order.id})">📍 Track Order</button>
+          <button class="action-btn btn-cancel ${!canCancel && !canReturn ? 'btn-disabled' : ''}" onclick="${canCancel ? `cancelOrder(${order.id})` : canReturn ? `returnOrder(${order.id})` : ''}" ${!canCancel && !canReturn ? 'disabled' : ''}>${canReturn ? '↩️ Return' : '❌ Cancel'}</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function returnOrder(orderId){
+  let reason = prompt('Reason for return:');
+  if(!reason) return;
+  let order = DB.orders.find(o => o.id == orderId);
+  if(!order) return;
+  order.status = 'Returned';
+  order.requestReason = reason;
+  order.requestTime = new Date().toISOString();
+  saveDB();
+  alert('✅ Return request submitted!');
+  loadMyOrders();
+}
+
+function trackOrder(orderId){
+  let order = DB.orders.find(o => o.id == orderId);
+  if(!order) return;
+  
+  let statusMsg = {
+    'Placed': 'Your order is confirmed and will be shipped soon',
+    'Shipped': 'Your order is on the way! Expected delivery in 2-3 days',
+    'Delivered': 'Your order has been delivered successfully',
+    'Canceled': 'This order has been cancelled',
+    'Returned': 'Return request is being processed'
+  };
+  
+  alert('📍 Order Tracking\n\nOrder ID: #' + order.id + '\nStatus: ' + order.status + '\n\n' + (statusMsg[order.status] || ''));
+}
+
+function cancelOrder(orderId){
+  if(!confirm('Cancel this order?')) return;
+  let order = DB.orders.find(o => o.id == orderId);
+  if(!order) return;
+  order.status = 'Canceled';
+  saveDB();
+  alert('✅ Order cancelled!');
+  loadMyOrders();
+}
+
+function customerLogout(){
+  localStorage.removeItem('currentUserId');
+  location.reload();
+}
+
+function updateCartCount(){
+  let userId = localStorage.getItem('currentUserId');
+  if(!userId) {
+    document.getElementById('cartCount').innerText = '0';
+    return;
+  }
+  userId = parseInt(userId);
+  let userCart = DB.cart.filter(c => c.uid == userId);
+  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = total;
+}
+</script>
+
+</body>
+</html>
