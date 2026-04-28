@@ -79,22 +79,20 @@
   <div class="login-box">
     <h2>🔐 Key Panel</h2>
     
-    <input type="email" id="adminEmail" placeholder="Admin Email" value="manishatak07@gmail.com" style="width:100%; padding:12px; margin:8px 0; box-sizing:border-box;">
-
+    
+<input type="email" id="adminEmail" placeholder="Admin Email" 
+       style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
 <input type="password" id="adminPassword" placeholder="Enter Password" style="width:100%; padding:12px; margin:8px 0; box-sizing:border-box;">
 
 <button id="loginBtn" style="width:100%; padding:14px; margin:8px 0; background:#6a1b9a; color:white; border:none; border-radius:4px; cursor:pointer;">Login</button>
 
 <button id="googleLoginBtn" style="width:100%; padding:14px; margin:8px 0; background:#db4437; color:white; border:none; border-radius:4px; cursor:pointer;">🚀 Sign in with Google</button>
+<a href="#" id="forgotBtn">Forgot Password?</a>
 
-<a href="#" id="forgotBtn" style="display:block; text-align:center; margin-top:10px;">Forgot Password?</a>
     
-    <div id="loginForm">
-      <input type="password" id="adminPassword" placeholder="Enter Password">
       
       <div id="loginMsg"></div>
-      <button type="button" onclick="adminLogin()">Login</button>
-      
+    <button id="loginBtn">Login</button>
       
       <div class="forgot-link" onclick="showForgotPassword()">Forgot Password?</div>
     </div>
@@ -881,7 +879,7 @@ function saveOTPSettings(){
 
 <!-- Firebase SDK + Login Code - BODY ke end mein daal -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
   // 👇 Yahan Tera Real Firebase Config Daal - Comment // Hata Ke
@@ -933,8 +931,93 @@ document.getElementById("forgotBtn").onclick = () => {
     });
 };
     
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // FIREBASE CONFIG - YE APNE WALE SE CHANGE KARNA
+  const firebaseConfig = {
+    apiKey: "TERA_API_KEY",
+    authDomain: "TERA_PROJECT.firebaseapp.com", 
+    projectId: "TERA_PROJECT_ID",
+    storageBucket: "TERA_PROJECT.appspot.com",
+    messagingSenderId: "TERA_SENDER_ID",
+    appId: "TERA_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  
+  // ADMIN EMAIL HIDE KAR DIYA
+  const ADMIN_EMAIL = "manishatak07@gmail.com";
+
+// LOGIN BUTTON
+document.getElementById("loginBtn").onclick = () => {
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+    
+    if(email !== ADMIN_EMAIL) {
+        alert("❌ Sirf admin login kar sakta hai");
+        return;
+    }
+    
+    signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+        document.getElementById('loginScreen').classList.add('hide');
+        document.getElementById('adminDashboard').classList.remove('hide');
+        loadDashboard(); // Tera purana function chalega
+      })
+    .catch(() => {
+        alert("❌ Galat Password");
+      });
+};
+
+// FORGOT PASSWORD BUTTON  
+document.getElementById("forgotBtn").onclick = (e) => {
+    e.preventDefault();
+    sendPasswordResetEmail(auth, ADMIN_EMAIL)
+    .then(() => {
+        alert("✅ Password reset link bhej diya manishatak07@gmail.com pe. Gmail check karo.");
+      })
+    .catch((error) => {
+        alert("Error: " + error.message);
+      });
+};
+  // FORGOT PASSWORD KA NAYA CODE
+  document.getElementById("forgotBtn").onclick = (e) => {
+    e.preventDefault();
+    sendPasswordResetEmail(auth, ADMIN_EMAIL)
+    .then(() => {
+        alert("✅ Password reset link bhej diya manishatak07@gmail.com pe. Gmail check karo.");
+      })
+    .catch((error) => {
+        alert("Error: " + error.message);
+      });
+  };
+  // NORMAL LOGIN KA CODE
+document.getElementById("loginBtn").onclick = () => {
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+    
+    if(email !== ADMIN_EMAIL) {
+        alert("❌ Galat Email");
+        return;
+    }
+    
+    signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+        document.getElementById('loginScreen').classList.add('hide');
+        document.getElementById('adminDashboard').classList.remove('hide');
+        loadDashboard(); // Tera purana function
+      })
+    .catch(() => {
+        alert("❌ Galat Password");
+      });
+};
+  
   
 </script>
+
 </body>
 </html>
 
