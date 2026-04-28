@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -79,20 +79,12 @@
   <div class="login-box">
     <h2>🔐 Key Panel</h2>
     
-    
-<input type="email" id="adminEmail" placeholder="Admin Email" 
-       style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
-<input type="password" id="adminPassword" placeholder="Enter Password" style="width:100%; padding:12px; margin:8px 0; box-sizing:border-box;">
-
-<button id="loginBtn" style="width:100%; padding:14px; margin:8px 0; background:#6a1b9a; color:white; border:none; border-radius:4px; cursor:pointer;">Login</button>
-
-<button id="googleLoginBtn" style="width:100%; padding:14px; margin:8px 0; background:#db4437; color:white; border:none; border-radius:4px; cursor:pointer;">🚀 Sign in with Google</button>
-<a href="#" id="forgotBtn">Forgot Password?</a>
-
-    
+    <div id="loginForm">
+      <input type="password" id="adminPassword" placeholder="Enter Password">
       
       <div id="loginMsg"></div>
-    <button id="loginBtn">Login</button>
+      <button type="button" onclick="adminLogin()">Login</button>
+      
       
       <div class="forgot-link" onclick="showForgotPassword()">Forgot Password?</div>
     </div>
@@ -103,25 +95,9 @@
     <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Choose OTP Method</p>
     
     <div style="display:flex;gap:10px;margin-bottom:15px;">
-      <button id="googleLoginBtn" style="width:100%;padding:12px;background:#4285F4;color:white;border:none;border-radius:6px;margin-bottom:10px;font-weight:bold;cursor:pointer;">
-  🚀 Sign in with Google
-</button>
-<div id="recaptcha-container"></div>
-<div id="otpInputDiv" style="display:none; margin-top:15px;">
-  <input type="text" id="otpInput" placeholder="6 digit OTP daalo" maxlength="6" style="width:100%; padding:10px; margin-bottom:10px;">
-  
-</div>
-<div id="msg" style="margin-top:10px;"></div>
-<!-- OTP Input Box - Line 106 ke baad daal -->
-<div id="otpInputDiv" style="display:none; margin-top:15px; margin-bottom:15px;">
-  <input type="text" id="otpInput" placeholder="6 digit OTP daalo" maxlength="6" 
-         style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;">
-  <button id="verifyOtpBtn" 
-          style="width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer;">
-    Verify OTP
-  </button>
-</div>
-<button type="button" id="mobileBtn" class="btn-blue" style="flex:1;">📱 Mobile</button>
+      <button type="button" class="btn-blue" onclick="selectOTPMethod('mobile')" style="flex:1;">📱 Mobile</button>
+      <button type="button" class="btn-blue" onclick="selectOTPMethod('email')" style="flex:1;">📧 Email</button>
+    </div>
     
     <div id="selectedMethodText" style="text-align:center;font-size:13px;color:#666;margin:15px 0;"></div>
         <button type="button" id="sendOTPBtn" class="hide" onclick="sendAdminOTP()">Send OTP</button>
@@ -161,19 +137,6 @@
         <div class="menu-item" onclick="showPage('global',this)">🌐 Global Control</div>
         <div class="menu-item" onclick="window.open('index.html','_blank')">🏠 Back to Website</div>
         <div class="menu-item" onclick="adminLogout()">🚪 Logout</div>
-            
-    
-    <!-- 👇 YEH NAYA CODE YAHAN PASTE KAR LINE 145 PE -->
-    <div class="menu-item" onclick="forgotPasswordAdmin()">🔑 Forgot Password</div>
-    
-    <!-- reCAPTCHA ke liye - invisible rahega -->
-<div id="recaptcha-container"></div>
-
-<div class="main-content">
-    
-  </div>
-</div>
-        
       </div>
     </div>
 
@@ -356,7 +319,7 @@ function adminLogin(){
   let msg = document.getElementById('loginMsg');
   let admin = DB.users.find(a => a.role==='admin');
 
-  if(admin && admin.pass === ){
+  if(admin && admin.pass === p){
     CURRENT_ADMIN = admin;
     msg.innerHTML = '<div class="msg msg-success">Login successful!</div>';
     setTimeout(() => {
@@ -384,60 +347,52 @@ function showLoginForm(){
   document.getElementById('otpVerifyForm').classList.add('hide');
   document.getElementById('loginForm').classList.remove('hide');
 }
-
-// Firebase Mobile OTP Login
-document.getElementById("mobileBtn").onclick = () => {
-  const adminNumber = "+919001654667";
-  const hiddenNumber = "+91******4667";
+function selectOTPMethod(method){
+  ADMIN_OTP_METHOD = method;
   
-  signInWithPhoneNumber(auth, adminNumber, window.recaptchaVerifier)
-    .then((confirmationResult) => {
-      window.confirmationResult = confirmationResult;
-      alert(`OTP bhej diya hai ${hiddenNumber} pe`);
-      document.getElementById('otpInputDiv').style.display = 'block';
-    }).catch((error) => {
-      alert("Error: " + error.message);
-    });
-};
-
-// Verify OTP Button
-document.getElementById("verifyOtpBtn").onclick = () => {
-  const code = document.getElementById("otpInput").value;
-  if (!code) {
-    alert("OTP daalo pehle");
-    return;
+  // Number/Email hide kar diya - bas ye dikhega
+  if(method === 'mobile'){
+    document.getElementById('selectedMethodText').innerHTML = `✅ OTP will be sent to your registered mobile number`;
+  } else {
+    document.getElementById('selectedMethodText').innerHTML = `✅ OTP will be sent to your registered email address`;
   }
-  window.confirmationResult.confirm(code).then((result) => {
-    alert("OTP Verify ho gaya! Login successful 🎉");
-    window.location.href = "admin-dashboard.html";
-  }).catch((error) => {
-    alert("Galat OTP ya expire ho gaya");
-  });
-};
-
-// Google Login
-document.getElementById("googleLoginBtn").onclick = () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider).then((result) => {
-    alert("Google Login Successful! 🎉");
-    window.location.href = "admin-dashboard.html";
-  }).catch((error) => {
-    alert("Google Login Failed: " + error.message);
-  });
-};
+  
+  document.getElementById('sendOTPBtn').classList.remove('hide');
+}
 
 
-  window.confirmationResult.confirm(code).then((result) => {
+
+
+function sendAdminOTP(){
+  let msg = document.getElementById('forgotMsg');
+  let admin = DB.users.find(a => a.role==='admin');
+
+  let target = ADMIN_OTP_METHOD === 'mobile' ? DB.settings.adminMobile||'9001654667' : DB.settings.adminEmail||'manishatak07@gmail.com';
+
+sendOTP(ADMIN_OTP_METHOD, target, otp);
+msg.innerHTML = '<div class="msg msg-success">✅ OTP sent successfully! Check your ' + ADMIN_OTP_METHOD + '</div>';
+  setTimeout(() => {
+    document.getElementById('forgotForm').classList.add('hide');
+    document.getElementById('otpVerifyForm').classList.remove('hide');
+    document.getElementById('otpMethodText').innerText = ADMIN_OTP_METHOD;
+  }, 1500);
+}
+
+function verifyAdminOTP(){
+  let enteredOTP = document.getElementById('adminOTP').value.trim();
+  let msg = document.getElementById('otpMsg');
+  let target = ADMIN_OTP_METHOD === 'mobile'? '9001654667' : 'manishatak07@gmail.com';
+  
+  if(verifyOTP(ADMIN_OTP_METHOD, target, enteredOTP)){
     msg.innerHTML = '<div class="msg msg-success">✅ OTP Verified!</div>';
-    setTimeout(() => {
-      document.getElementById('otpVerifyForm').classList.add('hide');
-      document.getElementById('resetForm').classList.remove('hide');
+    setTimeout(() => { 
+      document.getElementById('otpVerifyForm').classList.add('hide'); 
+      document.getElementById('resetForm').classList.remove('hide'); 
     }, 1000);
-  }).catch((error) => {
-    msg.innerHTML = '<div class="msg msg-error">❌ Galat OTP ya expire ho gaya!</div>';
-    console.log(error);
-  });
-};
+  } else {
+    msg.innerHTML = '<div class="msg msg-error">❌ Invalid OTP!</div>';
+  }
+}
 
 function resetAdminPassword(){
   let msg = document.getElementById('resetMsg');
@@ -870,154 +825,11 @@ function saveOTPSettings(){
   DB.settings.adminMobile = mobile;
   DB.settings.adminEmail = email;
   saveDB();
-  msg.innerHTML = '<div class="msg msg-success">✅ Settings updated successfully!</div>';
   
+  msg.innerHTML = '<div class="msg msg-success">✅ OTP settings updated successfully!</div>';
   setTimeout(()=>msg.innerHTML='',3000);
 }
 
 </script>
-
-<!-- Firebase SDK + Login Code - BODY ke end mein daal -->
-<script type="module">
-  
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  // 👇 Yahan Tera Real Firebase Config Daal - Comment // Hata Ke
-  
-    const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-    
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-  // 1. GOOGLE LOGIN - Tere Button ke liye
-  document.getElementById('googleLoginBtn').onclick = () => {
-    signInWithPopup(auth, provider).then((result) => {
-      const user = result.user;
-      if(user.email === "manishatak07@gmail.com") {
-        alert("Admin login successful! 🎉");
-        window.location.href = "admin-dashboard.html";
-      } else {
-        alert("Access denied! Sirf admin login kar sakta hai.");
-        signOut(auth);
-      }
-    }).catch((error) => {
-      alert("Google Error: " + error.message);
-    });
-  }
-// Forgot Password Function - Gmail Pe Link Bhejega
-document.getElementById("forgotBtn").onclick = () => {
-  const email = document.getElementById("adminEmail").value;
-  if(!email) {
-    alert("Pehle email daalo");
-    return;
-  }
-  
-  sendPasswordResetEmail(auth, email)
-    .then(() => {
-      alert(`Password reset link bhej diya ${email} pe. Gmail check karo. Spam bhi dekhna.`);
-    })
-    .catch((error) => {
-      alert("Error: " + error.message);
-    });
-};
-    
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  // FIREBASE CONFIG - YE APNE WALE SE CHANGE KARNA
-  const firebaseConfig = {
-    apiKey: "TERA_API_KEY",
-    authDomain: "TERA_PROJECT.firebaseapp.com", 
-    projectId: "TERA_PROJECT_ID",
-    storageBucket: "TERA_PROJECT.appspot.com",
-    messagingSenderId: "TERA_SENDER_ID",
-    appId: "TERA_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  
-  // ADMIN EMAIL HIDE KAR DIYA
-  const ADMIN_EMAIL = "manishatak07@gmail.com";
-
-// LOGIN BUTTON
-document.getElementById("loginBtn").onclick = () => {
-    const email = document.getElementById("adminEmail").value;
-    const password = document.getElementById("adminPassword").value;
-    
-    if(email !== ADMIN_EMAIL) {
-        alert("❌ Sirf admin login kar sakta hai");
-        return;
-    }
-    
-    signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-        document.getElementById('loginScreen').classList.add('hide');
-        document.getElementById('adminDashboard').classList.remove('hide');
-        loadDashboard(); // Tera purana function chalega
-      })
-    .catch(() => {
-        alert("❌ Galat Password");
-      });
-};
-
-// FORGOT PASSWORD BUTTON  
-document.getElementById("forgotBtn").onclick = (e) => {
-    e.preventDefault();
-    sendPasswordResetEmail(auth, ADMIN_EMAIL)
-    .then(() => {
-        alert("✅ Password reset link bhej diya manishatak07@gmail.com pe. Gmail check karo.");
-      })
-    .catch((error) => {
-        alert("Error: " + error.message);
-      });
-};
-  // FORGOT PASSWORD KA NAYA CODE
-  document.getElementById("forgotBtn").onclick = (e) => {
-    e.preventDefault();
-    sendPasswordResetEmail(auth, ADMIN_EMAIL)
-    .then(() => {
-        alert("✅ Password reset link bhej diya manishatak07@gmail.com pe. Gmail check karo.");
-      })
-    .catch((error) => {
-        alert("Error: " + error.message);
-      });
-  };
-  // NORMAL LOGIN KA CODE
-document.getElementById("loginBtn").onclick = () => {
-    const email = document.getElementById("adminEmail").value;
-    const password = document.getElementById("adminPassword").value;
-    
-    if(email !== ADMIN_EMAIL) {
-        alert("❌ Galat Email");
-        return;
-    }
-    
-    signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-        document.getElementById('loginScreen').classList.add('hide');
-        document.getElementById('adminDashboard').classList.remove('hide');
-        loadDashboard(); // Tera purana function
-      })
-    .catch(() => {
-        alert("❌ Galat Password");
-      });
-};
-  
-  
-</script>
-
 </body>
 </html>
-
