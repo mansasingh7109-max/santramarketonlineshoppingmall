@@ -142,6 +142,19 @@
         <div class="menu-item" onclick="showPage('global',this)">🌐 Global Control</div>
         <div class="menu-item" onclick="window.open('index.html','_blank')">🏠 Back to Website</div>
         <div class="menu-item" onclick="adminLogout()">🚪 Logout</div>
+            
+    
+    <!-- 👇 YEH NAYA CODE YAHAN PASTE KAR LINE 145 PE -->
+    <div class="menu-item" onclick="forgotPasswordAdmin()">🔑 Forgot Password</div>
+    
+    <!-- reCAPTCHA ke liye - invisible rahega -->
+<div id="recaptcha-container"></div>
+
+<div class="main-content">
+    
+  </div>
+</div>
+        
       </div>
     </div>
 
@@ -904,6 +917,40 @@ function saveOTPSettings(){
         });
       });
   }
+  
+  // 👇 SCRIPT TAG KE ANDAR, SABSE N
+  // reCAPTCHA setup - page load pe chal jaye
+window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+  'size': 'invisible'
+});
+
+// Forgot Password Function
+window.forgotPasswordAdmin = async function() {
+  try {
+    const adminDoc = await getDoc(doc(db, "Manisha Tak", "main_admin"));
+    
+    if (!adminDoc.exists()) {
+      alert("Admin number set nahi hai");
+      return;
+    }
+    
+    const adminPhone = adminDoc.data().phoneNumber;
+    const appVerifier = window.recaptchaVerifier;
+    const confirmationResult = await signInWithPhoneNumber(auth, adminPhone, appVerifier);
+    
+    window.confirmationResult = confirmationResult;
+    alert("OTP bhej diya hai admin ke number pe");
+    
+    let otp = prompt("OTP daalo:");
+    const result = await confirmationResult.confirm(otp);
+    
+    alert("OTP sahi hai! Ab naya password set karo");
+    
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+}
+  
 </script>
 </body>
 </html>
