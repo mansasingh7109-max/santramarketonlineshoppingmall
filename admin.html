@@ -95,6 +95,11 @@
     <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Choose OTP Method</p>
     
     <div style="display:flex;gap:10px;margin-bottom:15px;">
+      <button id="googleLoginBtn" style="width:100%;padding:12px;background:#4285F4;color:white;border:none;border-radius:6px;margin-bottom:10px;font-weight:bold;cursor:pointer;">
+  🚀 Sign in with Google
+</button>
+<div id="recaptcha-container"></div>
+<button id="sendOtpBtn">Send OTP</button>
       <button type="button" class="btn-blue" onclick="selectOTPMethod('mobile')" style="flex:1;">📱 Mobile</button>
       <button type="button" class="btn-blue" onclick="selectOTPMethod('email')" style="flex:1;">📧 Email</button>
     </div>
@@ -831,5 +836,75 @@ function saveOTPSettings(){
 }
 
 </script>
+
+<!-- Firebase SDK + Login Code - BODY ke end mein daal -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // 👇 Yahan Tera Real Firebase Config Daal - Comment // Hata Ke
+  
+    const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+    
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // 1. GOOGLE LOGIN - Tere Button ke liye
+  document.getElementById('googleLoginBtn').onclick = () => {
+    signInWithPopup(auth, provider).then((result) => {
+      const user = result.user;
+      if(user.email === "manishatak07@gmail.com") {
+        alert("Admin login successful! 🎉");
+        window.location.href = "admin-dashboard.html";
+      } else {
+        alert("Access denied! Sirf admin login kar sakta hai.");
+        signOut(auth);
+      }
+    }).catch((error) => {
+      alert("Google Error: " + error.message);
+    });
+  }
+
+  // 2. PHONE OTP LOGIN
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    'size': 'normal'
+  });
+
+  let confirmationResult;
+  
+  document.getElementById('sendOtpBtn').onclick = () => {
+    const phoneNumber = prompt("Phone number daalo +91 ke saath:");
+    if (!phoneNumber || !phoneNumber.startsWith('+91')) {
+      alert("Number +91 se shuru karo: +919001654667");
+      return;
+    }
+    
+    signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+      .then((result) => {
+        confirmationResult = result;
+        const otp = prompt("OTP daalo:");
+        return confirmationResult.confirm(otp);
+      }).then((result) => {
+        alert("Admin login successful! 🎉");
+        window.location.href = "admin-dashboard.html";
+      }).catch((error) => {
+        alert("Error: " + error.message);
+        window.recaptchaVerifier.render().then(widgetId => {
+          grecaptcha.reset(widgetId);
+        });
+      });
+  }
+</script>
 </body>
 </html>
+
