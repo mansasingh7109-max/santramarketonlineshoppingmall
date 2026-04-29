@@ -4,136 +4,168 @@
   <title>Login - Santra Market</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial; max-width: 400px; margin: 50px auto; padding: 20px; background: #f5f5; }
-    .box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0.1); }
-    button, input { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box; }
-    .google-btn { background: #4285f4; color: white; border: none; cursor: pointer; }
-    .otp-btn { background: #34a853; color: white; border: none; cursor: pointer; }
-    .logout-btn { background: #ea4335; color: white; border: none; cursor: pointer; }
-    #recaptcha-container { margin: 10px 0; }
-    h2 { text-align: center; color: #ff6b00; margin-top: 0; }
-    #userInfo { text-align: center; margin-bottom: 15px; display: none; }
+    body { font-family: Arial; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 90%; max-width: 400px; }
+    h2 { text-align: center; color: #333; }
+    input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+    .otp-btn, .google-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin: 8px 0; }
+    .otp-btn { background: #ff6b00; color: white; }
+    .google-btn { background: #4285f4; color: white; }
+    hr { margin: 20px 0; border: none; border-top: 1px solid #ddd; }
+    #recaptcha-container { margin: 10px 0; display: flex; justify-content: center; }
+    .msg { padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; font-size: 14px; }
+    .msg-success { background: #d4edda; color: #155724; }
+    .msg-error { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>🍊 Santra Market Login</h2>
+  <div class="login-box">
+    <h2>👤 Customer Login</h2>
     
-    <!-- Login ke baad ye dikhega -->
-    <div id="userInfo">
-      <p>Logged in as: <b id="userName"></b></p>
-      <button class="logout-btn" id="logout">Logout</button>
-    </div>
+    <div id="msgBox"></div>
 
-    <!-- Login Form -->
-    <div id="loginForm">
-      <button class="google-btn" id="googleLogin">Sign in with Google</button>
-      <h3>Email Login</h3>
-<input type="email" id="email" placeholder="Enter Email" autocomplete="off" name="new-email" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;">
-<input type="password" id="password" placeholder="Enter Password" autocomplete="new-password" name="user_pass_xyz" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;">
-<button class="otp-btn" id="emailLoginBtn" style="margin-top:10px;">Login with Email</button>
+    <!-- Email Login -->
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="otp-btn" onclick="emailLogin()">Login with Email</button>
+    <p style="text-align:center;font-size:14px;"><a href="#" onclick="resetPassword()">Forgot Password?</a></p>
 
-<button onclick="resetPassword()" style="background:none;border:none;color:#ff6b00;text-decoration:underline;margin-top:10px;cursor:pointer;">
-    Forgot Password?
-</button>
-      
-      
-      <hr style="margin: 20px 0;">
-      
-      <h3>Phone OTP Login</h3>
-      <input type="tel" id="phoneNumber" placeholder="Enter phone number with +91">
-      <div id="recaptcha-container"></div>
-      <button class="otp-btn" id="sendOtp">Send OTP</button>
-      
-      <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" style="display:none;">
-      <button class="otp-btn" id="verifyOtp" style="display:none;">Verify OTP</button>
-    </div>
+    <hr>
+
+    <!-- Google Login -->
+    <button class="google-btn" id="googleLogin">Sign in with Google</button>
+
+    <hr>
+
+    <!-- Phone OTP Login -->
+    <h3>Phone OTP Login</h3>
+    <input type="tel" id="phoneNumber" placeholder="Enter phone number with +91">
+    <div id="recaptcha-container"></div>
+    <button class="otp-btn" id="sendOtp">Send OTP</button>
+
+    <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" style="display:none;">
+    <button class="otp-btn" id="verifyOtp" style="display:none;">Verify OTP</button>
+
+    <p style="text-align:center;margin-top:20px;font-size:14px;">
+      <a href="index.html">← Back to Home</a>
+    </p>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // ⚠️ YAHAN APNA FIREBASE CONFIG DAALNA
+    // ✅ FIREBASE CONFIG - APNA CONFIG YAHA DAAL
     const firebaseConfig = {
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-      
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
     
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Check karta hai user login hai ya nahi
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('userInfo').style.display = 'block';
-        document.getElementById('userName').innerText = user.displayName || user.phoneNumber;
-      } else {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('userInfo').style.display = 'none';
-      }
-    });
+    function showMsg(text, type){
+      document.getElementById('msgBox').innerHTML = `<div class="msg msg-${type}">${text}</div>`;
+      setTimeout(()=>{document.getElementById('msgBox').innerHTML=''},4000);
+    }
 
-    // Google Login
+    // ✅ EMAIL LOGIN
+    window.emailLogin = function() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      
+      if(!email || !password){
+        showMsg("❌ Email aur Password daalo!", "error");
+        return;
+      }
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => { 
+          showMsg("✅ Login successful!", "success");
+          setTimeout(()=>{ window.location.href = "index.html"; }, 1000);
+        })
+        .catch((error) => showMsg("❌ Error: " + error.message, "error"));
+    }
+
+    // ✅ GOOGLE LOGIN
     document.getElementById('googleLogin').onclick = () => {
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
-        .then(() => { window.location.href = "index.html"; })
-        .catch((error) => alert("Error: " + error.message));
+        .then(() => { 
+          showMsg("✅ Google Login successful!", "success");
+          setTimeout(()=>{ window.location.href = "index.html"; }, 1000);
+        })
+        .catch((error) => showMsg("❌ Error: " + error.message, "error"));
     };
-window.resetPassword = function() {
-    const email = document.getElementById("email").value;
-    if (!email) {
-        alert("Pehle email daalo");
+
+    // ✅ RESET PASSWORD
+    window.resetPassword = function() {
+      const email = document.getElementById("email").value.trim();
+      if (!email) {
+        showMsg("❌ Pehle email daalo", "error");
         return;
+      }
+      sendPasswordResetEmail(auth, email)
+      .then(() => {
+        showMsg("✅ Password reset link email pe bhej diya. Spam bhi check karo.", "success");
+      })
+      .catch((error) => {
+        showMsg("❌ Error: " + error.message, "error");
+      });
     }
-    
-    sendPasswordResetEmail(auth, email)
-    .then(() => {
-        alert("Password reset link email pe bhej diya. Spam bhi check karo.");
-    })
-    .catch((error) => {
-        alert("Error: " + error.message);
+
+    // ✅ PHONE OTP - FIX KIYA
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 
+      'size': 'normal',
+      'callback': (response) => {
+        console.log('reCAPTCHA solved');
+      }
     });
-}
-
-
-    // Phone OTP Login
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'normal' });
 
     document.getElementById('sendOtp').onclick = () => {
-      const phoneNumber = document.getElementById('phoneNumber').value;
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      
+      if (!phoneNumber.startsWith('+91')) {
+        showMsg("❌ Number +91 se shuru karo. Jaise: +919876543210", "error");
+        return;
+      }
+
       signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
         .then((confirmationResult) => {
           window.confirmationResult = confirmationResult;
-          alert("OTP Sent!");
+          showMsg("✅ OTP Sent! Testing number hai to 123456 daalo", "success");
           document.getElementById('otpCode').style.display = 'block';
           document.getElementById('verifyOtp').style.display = 'block';
           document.getElementById('sendOtp').style.display = 'none';
+          document.getElementById('phoneNumber').disabled = true;
         })
-        .catch((error) => alert("Error: " + error.message));
+        .catch((error) => {
+          showMsg("❌ Error: " + error.message, "error");
+          // Reset reCAPTCHA
+          window.recaptchaVerifier.render().then(widgetId => {
+            grecaptcha.reset(widgetId);
+          });
+        });
     };
 
     document.getElementById('verifyOtp').onclick = () => {
-      const code = document.getElementById('otpCode').value;
-      window.confirmationResult.confirm(code)
-        .then(() => { window.location.href = "index.html"; })
-        .catch((error) => alert("Wrong OTP: " + error.message));
-    };
+      const code = document.getElementById('otpCode').value.trim();
+      
+      if(code.length !== 6){
+        showMsg("❌ 6 digit OTP daalo", "error");
+        return;
+      }
 
-    // Logout
-    document.getElementById('logout').onclick = () => {
-      signOut(auth);
+      window.confirmationResult.confirm(code)
+        .then(() => { 
+          showMsg("✅ Login successful!", "success");
+          setTimeout(()=>{ window.location.href = "index.html"; }, 1000);
+        })
+        .catch((error) => showMsg("❌ Wrong OTP: " + error.message, "error"));
     };
   </script>
 </body>

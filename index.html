@@ -52,17 +52,15 @@
       <div>⚙️</div>
       <span>key panel</span>
     </a>
-    <a href="help.html">
-    
-          <span>HELP<br>DESK</span>
+    <a href="help.html" class="icon-btn">
+      <div>❓</div>
+      <span>HELP<br>DESK</span>
     </a>
-  
-    <a href="login.html" class="icon-btn" id="loginBtn">
-  <div>👤</div>
-  <span id="loginText">LOGIN</span>
-</a>
-<span id="userDisplay" style="display:none; margin-left:10px; color:#ff6b00; font-weight:bold;"></span>
-    
+    <a href="javascript:void(0)" class="icon-btn" id="loginBtn">
+      <div>👤</div>
+      <span id="loginText">LOGIN</span>
+    </a>
+    <span id="userDisplay" style="display:none; margin-left:10px; color:#ff6b00; font-weight:bold;"></span>
   </div>
 </div>
 
@@ -106,44 +104,16 @@
     <div>📦</div>
     <span>Orders</span>
   </a>
-</div><!-- Firebase SDK -->
+</div>
+
+<!-- Firebase SDK + DB Import -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  // ✅ DB.JS SE IMPORT KAR
+  import { DB, saveDB } from './db.js';
   import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // ===== BHAI KAAM: YAHAN APNA FIREBASE CONFIG PASTE KARNA HAI =====
-  
-    // YAHAN APNA CONFIG PASTE KAR BEHEN
-   
-   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-   
-  
-  // ===== PASTE KHATAM =====
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  const auth = getAuth();
   const provider = new GoogleAuthProvider();
-
-  // DB Structure
-  window.DB = {
-    products: [],
-    cart: [],
-    users: []
-  };
 
   window.onload = function(){
     loadProducts();
@@ -153,22 +123,21 @@ const firebaseConfig = {
   }
 
   function initRecaptcha(){
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      'size': 'normal'
-    });
+    if(document.getElementById('recaptcha-container')){
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'normal'
+      });
+    }
   }
 
-  async function loadProducts(){
+  // ✅ DB.JS WALE PRODUCTS LOAD HONGE AB
+  function loadProducts(){
     let container = document.getElementById('productList');
-    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">Loading products...</p>';
     
-    // Demo Products - Baad mein Firebase se load karenge
-    DB.products = [
-      {id:1, name:"Fresh Tomatoes 1kg", price:40, img:"https://images.unsplash.com/photo-1546470427-e5e4ac9d1cb3?w=300", category:"Vegetables"},
-      {id:2, name:"Onions 1kg", price:30, img:"https://images.unsplash.com/photo-1518977671-2b4589c3f0e9?w=300", category:"Vegetables"},
-      {id:3, name:"Potatoes 2kg", price:50, img:"https://images.unsplash.com/photo-1518977671-2b4589c3f0e9?w=300", category:"Vegetables"},
-      {id:4, name:"Green Chillies 250g", price:20, img:"https://images.unsplash.com/photo-1584308972272-9e4e7557cf74?w=300", category:"Vegetables"}
-    ];
+    if(!DB.products || DB.products.length === 0){
+      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products available</p>';
+      return;
+    }
     
     container.innerHTML = '';
     DB.products.forEach(p => {
@@ -190,30 +159,34 @@ const firebaseConfig = {
 
   window.closeLogin = function(){
     document.getElementById('loginModal').classList.add('hide');
-  }  window.sendOTP = function() {
+  }
+
+  window.sendOTP = function() {
     const phoneNumber = document.getElementById('phone').value;
     if (!phoneNumber.startsWith('+91')) {
-      alert("Number +91 se shuru karo. Jaise: ");
+      alert("Number +91 se shuru karo. Jaise: +919876543210");
       return;
     }
     const appVerifier = window.recaptchaVerifier;
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
+        window.confirmationResult = irmationResult;
         alert("OTP bhej diya! Testing number hai to 123123 daalo");
         document.getElementById('otp').style.display = 'block';
         document.getElementById('verify-btn').style.display = 'block';
       }).catch((error) => { 
         alert("Error: " + error.message);
-        window.recaptchaVerifier.render().then(widgetId => {
-          grecaptcha.reset(widgetId);
-        });
+        if(window.recaptchaVerifier){
+          window.recaptchaVerifier.render().then(widgetId => {
+            grecaptcha.reset(widgetId);
+          });
+        }
       });
   }
 
   window.verifyOTP = function() {
     const code = document.getElementById('otp').value;
-    window.confirmationResult.confirm(code).then((result) => {
+    window.irmationResult.irm(code).then((result) => {
       alert("Login ho gaya behen! 🍊");
       closeLogin();
       updateLoginStatus();
@@ -241,10 +214,13 @@ const firebaseConfig = {
         localStorage.setItem('currentUserId', user.uid);
         document.getElementById('loginText').innerHTML = 'ACCOUNT';
         document.getElementById('loginBtn').onclick = logout;
+        document.getElementById('userDisplay').innerText = user.displayName || user.phoneNumber;
+        document.getElementById('userDisplay').style.display = 'inline';
       } else {
         localStorage.removeItem('currentUserId');
         document.getElementById('loginText').innerHTML = 'LOGIN';
         document.getElementById('loginBtn').onclick = showLogin;
+        document.getElementById('userDisplay').style.display = 'none';
       }
     });
   }
@@ -274,6 +250,7 @@ const firebaseConfig = {
         qty: 1
       });
     }
+    saveDB(); // ✅ DB.JS WALA saveDB CALL KIYA
     updateCartCount();
     alert('Cart mein add ho gaya! 🛒');
   }
@@ -289,6 +266,8 @@ const firebaseConfig = {
     document.getElementById('cartCount').innerText = total;
   }
 
+  // Make functions global
+  window.loadProducts = loadProducts;
 </script>
 </body>
 </html>

@@ -1,4 +1,29 @@
-// SANTRA MALL DATABASE - FINAL VERSION v4
+export let DB = {
+  users: [
+    {email: "mansasingh7109@gmail.com", pass: "Manisha7", role: "admin", name: "Admin"},
+    //... baaki users same rahenge
+  ],
+  products: [...], // Purana data same rahega
+  orders: [...] // Purana data same rahega
+}
+// ========================================
+// SANTRA MALL DATABASE - FINAL VERSION v5
+// ========================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/database/database.js";
+
+// Firebase Config - Yaha apna config daal
+const firebaseConfig = {
+  
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ========================================
+// DEFAULT DATABASE STRUCTURE
+// ========================================
 var DB = {
     products: [
         {id: 1, name: "Coffee Set", price: 80, img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400", category: "Home", desc: "Premium Coffee Set", stock: 50},
@@ -13,7 +38,7 @@ var DB = {
         {id:4, name:"Beauty", img:"https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=200", type:"image"}
     ],
     users: [
-        {id:1, name:"Manisha Tak", email:"manishatak07@gmail.com", pass:"admin123", role:"admin", mobile:"9001654667", mobileVerified: true}
+        {id:1, name:"Manisha Tak", email:"manishatak07@gmail.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified: true}
     ],
     orders: [],
     cart: [],
@@ -49,7 +74,9 @@ var DB = {
     }
 };
 
-// Load saved data from localStorage
+// ========================================
+// LOAD SAVED DATA FROM LOCALSTORAGE
+// ========================================
 const saved = localStorage.getItem('SANTRA_DB');
 if(saved) {
     try {
@@ -72,20 +99,35 @@ if(saved) {
         if(!DB.orders) DB.orders = [];
         if(!DB.cart) DB.cart = [];
         if(!DB.categories) DB.categories = [];
+        if(!DB.users) DB.users = [];
     } catch(e) {
         console.log('Error loading DB, using default');
     }
 }
 
-// Ensure admin exists - only if not in users array
-if(!DB.users.find(u=>u.email==="manishatak07@gmail.com")){
-    DB.users.push({id:1,name:"Manisha Tak",email:"manishatak07@gmail.com",pass:"admin123",role:"admin",mobile:"9001654667",mobileVerified:true});
-}
+// ========================================
+// ENSURE ONLY ONE ADMIN EXISTS
+// ========================================
+// Purane sab admin hata de
+DB.users = DB.users.filter(u => u.role !== 'admin');
 
-// Core functions
+// Sirf Manisha Tak admin rahega
+DB.users.push({
+    id: Date.now(),
+    name: "Manisha Tak",
+    email: "manishatak07@gmail.com",
+    pass: "Manisha7",
+    role: "admin",
+    mobile: "9001654667",
+    mobileVerified: true
+});
+
+// ========================================
+// CORE FUNCTIONS
+// ========================================
 function saveDB(){ 
     localStorage.setItem('SANTRA_DB', JSON.stringify(DB)); 
-    console.log('DB Saved. Products:', DB.products.length, 'Orders:', DB.orders.length, 'Cart:', DB.cart.length, 'Categories:', DB.categories.length);
+    console.log('DB Saved. Products:', DB.products.length, 'Orders:', DB.orders.length, 'Cart:', DB.cart.length, 'Categories:', DB.categories.length, 'Users:', DB.users.length);
 }
 
 function addProduct(productData) {
@@ -124,10 +166,19 @@ function saveCustomerForm(uid, formType, data){
     saveDB();
 }
 
-// First time setup
+// ========================================
+// FIRST TIME SETUP
+// ========================================
 if(!localStorage.getItem('SANTRA_DB')){
     saveDB();
     console.log('New DB created');
+} else {
+    saveDB(); // Update with new admin if added
 }
 
 console.log('DB Loaded Successfully:', DB);
+console.log('Available Admins:', DB.users.filter(u=>u.role==='admin').map(u=>u.email));
+
+// Export for Firebase
+export { db, ref, set, get };
+export { DB, saveDB, addProduct, deleteProduct, generateOTP, sendOTP, verifyOTP, saveCustomerForm };
