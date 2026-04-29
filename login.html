@@ -28,6 +28,15 @@
     <!-- Login Form -->
     <div id="loginForm">
       <button class="google-btn" id="googleLogin">Sign in with Google</button>
+      <h3>Email Login</h3>
+<input type="email" id="email" placeholder="Enter Email" autocomplete="off" name="new-email" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;">
+<input type="password" id="password" placeholder="Enter Password" autocomplete="new-password" name="user_pass_xyz" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;">
+<button class="otp-btn" id="emailLoginBtn" style="margin-top:10px;">Login with Email</button>
+
+<button onclick="resetPassword()" style="background:none;border:none;color:#ff6b00;text-decoration:underline;margin-top:10px;cursor:pointer;">
+    Forgot Password?
+</button>
+      
       
       <hr style="margin: 20px 0;">
       
@@ -43,7 +52,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     // ⚠️ YAHAN APNA FIREBASE CONFIG DAALNA
     const firebaseConfig = {
@@ -82,6 +91,22 @@ const firebaseConfig = {
         .then(() => { window.location.href = "index.html"; })
         .catch((error) => alert("Error: " + error.message));
     };
+window.resetPassword = function() {
+    const email = document.getElementById("email").value;
+    if (!email) {
+        alert("Pehle email daalo");
+        return;
+    }
+    
+    sendPasswordResetEmail(auth, email)
+    .then(() => {
+        alert("Password reset link email pe bhej diya. Spam bhi check karo.");
+    })
+    .catch((error) => {
+        alert("Error: " + error.message);
+    });
+}
+
 
     // Phone OTP Login
     window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'normal' });
