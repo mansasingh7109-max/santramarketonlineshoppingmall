@@ -1,43 +1,32 @@
- "name": "SANTRA MALL",
-  "short_name": "SANTRA MALL",
-  "description": "Online Shopping - Best Deals on Fashion, Electronics & More",
+{
+  "name": "SANTRAMARKET",
+  "short_name": "SANTRAMARKET",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#e40046",
-  "orientation": "portrait",
-  "categories": ["shopping", "business"],
+  "theme_color": "#FFC107",
   "icons": [
     {
-      "src": "https://dummyimage.com/72x72/e40046/ffffff.png&text=SM",
+      "src": "/icons/icon-72x72.png",
       "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "https://dummyimage.com/144x144/e40046/ffffff.png&text=SM",
+      "src": "/icons/icon-144x144.png",
       "sizes": "144x144",
-      "type": "image/png", 
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "https://dummyimage.com/192x192/e40046/ffffff.png&text=SM",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "https://dummyimage.com/512x512/e40046/ffffff.png&text=SANTRA+MALL",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "https://dummyimage.com/1080x1920/f5f5f5/333.png&text=SANTRA+MALL+Home",
-      "sizes": "1080x1920",
-      "type": "image/png"
+      "purpose": "maskable"
     }
   ]
 }

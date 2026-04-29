@@ -382,6 +382,10 @@ function requestActionPopup(orderId, type){
   openOrdersPopup(); // Refresh popup
 }
 </script>
-
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
 </body>
 </html>
