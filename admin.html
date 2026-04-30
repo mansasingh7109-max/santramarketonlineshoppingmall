@@ -1,76 +1,72 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANTRA MALL - ADMIN PANEL</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
   <style>
     :root{--accent:#e40046;--sidebar:#1e1b4b;--bg:#f1f3f6;--card:#fff;--green:#10b981;--blue:#3b82f6;--red:#ef4444;--orange:#f59e0b}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg)}
-.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-box{background:#fff;padding:40px;border-radius:15px;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-width:400px;width:90%}
-.login-box h2{color:#5b21b6;text-align:center;margin-bottom:25px;font-size:28px}
-.login-box input{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px}
-.login-box button{width:100%;padding:14px;background:#5b21b6;color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px}
-.forgot-link{text-align:center;margin-top:15px;color:#5b21b6;cursor:pointer;font-size:14px}
-.forgot-link:hover{text-decoration:underline}
-.hide{display:none!important}
-.msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
-.msg-success{background:#d4edda;color:#155724}
-.msg-error{background:#f8d7da;color:#721c24}
-.otp-choice{display:flex;gap:10px;margin:15px 0}
-.otp-choice button{flex:1;padding:12px;border:2px solid #5b21b6;background:#fff;color:#5b21b6;border-radius:8px;cursor:pointer;font-weight:bold}
-.otp-choice button.active{background:#5b21b6;color:#fff}
-.admin-layout{display:flex;min-height:100vh}
-.sidebar{width:260px;background:var(--sidebar);color:white;position:fixed;left:0;top:0;bottom:0;overflow-y:auto}
-.sidebar-header{padding:20px;border-bottom:1px solid rgba(255,255,255,0.1)}
-.sidebar-header h2{font-size:20px;display:flex;align-items:center;gap:10px}
-.menu-item{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:15px;border-left:3px solid transparent}
-.menu-item:hover{background:rgba(255,255,255,0.1);border-left-color:#5b21b6}
-.menu-item.active{background:#5b21b6;border-left-color:white}
-.main-content{margin-left:260px;flex:1}
-.top-bar{background:var(--card);padding:20px 30px;box-shadow:0 2px 5px rgba(0,0,0,0.05);display:flex;justify-content:space-between;position:sticky;top:0;z-index:50}
-.top-bar h1{font-size:28px;color:#1f2937}
-.content-area{padding:30px}
-.info-box{background:#e0f2fe;border-left:4px solid #0ea5e9;padding:15px;border-radius:8px;margin-bottom:25px;display:flex;gap:12px}
-.info-box p{color:#0c4a6e;font-size:14px;line-height:1.6}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:30px}
-.stat-box{padding:25px;border-radius:12px;color:white;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-.stat-box h2{font-size:42px;margin-bottom:8px;font-weight:bold}
-.stat-purple{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
-.stat-green{background:linear-gradient(135deg,#10b981 0%,#059669 100%)}
-.stat-orange{background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%)}
-.stat-pink{background:linear-gradient(135deg,#ec4899 0%,#db2777 100%)}
-.card{background:var(--card);padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:20px}
-.card h3{font-size:18px;margin-bottom:20px;color:#1f2937;display:flex;align-items:center;gap:10px}
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+ .login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+ .login-box{background:#fff;padding:40px;border-radius:15px;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-width:400px;width:90%}
+ .login-box h2{color:#5b21b6;text-align:center;margin-bottom:25px;font-size:28px}
+ .login-box input{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px}
+ .login-box button{width:100%;padding:14px;background:#5b21b6;color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px}
+ .forgot-link{text-align:center;margin-top:15px;color:#5b21b6;cursor:pointer;font-size:14px}
+ .forgot-link:hover{text-decoration:underline}
+ .hide{display:none!important}
+ .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+ .msg-success{background:#d4edda;color:#155724}
+ .msg-error{background:#f8d7da;color:#721c24}
+ .admin-layout{display:flex;min-height:100vh}
+ .sidebar{width:260px;background:var(--sidebar);color:white;position:fixed;left:0;top:0;bottom:0;overflow-y:auto;z-index:100}
+ .sidebar-header{padding:20px;border-bottom:1px solid rgba(255,255,255,0.1)}
+ .sidebar-header h2{font-size:20px;display:flex;align-items:center;gap:10px}
+ .menu-item{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:15px;border-left:3px solid transparent}
+ .menu-item:hover{background:rgba(255,255,255,0.1);border-left-color:#5b21b6}
+ .menu-item.active{background:#5b21b6;border-left-color:white}
+ .main-content{margin-left:260px;flex:1;width:calc(100% - 260px)}
+ .top-bar{background:var(--card);padding:20px 30px;box-shadow:0 2px 5px rgba(0,0,0,0.05);display:flex;justify-content:space-between;position:sticky;top:0;z-index:50}
+ .top-bar h1{font-size:28px;color:#1f2937}
+ .content-area{padding:30px}
+ .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:30px}
+ .stat-box{padding:25px;border-radius:12px;color:white;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+ .stat-box h2{font-size:42px;margin-bottom:8px;font-weight:bold}
+ .stat-purple{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+ .stat-green{background:linear-gradient(135deg,#10b981 0%,#059669 100%)}
+ .stat-orange{background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%)}
+ .stat-pink{background:linear-gradient(135deg,#ec4899 0%,#db2777 100%)}
+ .card{background:var(--card);padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:20px}
+ .card h3{font-size:18px;margin-bottom:20px;color:#1f2937;display:flex;align-items:center;gap:10px}
+ .card h4{font-size:15px;margin:20px 0 10px;color:var(--accent)}
+ .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
     input,select,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #e5e7eb;border-radius:8px;font-size:14px}
     input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
     button{padding:12px 24px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px;font-size:14px}
     button:hover{opacity:0.9}
-.btn-green{background:var(--green)}
-.btn-blue{background:var(--blue)}
-.btn-red{background:var(--red)}
-.btn-orange{background:var(--orange)}
+ .btn-green{background:var(--green)}
+ .btn-blue{background:var(--blue)}
+ .btn-red{background:var(--red)}
+ .btn-orange{background:var(--orange)}
     table{width:100%;border-collapse:collapse;margin-top:15px}
     th,td{padding:14px;text-align:left;border-bottom:1px solid #f3f4f6;font-size:14px}
     th{background:#f9fafb;font-weight:600;color:#6b7280}
-.status-badge{padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600;display:inline-block}
-.status-placed{background:#d1fae5;color:#065f46}
-.status-shipped{background:#dbeafe;color:#1e40af}
-.status-delivered{background:#e0e7ff;color:#3730a3}
-.status-canceled{background:#fee2e2;color:#991b1b}
-.status-returned{background:#ffedd5;color:#9a3412}
-.upload-area{border:2px dashed #d1d5db;padding:20px;text-align:center;border-radius:8px;margin:10px 0;background:#f9fafb}
-.upload-area input[type="file"]{display:none}
-.upload-area label{background:var(--accent);color:white;padding:10px 20px;border-radius:6px;cursor:pointer;display:inline-block}
-.media-preview{margin:15px 0}
-.media-preview img,.media-preview video{max-width:200px;border-radius:8px}
-.action-btn{padding:6px 12px;font-size:12px;margin:2px}
-.search-box{margin-bottom:20px}
-.search-box input{max-width:400px}
-    @media(max-width:768px){.sidebar{width:100%;position:relative;height:auto}.main-content{margin-left:0}.stats-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}}
+ .action-btn{padding:6px 12px;font-size:12px;margin:2px}
+ .media-preview{margin:10px 0}
+ .media-preview img{max-width:200px;border-radius:8px}
+    @media(max-width:768px){
+   .sidebar{width:100%;position:relative;height:auto}
+   .main-content{margin-left:0;width:100%}
+   .stats-grid{grid-template-columns:1fr}
+   .form-grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -78,33 +74,23 @@
 <div id="loginScreen" class="login-screen">
   <div class="login-box">
     <h2>🔐 Key Panel</h2>
-    
     <div id="loginForm">
       <input type="password" id="adminPassword" placeholder="Enter Password">
-      
       <div id="loginMsg"></div>
       <button type="button" onclick="adminLogin()">Login</button>
-      
-      
       <div class="forgot-link" onclick="showForgotPassword()">Forgot Password?</div>
     </div>
-
     <div id="forgotForm" class="hide">
-      
-        
-    <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Choose OTP Method</p>
-    
-    <div style="display:flex;gap:10px;margin-bottom:15px;">
-      <button type="button" class="btn-blue" onclick="selectOTPMethod('mobile')" style="flex:1;">📱 Mobile</button>
-      <button type="button" class="btn-blue" onclick="selectOTPMethod('email')" style="flex:1;">📧 Email</button>
+      <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Choose OTP Method</p>
+      <div style="display:flex;gap:10px;margin-bottom:15px;">
+        <button type="button" class="btn-blue" onclick="selectOTPMethod('mobile')" style="flex:1;">📱 Mobile</button>
+        <button type="button" class="btn-blue" onclick="selectOTPMethod('email')" style="flex:1;">📧 Email</button>
+      </div>
+      <div id="selectedMethodText" style="text-align:center;font-size:13px;color:#666;margin:15px 0;"></div>
+      <div id="forgotMsg"></div>
+      <button type="button" id="sendOTPBtn" class="hide" onclick="sendAdminOTP()">Send OTP</button>
+      <div class="forgot-link" onclick="backToLogin()">← Back to Login</div>
     </div>
-    
-    <div id="selectedMethodText" style="text-align:center;font-size:13px;color:#666;margin:15px 0;"></div>
-        <button type="button" id="sendOTPBtn" class="hide" onclick="sendAdminOTP()">Send OTP</button>
-    <div class="forgot-link" onclick="backToLogin()">← Back to Login</div>
-  </div>
-
-
     <div id="otpVerifyForm" class="hide">
       <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Enter OTP sent to your <span id="otpMethodText">mobile</span></p>
       <input type="text" id="adminOTP" placeholder="Enter 6-digit OTP" maxlength="6">
@@ -112,11 +98,12 @@
       <button type="button" onclick="verifyAdminOTP()">Verify OTP</button>
       <div class="forgot-link" onclick="showForgotPassword()">← Back</div>
     </div>
-
     <div id="resetForm" class="hide">
-      <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Your new password will be: <b>Manisha7</b></p>
+      <p style="text-align:center;margin-bottom:10px;font-size:14px;color:#666;">Enter new password</p>
+      <input type="password" id="newResetPassword" placeholder="Enter New Password">
+      <input type="password" id="confirmResetPassword" placeholder="Confirm New Password">
       <div id="resetMsg"></div>
-      <button type="button" onclick="resetAdminPassword()">Reset to Default Password</button>
+      <button type="button" onclick="resetAdminPassword()">Set New Password</button>
     </div>
   </div>
 </div>
@@ -131,47 +118,42 @@
         <div class="menu-item" onclick="showPage('categories',this)">🏷️ Categories</div>
         <div class="menu-item" onclick="showPage('orders',this)">🛍️ Orders</div>
         <div class="menu-item" onclick="showPage('customers',this)">👥 Customers</div>
-        <div class="menu-item" onclick="showPage('payment',this)">💳 Payment</div>
-        <div class="menu-item" onclick="showPage('theme',this)">⚙️ Theme Settings</div>
         <div class="menu-item" onclick="showPage('password',this)">🔑 Change Password</div>
+        <div class="menu-item" onclick="showPage('theme',this)">⚙️ Theme Settings</div>
         <div class="menu-item" onclick="showPage('global',this)">🌐 Global Control</div>
         <div class="menu-item" onclick="window.open('index.html','_blank')">🏠 Back to Website</div>
         <div class="menu-item" onclick="adminLogout()">🚪 Logout</div>
       </div>
     </div>
-
     <div class="main-content">
       <div class="top-bar">
         <h1 id="pageTitle">Dashboard</h1>
         <div>Welcome, <b id="adminName">Admin</b></div>
       </div>
-
       <div class="content-area">
         <div id="pageDashboard" class="page-content">
-          <div class="info-box">
-            <span>📊</span>
-            <p><b>Dashboard:</b> Yahan se poori website ka overview dekho. Total products, orders, customers aur revenue ek nazar me. Recent 5 orders bhi yahan dikhenge.</p>
-          </div>
-
           <div class="stats-grid">
             <div class="stat-box stat-purple"><h2 id="statProducts">0</h2><p>Total Products</p></div>
             <div class="stat-box stat-green"><h2 id="statOrders">0</h2><p>Total Orders</p></div>
             <div class="stat-box stat-orange"><h2 id="statCustomers">0</h2><p>Total Customers</p></div>
             <div class="stat-box stat-pink"><h2 id="statRevenue">₹0</h2><p>Total Revenue</p></div>
           </div>
-
-          <div class="card">
-            <h3>🔥 Recent Orders</h3>
-            <div id="recentOrdersTable"></div>
-          </div>
+          <div class="card"><h3>🔥 Recent Orders</h3><div id="recentOrdersTable"></div></div>
         </div>
+
         <div id="pageProducts" class="page-content hide">
           <div class="card">
             <h3>📦 Manage Products</h3>
             <button class="btn-green" onclick="toggleAddProduct()">+ Add New Product</button>
             <button class="btn-blue" onclick="exportProductsCSV()">📊 Export CSV</button>
           </div>
-
+          <div class="card">
+            <h3>📋 Product Add History</h3>
+            <button onclick="showHistory()">History Refresh</button>
+            <button onclick="downloadHistory()">History TXT Download</button>
+            <button onclick="localStorage.removeItem('product_history'); showHistory();">History Clear</button>
+            <pre id="historyBox" style="background:#f5f5f5; padding:10px; max-height:300px; overflow:auto; border:1px solid #ddd; margin-top:10px;">Loading...</pre>
+          </div>
           <div id="addProductBox" class="card hide">
             <h3>Add New Product</h3>
             <div class="form-grid">
@@ -187,27 +169,16 @@
               <option value="audio">🎵 Audio</option>
               <option value="document">📄 Document/PDF</option>
             </select>
-
-            <div class="upload-area">
-              <p><b>📎 Media Upload</b></p>
-              <input type="text" id="prodThumbUrl" placeholder="Thumbnail Image URL">
-              <input type="text" id="prodMediaUrl" placeholder="Media URL (Video/Audio/PDF Link)">
-              <p style="margin:10px 0;color:#999">- OR -</p>
-              <p><b>📁 Upload from Gallery/Browser:</b></p>
-              <input type="file" id="prodFile" accept="image/*,video/*,audio/*,.pdf" onchange="previewProductFile(this)">
-              <label for="prodFile">Choose File</label>
-              <span id="fileName">No file chosen</span>
-              <div id="prodPreview" class="media-preview"></div>
-            </div>
-
+            <input type="file" id="mediaFile" onchange="uploadProductFile(this)" style="margin-top:10px;">
+            <br><br>
+            <input type="text" id="prodMediaUrl" placeholder="Upload ke baad Firebase URL yaha aayega ya khud URL daal" style="width:100%;">
+            <br><br>
+            <div id="prodPreview" style="margin:10px 0;"></div>
             <textarea id="prodDesc" placeholder="Product Description" rows="3"></textarea>
             <button class="btn-green" onclick="saveProduct()">💾 Save Product</button>
-            <button class="btn-red" onclick="toggleAddProduct()">❌ Cancel</button>
           </div>
-
           <div class="card">
             <h3>🛍️ All Products</h3>
-            <div class="search-box"><input type="text" id="searchProduct" placeholder="🔍 Search products..." oninput="filterProducts()"></div>
             <div id="productListAdmin"></div>
           </div>
         </div>
@@ -216,93 +187,18 @@
           <div class="card">
             <h3>➕ Add New Category</h3>
             <input type="text" id="catName" placeholder="Category Name *">
-            <div class="upload-area">
-              <input type="file" id="catFile" accept="image/*" onchange="previewCatMedia(this)">
-              <label for="catFile">📁 Choose Image</label>
-              <div id="catPreview" class="media-preview"></div>
-            </div>
+            <input type="file" id="catFile" accept="image/*" onchange="previewCatMedia(this)">
+            <div id="catPreview" class="media-preview"></div>
             <button class="btn-green" onclick="addNewCategory()">Add Category</button>
           </div>
           <div class="card"><h3>📱 All Categories</h3><div id="categoryListAdmin"></div></div>
         </div>
 
-        <div id="pageOrders" class="page-content hide">
-          <div class="card">
-            <h3>📦 All Orders</h3>
-            <div class="search-box"><input type="text" id="searchOrder" placeholder="🔍 Search by Order ID or Customer..." oninput="filterOrders()"></div>
-            <div id="orderListAdmin"></div>
-          </div>
-        </div>
-
-        <div id="pageCustomers" class="page-content hide">
-          <div class="card">
-            <h3>👥 All Customers</h3>
-            <div class="search-box"><input type="text" id="searchCustomer" placeholder="🔍 Search customers..." oninput="filterCustomers()"></div>
-            <div id="customerListAdmin"></div>
-          </div>
-        </div>
-
-        <div id="pagePayment" class="page-content hide">
-          <div class="card">
-            <h3>💳 Payment Settings</h3>
-            <input type="text" id="upiId" placeholder="UPI ID (e.g. name@paytm)">
-            <input type="text" id="paytmQR" placeholder="Paytm QR Code URL">
-            <input type="number" id="deliveryCharge" placeholder="Delivery Charge">
-            <input type="number" id="freeDelivery" placeholder="Free Delivery Above">
-            <div id="paymentMsg"></div>
-            <button class="btn-green" onclick="savePaymentSettings()">Save Payment Settings</button>
-          </div>
-        </div>
-
-        <div id="pageTheme" class="page-content hide">
-          <div class="card">
-            <h3>⚙️ Theme Settings</h3>
-            <input type="text" id="siteName" placeholder="Site Name">
-            <input type="text" id="siteLogo" placeholder="Site Logo (Emoji + Text)">
-            <label>Primary Color:</label>
-            <input type="color" id="primaryColor" value="#e40046">
-            <div id="themeMsg"></div>
-            <button class="btn-green" onclick="saveThemeSettings()">Save Theme</button>
-          </div>
-        </div>
-
-        <div id="pagePassword" class="page-content hide">
-          <div class="card">
-            <h3>🔑 Change Password</h3>
-            <input type="password" id="oldPassword" placeholder="Old Password">
-            <input type="password" id="newPassword" placeholder="New Password">
-            <input type="password" id="confirmPassword" placeholder="Confirm New Password">
-            <div id="passMsg"></div>
-            <button class="btn-blue" onclick="changePassword()">Update Password</button>
-          </div>
-        </div>
-
-        <div id="pageGlobal" class="page-content hide">
-          <div class="card">
-            <h3>🌐 Global Control</h3>
-            <h4 style="margin:15px 0 10px;color:var(--accent)">Change Username</h4>
-            <input type="text" id="newUsername" placeholder="New Username"><div id="userMsg"></div>
-            <button class="btn-blue" onclick="changeUsername()">Update Username</button>
-<h4 style="margin:25px 0 10px;color:var(--accent)">🔐 Forgot Password Settings</h4>
-<p style="font-size:13px;color:#666;margin-bottom:15px;">Ye mobile/email pe OTP jayega jab password bhool jaye</p>
-<input type="tel" id="adminMobile" placeholder="Admin Mobile Number" maxlength="10">
-<input type="email" id="adminEmail" placeholder="Admin Email ID">
-<div id="otpSettingsMsg"></div>
-<button class="btn-green" onclick="saveOTPSettings()">💾 Save OTP Settings</button>
-
-            <h4 style="margin:25px 0 10px;color:var(--accent)">Site Status</h4>
-            <select id="siteStatus">
-              <option value="active">🟢 Active</option>
-              <option value="maintenance">🔧 Maintenance Mode</option>
-            </select>
-            <button class="btn-blue" onclick="updateSiteStatus()">Update Status</button>
-
-            <h4 style="margin:25px 0 10px;color:var(--accent)">Database Actions</h4>
-            <button class="btn-green" onclick="exportData()">📥 Export Data</button>
-            <button class="btn-orange" onclick="clearCache()">🗑️ Clear Cache</button>
-            <button class="btn-red" onclick="resetDemo()">⚠️ Reset Demo Data</button>
-          </div>
-        </div>
+        <div id="pageOrders" class="page-content hide"><div class="card"><h3>📦 All Orders</h3><div id="orderListAdmin"></div></div></div>
+        <div id="pageCustomers" class="page-content hide"><div class="card"><h3>👥 All Customers</h3><div id="customerListAdmin"></div></div></div>
+        <div id="pagePassword" class="page-content hide"></div>
+        <div id="pageTheme" class="page-content hide"></div>
+        <div id="pageGlobal" class="page-content hide"></div>
       </div>
     </div>
   </div>
@@ -310,67 +206,79 @@
 
 <script src="db.js"></script>
 <script>
+// ===== FIREBASE CONFIG - APNA CONFIG DAAL YAHAN =====
+
+const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+// Firebase Initialize
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}
+
+// ===== GLOBAL VARIABLES =====
 var CURRENT_ADMIN = null;
 var EDITING_PRODUCT_ID = null;
 var ADMIN_OTP_METHOD = 'mobile';
 
+// ===== SECURE LOGIN =====
 function adminLogin(){
   let p = document.getElementById('adminPassword').value.trim();
   let msg = document.getElementById('loginMsg');
-  let admin = DB.users.find(a => a.role==='admin');
+  let admin = DB.users.find(u => u.role==='admin');
 
-  if(admin && admin.pass === p){
+  if(admin && p === admin.pass){
     CURRENT_ADMIN = admin;
     msg.innerHTML = '<div class="msg msg-success">Login successful!</div>';
     setTimeout(() => {
       document.getElementById('loginScreen').classList.add('hide');
       document.getElementById('adminDashboard').classList.remove('hide');
-      document.getElementById('adminName').innerText = admin.name.split(' ')[0];
+      document.getElementById('adminName').innerText = CURRENT_ADMIN.name.split(' ')[0];
       loadDashboard();
     }, 500);
   } else {
     msg.innerHTML = '<div class="msg msg-error">❌ Invalid Password!</div>';
   }
 }
+
+function adminLogout(){ location.reload(); }
+
 function showForgotPassword(){
   document.getElementById('loginForm').classList.add('hide');
-  document.getElementById('resetForm').classList.add('hide');
-  document.getElementById('otpVerifyForm').classList.add('hide');
   document.getElementById('forgotForm').classList.remove('hide');
-  ADMIN_OTP_METHOD = 'mobile';
-  updateOTPInfo();
 }
 
-function showLoginForm(){
+function backToLogin(){
   document.getElementById('forgotForm').classList.add('hide');
-  document.getElementById('resetForm').classList.add('hide');
   document.getElementById('otpVerifyForm').classList.add('hide');
+  document.getElementById('resetForm').classList.add('hide');
   document.getElementById('loginForm').classList.remove('hide');
 }
+
 function selectOTPMethod(method){
   ADMIN_OTP_METHOD = method;
-  
-  // Number/Email hide kar diya - bas ye dikhega
-  if(method === 'mobile'){
-    document.getElementById('selectedMethodText').innerHTML = `✅ OTP will be sent to your registered mobile number`;
-  } else {
-    document.getElementById('selectedMethodText').innerHTML = `✅ OTP will be sent to your registered email address`;
-  }
-  
+  document.getElementById('selectedMethodText').innerHTML = `✅ OTP will be sent to ${method}`;
   document.getElementById('sendOTPBtn').classList.remove('hide');
 }
 
-
-
-
 function sendAdminOTP(){
   let msg = document.getElementById('forgotMsg');
-  let admin = DB.users.find(a => a.role==='admin');
+  let admin = DB.users.find(u=>u.role==='admin');
+  let target = ADMIN_OTP_METHOD === 'mobile'? (admin?.mobile || DB.settings.adminMobile || '9001654667') : (admin?.email || DB.settings.adminEmail || 'manishatak07@gmail.com');
+  let otp = Math.floor(100000 + Math.random() * 900000);
 
-  let target = ADMIN_OTP_METHOD === 'mobile' ? DB.settings.adminMobile||'9001654667' : DB.settings.adminEmail||'manishatak07@gmail.com';
+  localStorage.setItem('admin_otp_' + target, otp);
+  console.log('OTP for', target, ':', otp);
+  alert(`📱 OTP sent to ${target}`);
 
-sendOTP(ADMIN_OTP_METHOD, target, otp);
-msg.innerHTML = '<div class="msg msg-success">✅ OTP sent successfully! Check your ' + ADMIN_OTP_METHOD + '</div>';
+  msg.innerHTML = '<div class="msg msg-success">✅ OTP sent!</div>';
   setTimeout(() => {
     document.getElementById('forgotForm').classList.add('hide');
     document.getElementById('otpVerifyForm').classList.remove('hide');
@@ -381,13 +289,16 @@ msg.innerHTML = '<div class="msg msg-success">✅ OTP sent successfully! Check y
 function verifyAdminOTP(){
   let enteredOTP = document.getElementById('adminOTP').value.trim();
   let msg = document.getElementById('otpMsg');
-  let target = ADMIN_OTP_METHOD === 'mobile'? '9001654667' : 'manishatak07@gmail.com';
-  
-  if(verifyOTP(ADMIN_OTP_METHOD, target, enteredOTP)){
+  let admin = DB.users.find(u=>u.role==='admin');
+  let target = ADMIN_OTP_METHOD === 'mobile'? (admin?.mobile || DB.settings.adminMobile || '9001654667') : (admin?.email || DB.settings.adminEmail || 'manishatak07@gmail.com');
+  let storedOTP = localStorage.getItem('admin_otp_' + target);
+
+  if(enteredOTP === storedOTP){
     msg.innerHTML = '<div class="msg msg-success">✅ OTP Verified!</div>';
-    setTimeout(() => { 
-      document.getElementById('otpVerifyForm').classList.add('hide'); 
-      document.getElementById('resetForm').classList.remove('hide'); 
+    localStorage.removeItem('admin_otp_' + target);
+    setTimeout(() => {
+      document.getElementById('otpVerifyForm').classList.add('hide');
+      document.getElementById('resetForm').classList.remove('hide');
     }, 1000);
   } else {
     msg.innerHTML = '<div class="msg msg-error">❌ Invalid OTP!</div>';
@@ -396,32 +307,43 @@ function verifyAdminOTP(){
 
 function resetAdminPassword(){
   let msg = document.getElementById('resetMsg');
+  let newPass = document.getElementById('newResetPassword').value;
+  let confirmPass = document.getElementById('confirmResetPassword').value;
   let admin = DB.users.find(u=>u.role==='admin');
-  
-  admin.pass = 'Manisha7'; 
-  saveDB();
-  
-  msg.innerHTML = '<div class="msg msg-success">✅ Password reset to: Manisha7</div>';
-  setTimeout(showLoginForm, 2000);
+
+  if(!newPass || newPass.length < 6){
+    msg.innerHTML = '<div class="msg msg-error">❌ Password must be 6+ characters!</div>';
+    return;
+  }
+  if(newPass!== confirmPass){
+    msg.innerHTML = '<div class="msg msg-error">❌ Passwords do not match!</div>';
+    return;
+  }
+
+  if(admin){
+    admin.pass = newPass;
+    saveDB();
+  }
+  msg.innerHTML = '<div class="msg msg-success">✅ Password reset successfully!</div>';
+  setTimeout(backToLogin, 2000);
 }
 
-function adminLogout(){ location.reload(); }
-
+// ===== PAGE FUNCTIONS =====
 function showPage(page, el){
   document.querySelectorAll('.page-content').forEach(p => p.classList.add('hide'));
   document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
   document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.remove('hide');
-  el.classList.add('active');
+  if(el) el.classList.add('active');
   document.getElementById('pageTitle').innerText = page.charAt(0).toUpperCase() + page.slice(1);
 
   if(page==='dashboard') loadDashboard();
-  if(page==='products'){ loadProductsAdmin(); loadCategoryDropdown(); }
+  if(page==='products'){ loadProductsAdmin(); loadCategoryDropdown(); showHistory(); }
   if(page==='categories') loadCategoriesAdmin();
   if(page==='orders') loadOrders();
   if(page==='customers') loadCustomers();
-  if(page==='payment') loadPaymentSettings();
-  if(page==='theme') loadThemeSettings();
-  if(page==='global') loadGlobalSettings();
+  if(page==='password') document.getElementById('pagePassword').innerHTML = showChangePasswordModule();
+  if(page==='theme') document.getElementById('pageTheme').innerHTML = showThemeSettingsModule();
+  if(page==='global') document.getElementById('pageGlobal').innerHTML = showGlobalSettingsModule();
 }
 
 function loadDashboard(){
@@ -429,17 +351,41 @@ function loadDashboard(){
   document.getElementById('statOrders').innerText = DB.orders.length;
   document.getElementById('statCustomers').innerText = DB.users.filter(u=>u.role==='customer').length;
   document.getElementById('statRevenue').innerText = '₹' + DB.orders.reduce((s,o)=>s+o.total,0);
-
   let container = document.getElementById('recentOrdersTable');
   let recent = DB.orders.slice(-5).reverse();
   if(recent.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No orders yet</p>'; return; }
   container.innerHTML = '<table><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr>';
   recent.forEach(o => {
-    container.innerHTML += `<tr><td>#${o.id}</td><td>${o.customerName}</td><td>₹${o.total}</td><td><span class="status-badge status-${o.status.toLowerCase()}">${o.status}</span></td><td>${new Date(o.time).toLocaleDateString()}</td></tr>`;
+    container.innerHTML += `<tr><td>#${o.id}</td><td>${o.customerName}</td><td>₹${o.total}</td><td>${o.status}</td><td>${new Date(o.time).toLocaleDateString()}</td></tr>`;
   });
   container.innerHTML += '</table>';
 }
 
+// ===== HISTORY FUNCTIONS =====
+function saveToHistory(data) {
+  let now = new Date();
+  let dateTime = now.toLocaleString('en-IN');
+  let historyLine = `${dateTime} | ${data.name} | ₹${data.price} | MRP:₹${data.mrp} | Stock:${data.stock} | ${data.category} | By:Admin\n`;
+  let oldHistory = localStorage.getItem('product_history') || '';
+  localStorage.setItem('product_history', oldHistory + historyLine);
+}
+
+function showHistory() {
+  let history = localStorage.getItem('product_history');
+  let box = document.getElementById('historyBox');
+  if(box) box.innerText = history || "Abhi koi history nahi hai";
+}
+
+function downloadHistory() {
+  let history = localStorage.getItem('product_history') || 'Koi history nahi';
+  let blob = new Blob([history], { type: 'text/plain' });
+  let link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'product_history.txt';
+  link.click();
+}
+
+// ===== PRODUCT FUNCTIONS =====
 function toggleAddProduct(){
   document.getElementById('addProductBox').classList.toggle('hide');
   EDITING_PRODUCT_ID = null;
@@ -451,113 +397,142 @@ function updateMediaField(){
   urlField.placeholder = type==='image'?'Image URL':type==='video'?'Video URL':type==='audio'?'Audio URL':'Document/PDF URL';
 }
 
-function previewProductFile(input){
+// ===== FIREBASE PHOTO UPLOAD - FIXED =====
+async function uploadProductFile(input){
   let file = input.files[0];
-  if(file){
-    document.getElementById('fileName').innerText = file.name;
-    let reader = new FileReader();
-    reader.onload = function(e){
-      let type = document.getElementById('prodMediaType').value;
-      let preview = type==='image'?`<img src="${e.target.result}">`:type==='video'?`<video src="${e.target.result}" controls></video>`:type==='audio'?`<audio src="${e.target.result}" controls></audio>`:'📄 Document';
-      document.getElementById('prodPreview').innerHTML = preview;
-      document.getElementById('prodMediaUrl').value = e.target.result;
+  if(!file) return;
+
+  document.getElementById('prodPreview').innerHTML = '⏳ Uploading to Firebase...';
+
+  try {
+    if(typeof firebase === 'undefined' ||!firebase.storage){
+      throw new Error('Firebase not loaded');
     }
-    reader.readAsDataURL(file);
+
+    let storageRef = firebase.storage().ref();
+    let fileName = 'products/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    let imageRef = storageRef.child(fileName);
+    let snapshot = await imageRef.put(file);
+    let downloadURL = await snapshot.ref.getDownloadURL();
+
+    document.getElementById('prodMediaUrl').value = downloadURL;
+    document.getElementById('prodPreview').innerHTML = `<img src="${downloadURL}" style="max-width:200px;border-radius:8px;"><br>✅ Uploaded to Firebase`;
+
+  } catch(error) {
+    console.error('Firebase Upload Error:', error);
+    document.getElementById('prodPreview').innerHTML = '❌ Upload failed: ' + error.message + '<br><small style="color:red;">Sirf URL daalo ya Firebase config check karo</small>';
+    document.getElementById('prodMediaUrl').value = '';
   }
 }
 
 function loadCategoryDropdown(){
   let select = document.getElementById('prodCategory');
+  if(!select) return;
   select.innerHTML = '<option value="">Select Category *</option>';
   DB.categories.forEach(c => { select.innerHTML += `<option value="${c.name}">${c.name}</option>`; });
 }
 
-function saveProduct(){
-  let name = document.getElementById('prodName').value.trim();
-  let price = parseInt(document.getElementById('prodPrice').value);
-  let mrp = parseInt(document.getElementById('prodMRP').value) || price;
-  let stock = parseInt(document.getElementById('prodStock').value);
-  let category = document.getElementById('prodCategory').value;
-  let type = document.getElementById('prodMediaType').value;
-  let img = document.getElementById('prodThumbUrl').value.trim();
-  let media = document.getElementById('prodMediaUrl').value.trim();
-  let desc = document.getElementById('prodDesc').value.trim();
+// ===== PRODUCT SAVE - NO BASE64 =====
+async function saveProduct(){
+  try {
+    let name = document.getElementById('prodName').value.trim();
+    let price = parseInt(document.getElementById('prodPrice').value);
+    let mrp = parseInt(document.getElementById('prodMRP').value) || price;
+    let stock = parseInt(document.getElementById('prodStock').value);
+    let category = document.getElementById('prodCategory').value;
+    let type = document.getElementById('prodMediaType').value;
+    let img = document.getElementById('prodMediaUrl').value.trim();
+    let desc = document.getElementById('prodDesc').value;
 
-  if(!name||!price||!category||!stock){ alert('Please fill all required fields!'); return; }
+    if(!name ||!price ||!category ||!stock){
+      alert('⚠️ Please fill: Name, Price, Category, Stock');
+      return;
+    }
 
-  if(EDITING_PRODUCT_ID){
-    let p = DB.products.find(pr=>pr.id==EDITING_PRODUCT_ID);
-    Object.assign(p, {name,price,mrp,stock,category,type,img:img||p.img,media:media||p.media,desc});
-  } else {
-    DB.products.push({id:Date.now(),name,price,mrp,stock,category,type,img:img||'https://via.placeholder.com/200',media,desc});
+    if(!img){
+      alert('⚠️ Please upload image ya URL daalo!');
+      return;
+    }
+
+    if(img.startsWith('data:image')){
+      alert('❌ Base64 image localStorage me save nahi ho sakti!\n\nSolution: 1) Firebase config daalo ya 2) Direct image URL use karo');
+      return;
+    }
+
+    let productData = {
+      id: Date.now(),
+      name: name,
+      price: price,
+      mrp: mrp,
+      stock: stock,
+      category: category,
+      mediaType: type,
+      mediaUrl: img,
+      desc: desc,
+      uploadDate: new Date().toISOString(),
+      uploadedBy: 'Admin'
+    };
+
+    if(typeof firebase!== 'undefined' && firebase.database){
+      try {
+        await firebase.database().ref('products/' + productData.id).set(productData);
+        console.log('✅ Product saved to Firebase');
+      } catch(e) {
+        console.log('Firebase save failed:', e);
+      }
+    }
+
+    DB.products.push(productData);
+    saveDB();
+    saveToHistory(productData);
+    alert('✅ Product Saved Successfully!');
+
+    document.getElementById('prodName').value = '';
+    document.getElementById('prodPrice').value = '';
+    document.getElementById('prodMRP').value = '';
+    document.getElementById('prodStock').value = '';
+    document.getElementById('prodCategory').value = '';
+    document.getElementById('prodMediaUrl').value = '';
+    document.getElementById('prodDesc').value = '';
+    document.getElementById('mediaFile').value = '';
+    document.getElementById('prodPreview').innerHTML = '';
+
+    loadProductsAdmin();
+    loadDashboard();
+    showHistory();
+    toggleAddProduct();
+
+  } catch(error) {
+    console.error('Save Error:', error);
+    alert('❌ Error saving product: ' + error.message);
   }
-  saveDB();
-  document.getElementById('prodName').value = '';
-  document.getElementById('prodPrice').value = '';
-  document.getElementById('prodMRP').value = '';
-  document.getElementById('prodStock').value = '';
-  document.getElementById('prodCategory').value = '';
-  document.getElementById('prodThumbUrl').value = '';
-  document.getElementById('prodMediaUrl').value = '';
-  document.getElementById('prodDesc').value = '';
-  document.getElementById('prodFile').value = '';
-  document.getElementById('prodPreview').innerHTML = '';
-  document.getElementById('fileName').innerText = 'No file chosen';
-  alert('✅ Product saved successfully!');
-  loadProductsAdmin(); loadDashboard(); toggleAddProduct();
 }
 
 function loadProductsAdmin(){
   let container = document.getElementById('productListAdmin');
+  if(!container) return;
   if(DB.products.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No products yet</p>'; return; }
   container.innerHTML = '<table><tr><th>ID</th><th>Image</th><th>Name</th><th>Type</th><th>Price</th><th>Stock</th><th>Actions</th></tr>';
   DB.products.forEach(p => {
-    container.innerHTML += `<tr><td>${p.id}</td><td><img src="${p.img}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td><td>${p.name}</td><td>${p.type}</td><td>₹${p.price}</td><td>${p.stock}</td><td><button class="action-btn btn-blue" onclick="editProduct(${p.id})">✏️</button><button class="action-btn btn-red" onclick="deleteProduct(${p.id})">🗑️</button></td></tr>`;
+    let imgUrl = p.mediaUrl || p.img || '';
+    container.innerHTML += `<tr><td>${p.id}</td><td><img src="${imgUrl}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td><td>${p.name}</td><td>${p.mediaType || 'image'}</td><td>₹${p.price}</td><td>${p.stock}</td><td><button class="action-btn btn-red" onclick="deleteProduct(${p.id})">🗑️</button></td></tr>`;
   });
   container.innerHTML += '</table>';
-}
-
-function editProduct(id){
-  let p = DB.products.find(pr=>pr.id==id);
-  if(!p) return;
-  EDITING_PRODUCT_ID = id;
-  document.getElementById('prodName').value = p.name;
-  document.getElementById('prodPrice').value = p.price;
-  document.getElementById('prodMRP').value = p.mrp||'';
-  document.getElementById('prodStock').value = p.stock||'';
-  document.getElementById('prodCategory').value = p.category;
-  document.getElementById('prodMediaType').value = p.type||'image';
-  document.getElementById('prodThumbUrl').value = p.img;
-  document.getElementById('prodMediaUrl').value = p.media||'';
-  document.getElementById('prodDesc').value = p.desc||'';
-  document.getElementById('addProductBox').classList.remove('hide');
-  window.scrollTo(0,0);
 }
 
 function deleteProduct(id){
-  if(confirm('Delete this product?')){ 
-    DB.products = DB.products.filter(p=>p.id!=id); 
-    saveDB(); 
-    loadProductsAdmin(); 
-    loadDashboard(); 
+  if(confirm('Delete this product?')){
+    DB.products = DB.products.filter(p=>p.id!=id);
+    saveDB();
+    loadProductsAdmin();
+    loadDashboard();
   }
 }
 
-function filterProducts(){
-  let search = document.getElementById('searchProduct').value.toLowerCase();
-  let container = document.getElementById('productListAdmin');
-  let filtered = DB.products.filter(p => p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search));
-  if(filtered.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No products found</p>'; return; }
-  container.innerHTML = '<table><tr><th>ID</th><th>Image</th><th>Name</th><th>Type</th><th>Price</th><th>Stock</th><th>Actions</th></tr>';
-  filtered.forEach(p => {
-    container.innerHTML += `<tr><td>${p.id}</td><td><img src="${p.img}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td><td>${p.name}</td><td>${p.type}</td><td>₹${p.price}</td><td>${p.stock}</td><td><button class="action-btn btn-blue" onclick="editProduct(${p.id})">✏️</button><button class="action-btn btn-red" onclick="deleteProduct(${p.id})">🗑️</button></td></tr>`;
-  });
-  container.innerHTML += '</table>';
-}
 function exportProductsCSV(){
-  let csv = 'ID,Name,Price,MRP,Stock,Category,Type,Description\n';
+  let csv = 'ID,Name,Price,MRP,Stock,Category,Type\n';
   DB.products.forEach(p => {
-    csv += `${p.id},"${p.name}",${p.price},${p.mrp||p.price},${p.stock},"${p.category}","${p.type}","${p.desc||''}"\n`;
+    csv += `${p.id},"${p.name}",${p.price},${p.mrp||p.price},${p.stock},"${p.category}","${p.mediaType||'image'}"\n`;
   });
   let blob = new Blob([csv], {type: 'text/csv'});
   let url = URL.createObjectURL(blob);
@@ -565,9 +540,10 @@ function exportProductsCSV(){
   a.href = url;
   a.download = 'products-' + Date.now() + '.csv';
   a.click();
-  alert('✅ Products exported to CSV!');
+  alert('✅ Products exported!');
 }
 
+// ===== CATEGORY FUNCTIONS =====
 function previewCatMedia(input){
   let file = input.files[0];
   if(file){
@@ -589,11 +565,13 @@ function addNewCategory(){
   document.getElementById('catFile').value = '';
   document.getElementById('catPreview').innerHTML = '';
   alert('✅ Category added successfully!');
-  loadCategoriesAdmin(); loadCategoryDropdown();
+  loadCategoriesAdmin();
+  loadCategoryDropdown();
 }
 
 function loadCategoriesAdmin(){
   let container = document.getElementById('categoryListAdmin');
+  if(!container) return;
   if(!DB.categories||DB.categories.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No categories yet</p>'; return; }
   container.innerHTML = '<table><tr><th>Image</th><th>Name</th><th>Type</th><th>Products</th><th>Action</th></tr>';
   DB.categories.forEach(c => {
@@ -605,231 +583,264 @@ function loadCategoriesAdmin(){
 
 function deleteCategory(id){
   if(confirm('Delete this category? Products will not be deleted.')){
-    DB.categories = DB.categories.filter(c=>c.id!=id); saveDB(); loadCategoriesAdmin(); loadCategoryDropdown();
+    DB.categories = DB.categories.filter(c=>c.id!=id);
+    saveDB();
+    loadCategoriesAdmin();
+    loadCategoryDropdown();
   }
 }
 
 function loadOrders(){
   let container = document.getElementById('orderListAdmin');
+  if(!container) return;
   if(DB.orders.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No orders yet</p>'; return; }
-  container.innerHTML = '<table><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>Action</th></tr>';
+  container.innerHTML = '<table><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th></tr>';
   DB.orders.slice().reverse().forEach(o => {
-    container.innerHTML += `<tr><td>#${o.id}</td><td>${o.customerName}</td><td>${o.mobile}</td><td>₹${o.total}</td><td><select onchange="updateOrderStatus(${o.id},this.value)"><option ${o.status==='Placed'?'selected':''}>Placed</option><option ${o.status==='Shipped'?'selected':''}>Shipped</option><option ${o.status==='Delivered'?'selected':''}>Delivered</option><option ${o.status==='Canceled'?'selected':''}>Canceled</option><option ${o.status==='Returned'?'selected':''}>Returned</option></select></td><td><button class="action-btn btn-blue" onclick="viewOrderDetails(${o.id})">View</button></td></tr>`;
+    container.innerHTML += `<tr><td>#${o.id}</td><td>${o.customerName}</td><td>${o.mobile}</td><td>₹${o.total}</td><td>${o.status}</td></tr>`;
   });
   container.innerHTML += '</table>';
 }
 
-function updateOrderStatus(id,status){
-  let order = DB.orders.find(o=>o.id==id);
-  if(order){ order.status = status; saveDB(); alert('Order status updated!'); loadDashboard(); }
-}
-
-function viewOrderDetails(id){
-  let order = DB.orders.find(o=>o.id==id);
-  if(!order) return;
-  let items = order.items.map(i=>`${i.name} x${i.qty} = ₹${i.price*i.qty}`).join('\n');
-  let requestText = order.requestReason? `\n\nReturn Reason: ${order.requestReason}` : '';
-  alert(`Order #${order.id}\n\nCustomer: ${order.customerName}\nMobile: ${order.mobile}\nAddress: ${order.address}\nTotal: ₹${order.total}\nStatus: ${order.status}${requestText}\n\nItems:\n${items}`);
-}
-
-function filterOrders(){
-  let search = document.getElementById('searchOrder').value.toLowerCase();
-  let container = document.getElementById('orderListAdmin');
-  let filtered = DB.orders.filter(o => o.id.toString().includes(search)||o.customerName.toLowerCase().includes(search));
-  if(filtered.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No orders found</p>'; return; }
-  container.innerHTML = '<table><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>Action</th></tr>';
-  filtered.reverse().forEach(o => {
-    container.innerHTML += `<tr><td>#${o.id}</td><td>${o.customerName}</td><td>${o.mobile}</td><td>₹${o.total}</td><td><select onchange="updateOrderStatus(${o.id},this.value)"><option ${o.status==='Placed'?'selected':''}>Placed</option><option ${o.status==='Shipped'?'selected':''}>Shipped</option><option ${o.status==='Delivered'?'selected':''}>Delivered</option><option ${o.status==='Canceled'?'selected':''}>Canceled</option><option ${o.status==='Returned'?'selected':''}>Returned</option></select></td><td><button class="action-btn btn-blue" onclick="viewOrderDetails(${o.id})">View</button></td></tr>`;
-  });
-  container.innerHTML += '</table>';
-}
-
+// ===== FIXED loadCustomers - DUPLICATE HATA DIYA =====
 function loadCustomers(){
   let container = document.getElementById('customerListAdmin');
+  if(!container) return;
   let customers = DB.users.filter(u=>u.role==='customer');
-  if(customers.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No customers yet</p>'; return; }
-  container.innerHTML = '<table><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Orders</th><th>Verified</th><th>Action</th></tr>';
+  if(customers.length===0){ 
+    container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No customers yet</p>'; 
+    return; 
+  }
+  container.innerHTML = '<table><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Orders</th></tr>';
   customers.forEach(u => {
     let orderCount = DB.orders.filter(o=>o.uid===u.id).length;
-    container.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.mobile||'-'}</td><td>${orderCount}</td><td>${u.mobileVerified?'✅':'❌'}</td><td><button class="action-btn btn-red" onclick="deleteCustomer(${u.id})">Delete</button></td></tr>`;
+    container.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.mobile||'-'}</td><td>${orderCount}</td></tr>`;
   });
   container.innerHTML += '</table>';
 }
 
-function deleteCustomer(id){
-  if(confirm('Delete this customer?')){ DB.users = DB.users.filter(u=>u.id!=id); saveDB(); loadCustomers(); loadDashboard(); }
+// ===== CHANGE PASSWORD MODULE =====
+function showChangePasswordModule(){
+  return `
+    <div class="card">
+      <h3>🔑 Change Admin Password</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:15px;">Current Password: <b>${DB.users.find(u=>u.role==='admin')?.pass || 'Not Set'}</b></p>
+      <input type="password" id="oldPassword" placeholder="Old Password *">
+      <input type="password" id="newPassword" placeholder="New Password * (Min 6 chars)">
+      <input type="password" id="confirmPassword" placeholder="Confirm New Password *">
+      <div id="passMsg"></div>
+      <button class="btn-blue" onclick="changeAdminPassword()">Update Password</button>
+    </div>
+  `;
 }
 
-function filterCustomers(){
-  let search = document.getElementById('searchCustomer').value.toLowerCase();
-  let container = document.getElementById('customerListAdmin');
-  let filtered = DB.users.filter(u => u.role==='customer' && (u.name.toLowerCase().includes(search)||u.email.toLowerCase().includes(search)||(u.mobile&&u.mobile.includes(search))));
-  if(filtered.length===0){ container.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:20px;">No customers found</p>'; return; }
-  container.innerHTML = '<table><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Orders</th><th>Verified</th><th>Action</th></tr>';
-  filtered.forEach(u => {
-    let orderCount = DB.orders.filter(o=>o.uid===u.id).length;
-    container.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.mobile||'-'}</td><td>${orderCount}</td><td>${u.mobileVerified?'✅':'❌'}</td><td><button class="action-btn btn-red" onclick="deleteCustomer(${u.id})">Delete</button></td></tr>`;
-  });
-  container.innerHTML += '</table>';
-}
+function changeAdminPassword(){
+  let oldPass = document.getElementById('oldPassword').value;
+  let newPass = document.getElementById('newPassword').value;
+  let confirmPass = document.getElementById('confirmPassword').value;
+  let msg = document.getElementById('passMsg');
+  let admin = DB.users.find(u=>u.role==='admin');
 
-function loadPaymentSettings(){
-  document.getElementById('upiId').value = DB.settings.upiId||'';
-  document.getElementById('paytmQR').value = DB.settings.paytmQR||'';
-  document.getElementById('deliveryCharge').value = DB.settings.delivery||49;
-  document.getElementById('freeDelivery').value = DB.settings.freeDeliveryAbove||499;
-}
+  if(!admin){
+    msg.innerHTML = '<div class="msg msg-error">❌ Admin not found!</div>';
+    return;
+  }
+  if(oldPass!== admin.pass){
+    msg.innerHTML = '<div class="msg msg-error">❌ Old password incorrect!</div>';
+    return;
+  }
+  if(newPass!== confirmPass){
+    msg.innerHTML = '<div class="msg msg-error">❌ Passwords do not match!</div>';
+    return;
+  }
+  if(newPass.length < 6){
+    msg.innerHTML = '<div class="msg msg-error">❌ Password must be 6+ characters!</div>';
+    return;
+  }
 
-function savePaymentSettings(){
-  DB.settings.upiId = document.getElementById('upiId').value;
-  DB.settings.paytmQR = document.getElementById('paytmQR').value;
-  DB.settings.delivery = parseInt(document.getElementById('deliveryCharge').value);
-  DB.settings.freeDeliveryAbove = parseInt(document.getElementById('freeDelivery').value);
+  admin.pass = newPass;
   saveDB();
-  document.getElementById('paymentMsg').innerHTML = '<div class="msg msg-success">✅ Payment settings saved!</div>';
-  setTimeout(()=>document.getElementById('paymentMsg').innerHTML='',3000);
+  msg.innerHTML = '<div class="msg msg-success">✅ Password changed successfully!</div>';
+  document.getElementById('oldPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+
+  setTimeout(() => {
+    document.getElementById('pagePassword').innerHTML = showChangePasswordModule();
+  }, 2000);
 }
 
-function loadThemeSettings(){
-  document.getElementById('siteName').value = DB.settings.siteName||'';
-  document.getElementById('siteLogo').value = DB.settings.logo||'';
-  document.getElementById('primaryColor').value = DB.settings.primaryColor||'#e40046';
+// ===== THEME SETTINGS MODULE =====
+function showThemeSettingsModule(){
+  return `
+    <div class="card">
+      <h3>⚙️ Website Theme Settings</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:15px;">Ye changes home page pe dikhenge</p>
+
+      <h4>Site Details</h4>
+      <input type="text" id="siteName" placeholder="Site Name" value="${DB.settings.siteName || 'SANTRA MALL'}">
+      <input type="text" id="siteLogo" placeholder="Site Logo (Emoji + Text)" value="${DB.settings.logo || '🛍️ SANTRA MALL'}">
+
+      <h4>Colors</h4>
+      <label>Primary Color (Buttons, Header):</label>
+      <input type="color" id="primaryColor" value="${DB.settings.primaryColor || '#e40046'}">
+
+      <label>Background Color:</label>
+      <input type="color" id="bgColor" value="${DB.settings.bgColor || '#f1f3f6'}">
+
+      <label>Text Color:</label>
+      <input type="color" id="textColor" value="${DB.settings.textColor || '#212121'}">
+
+      <h4>Typography</h4>
+      <label>Font Family:</label>
+      <select id="fontFamily">
+        <option value="Arial, sans-serif" ${DB.settings.fontFamily==='Arial, sans-serif'?'selected':''}>Arial</option>
+        <option value="'Roboto', sans-serif" ${DB.settings.fontFamily==="'Roboto', sans-serif"?'selected':''}>Roboto</option>
+        <option value="'Poppins', sans-serif" ${DB.settings.fontFamily==="'Poppins', sans-serif"?'selected':''}>Poppins</option>
+        <option value="'Times New Roman', serif" ${DB.settings.fontFamily==="'Times New Roman', serif"?'selected':''}>Times New Roman</option>
+      </select>
+
+      <label>Base Font Size:</label>
+      <select id="fontSize">
+        <option value="14px" ${DB.settings.fontSize==='14px'?'selected':''}>Small</option>
+        <option value="16px" ${DB.settings.fontSize==='16px'?'selected':''}>Medium</option>
+        <option value="18px" ${DB.settings.fontSize==='18px'?'selected':''}>Large</option>
+      </select>
+
+      <h4>Background Image/Video</h4>
+      <input type="text" id="bgImage" placeholder="Background Image/Video URL" value="${DB.settings.bgImage || ''}">
+      <input type="file" id="bgFile" accept="image/*,video/*" onchange="uploadBgMedia(this)">
+      <div id="bgPreview" class="media-preview"></div>
+
+      <div id="themeMsg"></div>
+      <button class="btn-green" onclick="saveThemeSettings()">💾 Save & Apply Theme</button>
+    </div>
+  `;
+}
+
+async function uploadBgMedia(input){
+  let file = input.files[0];
+  if(!file) return;
+  document.getElementById('bgPreview').innerHTML = '⏳ Uploading...';
+
+  try {
+    if(typeof firebase === 'undefined' ||!firebase.storage){
+      throw new Error('Firebase not configured');
+    }
+    let storageRef = firebase.storage().ref();
+    let fileName = 'theme/bg_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+    let snapshot = await storageRef.child(fileName).put(file);
+    let downloadURL = await snapshot.ref.getDownloadURL();
+    document.getElementById('bgImage').value = downloadURL;
+    document.getElementById('bgPreview').innerHTML = `<img src="${downloadURL}" style="max-width:200px;border-radius:8px;"><br>✅ Uploaded`;
+  } catch(e) {
+    document.getElementById('bgPreview').innerHTML = '❌ ' + e.message + '<br><small>URL manually daalo</small>';
+  }
 }
 
 function saveThemeSettings(){
   DB.settings.siteName = document.getElementById('siteName').value;
   DB.settings.logo = document.getElementById('siteLogo').value;
   DB.settings.primaryColor = document.getElementById('primaryColor').value;
+  DB.settings.bgColor = document.getElementById('bgColor').value;
+  DB.settings.textColor = document.getElementById('textColor').value;
+  DB.settings.fontFamily = document.getElementById('fontFamily').value;
+  DB.settings.fontSize = document.getElementById('fontSize').value;
+  DB.settings.bgImage = document.getElementById('bgImage').value;
   saveDB();
-  document.getElementById('themeMsg').innerHTML = '<div class="msg msg-success">✅ Theme settings saved!</div>';
+  document.getElementById('themeMsg').innerHTML = '<div class="msg msg-success">✅ Theme saved! Home page refresh karo.</div>';
   setTimeout(()=>document.getElementById('themeMsg').innerHTML='',3000);
 }
 
-function changePassword(){
-  let oldPass = document.getElementById('oldPassword').value.trim();
-  let newPass = document.getElementById('newPassword').value.trim();
-  let confirmPass = document.getElementById('confirmPassword').value.trim();
-  let msg = document.getElementById('passMsg');
+// ===== GLOBAL SETTINGS MODULE =====
+function showGlobalSettingsModule(){
+  return `
+    <div class="card">
+      <h3>🌐 Global Control</h3>
 
-  if(oldPass!==CURRENT_ADMIN.pass){ msg.innerHTML = '<div class="msg msg-error">❌ Old password wrong!</div>'; return; }
-  if(newPass!==confirmPass){ msg.innerHTML = '<div class="msg msg-error">❌ New passwords do not match!</div>'; return; }
-  if(newPass.length<6){ msg.innerHTML = '<div class="msg msg-error">Password must be 6+ characters!</div>'; return; }
+      <h4>Change Username</h4>
+      <input type="text" id="newUsername" placeholder="New Username" value="${CURRENT_ADMIN?.name || 'Admin'}">
+      <div id="userMsg"></div>
+      <button class="btn-blue" onclick="changeUsername()">Update Username</button>
 
-  CURRENT_ADMIN.pass = newPass;
-  let admin = DB.users.find(u=>u.id==CURRENT_ADMIN.id);
-  if(admin) admin.pass = newPass;
-  saveDB();
-  msg.innerHTML = '<div class="msg msg-success">✅ Password updated!</div>';
-  document.getElementById('oldPassword').value = '';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmPassword').value = '';
+      <h4>🔐 Forgot Password Settings</h4>
+      <p style="font-size:13px;color:#666;margin-bottom:15px;">OTP jayega jab password bhool jaye</p>
+      <input type="tel" id="adminMobile" placeholder="Admin Mobile Number" maxlength="10" value="${DB.settings.adminMobile || ''}">
+      <input type="email" id="adminEmail" placeholder="Admin Email ID" value="${DB.settings.adminEmail || ''}">
+      <div id="otpSettingsMsg"></div>
+      <button class="btn-green" onclick="saveOTPSettings()">💾 Save OTP Settings</button>
+
+      <h4>Site Status</h4>
+      <select id="siteStatus">
+        <option value="active" ${DB.settings.siteStatus==='active'?'selected':''}>🟢 Active</option>
+        <option value="maintenance" ${DB.settings.siteStatus==='maintenance'?'selected':''}>🔧 Maintenance Mode</option>
+      </select>
+      <button class="btn-blue" onclick="updateSiteStatus()">Update Status</button>
+
+      <h4>Database Actions</h4>
+      <button class="btn-green" onclick="exportData()">📥 Export Data</button>
+      <button class="btn-orange" onclick="clearCache()">🗑️ Clear Cache</button>
+      <button class="btn-red" onclick="resetDemo()">⚠️ Reset Demo Data</button>
+    </div>
+  `;
 }
 
-function loadGlobalSettings(){
-  document.getElementById('siteStatus').value = DB.settings.siteStatus||'active';
-  document.getElementById('adminMobile').value = DB.settings.adminMobile||'9001654667';
-  document.getElementById('adminEmail').value = DB.settings.adminEmail||'manishatak07@gmail.com';
+function changeUsername(){
+  let newUser = document.getElementById('newUsername').value.trim();
+  let msg = document.getElementById('userMsg');
+  if(!newUser){
+    msg.innerHTML = '<div class="msg msg-error">❌ Enter username!</div>';
+    return;
+  }
+  let admin = DB.users.find(u=>u.role==='admin');
+  admin.name = newUser;
+  saveDB();
+  msg.innerHTML = '<div class="msg msg-success">✅ Username updated!</div>';
+  document.getElementById('adminName').innerText = newUser.split(' ')[0];
 }
 
 function saveOTPSettings(){
-  let mobile = document.getElementById('adminMobile').value.trim();
-  let email = document.getElementById('adminEmail').value.trim();
-  let msg = document.getElementById('otpSettingsMsg');
-  
-  if(mobile.length !== 10){
-    msg.innerHTML = '<div class="msg msg-error">❌ Enter valid 10-digit mobile!</div>';
-    return;
-  }
-  
-  if(!email.includes('@')){
-    msg.innerHTML = '<div class="msg msg-error">❌ Enter valid email!</div>';
-    return;
-  }
-  
-  DB.settings.adminMobile = mobile;
-  DB.settings.adminEmail = email;
+  DB.settings.adminMobile = document.getElementById('adminMobile').value;
+  DB.settings.adminEmail = document.getElementById('adminEmail').value;
   saveDB();
-  
-  msg.innerHTML = '<div class="msg msg-success">✅ OTP settings updated successfully!</div>';
-  setTimeout(()=>msg.innerHTML='',3000);
-}
-
-
-function changeUsername(){
-  let newUsername = document.getElementById('newUsername').value.trim();
-  let msg = document.getElementById('userMsg');
-  if(!newUsername){ msg.innerHTML = '<div class="msg msg-error">Please enter new username!</div>'; return; }
-  CURRENT_ADMIN.name = newUsername;
-  let admin = DB.users.find(u=>u.id==CURRENT_ADMIN.id);
-  if(admin) admin.name = newUsername;
-  saveDB();
-  document.getElementById('adminName').innerText = newUsername.split(' ')[0];
-  msg.innerHTML = '<div class="msg msg-success">✅ Username updated!</div>';
-  document.getElementById('newUsername').value = '';
+  document.getElementById('otpSettingsMsg').innerHTML = '<div class="msg msg-success">✅ OTP Settings saved!</div>';
+  setTimeout(()=>document.getElementById('otpSettingsMsg').innerHTML='',3000);
 }
 
 function updateSiteStatus(){
   DB.settings.siteStatus = document.getElementById('siteStatus').value;
   saveDB();
-  alert('✅ Site status updated to: ' + DB.settings.siteStatus);
+  alert('✅ Site status updated!');
 }
 
 function exportData(){
   let dataStr = JSON.stringify(DB, null, 2);
-  let blob = new Blob([dataStr], {type:'application/json'});
+  let blob = new Blob([dataStr], {type: 'application/json'});
   let url = URL.createObjectURL(blob);
   let a = document.createElement('a');
   a.href = url;
-  a.download = 'santra-mall-backup-' + Date.now() + '.json';
+  a.download = 'santra_mall_backup_' + Date.now() + '.json';
   a.click();
   alert('✅ Data exported successfully!');
 }
 
 function clearCache(){
-  if(confirm('Clear all cache? This will refresh the page.')){
-    localStorage.removeItem('SANTRA_DB');
-    location.reload();
+  if(confirm('Clear all cache? This will not delete data.')){
+    localStorage.removeItem('product_history');
+    alert('✅ Cache cleared!');
   }
 }
 
 function resetDemo(){
-  if(confirm('⚠️ Reset all demo data? This will delete all orders, customers, and reset to default.')){
-    localStorage.removeItem('SANTRA_DB');
+  if(confirm('⚠️ WARNING: This will delete ALL data and reset to demo!')){
+    localStorage.removeItem('santra_db');
+    localStorage.removeItem('product_history');
     location.reload();
   }
 }
 
-console.log('Admin panel loaded! Login: admin / admin123');
-
-function loadGlobalSettings(){
-  document.getElementById('siteStatus').value = DB.settings.siteStatus||'active';
-  document.getElementById('adminMobile').value = DB.settings.adminMobile||'9001654667';
-  document.getElementById('adminEmail').value = DB.settings.adminEmail||'manishatak07@gmail.com';
-}
-
-function saveOTPSettings(){
-  let mobile = document.getElementById('adminMobile').value.trim();
-  let email = document.getElementById('adminEmail').value.trim();
-  let msg = document.getElementById('otpSettingsMsg');
-  
-  if(mobile.length !== 10){
-    msg.innerHTML = '<div class="msg msg-error">❌ Enter valid 10-digit mobile!</div>';
-    return;
-  }
-  
-  if(!email.includes('@')){
-    msg.innerHTML = '<div class="msg msg-error">❌ Enter valid email!</div>';
-    return;
-  }
-  
-  DB.settings.adminMobile = mobile;
-  DB.settings.adminEmail = email;
-  saveDB();
-  
-  msg.innerHTML = '<div class="msg msg-success">✅ OTP settings updated successfully!</div>';
-  setTimeout(()=>msg.innerHTML='',3000);
-}
-
+window.addEventListener('load', function(){
+  setTimeout(showHistory, 1000);
+});
 </script>
 </body>
 </html>

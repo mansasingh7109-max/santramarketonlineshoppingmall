@@ -1,21 +1,11 @@
-// SANTRA MALL DATABASE - FINAL VERSION v4
+// SANTRA MALL DATABASE - FINAL VERSION v6
+// Key fix: LocalStorage key 'santra_db' use ki - ab admin.html se sync hoga
+
 var DB = {
-    products: [
-        {id: 1, name: "Coffee Set", price: 80, img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400", category: "Home", desc: "Premium Coffee Set", stock: 50},
-        {id: 2, name: "Bluetooth Speaker", price: 1299, img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400", category: "Electronics", desc: "Wireless Speaker", stock: 30},
-        {id: 3, name: "Cotton Kurti", price: 599, img: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400", category: "Fashion", desc: "Comfortable Kurti", stock: 100},
-        {id: 4, name: "Face Cream", price: 249, img: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400", category: "Beauty", desc: "Herbal Face Cream", stock: 75}
-    ],
-    categories: [
-        {id:1, name:"Fashion", img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=200", type:"image"},
-        {id:2, name:"Electronics", img:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200", type:"image"},
-        {id:3, name:"Home", img:"https://images.unsplash.com/photo-1511920170033-f8396924c348?w=200", type:"image"},
-        {id:4, name:"Beauty", img:"https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=200", type:"image"}
-    ],
-    users: [
-        {id:1, name:"Manisha Tak", email:"manishatak07@gmail.com", pass:"admin123", role:"admin", mobile:"9001654667", mobileVerified: true}
-    ],
+    products: [],
+    categories: [],
     orders: [],
+    users: [],
     cart: [],
     otps: [],
     enquiries: [],
@@ -49,17 +39,20 @@ var DB = {
     }
 };
 
-// Load saved data from localStorage
-const saved = localStorage.getItem('SANTRA_DB');
+// FIX 1: Load saved data from localStorage - SAME KEY as admin.html
+const saved = localStorage.getItem('santra_db');
 if(saved) {
     try {
         const oldDB = JSON.parse(saved);
+        // Merge old data with new structure - Old data safe rahega
         DB = {
             ...DB,
             ...oldDB,
-            products: oldDB.products?.length ? oldDB.products : DB.products,
-            categories: oldDB.categories?.length ? oldDB.categories : DB.categories,
-            users: oldDB.users?.length ? oldDB.users : DB.users,
+            products: oldDB.products || DB.products,
+            categories: oldDB.categories || DB.categories,
+            users: oldDB.users || DB.users,
+            orders: oldDB.orders || DB.orders,
+            cart: oldDB.cart || DB.cart,
             settings: { ...DB.settings, ...oldDB.settings },
             formSettings: { ...DB.formSettings, ...oldDB.formSettings }
         };
@@ -69,23 +62,46 @@ if(saved) {
         if(!DB.searchHistory) DB.searchHistory = [];
         if(!DB.customerForms) DB.customerForms = [];
         if(!DB.media) DB.media = [];
-        if(!DB.orders) DB.orders = [];
-        if(!DB.cart) DB.cart = [];
-        if(!DB.categories) DB.categories = [];
     } catch(e) {
         console.log('Error loading DB, using default');
     }
 }
 
-// Ensure admin exists - only if not in users array
-if(!DB.users.find(u=>u.email==="manishatak07@gmail.com")){
-    DB.users.push({id:1,name:"Manisha Tak",email:"manishatak07@gmail.com",pass:"admin123",role:"admin",mobile:"9001654667",mobileVerified:true});
+// FIX 2: Ensure admin exists - Password change ko overwrite nahi karega
+if(!DB.users || DB.users.length === 0){
+    // Sirf pehli baar admin banega
+    DB.users = [{id:1, name:"Manisha Tak", email:"manishatak07@gmail.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified:true}];
+} else {
+    // Agar admin nahi hai to add kar, lekin existing ka password mat chhedo
+    let adminExists = DB.users.find(u => u.role === 'admin');
+    if(!adminExists){
+        DB.users.push({id:Date.now(), name:"Admin", email:"admin@santra.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified:true});
+    }
 }
 
-// Core functions
+// FIX 3: Default products/categories agar khali hai to
+if(!DB.products || DB.products.length === 0){
+    DB.products = [
+        {id: 1, name: "Coffee Set", price: 80, img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400", category: "Home", desc: "Premium Coffee Set", stock: 50},
+        {id: 2, name: "Bluetooth Speaker", price: 1299, img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400", category: "Electronics", desc: "Wireless Speaker", stock: 30},
+        {id: 3, name: "Cotton Kurti", price: 599, img: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400", category: "Fashion", desc: "Comfortable Kurti", stock: 100},
+        {id: 4, name: "Face Cream", price: 249, img: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400", category: "Beauty", desc: "Herbal Face Cream", stock: 75}
+    ];
+}
+
+if(!DB.categories || DB.categories.length === 0){
+    DB.categories = [
+        {id:1, name:"Fashion", img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=200", type:"image"},
+        {id:2, name:"Electronics", img:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200", type:"image"},
+        {id:3, name:"Home", img:"https://images.unsplash.com/photo-1511920170033-f8396924c348?w=200", type:"image"},
+        {id:4, name:"Beauty", img:"https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=200", type:"image"}
+    ];
+}
+
+// Core functions - SAME KEY use kar rahe
 function saveDB(){ 
-    localStorage.setItem('SANTRA_DB', JSON.stringify(DB)); 
-    console.log('DB Saved. Products:', DB.products.length, 'Orders:', DB.orders.length, 'Cart:', DB.cart.length, 'Categories:', DB.categories.length);
+    localStorage.setItem('santra_db', JSON.stringify(DB)); 
+    console.log('DB Saved. Products:', DB.products.length, 'Orders:', DB.orders.length, 'Cart:', DB.cart.length, 'Users:', DB.users.length);
 }
 
 function addProduct(productData) {
@@ -125,9 +141,10 @@ function saveCustomerForm(uid, formType, data){
 }
 
 // First time setup
-if(!localStorage.getItem('SANTRA_DB')){
+if(!localStorage.getItem('santra_db')){
     saveDB();
-    console.log('New DB created');
+    console.log('New DB created with key: santra_db');
 }
 
 console.log('DB Loaded Successfully:', DB);
+console.log('Admin Password:', DB.users.find(u=>u.role==='admin')?.pass);
