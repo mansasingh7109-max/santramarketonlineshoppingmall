@@ -171,8 +171,24 @@
             <button class="btn-green" onclick="toggleAddProduct()">+ Add New Product</button>
             <button class="btn-blue" onclick="exportProductsCSV()">📊 Export CSV</button>
           </div>
+          
+                  </div>  <!-- Line 173: Ye Manage Products wale card ka closing div hai -->
 
-          <div id="addProductBox" class="card hide">
+        <!-- YAHAN SE PASTE KARO - Line 174 se start -->
+        <div class="card">
+            <hr>
+            <h3>📋 Product Add History</h3>
+            <button onclick="showHistory()">History Refresh Karo</button>
+            <button onclick="downloadHistory()">History TXT Download</button>
+            <button onclick="localStorage.removeItem('product_history'); showHistory();">History Clear Karo</button>
+
+            <pre id="historyBox" style="background:#f5f5f5; padding:10px; max-height:300px; overflow:auto; border:1px solid #ddd; margin-top:10px;">Loading...</pre>
+        </div>
+        <!-- YAHAN TAK PASTE KARO -->
+
+        <div id="addProductBox" class="card hide">  <!-- Line 175: Ye tumhara form start hota hai -->
+
+          
             <h3>Add New Product</h3>
             <div class="form-grid">
               <input type="text" id="prodName" placeholder="Product Name *">
@@ -187,22 +203,18 @@
               <option value="audio">🎵 Audio</option>
               <option value="document">📄 Document/PDF</option>
             </select>
+<input type="file" id="mediaFile" onchange="uploadProductFile(this)" style="margin-top:10px;">
+<br><br>
 
-            <div class="upload-area">
-              <p><b>📎 Media Upload</b></p>
-              <input type="text" id="prodThumbUrl" placeholder="Thumbnail Image URL">
-              <input type="text" id="prodMediaUrl" placeholder="Media URL (Video/Audio/PDF Link)">
-              <p style="margin:10px 0;color:#999">- OR -</p>
-              <p><b>📁 Upload from Gallery/Browser:</b></p>
-              <input type="file" id="prodFile" accept="image/*,video/*,audio/*,.pdf" onchange="previewProductFile(this)">
-              <label for="prodFile">Choose File</label>
-              <span id="fileName">No file chosen</span>
-              <div id="prodPreview" class="media-preview"></div>
+<input type="text" id="prodMediaUrl" placeholder="Upload ke baad URL yaha aayega" readonly style="width:100%;">
+<br><br>
+
+<div id="prodPreview" style="margin:10px 0;"></div>
+            
+198  <textarea id="prodDesc" placeholder="Product Description" rows="3"></textarea>
+199  <button class="btn-green" onclick="saveProduct()">💾 Save Product</button>
+              
             </div>
-
-            <textarea id="prodDesc" placeholder="Product Description" rows="3"></textarea>
-            <button class="btn-green" onclick="saveProduct()">💾 Save Product</button>
-            <button class="btn-red" onclick="toggleAddProduct()">❌ Cancel</button>
           </div>
 
           <div class="card">
@@ -473,17 +485,87 @@ function loadCategoryDropdown(){
 }
 
 function saveProduct(){
-  let name = document.getElementById('prodName').value.trim();
-  let price = parseInt(document.getElementById('prodPrice').value);
-  let mrp = parseInt(document.getElementById('prodMRP').value) || price;
-  let stock = parseInt(document.getElementById('prodStock').value);
-  let category = document.getElementById('prodCategory').value;
-  let type = document.getElementById('prodMediaType').value;
-  let img = document.getElementById('prodThumbUrl').value.trim();
-  let media = document.getElementById('prodMediaUrl').value.trim();
-  let desc = document.getElementById('prodDesc').value.trim();
+    let productData = {
+        name: document.getElementById('prodName').value,
+        price: document.getElementById('prodPrice').value,
+        mrp: document.getElementById('prodMRP').value,
+        stock: document.getElementById('prodStock').value,
+        category: document.getElementById('prodCategory').value,
+        mediaType: document.getElementById('prodMediaType').value,
+        mediaUrl: document.getElementById('prodMediaUrl').value,
+        thumbUrl: document.getElementById('prodThumbUrl').value,
+        description: document.getElementById('prodDesc').value,
+        uploadDate: firebase.firestore.FieldValue.serverTimestamp(), // ← Ye line date save karegi
+        uploadedBy: 'Santosh'
+    };
+}; // <-- Ye tumhari line 484 hai
 
-  if(!name||!price||!category||!stock){ alert('Please fill all required fields!'); return; }
+    // Line 485 se naya code start
+    if(!productData.name ||!productData.price ||!productData.category ||!productData.stock){
+        alert('Please fill all required fields!');
+        return;
+    }
+
+    // 1. Firestore me save
+    db.collection('products').add(productData).then(() => {
+
+        // 2. Line-wise History localStorage me save karo
+        saveToHistory(productData);
+
+        alert('✅ Product Saved! History me add ho gaya');
+        516     showHistory();  // ← ✅ Ab sahi hai
+
+    }).catch((error) => {
+        alert('Error: ' + error);
+    });
+}
+
+// Ye 3 functions saveProduct() ke bahar, alag se paste karo
+function saveToHistory(data) {
+    let now = new Date();
+    let dateTime = now.toLocaleString('en-IN'); // 30/4/2026, 3:25:10 PM
+
+    // Ek line banao: Date | Name | Price | MRP | Stock | Category | User
+    let historyLine = `${dateTime} | ${data.name} | ₹${data.price} | MRP:₹${data.mrp} | Stock:${data.stock} | ${data.category} | By:${data.uploadedBy}\n`;
+
+    // Purani history nikalo + nayi line add karo
+    let oldHistory = localStorage.getItem('product_history') || '';
+    localStorage.setItem('product_history', oldHistory + historyLine);
+
+    console.log("✅ History me add ho gaya");
+}
+
+function showHistory() {
+    let history = localStorage.getItem('product_history');
+    if(history) {
+        document.getElementById('historyBox').innerText = history;
+    } else {
+        document.getElementById('historyBox').innerText = "Abhi koi history nahi hai";
+    }
+}
+
+function downloadHistory() {
+    let history = localStorage.getItem('product_history') || 'Koi history nahi';
+    let blob = new Blob([history], { type: 'text/plain' });
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'product_history.txt';
+    link.click();
+}
+    
+    if(!productData.name || !productData.price || !productData.category || !productData.stock){
+        alert('Please fill all required fields!');
+        return;
+    }
+    
+    db.collection('products').add(productData).then(() => {
+        alert('✅ Product Saved! History me add ho gaya');
+        loadProductHistory(); // ← Table refresh ho jayegi
+        document.getElementById('productForm').reset();
+    }).catch(err => {
+        alert('Error: ' + err.message);
+    });
+}
 
   if(EDITING_PRODUCT_ID){
     let p = DB.products.find(pr=>pr.id==EDITING_PRODUCT_ID);
@@ -830,6 +912,110 @@ function saveOTPSettings(){
   setTimeout(()=>msg.innerHTML='',3000);
 }
 
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+// 1. Apna Firebase Config yaha daal - Firebase Console → Project Settings se milega
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+};
+
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
+const db = firebase.firestore();
+
+// 2. File Upload Function
+function uploadProductFile(input){
+    let file = input.files[0];
+    let type = document.getElementById('prodMediaType').value;
+    if(!file) return;
+
+    document.getElementById('prodPreview').innerHTML = 'Uploading...';
+
+    let fileName = Date.now() + '_' + file.name;
+    storage.ref('products/' + fileName).put(file).then(snap => {
+        return snap.ref.getDownloadURL();
+    }).then(url => {
+        document.getElementById('prodMediaUrl').value = url;
+        
+        if(type === 'image') document.getElementById('prodPreview').innerHTML = `<img src="${url}" width="150">`;
+        else if(type === 'video') document.getElementById('prodPreview').innerHTML = `<video src="${url}" width="200" controls></video>`;
+        else if(type === 'audio') document.getElementById('prodPreview').innerHTML = `<audio src="${url}" controls></audio>`;
+        else document.getElementById('prodPreview').innerHTML = '✅ PDF Uploaded';
+    }).catch(err => {
+        document.getElementById('prodPreview').innerHTML = '❌ Error: ' + err.message;
+    });
+}
+
+// 3. Save Product with Date History
+function saveProduct(){
+    let productData = {
+        name: document.getElementById('prodName').value,
+        price: document.getElementById('prodPrice').value,
+        mrp: document.getElementById('prodMRP').value,
+        stock: document.getElementById('prodStock').value,
+        category: document.getElementById('prodCategory').value,
+        mediaType: document.getElementById('prodMediaType').value,
+        mediaUrl: document.getElementById('prodMediaUrl').value,
+        description: document.getElementById('prodDesc').value,
+        uploadDate: firebase.firestore.FieldValue.serverTimestamp() // Ye date add karega
+    };
+    
+db.collection('products').add(productData).then(() => {
+    
+    // 1. Pehle History save karo
+    saveToHistory(productData); 
+
+    alert('✅ Product Saved with Date & Time! History me add ho gaya');
+    
+    // 2. Reload hata diya - ab page reload nahi hoga
+    // location.reload();
+    
+    showHistory(); // History box refresh kar do
+    document.getElementById('addProductBox').classList.add('hide'); // Form band kar do
+    
+});
+}
+
+} // saveProduct() khatam
+
+function saveToHistory(data) {
+    let now = new Date();
+    let dateTime = now.toLocaleString('en-IN');
+    let historyLine = `${dateTime} | ${data.name} | ₹${data.price} | MRP:₹${data.mrp} | Stock:${data.stock} | ${data.category} | By:${data.uploadedBy}\n`;
+    let oldHistory = localStorage.getItem('product_history') || '';
+    localStorage.setItem('product_history', oldHistory + historyLine);
+}
+
+function showHistory() {
+    let history = localStorage.getItem('product_history');
+    document.getElementById('historyBox').innerText = history || "Abhi koi history nahi hai";
+}
+
+function downloadHistory() {
+    let history = localStorage.getItem('product_history') || 'Koi history nahi';
+    let blob = new Blob([history], { type: 'text/plain' });
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'product_history.txt';
+    link.click();
+}
+</script>
+<script>
+// Page load par history dikhao
+document.addEventListener('DOMContentLoaded', showHistory);
 </script>
 </body>
 </html>

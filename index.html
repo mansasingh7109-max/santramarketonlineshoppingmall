@@ -387,5 +387,100 @@ function requestActionPopup(orderId, type){
     navigator.serviceWorker.register('/sw.js');
   }
 </script>
-</body>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+// Firebase Config - admin.html wala hi use kar
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+};
+
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+// Products Load Karo Home Page Pe
+db.collection('products').orderBy('uploadDate', 'desc').get().then((querySnapshot) => {
+    let html = '';
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        let date = data.uploadDate ? data.uploadDate.toDate().toLocaleDateString('en-IN') : '';
+        
+        html += `<div class="product-card">`;
+        
+        if(data.mediaType === 'image'){
+            html += `<img src="${data.mediaUrl}" alt="${data.name}">`;
+        }
+        else if(data.mediaType === 'video'){
+            html += `<video src="${data.mediaUrl}" controls></video>`;
+        }
+        else if(data.mediaType === 'audio'){
+            html += `<audio src="${data.mediaUrl}" controls style="width:100%"></audio>`;
+        }
+        else if(data.mediaType === 'document'){
+            html += `<a href="${data.mediaUrl}" target="_blank">📄 View PDF</a>`;
+        }
+        
+        html += `<h3>${data.name}</h3>
+                 <p><s>₹${data.mrp}</s> <b>₹${data.price}</b></p>
+                 <p>Stock: ${data.stock}</p>
+                 <small>Added: ${date}</small><br>
+                 <button onclick="addToCart('${doc.id}')">Add to Cart</button>
+               </div>`;
+    });
+    
+    if(html === '') html = '<p>No products available</p>';
+    document.getElementById('productList').innerHTML = html;
+}).catch(err => {
+    document.getElementById('productList').innerHTML = 'Error: ' + err.message;
+});
+
+function addToCart(productId){
+    alert('Added: ' + productId);
+}
+</script>
+
+<style>
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.product-card img, .product-card video {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.product-card button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+</style>
+</body>  <!-- Is line ke just upar paste kar -->
 </html>
