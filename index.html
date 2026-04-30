@@ -83,34 +83,11 @@
 <div class="header">
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
-    <!-- KEY PANEL - Ab ye popup kholega -->
-    <div class="icon-btn" onclick="showKeyPanelLogin()">
-      <div>⚙️</div>
-      <span>KEY<br>PANEL</span>
-    </div>
-    <a href="help.html" class="icon-btn">
-      <div>🤝</div>
-      <span>HELP<br>DESK</span>
-    </a>
+    <!-- KEY PANEL HATA DIYA - AB SIRF HELP DESK RAHEGA -->
     <a href="customer-account.html" class="icon-btn" id="loginBtn">
       <div>👤</div>
       <span id="loginText">LOGIN</span>
     </a>
-  </div>
-</div>
-
-<!-- KEY PANEL LOGIN POPUP -->
-<div id="keyPanelModal" class="modal hide">
-  <div class="modal-content" style="max-width:400px;">
-    <div class="modal-header">
-      <h3>🔐 Key Panel</h3>
-      <button class="close-btn" onclick="closeKeyPanel()">×</button>
-    </div>
-    <div class="modal-body">
-      <input type="password" id="keyPanelPassword" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px">
-      <div id="keyPanelMsg"></div>
-      <button onclick="keyPanelLogin()" style="width:100%;padding:14px;background:#5b21b6;color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px;">Login to Admin</button>
-    </div>
   </div>
 </div>
 
@@ -154,9 +131,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-<!-- ===== THEME APPLY CODE - db.js KE BAAD ===== -->
+<!-- ===== THEME APPLY CODE - db.js KE BAAD ===== LINE 158 YAHAN SE SHURU -->
 <script>
-// ===== THEME APPLY - DB se load karo =====
+// ===== THEME APPLY + HELP DESK - DB se load karo =====
 document.addEventListener('DOMContentLoaded', function(){
   // db.js load ho chuka hai, ab DB variable available hai
   if(typeof DB !== 'undefined' && DB.settings){
@@ -175,7 +152,95 @@ document.addEventListener('DOMContentLoaded', function(){
     let logoEl = document.querySelector('.header h1');
     if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
   }
+  
+  // ===== HELP DESK BUTTON LOAD =====
+  loadHelpDeskButton();
 });
+
+// ===== HELP DESK BUTTON - HOME PAGE PE =====
+function loadHelpDeskButton(){
+  let header = document.querySelector('.header');
+  if(header &&!document.getElementById('helpDeskBtn')){
+    let btn = document.createElement('button');
+    btn.id = 'helpDeskBtn';
+    btn.innerHTML = '🤝 HELP<br>DESK';
+    btn.style.cssText = 'width:auto;padding:8px;background:#f57c00;color:white;border:none;border-radius:4px;margin:5px;font-size:12px;';
+    btn.onclick = openHelpDesk;
+    header.appendChild(btn);
+  }
+}
+
+// ===== HELP DESK MODAL WITH ADMIN LOGIN =====
+function openHelpDesk(){
+  let modal = document.createElement('div');
+  modal.id = 'helpDeskModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;';
+
+  modal.innerHTML = `
+    <div style="background:white;padding:25px;border-radius:12px;max-width:450px;width:90%;max-height:80vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+        <h3>💬 Help Desk</h3>
+        <button onclick="closeHelpDesk()" style="background:none;border:none;font-size:24px;width:auto;padding:0;cursor:pointer;">×</button>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <h4>📞 Customer Support</h4>
+        <p><b>Phone:</b> ${DB.settings.helpdeskPhone || '9876543210'}</p>
+        <p><b>Email:</b> ${DB.settings.helpdeskEmail || 'support@santra.com'}</p>
+        <p><b>WhatsApp:</b> ${DB.settings.helpdeskWhatsapp || '9876543210'}</p>
+        <p><b>Hours:</b> ${DB.settings.helpdeskHours || 'Mon-Sat: 10 AM - 7 PM'}</p>
+        <br>
+        <h4>📝 About Us</h4>
+        <p>${DB.settings.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
+      </div>
+
+      <hr style="margin:20px 0;">
+
+      <div>
+        <h4 style="margin-bottom:10px;">🔐 Admin Login</h4>
+        <input type="password" id="adminPassHelpdesk" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+        <button onclick="adminLoginFromHelpdesk()" style="width:100%;padding:12px;background:#2874f0;color:white;border:none;border-radius:4px;font-weight:bold;">Login to Admin Panel</button>
+        <p style="font-size:11px;color:#666;margin-top:8px;">Authorized personnel only</p>
+      </div>
+
+      <div id="adminLoginMsg"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeHelpDesk(){
+  let modal = document.getElementById('helpDeskModal');
+  if(modal) modal.remove();
+}
+
+// ===== ADMIN LOGIN FROM HELP DESK =====
+function adminLoginFromHelpdesk(){
+  let pass = document.getElementById('adminPassHelpdesk').value.trim();
+  let msg = document.getElementById('adminLoginMsg');
+
+  if(!DB.users || DB.users.length === 0){
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin not found!</div>';
+    return;
+  }
+
+  let admin = DB.users.find(u => u.role === 'admin');
+
+  if(!admin){
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin user not found!</div>';
+    return;
+  }
+
+  if(pass === admin.pass){
+    localStorage.setItem('current_admin', JSON.stringify(admin));
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#d4edda;color:#155724;">✅ Login Success! Redirecting...</div>';
+    setTimeout(() => {
+      window.location.href = 'admin.html';
+    }, 1000);
+  } else {
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Invalid Password!</div>';
+  }
+}
 </script>
 
 <script>
@@ -190,7 +255,6 @@ const firebaseConfig = {
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-  
 
 if (!firebase.apps.length) {
    firebase.initializeApp(firebaseConfig);
@@ -201,40 +265,6 @@ window.onload = function(){
   loadProductsFromFirebase();
   updateLoginStatus();
   updateCartCount();
-}
-
-// ===== KEY PANEL LOGIN - DB SE LATEST PASSWORD CHECK KAREGA =====
-function showKeyPanelLogin(){
-  document.getElementById('keyPanelModal').classList.remove('hide');
-  document.getElementById('keyPanelPassword').value = '';
-  document.getElementById('keyPanelMsg').innerHTML = '';
-}
-
-function closeKeyPanel(){
-  document.getElementById('keyPanelModal').classList.add('hide');
-}
-
-function keyPanelLogin(){
-  let p = document.getElementById('keyPanelPassword').value.trim();
-  let msg = document.getElementById('keyPanelMsg');
-  
-  // localStorage se latest DB load kar
-  let savedDB = localStorage.getItem('santra_db');
-  if(savedDB){
-    DB = JSON.parse(savedDB);
-  }
-  
-  let admin = DB.users.find(u => u.role==='admin');
-
-  // Sirf DB wala password chalega - Change karne ke baad naya wala
-  if(admin && p === admin.pass){
-    msg.innerHTML = '<div class="msg msg-success">✅ Login successful!</div>';
-    setTimeout(() => {
-      window.location.href = 'admin.html';
-    }, 500);
-  } else {
-    msg.innerHTML = '<div class="msg msg-error">❌ Invalid Password!</div>';
-  }
 }
 
 // Firebase se Products Load Karo
