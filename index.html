@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANTRA MALL</title>
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#e40046">
+  <meta name="theme-color" content="#e40046">
   
   <style>
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
@@ -20,7 +20,7 @@
     .container{padding:15px;}
     .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
     .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
+    .product-card img, .product-card video{width:100%;height:140px;object-fit:cover;border-radius:6px;}
     .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
     .product-card p{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
     .product-card .cat{font-size:11px;color:#999;}
@@ -31,8 +31,6 @@
     .nav-item div{font-size:22px;}
     .nav-item span{font-size:11px;display:block;margin-top:2px;}
     .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-    
-    /* ORDER POPUP MODAL - FULL SCREEN */
     .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
     .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
     .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
@@ -40,8 +38,6 @@
     .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
     .modal-body{padding:20px;overflow-y:auto;}
     .hide{display:none!important;}
-    
-    /* ORDER BOX IN POPUP */
     .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
     .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
     .order-box h4{color:var(--accent);font-size:16px;}
@@ -54,18 +50,15 @@
     .status-returned{background:#ff9800;color:white;}
     .status-refunded{background:#9c27b0;color:white;}
     .status-exchange{background:#00bcd4;color:white;}
-    
     .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
     .order-info p{margin:5px 0;}
     .order-info b{color:#333;}
     .request-box{background:#fff3cd;border:1px solid #ffc107;padding:10px;border-radius:6px;margin:8px 0;font-size:12px;}
-    
     .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
     .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
     .order-item-info{flex:1;}
     .order-item-info h5{font-size:13px;margin-bottom:3px;}
     .order-item-info p{font-size:12px;color:#666;}
-    
     .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
     .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
     .btn-track{background:#2196F3;color:white;}
@@ -73,7 +66,6 @@
     .btn-return{background:#ff9800;color:white;}
     .btn-refund{background:#9c27b0;color:white;}
     .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
-    
     .tracking-bar{display:flex;justify-content:space-between;margin:15px 0;position:relative;}
     .tracking-bar::before{content:'';position:absolute;top:12px;left:0;right:0;height:2px;background:#ddd;z-index:0;}
     .track-dot{text-align:center;position:relative;z-index:1;flex:1;}
@@ -89,9 +81,9 @@
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
     <a href="admin.html" class="icon-btn">
-      <div>⚙️</div>
-      <span>key panel</span>
-    </a>
+  <div>⚙️</div>
+  <span>key panel</span>
+</a>
     <a href="help.html" class="icon-btn">
       <div>🤝</div>
       <span>HELP<br>DESK</span>
@@ -108,7 +100,6 @@
   <div id="productList" class="product-grid"></div>
 </div>
 
-<!-- ORDERS POPUP MODAL - YE POPUP KHULEGA -->
 <div id="ordersModal" class="modal hide">
   <div class="modal-content">
     <div class="modal-header">
@@ -140,34 +131,79 @@
 </div>
 
 <script src="db.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
 <script>
+// Firebase Config - apna config daalo yahan
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
 window.onload = function(){
-  loadProducts();
+  loadProductsFromFirebase();
   updateLoginStatus();
   updateCartCount();
 }
 
-function loadProducts(){
+// Firebase se Products Load Karo
+function loadProductsFromFirebase(){
   let container = document.getElementById('productList');
-  container.innerHTML = '';
-  if(!DB.products || DB.products.length === 0){
-    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
-    return;
-  }
-  DB.products.forEach(p => {
-    container.innerHTML += `
-      <div class="product-card">
-        <img src="${p.img}" alt="${p.name}">
-        <h4>${p.name}</h4>
-        <p>₹${p.price}</p>
-        <div class="cat">Category: ${p.category || 'General'}</div>
-        <button onclick="addToCart(${p.id})">Add to Cart</button>
-      </div>
-    `;
+  container.innerHTML = '<p style="text-align:center;padding:40px;color:#999;">Loading products...</p>';
+  
+  db.collection('products').orderBy('uploadDate', 'desc').get().then((querySnapshot) => {
+    container.innerHTML = '';
+    if(querySnapshot.empty){
+      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
+      return;
+    }
+    
+    querySnapshot.forEach((doc) => {
+      let p = doc.data();
+      p.id = doc.id;
+      
+      let mediaHtml = '';
+      if(p.mediaType === 'image'){
+        mediaHtml = `<img src="${p.mediaUrl}" alt="${p.name}">`;
+      } else if(p.mediaType === 'video'){
+        mediaHtml = `<video src="${p.mediaUrl}" controls></video>`;
+      } else if(p.mediaType === 'audio'){
+        mediaHtml = `<audio src="${p.mediaUrl}" controls style="width:100%"></audio>`;
+      } else if(p.mediaType === 'document'){
+        mediaHtml = `<a href="${p.mediaUrl}" target="_blank">📄 View PDF</a>`;
+      }
+      
+      let date = p.uploadDate ? p.uploadDate.toDate().toLocaleDateString('en-IN') : '';
+      
+      container.innerHTML += `
+        <div class="product-card">
+          ${mediaHtml}
+          <h4>${p.name}</h4>
+          <p><s style="font-size:12px;color:#999;">₹${p.mrp}</s> ₹${p.price}</p>
+          <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock}</div>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
+        </div>
+      `;
+    });
+  }).catch(err => {
+    container.innerHTML = '<p style="color:red;text-align:center;">Error: ' + err.message + '</p>';
   });
 }
 
-function addToCart(pid){
+function addToCart(productId){
   let userId = localStorage.getItem('currentUserId');
   if(!userId){
     alert('Please login first!');
@@ -175,30 +211,34 @@ function addToCart(pid){
     return;
   }
   
-  userId = parseInt(userId);
-  let product = DB.products.find(p => p.id == pid);
-  if(!product) {
-    alert('Product not found!');
-    return;
-  }
-  
-  let cartItem = DB.cart.find(c => c.pid == pid && c.uid == userId);
-  if(cartItem){
-    cartItem.qty += 1;
-  } else {
-    DB.cart.push({
-      id: Date.now(),
-      uid: userId, 
-      pid: pid,
-      name: product.name,
-      price: product.price,
-      img: product.img,
-      qty: 1
-    });
-  }
-  saveDB();
-  updateCartCount();
-  alert('Added to cart!');
+  // Firebase se product fetch karke cart me add karo
+  db.collection('products').doc(productId).get().then((doc) => {
+    if(!doc.exists){
+      alert('Product not found!');
+      return;
+    }
+    let product = doc.data();
+    
+    // Local cart me add karo
+    if(!DB.cart) DB.cart = [];
+    let cartItem = DB.cart.find(c => c.pid == productId && c.uid == userId);
+    if(cartItem){
+      cartItem.qty += 1;
+    } else {
+      DB.cart.push({
+        id: Date.now(),
+        uid: parseInt(userId), 
+        pid: productId,
+        name: product.name,
+        price: product.price,
+        img: product.mediaUrl,
+        qty: 1
+      });
+    }
+    saveDB();
+    updateCartCount();
+    alert('✅ Added to cart!');
+  });
 }
 
 function updateCartCount(){
@@ -207,15 +247,15 @@ function updateCartCount(){
     document.getElementById('cartCount').innerText = '0';
     return;
   }
-  userId = parseInt(userId);
-  let userCart = DB.cart.filter(c => c.uid == userId);
+  if(!DB.cart) DB.cart = [];
+  let userCart = DB.cart.filter(c => c.uid == parseInt(userId));
   let total = userCart.reduce((sum, item) => sum + item.qty, 0);
   document.getElementById('cartCount').innerText = total;
 }
 
 function updateLoginStatus(){
   let userId = localStorage.getItem('currentUserId');
-  if(userId){
+  if(userId && DB.users){
     let user = DB.users.find(u => u.id == parseInt(userId));
     if(user){
       document.getElementById('loginText').innerHTML = 'ACCOUNT';
@@ -233,8 +273,8 @@ function openOrdersPopup(){
   }
   
   userId = parseInt(userId);
-  let userOrders = DB.orders.filter(o => o.uid == userId).reverse();
-  let userInquiries = DB.customerForms.filter(f => f.uid == userId).reverse();
+  let userOrders = DB.orders ? DB.orders.filter(o => o.uid == userId).reverse() : [];
+  let userInquiries = DB.customerForms ? DB.customerForms.filter(f => f.uid == userId).reverse() : [];
   let container = document.getElementById('ordersPopupList');
   
   if(userOrders.length === 0 && userInquiries.length === 0){
@@ -252,7 +292,6 @@ function openOrdersPopup(){
       let canReturn = order.status === 'Delivered';
       let canRefund = ['Delivered', 'Returned'].includes(order.status);
       
-      // TRACKING BAR
       let trackingHtml = `
         <div class="tracking-bar">
           <div class="track-dot ${['Confirmed','Shipped','Delivered'].includes(order.status) ? 'done' : 'active'}">
@@ -315,7 +354,6 @@ function openOrdersPopup(){
       `;
     });
     
-    // INQUIRIES
     if(userInquiries.length > 0){
       container.innerHTML += '<h4 style="color:var(--accent);margin:20px 0 10px;">💬 My Inquiries</h4>';
       userInquiries.forEach(inq => {
@@ -379,108 +417,14 @@ function requestActionPopup(orderId, type){
   
   saveDB();
   alert('✅ ' + type + ' request submitted successfully!\n\nAdmin will review and contact you soon.');
-  openOrdersPopup(); // Refresh popup
+  openOrdersPopup();
 }
 </script>
+
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js');
   }
 </script>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
-<script>
-// Firebase Config - admin.html wala hi use kar
-
-  const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-};
-
-if (!firebase.apps.length) {
-   firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-// Products Load Karo Home Page Pe
-db.collection('products').orderBy('uploadDate', 'desc').get().then((querySnapshot) => {
-    let html = '';
-    querySnapshot.forEach((doc) => {
-        let data = doc.data();
-        let date = data.uploadDate ? data.uploadDate.toDate().toLocaleDateString('en-IN') : '';
-        
-        html += `<div class="product-card">`;
-        
-        if(data.mediaType === 'image'){
-            html += `<img src="${data.mediaUrl}" alt="${data.name}">`;
-        }
-        else if(data.mediaType === 'video'){
-            html += `<video src="${data.mediaUrl}" controls></video>`;
-        }
-        else if(data.mediaType === 'audio'){
-            html += `<audio src="${data.mediaUrl}" controls style="width:100%"></audio>`;
-        }
-        else if(data.mediaType === 'document'){
-            html += `<a href="${data.mediaUrl}" target="_blank">📄 View PDF</a>`;
-        }
-        
-        html += `<h3>${data.name}</h3>
-                 <p><s>₹${data.mrp}</s> <b>₹${data.price}</b></p>
-                 <p>Stock: ${data.stock}</p>
-                 <small>Added: ${date}</small><br>
-                 <button onclick="addToCart('${doc.id}')">Add to Cart</button>
-               </div>`;
-    });
-    
-    if(html === '') html = '<p>No products available</p>';
-    document.getElementById('productList').innerHTML = html;
-}).catch(err => {
-    document.getElementById('productList').innerHTML = 'Error: ' + err.message;
-});
-
-function addToCart(productId){
-    alert('Added: ' + productId);
-}
-</script>
-
-<style>
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 10px;
-}
-.product-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.product-card img, .product-card video {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-.product-card button {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-</style>
-</body>  <!-- Is line ke just upar paste kar -->
+</body>
 </html>
