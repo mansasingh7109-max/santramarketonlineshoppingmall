@@ -70,12 +70,12 @@ if(saved) {
 // FIX 2: Ensure admin exists - Password change ko overwrite nahi karega
 if(!DB.users || DB.users.length === 0){
     // Sirf pehli baar admin banega
-    DB.users = [{id:1, name:"Manisha Tak", email:"manishatak07@gmail.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified:true}];
+    DB.users = [{id:1, name:"Manisha Tak", email:"mansasingh7109@gmail.com", pass:"......", role:"admin", mobile:"9001654667", mobileVerified:true}];
 } else {
     // Agar admin nahi hai to add kar, lekin existing ka password mat chhedo
     let adminExists = DB.users.find(u => u.role === 'admin');
     if(!adminExists){
-        DB.users.push({id:Date.now(), name:"Santosh Tak", email:"mansasingh7109@gmail.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified:true});
+        DB.users.push({id:Date.now(), name:"Santosh Tak", email:"mansasingh7109@gmail.com", pass:"......", role:"admin", mobile:"9001654667", mobileVerified:true});
     }
 }
 
