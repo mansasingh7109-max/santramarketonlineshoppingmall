@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SANTRA MALL - Admin Panel Final</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial; padding: 15px; background: #1a1a2e; color: #fff; }
+ .box { background: #16213e; padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #0f3460; }
+    input, textarea, select { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #0f3460; border-radius: 8px; font-size: 15px; background: #0f3460; color: #fff; }
+    input:focus, textarea:focus { border-color: #e94560; outline: none; }
+    button { background: linear-gradient(135deg, #e94560 0%, #c81d77 100%); color: white; padding: 16px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 17px; font-weight: bold; margin-top: 10px; }
+    button:hover { opacity: 0.9; }
+    button:disabled { background: #555; cursor: not-allowed; }
+ .btn-option { width: auto; padding: 12px 20px; margin: 5px; font-size: 14px; }
+ .btn-gallery { background: #3498db; }
+ .btn-url { background: #9b59b6; }
+ .btn-github { background: #2ecc71; }
+ .btn-browse { background: #f39c12; }
+ .btn-red { background: #e74c3c; width: auto; padding: 8px 15px; }
+ .product { border: 2px solid #0f3460; padding: 18px; margin: 12px 0; border-radius: 10px; background: #0f3460; }
+ .flex { display: flex; gap: 12px; }
+ .flex > * { flex: 1; }
+    label { font-weight: 600; font-size: 14px; display: block; margin-top: 14px; color: #e94560; }
+ .upload-area { border: 3px dashed #e94560; padding: 25px; text-align: center; border-radius: 12px; margin: 12px 0; background: #1a1a2e; cursor: pointer; }
+ .upload-area:hover { background: #16213e; }
+ .upload-area input { display: none; }
+ .tab-content { display: none; padding: 15px; background: #1a1a2e; border-radius: 8px; margin-top: 10px; }
+ .tab-content.active { display: block; }
+    img.preview { max-width: 200px; max-height: 200px; margin-top: 12px; border-radius: 10px; border: 3px solid #e94560; }
+ .alert { padding: 15px; border-radius: 8px; margin: 12px 0; font-weight: 500; }
+ .alert-success { background: #1a4d2e; border: 2px solid #28a745; color: #4ade80; }
+ .alert-warning { background: #4d3319; border: 2px solid #f39c12; color: #fbbf24; }
+ .progress { width: 100%; height: 30px; background: #0f3460; border-radius: 8px; overflow: hidden; margin: 12px 0; display: none; }
+ .progress-bar { height: 100%; background: linear-gradient(135deg, #e94560 0%, #c81d77 100%); width: 0%; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; }
+    h2 { color: #e94560; font-size: 26px; margin-bottom: 15px; }
+    h3 { color: #3498db; margin: 20px 0 12px 0; font-size: 18px; }
+ .login-box { max-width: 400px; margin: 100px auto; }
+ .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 10px; }
+ .media-item { position: relative; }
+ .media-item img,.media-item video { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
+ .media-item.remove { position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; border: none; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="box login-box">
+  <h2 style="text-align:center;">🔐 SANTRA MALL - Admin Login</h2>
+  <div class="alert alert-success">
+    <b>FREE Firebase:</b> 5GB Storage | Unlimited Uploads
+  </div>
+  <label>Email</label>
+  <input type="email" id="loginEmail" placeholder="mansasingh7109@gmail.com">
+  <label>Password</label>
+  <input type="password" id="loginPassword" placeholder="Manisha71@">
+  <button onclick="login()">Login to Admin Panel</button>
+  <small style="text-align:center; margin-top:15px; display:block; color:#999;">First time? Firebase Console → Authentication → Add User</small>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
+<div class="box">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2>🛍️ SANTRA MALL - Admin Panel</h2>
+    <button onclick="logout()" style="width:auto; padding:10px 20px; background:#e74c3c;">Logout</button>
+  </div>
+
+  <label>Product Name *</label>
+  <input type="text" id="name" placeholder="Pink Salwar Suit">
+
+  <div class="flex">
+    <div><label>MRP (Optional)</label><input type="number" id="mrp" placeholder="15000"></div>
+    <div><label>Selling Price *</label><input type="number" id="price" placeholder="13005"></div>
+    <div><label>Stock Quantity</label><input type="number" id="stock" placeholder="20"></div>
+  </div>
+
+  <label>Select Category *</label>
+  <select id="category">
+    <option value="">-- Select --</option>
+    <option>Gowns</option>
+    <option>Dresses</option>
+    <option>Salwar Suit</option>
+    <option>Sarees</option>
+    <option>Electronics</option>
+    <option>Accessories</option>
+  </select>
+
+  <label>Size & Price - Har line me ek</label>
+  <textarea id="sizes" rows="3" placeholder="S-12000&#10;M-13005&#10;L-14000&#10;XL-15000"></textarea>
+
+  <h3>📁 Media Upload - 4 OPTIONS</h3>
+  
+  <!-- IMAGE UPLOAD -->
+  <label>🖼️ Image</label>
+  <div>
+    <button type="button" class="btn-option btn-gallery" onclick="selectMedia('image', 'gallery')">📱 From Gallery</button>
+    <button type="button" class="btn-option btn-url" onclick="selectMedia('image', 'url')">🔗 From URL</button>
+    <button type="button" class="btn-option btn-github" onclick="selectMedia('image', 'github')">☁️ Upload to GitHub</button>
+    <button type="button" class="btn-option btn-browse" onclick="selectMedia('image', 'browse')">💻 Browse Computer</button>
+  </div>
+  
+  <div id="image-gallery" class="tab-content">
+    <div class="upload-area" onclick="document.getElementById('imgFileGallery').click()">
+      <input type="file" id="imgFileGallery" accept="image/*" multiple onchange="uploadToFirebase(this, 'image')">
+      <div style="font-size:48px;">📱</div>
+      <b>Gallery Se Select Karo</b>
+      <p>Multiple photos select kar sakte ho</p>
+    </div>
+  </div>
+
+  <div id="image-url" class="tab-content">
+    <input type="text" id="imgUrlInput" placeholder="https://i.ibb.co/... ya assets/photo.jpg">
+    <button type="button" onclick="addUrl('image')" style="margin-top:10px;">Add URL</button>
+  </div>
+
+  <div id="image-github" class="tab-content">
+    <div class="alert alert-warning">
+      <b>Step 1:</b> Neeche button dabao - GitHub khulega<br>
+      <b>Step 2:</b> assets folder me photo upload karo<br>
+      <b>Step 3:</b> Wapas aake From URL me likho: <code>assets/photo.jpg</code>
+      <button type="button" onclick="window.open('https://github.com/mansasingh7109-max/santramarketonlineshoppingmall/upload/main/assets', '_blank')" style="margin-top:10px;">🚀 Open GitHub Assets</button>
+    </div>
+  </div>
+
+  <div id="image-browse" class="tab-content">
+    <div class="upload-area" onclick="document.getElementById('imgFileBrowse').click()">
+      <input type="file" id="imgFileBrowse" accept="image/*" multiple onchange="uploadToFirebase(this, 'image')">
+      <div style="font-size:48px;">💻</div>
+      <b>Computer Se Select Karo</b>
+    </div>
+  </div>
+
+  <div class="progress" id="imgProgress"><div class="progress-bar" id="imgProgressBar">0%</div></div>
+  <div class="media-grid" id="imagePreviewGrid"></div>
+  <input type="hidden" id="imageUrls">
+
+  <!-- VIDEO UPLOAD -->
+  <label>🎥 Video (Optional)</label>
+  <div>
+    <button type="button" class="btn-option btn-gallery" onclick="selectMedia('video', 'gallery')">📱 From Gallery</button>
+    <button type="button" class="btn-option btn-url" onclick="selectMedia('video', 'url')">🔗 From URL</button>
+    <button type="button" class="btn-option btn-browse" onclick="selectMedia('video', 'browse')">💻 Browse Computer</button>
+  </div>
+
+  <div id="video-gallery" class="tab-content">
+    <div class="upload-area" onclick="document.getElementById('vidFileGallery').click()">
+      <input type="file" id="vidFileGallery" accept="video/*" onchange="uploadToFirebase(this, 'video')">
+      <div style="font-size:48px;">📱</div><b>Gallery Se Video</b>
+    </div>
+  </div>
+
+  <div id="video-url" class="tab-content">
+    <input type="text" id="vidUrlInput" placeholder="YouTube link ya https://...">
+    <button type="button" onclick="addUrl('video')" style="margin-top:10px;">Add URL</button>
+  </div>
+
+  <div id="video-browse" class="tab-content">
+    <div class="upload-area" onclick="document.getElementById('vidFileBrowse').click()">
+      <input type="file" id="vidFileBrowse" accept="video/*" onchange="uploadToFirebase(this, 'video')">
+      <div style="font-size:48px;">💻</div><b>Computer Se Video</b>
+    </div>
+  </div>
+
+  <div class="progress" id="vidProgress"><div class="progress-bar" id="vidProgressBar">0%</div></div>
+  <div class="media-grid" id="videoPreviewGrid"></div>
+  <input type="hidden" id="videoUrls">
+
+  <!-- DOCUMENT UPLOAD -->
+  <label>📄 Document/PDF (Optional)</label>
+  <div>
+    <button type="button" class="btn-option btn-browse" onclick="selectMedia('doc', 'browse')">💻 Browse Computer</button>
+    <button type="button" class="btn-option btn-url" onclick="selectMedia('doc', 'url')">🔗 From URL</button>
+  </div>
+
+  <div id="doc-browse" class="tab-content">
+    <div class="upload-area" onclick="document.getElementById('docFileBrowse').click()">
+      <input type="file" id="docFileBrowse" accept=".pdf,.doc,.docx" onchange="uploadToFirebase(this, 'doc')">
+      <div style="font-size:48px;">📄</div><b>PDF/Doc Select Karo</b>
+    </div>
+  </div>
+
+  <div id="doc-url" class="tab-content">
+    <input type="text" id="docUrlInput" placeholder="Google Drive link ya assets/file.pdf">
+    <button type="button" onclick="addUrl('doc')" style="margin-top:10px;">Add URL</button>
+  </div>
+
+  <div class="progress" id="docProgress"><div class="progress-bar" id="docProgressBar">0%</div></div>
+  <div id="docPreviewList"></div>
+  <input type="hidden" id="docUrls">
+
+  <!-- AUDIO UPLOAD -->
+  <label>🎵 Audio (Optional)</label>
+  <div>
+    <button type="button" class="btn-option btn-browse" onclick="selectMedia('audio', 'browse')">💻 Browse Computer</button>
+    <button type="button" class="btn-option btn-url" onclick="selectMedia('audio', 'url')">🔗 From URL</button>
+  </div>
+
+  <div id="audio-browse" class="tab-content">
+    <div class="upload-area" onclick="document.getElementById('audFileBrowse').click()">
+      <input type="file" id="audFileBrowse" accept="audio/*" onchange="uploadToFirebase(this, 'audio')">
+      <div style="font-size:48px;">🎵</div><b>Audio File Select Karo</b>
+    </div>
+  </div>
+
+  <div id="audio-url" class="tab-content">
+    <input type="text" id="audUrlInput" placeholder="MP3 link ya assets/audio.mp3">
+    <button type="button" onclick="addUrl('audio')" style="margin-top:10px;">Add URL</button>
+  </div>
+
+  <div class="progress" id="audProgress"><div class="progress-bar" id="audProgressBar">0%</div></div>
+  <div id="audioPreviewList"></div>
+  <input type="hidden" id="audioUrls">
+
+  <label>Product Description</label>
+  <textarea id="desc" rows="3" placeholder="Product ke baare me likho..."></textarea>
+
+  <button onclick="saveProduct()" id="saveBtn">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
+</div>
+
+<div class="box">
+  <h2>📦 Product List - SAB PURANE PRODUCTS YAHAN HAIN</h2>
+  <button type="button" onclick="exportCSV()" style="width:auto; background:#3498db; margin-bottom:15px;">📥 Export CSV</button>
+  <div id="productList"></div>
+</div>
+
+<script>
+  // 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO - Firebase Console → Project Settings → Config
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+let DB = {
+  users: [
+    {role: 'admin', name: 'Admin', pass: 'admin123'}  // 👈 Naya password
+  ],
+  products: [],
+  categories: [],
+  settings: {}
+}
+  const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+  const auth = firebase.auth();
+
+  let mediaFiles = { image: [], video: [], doc: [], audio: [] };
+
+  auth.onAuthStateChanged(user => {
+    console.log('Auth state:', user);
+    if (user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadProducts();
+    } else {
+      document.getElementById('loginScreen').style.display = 'block';
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+  });
+
+  function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    console.log('Login try:', email);
+    
+    auth.signInWithEmailAndPassword(email, password)
+   .then((userCredential) => {
+      console.log('Login success:', userCredential.user);
+      alert('✅ Login Success!');
+    })
+   .catch(err => {
+      console.error('Login error:', err);
+      alert('❌ ' + err.message + '\n\nCode: ' + err.code);
+    });
+  }
+
+  function logout() { auth.signOut(); }
+
+  function selectMedia(type, method) {
+    document.querySelectorAll(`[id^="${type}-"]`).forEach(el => el.classList.remove('active'));
+    document.getElementById(`${type}-${method}`).classList.add('active');
+  }
+
+  function uploadToFirebase(input, type) {
+    const files = input.files;
+    if (!files.length) return;
+
+    const progressDiv = document.getElementById(type.substring(0,3) + 'Progress');
+    const progressBar = document.getElementById(type.substring(0,3) + 'ProgressBar');
+    progressDiv.style.display = 'block';
+    document.getElementById('saveBtn').disabled = true;
+
+    let uploaded = 0;
+    Array.from(files).forEach(file => {
+      const storageRef = storage.ref(`${type}s/${Date.now()}_${file.name}`);
+      const uploadTask = storageRef.put(file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          progressBar.style.width = progress + '%';
+          progressBar.innerText = Math.round(progress) + '%';
+        },
+        (error) => {
+          alert('❌ Upload failed: ' + error.message);
+          document.getElementById('saveBtn').disabled = false;
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+            mediaFiles[type].push({ url: url, name: file.name, type: file.type });
+            updatePreview(type);
+            uploaded++;
+            if (uploaded === files.length) {
+              progressBar.innerText = 'Complete! ✅';
+              setTimeout(() => { progressDiv.style.display = 'none'; }, 2000);
+              document.getElementById('saveBtn').disabled = false;
+              input.value = '';
+            }
+          });
+        }
+      );
+    });
+  }
+
+  function addUrl(type) {
+    const url = document.getElementById(type.substring(0,3) + 'UrlInput').value.trim();
+    if (!url) return alert('URL daalo');
+    mediaFiles[type].push({ url: url, name: 'External Link', type: 'url' });
+    updatePreview(type);
+    document.getElementById(type.substring(0,3) + 'UrlInput').value = '';
+  }
+
+  function updatePreview(type) {
+    const grid = document.getElementById(type + 'Preview' + (type === 'doc' || type === 'audio'? 'List' : 'Grid'));
+    const urlsInput = document.getElementById(type + 'Urls');
+    
+    if (type === 'image') {
+      grid.innerHTML = mediaFiles[type].map((f, i) => `
+        <div class="media-item">
+          <img src="${f.url}">
+          <button class="remove" onclick="removeMedia('image', ${i})">×</button>
+        </div>
+      `).join('');
+    } else if (type === 'video') {
+      grid.innerHTML = mediaFiles[type].map((f, i) => `
+        <div class="media-item">
+          <video src="${f.url}"></video>
+          <button class="remove" onclick="removeMedia('video', ${i})">×</button>
+        </div>
+      `).join('');
+    } else {
+      grid.innerHTML = mediaFiles[type].map((f, i) => `
+        <div style="background:#0f3460; padding:10px; border-radius:5px; margin:5px 0; display:flex; justify-content:space-between; align-items:center;">
+          <span>${type === 'doc'? '📄' : '🎵'} ${f.name}</span>
+          <button class="btn-red" onclick="removeMedia('${type}', ${i})" style="padding:5px 10px;">Delete</button>
+        </div>
+      `).join('');
+    }
+    urlsInput.value = JSON.stringify(mediaFiles[type].map(f => f.url));
+  }
+
+  function removeMedia(type, index) {
+    mediaFiles[type].splice(index, 1);
+    updatePreview(type);
+  }
+
+  async function saveProduct() {
+    const sizes = document.getElementById('sizes').value.split('\n').filter(s => s.trim());
+    
+    const product = {
+      name: document.getElementById('name').value.trim(),
+      description: document.getElementById('desc').value.trim(),
+      mrp: Number(document.getElementById('mrp').value) || 0,
+      price: Number(document.getElementById('price').value) || 0,
+      stock: Number(document.getElementById('stock').value) || 0,
+      category: document.getElementById('category').value,
+      sizes: sizes,
+      images: mediaFiles.image.map(f => f.url),
+      videos: mediaFiles.video.map(f => f.url),
+      docs: mediaFiles.doc.map(f => f.url),
+      audios: mediaFiles.audio.map(f => f.url),
+      created: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    if (!product.name ||!product.price ||!product.category) {
+      return alert('❌ Name, Price aur Category zaruri hai');
+    }
+
+    try {
+      await db.collection('products').add(product);
+      alert('✅ Product Save Ho Gaya! Home page pe turant dikhega');
+      document.querySelectorAll('input,textarea,select').forEach(i => { if(i.type!== 'hidden') i.value = ''; });
+      mediaFiles = { image: [], video: [], doc: [], audio: [] };
+      ['image', 'video', 'doc', 'audio'].forEach(t => updatePreview(t));
+    } catch (err) {
+      alert('❌ Error: ' + err.message);
+    }
+  }
+
+  function loadProducts() {
+    db.collection('products').orderBy('created', 'desc').onSnapshot(snapshot => {
+      let html = '<table style="width:100%; border-collapse:collapse;"><tr style="background:#0f3460;"><th style="padding:10px;">ID</th><th>Media</th><th>Name</th><th>Type</th><th>Price</th><th>Action</th></tr>';
+      snapshot.forEach(doc => {
+        const p = doc.data();
+        html += `<tr style="border-bottom:1px solid #0f3460;">
+          <td style="padding:10px; font-size:12px;">${doc.id.substring(0,8)}</td>
+          <td>${p.images && p.images[0]? `<img src="${p.images[0]}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">` : '❌'}</td>
+          <td>${p.name}</td>
+          <td>${p.category}</td>
+          <td>₹${p.price}</td>
+          <td><button class="btn-red" onclick="deleteProduct('${doc.id}')" style="padding:6px 12px;">🗑️</button></td>
+        </tr>`;
+      });
+      html += '</table>';
+      document.getElementById('productList').innerHTML = html || '<p style="text-align:center; color:#999; padding:30px;">Koi product nahi hai.</p>';
+    });
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Pakka delete karna hai?')) return;
+    try {
+      await db.collection('products').doc(id).delete();
+      alert('✅ Delete ho gaya');
+    } catch (err) {
+      alert('❌ Error: ' + err.message);
+    }
+  }
+
+  function exportCSV() {
+    db.collection('products').get().then(snapshot => {
+      let csv = 'Name,Price,MRP,Stock,Category,Images\n';
+      snapshot.forEach(doc => {
+        const p = doc.data();
+        csv += `"${p.name}",${p.price},${p.mrp},${p.stock},"${p.category}","${(p.images || []).join(';')}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'products-' + Date.now() + '.csv';
+      a.click();
+    });
+  }
+</script>
+
+</body>
+</html>

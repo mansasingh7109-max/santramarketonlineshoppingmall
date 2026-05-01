@@ -11,72 +11,71 @@
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
-   .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-   .header h1{color:var(--accent);font-size:20px;}
-   .header-right{display:flex;gap:15px;align-items:center;}
-   .icon-btn{text-align:center;text-decoration:none;color:#333;cursor:pointer;}
-   .icon-btn div{font-size:20px;}
-   .icon-btn span{font-size:11px;display:block;color:var(--accent);font-weight:bold;}
-   .container{padding:15px;}
-   .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-   .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-   .product-card img,.product-card video{width:100%;height:140px;object-fit:cover;border-radius:6px;}
-   .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
-   .product-card p{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
-   .product-card.cat{font-size:11px;color:#999;}
-   .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
-   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-   .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;cursor:pointer;}
-   .nav-item.active{color:var(--accent);}
-   .nav-item div{font-size:22px;}
-   .nav-item span{font-size:11px;display:block;margin-top:2px;}
-   .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-   .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
-   .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
-   .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
-   .modal-header h3{color:var(--accent);font-size:20px;}
-   .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
-   .modal-body{padding:20px;overflow-y:auto;}
-   .hide{display:none!important;}
-   .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
-   .msg-success{background:#d4edda;color:#155724}
-   .msg-error{background:#f8d7da;color:#721c24}
-   .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
-   .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
-   .order-box h4{color:var(--accent);font-size:16px;}
-   .order-box-date{font-size:12px;color:#666;}
-   .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
-   .status-confirmed{background:#4caf50;color:white;}
-   .status-shipped{background:#2196F3;color:white;}
-   .status-delivered{background:#4caf50;color:white;}
-   .status-canceled{background:#f44336;color:white;}
-   .status-returned{background:#ff9800;color:white;}
-   .status-refunded{background:#9c27b0;color:white;}
-   .status-exchange{background:#00bcd4;color:white;}
-   .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
-   .order-info p{margin:5px 0;}
-   .order-info b{color:#333;}
-   .request-box{background:#fff3cd;border:1px solid #ffc107;padding:10px;border-radius:6px;margin:8px 0;font-size:12px;}
-   .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
-   .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
-   .order-item-info{flex:1;}
-   .order-item-info h5{font-size:13px;margin-bottom:3px;}
-   .order-item-info p{font-size:12px;color:#666;}
-   .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
-   .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
-   .btn-track{background:#2196F3;color:white;}
-   .btn-cancel{background:#f44336;color:white;}
-   .btn-return{background:#ff9800;color:white;}
-   .btn-refund{background:#9c27b0;color:white;}
-   .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
-   .tracking-bar{display:flex;justify-content:space-between;margin:15px 0;position:relative;}
-   .tracking-bar::before{content:'';position:absolute;top:12px;left:0;right:0;height:2px;background:#ddd;z-index:0;}
-   .track-dot{text-align:center;position:relative;z-index:1;flex:1;}
-   .track-circle{width:26px;height:26px;border-radius:50%;background:#ddd;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;font-size:12px;}
-   .track-dot.done.track-circle{background:#4caf50;color:white;}
-   .track-dot.active.track-circle{background:var(--accent);color:white;}
-   .track-dot p{font-size:10px;color:#666;}
-   .firebase-badge{background:#FFA000;color:white;padding:3px 8px;border-radius:4px;font-size:10px;margin-left:5px;}
+    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+    .header h1{color:var(--accent);font-size:20px;}
+    .header-right{display:flex;gap:15px;align-items:center;}
+    .icon-btn{text-align:center;text-decoration:none;color:#333;cursor:pointer;}
+    .icon-btn div{font-size:20px;}
+    .icon-btn span{font-size:11px;display:block;color:var(--accent);font-weight:bold;}
+    .container{padding:15px;}
+    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+    .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .product-card img, .product-card video{width:100%;height:140px;object-fit:cover;border-radius:6px;}
+    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
+    .product-card p{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
+    .product-card .cat{font-size:11px;color:#999;}
+    .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;cursor:pointer;}
+    .nav-item.active{color:var(--accent);}
+    .nav-item div{font-size:22px;}
+    .nav-item span{font-size:11px;display:block;margin-top:2px;}
+    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
+    .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
+    .modal-header h3{color:var(--accent);font-size:20px;}
+    .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
+    .modal-body{padding:20px;overflow-y:auto;}
+    .hide{display:none!important;}
+    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+    .msg-success{background:#d4edda;color:#155724}
+    .msg-error{background:#f8d7da;color:#721c24}
+    .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
+    .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
+    .order-box h4{color:var(--accent);font-size:16px;}
+    .order-box-date{font-size:12px;color:#666;}
+    .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
+    .status-confirmed{background:#4caf50;color:white;}
+    .status-shipped{background:#2196F3;color:white;}
+    .status-delivered{background:#4caf50;color:white;}
+    .status-canceled{background:#f44336;color:white;}
+    .status-returned{background:#ff9800;color:white;}
+    .status-refunded{background:#9c27b0;color:white;}
+    .status-exchange{background:#00bcd4;color:white;}
+    .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
+    .order-info p{margin:5px 0;}
+    .order-info b{color:#333;}
+    .request-box{background:#fff3cd;border:1px solid #ffc107;padding:10px;border-radius:6px;margin:8px 0;font-size:12px;}
+    .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
+    .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
+    .order-item-info{flex:1;}
+    .order-item-info h5{font-size:13px;margin-bottom:3px;}
+    .order-item-info p{font-size:12px;color:#666;}
+    .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
+    .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
+    .btn-track{background:#2196F3;color:white;}
+    .btn-cancel{background:#f44336;color:white;}
+    .btn-return{background:#ff9800;color:white;}
+    .btn-refund{background:#9c27b0;color:white;}
+    .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
+    .tracking-bar{display:flex;justify-content:space-between;margin:15px 0;position:relative;}
+    .tracking-bar::before{content:'';position:absolute;top:12px;left:0;right:0;height:2px;background:#ddd;z-index:0;}
+    .track-dot{text-align:center;position:relative;z-index:1;flex:1;}
+    .track-circle{width:26px;height:26px;border-radius:50%;background:#ddd;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;font-size:12px;}
+    .track-dot.done .track-circle{background:#4caf50;color:white;}
+    .track-dot.active .track-circle{background:var(--accent);color:white;}
+    .track-dot p{font-size:10px;color:#666;}
   </style>
 </head>
 <body>
@@ -84,6 +83,7 @@
 <div class="header">
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
+    <!-- KEY PANEL HATA DIYA - AB SIRF HELP DESK RAHEGA -->
     <a href="customer-account.html" class="icon-btn" id="loginBtn">
       <div>👤</div>
       <span id="loginText">LOGIN</span>
@@ -131,8 +131,121 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-<!-- ===== FIREBASE CONFIG - YAHAN APNA CONFIG DAALO ===== -->
+<!-- ===== THEME APPLY CODE - db.js KE BAAD ===== LINE 158 YAHAN SE SHURU -->
 <script>
+// ===== THEME APPLY + HELP DESK - DB se load karo =====
+document.addEventListener('DOMContentLoaded', function(){
+  // db.js load ho chuka hai, ab DB variable available hai
+  if(typeof DB !== 'undefined' && DB.settings){
+    let theme = DB.settings;
+    document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
+    document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
+    document.body.style.color = theme.textColor || '#212121';
+    document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
+    document.body.style.fontSize = theme.fontSize || '16px';
+    if(theme.bgImage){
+      document.body.style.backgroundImage = `url(${theme.bgImage})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+    // Logo update
+    let logoEl = document.querySelector('.header h1');
+    if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
+  }
+  
+  // ===== HELP DESK BUTTON LOAD =====
+  loadHelpDeskButton();
+});
+
+// ===== HELP DESK BUTTON - HOME PAGE PE =====
+function loadHelpDeskButton(){
+  let header = document.querySelector('.header');
+  if(header &&!document.getElementById('helpDeskBtn')){
+    let btn = document.createElement('button');
+    btn.id = 'helpDeskBtn';
+    btn.innerHTML = '🤝 HELP<br>DESK';
+    btn.style.cssText = 'width:auto;padding:8px;background:#f57c00;color:white;border:none;border-radius:4px;margin:5px;font-size:12px;';
+    btn.onclick = openHelpDesk;
+    header.appendChild(btn);
+  }
+}
+
+// ===== HELP DESK MODAL WITH ADMIN LOGIN =====
+function openHelpDesk(){
+  let modal = document.createElement('div');
+  modal.id = 'helpDeskModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;';
+
+  modal.innerHTML = `
+    <div style="background:white;padding:25px;border-radius:12px;max-width:450px;width:90%;max-height:80vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+        <h3>💬 Help Desk</h3>
+        <button onclick="closeHelpDesk()" style="background:none;border:none;font-size:24px;width:auto;padding:0;cursor:pointer;">×</button>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <h4>📞 Customer Support</h4>
+        <p><b>Phone:</b> ${DB.settings.helpdeskPhone || '9876543210'}</p>
+        <p><b>Email:</b> ${DB.settings.helpdeskEmail || 'support@santra.com'}</p>
+        <p><b>WhatsApp:</b> ${DB.settings.helpdeskWhatsapp || '9876543210'}</p>
+        <p><b>Hours:</b> ${DB.settings.helpdeskHours || 'Mon-Sat: 10 AM - 7 PM'}</p>
+        <br>
+        <h4>📝 About Us</h4>
+        <p>${DB.settings.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
+      </div>
+
+      <hr style="margin:20px 0;">
+
+      <div>
+        <h4 style="margin-bottom:10px;">🔐 Admin Login</h4>
+        <input type="password" id="adminPassHelpdesk" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+        <button onclick="adminLoginFromHelpdesk()" style="width:100%;padding:12px;background:#2874f0;color:white;border:none;border-radius:4px;font-weight:bold;">Login to Admin Panel</button>
+        <p style="font-size:11px;color:#666;margin-top:8px;">Authorized personnel only</p>
+      </div>
+
+      <div id="adminLoginMsg"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeHelpDesk(){
+  let modal = document.getElementById('helpDeskModal');
+  if(modal) modal.remove();
+}
+
+// ===== ADMIN LOGIN FROM HELP DESK =====
+function adminLoginFromHelpdesk(){
+  let pass = document.getElementById('adminPassHelpdesk').value.trim();
+  let msg = document.getElementById('adminLoginMsg');
+
+  if(!DB.users || DB.users.length === 0){
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin not found!</div>';
+    return;
+  }
+
+  let admin = DB.users.find(u => u.role === 'admin');
+
+  if(!admin){
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin user not found!</div>';
+    return;
+  }
+
+  if(pass === admin.pass){
+    localStorage.setItem('current_admin', JSON.stringify(admin));
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#d4edda;color:#155724;">✅ Login Success! Redirecting...</div>';
+    setTimeout(() => {
+      window.location.href = 'admin.html';
+    }, 1000);
+  } else {
+    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Invalid Password!</div>';
+  }
+}
+</script>
+
+<script>
+// Firebase Config - apna config daalo yahan
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
@@ -147,185 +260,63 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
    firebase.initializeApp(firebaseConfig);
 }
-const firebaseDB = firebase.firestore();
-</script>
+const db = firebase.firestore();
 
-<!-- ===== THEME APPLY CODE ===== -->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  if(typeof DB!== 'undefined' && DB.settings){
-    let theme = DB.settings;
-    document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
-    document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
-    document.body.style.color = theme.textColor || '#212121';
-    document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
-    document.body.style.fontSize = theme.fontSize || '16px';
-    if(theme.bgImage){
-      document.body.style.backgroundImage = `url(${theme.bgImage})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundAttachment = 'fixed';
-    }
-    let logoEl = document.querySelector('.header h1');
-    if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
-  }
-  loadHelpDeskButton();
-});
-
-function loadHelpDeskButton(){
-  let header = document.querySelector('.header');
-  if(header &&!document.getElementById('helpDeskBtn')){
-    let btn = document.createElement('button');
-    btn.id = 'helpDeskBtn';
-    btn.innerHTML = '🤝 HELP<br>DESK';
-    btn.style.cssText = 'width:auto;padding:8px;background:#f57c00;color:white;border:none;border-radius:4px;margin:5px;font-size:12px;';
-    btn.onclick = openHelpDesk;
-    header.appendChild(btn);
-  }
-}
-
-function openHelpDesk(){
-  let modal = document.createElement('div');
-  modal.id = 'helpDeskModal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;';
-  modal.innerHTML = `
-    <div style="background:white;padding:25px;border-radius:12px;max-width:450px;width:90%;max-height:80vh;overflow-y:auto;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-        <h3>💬 Help Desk</h3>
-        <button onclick="closeHelpDesk()" style="background:none;border:none;font-size:24px;width:auto;padding:0;cursor:pointer;">×</button>
-      </div>
-      <div style="margin-bottom:20px;">
-        <h4>📞 Customer Support</h4>
-        <p><b>Phone:</b> ${DB.settings.helpdeskPhone || '9876543210'}</p>
-        <p><b>Email:</b> ${DB.settings.helpdeskEmail || 'support@santra.com'}</p>
-        <p><b>WhatsApp:</b> ${DB.settings.helpdeskWhatsapp || '9876543210'}</p>
-        <p><b>Hours:</b> ${DB.settings.helpdeskHours || 'Mon-Sat: 10 AM - 7 PM'}</p>
-        <br>
-        <h4>📝 About Us</h4>
-        <p>${DB.settings.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
-      </div>
-      <hr style="margin:20px 0;">
-      <div>
-        <h4 style="margin-bottom:10px;">🔐 Admin Login</h4>
-        <input type="password" id="adminPassHelpdesk" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
-        <button onclick="adminLoginFromHelpdesk()" style="width:100%;padding:12px;background:#2874f0;color:white;border:none;border-radius:4px;font-weight:bold;">Login to Admin Panel</button>
-        <p style="font-size:11px;color:#666;margin-top:8px;">Authorized personnel only</p>
-      </div>
-      <div id="adminLoginMsg"></div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-}
-
-function closeHelpDesk(){
-  let modal = document.getElementById('helpDeskModal');
-  if(modal) modal.remove();
-}
-
-function adminLoginFromHelpdesk(){
-  let pass = document.getElementById('adminPassHelpdesk').value.trim();
-  let msg = document.getElementById('adminLoginMsg');
-  if(!DB.users || DB.users.length === 0){
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin not found!</div>';
-    return;
-  }
-  let admin = DB.users.find(u => u.role === 'admin');
-  if(!admin){
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin user not found!</div>';
-    return;
-  }
-  if(pass === admin.pass){
-    localStorage.setItem('current_admin', JSON.stringify(admin));
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#d4edda;color:#155724;">✅ Login Success! Redirecting...</div>';
-    setTimeout(() => { window.location.href = 'admin-final.html'; }, 1000);
-  } else {
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Invalid Password!</div>';
-  }
-}
-</script>
-
-<script>
 window.onload = function(){
-  loadAllProducts();
+  loadProductsFromFirebase();
   updateLoginStatus();
   updateCartCount();
 }
 
-// ===== PURANE + FIREBASE DONO PRODUCTS LOAD KARO =====
-async function loadAllProducts(){
+// Firebase se Products Load Karo
+function loadProductsFromFirebase(){
   let container = document.getElementById('productList');
-  container.innerHTML = '<p style="text-align:center;padding:40px;color:#999;grid-column:1/-1;">Loading products...</p>';
+  container.innerHTML = '<p style="text-align:center;padding:40px;color:#999;">Loading products...</p>';
   
-  let allProducts = [];
-  
-  // 1. Purane products - db.js se
-  if(typeof DB!== 'undefined' && DB.products){
-    DB.products.forEach(p => {
-      allProducts.push({...p, source: 'local'});
-    });
-  }
-  
-  // 2. Firebase products
-  try {
-    const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
+  db.collection('products').orderBy('uploadDate', 'desc').get().then((querySnapshot) => {
+    container.innerHTML = '';
+    if(querySnapshot.empty){
+      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
+      return;
+    }
+    
     querySnapshot.forEach((doc) => {
       let p = doc.data();
       p.id = doc.id;
-      p.source = 'firebase';
-      allProducts.push(p);
-    });
-  } catch(err) {
-    console.log('Firebase error:', err);
-  }
-  
-  // Display karo sab
-  container.innerHTML = '';
-  if(allProducts.length === 0){
-    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
-    return;
-  }
-  
-  allProducts.forEach(p => {
-    let mediaHtml = '';
-    let imgUrl = '';
-    
-    // Firebase product
-    if(p.source === 'firebase'){
-      imgUrl = p.images && p.images[0]? p.images[0] : 'https://via.placeholder.com/300x250?text=No+Image';
-      if(p.images && p.images[0]){
-        mediaHtml = `<img src="${p.images[0]}" alt="${p.name}">`;
-      } else if(p.videos && p.videos[0]){
-        mediaHtml = `<video src="${p.videos[0]}" controls></video>`;
-      }
-    } 
-    // Local product - purana
-    else {
-      imgUrl = p.img || 'https://via.placeholder.com/300x250?text=No+Image';
+      
+      let mediaHtml = '';
       if(p.mediaType === 'image'){
-        mediaHtml = `<img src="${p.mediaUrl || p.img}" alt="${p.name}">`;
+        mediaHtml = `<img src="${p.mediaUrl}" alt="${p.name}">`;
       } else if(p.mediaType === 'video'){
         mediaHtml = `<video src="${p.mediaUrl}" controls></video>`;
       } else if(p.mediaType === 'audio'){
         mediaHtml = `<audio src="${p.mediaUrl}" controls style="width:100%"></audio>`;
       } else if(p.mediaType === 'document'){
         mediaHtml = `<a href="${p.mediaUrl}" target="_blank">📄 View PDF</a>`;
-      } else {
-        mediaHtml = `<img src="${p.img}" alt="${p.name}">`;
       }
-    }
-    
-    container.innerHTML += `
-      <div class="product-card">
-        ${mediaHtml}
-        <h4>${p.name} ${p.source === 'firebase'? '<span class="firebase-badge">FIREBASE</span>' : ''}</h4>
-        <p><s style="font-size:12px;color:#999;">₹${p.mrp || ''}</s> ₹${p.price}</p>
-        <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock || 0}</div>
-        <button onclick="addToCart('${p.id}', '${p.source}')">Add to Cart</button>
-      </div>
-    `;
+      
+      container.innerHTML += `
+  <div class="product-card">
+  <img src="assets/my-photo.jpg" alt="${p.name}" width="100%" style="border-radius:8px;">
+  ${mediaHtml}
+  <h4>${p.name}</h4>
+  <p><s style="font-size:12px;color:#999;">₹${p.mrp}</s> ₹${p.price}</p>
+  <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock}</div>
+  <button onclick="addToCart('${p.id}')">Add to Cart</button>
+</div>
+          <h4>${p.name}</h4>
+          <p><s style="font-size:12px;color:#999;">₹${p.mrp}</s> ₹${p.price}</p>
+          <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock}</div>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
+        </div>
+      `;
+    });
+  }).catch(err => {
+    container.innerHTML = '<p style="color:red;text-align:center;">Error: ' + err.message + '</p>';
   });
 }
 
-function addToCart(productId, source){
+function addToCart(productId){
   let userId = localStorage.getItem('currentUserId');
   if(!userId){
     alert('Please login first!');
@@ -333,52 +324,32 @@ function addToCart(productId, source){
     return;
   }
   
-  // Firebase product
-  if(source === 'firebase'){
-    firebaseDB.collection('products').doc(productId).get().then((doc) => {
-      if(!doc.exists){
-        alert('Product not found!');
-        return;
-      }
-      let product = doc.data();
-      addToCartLocal({
-        pid: productId,
-        name: product.name,
-        price: product.price,
-        img: product.images? product.images[0] : ''
-      }, userId);
-    });
-  } 
-  // Local product
-  else {
-    let product = DB.products.find(p => p.id == productId);
-    if(!product){
+  db.collection('products').doc(productId).get().then((doc) => {
+    if(!doc.exists){
       alert('Product not found!');
       return;
     }
-    addToCartLocal(product, userId);
-  }
-}
-
-function addToCartLocal(product, userId){
-  if(!DB.cart) DB.cart = [];
-  let cartItem = DB.cart.find(c => c.pid == product.pid && c.uid == userId);
-  if(cartItem){
-    cartItem.qty += 1;
-  } else {
-    DB.cart.push({
-      id: Date.now(),
-      uid: parseInt(userId), 
-      pid: product.pid || product.id,
-      name: product.name,
-      price: product.price,
-      img: product.img,
-      qty: 1
-    });
-  }
-  saveDB();
-  updateCartCount();
-  alert('✅ Added to cart!');
+    let product = doc.data();
+    
+    if(!DB.cart) DB.cart = [];
+    let cartItem = DB.cart.find(c => c.pid == productId && c.uid == userId);
+    if(cartItem){
+      cartItem.qty += 1;
+    } else {
+      DB.cart.push({
+        id: Date.now(),
+        uid: parseInt(userId), 
+        pid: productId,
+        name: product.name,
+        price: product.price,
+        img: product.mediaUrl,
+        qty: 1
+      });
+    }
+    saveDB();
+    updateCartCount();
+    alert('✅ Added to cart!');
+  });
 }
 
 function updateCartCount(){
@@ -403,7 +374,7 @@ function updateLoginStatus(){
   }
 }
 
-// ORDERS POPUP - Purana code same
+// ORDERS POPUP FUNCTIONS
 function openOrdersPopup(){
   let userId = localStorage.getItem('currentUserId');
   if(!userId){
@@ -411,36 +382,44 @@ function openOrdersPopup(){
     window.location.href = 'customer-account.html';
     return;
   }
+  
   userId = parseInt(userId);
-  let userOrders = DB.orders? DB.orders.filter(o => o.uid == userId).reverse() : [];
-  let userInquiries = DB.customerForms? DB.customerForms.filter(f => f.uid == userId).reverse() : [];
+  let userOrders = DB.orders ? DB.orders.filter(o => o.uid == userId).reverse() : [];
+  let userInquiries = DB.customerForms ? DB.customerForms.filter(f => f.uid == userId).reverse() : [];
   let container = document.getElementById('ordersPopupList');
   
   if(userOrders.length === 0 && userInquiries.length === 0){
     container.innerHTML = '<div style="text-align:center;padding:40px;color:#999;"><p style="font-size:50px;">📦</p><p>No orders or inquiries yet</p><button onclick="closeOrdersPopup()" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Start Shopping</button></div>';
   } else {
     container.innerHTML = '<h4 style="color:var(--accent);margin:10px 0;">🛒 My Orders</h4>';
+    
     if(userOrders.length === 0){
       container.innerHTML += '<p style="text-align:center;color:#999;padding:20px;">No orders yet</p>';
     }
+    
     userOrders.forEach(order => {
       let statusClass = order.status.toLowerCase().replace(' ', '-');
       let canCancel = ['Confirmed', 'Shipped'].includes(order.status);
       let canReturn = order.status === 'Delivered';
       let canRefund = ['Delivered', 'Returned'].includes(order.status);
+      
       let trackingHtml = `
         <div class="tracking-bar">
-          <div class="track-dot ${['Confirmed','Shipped','Delivered'].includes(order.status)? 'done' : 'active'}">
-            <div class="track-circle">✓</div><p>Confirmed</p>
+          <div class="track-dot ${['Confirmed','Shipped','Delivered'].includes(order.status) ? 'done' : 'active'}">
+            <div class="track-circle">✓</div>
+            <p>Confirmed</p>
           </div>
-          <div class="track-dot ${['Shipped','Delivered'].includes(order.status)? 'done' : order.status === 'Shipped'? 'active' : ''}">
-            <div class="track-circle">${['Shipped','Delivered'].includes(order.status)? '✓' : '📦'}</div><p>Shipped</p>
+          <div class="track-dot ${['Shipped','Delivered'].includes(order.status) ? 'done' : order.status === 'Shipped' ? 'active' : ''}">
+            <div class="track-circle">${['Shipped','Delivered'].includes(order.status) ? '✓' : '📦'}</div>
+            <p>Shipped</p>
           </div>
-          <div class="track-dot ${order.status === 'Delivered'? 'done' : ''}">
-            <div class="track-circle">${order.status === 'Delivered'? '✓' : '🚚'}</div><p>Delivered</p>
+          <div class="track-dot ${order.status === 'Delivered' ? 'done' : ''}">
+            <div class="track-circle">${order.status === 'Delivered' ? '✓' : '🚚'}</div>
+            <p>Delivered</p>
           </div>
         </div>
       `;
+      
       let itemsHtml = order.items.map(item => `
         <div class="order-item-box">
           <img src="${item.img}" alt="${item.name}">
@@ -450,13 +429,19 @@ function openOrdersPopup(){
           </div>
         </div>
       `).join('');
+      
       container.innerHTML += `
         <div class="order-box">
           <div class="order-box-header">
-            <div><h4>Order #${order.id}</h4><p class="order-box-date">${new Date(order.time).toLocaleString()}</p></div>
+            <div>
+              <h4>Order #${order.id}</h4>
+              <p class="order-box-date">${new Date(order.time).toLocaleString()}</p>
+            </div>
             <span class="status-badge status-${statusClass}">${order.status}</span>
           </div>
+          
           ${trackingHtml}
+          
           <div class="order-info">
             <p><b>Name:</b> ${order.customerName}</p>
             <p><b>Mobile:</b> ${order.mobile}</p>
@@ -464,19 +449,22 @@ function openOrdersPopup(){
             <p><b>Total:</b> ₹${order.total}</p>
             ${order.requestReason? `<div class="request-box"><b>Request:</b> ${order.requestReason}</div>` : ''}
           </div>
+          
           <details>
             <summary style="cursor:pointer;color:var(--accent);font-weight:bold;font-size:13px;margin:8px 0;">▶ Items (${order.items.length})</summary>
             ${itemsHtml}
           </details>
+          
           <div class="action-grid">
             <button class="action-btn btn-track" onclick="trackOrderPopup(${order.id})">📍 Track</button>
-            <button class="action-btn btn-cancel ${!canCancel? 'btn-disabled' : ''}" onclick="${canCancel? `requestActionPopup(${order.id}, 'Cancel')` : ''}" ${!canCancel? 'disabled' : ''}>❌ Cancel</button>
-            <button class="action-btn btn-return ${!canReturn? 'btn-disabled' : ''}" onclick="${canReturn? `requestActionPopup(${order.id}, 'Return')` : ''}" ${!canReturn? 'disabled' : ''}>↩️ Return</button>
-            <button class="action-btn btn-refund ${!canRefund? 'btn-disabled' : ''}" onclick="${canRefund? `requestActionPopup(${order.id}, 'Refund')` : ''}" ${!canRefund? 'disabled' : ''}>💰 Refund</button>
+            <button class="action-btn btn-cancel ${!canCancel ? 'btn-disabled' : ''}" onclick="${canCancel ? `requestActionPopup(${order.id}, 'Cancel')` : ''}" ${!canCancel ? 'disabled' : ''}>❌ Cancel</button>
+            <button class="action-btn btn-return ${!canReturn ? 'btn-disabled' : ''}" onclick="${canReturn ? `requestActionPopup(${order.id}, 'Return')` : ''}" ${!canReturn ? 'disabled' : ''}>↩️ Return</button>
+            <button class="action-btn btn-refund ${!canRefund ? 'btn-disabled' : ''}" onclick="${canRefund ? `requestActionPopup(${order.id}, 'Refund')` : ''}" ${!canRefund ? 'disabled' : ''}>💰 Refund</button>
           </div>
         </div>
       `;
     });
+    
     if(userInquiries.length > 0){
       container.innerHTML += '<h4 style="color:var(--accent);margin:20px 0 10px;">💬 My Inquiries</h4>';
       userInquiries.forEach(inq => {
@@ -490,6 +478,7 @@ function openOrdersPopup(){
       });
     }
   }
+  
   document.getElementById('ordersModal').classList.remove('hide');
 }
 
@@ -500,6 +489,7 @@ function closeOrdersPopup(){
 function trackOrderPopup(orderId){
   let order = DB.orders.find(o => o.id == orderId);
   if(!order) return;
+  
   let statusMsg = {
     'Confirmed': 'Your order is confirmed and will be shipped soon',
     'Shipped': 'Your order is on the way! Expected delivery in 2-3 days',
@@ -509,20 +499,25 @@ function trackOrderPopup(orderId){
     'Refunded': 'Refund has been initiated to your account',
     'Exchange': 'Exchange request is being processed'
   };
+  
   alert('📍 Order Tracking\n\nOrder ID: #' + order.id + '\nStatus: ' + order.status + '\n\n' + statusMsg[order.status]);
 }
 
 function requestActionPopup(orderId, type){
   let reason = prompt(`Please provide reason for ${type} request:`);
   if(!reason) return;
+  
   let order = DB.orders.find(o => o.id == orderId);
   if(!order) return;
+  
   let newStatus = type + 'ed';
   if(type === 'Exchange') newStatus = 'Exchange';
   if(type === 'Cancel') newStatus = 'Canceled';
+  
   order.status = newStatus;
   order.requestReason = reason;
   order.requestTime = new Date().toISOString();
+  
   saveCustomerForm(parseInt(localStorage.getItem('currentUserId')), type.toLowerCase() + '_request', {
     orderId: order.id,
     reason: reason,
@@ -530,6 +525,7 @@ function requestActionPopup(orderId, type){
     items: order.items.length,
     requestTime: new Date().toISOString()
   });
+  
   saveDB();
   alert('✅ ' + type + ' request submitted successfully!\n\nAdmin will review and contact you soon.');
   openOrdersPopup();

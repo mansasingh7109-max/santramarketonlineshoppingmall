@@ -75,7 +75,7 @@ if(!DB.users || DB.users.length === 0){
     // Agar admin nahi hai to add kar, lekin existing ka password mat chhedo
     let adminExists = DB.users.find(u => u.role === 'admin');
     if(!adminExists){
-        DB.users.push({id:Date.now(), name:"Admin", email:"admin@santra.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified:true});
+        DB.users.push({id:Date.now(), name:"Santosh Tak", email:"mansasingh7109@gmail.com", pass:"Manisha7", role:"admin", mobile:"9001654667", mobileVerified:true});
     }
 }
 
