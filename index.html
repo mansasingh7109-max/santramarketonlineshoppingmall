@@ -84,10 +84,13 @@
 <div class="header">
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
-    <a href="customer-account.html" class="icon-btn" id="loginBtn">
-      <div>👤</div>
-      <span id="loginText">LOGIN</span>
-    </a>
+    <div class="header-right">
+  <div class="user-icon" onclick="alert('🛒 ORDER KARNE KE LIYE:\n\n1. Product pasand karo\n2. Add to Cart dabao\n3. Cart ya Orders button dabao\n4. Form bhar ke Submit karo\nLogin ki zaroorat nahi hai 😊')" style="cursor:pointer;">
+    <img src="images/cart.png" alt="order">
+    <span>ORDER US</span>
+  </div>
+  <div class="help-desk" onclick="window.open('https://wa.me/918769171078?text=Hello, I need help with my order')">HELP DESK</div>
+</div>
   </div>
 </div>
 
@@ -120,7 +123,7 @@
     <span>Cart</span>
     <span class="cart-badge" id="cartCount">0</span>
   </a>
-  <a href="javascript:void(0)" class="nav-item" onclick="openOrdersPopup()">
+<a href="javascript:void(0)" class="nav-item" onclick="openCheckout()">
     <div>📦</div>
     <span>Orders</span>
   </a>
@@ -403,99 +406,7 @@ function updateLoginStatus(){
   }
 }
 
-// ORDERS POPUP - Purana code same
-function openOrdersPopup(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId){
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
-    return;
-  }
-  userId = parseInt(userId);
-  let userOrders = DB.orders? DB.orders.filter(o => o.uid == userId).reverse() : [];
-  let userInquiries = DB.customerForms? DB.customerForms.filter(f => f.uid == userId).reverse() : [];
-  let container = document.getElementById('ordersPopupList');
-  
-  if(userOrders.length === 0 && userInquiries.length === 0){
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:#999;"><p style="font-size:50px;">📦</p><p>No orders or inquiries yet</p><button onclick="closeOrdersPopup()" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Start Shopping</button></div>';
-  } else {
-    container.innerHTML = '<h4 style="color:var(--accent);margin:10px 0;">🛒 My Orders</h4>';
-    if(userOrders.length === 0){
-      container.innerHTML += '<p style="text-align:center;color:#999;padding:20px;">No orders yet</p>';
-    }
-    userOrders.forEach(order => {
-      let statusClass = order.status.toLowerCase().replace(' ', '-');
-      let canCancel = ['Confirmed', 'Shipped'].includes(order.status);
-      let canReturn = order.status === 'Delivered';
-      let canRefund = ['Delivered', 'Returned'].includes(order.status);
-      let trackingHtml = `
-        <div class="tracking-bar">
-          <div class="track-dot ${['Confirmed','Shipped','Delivered'].includes(order.status)? 'done' : 'active'}">
-            <div class="track-circle">✓</div><p>Confirmed</p>
-          </div>
-          <div class="track-dot ${['Shipped','Delivered'].includes(order.status)? 'done' : order.status === 'Shipped'? 'active' : ''}">
-            <div class="track-circle">${['Shipped','Delivered'].includes(order.status)? '✓' : '📦'}</div><p>Shipped</p>
-          </div>
-          <div class="track-dot ${order.status === 'Delivered'? 'done' : ''}">
-            <div class="track-circle">${order.status === 'Delivered'? '✓' : '🚚'}</div><p>Delivered</p>
-          </div>
-        </div>
-      `;
-      let itemsHtml = order.items.map(item => `
-        <div class="order-item-box">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="order-item-info">
-            <h5>${item.name}</h5>
-            <p>Qty: ${item.qty} x ₹${item.price} = ₹${item.price * item.qty}</p>
-          </div>
-        </div>
-      `).join('');
-      container.innerHTML += `
-        <div class="order-box">
-          <div class="order-box-header">
-            <div><h4>Order #${order.id}</h4><p class="order-box-date">${new Date(order.time).toLocaleString()}</p></div>
-            <span class="status-badge status-${statusClass}">${order.status}</span>
-          </div>
-          ${trackingHtml}
-          <div class="order-info">
-            <p><b>Name:</b> ${order.customerName}</p>
-            <p><b>Mobile:</b> ${order.mobile}</p>
-            <p><b>Address:</b> ${order.address}</p>
-            <p><b>Total:</b> ₹${order.total}</p>
-            ${order.requestReason? `<div class="request-box"><b>Request:</b> ${order.requestReason}</div>` : ''}
-          </div>
-          <details>
-            <summary style="cursor:pointer;color:var(--accent);font-weight:bold;font-size:13px;margin:8px 0;">▶ Items (${order.items.length})</summary>
-            ${itemsHtml}
-          </details>
-          <div class="action-grid">
-            <button class="action-btn btn-track" onclick="trackOrderPopup(${order.id})">📍 Track</button>
-            <button class="action-btn btn-cancel ${!canCancel? 'btn-disabled' : ''}" onclick="${canCancel? `requestActionPopup(${order.id}, 'Cancel')` : ''}" ${!canCancel? 'disabled' : ''}>❌ Cancel</button>
-            <button class="action-btn btn-return ${!canReturn? 'btn-disabled' : ''}" onclick="${canReturn? `requestActionPopup(${order.id}, 'Return')` : ''}" ${!canReturn? 'disabled' : ''}>↩️ Return</button>
-            <button class="action-btn btn-refund ${!canRefund? 'btn-disabled' : ''}" onclick="${canRefund? `requestActionPopup(${order.id}, 'Refund')` : ''}" ${!canRefund? 'disabled' : ''}>💰 Refund</button>
-          </div>
-        </div>
-      `;
-    });
-    if(userInquiries.length > 0){
-      container.innerHTML += '<h4 style="color:var(--accent);margin:20px 0 10px;">💬 My Inquiries</h4>';
-      userInquiries.forEach(inq => {
-        container.innerHTML += `
-          <div style="border:1px solid #ddd;padding:12px;margin:8px 0;border-radius:6px;background:#f9f9;">
-            <p style="font-size:13px;"><b>Type:</b> ${inq.formType}</p>
-            <p style="font-size:12px;color:#666;"><b>Data:</b> ${JSON.stringify(inq.data)}</p>
-            <p style="font-size:11px;color:#999;">${new Date(inq.time).toLocaleString()}</p>
-          </div>
-        `;
-      });
-    }
-  }
-  document.getElementById('ordersModal').classList.remove('hide');
-}
 
-function closeOrdersPopup(){
-  document.getElementById('ordersModal').classList.add('hide');
-}
 
 function trackOrderPopup(orderId){
   let order = DB.orders.find(o => o.id == orderId);
@@ -541,5 +452,158 @@ function requestActionPopup(orderId, type){
     navigator.serviceWorker.register('/sw.js');
   }
 </script>
+<!-- CUSTOMER CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal hide">
+  <div class="modal-content" style="max-width:500px;">
+    <div class="modal-header">
+      <h3>🛒 Place Your Order</h3>
+      <button class="close-btn" onclick="closeCheckout()">×</button>
+    </div>
+    
+    <div class="modal-body" style="padding:20px;">
+      <label>Full Name *</label>
+      <input type="text" id="custName" placeholder="Your Name" required>
+      
+      <label>Mobile Number *</label>
+      <input type="tel" id="custPhone" placeholder="10 digit mobile" maxlength="10" required>
+      
+      <label>Email *</label>
+      <input type="email" id="custEmail" placeholder="your@email.com" required>
+      
+      <label>Full Address *</label>
+      <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required></textarea>
+      
+      <label>Payment Mode *</label>
+      <select id="paymentMode" required>
+        <option value="">-- Select Payment --</option>
+        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+        <option value="UPI">UPI / PhonePe / Paytm</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+      
+      <div id="orderSummary" style="background:#0f3460; padding:15px; border-radius:8px; margin:15px 0;">
+        <h4>Order Summary</h4>
+        <div id="cartItemsList"></div>
+        <h3>Total: ₹<span id="cartTotalAmount">0</span></h3>
+      </div>
+      
+      <button onclick="submitOrder()" style="width:100%; padding:15px; background:#25D366; font-size:18px;">
+        ✅ Submit Order on WhatsApp + Email
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; align-items:center; justify-content:center; }
+.modal.hide { display:none; }
+.modal-content { background:#1a1a2e; border-radius:10px; width:90%; max-height:90vh; overflow-y:auto; }
+.modal-header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; border-bottom:1px solid #0f3460; }
+.close-btn { background:#e74c3c; border:none; color:white; font-size:24px; width:35px; height:35px; border-radius:50%; cursor:pointer; }
+.modal-body label { display:block; margin-top:12px; margin-bottom:5px; color:#94a3b8; font-size:14px; }
+.modal-body input, .modal-body textarea, .modal-body select { 
+  width:100%; padding:12px; background:#0f3460; border:1px solid #16213e; 
+  color:white; border-radius:5px; font-size:15px; 
+}
+</style>
+  <!-- Modal HTML yahan -->
+  </div>
+
+  <style>
+  /* CSS yahan */
+  </style>
+
+  <!-- JAVASCRIPT - Line 544+ pe, </body> ke upar -->
+  <script>
+    const ADMIN_WHATSAPP = '918769171078'; 
+    const ADMIN_EMAIL = 'mansasingh7109@gmail.com';
+    
+    function openCheckout() { ... }
+    function closeCheckout() { ... }
+    function submitOrder() { ... }
+  </script>
+<!-- CUSTOMER CHECKOUT MODAL - </body> KE UPAR PASTE KAR -->
+<div id="checkoutModal" class="modal hide">
+  <div class="modal-content" style="max-width:500px;">
+    <div class="modal-header">
+      <h3>🛒 Place Your Order</h3>
+      <button class="close-btn" onclick="closeCheckout()">×</button>
+    </div>
+    <div class="modal-body" style="padding:20px;">
+      <label>Full Name *</label>
+      <input type="text" id="custName" placeholder="Your Name" required>
+      <label>Mobile Number *</label>
+      <input type="tel" id="custPhone" placeholder="10 digit mobile" maxlength="10" required>
+      <label>Email *</label>
+      <input type="email" id="custEmail" placeholder="your@email.com" required>
+      <label>Full Address *</label>
+      <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required></textarea>
+      <label>Payment Mode *</label>
+      <select id="paymentMode" required>
+        <option value="">-- Select Payment --</option>
+        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+        <option value="UPI">UPI / PhonePe / Paytm</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+      <div id="orderSummary" style="background:#0f3460; padding:15px; border-radius:8px; margin:15px 0;">
+        <h4>Order Summary</h4>
+        <div id="cartItemsList"></div>
+        <h3>Total: ₹<span id="cartTotalAmount">0</span></h3>
+      </div>
+      <button onclick="submitOrder()" style="width:100%; padding:15px; background:#25D366; font-size:18px; border:none; color:white; border-radius:8px; cursor:pointer;">
+        ✅ Submit Order on WhatsApp + Email
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; align-items:center; justify-content:center; }
+.modal.hide { display:none; }
+.modal-content { background:#1a1a2e; border-radius:10px; width:90%; max-height:90vh; overflow-y:auto; }
+.modal-header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; border-bottom:1px solid #0f3460; }
+.close-btn { background:#e74c3c; border:none; color:white; font-size:24px; width:35px; height:35px; border-radius:50%; cursor:pointer; }
+.modal-body label { display:block; margin-top:12px; margin-bottom:5px; color:#94a3b8; font-size:14px; }
+.modal-body input, .modal-body textarea, .modal-body select { 
+  width:100%; padding:12px; background:#0f3460; border:1px solid #16213e; 
+  color:white; border-radius:5px; font-size:15px; margin-bottom:5px;
+}
+</style>
+
+<!-- CUSTOMER CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal hide">
+  <div class="modal-content" style="max-width:500px;">
+    <div class="modal-header">
+      <h3>🛒 Place Your Order</h3>
+      <button class="close-btn" onclick="closeCheckout()">×</button>
+    </div>
+    <div class="modal-body" style="padding:20px;">
+      <label>Full Name *</label>
+      <input type="text" id="custName" placeholder="Your Name" required>
+      <label>Mobile Number *</label>
+      <input type="tel" id="custPhone" placeholder="10 digit mobile" maxlength="10" required>
+      <label>Email *</label>
+      <input type="email" id="custEmail" placeholder="your@email.com" required>
+      <label>Full Address *</label>
+      <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required></textarea>
+      <label>Payment Mode *</label>
+      <select id="paymentMode" required>
+        <option value="">-- Select Payment --</option>
+        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+        <option value="UPI">UPI / PhonePe / Paytm</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+      <div id="orderSummary" style="background:#0f3460; padding:15px; border-radius:8px; margin:15px 0;">
+        <h4>Order Summary</h4>
+        <div id="cartItemsList"></div>
+        <h3>Total: ₹<span id="cartTotalAmount">0</span></h3>
+      </div>
+      <button onclick="submitOrder()" style="width:100%; padding:15px; background:#25D366; font-size:18px; border:none; color:white; border-radius:8px; cursor:pointer;">
+        ✅ Submit Order on WhatsApp + Email
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
