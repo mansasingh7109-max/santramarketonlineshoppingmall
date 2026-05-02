@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // ORDER US - Direct WhatsApp
 function openOrderUs(){
-  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9876543210';
+  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078';
   window.open(`https://wa.me/91${waNumber}?text=Hi, I want to place an order from SANTRA MALL`, '_blank');
 }
 
@@ -438,7 +438,7 @@ function submitOrderToWhatsApp(pid, pname, pprice){
   saveDB();
 
   // 2. Send to WhatsApp
-  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9876543210';
+  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078';
   let msg = `🛒 *New Order - SANTRA MALL*\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${address}\nPayment: ${payment}\n\n*Product:*\n${pname} - ₹${pprice}\n\n*Total: ₹${pprice}*`;
   window.open(`https://wa.me/91${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
 
