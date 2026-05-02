@@ -358,13 +358,7 @@ const GITHUB_USERNAME = "githubapplast";
 const GITHUB_REPO = "Go4";
 
 // ===== DATABASE - PURANA DATA LOAD + AUTO BACKUP =====
-let DB = JSON.parse(localStorage.getItem('santra_db')) || {
-  users: [{role: 'admin', name: 'Admin', pass: 'admin123'}],
-  products: [],
-  categories: [],
-  orders: [],
-  customers: [],
-  settings: {
+
     siteName: 'SANTRA MALL',
     logo: '🛍️ SANTRA MALL',
     primaryColor: '#8b5cf6',
