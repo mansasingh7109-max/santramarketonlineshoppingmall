@@ -99,6 +99,12 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
+  let DB = {
+  users: [], // 👈 Ye line zaruri hai warna error aayega
+  products: [],
+  categories: [],
+  settings: {}
+}
 // ===== FIREBASE CONFIG - APNA CONFIG DAALO YA EMPTY CHHOD DO =====
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
