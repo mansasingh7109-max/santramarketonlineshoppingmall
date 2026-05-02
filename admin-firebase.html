@@ -1,122 +1,185 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Firebase Admin - Free Unlimited</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - SANTRA MALL</title>
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: Arial; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; min-height: 100vh; }
-   .box { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    input, textarea { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; }
-    input:focus, textarea:focus { border-color: #667eea; outline: none; }
-    button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 17px; font-weight: bold; }
-    button:disabled { background: #ccc; cursor: not-allowed; }
-   .btn-red { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-   .product { border: 2px solid #f0f0f0; padding: 18px; margin: 12px 0; border-radius: 10px; }
-   .flex { display: flex; gap: 12px; }
-   .flex > * { flex: 1; }
-    label { font-weight: 600; font-size: 14px; display: block; margin-top: 14px; color: #333; }
-   .upload-box { border: 3px dashed #667eea; padding: 30px; text-align: center; border-radius: 12px; margin: 12px 0; background: #f8f9ff; cursor: pointer; }
-   .upload-box:hover { background: #eef2ff; }
-   .upload-box input { display: none; }
-    img.preview { max-width: 180px; max-height: 180px; margin-top: 12px; border-radius: 10px; border: 3px solid #667eea; }
-   .alert { padding: 15px; border-radius: 8px; margin: 12px 0; font-weight: 500; }
-   .alert-success { background: #d4edda; border: 2px solid #28a745; color: #155724; }
-   .progress { width: 100%; height: 30px; background: #e9ecef; border-radius: 8px; overflow: hidden; margin: 12px 0; display: none; }
-   .progress-bar { height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 0%; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; }
-    h2 { margin-top: 0; color: #333; font-size: 28px; }
-    h3 { color: #667eea; margin: 25px 0 12px 0; font-size: 20px; }
-   .login-box { max-width: 400px; margin: 100px auto; }
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding:20px;}
+   .header{background:var(--card);padding:15px;border-radius:8px;margin-bottom:20px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;}
+   .header h1{color:var(--accent);}
+   .logout-btn{padding:8px 15px;background:#f44336;color:white;border:none;border-radius:4px;cursor:pointer;}
+   .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+   .tab-btn{padding:10px 20px;background:#ddd;border:none;border-radius:4px;cursor:pointer;font-weight:bold;}
+   .tab-btn.active{background:var(--accent);color:white;}
+   .tab-content{background:var(--card);padding:20px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+   .hide{display:none!important;}
+    input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;}
+    label{font-weight:bold;margin-top:10px;display:block;}
+    button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:4px;cursor:pointer;margin:5px 0;}
+   .btn-delete{background:#f44336!important;}
+   .btn-edit{background:#2196F3!important;}
+   .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;margin-top:20px;}
+   .product-item{border:1px solid #ddd;padding:10px;border-radius:6px;background:#fafafa;}
+   .product-item img{width:100%;height:140px;object-fit:cover;border-radius:4px;}
+   .order-item{border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:6px;background:#fafafa;}
+   .media-preview{margin:10px 0;}
+   .media-preview img,.media-preview video{max-width:200px;max-height:150px;border-radius:4px;margin:5px;}
+   .flex{display:flex;gap:10px;}
+   .flex > *{flex:1;}
+   .firebase-badge{background:#FFA000;color:white;padding:3px 8px;border-radius:4px;font-size:11px;margin-left:5px;}
   </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="box login-box">
-  <h2 style="text-align:center;">🔐 Admin Login</h2>
-  <div class="alert alert-success">
-    <b>FREE:</b> Firebase free plan. 5GB storage free.
-  </div>
-  <label>Email</label>
-  <input type="email" id="loginEmail" placeholder="mansasingh7109@gmail.com">
-  <label>Password</label>
-  <input type="password" id="loginPassword" placeholder="......">
-  <button onclick="login()">Login</button>
-  <small style="text-align:center; margin-top:15px; display:block;">Pehli baar? Firebase Console → Authentication → Add User</small>
+<div class="header">
+  <h1>🛍️ SANTRA MALL - Admin Panel <span class="firebase-badge">FIREBASE</span></h1>
+  <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel" style="display:none;">
-<div class="box">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-    <h2>🔥 Firebase Admin Panel</h2>
-    <button onclick="logout()" style="width:auto; padding:10px 20px; background:#dc3545;">Logout</button>
-  </div>
-  <div class="alert alert-success">
-    <b>✅ Free Tier Active:</b> 5GB Storage | Unlimited Uploads | Direct Gallery Se
-  </div>
-
-  <label>Product Name *</label>
-  <input type="text" id="name" placeholder="Blue Designer Gown">
-
-  <label>Description</label>
-  <textarea id="desc" rows="2" placeholder="Premium silk gown"></textarea>
-
-  <div class="flex">
-    <div><label>MRP ₹</label><input type="number" id="mrp" placeholder="2999"></div>
-    <div><label>Selling Price ₹ *</label><input type="number" id="price" placeholder="1999"></div>
-    <div><label>Stock</label><input type="number" id="stock" placeholder="25"></div>
-  </div>
-
-  <label>Size & Price</label>
-  <textarea id="sizes" rows="4" placeholder="S-1799&#10;M-1999&#10;L-2199&#10;XL-2399"></textarea>
-
-  <label>Category</label>
-  <input type="text" id="category" placeholder="Gowns">
-
-  <h3>📸 Photo - Gallery Se Direct Upload</h3>
-  <div class="upload-box" onclick="document.getElementById('imgFile').click()">
-    <input type="file" id="imgFile" accept="image/*" onchange="uploadFile(this, 'image')">
-    <div id="imgText"><div style="font-size: 48px;">📱</div><b>Gallery Se Photo Select Karo</b><p>Click karke chuno, apne aap upload ho jayegi</p></div>
-    <img id="imgPreview" class="preview" style="display:none;">
-    <div class="progress" id="imgProgress"><div class="progress-bar" id="imgProgressBar">0%</div></div>
-  </div>
-  <input type="hidden" id="imageUrl">
-
-  <h3>🎥 Video - Direct Upload</h3>
-  <div class="upload-box" onclick="document.getElementById('vidFile').click()">
-    <input type="file" id="vidFile" accept="video/*" onchange="uploadFile(this, 'video')">
-    <div id="vidText"><div style="font-size: 48px;">🎬</div><b>Gallery Se Video Select Karo</b></div>
-    <div class="progress" id="vidProgress"><div class="progress-bar" id="vidProgressBar">0%</div></div>
-  </div>
-  <input type="hidden" id="videoUrl">
-  <div id="vidLink" style="display:none; margin-top:10px;"></div>
-
-  <h3>📄 Document URL (Optional)</h3>
-  <input type="text" id="docUrl" placeholder="Google Drive link ya PDF URL">
-
-  <h3>🎵 Audio URL (Optional)</h3>
-  <input type="text" id="audioUrl" placeholder="Audio file ka link">
-
-  <br><br>
-  <button onclick="saveProduct()" id="saveBtn">💾 Save Product to Firebase</button>
+<div class="tabs">
+  <button class="tab-btn active" onclick="openTab('products')">📦 Products</button>
+  <button class="tab-btn" onclick="openTab('orders')">📋 Orders</button>
+  <button class="tab-btn" onclick="openTab('customers')">👥 Customer Fields</button>
+  <button class="tab-btn" onclick="openTab('media')">🖼️ Media Library</button>
+  <button class="tab-btn" onclick="openTab('settings')">⚙️ Settings</button>
 </div>
 
-<div class="box">
-  <h2>📦 All Products - <span id="count">0</span></h2>
-  <div id="productList"></div>
+<!-- PRODUCTS TAB -->
+<div id="products" class="tab-content">
+  <h3>Add / Edit Product - Unlimited Media</h3>
+  <form id="productForm">
+    <input type="hidden" id="productId">
+    <label>Product Name *</label>
+    <input type="text" id="pName" required>
+    
+    <div class="flex">
+      <div>
+        <label>MRP</label>
+        <input type="number" id="pMrp">
+      </div>
+      <div>
+        <label>Selling Price *</label>
+        <input type="number" id="pPrice" required>
+      </div>
+      <div>
+        <label>Stock *</label>
+        <input type="number" id="pStock" required>
+      </div>
+    </div>
+
+    <label>Category</label>
+    <input type="text" id="pCategory" placeholder="General">
+
+    <label>Description</label>
+    <textarea id="pDesc" rows="3"></textarea>
+
+    <h4 style="margin-top:20px;color:var(--accent);">Media Upload - Gallery/Browser/URL - Unlimited</h4>
+    
+    <label>Upload Images - From Gallery/Browser - Multiple</label>
+    <input type="file" id="pImages" accept="image/*" multiple>
+    <div id="imagePreview" class="media-preview"></div>
+
+    <label>Upload Videos - From Gallery/Browser - Multiple</label>
+    <input type="file" id="pVideos" accept="video/*" multiple>
+    <div id="videoPreview" class="media-preview"></div>
+
+    <label>Upload Audio/Document - PDF, MP3, DOC</label>
+    <input type="file" id="pDocs" accept="audio/*,.pdf,.doc,.docx" multiple>
+    <div id="docPreview" class="media-preview"></div>
+
+    <label>OR Enter Image URLs - Comma Separated</label>
+    <textarea id="pImageUrls" rows="2" placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
+
+    <label>OR Enter Video URLs - Comma Separated</label>
+    <textarea id="pVideoUrls" rows="2" placeholder="https://example.com/video1.mp4"></textarea>
+
+    <button type="button" onclick="saveProductFirebase()">💾 Save to Firebase</button>
+    <button type="button" onclick="clearForm()" style="background:#999;">Clear</button>
+  </form>
+
+  <h3 style="margin-top:30px;">All Products - Firebase</h3>
+  <div id="productList" class="product-list"></div>
 </div>
+
+<!-- ORDERS TAB -->
+<div id="orders" class="tab-content hide">
+  <h3>Customer Orders - Real Time</h3>
+  <div id="orderList"></div>
 </div>
+
+<!-- CUSTOMERS TAB -->
+<div id="customers" class="tab-content hide">
+  <h3>Customer Form Fields - Checkout Pe Dikhega</h3>
+  <p style="color:#666;font-size:14px;margin-bottom:15px;">Yahan se extra fields add karo jo customer se order ke time mangne hain</p>
+  
+  <div style="border:1px solid #ddd;padding:15px;border-radius:6px;margin-bottom:20px;">
+    <h4>Add New Field</h4>
+    <input type="text" id="fieldLabel" placeholder="Field Label e.g. GST Number">
+    <input type="text" id="fieldName" placeholder="Field Name e.g. gst_number">
+    <select id="fieldType">
+      <option value="text">Text</option>
+      <option value="number">Number</option>
+      <option value="email">Email</option>
+      <option value="tel">Phone</option>
+      <option value="textarea">Textarea</option>
+      <option value="select">Dropdown</option>
+    </select>
+    <input type="text" id="fieldPlaceholder" placeholder="Placeholder text">
+    <input type="text" id="fieldOptions" placeholder="Dropdown options comma separated" style="display:none;">
+    <label><input type="checkbox" id="fieldRequired"> Required Field</label>
+    <button onclick="addCustomField()">Add Field</button>
+  </div>
+
+  <h4>Current Fields</h4>
+  <div id="customFieldsList"></div>
+</div>
+
+<!-- MEDIA TAB -->
+<div id="media" class="tab-content hide">
+  <h3>Media Library - All Uploads</h3>
+  <p style="color:#666;">Gallery se upload kiye hue sab images/videos/docs yahan dikhenge</p>
+  <div id="mediaLibrary"></div>
+</div>
+
+<!-- SETTINGS TAB -->
+<div id="settings" class="tab-content hide">
+  <h3>Website Settings</h3>
+  
+  <label>Logo Text</label>
+  <input type="text" id="setLogo" placeholder="🛍️ SANTRA MALL">
+  
+  <label>Primary Color</label>
+  <input type="color" id="setColor" value="#e40046">
+  
+  <label>Help Desk Phone</label>
+  <input type="text" id="setPhone" placeholder="8769171078">
+  
+  <label>Help Desk WhatsApp</label>
+  <input type="text" id="setWhatsapp" placeholder="8769171078">
+  
+  <label>Help Desk Email</label>
+  <input type="email" id="setEmail" placeholder="mansasingh7109@gmail.com">
+  
+  <label>Help Desk Hours</label>
+  <input type="text" id="setHours" placeholder="Mon-Sat: 12 AM - 12 PM">
+  
+  <label>About Us</label>
+  <textarea id="setAbout" rows="3"></textarea>
+
+  <button onclick="saveSettings()">💾 Save Settings</button>
+</div>
+
+<script src="db.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
 
 <script>
-  // 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-  const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -125,1050 +188,361 @@
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-  
-  
-  <!DOCTYPE html>
-<html>
-<head>
-  <title>SANTRA MALL - Admin Panel Final</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial; padding: 15px; background: #1a1a2e; color: #fff; }
- .box { background: #16213e; padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #0f3460; }
-    input, textarea, select { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #0f3460; border-radius: 8px; font-size: 15px; background: #0f3460; color: #fff; }
-    input:focus, textarea:focus { border-color: #e94560; outline: none; }
-    button { background: linear-gradient(135deg, #e94560 0%, #c81d77 100%); color: white; padding: 16px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 17px; font-weight: bold; margin-top: 10px; }
-    button:hover { opacity: 0.9; }
-    button:disabled { background: #555; cursor: not-allowed; }
- .btn-option { width: auto; padding: 12px 20px; margin: 5px; font-size: 14px; }
- .btn-gallery { background: #3498db; }
- .btn-url { background: #9b59b6; }
- .btn-github { background: #2ecc71; }
- .btn-browse { background: #f39c12; }
- .btn-red { background: #e74c3c; width: auto; padding: 8px 15px; }
- .product { border: 2px solid #0f3460; padding: 18px; margin: 12px 0; border-radius: 10px; background: #0f3460; }
- .flex { display: flex; gap: 12px; }
- .flex > * { flex: 1; }
-    label { font-weight: 600; font-size: 14px; display: block; margin-top: 14px; color: #e94560; }
- .upload-area { border: 3px dashed #e94560; padding: 25px; text-align: center; border-radius: 12px; margin: 12px 0; background: #1a1a2e; cursor: pointer; }
- .upload-area:hover { background: #16213e; }
- .upload-area input { display: none; }
- .tab-content { display: none; padding: 15px; background: #1a1a2e; border-radius: 8px; margin-top: 10px; }
- .tab-content.active { display: block; }
-    img.preview { max-width: 200px; max-height: 200px; margin-top: 12px; border-radius: 10px; border: 3px solid #e94560; }
- .alert { padding: 15px; border-radius: 8px; margin: 12px 0; font-weight: 500; }
- .alert-success { background: #1a4d2e; border: 2px solid #28a745; color: #4ade80; }
- .alert-warning { background: #4d3319; border: 2px solid #f39c12; color: #fbbf24; }
- .progress { width: 100%; height: 30px; background: #0f3460; border-radius: 8px; overflow: hidden; margin: 12px 0; display: none; }
- .progress-bar { height: 100%; background: linear-gradient(135deg, #e94560 0%, #c81d77 100%); width: 0%; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; }
-    h2 { color: #e94560; font-size: 26px; margin-bottom: 15px; }
-    h3 { color: #3498db; margin: 20px 0 12px 0; font-size: 18px; }
- .login-box { max-width: 400px; margin: 100px auto; }
- .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 10px; }
- .media-item { position: relative; }
- .media-item img,.media-item video { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
- .media-item.remove { position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; border: none; }
-  </style>
-</head>
-<body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="box login-box">
-  <h2 style="text-align:center;">🔐 SANTRA MALL - Admin Login</h2>
-  <div class="alert alert-success">
-    <b>FREE Firebase:</b> 5GB Storage | Unlimited Uploads
-  </div>
-  <label>Email</label>
-  <input type="email" id="loginEmail" placeholder="mansasingh7109@gmail.com">
-  <label>Password</label>
-  <input type="password" id="loginPassword" placeholder="••••••••">
-  <button onclick="login()">Login to Admin Panel</button>
-  <small style="text-align:center; margin-top:15px; display:block; color:#999;">First time? Firebase Console → Authentication → Add User</small>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="adminPanel" style="display:none;">
-<div class="box">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-    <h2>🛍️ SANTRA MALL - Admin Panel</h2>
-    <button onclick="logout()" style="width:auto; padding:10px 20px; background:#e74c3c;">Logout</button>
-  </div>
-
-  <label>Product Name *</label>
-  <input type="text" id="name" placeholder="Pink Salwar Suit">
-
-  <div class="flex">
-    <div><label>MRP (Optional)</label><input type="number" id="mrp" placeholder="15000"></div>
-    <div><label>Selling Price *</label><input type="number" id="price" placeholder="13005"></div>
-    <div><label>Stock Quantity</label><input type="number" id="stock" placeholder="20"></div>
-  </div>
-
-  <label>Select Category *</label>
-  <select id="category">
-    <option value="">-- Select --</option>
-    <option>Gowns</option>
-    <option>Dresses</option>
-    <option>Salwar Suit</option>
-    <option>Sarees</option>
-    <option>Electronics</option>
-    <option>Accessories</option>
-  </select>
-
-  <label>Size & Price - Har line me ek</label>
-  <textarea id="sizes" rows="3" placeholder="S-12000&#10;M-13005&#10;L-14000&#10;XL-15000"></textarea>
-
-  <h3>📁 Media Upload - 4 OPTIONS</h3>
-  
-  <!-- IMAGE UPLOAD -->
-  <label>🖼️ Image</label>
-  <div>
-    <button type="button" class="btn-option btn-gallery" onclick="selectMedia('image', 'gallery')">📱 From Gallery</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('image', 'url')">🔗 From URL</button>
-    <button type="button" class="btn-option btn-github" onclick="selectMedia('image', 'github')">☁️ Upload to GitHub</button>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('image', 'browse')">💻 Browse Computer</button>
-  </div>
-  
-  <div id="image-gallery" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('imgFileGallery').click()">
-      <input type="file" id="imgFileGallery" accept="image/*" multiple onchange="uploadToFirebase(this, 'image')">
-      <div style="font-size:48px;">📱</div>
-      <b>Gallery Se Select Karo</b>
-      <p>Multiple photos select kar sakte ho</p>
-    </div>
-  </div>
-
-  <div id="image-url" class="tab-content">
-    <input type="text" id="imgUrlInput" placeholder="https://i.ibb.co/... ya assets/photo.jpg">
-    <button type="button" onclick="addUrl('image')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div id="image-github" class="tab-content">
-    <div class="alert alert-warning">
-      <b>Step 1:</b> Neeche button dabao - GitHub khulega<br>
-      <b>Step 2:</b> assets folder me photo upload karo<br>
-      <b>Step 3:</b> Wapas aake From URL me likho: <code>assets/photo.jpg</code>
-      <button type="button" onclick="window.open('https://github.com/mansasingh7109-max/santramarketonlineshoppingmall/upload/main/assets', '_blank')" style="margin-top:10px;">🚀 Open GitHub Assets</button>
-    </div>
-  </div>
-
-  <div id="image-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('imgFileBrowse').click()">
-      <input type="file" id="imgFileBrowse" accept="image/*" multiple onchange="uploadToFirebase(this, 'image')">
-      <div style="font-size:48px;">💻</div>
-      <b>Computer Se Select Karo</b>
-    </div>
-  </div>
-
-  <div class="progress" id="imgProgress"><div class="progress-bar" id="imgProgressBar">0%</div></div>
-  <div class="media-grid" id="imagePreviewGrid"></div>
-  <input type="hidden" id="imageUrls">
-
-  <!-- VIDEO UPLOAD -->
-  <label>🎥 Video (Optional)</label>
-  <div>
-    <button type="button" class="btn-option btn-gallery" onclick="selectMedia('video', 'gallery')">📱 From Gallery</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('video', 'url')">🔗 From URL</button>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('video', 'browse')">💻 Browse Computer</button>
-  </div>
-
-  <div id="video-gallery" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('vidFileGallery').click()">
-      <input type="file" id="vidFileGallery" accept="video/*" onchange="uploadToFirebase(this, 'video')">
-      <div style="font-size:48px;">📱</div><b>Gallery Se Video</b>
-    </div>
-  </div>
-
-  <div id="video-url" class="tab-content">
-    <input type="text" id="vidUrlInput" placeholder="YouTube link ya https://...">
-    <button type="button" onclick="addUrl('video')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div id="video-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('vidFileBrowse').click()">
-      <input type="file" id="vidFileBrowse" accept="video/*" onchange="uploadToFirebase(this, 'video')">
-      <div style="font-size:48px;">💻</div><b>Computer Se Video</b>
-    </div>
-  </div>
-
-  <div class="progress" id="vidProgress"><div class="progress-bar" id="vidProgressBar">0%</div></div>
-  <div class="media-grid" id="videoPreviewGrid"></div>
-  <input type="hidden" id="videoUrls">
-
-  <!-- DOCUMENT UPLOAD -->
-  <label>📄 Document/PDF (Optional)</label>
-  <div>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('doc', 'browse')">💻 Browse Computer</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('doc', 'url')">🔗 From URL</button>
-  </div>
-
-  <div id="doc-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('docFileBrowse').click()">
-      <input type="file" id="docFileBrowse" accept=".pdf,.doc,.docx" onchange="uploadToFirebase(this, 'doc')">
-      <div style="font-size:48px;">📄</div><b>PDF/Doc Select Karo</b>
-    </div>
-  </div>
-
-  <div id="doc-url" class="tab-content">
-    <input type="text" id="docUrlInput" placeholder="Google Drive link ya assets/file.pdf">
-    <button type="button" onclick="addUrl('doc')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div class="progress" id="docProgress"><div class="progress-bar" id="docProgressBar">0%</div></div>
-  <div id="docPreviewList"></div>
-  <input type="hidden" id="docUrls">
-
-  <!-- AUDIO UPLOAD -->
-  <label>🎵 Audio (Optional)</label>
-  <div>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('audio', 'browse')">💻 Browse Computer</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('audio', 'url')">🔗 From URL</button>
-  </div>
-
-  <div id="audio-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('audFileBrowse').click()">
-      <input type="file" id="audFileBrowse" accept="audio/*" onchange="uploadToFirebase(this, 'audio')">
-      <div style="font-size:48px;">🎵</div><b>Audio File Select Karo</b>
-    </div>
-  </div>
-
-  <div id="audio-url" class="tab-content">
-    <input type="text" id="audUrlInput" placeholder="MP3 link ya assets/audio.mp3">
-    <button type="button" onclick="addUrl('audio')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div class="progress" id="audProgress"><div class="progress-bar" id="audProgressBar">0%</div></div>
-  <div id="audioPreviewList"></div>
-  <input type="hidden" id="audioUrls">
-
-  <label>Product Description</label>
-  <textarea id="desc" rows="3" placeholder="Product ke baare me likho..."></textarea>
-
-  <button onclick="saveProduct()" id="saveBtn">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
-</div>
-
-<div class="box">
-  <h2>📦 Product List - SAB PURANE PRODUCTS YAHAN HAIN</h2>
-  <button type="button" onclick="exportCSV()" style="width:auto; background:#3498db; margin-bottom:15px;">📥 Export CSV</button>
-  <div id="productList"></div>
-</div>
-
-<script>
-  // 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO - Firebase Console → Project Settings → Config
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const storage = firebase.storage();
-  const auth = firebase.auth();
-
-  let mediaFiles = { image: [], video: [], doc: [], audio: [] };
-
-  auth.onAuthStateChanged(user => {
-    console.log('Auth state:', user);
-    if (user) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
-      loadProducts();
-    } else {
-      document.getElementById('loginScreen').style.display = 'block';
-      document.getElementById('adminPanel').style.display = 'none';
-    }
-  });
-
-  function login() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    console.log('Login try:', email);
-    
-    auth.signInWithEmailAndPassword(email, password)
-   .then((userCredential) => {
-      console.log('Login success:', userCredential.user);
-      alert('✅ Login Success!');
-    })
-   .catch(err => {
-      console.error('Login error:', err);
-      alert('❌ ' + err.message + '\n\nCode: ' + err.code);
-    });
-  }
-
-  function logout() { auth.signOut(); }
-
-  function selectMedia(type, method) {
-    document.querySelectorAll(`[id^="${type}-"]`).forEach(el => el.classList.remove('active'));
-    document.getElementById(`${type}-${method}`).classList.add('active');
-  }
-
-  function uploadToFirebase(input, type) {
-    const files = input.files;
-    if (!files.length) <!DOCTYPE html>
-<html>
-<head>
-  <title>SANTRA MALL - Admin Panel Final</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial; padding: 15px; background: #1a1a2e; color: #fff; }
- .box { background: #16213e; padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #0f3460; }
-    input, textarea, select { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #0f3460; border-radius: 8px; font-size: 15px; background: #0f3460; color: #fff; }
-    input:focus, textarea:focus { border-color: #e94560; outline: none; }
-    button { background: linear-gradient(135deg, #e94560 0%, #c81d77 100%); color: white; padding: 16px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 17px; font-weight: bold; margin-top: 10px; }
-    button:hover { opacity: 0.9; }
-    button:disabled { background: #555; cursor: not-allowed; }
- .btn-option { width: auto; padding: 12px 20px; margin: 5px; font-size: 14px; }
- .btn-gallery { background: #3498db; }
- .btn-url { background: #9b59b6; }
- .btn-github { background: #2ecc71; }
- .btn-browse { background: #f39c12; }
- .btn-red { background: #e74c3c; width: auto; padding: 8px 15px; }
- .product { border: 2px solid #0f3460; padding: 18px; margin: 12px 0; border-radius: 10px; background: #0f3460; }
- .flex { display: flex; gap: 12px; }
- .flex > * { flex: 1; }
-    label { font-weight: 600; font-size: 14px; display: block; margin-top: 14px; color: #e94560; }
- .upload-area { border: 3px dashed #e94560; padding: 25px; text-align: center; border-radius: 12px; margin: 12px 0; background: #1a1a2e; cursor: pointer; }
- .upload-area:hover { background: #16213e; }
- .upload-area input { display: none; }
- .tab-content { display: none; padding: 15px; background: #1a1a2e; border-radius: 8px; margin-top: 10px; }
- .tab-content.active { display: block; }
-    img.preview { max-width: 200px; max-height: 200px; margin-top: 12px; border-radius: 10px; border: 3px solid #e94560; }
- .alert { padding: 15px; border-radius: 8px; margin: 12px 0; font-weight: 500; }
- .alert-success { background: #1a4d2e; border: 2px solid #28a745; color: #4ade80; }
- .alert-warning { background: #4d3319; border: 2px solid #f39c12; color: #fbbf24; }
- .progress { width: 100%; height: 30px; background: #0f3460; border-radius: 8px; overflow: hidden; margin: 12px 0; display: none; }
- .progress-bar { height: 100%; background: linear-gradient(135deg, #e94560 0%, #c81d77 100%); width: 0%; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; }
-    h2 { color: #e94560; font-size: 26px; margin-bottom: 15px; }
-    h3 { color: #3498db; margin: 20px 0 12px 0; font-size: 18px; }
- .login-box { max-width: 400px; margin: 100px auto; }
- .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 10px; }
- .media-item { position: relative; }
- .media-item img,.media-item video { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
- .media-item.remove { position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; border: none; }
-  </style>
-</head>
-<body>
-
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="box login-box">
-  <h2 style="text-align:center;">🔐 SANTRA MALL - Admin Login</h2>
-  <div class="alert alert-success">
-    <b>FREE Firebase:</b> 5GB Storage | Unlimited Uploads
-  </div>
-  <label>Email</label>
-  <input type="email" id="loginEmail" placeholder="mansasingh7109@gmail.com">
-  <label>Password</label>
-  <input type="password" id="loginPassword" placeholder="">
-  <button onclick="login()">Login to Admin Panel</button>
-  <small style="text-align:center; margin-top:15px; display:block; color:#999;">First time? Firebase Console → Authentication → Add User</small>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="adminPanel" style="display:none;">
-<div class="box">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-    <h2>🛍️ SANTRA MALL - Admin Panel</h2>
-    <button onclick="logout()" style="width:auto; padding:10px 20px; background:#e74c3c;">Logout</button>
-  </div>
-
-  <label>Product Name *</label>
-  <input type="text" id="name" placeholder="Pink Salwar Suit">
-
-  <div class="flex">
-    <div><label>MRP (Optional)</label><input type="number" id="mrp" placeholder="15000"></div>
-    <div><label>Selling Price *</label><input type="number" id="price" placeholder="13005"></div>
-    <div><label>Stock Quantity</label><input type="number" id="stock" placeholder="20"></div>
-  </div>
-
-  <label>Select Category *</label>
-  <select id="category">
-    <option value="">-- Select --</option>
-    <option>Gowns</option>
-    <option>Dresses</option>
-    <option>Salwar Suit</option>
-    <option>Sarees</option>
-    <option>Electronics</option>
-    <option>Accessories</option>
-  </select>
-
-  <label>Size & Price - Har line me ek</label>
-  <textarea id="sizes" rows="3" placeholder="S-12000&#10;M-13005&#10;L-14000&#10;XL-15000"></textarea>
-
-  <h3>📁 Media Upload - 4 OPTIONS</h3>
-  
-  <!-- IMAGE UPLOAD -->
-  <label>🖼️ Image</label>
-  <div>
-    <button type="button" class="btn-option btn-gallery" onclick="selectMedia('image', 'gallery')">📱 From Gallery</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('image', 'url')">🔗 From URL</button>
-    <button type="button" class="btn-option btn-github" onclick="selectMedia('image', 'github')">☁️ Upload to GitHub</button>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('image', 'browse')">💻 Browse Computer</button>
-  </div>
-  
-  <div id="image-gallery" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('imgFileGallery').click()">
-      <input type="file" id="imgFileGallery" accept="image/*" multiple onchange="uploadToFirebase(this, 'image')">
-      <div style="font-size:48px;">📱</div>
-      <b>Gallery Se Select Karo</b>
-      <p>Multiple photos select kar sakte ho</p>
-    </div>
-  </div>
-
-  <div id="image-url" class="tab-content">
-    <input type="text" id="imgUrlInput" placeholder="https://i.ibb.co/... ya assets/photo.jpg">
-    <button type="button" onclick="addUrl('image')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div id="image-github" class="tab-content">
-    <div class="alert alert-warning">
-      <b>Step 1:</b> Neeche button dabao - GitHub khulega<br>
-      <b>Step 2:</b> assets folder me photo upload karo<br>
-      <b>Step 3:</b> Wapas aake From URL me likho: <code>assets/photo.jpg</code>
-      <button type="button" onclick="window.open('https://github.com/mansasingh7109-max/santramarketonlineshoppingmall/upload/main/assets', '_blank')" style="margin-top:10px;">🚀 Open GitHub Assets</button>
-    </div>
-  </div>
-
-  <div id="image-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('imgFileBrowse').click()">
-      <input type="file" id="imgFileBrowse" accept="image/*" multiple onchange="uploadToFirebase(this, 'image')">
-      <div style="font-size:48px;">💻</div>
-      <b>Computer Se Select Karo</b>
-    </div>
-  </div>
-
-  <div class="progress" id="imgProgress"><div class="progress-bar" id="imgProgressBar">0%</div></div>
-  <div class="media-grid" id="imagePreviewGrid"></div>
-  <input type="hidden" id="imageUrls">
-
-  <!-- VIDEO UPLOAD -->
-  <label>🎥 Video (Optional)</label>
-  <div>
-    <button type="button" class="btn-option btn-gallery" onclick="selectMedia('video', 'gallery')">📱 From Gallery</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('video', 'url')">🔗 From URL</button>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('video', 'browse')">💻 Browse Computer</button>
-  </div>
-
-  <div id="video-gallery" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('vidFileGallery').click()">
-      <input type="file" id="vidFileGallery" accept="video/*" onchange="uploadToFirebase(this, 'video')">
-      <div style="font-size:48px;">📱</div><b>Gallery Se Video</b>
-    </div>
-  </div>
-
-  <div id="video-url" class="tab-content">
-    <input type="text" id="vidUrlInput" placeholder="YouTube link ya https://...">
-    <button type="button" onclick="addUrl('video')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div id="video-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('vidFileBrowse').click()">
-      <input type="file" id="vidFileBrowse" accept="video/*" onchange="uploadToFirebase(this, 'video')">
-      <div style="font-size:48px;">💻</div><b>Computer Se Video</b>
-    </div>
-  </div>
-
-  <div class="progress" id="vidProgress"><div class="progress-bar" id="vidProgressBar">0%</div></div>
-  <div class="media-grid" id="videoPreviewGrid"></div>
-  <input type="hidden" id="videoUrls">
-
-  <!-- DOCUMENT UPLOAD -->
-  <label>📄 Document/PDF (Optional)</label>
-  <div>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('doc', 'browse')">💻 Browse Computer</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('doc', 'url')">🔗 From URL</button>
-  </div>
-
-  <div id="doc-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('docFileBrowse').click()">
-      <input type="file" id="docFileBrowse" accept=".pdf,.doc,.docx" onchange="uploadToFirebase(this, 'doc')">
-      <div style="font-size:48px;">📄</div><b>PDF/Doc Select Karo</b>
-    </div>
-  </div>
-
-  <div id="doc-url" class="tab-content">
-    <input type="text" id="docUrlInput" placeholder="Google Drive link ya assets/file.pdf">
-    <button type="button" onclick="addUrl('doc')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div class="progress" id="docProgress"><div class="progress-bar" id="docProgressBar">0%</div></div>
-  <div id="docPreviewList"></div>
-  <input type="hidden" id="docUrls">
-
-  <!-- AUDIO UPLOAD -->
-  <label>🎵 Audio (Optional)</label>
-  <div>
-    <button type="button" class="btn-option btn-browse" onclick="selectMedia('audio', 'browse')">💻 Browse Computer</button>
-    <button type="button" class="btn-option btn-url" onclick="selectMedia('audio', 'url')">🔗 From URL</button>
-  </div>
-
-  <div id="audio-browse" class="tab-content">
-    <div class="upload-area" onclick="document.getElementById('audFileBrowse').click()">
-      <input type="file" id="audFileBrowse" accept="audio/*" onchange="uploadToFirebase(this, 'audio')">
-      <div style="font-size:48px;">🎵</div><b>Audio File Select Karo</b>
-    </div>
-  </div>
-
-  <div id="audio-url" class="tab-content">
-    <input type="text" id="audUrlInput" placeholder="MP3 link ya assets/audio.mp3">
-    <button type="button" onclick="addUrl('audio')" style="margin-top:10px;">Add URL</button>
-  </div>
-
-  <div class="progress" id="audProgress"><div class="progress-bar" id="audProgressBar">0%</div></div>
-  <div id="audioPreviewList"></div>
-  <input type="hidden" id="audioUrls">
-
-  <label>Product Description</label>
-  <textarea id="desc" rows="3" placeholder="Product ke baare me likho..."></textarea>
-
-  <button onclick="saveProduct()" id="saveBtn">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
-</div>
-
-<div class="box">
-  <h2>📦 Product List - SAB PURANE PRODUCTS YAHAN HAIN</h2>
-  <button type="button" onclick="exportCSV()" style="width:auto; background:#3498db; margin-bottom:15px;">📥 Export CSV</button>
-  <div id="productList"></div>
-</div>
-
-<script>
-  // 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO - Firebase Console → Project Settings → Config
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-}; 
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const storage = firebase.storage();
-  const auth = firebase.auth();
-
-  let mediaFiles = { image: [], video: [], doc: [], audio: [] };
-
-  auth.onAuthStateChanged(user => {
-    console.log('Auth state:', user);
-    if (user) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
-      loadProducts();
-    } else {
-      document.getElementById('loginScreen').style.display = 'block';
-      document.getElementById('adminPanel').style.display = 'none';
-    }
-  });
-
-  function login() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    console.log('Login try:', email);
-    
-    auth.signInWithEmailAndPassword(email, password)
-   .then((userCredential) => {
-      console.log('Login success:', userCredential.user);
-      alert('✅ Login Success!');
-    })
-   .catch(err => {
-      console.error('Login error:', err);
-      alert('❌ ' + err.message + '\n\nCode: ' + err.code);
-    });
-  }
-
-  function logout() { auth.signOut(); }
-
-  function selectMedia(type, method) {
-    document.querySelectorAll(`[id^="${type}-"]`).forEach(el => el.classList.remove('active'));
-    document.getElementById(`${type}-${method}`).classList.add('active');
-  }
-
-  function uploadToFirebase(input, type) {
-    const files = input.files;
-    if (!files.length) return;
-
-    const progressDiv = document.getElementById(type.substring(0,3) + 'Progress');
-    const progressBar = document.getElementById(type.substring(0,3) + 'ProgressBar');
-    progressDiv.style.display = 'block';
-    document.getElementById('saveBtn').disabled = true;
-
-    let uploaded = 0;
-    Array.from(files).forEach(file => {
-      const storageRef = storage.ref(`${type}s/${Date.now()}_${file.name}`);
-      const uploadTask = storageRef.put(file);
-
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          progressBar.style.width = progress + '%';
-          progressBar.innerText = Math.round(progress) + '%';
-        },
-        (error) => {
-          alert('❌ Upload failed: ' + error.message);
-          document.getElementById('saveBtn').disabled = false;
-        },
-        () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-            mediaFiles[type].push({ url: url, name: file.name, type: file.type });
-            updatePreview(type);
-            uploaded++;
-            if (uploaded === files.length) {
-              progressBar.innerText = 'Complete! ✅';
-              setTimeout(() => { progressDiv.style.display = 'none'; }, 2000);
-              document.getElementById('saveBtn').disabled = false;
-              input.value = '';
-            }
-          });
-        }
-      );
-    });
-  }
-
-  function addUrl(type) {
-    const url = document.getElementById(type.substring(0,3) + 'UrlInput').value.trim();
-    if (!url) return alert('URL daalo');
-    mediaFiles[type].push({ url: url, name: 'External Link', type: 'url' });
-    updatePreview(type);
-    document.getElementById(type.substring(0,3) + 'UrlInput').value = '';
-  }
-
-  function updatePreview(type) {
-    const grid = document.getElementById(type + 'Preview' + (type === 'doc' || type === 'audio'? 'List' : 'Grid'));
-    const urlsInput = document.getElementById(type + 'Urls');
-    
-    if (type === 'image') {
-      grid.innerHTML = mediaFiles[type].map((f, i) => `
-        <div class="media-item">
-          <img src="${f.url}">
-          <button class="remove" onclick="removeMedia('image', ${i})">×</button>
-        </div>
-      `).join('');
-    } else if (type === 'video') {
-      grid.innerHTML = mediaFiles[type].map((f, i) => `
-        <div class="media-item">
-          <video src="${f.url}"></video>
-          <button class="remove" onclick="removeMedia('video', ${i})">×</button>
-        </div>
-      `).join('');
-    } else {
-      grid.innerHTML = mediaFiles[type].map((f, i) => `
-        <div style="background:#0f3460; padding:10px; border-radius:5px; margin:5px 0; display:flex; justify-content:space-between; align-items:center;">
-          <span>${type === 'doc'? '📄' : '🎵'} ${f.name}</span>
-          <button class="btn-red" onclick="removeMedia('${type}', ${i})" style="padding:5px 10px;">Delete</button>
-        </div>
-      `).join('');
-    }
-    urlsInput.value = JSON.stringify(mediaFiles[type].map(f => f.url));
-  }
-
-  function removeMedia(type, index) {
-    mediaFiles[type].splice(index, 1);
-    updatePreview(type);
-  }
-
-  async function saveProduct() {
-    const sizes = document.getElementById('sizes').value.split('\n').filter(s => s.trim());
-    
-    const product = {
-      name: document.getElementById('name').value.trim(),
-      description: document.getElementById('desc').value.trim(),
-      mrp: Number(document.getElementById('mrp').value) || 0,
-      price: Number(document.getElementById('price').value) || 0,
-      stock: Number(document.getElementById('stock').value) || 0,
-      category: document.getElementById('category').value,
-      sizes: sizes,
-      images: mediaFiles.image.map(f => f.url),
-      videos: mediaFiles.video.map(f => f.url),
-      docs: mediaFiles.doc.map(f => f.url),
-      audios: mediaFiles.audio.map(f => f.url),
-      created: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    if (!product.name ||!product.price ||!product.category) {
-      return alert('❌ Name, Price aur Category zaruri hai');
-    }
-
-    try {
-      await db.collection('products').add(product);
-      alert('✅ Product Save Ho Gaya! Home page pe turant dikhega');
-      document.querySelectorAll('input,textarea,select').forEach(i => { if(i.type!== 'hidden') i.value = ''; });
-      mediaFiles = { image: [], video: [], doc: [], audio: [] };
-      ['image', 'video', 'doc', 'audio'].forEach(t => updatePreview(t));
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
-  }
-
-  function loadProducts() {
-    db.collection('products').orderBy('created', 'desc').onSnapshot(snapshot => {
-      let html = '<table style="width:100%; border-collapse:collapse;"><tr style="background:#0f3460;"><th style="padding:10px;">ID</th><th>Media</th><th>Name</th><th>Type</th><th>Price</th><th>Action</th></tr>';
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        html += `<tr style="border-bottom:1px solid #0f3460;">
-          <td style="padding:10px; font-size:12px;">${doc.id.substring(0,8)}</td>
-          <td>${p.images && p.images[0]? `<img src="${p.images[0]}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">` : '❌'}</td>
-          <td>${p.name}</td>
-          <td>${p.category}</td>
-          <td>₹${p.price}</td>
-          <td><button class="btn-red" onclick="deleteProduct('${doc.id}')" style="padding:6px 12px;">🗑️</button></td>
-        </tr>`;
-      });
-      html += '</table>';
-      document.getElementById('productList').innerHTML = html || '<p style="text-align:center; color:#999; padding:30px;">Koi product nahi hai.</p>';
-    });
-  }
-
-  async function deleteProduct(id) {
-    if (!confirm('Pakka delete karna hai?')) return;
-    try {
-      await db.collection('products').doc(id).delete();
-      alert('✅ Delete ho gaya');
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
-  }
-
-  function exportCSV() {
-    db.collection('products').get().then(snapshot => {
-      let csv = 'Name,Price,MRP,Stock,Category,Images\n';
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        csv += `"${p.name}",${p.price},${p.mrp},${p.stock},"${p.category}","${(p.images || []).join(';')}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'products-' + Date.now() + '.csv';
-      a.click();
-    });
-  }
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}
+const firebaseDB = firebase.firestore();
+const firebaseStorage = firebase.storage();
 </script>
 
-</body>
-</html>;
-
-    const progressDiv = document.getElementById(type.substring(0,3) + 'Progress');
-    const progressBar = document.getElementById(type.substring(0,3) + 'ProgressBar');
-    progressDiv.style.display = 'block';
-    document.getElementById('saveBtn').disabled = true;
-
-    let uploaded = 0;
-    Array.from(files).forEach(file => {
-      const storageRef = storage.ref(`${type}s/${Date.now()}_${file.name}`);
-      const uploadTask = storageRef.put(file);
-
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          progressBar.style.width = progress + '%';
-          progressBar.innerText = Math.round(progress) + '%';
-        },
-        (error) => {
-          alert('❌ Upload failed: ' + error.message);
-          document.getElementById('saveBtn').disabled = false;
-        },
-        () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-            mediaFiles[type].push({ url: url, name: file.name, type: file.type });
-            updatePreview(type);
-            uploaded++;
-            if (uploaded === files.length) {
-              progressBar.innerText = 'Complete! ✅';
-              setTimeout(() => { progressDiv.style.display = 'none'; }, 2000);
-              document.getElementById('saveBtn').disabled = false;
-              input.value = '';
-            }
-          });
-        }
-      );
-    });
+<script>
+// CHECK ADMIN LOGIN
+window.onload = function(){
+  let admin = localStorage.getItem('current_admin');
+  if(!admin){
+    alert('Please login from Help Desk first!');
+    window.location.href = 'index.html';
+    return;
   }
+  loadProductsFirebase();
+  loadOrdersFirebase();
+  loadCustomFields();
+  loadSettings();
+  loadMediaLibrary();
+}
 
-  function addUrl(type) {
-    const url = document.getElementById(type.substring(0,3) + 'UrlInput').value.trim();
-    if (!url) return alert('URL daalo');
-    mediaFiles[type].push({ url: url, name: 'External Link', type: 'url' });
-    updatePreview(type);
-    document.getElementById(type.substring(0,3) + 'UrlInput').value = '';
-  }
+function logout(){
+  localStorage.removeItem('current_admin');
+  window.location.href = 'index.html';
+}
 
-  function updatePreview(type) {
-    const grid = document.getElementById(type + 'Preview' + (type === 'doc' || type === 'audio'? 'List' : 'Grid'));
-    const urlsInput = document.getElementById(type + 'Urls');
-    
-    if (type === 'image') {
-      grid.innerHTML = mediaFiles[type].map((f, i) => `
-        <div class="media-item">
-          <img src="${f.url}">
-          <button class="remove" onclick="removeMedia('image', ${i})">×</button>
-        </div>
-      `).join('');
-    } else if (type === 'video') {
-      grid.innerHTML = mediaFiles[type].map((f, i) => `
-        <div class="media-item">
-          <video src="${f.url}"></video>
-          <button class="remove" onclick="removeMedia('video', ${i})">×</button>
-        </div>
-      `).join('');
-    } else {
-      grid.innerHTML = mediaFiles[type].map((f, i) => `
-        <div style="background:#0f3460; padding:10px; border-radius:5px; margin:5px 0; display:flex; justify-content:space-between; align-items:center;">
-          <span>${type === 'doc'? '📄' : '🎵'} ${f.name}</span>
-          <button class="btn-red" onclick="removeMedia('${type}', ${i})" style="padding:5px 10px;">Delete</button>
-        </div>
-      `).join('');
+function openTab(tabName){
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hide'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabName).classList.remove('hide');
+  event.target.classList.add('active');
+}
+
+// PREVIEW UPLOADS
+document.getElementById('pImages').addEventListener('change', function(e){
+  let preview = document.getElementById('imagePreview');
+  preview.innerHTML = '';
+  for(let file of e.target.files){
+    let reader = new FileReader();
+    reader.onload = function(event){
+      preview.innerHTML += `<img src="${event.target.result}" style="max-width:100px;margin:5px;">`;
     }
-    urlsInput.value = JSON.stringify(mediaFiles[type].map(f => f.url));
+    reader.readAsDataURL(file);
   }
+});
 
-  function removeMedia(type, index) {
-    mediaFiles[type].splice(index, 1);
-    updatePreview(type);
-  }
-
-  async function saveProduct() {
-    const sizes = document.getElementById('sizes').value.split('\n').filter(s => s.trim());
-    
-    const product = {
-      name: document.getElementById('name').value.trim(),
-      description: document.getElementById('desc').value.trim(),
-      mrp: Number(document.getElementById('mrp').value) || 0,
-      price: Number(document.getElementById('price').value) || 0,
-      stock: Number(document.getElementById('stock').value) || 0,
-      category: document.getElementById('category').value,
-      sizes: sizes,
-      images: mediaFiles.image.map(f => f.url),
-      videos: mediaFiles.video.map(f => f.url),
-      docs: mediaFiles.doc.map(f => f.url),
-      audios: mediaFiles.audio.map(f => f.url),
-      created: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    if (!product.name ||!product.price ||!product.category) {
-      return alert('❌ Name, Price aur Category zaruri hai');
+document.getElementById('pVideos').addEventListener('change', function(e){
+  let preview = document.getElementById('videoPreview');
+  preview.innerHTML = '';
+  for(let file of e.target.files){
+    let reader = new FileReader();
+    reader.onload = function(event){
+      preview.innerHTML += `<video src="${event.target.result}" controls style="max-width:100px;margin:5px;"></video>`;
     }
-
-    try {
-      await db.collection('products').add(product);
-      alert('✅ Product Save Ho Gaya! Home page pe turant dikhega');
-      document.querySelectorAll('input,textarea,select').forEach(i => { if(i.type!== 'hidden') i.value = ''; });
-      mediaFiles = { image: [], video: [], doc: [], audio: [] };
-      ['image', 'video', 'doc', 'audio'].forEach(t => updatePreview(t));
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
+    reader.readAsDataURL(file);
   }
+});
 
-  function loadProducts() {
-    db.collection('products').orderBy('created', 'desc').onSnapshot(snapshot => {
-      let html = '<table style="width:100%; border-collapse:collapse;"><tr style="background:#0f3460;"><th style="padding:10px;">ID</th><th>Media</th><th>Name</th><th>Type</th><th>Price</th><th>Action</th></tr>';
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        html += `<tr style="border-bottom:1px solid #0f3460;">
-          <td style="padding:10px; font-size:12px;">${doc.id.substring(0,8)}</td>
-          <td>${p.images && p.images[0]? `<img src="${p.images[0]}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">` : '❌'}</td>
-          <td>${p.name}</td>
-          <td>${p.category}</td>
-          <td>₹${p.price}</td>
-          <td><button class="btn-red" onclick="deleteProduct('${doc.id}')" style="padding:6px 12px;">🗑️</button></td>
-        </tr>`;
-      });
-      html += '</table>';
-      document.getElementById('productList').innerHTML = html || '<p style="text-align:center; color:#999; padding:30px;">Koi product nahi hai.</p>';
-    });
+document.getElementById('pDocs').addEventListener('change', function(e){
+  let preview = document.getElementById('docPreview');
+  preview.innerHTML = '';
+  for(let file of e.target.files){
+    preview.innerHTML += `<p>📄 ${file.name}</p>`;
   }
+});
 
-  async function deleteProduct(id) {
-    if (!confirm('Pakka delete karna hai?')) return;
-    try {
-      await db.collection('products').doc(id).delete();
-      alert('✅ Delete ho gaya');
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
-  }
+document.getElementById('fieldType').addEventListener('change', function(){
+  document.getElementById('fieldOptions').style.display = this.value === 'select' ? 'block' : 'none';
+});
 
-  function exportCSV() {
-    db.collection('products').get().then(snapshot => {
-      let csv = 'Name,Price,MRP,Stock,Category,Images\n';
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        csv += `"${p.name}",${p.price},${p.mrp},${p.stock},"${p.category}","${(p.images || []).join(';')}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'products-' + Date.now() + '.csv';
-      a.click();
-    });
-  }
-</script>
-
-</body>
-</html>,
+// SAVE PRODUCT TO FIREBASE
+async function saveProductFirebase(){
+  let id = document.getElementById('productId').value;
+  let name = document.getElementById('pName').value;
+  let mrp = document.getElementById('pMrp').value;
+  let price = document.getElementById('pPrice').value;
+  let stock = document.getElementById('pStock').value;
+  let category = document.getElementById('pCategory').value;
+  let desc = document.getElementById('pDesc').value;
   
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const storage = firebase.storage();
-  const auth = firebase.auth();
-
-  // Check login
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
-      loadProducts();
-    } else {
-      document.getElementById('loginScreen').style.display = 'block';
-      document.getElementById('adminPanel').style.display = 'none';
-    }
-  });
-
-  function login() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    auth.signInWithEmailAndPassword(email, password).catch(err => alert('❌ ' + err.message));
+  if(!name ||!price ||!stock){
+    alert('Please fill required fields!');
+    return;
   }
 
-  function logout() {
-    auth.signOut();
+  let images = [];
+  let videos = [];
+  let docs = [];
+
+  // Upload Images to Firebase Storage
+  let imgFiles = document.getElementById('pImages').files;
+  for(let file of imgFiles){
+    let storageRef = firebaseStorage.ref('products/images/' + Date.now() + '_' + file.name);
+    await storageRef.put(file);
+    let url = await storageRef.getDownloadURL();
+    images.push(url);
   }
 
-  function uploadFile(input, type) {
-    const file = input.files[0];
-    if (!file) return;
-
-    const progressDiv = document.getElementById(type === 'image'? 'img' : 'vid' + 'Progress');
-    const progressBar = document.getElementById(type === 'image'? 'img' : 'vid' + 'ProgressBar');
-    const textDiv = document.getElementById(type === 'image'? 'img' : 'vid' + 'Text');
-
-    progressDiv.style.display = 'block';
-    document.getElementById('saveBtn').disabled = true;
-
-    const storageRef = storage.ref(`${type}s/${Date.now()}_${file.name}`);
-    const uploadTask = storageRef.put(file);
-
-    uploadTask.on('state_changed', 
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        progressBar.style.width = progress + '%';
-        progressBar.innerText = Math.round(progress) + '%';
-      }, 
-      (error) => {
-        alert('❌ Upload failed: ' + error.message);
-        document.getElementById('saveBtn').disabled = false;
-      }, 
-      () => {
-        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-          document.getElementById(type + 'Url').value = url;
-          if (type === 'image') {
-            document.getElementById('imgPreview').src = url;
-            document.getElementById('imgPreview').style.display = 'block';
-            textDiv.innerHTML = '<b style="color:green;">✅ Photo Upload Ho Gayi!</b>';
-          } else {
-            document.getElementById('vidLink').style.display = 'block';
-            document.getElementById('vidLink').innerHTML = '✅ Video: <a href="' + url + '" target="_blank">View</a>';
-            textDiv.innerHTML = '<b style="color:green;">✅ Video Upload Ho Gayi!</b>';
-          }
-          progressBar.innerText = 'Complete! ✅';
-          document.getElementById('saveBtn').disabled = false;
-        });
-      }
-    );
+  // Upload Videos
+  let vidFiles = document.getElementById('pVideos').files;
+  for(let file of vidFiles){
+    let storageRef = firebaseStorage.ref('products/videos/' + Date.now() + '_' + file.name);
+    await storageRef.put(file);
+    let url = await storageRef.getDownloadURL();
+    videos.push(url);
   }
 
-  async function saveProduct() {
-    const sizes = document.getElementById('sizes').value.split('\n').filter(s => s.trim());
+  // Upload Docs
+  let docFiles = document.getElementById('pDocs').files;
+  for(let file of docFiles){
+    let storageRef = firebaseStorage.ref('products/docs/' + Date.now() + '_' + file.name);
+    await storageRef.put(file);
+    let url = await storageRef.getDownloadURL();
+    docs.push(url);
+  }
+
+  // Add URL inputs
+  let imgUrls = document.getElementById('pImageUrls').value;
+  if(imgUrls) images = images.concat(imgUrls.split(',').map(u => u.trim()));
+  
+  let vidUrls = document.getElementById('pVideoUrls').value;
+  if(vidUrls) videos = videos.concat(vidUrls.split(',').map(u => u.trim()));
+
+  let productData = {
+    name, mrp, price, stock, category, desc,
+    images, videos, docs,
+    created: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  if(id){
+    await firebaseDB.collection('products').doc(id).update(productData);
+    alert('✅ Product updated!');
+  } else {
+    await firebaseDB.collection('products').add(productData);
+    alert('✅ Product added to Firebase!');
+  }
+  
+  clearForm();
+  loadProductsFirebase();
+  loadMediaLibrary();
+}
+
+function clearForm(){
+  document.getElementById('productForm').reset();
+  document.getElementById('productId').value = '';
+  document.getElementById('imagePreview').innerHTML = '';
+  document.getElementById('videoPreview').innerHTML = '';
+  document.getElementById('docPreview').innerHTML = '';
+}
+
+// LOAD PRODUCTS FROM FIREBASE
+async function loadProductsFirebase(){
+  let container = document.getElementById('productList');
+  container.innerHTML = '<p>Loading...</p>';
+  
+  try {
+    const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
+    container.innerHTML = '';
     
-    const product = {
-      name: document.getElementById('name').value.trim(),
-      description: document.getElementById('desc').value.trim(),
-      mrp: Number(document.getElementById('mrp').value) || 0,
-      price: Number(document.getElementById('price').value) || 0,
-      stock: Number(document.getElementById('stock').value) || 0,
-      category: document.getElementById('category').value.trim(),
-      sizes: sizes,
-      image: document.getElementById('imageUrl').value,
-      video: document.getElementById('videoUrl').value,
-      doc: document.getElementById('docUrl').value,
-      audio: document.getElementById('audioUrl').value,
-      created: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    if (!product.name ||!product.price) {
-      alert('❌ Name aur Price zaruri hai');
+    if(querySnapshot.empty){
+      container.innerHTML = '<p>No products yet</p>';
       return;
     }
-
-    try {
-      await db.collection('products').add(product);
-      alert('✅ Product Firebase me Save Ho Gaya!');
-      document.querySelectorAll('input,textarea').forEach(i => { if(i.type!== 'hidden') i.value = ''; });
-      document.getElementById('imgPreview').style.display = 'none';
-      document.getElementById('imgText').innerHTML = '<div style="font-size: 48px;">📱</div><b>Gallery Se Photo Select Karo</b><p>Click karke chuno</p>';
-      document.getElementById('imgProgress').style.display = 'none';
-      document.getElementById('vidProgress').style.display = 'none';
-      document.getElementById('vidLink').style.display = 'none';
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
-  }
-
-  function loadProducts() {
-    db.collection('products').orderBy('created', 'desc').onSnapshot(snapshot => {
-      let html = '';
-      let count = 0;
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        count++;
-        html += `<div class="product">
-          <div style="display:flex; gap:12px; align-items:start;">
-            ${p.image? `<img src="${p.image}" style="width:80px; height:80px; object-fit:cover; border-radius:8px; border:2px solid #ddd;">` : '<div style="width:80px; height:80px; background:#eee; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:32px;">📦</div>'}
-            <div style="flex:1;">
-              <b style="font-size:16px;">${p.name}</b>
-              <span style="color:#28a745; font-weight:bold; font-size:18px;">₹${p.price}</span>
-              ${p.mrp? `<s style="color:#999; font-size:13px;">₹${p.mrp}</s>` : ''}
-              <br><small>Stock: ${p.stock} | ${p.category || 'No Category'}</small>
-              ${p.sizes && p.sizes.length? `<br><small>Sizes: ${p.sizes.join(', ')}</small>` : ''}
-              <div style="margin-top:8px;">
-                ${p.video? '<span style="background:#e3f2fd; padding:3px 8px; border-radius:4px; font-size:12px; margin-right:5px;">🎥 Video</span>' : ''}
-                ${p.doc? '<span style="background:#fff3e0; padding:3px 8px; border-radius:4px; font-size:12px; margin-right:5px;">📄 PDF</span>' : ''}
-                ${p.audio? '<span style="background:#f3e5f5; padding:3px 8px; border-radius:4px; font-size:12px;">🎵 Audio</span>' : ''}
-              </div>
-            <button class="btn-red" onclick="deleteProduct('${doc.id}')" style="width:auto; padding:10px 15px; margin-top:10px;">Delete</button>
-          </div>
-        </div>`;
-      });
-      document.getElementById('productList').innerHTML = html || '<p style="text-align:center; color:#999; padding:30px;">Koi product nahi hai.</p>';
-      document.getElementById('count').innerText = count;
+    
+    querySnapshot.forEach((doc) => {
+      let p = doc.data();
+      p.id = doc.id;
+      let mediaHtml = '';
+      if(p.images && p.images[0]){
+        mediaHtml = `<img src="${p.images[0]}" alt="${p.name}">`;
+      } else if(p.videos && p.videos[0]){
+        mediaHtml = `<video src="${p.videos[0]}" controls></video>`;
+      }
+      
+      container.innerHTML += `
+        <div class="product-item">
+          ${mediaHtml}
+          <h4>${p.name}</h4>
+          <p>₹${p.price} | Stock: ${p.stock}</p>
+          <button class="btn-edit" onclick="editProductFirebase('${p.id}')">Edit</button>
+          <button class="btn-delete" onclick="deleteProductFirebase('${p.id}')">Delete</button>
+        </div>
+      `;
     });
+  } catch(err) {
+    container.innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
   }
+}
 
-  async function deleteProduct(id) {
-    if (!confirm('Pakka delete karna hai?')) return;
-    try {
-      await db.collection('products').doc(id).delete();
-      alert('✅ Delete ho gaya');
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
+async function editProductFirebase(id){
+  let doc = await firebaseDB.collection('products').doc(id).get();
+  if(!doc.exists) return;
+  let p = doc.data();
+  
+  document.getElementById('productId').value = id;
+  document.getElementById('pName').value = p.name;
+  document.getElementById('pMrp').value = p.mrp || '';
+  document.getElementById('pPrice').value = p.price;
+  document.getElementById('pStock').value = p.stock;
+  document.getElementById('pCategory').value = p.category || '';
+  document.getElementById('pDesc').value = p.desc || '';
+  document.getElementById('pImageUrls').value = p.images? p.images.join(', ') : '';
+  document.getElementById('pVideoUrls').value = p.videos? p.videos.join(', ') : '';
+  window.scrollTo(0,0);
+}
+
+async function deleteProductFirebase(id){
+  if(confirm('Delete this product?')){
+    await firebaseDB.collection('products').doc(id).delete();
+    alert('Deleted!');
+    loadProductsFirebase();
   }
+}
+
+// ORDERS FROM FIREBASE
+async function loadOrdersFirebase(){
+  let container = document.getElementById('orderList');
+  container.innerHTML = '<p>Loading orders...</p>';
+  
+  try {
+    const querySnapshot = await firebaseDB.collection('orders').orderBy('created', 'desc').get();
+    container.innerHTML = '';
+    
+    if(querySnapshot.empty){
+      container.innerHTML = '<p>No orders yet</p>';
+      return;
+    }
+    
+    querySnapshot.forEach((doc) => {
+      let o = doc.data();
+      o.id = doc.id;
+      container.innerHTML += `
+        <div class="order-item">
+          <h4>Order #${o.id} - ${o.status || 'Confirmed'}</h4>
+          <p><b>Customer:</b> ${o.customerName} | ${o.mobile}</p>
+          <p><b>Address:</b> ${o.address}</p>
+          <p><b>Total:</b> ₹${o.total} | <b>Payment:</b> ${o.paymentMode}</p>
+          <p><b>Items:</b> ${o.items.map(i => i.name + ' x' + i.qty).join(', ')}</p>
+          <p><b>Date:</b> ${o.created? new Date(o.created.seconds * 1000).toLocaleString() : ''}</p>
+          <select onchange="updateOrderStatusFirebase('${o.id}', this.value)">
+            <option value="Confirmed" ${o.status==='Confirmed'?'selected':''}>Confirmed</option>
+            <option value="Shipped" ${o.status==='Shipped'?'selected':''}>Shipped</option>
+            <option value="Delivered" ${o.status==='Delivered'?'selected':''}>Delivered</option>
+            <option value="Canceled" ${o.status==='Canceled'?'selected':''}>Canceled</option>
+          </select>
+        </div>
+      `;
+    });
+  } catch(err) {
+    container.innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
+  }
+}
+
+async function updateOrderStatusFirebase(id, status){
+  await firebaseDB.collection('orders').doc(id).update({status: status});
+  alert('Status updated!');
+}
+
+// CUSTOM FIELDS
+function addCustomField(){
+  let label = document.getElementById('fieldLabel').value;
+  let name = document.getElementById('fieldName').value;
+  let type = document.getElementById('fieldType').value;
+  let placeholder = document.getElementById('fieldPlaceholder').value;
+  let options = document.getElementById('fieldOptions').value;
+  let required = document.getElementById('fieldRequired').checked;
+  
+  if(!label ||!name){
+    alert('Label and Name required!');
+    return;
+  }
+  
+  let fields = JSON.parse(localStorage.getItem('CUSTOMER_FORM_FIELDS')) || [];
+  fields.push({label, name, type, placeholder, options, required});
+  localStorage.setItem('CUSTOMER_FORM_FIELDS', JSON.stringify(fields));
+  
+  document.getElementById('fieldLabel').value = '';
+  document.getElementById('fieldName').value = '';
+  document.getElementById('fieldPlaceholder').value = '';
+  document.getElementById('fieldOptions').value = '';
+  
+  loadCustomFields();
+  alert('Field added! Will show in checkout form.');
+}
+
+function loadCustomFields(){
+  let fields = JSON.parse(localStorage.getItem('CUSTOMER_FORM_FIELDS')) || [];
+  let container = document.getElementById('customFieldsList');
+  
+  if(fields.length === 0){
+    container.innerHTML = '<p>No custom fields yet</p>';
+    return;
+  }
+  
+  container.innerHTML = fields.map((f, idx) => `
+    <div style="border:1px solid #ddd;padding:10px;margin:8px 0;border-radius:4px;">
+      <b>${f.label}</b> (${f.type}) ${f.required? ' *' : ''}
+      <button onclick="deleteField(${idx})" style="float:right;background:#f44336;">Delete</button>
+    </div>
+  `).join('');
+}
+
+function deleteField(idx){
+  let fields = JSON.parse(localStorage.getItem('CUSTOMER_FORM_FIELDS')) || [];
+  fields.splice(idx, 1);
+  localStorage.setItem('CUSTOMER_FORM_FIELDS', JSON.stringify(fields));
+  loadCustomFields();
+}
+
+// MEDIA LIBRARY
+async function loadMediaLibrary(){
+  let container = document.getElementById('mediaLibrary');
+  container.innerHTML = '<p>Loading media...</p>';
+  
+  try {
+    let imgRef = firebaseStorage.ref('products/images');
+    let list = await imgRef.listAll();
+    container.innerHTML = '<h4>Images</h4>';
+    
+    for(let item of list.items){
+      let url = await item.getDownloadURL();
+      container.innerHTML += `<img src="${url}" style="max-width:150px;margin:5px;border-radius:4px;">`;
+    }
+  } catch(err) {
+    container.innerHTML = '<p>Enable Firebase Storage first</p>';
+  }
+}
+
+// SETTINGS
+function loadSettings(){
+  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
+  document.getElementById('setLogo').value = SANTRA_DB.settings.logo || '🛍️ SANTRA MALL';
+  document.getElementById('setColor').value = SANTRA_DB.settings.primaryColor || '#e40046';
+  document.getElementById('setPhone').value = SANTRA_DB.settings.helpdeskPhone || '';
+  document.getElementById('setWhatsapp').value = SANTRA_DB.settings.helpdeskWhatsapp || '';
+  document.getElementById('setEmail').value = SANTRA_DB.settings.helpdeskEmail || '';
+  document.getElementById('setHours').value = SANTRA_DB.settings.helpdeskHours || '';
+  document.getElementById('setAbout').value = SANTRA_DB.settings.helpdeskAbout || '';
+}
+
+function saveSettings(){
+  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
+  SANTRA_DB.settings.logo = document.getElementById('setLogo').value;
+  SANTRA_DB.settings.primaryColor = document.getElementById('setColor').value;
+  SANTRA_DB.settings.helpdeskPhone = document.getElementById('setPhone').value;
+  SANTRA_DB.settings.helpdeskWhatsapp = document.getElementById('setWhatsapp').value;
+  SANTRA_DB.settings.helpdeskEmail = document.getElementById('setEmail').value;
+  SANTRA_DB.settings.helpdeskHours = document.getElementById('setHours').value;
+  SANTRA_DB.settings.helpdeskAbout = document.getElementById('setAbout').value;
+  saveDB();
+  alert('✅ Settings saved!');
+}
 </script>
 
 </body>

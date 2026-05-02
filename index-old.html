@@ -188,7 +188,7 @@ function openHelpDesk(){
         <p><b>Phone:</b> ${DB.settings.helpdeskPhone || '8769171078'}</p>
         <p><b>Email:</b> ${DB.settings.helpdeskEmail || 'mansasingh7109@gmail.com'}</p>
         <p><b>WhatsApp:</b> ${DB.settings.helpdeskWhatsapp || '8769171078'}</p>
-        <p><b>Hours:</b> ${DB.settings.helpdeskHours || 'Mon-Sat: 10 AM - 7 PM'}</p>
+        <p><b>Hours:</b> ${DB.settings.helpdeskHours || 'Mon-Sat: 12 AM - 12 PM'}</p>
         <br>
         <h4>📝 About Us</h4>
         <p>${DB.settings.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
@@ -247,6 +247,15 @@ function adminLoginFromHelpdesk(){
 // Firebase Config - apna config daalo yahan
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+let DB = {
+  users: [
+   {role: 'admin', name: 'Admin', pass: ''} // password removed
+  ],
+  products: [],
+  categories: [],
+  settings: {}
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",

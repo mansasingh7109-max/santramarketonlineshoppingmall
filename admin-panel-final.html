@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTRA MALL - Admin Panel Final</title>
+  <style>
+    :root{--bg:#0f172a;--card:#1e293b;--accent:#e40046;--text:#e2e8f0;--border:#334155}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);color:var(--text);}
+   .top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;}
+   .top-bar h1{color:var(--accent);font-size:18px;}
+   .top-btns{display:flex;gap:10px;}
+   .btn-firebase{background:#e40046;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
+   .btn-global{background:#7c3aed;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
+   .btn-logout{background:#475569;color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;}
+   .main{display:flex;gap:15px;padding:0 15px;}
+   .sidebar{width:220px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;}
+   .menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;}
+   .menu-item:hover{background:#334155;}
+   .menu-item.active{background:#334155;border-left:3px solid var(--accent);}
+   .content{flex:1;background:var(--card);border-radius:8px;padding:20px;}
+    input,select,textarea{width:100%;padding:10px;margin:8px 0;background:#0f172a;border:1px solid var(--border);border-radius:4px;color:var(--text);}
+    label{font-weight:bold;margin-top:10px;display:block;color:#cbd5e1;}
+    button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:4px;cursor:pointer;margin:5px 0;font-weight:bold;}
+   .btn-del{background:#ef4444!important;}
+   .btn-edit{background:#3b82f6!important;}
+   .media-btn{display:inline-block;padding:8px 12px;border:none;border-radius:4px;margin:5px;cursor:pointer;font-size:13px;}
+   .btn-gallery{background:#3b82f6;}
+   .btn-url{background:#8b5cf6;}
+   .btn-github{background:#10b981;}
+   .btn-browse{background:#f59e0b;}
+   .flex{display:flex;gap:10px;}
+   .flex > *{flex:1;}
+    table{width:100%;border-collapse:collapse;margin-top:15px;}
+    th,td{padding:10px;text-align:left;border-bottom:1px solid var(--border);}
+    th{background:#0f172a;}
+   .hide{display:none!important;}
+   .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+   .msg-success{background:#065f46;color:#d1fae5}
+   .msg-error{background:#7f1d1d;color:#fecaca}
+   .section-title{color:var(--accent);margin:20px 0 10px;font-size:16px;}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>🛍️ SANTRA MALL - Admin Panel</h1>
+  <div class="top-btns">
+    <button class="btn-firebase">🔒 Firebase Secure</button>
+    <button class="btn-global">🌐 Global Control</button>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="menu-item active" onclick="openTab('dashboard')">📊 Dashboard</div>
+    <div class="menu-item" onclick="openTab('products')">📦 Products</div>
+    <div class="menu-item" onclick="openTab('categories')">🏷️ Categories</div>
+    <div class="menu-item" onclick="openTab('orders')">📋 Orders</div>
+    <div class="menu-item" onclick="openTab('customers')">👥 Customers</div>
+    <div class="menu-item" onclick="openTab('payment')">💳 Payment</div>
+    <div class="menu-item" onclick="openTab('theme')">⚙️ Theme Settings</div>
+    <div class="menu-item" onclick="openTab('helpdesk')">💬 Help Desk</div>
+    <div class="menu-item" onclick="openTab('global')">🌐 Global Control</div>
+    <div class="menu-item" onclick="window.location.href='index.html'">🏠 Back to Website</div>
+    <div class="menu-item" onclick="logout()">🚪 Logout</div>
+  </div>
+
+  <div class="content">
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="tab-page">
+      <h2>Dashboard</h2>
+      <p style="color:#94a3b8;margin:10px 0;">Welcome Admin! Purana data yahan dikhega.</p>
+      <div style="display:flex;gap:15px;margin:20px 0;">
+        <div style="background:#0f172a;padding:20px;border-radius:8px;flex:1;">
+          <h3>Total Products: <span id="totalProducts">0</span></h3>
+        </div>
+        <div style="background:#0f172a;padding:20px;border-radius:8px;flex:1;">
+          <h3>Total Orders: <span id="totalOrders">0</span></h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div id="products" class="tab-page hide">
+      <h2>🛍️ SANTRA MALL - Admin Panel</h2>
+      <button class="btn-logout" style="float:right;">Logout</button>
+      <div style="clear:both;"></div>
+
+      <h3 class="section-title">Product Name *</h3>
+      <input type="text" id="pName" placeholder="Pink Salwar Suit">
+
+      <div class="flex">
+        <div>
+          <label>MRP (Optional)</label>
+          <input type="number" id="pMrp" placeholder="15000">
+        </div>
+        <div>
+          <label>Selling Price *</label>
+          <input type="number" id="pPrice" placeholder="13005">
+        </div>
+        <div>
+          <label>Stock Quantity</label>
+          <input type="number" id="pStock" placeholder="20">
+        </div>
+      </div>
+
+      <label>Select Category *</label>
+      <select id="pCategory">
+        <option>-- Select --</option>
+      </select>
+
+      <label>Size & Price - Har line me ek</label>
+      <textarea id="pSizePrice" rows="4" placeholder="S-12000&#10;M-13005&#10;L-14000&#10;XL-15000"></textarea>
+
+      <h3 class="section-title">📁 Media Upload - 4 OPTIONS</h3>
+
+      <label>🖼️ Image</label>
+      <button class="media-btn btn-gallery" onclick="uploadFromGallery('image')">📁 From Gallery</button>
+      <button class="media-btn btn-url" onclick="uploadFromUrl('image')">🔗 From URL</button>
+      <button class="media-btn btn-github" onclick="uploadToGithub('image')">☁️ Upload to GitHub</button>
+      <button class="media-btn btn-browse" onclick="browseComputer('image')">💻 Browse Computer</button>
+      <div id="imagePreview"></div>
+
+      <label>🎬 Video (Optional)</label>
+      <button class="media-btn btn-gallery" onclick="uploadFromGallery('video')">📁 From Gallery</button>
+      <button class="media-btn btn-url" onclick="uploadFromUrl('video')">🔗 From URL</button>
+      <button class="media-btn btn-browse" onclick="browseComputer('video')">💻 Browse Computer</button>
+      <div id="videoPreview"></div>
+
+      <label>📄 Document/PDF (Optional)</label>
+      <button class="media-btn btn-browse" onclick="browseComputer('document')">💻 Browse Computer</button>
+      <button class="media-btn btn-url" onclick="uploadFromUrl('document')">🔗 From URL</button>
+      <div id="docPreview"></div>
+
+      <label>🎵 Audio (Optional)</label>
+      <button class="media-btn btn-browse" onclick="browseComputer('audio')">💻 Browse Computer</button>
+      <button class="media-btn btn-url" onclick="uploadFromUrl('audio')">🔗 From URL</button>
+      <div id="audioPreview"></div>
+
+      <label>Product Description</label>
+      <textarea id="pDesc" rows="3" placeholder="Product ke baare me likho..."></textarea>
+
+      <button onclick="saveProduct()" style="width:100%;padding:15px;font-size:16px;">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
+
+      <h3 class="section-title" style="margin-top:30px;">📦 Product List - SAB PURANE PRODUCTS YAHAN HAIN</h3>
+      <button onclick="exportCSV()" style="background:#3b82f6;">📊 Export CSV</button>
+
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Media</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div id="categories" class="tab-page hide">
+      <h2>Categories</h2>
+      <input type="text" id="catName" placeholder="Category Name">
+      <button onclick="addCategory()">Add Category</button>
+      <div id="catList"></div>
+    </div>
+
+    <!-- ORDERS -->
+    <div id="orders" class="tab-page hide">
+      <h2>Orders</h2>
+      <div id="orderList"></div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="customers" class="tab-page hide">
+      <h2>Customers</h2>
+      <div id="customerList"></div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div id="payment" class="tab-page hide">
+      <h2>Payment Settings</h2>
+      <label>UPI ID</label>
+      <input type="text" id="upiId" placeholder="yourname@upi">
+      <label>Bank Account</label>
+      <input type="text" id="bankAccount" placeholder="Account Number">
+      <button onclick="savePayment()">Save Payment</button>
+    </div>
+
+    <!-- THEME SETTINGS -->
+    <div id="theme" class="tab-page hide">
+      <h2>Theme Settings</h2>
+      <p style="color:#94a3b8;">Website ka logo, color, banner change karo.</p>
+      <label>Logo Text</label>
+<input type="text" id="logoText" placeholder="🛍️ SANTRA MALL">
+
+<label>Accent Color</label>
+<input type="color" id="primaryColor" value="#e40046">
+
+<label>Background Color</label>
+<input type="color" id="bgColor" value="#0f172a">
+
+<label>Card Color</label>
+<input type="color" id="cardColor" value="#1e293b">
+
+<label>Text Color</label>
+<input type="color" id="textColor" value="#e2e8f0">
+
+<button onclick="saveTheme()">Save Theme</button>
+    </div>
+
+    <!-- HELP DESK -->
+    <div id="helpdesk" class="tab-page hide">
+      <h2>Help Desk</h2>
+      <p style="color:#94a3b8;">Phone number change karo jo Help Desk me dikhta hai.</p>
+      <label>Help Desk Phone</label>
+      <input type="text" id="helpPhone" placeholder="8769171078">
+      <label>Help Desk WhatsApp</label>
+      <input type="text" id="helpWhatsapp" placeholder="8769171078">
+      <label>Help Desk Email</label>
+      <input type="email" id="helpEmail" placeholder="mansasingh7109@gmail.com">
+      <button onclick="saveHelpdesk()">Save Help Desk</button>
+    </div>
+  
+
+    <!-- GLOBAL CONTROL -->
+    <div id="global" class="tab-page hide">
+      <h2>Global Control</h2>
+      <label>Site Status</label>
+      <select id="siteStatus">
+        <option value="live">Live</option>
+        <option value="maintenance">Maintenance Mode</option>
+      </select>
+      <button onclick="saveGlobal()">Save Global Settings</button>
+    </div>
+  </div>
+</div>
+
+<script src="db.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}
+const firebaseDB = firebase.firestore();
+const firebaseStorage = firebase.storage();
+
+</script>
+
+<script>
+// CHECK ADMIN LOGIN - localStorage wala
+window.onload = function(){
+  let admin = localStorage.getItem('current_admin');
+  if(!admin){
+    alert('Please login from Help Desk first!');
+    window.location.href = 'index.html';
+    return;
+  }
+  loadDashboard();
+  loadProducts();
+  loadOrders();
+  loadThemeFromStorage();
+}
+
+
+function logout(){
+  localStorage.removeItem('current_admin');
+  localStorage.removeItem('admin_logged_in');
+  alert('✅ Logged out successfully');
+  window.location.href = 'index.html';
+}
+
+function openTab(tabName){
+  document.querySelectorAll('.tab-page').forEach(t => t.classList.add('hide'));
+  document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabName).classList.remove('hide');
+  event.target.classList.add('active');
+}
+
+// MEDIA UPLOAD FUNCTIONS - 4 OPTIONS
+function uploadFromGallery(type){
+  let input = document.createElement('input');
+  input.type = 'file';
+  if(type==='image') input.accept = 'image/*';
+  if(type==='video') input.accept = 'video/*';
+  input.onchange = function(e){
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.onload = function(event){
+      if(type==='image') document.getElementById('imagePreview').innerHTML = `<img src="${event.target.result}" style="max-width:150px;">`;
+      if(type==='video') document.getElementById('videoPreview').innerHTML = `<video src="${event.target.result}" controls style="max-width:150px;"></video>`;
+    }
+    reader.readAsDataURL(file);
+  }
+  input.click();
+}
+
+function uploadFromUrl(type){
+  let url = prompt('Enter ' + type + ' URL:');
+  if(url){
+    if(type==='image') document.getElementById('imagePreview').innerHTML = `<img src="${url}" style="max-width:150px;">`;
+    if(type==='video') document.getElementById('videoPreview').innerHTML = `<video src="${url}" controls style="max-width:150px;"></video>`;
+  }
+}
+
+function uploadToGithub(type){
+  alert('GitHub upload will be configured with your token');
+}
+
+function browseComputer(type){
+  uploadFromGallery(type);
+}
+
+// SAVE PRODUCT
+async function saveProduct(){
+  let name = document.getElementById('pName').value;
+  let price = document.getElementById('pPrice').value;
+  let stock = document.getElementById('pStock').value;
+
+  if(!name ||!price ||!stock){
+    alert('Please fill required fields!');
+    return;
+  }
+
+  let productData = {
+    name: name,
+    mrp: document.getElementById('pMrp').value,
+    price: price,
+    stock: stock,
+    category: document.getElementById('pCategory').value,
+    desc: document.getElementById('pDesc').value,
+    sizePrice: document.getElementById('pSizePrice').value,
+    created: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  await firebaseDB.collection('products').add(productData);
+  alert('✅ Product saved! HOME PAGE PE TURANT DIKHEGA');
+  loadProducts();
+}
+
+async function loadProducts(){
+  let tbody = document.getElementById('productTableBody');
+  tbody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
+
+  const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
+  tbody.innerHTML = '';
+  let total = 0;
+
+  querySnapshot.forEach((doc) => {
+    let p = doc.data();
+    total++;
+    tbody.innerHTML += `
+      <tr>
+        <td>${doc.id.substring(0,8)}</td>
+        <td>❌</td>
+        <td>${p.name}</td>
+        <td>${p.category || 'General'}</td>
+        <td>₹${p.price}</td>
+        <td>
+          <button class="btn-edit" onclick="editProduct('${doc.id}')">✏️</button>
+          <button class="btn-del" onclick="deleteProduct('${doc.id}')">🗑️</button>
+        </td>
+      </tr>
+    `;
+  });
+  document.getElementById('totalProducts').innerText = total;
+}
+
+async function deleteProduct(id){
+  if(confirm('Delete this product?')){
+    await firebaseDB.collection('products').doc(id).delete();
+    loadProducts();
+  }
+}
+
+function editProduct(id){
+  alert('Edit feature - Load product data');
+}
+
+async function loadOrders(){
+  let container = document.getElementById('orderList');
+  const querySnapshot = await firebaseDB.collection('orders').orderBy('created', 'desc').get();
+  let total = 0;
+  container.innerHTML = '';
+
+  querySnapshot.forEach((doc) => {
+    total++;
+    let o = doc.data();
+    container.innerHTML += `
+      <div class="order-item">
+        <h4>Order #${doc.id} - ${o.status || 'Confirmed'}</h4>
+        <p><b>Customer:</b> ${o.customerName} | ${o.mobile}</p>
+        <p><b>Total:</b> ₹${o.total}</p>
+      </div>
+    `;
+  });
+  document.getElementById('totalOrders').innerText = total;
+}
+
+function loadDashboard(){
+  loadProducts();
+  loadOrders();
+}
+
+function exportCSV(){
+  alert('CSV Export feature');
+}
+
+function addCategory(){
+  alert('Category added');
+}
+
+function savePayment(){
+  alert('Payment saved');
+}
+
+function saveTheme(){
+  alert('Theme saved');
+}
+
+function saveHelpdesk(){
+  alert('Help Desk saved');
+}
+
+function saveGlobal(){
+  alert('Global settings saved');
+}
+function loadThemeFromStorage(){
+  let theme = SANTRA_DB.settings || {};
+  if(theme.bgColor) document.documentElement.style.setProperty('--bg', theme.bgColor);
+  if(theme.cardColor) document.documentElement.style.setProperty('--card', theme.cardColor);
+  if(theme.textColor) document.documentElement.style.setProperty('--text', theme.textColor);
+  if(theme.accentColor) document.documentElement.style.setProperty('--accent', theme.accentColor);
+}
+function saveTheme(){
+  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
+  SANTRA_DB.settings.logo = document.getElementById('logoText').value;
+  SANTRA_DB.settings.accentColor = document.getElementById('primaryColor').value;
+  SANTRA_DB.settings.bgColor = document.getElementById('bgColor').value;
+  SANTRA_DB.settings.cardColor = document.getElementById('cardColor').value;
+  SANTRA_DB.settings.textColor = document.getElementById('textColor').value;
+  saveDB();
+  loadThemeFromStorage();
+  alert('✅ Theme saved! Hard reload karo');
+}
+function saveTheme(){
+  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
+  SANTRA_DB.settings.logo = document.getElementById('logoText').value; // logoText
+  SANTRA_DB.settings.accentColor = document.getElementById('primaryColor').value; // primaryColor
+  SANTRA_DB.settings.bgColor = document.getElementById('bgColor').value;
+  SANTRA_DB.settings.cardColor = document.getElementById('cardColor').value;
+  SANTRA_DB.settings.textColor = document.getElementById('textColor').value;
+  saveDB();
+  loadThemeFromStorage();
+  alert('✅ Theme saved! Hard reload karo');
+}
+</script>
+
+</body>
+</html>

@@ -6,77 +6,41 @@
   <title>SANTRA MALL</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#e40046">
-  
+
   <style>
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
-   .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-   .header h1{color:var(--accent);font-size:20px;}
-   .header-right{display:flex;gap:15px;align-items:center;}
-   .icon-btn{text-align:center;text-decoration:none;color:#333;cursor:pointer;}
-   .icon-btn div{font-size:20px;}
-   .icon-btn span{font-size:11px;display:block;color:var(--accent);font-weight:bold;}
-   .container{padding:15px;}
-   .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-   .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-   .product-card img,.product-card video{width:100%;height:140px;object-fit:cover;border-radius:6px;}
-   .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
-   .product-card p{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
-   .product-card.cat{font-size:11px;color:#999;}
-   .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
-   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-   .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;cursor:pointer;}
-   .nav-item.active{color:var(--accent);}
-   .nav-item div{font-size:22px;}
-   .nav-item span{font-size:11px;display:block;margin-top:2px;}
-   .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-   .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
-   .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
-   .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
-   .modal-header h3{color:var(--accent);font-size:20px;}
-   .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
-   .modal-body{padding:20px;overflow-y:auto;}
-   .hide{display:none!important;}
-   .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
-   .msg-success{background:#d4edda;color:#155724}
-   .msg-error{background:#f8d7da;color:#721c24}
-   .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
-   .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
-   .order-box h4{color:var(--accent);font-size:16px;}
-   .order-box-date{font-size:12px;color:#666;}
-   .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
-   .status-confirmed{background:#4caf50;color:white;}
-   .status-shipped{background:#2196F3;color:white;}
-   .status-delivered{background:#4caf50;color:white;}
-   .status-canceled{background:#f44336;color:white;}
-   .status-returned{background:#ff9800;color:white;}
-   .status-refunded{background:#9c27b0;color:white;}
-   .status-exchange{background:#00bcd4;color:white;}
-   .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
-   .order-info p{margin:5px 0;}
-   .order-info b{color:#333;}
-   .request-box{background:#fff3cd;border:1px solid #ffc107;padding:10px;border-radius:6px;margin:8px 0;font-size:12px;}
-   .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
-   .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
-   .order-item-info{flex:1;}
-   .order-item-info h5{font-size:13px;margin-bottom:3px;}
-   .order-item-info p{font-size:12px;color:#666;}
-   .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
-   .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
-   .btn-track{background:#2196F3;color:white;}
-   .btn-cancel{background:#f44336;color:white;}
-   .btn-return{background:#ff9800;color:white;}
-   .btn-refund{background:#9c27b0;color:white;}
-   .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
-   .tracking-bar{display:flex;justify-content:space-between;margin:15px 0;position:relative;}
-   .tracking-bar::before{content:'';position:absolute;top:12px;left:0;right:0;height:2px;background:#ddd;z-index:0;}
-   .track-dot{text-align:center;position:relative;z-index:1;flex:1;}
-   .track-circle{width:26px;height:26px;border-radius:50%;background:#ddd;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;font-size:12px;}
-   .track-dot.done.track-circle{background:#4caf50;color:white;}
-   .track-dot.active.track-circle{background:var(--accent);color:white;}
-   .track-dot p{font-size:10px;color:#666;}
-   .firebase-badge{background:#FFA000;color:white;padding:3px 8px;border-radius:4px;font-size:10px;margin-left:5px;}
+.header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.header h1{color:var(--accent);font-size:20px;}
+.header-right{display:flex;gap:10px;align-items:center;}
+.header-btn{width:auto;padding:8px 12px;background:var(--accent);color:white;border:none;border-radius:4px;font-size:11px;font-weight:bold;cursor:pointer;text-align:center;line-height:1.2;}
+.help-desk-btn{background:#f57c00!important;}
+.container{padding:15px;}
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.product-card img,.product-card video{width:100%;height:140px;object-fit:cover;border-radius:6px;cursor:pointer;}
+.product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
+.product-card p{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
+.product-card.cat{font-size:11px;color:#999;}
+.product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;cursor:pointer;}
+.nav-item.active{color:var(--accent);}
+.nav-item div{font-size:22px;}
+.nav-item span{font-size:11px;display:block;margin-top:2px;}
+.cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
+.modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
+.modal-header h3{color:var(--accent);font-size:20px;}
+.close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
+.modal-body{padding:20px;overflow-y:auto;}
+.hide{display:none!important;}
+.msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+.msg-success{background:#d4edda;color:#155724}
+.msg-error{background:#f8d7da;color:#721c24}
+.firebase-badge{background:#FFA000;color:white;padding:3px 8px;border-radius:4px;font-size:10px;margin-left:5px;}
   </style>
 </head>
 <body>
@@ -84,29 +48,14 @@
 <div class="header">
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
-    <div class="header-right">
-  <div class="user-icon" onclick="alert('🛒 ORDER KARNE KE LIYE:\n\n1. Product pasand karo\n2. Add to Cart dabao\n3. Cart ya Orders button dabao\n4. Form bhar ke Submit karo\nLogin ki zaroorat nahi hai 😊')" style="cursor:pointer;">
-    <img src="images/cart.png" alt="order">
-    <span>ORDER US</span>
-  </div>
-  <div class="help-desk" onclick="window.open('https://wa.me/918769171078?text=Hello, I need help with my order')">HELP DESK</div>
-</div>
+    <button class="header-btn" onclick="openOrderUs()">📱 ORDER<br>US</button>
+    <button class="header-btn help-desk-btn" onclick="openHelpDesk()">🤝 HELP<br>DESK</button>
   </div>
 </div>
 
 <div class="container">
   <h3 style="margin-bottom:15px;">WELCOME</h3>
   <div id="productList" class="product-grid"></div>
-</div>
-
-<div id="ordersModal" class="modal hide">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>📦 My Orders & Inquiries</h3>
-      <button class="close-btn" onclick="closeOrdersPopup()">×</button>
-    </div>
-    <div class="modal-body" id="ordersPopupList"></div>
-  </div>
 </div>
 
 <div class="bottom-nav">
@@ -123,10 +72,25 @@
     <span>Cart</span>
     <span class="cart-badge" id="cartCount">0</span>
   </a>
-<a href="javascript:void(0)" class="nav-item" onclick="openCheckout()">
+  <a href="javascript:void(0)" class="nav-item" onclick="openOrdersPopup()">
     <div>📦</div>
     <span>Orders</span>
   </a>
+</div>
+
+<!-- ORDERS MODAL -->
+<div id="ordersModal" class="modal hide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📦 Track Your Orders</h3>
+      <button class="close-btn" onclick="closeOrdersPopup()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="tel" id="trackMobile" placeholder="Enter Mobile Number" style="width:100%;padding:12px;margin-bottom:10px;border:1px solid #ddd;border-radius:4px;">
+      <button onclick="trackOrderByMobile()" style="width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:4px;font-weight:bold;">Track Order</button>
+      <div id="ordersPopupList" style="margin-top:20px;"></div>
+    </div>
+  </div>
 </div>
 
 <script src="db.js"></script>
@@ -134,9 +98,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-<!-- ===== FIREBASE CONFIG - YAHAN APNA CONFIG DAALO ===== -->
 <script>
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// ===== FIREBASE CONFIG - APNA CONFIG DAALO YA EMPTY CHHOD DO =====
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -147,73 +110,68 @@ const firebaseConfig = {
   measurementId: "G-ZW1ZR8HETY"
 };
 
-if (!firebase.apps.length) {
+if (firebaseConfig.projectId!== "YOUR_PROJECT_ID" &&!firebase.apps.length) {
    firebase.initializeApp(firebaseConfig);
 }
-const firebaseDB = firebase.firestore();
+const firebaseDB = firebase.apps.length? firebase.firestore() : null;
 </script>
 
-<!-- ===== THEME APPLY CODE ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  if(typeof DB!== 'undefined' && DB.settings){
-    let theme = DB.settings;
-    document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
-    document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
-    document.body.style.color = theme.textColor || '#212121';
-    document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
-    document.body.style.fontSize = theme.fontSize || '16px';
-    if(theme.bgImage){
-      document.body.style.backgroundImage = `url(${theme.bgImage})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundAttachment = 'fixed';
+    if(typeof SANTRA_DB!== 'undefined' && SANTRA_DB.settings){
+        let theme = SANTRA_DB.settings;
+        document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
+        document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
+        document.body.style.color = theme.textColor || '#212121';
+        document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
+        document.body.style.fontSize = theme.fontSize || '16px';
+        if(theme.bgImage){
+          document.body.style.backgroundImage = `url(${theme.bgImage})`;
+          document.body.style.backgroundSize = 'cover';
+          document.body.style.backgroundAttachment = 'fixed';
+        }
+        let logoEl = document.querySelector('.header h1');
+        if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
     }
-    let logoEl = document.querySelector('.header h1');
-    if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
-  }
-  loadHelpDeskButton();
 });
 
-function loadHelpDeskButton(){
-  let header = document.querySelector('.header');
-  if(header &&!document.getElementById('helpDeskBtn')){
-    let btn = document.createElement('button');
-    btn.id = 'helpDeskBtn';
-    btn.innerHTML = '🤝 HELP<br>DESK';
-    btn.style.cssText = 'width:auto;padding:8px;background:#f57c00;color:white;border:none;border-radius:4px;margin:5px;font-size:12px;';
-    btn.onclick = openHelpDesk;
-    header.appendChild(btn);
-  }
+// ORDER US - Direct WhatsApp
+function openOrderUs(){
+  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9876543210';
+  window.open(`https://wa.me/91${waNumber}?text=Hi, I want to place an order from SANTRA MALL`, '_blank');
 }
 
+// HELP DESK + ADMIN LOGIN
 function openHelpDesk(){
   let modal = document.createElement('div');
   modal.id = 'helpDeskModal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;';
+  modal.className = 'modal';
   modal.innerHTML = `
-    <div style="background:white;padding:25px;border-radius:12px;max-width:450px;width:90%;max-height:80vh;overflow-y:auto;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+    <div class="modal-content" style="max-width:450px;">
+      <div class="modal-header">
         <h3>💬 Help Desk</h3>
-        <button onclick="closeHelpDesk()" style="background:none;border:none;font-size:24px;width:auto;padding:0;cursor:pointer;">×</button>
+        <button class="close-btn" onclick="closeHelpDesk()">×</button>
       </div>
-      <div style="margin-bottom:20px;">
-        <h4>📞 Customer Support</h4>
-        <p><b>Phone:</b> ${DB.settings.helpdeskPhone || '8769171078'}</p>
-        <p><b>Email:</b> ${DB.settings.helpdeskEmail || 'mansasingh7109@gmail.com'}</p>
-        <p><b>WhatsApp:</b> ${DB.settings.helpdeskWhatsapp || '8769171078'}</p>
-        <p><b>Hours:</b> ${DB.settings.helpdeskHours || 'Mon-Sat: 12 AM - 12 PM'}</p>
-        <br>
-        <h4>📝 About Us</h4>
-        <p>${DB.settings.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
+      <div class="modal-body">
+        <div style="margin-bottom:20px;">
+          <h4>📞 Customer Support</h4>
+          <p><b>Phone:</b> ${SANTRA_DB.settings?.helpdeskPhone || '8769171078'}</p>
+          <p><b>Email:</b> ${SANTRA_DB.settings?.helpdeskEmail || 'mansasingh7109@gmail.com'}</p>
+          <p><b>WhatsApp:</b> <a href="https://wa.me/91${SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078'}" target="_blank" style="color:#25D366;font-weight:bold;">${SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078'}</a></p>
+          <p><b>Hours:</b> ${SANTRA_DB.settings?.helpdeskHours || 'Mon-Sat: 12 AM - 12 PM'}</p>
+          <br>
+          <h4>📝 About Us</h4>
+          <p>${SANTRA_DB.settings?.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
+        </div>
+        <hr style="margin:20px 0;">
+        <div>
+          <h4 style="margin-bottom:10px;">🔐 Admin Login</h4>
+          <input type="password" id="adminPassHelpdesk" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+          <button onclick="adminLoginFromHelpdesk()" style="width:100%;padding:12px;background:#2874f0;color:white;border:none;border-radius:4px;font-weight:bold;">Login to Admin Panel</button>
+          <p style="font-size:11px;color:#666;margin-top:8px;">Authorized personnel only</p>
+        </div>
+        <div id="adminLoginMsg"></div>
       </div>
-      <hr style="margin:20px 0;">
-      <div>
-        <h4 style="margin-bottom:10px;">🔐 Admin Login</h4>
-        <input type="password" id="adminPassHelpdesk" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
-        <button onclick="adminLoginFromHelpdesk()" style="width:100%;padding:12px;background:#2874f0;color:white;border:none;border-radius:4px;font-weight:bold;">Login to Admin Panel</button>
-        <p style="font-size:11px;color:#666;margin-top:8px;">Authorized personnel only</p>
-      </div>
-      <div id="adminLoginMsg"></div>
     </div>
   `;
   document.body.appendChild(modal);
@@ -227,21 +185,21 @@ function closeHelpDesk(){
 function adminLoginFromHelpdesk(){
   let pass = document.getElementById('adminPassHelpdesk').value.trim();
   let msg = document.getElementById('adminLoginMsg');
-  if(!DB.users || DB.users.length === 0){
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin not found!</div>';
+  if(!SANTRA_DB.users || SANTRA_DB.users.length === 0){
+    msg.innerHTML = '<div class="msg msg-error">❌ Admin not found!</div>';
     return;
   }
-  let admin = DB.users.find(u => u.role === 'admin');
+  let admin = SANTRA_DB.users.find(u => u.role === 'admin');
   if(!admin){
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Admin user not found!</div>';
+    msg.innerHTML = '<div class="msg msg-error">❌ Admin user not found!</div>';
     return;
   }
   if(pass === admin.pass){
     localStorage.setItem('current_admin', JSON.stringify(admin));
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#d4edda;color:#155724;">✅ Login Success! Redirecting...</div>';
-    setTimeout(() => { window.location.href = 'admin-final.html'; }, 1000);
+    msg.innerHTML = '<div class="msg msg-success">✅ Login Success! Redirecting...</div>';
+    setTimeout(() => { window.location.href = 'admin-panel-final.html'; }, 1000);
   } else {
-    msg.innerHTML = '<div style="padding:10px;margin:10px 0;border-radius:4px;background:#f8d7da;color:#721c24;">❌ Invalid Password!</div>';
+    msg.innerHTML = '<div class="msg msg-error">❌ Invalid Password!</div>';
   }
 }
 </script>
@@ -249,62 +207,58 @@ function adminLoginFromHelpdesk(){
 <script>
 window.onload = function(){
   loadAllProducts();
-  updateLoginStatus();
   updateCartCount();
 }
 
-// ===== PURANE + FIREBASE DONO PRODUCTS LOAD KARO =====
+// FIREBASE + LOCAL DONO PRODUCTS
 async function loadAllProducts(){
   let container = document.getElementById('productList');
   container.innerHTML = '<p style="text-align:center;padding:40px;color:#999;grid-column:1/-1;">Loading products...</p>';
-  
+
   let allProducts = [];
-  
-  // 1. Purane products - db.js se
-  if(typeof DB!== 'undefined' && DB.products){
-    DB.products.forEach(p => {
-      allProducts.push({...p, source: 'local'});
+
+  if(typeof SANTRA_DB!== 'undefined' && SANTRA_DB.products){
+    SANTRA_DB.products.forEach(p => {
+        allProducts.push({...p, source: 'local'});
     });
   }
-  
-  // 2. Firebase products
-  try {
-    const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
-    querySnapshot.forEach((doc) => {
-      let p = doc.data();
-      p.id = doc.id;
-      p.source = 'firebase';
-      allProducts.push(p);
-    });
-  } catch(err) {
-    console.log('Firebase error:', err);
+
+  if(firebaseDB){
+    try {
+      const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
+      querySnapshot.forEach((doc) => {
+        let p = doc.data();
+        p.id = doc.id;
+        p.source = 'firebase';
+        allProducts.push(p);
+      });
+    } catch(err) {
+      console.log('Firebase error:', err);
+    }
   }
-  
-  // Display karo sab
+
   container.innerHTML = '';
   if(allProducts.length === 0){
     container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
     return;
   }
-  
+
   allProducts.forEach(p => {
     let mediaHtml = '';
     let imgUrl = '';
-    
-    // Firebase product
+
     if(p.source === 'firebase'){
       imgUrl = p.images && p.images[0]? p.images[0] : 'https://via.placeholder.com/300x250?text=No+Image';
       if(p.images && p.images[0]){
-        mediaHtml = `<img src="${p.images[0]}" alt="${p.name}">`;
+        mediaHtml = `<img src="${p.images[0]}" alt="${p.name}" onclick="openProductDetail('${p.id}', 'firebase')">`;
       } else if(p.videos && p.videos[0]){
         mediaHtml = `<video src="${p.videos[0]}" controls></video>`;
       }
-    } 
-    // Local product - purana
+    }
     else {
-      imgUrl = p.img || 'https://via.placeholder.com/300x250?text=No+Image';
-      if(p.mediaType === 'image'){
-        mediaHtml = `<img src="${p.mediaUrl || p.img}" alt="${p.name}">`;
+      imgUrl = p.img || p.mediaUrl || 'https://via.placeholder.com/300x250?text=No+Image';
+      if(p.mediaType === 'image' ||!p.mediaType){
+        mediaHtml = `<img src="${imgUrl}" alt="${p.name}" onclick="openProductDetail('${p.id}', 'local')">`;
       } else if(p.mediaType === 'video'){
         mediaHtml = `<video src="${p.mediaUrl}" controls></video>`;
       } else if(p.mediaType === 'audio'){
@@ -312,138 +266,253 @@ async function loadAllProducts(){
       } else if(p.mediaType === 'document'){
         mediaHtml = `<a href="${p.mediaUrl}" target="_blank">📄 View PDF</a>`;
       } else {
-        mediaHtml = `<img src="${p.img}" alt="${p.name}">`;
+        mediaHtml = `<img src="${imgUrl}" alt="${p.name}" onclick="openProductDetail('${p.id}', 'local')">`;
       }
     }
-    
+
     container.innerHTML += `
       <div class="product-card">
         ${mediaHtml}
-        <h4>${p.name} ${p.source === 'firebase'? '<span class="firebase-badge">FIREBASE</span>' : ''}</h4>
+        <h4>${p.name} ${p.source === 'firebase'? '<span class="firebase-badge">NEW</span>' : ''}</h4>
         <p><s style="font-size:12px;color:#999;">₹${p.mrp || ''}</s> ₹${p.price}</p>
         <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock || 0}</div>
-        <button onclick="addToCart('${p.id}', '${p.source}')">Add to Cart</button>
+        <button onclick="openCheckoutDirect('${p.id}', '${p.source}')">Buy Now</button>
       </div>
     `;
   });
 }
 
-function addToCart(productId, source){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId){
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
-    return;
-  }
-  
-  // Firebase product
-  if(source === 'firebase'){
-    firebaseDB.collection('products').doc(productId).get().then((doc) => {
-      if(!doc.exists){
-        alert('Product not found!');
-        return;
-      }
-      let product = doc.data();
-      addToCartLocal({
-        pid: productId,
-        name: product.name,
-        price: product.price,
-        img: product.images? product.images[0] : ''
-      }, userId);
-    });
-  } 
-  // Local product
-  else {
-    let product = DB.products.find(p => p.id == productId);
-    if(!product){
-      alert('Product not found!');
-      return;
+// ===== PRODUCT DETAIL POPUP - IMAGE PE CLICK PE KHULEGA =====
+function openProductDetail(productId, source){
+    if(source === 'firebase' && firebaseDB){
+        firebaseDB.collection('products').doc(productId).get().then(doc => {
+            if(doc.exists){
+                let p = doc.data();
+                p.id = doc.id;
+                showProductModal(p);
+            }
+        });
+    } else {
+        let p = SANTRA_DB.products.find(pr => pr.id == productId);
+        if(p) showProductModal(p);
     }
-    addToCartLocal(product, userId);
-  }
 }
 
-function addToCartLocal(product, userId){
-  if(!DB.cart) DB.cart = [];
-  let cartItem = DB.cart.find(c => c.pid == product.pid && c.uid == userId);
-  if(cartItem){
-    cartItem.qty += 1;
-  } else {
-    DB.cart.push({
-      id: Date.now(),
-      uid: parseInt(userId), 
-      pid: product.pid || product.id,
-      name: product.name,
-      price: product.price,
-      img: product.img,
-      qty: 1
-    });
+function showProductModal(p){
+  let modal = document.createElement('div');
+  modal.className = 'modal';
+  let imgHtml = '';
+  if(p.images && p.images[0]){
+    imgHtml = `<img src="${p.images[0]}" style="width:100%;max-height:300px;object-fit:contain;border-radius:8px;">`;
+  } else if(p.img || p.mediaUrl){
+    imgHtml = `<img src="${p.img || p.mediaUrl}" style="width:100%;max-height:300px;object-fit:contain;border-radius:8px;">`;
   }
+
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:500px;">
+      <div class="modal-header">
+        <h3>${p.name}</h3>
+        <button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
+      </div>
+      <div class="modal-body">
+        ${imgHtml}
+        <h4 style="color:var(--accent);margin:15px 0;">₹${p.price} <s style="font-size:14px;color:#999;">₹${p.mrp || ''}</s></h4>
+        <p><b>Category:</b> ${p.category || 'General'}</p>
+        <p><b>Stock:</b> ${p.stock || 0}</p>
+        <p style="margin-top:10px;">${p.desc || p.description || 'No description'}</p>
+        <button onclick="openCheckoutDirect('${p.id}', '${p.source || 'local'}');this.closest('.modal').remove();" style="width:100%;margin-top:15px;">Buy Now</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+// DIRECT CHECKOUT - NO LOGIN NEEDED
+function openCheckoutDirect(productId, source){
+    if(source === 'firebase' && firebaseDB){
+        firebaseDB.collection('products').doc(productId).get().then(doc => {
+            if(doc.exists){
+                let product = doc.data();
+                product.id = doc.id;
+                openCheckoutForm(product);
+            } else {
+                alert('Product not found!');
+            }
+        });
+    }
+    else {
+        let product = SANTRA_DB.products.find(p => p.id == productId);
+        if(!product){
+            alert('Product not found!');
+            return;
+        }
+        openCheckoutForm(product);
+    }
+}
+
+function openCheckoutForm(product){
+  let modal = document.createElement('div');
+  modal.id = 'checkoutModal';
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:500px;">
+      <div class="modal-header">
+        <h3>🛒 Place Your Order</h3>
+        <button class="close-btn" onclick="closeCheckoutModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="orderForm">
+          <div style="background:#0f3460;padding:15px;border-radius:8px;margin-bottom:15px;color:white;">
+            <h4>Order Item</h4>
+            <p>${product.name} - ₹${product.price}</p>
+          </div>
+
+          <label>Full Name *</label>
+          <input type="text" name="Name" placeholder="Your Name" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+
+          <label>Mobile Number *</label>
+          <input type="tel" name="Mobile" placeholder="10 digit mobile" maxlength="10" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+
+          <label>Email</label>
+          <input type="email" name="Email" placeholder="your@email.com" style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+
+          <label>Full Address *</label>
+          <textarea name="Address" rows="3" placeholder="House no, Street, City, PIN" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;"></textarea>
+
+          <div id="customerFieldsBox"></div>
+
+          <label>Payment Mode *</label>
+          <select name="Payment_Mode" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+            <option value="">-- Select Payment --</option>
+            <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+            <option value="UPI">UPI / PhonePe / Paytm</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+
+          <button type="button" onclick="submitOrderToWhatsApp('${product.id}', '${product.name}', ${product.price})" style="width:100%;padding:15px;background:#25D366;font-size:18px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
+            ✅ Submit Order on WhatsApp
+          </button>
+        </form>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  loadAdminFields();
+}
+
+function closeCheckoutModal(){
+  let modal = document.getElementById('checkoutModal');
+  if(modal) modal.remove();
+}
+
+// Submit Order to WhatsApp + Save to DB for Admin
+function submitOrderToWhatsApp(pid, pname, pprice){
+  let form = document.getElementById('orderForm');
+  let name = form.Name.value;
+  let mobile = form.Mobile.value;
+  let address = form.Address.value;
+  let payment = form.Payment_Mode.value;
+  let email = form.Email.value;
+
+  if(!name ||!mobile ||!address ||!payment){
+    alert('Please fill all required fields!');
+    return;
+  }
+
+  // 1. Save to local DB for Admin Dashboard
+  if(!SANTRA_DB.orders) SANTRA_DB.orders = [];
+  let orderData = {
+    id: Date.now(),
+    uid: 0,
+    customerName: name,
+    mobile: mobile,
+    email: email,
+    address: address,
+    paymentMode: payment,
+    items: [{id: pid, name: pname, price: pprice, qty: 1}],
+    total: pprice,
+    status: 'Confirmed',
+    time: new Date().toISOString()
+  };
+  SANTRA_DB.orders.push(orderData);
   saveDB();
-  updateCartCount();
-  alert('✅ Added to cart!');
+
+  // 2. Send to WhatsApp
+  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9876543210';
+  let msg = `🛒 *New Order - SANTRA MALL*\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${address}\nPayment: ${payment}\n\n*Product:*\n${pname} - ₹${pprice}\n\n*Total: ₹${pprice}*`;
+  window.open(`https://wa.me/91${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  closeCheckoutModal();
+  alert('✅ Order placed successfully! We will contact you soon.');
+}
+
+// Admin Ke Extra Fields Load Karo
+function loadAdminFields() {
+  let fields = JSON.parse(localStorage.getItem('CUSTOMER_FORM_FIELDS')) || [];
+
+  if(fields.length === 0) {
+    document.getElementById('customerFieldsBox').innerHTML = '';
+    return;
+  }
+
+  let html = '<hr style="margin:20px 0;border:1px solid #ddd;"><p style="color:#FF6B35;font-weight:bold;margin-bottom:10px;">Additional Details:</p>';
+
+  fields.forEach(f => {
+    html += `<label style="display:block;margin-top:12px;">${f.label} ${f.required? '*' : ''}</label>`;
+
+    if(f.type === 'textarea') {
+      html += `<textarea name="${f.name}" rows="3" placeholder="${f.placeholder}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;"></textarea>`;
+    }
+    else if(f.type === 'select') {
+      let opts = f.options? f.options.split(',') : [];
+      html += `<select name="${f.name}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+        <option value="">-- Select --</option>
+        ${opts.map(o => `<option value="${o.trim()}">${o.trim()}</option>`).join('')}
+      </select>`;
+    }
+    else {
+      html += `<input type="${f.type}" name="${f.name}" placeholder="${f.placeholder}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">`;
+    }
+  });
+
+  document.getElementById('customerFieldsBox').innerHTML = html;
 }
 
 function updateCartCount(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId) {
-    document.getElementById('cartCount').innerText = '0';
+    if(typeof SANTRA_DB === 'undefined' ||!SANTRA_DB.cart) return;
+    let count = SANTRA_DB.cart.length;
+    document.getElementById('cartCount').textContent = count;
+}
+
+function openOrdersPopup(){
+  document.getElementById('ordersModal').classList.remove('hide');
+}
+
+function closeOrdersPopup(){
+  document.getElementById('ordersModal').classList.add('hide');
+}
+
+function trackOrderByMobile(){
+  let mobile = document.getElementById('trackMobile').value;
+  if(!mobile){
+    alert('Please enter mobile number');
     return;
   }
-  if(!DB.cart) DB.cart = [];
-  let userCart = DB.cart.filter(c => c.uid == parseInt(userId));
-  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').innerText = total;
-}
+  let userOrders = SANTRA_DB.orders? SANTRA_DB.orders.filter(o => o.mobile == mobile).reverse() : [];
+  let container = document.getElementById('ordersPopupList');
 
-function updateLoginStatus(){
-  let userId = localStorage.getItem('currentUserId');
-  if(userId && DB.users){
-    let user = DB.users.find(u => u.id == parseInt(userId));
-    if(user){
-      document.getElementById('loginText').innerHTML = 'ACCOUNT';
-    }
+  if(userOrders.length === 0){
+    container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No orders found for this number</p>';
+  } else {
+    container.innerHTML = userOrders.map(order => `
+      <div class="order-box">
+        <h4>Order #${order.id}</h4>
+        <p><b>Status:</b> ${order.status}</p>
+        <p><b>Total:</b> ₹${order.total}</p>
+        <p><b>Date:</b> ${new Date(order.time).toLocaleString()}</p>
+      </div>
+    `).join('');
   }
-}
-
-
-
-function trackOrderPopup(orderId){
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
-  let statusMsg = {
-    'Confirmed': 'Your order is confirmed and will be shipped soon',
-    'Shipped': 'Your order is on the way! Expected delivery in 2-3 days',
-    'Delivered': 'Your order has been delivered successfully',
-    'Canceled': 'This order has been cancelled',
-    'Returned': 'Return request is being processed',
-    'Refunded': 'Refund has been initiated to your account',
-    'Exchange': 'Exchange request is being processed'
-  };
-  alert('📍 Order Tracking\n\nOrder ID: #' + order.id + '\nStatus: ' + order.status + '\n\n' + statusMsg[order.status]);
-}
-
-function requestActionPopup(orderId, type){
-  let reason = prompt(`Please provide reason for ${type} request:`);
-  if(!reason) return;
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
-  let newStatus = type + 'ed';
-  if(type === 'Exchange') newStatus = 'Exchange';
-  if(type === 'Cancel') newStatus = 'Canceled';
-  order.status = newStatus;
-  order.requestReason = reason;
-  order.requestTime = new Date().toISOString();
-  saveCustomerForm(parseInt(localStorage.getItem('currentUserId')), type.toLowerCase() + '_request', {
-    orderId: order.id,
-    reason: reason,
-    orderTotal: order.total,
-    items: order.items.length,
-    requestTime: new Date().toISOString()
-  });
-  saveDB();
-  alert('✅ ' + type + ' request submitted successfully!\n\nAdmin will review and contact you soon.');
-  openOrdersPopup();
 }
 </script>
 
@@ -452,158 +521,6 @@ function requestActionPopup(orderId, type){
     navigator.serviceWorker.register('/sw.js');
   }
 </script>
-<!-- CUSTOMER CHECKOUT MODAL -->
-<div id="checkoutModal" class="modal hide">
-  <div class="modal-content" style="max-width:500px;">
-    <div class="modal-header">
-      <h3>🛒 Place Your Order</h3>
-      <button class="close-btn" onclick="closeCheckout()">×</button>
-    </div>
-    
-    <div class="modal-body" style="padding:20px;">
-      <label>Full Name *</label>
-      <input type="text" id="custName" placeholder="Your Name" required>
-      
-      <label>Mobile Number *</label>
-      <input type="tel" id="custPhone" placeholder="10 digit mobile" maxlength="10" required>
-      
-      <label>Email *</label>
-      <input type="email" id="custEmail" placeholder="your@email.com" required>
-      
-      <label>Full Address *</label>
-      <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required></textarea>
-      
-      <label>Payment Mode *</label>
-      <select id="paymentMode" required>
-        <option value="">-- Select Payment --</option>
-        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-        <option value="UPI">UPI / PhonePe / Paytm</option>
-        <option value="Bank Transfer">Bank Transfer</option>
-      </select>
-      
-      <div id="orderSummary" style="background:#0f3460; padding:15px; border-radius:8px; margin:15px 0;">
-        <h4>Order Summary</h4>
-        <div id="cartItemsList"></div>
-        <h3>Total: ₹<span id="cartTotalAmount">0</span></h3>
-      </div>
-      
-      <button onclick="submitOrder()" style="width:100%; padding:15px; background:#25D366; font-size:18px;">
-        ✅ Submit Order on WhatsApp + Email
-      </button>
-    </div>
-  </div>
-</div>
-
-<style>
-.modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; align-items:center; justify-content:center; }
-.modal.hide { display:none; }
-.modal-content { background:#1a1a2e; border-radius:10px; width:90%; max-height:90vh; overflow-y:auto; }
-.modal-header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; border-bottom:1px solid #0f3460; }
-.close-btn { background:#e74c3c; border:none; color:white; font-size:24px; width:35px; height:35px; border-radius:50%; cursor:pointer; }
-.modal-body label { display:block; margin-top:12px; margin-bottom:5px; color:#94a3b8; font-size:14px; }
-.modal-body input, .modal-body textarea, .modal-body select { 
-  width:100%; padding:12px; background:#0f3460; border:1px solid #16213e; 
-  color:white; border-radius:5px; font-size:15px; 
-}
-</style>
-  <!-- Modal HTML yahan -->
-  </div>
-
-  <style>
-  /* CSS yahan */
-  </style>
-
-  <!-- JAVASCRIPT - Line 544+ pe, </body> ke upar -->
-  <script>
-    const ADMIN_WHATSAPP = '918769171078'; 
-    const ADMIN_EMAIL = 'mansasingh7109@gmail.com';
-    
-    function openCheckout() { ... }
-    function closeCheckout() { ... }
-    function submitOrder() { ... }
-  </script>
-<!-- CUSTOMER CHECKOUT MODAL - </body> KE UPAR PASTE KAR -->
-<div id="checkoutModal" class="modal hide">
-  <div class="modal-content" style="max-width:500px;">
-    <div class="modal-header">
-      <h3>🛒 Place Your Order</h3>
-      <button class="close-btn" onclick="closeCheckout()">×</button>
-    </div>
-    <div class="modal-body" style="padding:20px;">
-      <label>Full Name *</label>
-      <input type="text" id="custName" placeholder="Your Name" required>
-      <label>Mobile Number *</label>
-      <input type="tel" id="custPhone" placeholder="10 digit mobile" maxlength="10" required>
-      <label>Email *</label>
-      <input type="email" id="custEmail" placeholder="your@email.com" required>
-      <label>Full Address *</label>
-      <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required></textarea>
-      <label>Payment Mode *</label>
-      <select id="paymentMode" required>
-        <option value="">-- Select Payment --</option>
-        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-        <option value="UPI">UPI / PhonePe / Paytm</option>
-        <option value="Bank Transfer">Bank Transfer</option>
-      </select>
-      <div id="orderSummary" style="background:#0f3460; padding:15px; border-radius:8px; margin:15px 0;">
-        <h4>Order Summary</h4>
-        <div id="cartItemsList"></div>
-        <h3>Total: ₹<span id="cartTotalAmount">0</span></h3>
-      </div>
-      <button onclick="submitOrder()" style="width:100%; padding:15px; background:#25D366; font-size:18px; border:none; color:white; border-radius:8px; cursor:pointer;">
-        ✅ Submit Order on WhatsApp + Email
-      </button>
-    </div>
-  </div>
-</div>
-
-<style>
-.modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; align-items:center; justify-content:center; }
-.modal.hide { display:none; }
-.modal-content { background:#1a1a2e; border-radius:10px; width:90%; max-height:90vh; overflow-y:auto; }
-.modal-header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; border-bottom:1px solid #0f3460; }
-.close-btn { background:#e74c3c; border:none; color:white; font-size:24px; width:35px; height:35px; border-radius:50%; cursor:pointer; }
-.modal-body label { display:block; margin-top:12px; margin-bottom:5px; color:#94a3b8; font-size:14px; }
-.modal-body input, .modal-body textarea, .modal-body select { 
-  width:100%; padding:12px; background:#0f3460; border:1px solid #16213e; 
-  color:white; border-radius:5px; font-size:15px; margin-bottom:5px;
-}
-</style>
-
-<!-- CUSTOMER CHECKOUT MODAL -->
-<div id="checkoutModal" class="modal hide">
-  <div class="modal-content" style="max-width:500px;">
-    <div class="modal-header">
-      <h3>🛒 Place Your Order</h3>
-      <button class="close-btn" onclick="closeCheckout()">×</button>
-    </div>
-    <div class="modal-body" style="padding:20px;">
-      <label>Full Name *</label>
-      <input type="text" id="custName" placeholder="Your Name" required>
-      <label>Mobile Number *</label>
-      <input type="tel" id="custPhone" placeholder="10 digit mobile" maxlength="10" required>
-      <label>Email *</label>
-      <input type="email" id="custEmail" placeholder="your@email.com" required>
-      <label>Full Address *</label>
-      <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required></textarea>
-      <label>Payment Mode *</label>
-      <select id="paymentMode" required>
-        <option value="">-- Select Payment --</option>
-        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-        <option value="UPI">UPI / PhonePe / Paytm</option>
-        <option value="Bank Transfer">Bank Transfer</option>
-      </select>
-      <div id="orderSummary" style="background:#0f3460; padding:15px; border-radius:8px; margin:15px 0;">
-        <h4>Order Summary</h4>
-        <div id="cartItemsList"></div>
-        <h3>Total: ₹<span id="cartTotalAmount">0</span></h3>
-      </div>
-      <button onclick="submitOrder()" style="width:100%; padding:15px; background:#25D366; font-size:18px; border:none; color:white; border-radius:8px; cursor:pointer;">
-        ✅ Submit Order on WhatsApp + Email
-      </button>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
