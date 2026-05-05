@@ -48,7 +48,11 @@
 <div class="header">
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
-    <button class="header-btn" onclick="openOrderUs()">📱 ORDER<br>US</button>
+    <!-- Line 51 ko isse replace kar -->
+
+<button onclick="orderOnWhatsAppGeneral()" style="background:#0000ff;color:white;padding:10px 15px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
+  📱 ORDER US
+</button>
     <button class="header-btn help-desk-btn" onclick="openHelpDesk()">🤝 HELP<br>DESK</button>
   </div>
 </div>
@@ -59,10 +63,7 @@
 </div>
 
 <div class="bottom-nav">
-  <a href="index.html" class="nav-item active">
-    <div>🏠</div>
-    <span>Home</span>
-  </a>
+
   <a href="categories.html" class="nav-item">
     <div>📱</div>
     <span>Categories</span>
@@ -282,7 +283,12 @@ async function loadAllProducts(){
         <h4>${p.name} ${p.source === 'firebase'? '<span class="firebase-badge">NEW</span>' : ''}</h4>
         <p><s style="font-size:12px;color:#999;">₹${p.mrp || ''}</s> ₹${p.price}</p>
         <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock || 0}</div>
-        <button onclick="openCheckoutDirect('${p.id}', '${p.source}')">Buy Now</button>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+ <button onclick="orderOnWhatsApp('${p.id}', '${p.name}', '${p.price}', '${p.image}', '${p.source || 'local'}')" style="width:100%; padding:15px; background:#25D366; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold;">
+  💬 Order on WhatsApp
+</button>
+</div>
+     
       </div>
     `;
   });
@@ -326,8 +332,11 @@ function showProductModal(p){
         <p><b>Category:</b> ${p.category || 'General'}</p>
         <p><b>Stock:</b> ${p.stock || 0}</p>
         <p style="margin-top:10px;">${p.desc || p.description || 'No description'}</p>
-        <button onclick="openCheckoutDirect('${p.id}', '${p.source || 'local'}');this.closest('.modal').remove();" style="width:100%;margin-top:15px;">Buy Now</button>
-      </div>
+        
+        <div style="display:flex; gap:8px; margin-top:15px;">
+ <button onclick="addToCart('${p.id}', '${p.source || 'local'}')" style="flex:1; padding:12px; background:#ff6b6b; color:white; border:none; border-radius:6px;">🛒 Add to Cart</button>
+  <button onclick="openCheckoutDirect('${p.id}', '${p.source}||'local')" style="flex:1; padding:12px; background:#4CAF50; color:white; border:none; border-radius:6px;">⚡ Buy Now</button>
+</div>
     </div>
   `;
   document.body.appendChild(modal);
@@ -527,6 +536,220 @@ function trackOrderByMobile(){
     navigator.serviceWorker.register('/sw.js');
   }
 </script>
+<script>
+// ===== ADD TO CART FUNCTION =====
+function addToCart(productId, source) {
+  let CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+  
+  // Product dhundo - firebase ya local
+  let product = null;
+  if(source === 'firebase') {
+    product = allProducts.find(p => p.id == productId);
+  } else {
+    product = SANTRA_DB.products.find(p => p.id == productId);
+  }
+  
+  if (!product) {
+    alert("Product nahi mila!");
+    return;
+  }
+  
+  let item = CART.find(i => i.id == productId);
+  if (item) {
+    item.qty += 1;
+  } else {
+    CART.push({...product, qty: 1, source: source});
+  }
+  
+  localStorage.setItem('santra_cart', JSON.stringify(CART));
+  
+  // Cart badge update karo
+  let count = CART.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = count;
+  
+  alert(`✅ ${product.name} cart me add ho gaya!`);
+}
 
+// Page load pe cart count dikhao
+window.addEventListener('load', () => {
+  let CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+  let count = CART.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = count;
+});
+// ===== END =====
+</script>
+<script>
+function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
+  // 1. 4-digit OTP generate karo
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  
+  // 2. OTP + Product info localStorage me save karo 10 min ke liye
+  let pendingOrder = {
+    productId: productId,
+    productName: productName,
+    productPrice: productPrice,
+    otp: otp,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
+  
+  // 3. Tera WhatsApp number
+  let yourWhatsAppNumber = "918769171078"; // ← Tera number
+  
+  // 4. Message banao
+  let message = `Hi SANTRA MALL! 👋\n\nI want to order:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nPlease send me order form.`;
+  
+  // 5. WhatsApp khol do
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  
+  // 6. Customer ko alert dikhao
+  alert(`✅ WhatsApp khul gaya!\n\nAb main aapko OTP aur Order Form bhejungi WhatsApp pe.\n\nOTP: ${otp} (Note kar lo)`);
+  
+  closeProduct();
+}
+
+<script>
+function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
+  // 1. 4-digit OTP generate karo
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  
+  // 2. OTP + Product info localStorage me save karo 10 min ke liye
+  let pendingOrder = {
+    productId: productId,
+    productName: productName,
+    productPrice: productPrice,
+    otp: otp,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
+  
+  // 3. Tera WhatsApp number
+  let yourWhatsAppNumber = "918769171078"; // ← Tera number
+  
+  // 4. Message banao
+  let message = `Hi SANTRA MALL! 👋\n\nI want to order:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nPlease send me order form.`;
+  
+  // 5. WhatsApp khol do
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  
+  // 6. Customer ko alert dikhao
+  alert(`✅ WhatsApp khul gaya!\n\nAb main aapko OTP aur Order Form bhejungi WhatsApp pe.\n\nOTP: ${otp} (Note kar lo)`);
+  
+  closeProduct();
+}
+</script>
+<script>
+function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
+  // 1. OTP generate karo
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  
+  // 2. Product + OTP save karo localStorage me 10 min ke liye
+  let pendingOrder = {
+    productId: productId,
+    productName: productName,
+    productPrice: productPrice,
+    otp: otp,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
+  
+  // 3. Tera number
+  let yourWhatsAppNumber = "918769171078"; 
+  
+  // 4. Message - OTP nahi bhejna yahan
+  let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
+  
+  // 5. WhatsApp kholo
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  
+  // 6. Alert - OTP mat dikhao
+  alert(`✅ WhatsApp khul gaya!\n\nMain aapko WhatsApp pe OTP bhejungi.\nUske baad form link bhejungi.\n\nMere reply ka wait karein 🙏`);
+  
+  closeProduct();
+}
+</script>
+<script>
+// WhatsApp Order Function
+function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
+  // Har bar naya OTP generate hoga
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  
+  // Product ke hisab se alag OTP save karo
+  let pendingOrder = {
+    productId: productId,
+    productName: productName,
+    productPrice: productPrice,
+    otp: otp,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('pending_whatsapp_order_' + productId, JSON.stringify(pendingOrder));
+  
+  let yourWhatsAppNumber = "918769171078"; 
+  let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
+  
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  
+  alert(`✅ WhatsApp khul gaya!\n\nMain aapko WhatsApp pe OTP bhejungi.\nUske baad form link bhejungi.\n\nMere reply ka wait karein 🙏`);
+  
+  closeProduct();
+}
+
+// ORDER US button ke liye bhi same function
+function orderOnWhatsAppGeneral(){
+  let yourWhatsAppNumber = "918769171078"; 
+  let message = `Hi SANTRA MALL! 👋\n\nMujhe order karna hai. Please OTP aur form bhejein.`;
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+}
+</script>
+<script>
+// Product wala button
+function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  
+  let pendingOrder = {
+    productId: productId,
+    productName: productName,
+    productPrice: productPrice,
+    otp: otp,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('pending_whatsapp_order_' + productId, JSON.stringify(pendingOrder));
+  
+  let yourWhatsAppNumber = "918769171078"; 
+  let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
+  
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  
+  alert(`✅ WhatsApp khul gaya!\n\nMain aapko WhatsApp pe OTP bhejungi.\nMere reply ka wait karein 🙏`);
+  closeProduct();
+}
+
+// Header wala ORDER US button
+function orderOnWhatsAppGeneral(){
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  
+  let pendingOrder = {
+    productId: 'general',
+    productName: 'General Inquiry',
+    productPrice: '0',
+    otp: otp,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('pending_whatsapp_order_general', JSON.stringify(pendingOrder));
+  
+  let yourWhatsAppNumber = "918769171078"; 
+  let message = `Hi SANTRA MALL! 👋\n\nMujhe order karna hai.\nOTP aur Order Form bhej dijiye.`;
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  
+  alert(`✅ WhatsApp khul gaya!\n\nMain aapko OTP bhejungi WhatsApp pe.`);
+}
+</script>
 </body>
 </html>

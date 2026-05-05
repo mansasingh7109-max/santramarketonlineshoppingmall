@@ -8,34 +8,32 @@
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff;--green:#10b981;--red:#ef4444}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
-    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-    .header h1{color:var(--accent);font-size:20px;}
-    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
-    .container{padding:15px;}
-    .cart-item{background:var(--card);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;gap:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .cart-item img{width:80px;height:80px;object-fit:cover;border-radius:6px;}
-    .cart-item-info{flex:1;}
-    .cart-item-info h4{font-size:14px;margin-bottom:4px;}
-    .cart-item-info .price{color:var(--accent);font-weight:bold;font-size:16px;}
-    .qty-control{display:flex;gap:8px;align-items:center;margin-top:8px;}
-    .qty-control button{width:28px;height:28px;border:1px solid #ddd;background:white;border-radius:4px;cursor:pointer;}
-    .qty-control span{min-width:30px;text-align:center;font-weight:bold;}
-    .remove-btn{background:var(--red);color:white;border:none;padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:8px;}
-    .empty-cart{text-align:center;padding:60px 20px;color:#999;}
-    .empty-cart div{font-size:60px;margin-bottom:15px;}
-    .checkout-box{background:var(--card);padding:15px;border-radius:8px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .checkout-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px;}
-    .checkout-row.total{font-size:18px;font-weight:bold;color:var(--accent);border-top:2px solid #eee;padding-top:10px;margin-top:10px;}
-    .checkout-btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px;}
-    .checkout-btn:disabled{background:#ccc;cursor:not-allowed;}
-    .address-form input, .address-form textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #e5e7eb;border-radius:8px;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;}
-    .nav-item.active{color:var(--accent);}
-    .nav-item div{font-size:22px;}
-    .nav-item span{font-size:11px;display:block;margin-top:2px;}
-    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-    .hide{display:none!important;}
+.header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.header h1{color:var(--accent);font-size:20px;}
+.back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+.container{padding:15px;}
+.cart-item{background:var(--card);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;gap:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.cart-item img{width:80px;height:80px;object-fit:cover;border-radius:6px;}
+.cart-item-info{flex:1;}
+.cart-item-info h4{font-size:14px;margin-bottom:4px;}
+.cart-item-info.price{color:var(--accent);font-weight:bold;font-size:16px;}
+.qty-control{display:flex;gap:8px;align-items:center;margin-top:8px;}
+.qty-control button{width:28px;height:28px;border:1px solid #ddd;background:white;border-radius:4px;cursor:pointer;}
+.qty-control span{min-width:30px;text-align:center;font-weight:bold;}
+.remove-btn{background:var(--red);color:white;border:none;padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:8px;}
+.empty-cart{text-align:center;padding:60px 20px;color:#999;}
+.empty-cart div{font-size:60px;margin-bottom:15px;}
+.checkout-box{background:var(--card);padding:15px;border-radius:8px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.checkout-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px;}
+.checkout-row.total{font-size:18px;font-weight:bold;color:var(--accent);border-top:2px solid #eee;padding-top:10px;margin-top:10px;}
+.address-form input,.address-form textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #e5e7eb;border-radius:8px;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;}
+.nav-item.active{color:var(--accent);}
+.nav-item div{font-size:22px;}
+.nav-item span{font-size:11px;display:block;margin-top:2px;}
+.cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+.hide{display:none!important;}
   </style>
 </head>
 <body>
@@ -48,7 +46,7 @@
 
 <div class="container">
   <div id="cartItems"></div>
-  
+
   <div id="checkoutSection" class="hide">
     <div class="checkout-box">
       <h3 style="margin-bottom:15px;">📍 Delivery Address</h3>
@@ -73,7 +71,9 @@
         <span>Total Amount</span>
         <span id="total">₹0</span>
       </div>
-      <button class="checkout-btn" onclick="placeOrder()">Place Order (COD)</button>
+      <button onclick="orderFromCart()" style="width:100%;padding:15px;background:#25D366;color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;margin-top:15px;">
+        💬 Order on WhatsApp
+      </button>
     </div>
   </div>
 </div>
@@ -98,172 +98,143 @@
   </a>
 </div>
 
-<script src="db.js"></script>
 <script>
 window.onload = function(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId){
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
-    return;
-  }
   loadCart();
   updateCartCount();
 }
 
 function loadCart(){
-  let userId = parseInt(localStorage.getItem('currentUserId'));
-  let userCart = DB.cart.filter(c => c.uid == userId);
+  let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+  let userCart = SANTRA_CART;
   let container = document.getElementById('cartItems');
-  
+
   if(userCart.length === 0){
     container.innerHTML = '<div class="empty-cart"><div>🛒</div><p>Your cart is empty</p><button onclick="window.location.href=\'index.html\'" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Continue Shopping</button></div>';
     document.getElementById('checkoutSection').classList.add('hide');
     return;
   }
-  
+
   container.innerHTML = '';
   let subtotal = 0;
-  
-  userCart.forEach(item => {
-    let product = DB.products.find(p => p.id == item.pid);
+
+  userCart.forEach((item, index) => {
     let itemTotal = item.price * item.qty;
     subtotal += itemTotal;
-    
+
     container.innerHTML += `
       <div class="cart-item">
-        <img src="${item.img}" alt="${item.name}">
+        <img src="${item.image || item.img || 'https://via.placeholder.com/80'}" alt="${item.name}">
         <div class="cart-item-info">
           <h4>${item.name}</h4>
           <div class="price">₹${item.price} x ${item.qty} = ₹${itemTotal}</div>
           <div class="qty-control">
-            <button onclick="updateQty(${item.id}, -1)">-</button>
+            <button onclick="updateQty(${index}, -1)">-</button>
             <span>${item.qty}</span>
-            <button onclick="updateQty(${item.id}, 1)" ${item.qty >= (product?.stock || 999) ? 'disabled' : ''}>+</button>
+            <button onclick="updateQty(${index}, 1)">+</button>
           </div>
-          <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
         </div>
       </div>
     `;
   });
-  
-  let delivery = subtotal >= DB.settings.freeDeliveryAbove ? 0 : DB.settings.delivery;
+
+  let delivery = subtotal >= 500? 0 : 49;
   let total = subtotal + delivery;
-  
+
   document.getElementById('subtotal').innerText = '₹' + subtotal;
-  document.getElementById('delivery').innerText = delivery === 0 ? 'FREE' : '₹' + delivery;
+  document.getElementById('delivery').innerText = delivery === 0? 'FREE' : '₹' + delivery;
   document.getElementById('total').innerText = '₹' + total;
   document.getElementById('checkoutSection').classList.remove('hide');
-  
-  let user = DB.users.find(u => u.id == userId);
-  if(user){
-    document.getElementById('custName').value = user.name;
-    document.getElementById('custMobile').value = user.mobile || '';
-  }
 }
 
-function updateQty(cartId, change){
-  let item = DB.cart.find(c => c.id == cartId);
-  if(!item) return;
-  
-  let product = DB.products.find(p => p.id == item.pid);
-  let newQty = item.qty + change;
-  
+function updateQty(index, change){
+  let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+  if(!SANTRA_CART[index]) return;
+
+  let newQty = SANTRA_CART[index].qty + change;
+
   if(newQty < 1){
-    removeItem(cartId);
+    removeItem(index);
     return;
   }
-  
-  if(product && newQty > product.stock){
-    alert('No more stock available!');
-    return;
-  }
-  
-  item.qty = newQty;
-  saveDB();
+
+  SANTRA_CART[index].qty = newQty;
+  localStorage.setItem('santra_cart', JSON.stringify(SANTRA_CART));
   loadCart();
   updateCartCount();
 }
 
-function removeItem(cartId){
+function removeItem(index){
   if(confirm('Remove this item?')){
-    DB.cart = DB.cart.filter(c => c.id != cartId);
-    saveDB();
+    let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+    SANTRA_CART.splice(index, 1);
+    localStorage.setItem('santra_cart', JSON.stringify(SANTRA_CART));
     loadCart();
     updateCartCount();
   }
 }
 
-function placeOrder(){
-  let name = document.getElementById('custName').value.trim();
-  let mobile = document.getElementById('custMobile').value.trim();
-  let address = document.getElementById('custAddress').value.trim();
-  
-  if(!name || !mobile || !address){
-    alert('Please fill all address fields!');
-    return;
-  }
-  
-  if(mobile.length !== 10){
-    alert('Please enter valid 10-digit mobile number!');
-    return;
-  }
-  
-  let userId = parseInt(localStorage.getItem('currentUserId'));
-  let userCart = DB.cart.filter(c => c.uid == userId);
-  
-  if(userCart.length === 0){
-    alert('Cart is empty!');
-    return;
-  }
-  
-  let subtotal = userCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  let delivery = subtotal >= DB.settings.freeDeliveryAbove ? 0 : DB.settings.delivery;
-  let total = subtotal + delivery;
-  
-  let order = {
-    id: Date.now(),
-    uid: userId,
-    customerName: name,
-    mobile: mobile,
-    address: address,
-    total: total,
-    status: 'Placed',
-    time: new Date().toISOString(),
-    items: userCart.map(item => ({
-      pid: item.pid,
-      name: item.name,
-      price: item.price,
-      qty: item.qty,
-      img: item.img
-    }))
-  };
-  
-  DB.orders.push(order);
-  
-  userCart.forEach(item => {
-    let product = DB.products.find(p => p.id == item.pid);
-    if(product){
-      product.stock -= item.qty;
-    }
-  });
-  
-  DB.cart = DB.cart.filter(c => c.uid != userId);
-  saveDB();
-  
-  alert('✅ Order Placed Successfully!\n\nOrder ID: #' + order.id + '\nTotal: ₹' + total + '\n\nCash on Delivery');
-  window.location.href = 'index.html';
-}
-
 function updateCartCount(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId) return;
-  userId = parseInt(userId);
-  let userCart = DB.cart.filter(c => c.uid == userId);
-  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
+  let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+  let total = SANTRA_CART.reduce((sum, item) => sum + item.qty, 0);
   document.getElementById('cartCount').innerText = total;
 }
-</script>
 
+// WHATSAPP ORDER - FIXED FOR MOBILE
+function orderFromCart(){
+   console.log('Cart button daba!');
+
+   let cart = JSON.parse(localStorage.getItem('santra_cart')) || [];
+   if(cart.length === 0){
+      alert('Cart khali hai! Pehle product add karo.');
+      return;
+   }
+
+   let name = document.getElementById('custName').value.trim();
+   let mobile = document.getElementById('custMobile').value.trim();
+   let address = document.getElementById('custAddress').value.trim();
+
+   if(!name ||!mobile ||!address){
+      alert('Naam, Mobile aur Address bharna zaroori hai');
+      return;
+   }
+
+   if(mobile.length!== 10){
+      alert('Please enter valid 10-digit mobile number!');
+      return;
+   }
+
+   let itemsText = "";
+   let subtotal = 0;
+   cart.forEach(item => {
+      let itemTotal = item.price * item.qty;
+      subtotal += itemTotal;
+      itemsText += `• ${item.name} x ${item.qty} = ₹${itemTotal}%0A`;
+   });
+
+   let delivery = subtotal >= 500? 0 : 49;
+   let finalTotal = subtotal + delivery;
+
+   let message = `🛒 *New Order - SANTRA MALL*%0A%0A`;
+   message += `*Customer:* ${name}%0A`;
+   message += `*Mobile:* ${mobile}%0A`;
+   message += `*Address:* ${address}%0A%0A`;
+   message += `*Items:*%0A${itemsText}%0A`;
+   message += `*Subtotal:* ₹${subtotal}%0A`;
+   message += `*Delivery:* ${delivery === 0? 'FREE' : '₹' + delivery}%0A`;
+   message += `*Total Amount:* ₹${finalTotal}%0A%0A`;
+   message += `Payment: Cash on Delivery`;
+
+   const shopNumber = "918769171078";
+   const whatsappUrl = `https://wa.me/${shopNumber}?text=${encodeURIComponent(message)}`;
+
+   // Cart khali karo
+   localStorage.setItem('santra_cart', JSON.stringify([]));
+
+   // Direct WhatsApp kholo - alert hata diya, popup block nahi hoga
+   window.location.href = whatsappUrl;
+}
+</script>
 </body>
 </html>

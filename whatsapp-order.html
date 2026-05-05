@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify OTP - SANTRA MALL</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px;min-height:100vh;}
+    .card{background:white;border-radius:16px;padding:25px;max-width:450px;margin:20px auto;box-shadow:0 10px 40px rgba(0,0,0,0.2);}
+    .header{text-align:center;margin-bottom:25px;}
+    .header h2{color:#e40046;margin-bottom:8px;}
+    .header p{color:#666;font-size:14px;}
+    input,textarea{width:100%;padding:14px;margin:10px 0;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;}
+    input:focus,textarea:focus{border-color:#e40046;outline:none;}
+    .btn{width:100%;padding:16px;background:#25D366;color:white;border:none;border-radius:10px;font-size:17px;font-weight:bold;cursor:pointer;margin-top:15px;}
+    .btn:disabled{background:#ccc;cursor:not-allowed;}
+    .hide{display:none;}
+    .error{color:#e40046;font-size:14px;margin-top:8px;text-align:center;font-weight:bold;}
+    .product-card{background:#1e3a5f;color:white;padding:15px;border-radius:10px;margin:15px 0;}
+    .success{text-align:center;padding:30px;}
+    .success-icon{font-size:70px;}
+    .otp-box{background:#fff9e6;border:2px dashed #ffc107;padding:15px;border-radius:10px;margin:15px 0;text-align:center;}
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- STEP 1: OTP VERIFY -->
+  <div id="otpSection">
+    <div class="header">
+      <h2>🔐 OTP Verification</h2>
+      <p>WhatsApp pe mila 4-digit OTP yahan daalein</p>
+    </div>
+    
+    <div class="otp-box">
+      <p style="color:#666;font-size:14px;">SANTRA MALL ne aapko WhatsApp pe OTP bheja hai</p>
+    </div>
+    
+    <input type="text" id="otpInput" placeholder="Enter 4-digit OTP" maxlength="4" inputmode="numeric">
+    <div id="otpError" class="error hide">❌ Galat OTP! WhatsApp pe check karein.</div>
+    <button class="btn" onclick="verifyOTP()">Verify OTP</button>
+    <p style="text-align:center;margin-top:15px;font-size:13px;color:#999;">OTP 10 minute tak valid hai</p>
+  </div>
+
+  <!-- STEP 2: FORM FILL -->
+  <div id="formSection" class="hide">
+    <div class="header">
+      <h2>📝 Delivery Details</h2>
+      <p style="color:#10b981;font-weight:bold;">OTP Verified ✅</p>
+    </div>
+    
+    <div id="productInfo" class="product-card"></div>
+    
+    <input type="text" id="custName" placeholder="Full Name *" required>
+    <input type="tel" id="custMobile" placeholder="10 digit mobile number *" maxlength="10" required>
+    <input type="email" id="custEmail" placeholder="Email (Optional)">
+    <textarea id="custAddress" placeholder="House no, Street, Area, City *" rows="3" required></textarea>
+    <input type="text" id="custPincode" placeholder="Pincode *" maxlength="6" required>
+    <input type="text" id="custLandmark" placeholder="Landmark (Optional)">
+    
+    <button class="btn" onclick="submitFinalOrder()">🛒 Place Order on WhatsApp</button>
+  </div>
+
+  <!-- STEP 3: SUCCESS -->
+  <div id="successSection" class="hide">
+    <div class="success">
+      <div class="success-icon">✅</div>
+      <h3 style="color:#10b981;margin:15px 0;">Order Submitted!</h3>
+      <p style="color:#666;">WhatsApp khul raha hai... Check karein.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+let pendingOrder = null;
+let orderKey = '';
+
+window.onload = function(){
+  // URL se product ID nikalo
+  let urlParams = new URLSearchParams(window.location.search);
+  let productId = urlParams.get('product');
+  
+  // Product ID ke hisab se key banao
+  if(productId && productId !== 'general'){
+    orderKey = 'pending_whatsapp_order_' + productId;
+  } else {
+    orderKey = 'pending_whatsapp_order_general';
+  }
+  
+  // LocalStorage se order nikalo
+  pendingOrder = JSON.parse(localStorage.getItem(orderKey));
+  
+  if(!pendingOrder){
+    alert('❌ No order found!\n\nPlease click "Order on WhatsApp" button again from website.');
+    window.location.href = 'index.html';
+    return;
+  }
+  
+  // 10 minute expire check
+  let timeDiff = Date.now() - pendingOrder.timestamp;
+  if(timeDiff > 10 * 60 * 1000){
+    alert('⏰ OTP expired!\n\nPlease order again from website.');
+    localStorage.removeItem(orderKey);
+    window.location.href = 'index.html';
+    return;
+  }
+  
+  // Product info dikhao agar hai to
+  if(pendingOrder.productName && pendingOrder.productName !== 'General Inquiry'){
+    document.getElementById('productInfo').innerHTML = `
+      <b>Your Order:</b><br>
+      ${pendingOrder.productName}<br>
+      <b style="font-size:18px;">₹${pendingOrder.productPrice}</b>
+    `;
+  } else {
+    document.getElementById('productInfo').innerHTML = `
+      <b>General Order Inquiry</b><br>
+      <span style="font-size:14px;">Product details fill karne ke baad batayein</span>
+    `;
+  }
+}
+
+function verifyOTP(){
+  let enteredOTP = document.getElementById('otpInput').value.trim();
+  
+  if(!enteredOTP){
+    document.getElementById('otpError').textContent = '❌ Please enter OTP';
+    document.getElementById('otpError').classList.remove('hide');
+    return;
+  }
+  
+  if(enteredOTP == pendingOrder.otp){
+    document.getElementById('otpSection').classList.add('hide');
+    document.getElementById('formSection').classList.remove('hide');
+    document.getElementById('otpError').classList.add('hide');
+  } else {
+    document.getElementById('otpError').textContent = '❌ Galat OTP! WhatsApp pe check karein.';
+    document.getElementById('otpError').classList.remove('hide');
+  }
+}
+
+function submitFinalOrder(){
+  let name = document.getElementById('custName').value.trim();
+  let mobile = document.getElementById('custMobile').value.trim();
+  let email = document.getElementById('custEmail').value.trim();
+  let address = document.getElementById('custAddress').value.trim();
+  let pincode = document.getElementById('custPincode').value.trim();
+  let landmark = document.getElementById('custLandmark').value.trim();
+
+  // Validation
+  if(!name || !mobile || !address || !pincode){
+    alert('⚠️ Please fill all required fields:\nName, Mobile, Address, Pincode');
+    return;
+  }
+
+  if(mobile.length !== 10 || isNaN(mobile)){
+    alert('⚠️ Please enter valid 10-digit mobile number');
+    return;
+  }
+
+  if(pincode.length !== 6 || isNaN(pincode)){
+    alert('⚠️ Please enter valid 6-digit pincode');
+    return;
+  }
+
+  // Full address banao
+  let fullAddress = `${address}${landmark ? ', Landmark: ' + landmark : ''}, Pincode: ${pincode}`;
+  
+  // Final WhatsApp message
+  let message = `✅ *ORDER CONFIRMED - OTP VERIFIED*\n\n` +
+    `*OTP:* ${pendingOrder.otp} ✅\n\n` +
+    `*Product:* ${pendingOrder.productName}\n` +
+    `*Price:* ₹${pendingOrder.productPrice}\n\n` +
+    `*Customer Details:*\n` +
+    `Name: ${name}\n` +
+    `Mobile: ${mobile}\n` +
+    `Email: ${email || 'Not provided'}\n` +
+    `Address: ${fullAddress}\n\n` +
+    `*Payment:* Cash on Delivery\n\n` +
+    `Thank you! 🙏`;
+
+  // Tera WhatsApp number
+  let yourWhatsAppNumber = "918769171078"; 
+  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+
+  // Order local me save karo
+  let ORDERS = JSON.parse(localStorage.getItem('santra_orders')) || [];
+  ORDERS.push({
+    id: Date.now(),
+    productId: pendingOrder.productId,
+    productName: pendingOrder.productName,
+    price: pendingOrder.productPrice,
+    customerName: name,
+    mobile: mobile,
+    email: email,
+    address: fullAddress,
+    status: 'OTP Verified',
+    otp: pendingOrder.otp,
+    time: new Date().toISOString()
+  });
+  localStorage.setItem('santra_orders', JSON.stringify(ORDERS));
+  
+  // Pending order hata do
+  localStorage.removeItem(orderKey);
+
+  // Success dikhao
+  document.getElementById('formSection').classList.add('hide');
+  document.getElementById('successSection').classList.remove('hide');
+
+  // WhatsApp kholo
+  setTimeout(() => {
+    window.open(whatsappUrl, '_blank');
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
