@@ -336,7 +336,6 @@ function showProductModal(p){
   `;
   document.body.appendChild(modal);
 }
-
 // DIRECT CHECKOUT
 function openCheckoutDirect(productId, source){
   if(source === 'firebase' && firebaseDB){
@@ -359,7 +358,7 @@ function openCheckoutDirect(productId, source){
   }
 }
 
-// CHECKOUT FORM WITH OTP
+// CHECKOUT FORM WITH OTP - WEBSITE PE DIKHEGA
 function openCheckoutForm(product){
   let modal = document.createElement('div');
   modal.id = 'checkoutModal';
@@ -405,20 +404,7 @@ function openCheckoutForm(product){
             </button>
           </div>
 
-          <div id="otpVerifySection" style="display:none;">
-            <div style="background:#d4edda;padding:15px;border-radius:8px;margin:15px 0;">
-              <p style="color:#155724;margin:0;">✅ OTP sent to your mobile via WhatsApp!</p>
-            </div>
-            <label>Enter 6 Digit OTP *</label>
-            <input type="text" id="enteredOTP" placeholder="Enter OTP" maxlength="6" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;font-size:18px;text-align:center;letter-spacing:5px;">
-            <p id="otpError" style="color:red;font-size:12px;display:none;"></p>
-            <button type="button" onclick="verifyOTPAndPlaceOrder()" style="width:100%;padding:15px;background:#25D366;font-size:18px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
-              ✅ Verify OTP & Place Order
-            </button>
-            <button type="button" onclick="resendOTP()" style="width:100%;padding:10px;background:#6c757d;font-size:14px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:8px;">
-              🔄 Resend OTP
-            </button>
-          </div>
+          <div id="otpVerifySection" style="display:none;"></div>
         </form>
       </div>
     </div>
@@ -427,7 +413,7 @@ function openCheckoutForm(product){
   loadAdminFields();
 }
 
-// SEND OTP TO CUSTOMER - WHATSAPP LINK FIX
+// SEND OTP TO CUSTOMER - AB WEBSITE PE DIKHEGA, WHATSAPP NAHI
 function sendOTPToCustomer(pid, pname, pprice){
   let name = document.getElementById('custName').value.trim();
   let mobile = document.getElementById('custMobile').value.trim();
@@ -451,26 +437,26 @@ function sendOTPToCustomer(pid, pname, pprice){
     pid, pname, pprice, name, mobile, email, address, payment
   };
   
-  let otpMsg = `SANTRA MALL - OTP Verification
-
-Hello ${name},
-
-Your OTP is: *${generatedOTP}*
-
-Enter this OTP on website to confirm your order.
-
-Valid for 10 minutes.
-Do not share with anyone.`;
-  
-  // FIXED: Use api.whatsapp.com instead of wa.me to avoid ERR_UNKNOWN_URL_SCHEME
-  let customerWA = `https://api.whatsapp.com/send?phone=91${mobile}&text=${encodeURIComponent(otpMsg)}`;
-  window.open(customerWA, '_blank');
-  
+  // ===== OTP WEBSITE PE HI DIKHEGA - WHATSAPP LINK NAHI KHULEGA =====
   document.getElementById('customerDetailsForm').style.display = 'none';
   document.getElementById('otpVerifySection').style.display = 'block';
+  
+  document.getElementById('otpVerifySection').innerHTML = `
+    <div style="background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border:2px dashed #FFA000;">
+      <p style="color:#856404;margin:0;text-align:center;"><b>🔐 Your OTP</b></p>
+      <h2 style="text-align:center;color:#e40046;margin:10px 0;letter-spacing:5px;">${generatedOTP}</h2>
+      <p style="color:#856404;margin:0;text-align:center;font-size:12px;">Enter this OTP below to verify your order</p>
+    </div>
+    <label>Enter 6 Digit OTP *</label>
+    <input type="text" id="enteredOTP" placeholder="Enter OTP" maxlength="6" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;font-size:18px;text-align:center;letter-spacing:5px;">
+    <p id="otpError" style="color:red;font-size:12px;display:none;"></p>
+    <button type="button" onclick="verifyOTPAndPlaceOrder()" style="width:100%;padding:15px;background:#25D366;font-size:18px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
+      ✅ Verify OTP & Place Order
+    </button>
+  `;
 }
 
-// VERIFY OTP AND PLACE ORDER - FIREBASE BACKUP + WHATSAPP FIX
+// VERIFY OTP AND PLACE ORDER - FIREBASE + ADMIN WHATSAPP + CUSTOMER PROFILE
 function verifyOTPAndPlaceOrder(){
   let enteredOTP = document.getElementById('enteredOTP').value.trim();
   let errorEl = document.getElementById('otpError');
@@ -478,28 +464,10 @@ function verifyOTPAndPlaceOrder(){
   if(enteredOTP == generatedOTP){
     let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
     
-    // NO EMOJI - Fix %EF%BF%BD encoding issue
-    let msg = `New Order - SANTRA MALL
-OTP Verified: ${generatedOTP}
-
-Customer Details:
-Name: ${currentOrderData.name}
-Mobile: ${currentOrderData.mobile}
-Email: ${currentOrderData.email}
-Address: ${currentOrderData.address}
-Payment: ${currentOrderData.payment}
-
-Product:
-${currentOrderData.pname} - Rs.${currentOrderData.pprice}
-
-Total: Rs.${currentOrderData.pprice}`;
-    
-    // FIXED: Use api.whatsapp.com instead of wa.me
-    let whatsappURL = `https://api.whatsapp.com/send?phone=91${waNumber}&text=${encodeURIComponent(msg)}`;
-    window.open(whatsappURL, '_blank');
-    
-    // 1. SAVE TO LOCAL DB
+    // 1. SAVE TO LOCAL DB - Customer Profile + Order
     if(!SANTRA_DB.orders) SANTRA_DB.orders = [];
+    if(!SANTRA_DB.customers) SANTRA_DB.customers = [];
+    
     let orderData = {
       id: Date.now(),
       uid: 0,
@@ -512,8 +480,31 @@ Total: Rs.${currentOrderData.pprice}`;
       total: currentOrderData.pprice,
       status: 'Confirmed',
       otpVerified: true,
+      otp: generatedOTP,
       time: new Date().toISOString()
     };
+    
+    // Customer profile save/update karo
+    let existingCustomer = SANTRA_DB.customers.find(c => c.mobile == currentOrderData.mobile);
+    if(existingCustomer){
+      existingCustomer.orders = (existingCustomer.orders || 0) + 1;
+      existingCustomer.lastOrder = new Date().toISOString();
+      existingCustomer.name = currentOrderData.name;
+      existingCustomer.email = currentOrderData.email;
+      existingCustomer.address = currentOrderData.address;
+    } else {
+      SANTRA_DB.customers.push({
+        id: Date.now(),
+        name: currentOrderData.name,
+        mobile: currentOrderData.mobile,
+        email: currentOrderData.email,
+        address: currentOrderData.address,
+        orders: 1,
+        joined: new Date().toISOString(),
+        lastOrder: new Date().toISOString()
+      });
+    }
+    
     SANTRA_DB.orders.push(orderData);
     saveDB();
     
@@ -522,7 +513,36 @@ Total: Rs.${currentOrderData.pprice}`;
       firebaseDB.collection('orders').add(orderData)
     .then(() => console.log('✅ Order saved to Firebase Backup'))
     .catch(err => console.log('Firebase save error:', err));
+    
+      // Customer profile bhi Firebase me save
+      firebaseDB.collection('customers').doc(currentOrderData.mobile).set({
+        name: currentOrderData.name,
+        mobile: currentOrderData.mobile,
+        email: currentOrderData.email,
+        address: currentOrderData.address,
+        updated: new Date().toISOString()
+      }, {merge: true});
     }
+    
+    // 3. SEND TO ADMIN WHATSAPP - Customer ki sari details ke sath
+    let msg = `New Order - SANTRA MALL
+OTP Verified: ${generatedOTP}
+
+CUSTOMER PROFILE:
+Name: ${currentOrderData.name}
+Mobile: ${currentOrderData.mobile}
+Email: ${currentOrderData.email}
+Address: ${currentOrderData.address}
+Payment: ${currentOrderData.payment}
+
+PRODUCT:
+${currentOrderData.pname} - Rs.${currentOrderData.pprice}
+
+Total: Rs.${currentOrderData.pprice}
+Time: ${new Date().toLocaleString()}`;
+    
+    let whatsappURL = `https://api.whatsapp.com/send?phone=91${waNumber}&text=${encodeURIComponent(msg)}`;
+    window.open(whatsappURL, '_blank');
     
     closeCheckoutModal();
     alert('✅ Order placed successfully! OTP verified.');
@@ -670,7 +690,6 @@ function loadAdminFields() {
 }
 
 // ===== SINGLE ORDER WHATSAPP FUNCTION WITH OTP =====
-
 function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
   if(source === 'firebase' && firebaseDB){
     firebaseDB.collection('products').doc(productId).get().then(doc => {
