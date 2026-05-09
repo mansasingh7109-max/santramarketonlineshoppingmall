@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // ORDER US - Direct WhatsApp
 function openOrderUs(){
-  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078';
+  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
   window.open(`https://wa.me/91${waNumber}?text=Hi, I want to place an order from SANTRA MALL`, '_blank');
 }
 
@@ -162,9 +162,9 @@ function openHelpDesk(){
       <div class="modal-body">
         <div style="margin-bottom:20px;">
           <h4>📞 Customer Support</h4>
-          <p><b>Phone:</b> ${SANTRA_DB.settings?.helpdeskPhone || '8769171078'}</p>
+          <p><b>Phone:</b> ${SANTRA_DB.settings?.helpdeskPhone || '9829508335'}</p>
           <p><b>Email:</b> ${SANTRA_DB.settings?.helpdeskEmail || 'mansasingh7109@gmail.com'}</p>
-          <p><b>WhatsApp:</b> <a href="https://wa.me/91${SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078'}" target="_blank" style="color:#25D366;font-weight:bold;">${SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078'}</a></p>
+          <p><b>WhatsApp:</b> <a href="https://wa.me/91${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}" target="_blank" style="color:#25D366;font-weight:bold;">${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}</a></p>
           <p><b>Hours:</b> ${SANTRA_DB.settings?.helpdeskHours || 'Mon-Sat: 12 AM - 12 PM'}</p>
           <br>
           <h4>📝 About Us</h4>
@@ -453,7 +453,7 @@ function submitOrderToWhatsApp(pid, pname, pprice){
   saveDB();
 
   // 2. Send to WhatsApp
-  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078';
+  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
   let msg = `🛒 *New Order - SANTRA MALL*\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${address}\nPayment: ${payment}\n\n*Product:*\n${pname} - ₹${pprice}\n\n*Total: ₹${pprice}*`;
   window.open(`https://wa.me/91${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
 
@@ -594,7 +594,7 @@ function orderOnWhatsApp(productId, productName, productPrice, productImage, sou
   localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
   
   // 3. Tera WhatsApp number
-  let yourWhatsAppNumber = "918769171078"; // ← Tera number
+  let yourWhatsAppNumber = "919829508335"; // ← Tera number
   
   // 4. Message banao
   let message = `Hi SANTRA MALL! 👋\n\nI want to order:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nPlease send me order form.`;
@@ -625,7 +625,7 @@ function orderOnWhatsApp(productId, productName, productPrice, productImage, sou
   localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
   
   // 3. Tera WhatsApp number
-  let yourWhatsAppNumber = "918769171078"; // ← Tera number
+  let yourWhatsAppNumber = "919829508335"; // ← Tera number
   
   // 4. Message banao
   let message = `Hi SANTRA MALL! 👋\n\nI want to order:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nPlease send me order form.`;
@@ -656,7 +656,7 @@ function orderOnWhatsApp(productId, productName, productPrice, productImage, sou
   localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
   
   // 3. Tera number
-  let yourWhatsAppNumber = "918769171078"; 
+  let yourWhatsAppNumber = "919829508335"; 
   
   // 4. Message - OTP nahi bhejna yahan
   let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
@@ -687,7 +687,7 @@ function orderOnWhatsApp(productId, productName, productPrice, productImage, sou
   };
   localStorage.setItem('pending_whatsapp_order_' + productId, JSON.stringify(pendingOrder));
   
-  let yourWhatsAppNumber = "918769171078"; 
+  let yourWhatsAppNumber = "919829508335"; 
   let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
   
   let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
@@ -700,7 +700,7 @@ function orderOnWhatsApp(productId, productName, productPrice, productImage, sou
 
 // ORDER US button ke liye bhi same function
 function orderOnWhatsAppGeneral(){
-  let yourWhatsAppNumber = "918769171078"; 
+  let yourWhatsAppNumber = "919829508335"; 
   let message = `Hi SANTRA MALL! 👋\n\nMujhe order karna hai. Please OTP aur form bhejein.`;
   let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
   window.open(whatsappUrl, '_blank');
@@ -720,7 +720,7 @@ function orderOnWhatsApp(productId, productName, productPrice, productImage, sou
   };
   localStorage.setItem('pending_whatsapp_order_' + productId, JSON.stringify(pendingOrder));
   
-  let yourWhatsAppNumber = "918769171078"; 
+  let yourWhatsAppNumber = "919829508335"; 
   let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
   
   let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
@@ -743,7 +743,7 @@ function orderOnWhatsAppGeneral(){
   };
   localStorage.setItem('pending_whatsapp_order_general', JSON.stringify(pendingOrder));
   
-  let yourWhatsAppNumber = "918769171078"; 
+  let yourWhatsAppNumber = "919829508335"; 
   let message = `Hi SANTRA MALL! 👋\n\nMujhe order karna hai.\nOTP aur Order Form bhej dijiye.`;
   let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
   window.open(whatsappUrl, '_blank');
