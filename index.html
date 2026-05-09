@@ -48,11 +48,9 @@
 <div class="header">
   <h1>🛍️ SANTRA MALL</h1>
   <div class="header-right">
-    <!-- Line 51 ko isse replace kar -->
-
-<button onclick="orderOnWhatsAppGeneral()" style="background:#0000ff;color:white;padding:10px 15px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
-  📱 ORDER US
-</button>
+    <button onclick="orderOnWhatsAppGeneral()" style="background:#0000ff;color:white;padding:10px 15px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
+      📱 ORDER US
+    </button>
     <button class="header-btn help-desk-btn" onclick="openHelpDesk()">🤝 HELP<br>DESK</button>
   </div>
 </div>
@@ -63,7 +61,6 @@
 </div>
 
 <div class="bottom-nav">
-
   <a href="categories.html" class="nav-item">
     <div>📱</div>
     <span>Categories</span>
@@ -95,19 +92,19 @@
 </div>
 
 <script src="db.js"></script>
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
   let DB = {
-  users: [], // 👈 Ye line zaruri hai warna error aayega
-  products: [],
-  categories: [],
-  settings: {}
-}
-// ===== FIREBASE CONFIG - APNA CONFIG DAALO YA EMPTY CHHOD DO =====
-const firebaseConfig = {
+    users: [],
+    products: [],
+    categories: [],
+    settings: {}
+  }
+  
+  // ===== FIREBASE CONFIG - APNA CONFIG YAHAN PASTE KARO =====
+  const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -117,38 +114,37 @@ const firebaseConfig = {
   measurementId: "G-ZW1ZR8HETY"
 };
 
-if (firebaseConfig.projectId!== "YOUR_PROJECT_ID" &&!firebase.apps.length) {
-   firebase.initializeApp(firebaseConfig);
-}
-const firebaseDB = firebase.apps.length? firebase.firestore() : null;
+  if (firebaseConfig.projectId!== "YOUR_PROJECT_ID" &&!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const firebaseDB = firebase.apps.length? firebase.firestore() : null;
+  
+  // ===== OTP SYSTEM VARIABLES =====
+  let generatedOTP = '';
+  let currentOrderData = {};
+  let allProducts = [];
 </script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-    if(typeof SANTRA_DB!== 'undefined' && SANTRA_DB.settings){
-        let theme = SANTRA_DB.settings;
-        document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
-        document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
-        document.body.style.color = theme.textColor || '#212121';
-        document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
-        document.body.style.fontSize = theme.fontSize || '16px';
-        if(theme.bgImage){
-          document.body.style.backgroundImage = `url(${theme.bgImage})`;
-          document.body.style.backgroundSize = 'cover';
-          document.body.style.backgroundAttachment = 'fixed';
-        }
-        let logoEl = document.querySelector('.header h1');
-        if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
+  if(typeof SANTRA_DB!== 'undefined' && SANTRA_DB.settings){
+    let theme = SANTRA_DB.settings;
+    document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
+    document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
+    document.body.style.color = theme.textColor || '#212121';
+    document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
+    document.body.style.fontSize = theme.fontSize || '16px';
+    if(theme.bgImage){
+      document.body.style.backgroundImage = `url(${theme.bgImage})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundAttachment = 'fixed';
     }
+    let logoEl = document.querySelector('.header h1');
+    if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
+  }
 });
 
-// ORDER US - Direct WhatsApp
-function openOrderUs(){
-  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
-  window.open(`https://wa.me/91${waNumber}?text=Hi, I want to place an order from SANTRA MALL`, '_blank');
-}
-
-// HELP DESK + ADMIN LOGIN
+// HELP DESK - FIXED WHATSAPP LINK
 function openHelpDesk(){
   let modal = document.createElement('div');
   modal.id = 'helpDeskModal';
@@ -164,7 +160,7 @@ function openHelpDesk(){
           <h4>📞 Customer Support</h4>
           <p><b>Phone:</b> ${SANTRA_DB.settings?.helpdeskPhone || '9829508335'}</p>
           <p><b>Email:</b> ${SANTRA_DB.settings?.helpdeskEmail || 'mansasingh7109@gmail.com'}</p>
-          <p><b>WhatsApp:</b> <a href="https://wa.me/${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}" target="_blank" style="color:#25D366;font-weight:bold;">${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}</a></p>
+          <p><b>WhatsApp:</b> <a href="https://api.whatsapp.com/send?phone=91${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}" target="_blank" style="color:#25D366;font-weight:bold;">${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}</a></p>
           <p><b>Hours:</b> ${SANTRA_DB.settings?.helpdeskHours || 'Mon-Sat: 12 AM - 12 PM'}</p>
           <br>
           <h4>📝 About Us</h4>
@@ -217,16 +213,16 @@ window.onload = function(){
   updateCartCount();
 }
 
-// FIREBASE + LOCAL DONO PRODUCTS
+// FIREBASE + LOCAL PRODUCTS
 async function loadAllProducts(){
   let container = document.getElementById('productList');
   container.innerHTML = '<p style="text-align:center;padding:40px;color:#999;grid-column:1/-1;">Loading products...</p>';
 
-  let allProducts = [];
+  allProducts = [];
 
   if(typeof SANTRA_DB!== 'undefined' && SANTRA_DB.products){
     SANTRA_DB.products.forEach(p => {
-        allProducts.push({...p, source: 'local'});
+      allProducts.push({...p, source: 'local'});
     });
   }
 
@@ -261,8 +257,7 @@ async function loadAllProducts(){
       } else if(p.videos && p.videos[0]){
         mediaHtml = `<video src="${p.videos[0]}" controls></video>`;
       }
-    }
-    else {
+    } else {
       imgUrl = p.img || p.mediaUrl || 'https://via.placeholder.com/300x250?text=No+Image';
       if(p.mediaType === 'image' ||!p.mediaType){
         mediaHtml = `<img src="${imgUrl}" alt="${p.name}" onclick="openProductDetail('${p.id}', 'local')">`;
@@ -284,30 +279,29 @@ async function loadAllProducts(){
         <p><s style="font-size:12px;color:#999;">₹${p.mrp || ''}</s> ₹${p.price}</p>
         <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock || 0}</div>
         <div style="display:flex; gap:8px; margin-top:10px;">
- <button onclick="orderOnWhatsApp('${p.id}', '${p.name}', '${p.price}', '${p.image}', '${p.source || 'local'}')" style="width:100%; padding:15px; background:#25D366; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold;">
-  💬 Order on WhatsApp
-</button>
-</div>
-     
+          <button onclick="orderOnWhatsApp('${p.id}', '${p.name.replace(/'/g,"\\'")}', '${p.price}', '${imgUrl}', '${p.source || 'local'}')" style="width:100%; padding:15px; background:#25D366; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold;">
+            💬 Order on WhatsApp
+          </button>
+        </div>
       </div>
     `;
   });
 }
 
-// ===== PRODUCT DETAIL POPUP - IMAGE PE CLICK PE KHULEGA =====
+// PRODUCT DETAIL POPUP
 function openProductDetail(productId, source){
-    if(source === 'firebase' && firebaseDB){
-        firebaseDB.collection('products').doc(productId).get().then(doc => {
-            if(doc.exists){
-                let p = doc.data();
-                p.id = doc.id;
-                showProductModal(p);
-            }
-        });
-    } else {
-        let p = SANTRA_DB.products.find(pr => pr.id == productId);
-        if(p) showProductModal(p);
-    }
+  if(source === 'firebase' && firebaseDB){
+    firebaseDB.collection('products').doc(productId).get().then(doc => {
+      if(doc.exists){
+        let p = doc.data();
+        p.id = doc.id;
+        showProductModal(p);
+      }
+    });
+  } else {
+    let p = SANTRA_DB.products.find(pr => pr.id == productId);
+    if(p) showProductModal(p);
+  }
 }
 
 function showProductModal(p){
@@ -334,37 +328,38 @@ function showProductModal(p){
         <p style="margin-top:10px;">${p.desc || p.description || 'No description'}</p>
         
         <div style="display:flex; gap:8px; margin-top:15px;">
- <button onclick="addToCart('${p.id}', '${p.source || 'local'}')" style="flex:1; padding:12px; background:#ff6b6b; color:white; border:none; border-radius:6px;">🛒 Add to Cart</button>
-  <button onclick="openCheckoutDirect('${p.id}', '${p.source}||'local')" style="flex:1; padding:12px; background:#4CAF50; color:white; border:none; border-radius:6px;">⚡ Buy Now</button>
-</div>
+          <button onclick="addToCart('${p.id}', '${p.source || 'local'}')" style="flex:1; padding:12px; background:#ff6b6b; color:white; border:none; border-radius:6px;">🛒 Add to Cart</button>
+          <button onclick="openCheckoutDirect('${p.id}', '${p.source || 'local'}')" style="flex:1; padding:12px; background:#4CAF50; color:white; border:none; border-radius:6px;">⚡ Buy Now</button>
+        </div>
+      </div>
     </div>
   `;
   document.body.appendChild(modal);
 }
 
-// DIRECT CHECKOUT - NO LOGIN NEEDED
+// DIRECT CHECKOUT
 function openCheckoutDirect(productId, source){
-    if(source === 'firebase' && firebaseDB){
-        firebaseDB.collection('products').doc(productId).get().then(doc => {
-            if(doc.exists){
-                let product = doc.data();
-                product.id = doc.id;
-                openCheckoutForm(product);
-            } else {
-                alert('Product not found!');
-            }
-        });
-    }
-    else {
-        let product = SANTRA_DB.products.find(p => p.id == productId);
-        if(!product){
-            alert('Product not found!');
-            return;
-        }
+  if(source === 'firebase' && firebaseDB){
+    firebaseDB.collection('products').doc(productId).get().then(doc => {
+      if(doc.exists){
+        let product = doc.data();
+        product.id = doc.id;
         openCheckoutForm(product);
+      } else {
+        alert('Product not found!');
+      }
+    });
+  } else {
+    let product = SANTRA_DB.products.find(p => p.id == productId);
+    if(!product){
+      alert('Product not found!');
+      return;
     }
+    openCheckoutForm(product);
+  }
 }
 
+// CHECKOUT FORM WITH OTP
 function openCheckoutForm(product){
   let modal = document.createElement('div');
   modal.id = 'checkoutModal';
@@ -382,31 +377,48 @@ function openCheckoutForm(product){
             <p>${product.name} - ₹${product.price}</p>
           </div>
 
-          <label>Full Name *</label>
-          <input type="text" name="Name" placeholder="Your Name" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+          <div id="customerDetailsForm">
+            <label>Full Name *</label>
+            <input type="text" id="custName" placeholder="Your Name" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
 
-          <label>Mobile Number *</label>
-          <input type="tel" name="Mobile" placeholder="10 digit mobile" maxlength="10" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+            <label>Mobile Number *</label>
+            <input type="tel" id="custMobile" placeholder="10 digit mobile" maxlength="10" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
 
-          <label>Email</label>
-          <input type="email" name="Email" placeholder="your@email.com" style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+            <label>Email</label>
+            <input type="email" id="custEmail" placeholder="your@email.com" style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
 
-          <label>Full Address *</label>
-          <textarea name="Address" rows="3" placeholder="House no, Street, City, PIN" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;"></textarea>
+            <label>Full Address *</label>
+            <textarea id="custAddress" rows="3" placeholder="House no, Street, City, PIN" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;"></textarea>
 
-          <div id="customerFieldsBox"></div>
+            <div id="customerFieldsBox"></div>
 
-          <label>Payment Mode *</label>
-          <select name="Payment_Mode" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
-            <option value="">-- Select Payment --</option>
-            <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-            <option value="UPI">UPI / PhonePe / Paytm</option>
-            <option value="Bank Transfer">Bank Transfer</option>
-          </select>
+            <label>Payment Mode *</label>
+            <select id="custPayment" required style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+              <option value="">-- Select Payment --</option>
+              <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+              <option value="UPI">UPI / PhonePe / Paytm</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+            </select>
 
-          <button type="button" onclick="submitOrderToWhatsApp('${product.id}', '${product.name}', ${product.price})" style="width:100%;padding:15px;background:#25D366;font-size:18px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
-            ✅ Submit Order on WhatsApp
-          </button>
+            <button type="button" onclick="sendOTPToCustomer('${product.id}', '${product.name.replace(/'/g,"\\'")}', ${product.price})" id="sendOTPBtn" style="width:100%;padding:15px;background:#007bff;font-size:16px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
+              📲 Send OTP to Verify
+            </button>
+          </div>
+
+          <div id="otpVerifySection" style="display:none;">
+            <div style="background:#d4edda;padding:15px;border-radius:8px;margin:15px 0;">
+              <p style="color:#155724;margin:0;">✅ OTP sent to your mobile via WhatsApp!</p>
+            </div>
+            <label>Enter 6 Digit OTP *</label>
+            <input type="text" id="enteredOTP" placeholder="Enter OTP" maxlength="6" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;font-size:18px;text-align:center;letter-spacing:5px;">
+            <p id="otpError" style="color:red;font-size:12px;display:none;"></p>
+            <button type="button" onclick="verifyOTPAndPlaceOrder()" style="width:100%;padding:15px;background:#25D366;font-size:18px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
+              ✅ Verify OTP & Place Order
+            </button>
+            <button type="button" onclick="resendOTP()" style="width:100%;padding:10px;background:#6c757d;font-size:14px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:8px;">
+              🔄 Resend OTP
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -415,133 +427,134 @@ function openCheckoutForm(product){
   loadAdminFields();
 }
 
-function closeCheckoutModal(){
-  let modal = document.getElementById('checkoutModal');
-  if(modal) modal.remove();
-}
-
-// Submit Order to WhatsApp + Save to DB for Admin
-function submitOrderToWhatsApp(pid, pname, pprice){
-  let form = document.getElementById('orderForm');
-  let name = form.Name.value;
-  let mobile = form.Mobile.value;
-  let address = form.Address.value;
-  let payment = form.Payment_Mode.value;
-  let email = form.Email.value;
+// SEND OTP TO CUSTOMER - WHATSAPP LINK FIX
+function sendOTPToCustomer(pid, pname, pprice){
+  let name = document.getElementById('custName').value.trim();
+  let mobile = document.getElementById('custMobile').value.trim();
+  let address = document.getElementById('custAddress').value.trim();
+  let payment = document.getElementById('custPayment').value;
+  let email = document.getElementById('custEmail').value.trim();
 
   if(!name ||!mobile ||!address ||!payment){
     alert('Please fill all required fields!');
     return;
   }
+  
+  if(mobile.length!== 10 || isNaN(mobile)){
+    alert('Please enter valid 10 digit mobile number!');
+    return;
+  }
 
-  // 1. Save to local DB for Admin Dashboard
-  if(!SANTRA_DB.orders) SANTRA_DB.orders = [];
-  let orderData = {
-    id: Date.now(),
-    uid: 0,
-    customerName: name,
-    mobile: mobile,
-    email: email,
-    address: address,
-    paymentMode: payment,
-    items: [{id: pid, name: pname, price: pprice, qty: 1}],
-    total: pprice,
-    status: 'Confirmed',
-    time: new Date().toISOString()
+  generatedOTP = Math.floor(100000 + Math.random() * 900000);
+  
+  currentOrderData = {
+    pid, pname, pprice, name, mobile, email, address, payment
   };
-  SANTRA_DB.orders.push(orderData);
-  saveDB();
+  
+  let otpMsg = `SANTRA MALL - OTP Verification
 
-  // 2. Send to WhatsApp
-  let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
-  let msg = `🛒 *New Order - SANTRA MALL*\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${address}\nPayment: ${payment}\n\n*Product:*\n${pname} - ₹${pprice}\n\n*Total: ₹${pprice}*`;
-  window.open(`https://wa.me/91${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+Hello ${name},
 
-  closeCheckoutModal();
-  alert('✅ Order placed successfully! We will contact you soon.');
+Your OTP is: *${generatedOTP}*
+
+Enter this OTP on website to confirm your order.
+
+Valid for 10 minutes.
+Do not share with anyone.`;
+  
+  // FIXED: Use api.whatsapp.com instead of wa.me to avoid ERR_UNKNOWN_URL_SCHEME
+  let customerWA = `https://api.whatsapp.com/send?phone=91${mobile}&text=${encodeURIComponent(otpMsg)}`;
+  window.open(customerWA, '_blank');
+  
+  document.getElementById('customerDetailsForm').style.display = 'none';
+  document.getElementById('otpVerifySection').style.display = 'block';
 }
 
-// Admin Ke Extra Fields Load Karo
-function loadAdminFields() {
-  let fields = JSON.parse(localStorage.getItem('CUSTOMER_FORM_FIELDS')) || [];
+// VERIFY OTP AND PLACE ORDER - FIREBASE BACKUP + WHATSAPP FIX
+function verifyOTPAndPlaceOrder(){
+  let enteredOTP = document.getElementById('enteredOTP').value.trim();
+  let errorEl = document.getElementById('otpError');
+  
+  if(enteredOTP == generatedOTP){
+    let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
+    
+    // NO EMOJI - Fix %EF%BF%BD encoding issue
+    let msg = `New Order - SANTRA MALL
+OTP Verified: ${generatedOTP}
 
-  if(fields.length === 0) {
-    document.getElementById('customerFieldsBox').innerHTML = '';
-    return;
-  }
+Customer Details:
+Name: ${currentOrderData.name}
+Mobile: ${currentOrderData.mobile}
+Email: ${currentOrderData.email}
+Address: ${currentOrderData.address}
+Payment: ${currentOrderData.payment}
 
-  let html = '<hr style="margin:20px 0;border:1px solid #ddd;"><p style="color:#FF6B35;font-weight:bold;margin-bottom:10px;">Additional Details:</p>';
+Product:
+${currentOrderData.pname} - Rs.${currentOrderData.pprice}
 
-  fields.forEach(f => {
-    html += `<label style="display:block;margin-top:12px;">${f.label} ${f.required? '*' : ''}</label>`;
-
-    if(f.type === 'textarea') {
-      html += `<textarea name="${f.name}" rows="3" placeholder="${f.placeholder}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;"></textarea>`;
+Total: Rs.${currentOrderData.pprice}`;
+    
+    // FIXED: Use api.whatsapp.com instead of wa.me
+    let whatsappURL = `https://api.whatsapp.com/send?phone=91${waNumber}&text=${encodeURIComponent(msg)}`;
+    window.open(whatsappURL, '_blank');
+    
+    // 1. SAVE TO LOCAL DB
+    if(!SANTRA_DB.orders) SANTRA_DB.orders = [];
+    let orderData = {
+      id: Date.now(),
+      uid: 0,
+      customerName: currentOrderData.name,
+      mobile: currentOrderData.mobile,
+      email: currentOrderData.email,
+      address: currentOrderData.address,
+      paymentMode: currentOrderData.payment,
+      items: [{id: currentOrderData.pid, name: currentOrderData.pname, price: currentOrderData.pprice, qty: 1}],
+      total: currentOrderData.pprice,
+      status: 'Confirmed',
+      otpVerified: true,
+      time: new Date().toISOString()
+    };
+    SANTRA_DB.orders.push(orderData);
+    saveDB();
+    
+    // 2. SAVE TO FIREBASE - PERMANENT BACKUP
+    if(firebaseDB){
+      firebaseDB.collection('orders').add(orderData)
+    .then(() => console.log('✅ Order saved to Firebase Backup'))
+    .catch(err => console.log('Firebase save error:', err));
     }
-    else if(f.type === 'select') {
-      let opts = f.options? f.options.split(',') : [];
-      html += `<select name="${f.name}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
-        <option value="">-- Select --</option>
-        ${opts.map(o => `<option value="${o.trim()}">${o.trim()}</option>`).join('')}
-      </select>`;
-    }
-    else {
-      html += `<input type="${f.type}" name="${f.name}" placeholder="${f.placeholder}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">`;
-    }
-  });
-
-  document.getElementById('customerFieldsBox').innerHTML = html;
-}
-
-function updateCartCount(){
-    if(typeof SANTRA_DB === 'undefined' ||!SANTRA_DB.cart) return;
-    let count = SANTRA_DB.cart.length;
-    document.getElementById('cartCount').textContent = count;
-}
-
-function openOrdersPopup(){
-  document.getElementById('ordersModal').classList.remove('hide');
-}
-
-function closeOrdersPopup(){
-  document.getElementById('ordersModal').classList.add('hide');
-}
-
-function trackOrderByMobile(){
-  let mobile = document.getElementById('trackMobile').value;
-  if(!mobile){
-    alert('Please enter mobile number');
-    return;
-  }
-  let userOrders = SANTRA_DB.orders? SANTRA_DB.orders.filter(o => o.mobile == mobile).reverse() : [];
-  let container = document.getElementById('ordersPopupList');
-
-  if(userOrders.length === 0){
-    container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No orders found for this number</p>';
+    
+    closeCheckoutModal();
+    alert('✅ Order placed successfully! OTP verified.');
+    generatedOTP = '';
+    currentOrderData = {};
+    
   } else {
-    container.innerHTML = userOrders.map(order => `
-      <div class="order-box">
-        <h4>Order #${order.id}</h4>
-        <p><b>Status:</b> ${order.status}</p>
-        <p><b>Total:</b> ₹${order.total}</p>
-        <p><b>Date:</b> ${new Date(order.time).toLocaleString()}</p>
-      </div>
-    `).join('');
+    errorEl.innerText = '❌ Invalid OTP! Please check and try again.';
+    errorEl.style.display = 'block';
   }
 }
-</script>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
+function resendOTP(){
+  if(currentOrderData.mobile){
+    sendOTPToCustomer(currentOrderData.pid, currentOrderData.pname, currentOrderData.pprice);
+    document.getElementById('otpError').innerText = 'OTP resent successfully!';
+    document.getElementById('otpError').style.color = 'green';
+    document.getElementById('otpError').style.display = 'block';
   }
-</script>
-<script>
-// ===== ADD TO CART FUNCTION =====
+}
+
+function closeCheckoutModal(){
+  let modal = document.getElementById('checkoutModal');
+  if(modal) modal.remove();
+  generatedOTP = '';
+  currentOrderData = {};
+}
+
+// ADD TO CART
 function addToCart(productId, source) {
   let CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
   
-  // Product dhundo - firebase ya local
   let product = null;
   if(source === 'firebase') {
     product = allProducts.find(p => p.id == productId);
@@ -562,194 +575,128 @@ function addToCart(productId, source) {
   }
   
   localStorage.setItem('santra_cart', JSON.stringify(CART));
-  
-  // Cart badge update karo
-  let count = CART.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').innerText = count;
-  
+  updateCartCount();
   alert(`✅ ${product.name} cart me add ho gaya!`);
 }
 
-// Page load pe cart count dikhao
-window.addEventListener('load', () => {
+function updateCartCount(){
   let CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
   let count = CART.reduce((sum, item) => sum + item.qty, 0);
   document.getElementById('cartCount').innerText = count;
+}
+
+window.addEventListener('load', () => {
+  updateCartCount();
 });
-// ===== END =====
-</script>
-<script>
-function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
-  // 1. 4-digit OTP generate karo
-  let otp = Math.floor(1000 + Math.random() * 9000);
-  
-  // 2. OTP + Product info localStorage me save karo 10 min ke liye
-  let pendingOrder = {
-    productId: productId,
-    productName: productName,
-    productPrice: productPrice,
-    otp: otp,
-    timestamp: Date.now()
-  };
-  localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
-  
-  // 3. Tera WhatsApp number
-  let yourWhatsAppNumber = "919829508335"; // ← Tera number
-  
-  // 4. Message banao
-  let message = `Hi SANTRA MALL! 👋\n\nI want to order:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nPlease send me order form.`;
-  
-  // 5. WhatsApp khol do
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  // 6. Customer ko alert dikhao
-  alert(`✅ WhatsApp khul gaya!\n\nAb main aapko OTP aur Order Form bhejungi WhatsApp pe.\n\nOTP: ${otp} (Note kar lo)`);
-  
-  closeProduct();
+
+// ORDERS POPUP
+function openOrdersPopup(){
+  document.getElementById('ordersModal').classList.remove('hide');
 }
 
-<script>
-function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
-  // 1. 4-digit OTP generate karo
-  let otp = Math.floor(1000 + Math.random() * 9000);
-  
-  // 2. OTP + Product info localStorage me save karo 10 min ke liye
-  let pendingOrder = {
-    productId: productId,
-    productName: productName,
-    productPrice: productPrice,
-    otp: otp,
-    timestamp: Date.now()
-  };
-  localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
-  
-  // 3. Tera WhatsApp number
-  let yourWhatsAppNumber = "919829508335"; // ← Tera number
-  
-  // 4. Message banao
-  let message = `Hi SANTRA MALL! 👋\n\nI want to order:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nPlease send me order form.`;
-  
-  // 5. WhatsApp khol do
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  // 6. Customer ko alert dikhao
-  alert(`✅ WhatsApp khul gaya!\n\nAb main aapko OTP aur Order Form bhejungi WhatsApp pe.\n\nOTP: ${otp} (Note kar lo)`);
-  
-  closeProduct();
-}
-</script>
-<script>
-function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
-  // 1. OTP generate karo
-  let otp = Math.floor(1000 + Math.random() * 9000);
-  
-  // 2. Product + OTP save karo localStorage me 10 min ke liye
-  let pendingOrder = {
-    productId: productId,
-    productName: productName,
-    productPrice: productPrice,
-    otp: otp,
-    timestamp: Date.now()
-  };
-  localStorage.setItem('pending_whatsapp_order', JSON.stringify(pendingOrder));
-  
-  // 3. Tera number
-  let yourWhatsAppNumber = "919829508335"; 
-  
-  // 4. Message - OTP nahi bhejna yahan
-  let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
-  
-  // 5. WhatsApp kholo
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  // 6. Alert - OTP mat dikhao
-  alert(`✅ WhatsApp khul gaya!\n\nMain aapko WhatsApp pe OTP bhejungi.\nUske baad form link bhejungi.\n\nMere reply ka wait karein 🙏`);
-  
-  closeProduct();
-}
-</script>
-<script>
-// WhatsApp Order Function
-function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
-  // Har bar naya OTP generate hoga
-  let otp = Math.floor(1000 + Math.random() * 9000);
-  
-  // Product ke hisab se alag OTP save karo
-  let pendingOrder = {
-    productId: productId,
-    productName: productName,
-    productPrice: productPrice,
-    otp: otp,
-    timestamp: Date.now()
-  };
-  localStorage.setItem('pending_whatsapp_order_' + productId, JSON.stringify(pendingOrder));
-  
-  let yourWhatsAppNumber = "919829508335"; 
-  let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
-  
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  alert(`✅ WhatsApp khul gaya!\n\nMain aapko WhatsApp pe OTP bhejungi.\nUske baad form link bhejungi.\n\nMere reply ka wait karein 🙏`);
-  
-  closeProduct();
+function closeOrdersPopup(){
+  document.getElementById('ordersModal').classList.add('hide');
 }
 
-// ORDER US button ke liye bhi same function
+// TRACK ORDER - LOCAL + FIREBASE DONO SE
+async function trackOrderByMobile(){
+  let mobile = document.getElementById('trackMobile').value;
+  if(!mobile){
+    alert('Please enter mobile number');
+    return;
+  }
+  
+  let userOrders = [];
+  
+  // 1. Local orders
+  if(SANTRA_DB.orders){
+    userOrders = SANTRA_DB.orders.filter(o => o.mobile == mobile);
+  }
+  
+  // 2. Firebase orders bhi check karo
+  if(firebaseDB){
+    try {
+      const snapshot = await firebaseDB.collection('orders').where('mobile', '==', mobile).get();
+      snapshot.forEach(doc => {
+        userOrders.push(doc.data());
+      });
+    } catch(err) {
+      console.log('Firebase track error:', err);
+    }
+  }
+  
+  // Sort by time
+  userOrders.sort((a,b) => new Date(b.time) - new Date(a.time));
+  
+  let container = document.getElementById('ordersPopupList');
+
+  if(userOrders.length === 0){
+    container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No orders found for this number</p>';
+  } else {
+    container.innerHTML = userOrders.map(order => `
+      <div class="order-box" style="background:#f9f9f9;padding:15px;border-radius:8px;margin-bottom:10px;">
+        <h4>Order #${order.id}</h4>
+        <p><b>Status:</b> ${order.status} ${order.otpVerified? '✅ Verified' : ''}</p>
+        <p><b>Total:</b> ₹${order.total}</p>
+        <p><b>Date:</b> ${new Date(order.time).toLocaleString()}</p>
+      </div>
+    `).join('');
+  }
+}
+
+// ADMIN FIELDS
+function loadAdminFields() {
+  let fields = JSON.parse(localStorage.getItem('CUSTOMER_FORM_FIELDS')) || [];
+  if(fields.length === 0) {
+    document.getElementById('customerFieldsBox').innerHTML = '';
+    return;
+  }
+  let html = '<hr style="margin:20px 0;border:1px solid #ddd;"><p style="color:#FF6B35;font-weight:bold;margin-bottom:10px;">Additional Details:</p>';
+  fields.forEach(f => {
+    html += `<label style="display:block;margin-top:12px;">${f.label} ${f.required? '*' : ''}</label>`;
+    if(f.type === 'textarea') {
+      html += `<textarea name="${f.name}" rows="3" placeholder="${f.placeholder}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;"></textarea>`;
+    } else if(f.type === 'select') {
+      let opts = f.options? f.options.split(',') : [];
+      html += `<select name="${f.name}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+        <option value="">-- Select --</option>
+        ${opts.map(o => `<option value="${o.trim()}">${o.trim()}</option>`).join('')}
+      </select>`;
+    } else {
+      html += `<input type="${f.type}" name="${f.name}" placeholder="${f.placeholder}" ${f.required? 'required' : ''} style="width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">`;
+    }
+  });
+  document.getElementById('customerFieldsBox').innerHTML = html;
+}
+
+// ===== SINGLE ORDER WHATSAPP FUNCTION WITH OTP =====
+
+function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
+  if(source === 'firebase' && firebaseDB){
+    firebaseDB.collection('products').doc(productId).get().then(doc => {
+      if(doc.exists){
+        let product = doc.data();
+        product.id = doc.id;
+        openCheckoutForm(product);
+      }
+    });
+  } else {
+    let product = SANTRA_DB.products.find(p => p.id == productId);
+    if(product) openCheckoutForm(product);
+  }
+}
+
+// ORDER US BUTTON
 function orderOnWhatsAppGeneral(){
-  let yourWhatsAppNumber = "919829508335"; 
-  let message = `Hi SANTRA MALL! 👋\n\nMujhe order karna hai. Please OTP aur form bhejein.`;
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
+  alert('Please select a product from the list to place an order with OTP verification.');
 }
 </script>
-<script>
-// Product wala button
-function orderOnWhatsApp(productId, productName, productPrice, productImage, source) {
-  let otp = Math.floor(1000 + Math.random() * 9000);
-  
-  let pendingOrder = {
-    productId: productId,
-    productName: productName,
-    productPrice: productPrice,
-    otp: otp,
-    timestamp: Date.now()
-  };
-  localStorage.setItem('pending_whatsapp_order_' + productId, JSON.stringify(pendingOrder));
-  
-  let yourWhatsAppNumber = "919829508335"; 
-  let message = `Hi SANTRA MALL! 👋\n\nMujhe ye order karna hai:\n\n📦 *${productName}*\n💰 Price: ₹${productPrice}\n\nOTP aur Order Form bhej dijiye.`;
-  
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  alert(`✅ WhatsApp khul gaya!\n\nMain aapko WhatsApp pe OTP bhejungi.\nMere reply ka wait karein 🙏`);
-  closeProduct();
-}
 
-// Header wala ORDER US button
-function orderOnWhatsAppGeneral(){
-  let otp = Math.floor(1000 + Math.random() * 9000);
-  
-  let pendingOrder = {
-    productId: 'general',
-    productName: 'General Inquiry',
-    productPrice: '0',
-    otp: otp,
-    timestamp: Date.now()
-  };
-  localStorage.setItem('pending_whatsapp_order_general', JSON.stringify(pendingOrder));
-  
-  let yourWhatsAppNumber = "919829508335"; 
-  let message = `Hi SANTRA MALL! 👋\n\nMujhe order karna hai.\nOTP aur Order Form bhej dijiye.`;
-  let whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  alert(`✅ WhatsApp khul gaya!\n\nMain aapko OTP bhejungi WhatsApp pe.`);
-}
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
 </script>
+
 </body>
 </html>
