@@ -35,6 +35,7 @@
     table{width:100%;border-collapse:collapse;margin-top:15px;}
     th,td{padding:10px;text-align:left;border-bottom:1px solid var(--border);}
     th{background:#0f172a;}
+ .table-wrapper{overflow-x:auto;}
 .hide{display:none!important;}
 .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
 .msg-success{background:#065f46;color:#d1fae5}
@@ -126,7 +127,7 @@
       <label>Size & Price - Har line me ek</label>
       <textarea id="pSizePrice" rows="4" placeholder="S-12000&#10;M-13005&#10;L-14000&#10;XL-15000"></textarea>
 
-      <h3 class="section-title">📁 Media Upload - Base64 + ImgBB Fallback</h3>
+      <h3 class="section-title">📁 Media Upload - Base64 Mobile Safe</h3>
 
       <label>🖼️ Image</label>
       <button class="media-btn btn-gallery" onclick="uploadFromGallery('image')">📁 From Gallery - Base64</button>
@@ -152,24 +153,26 @@
       <label>Product Description</label>
       <textarea id="pDesc" rows="3" placeholder="Product ke baare me likho..."></textarea>
 
-      <button onclick="saveProduct()" style="width:100%;padding:15px;font-size:16px;">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
+      <button id="saveBtn" onclick="saveProduct()" style="width:100%;padding:15px;font-size:16px;">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
 
       <h3 class="section-title" style="margin-top:30px;">📦 Product List - SAB PRODUCTS YAHAN HAIN</h3>
       <button onclick="exportCSV()" style="background:#3b82f6;">📊 Export CSV</button>
 
-      <table id="productTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Media</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="productTableBody"></tbody>
-      </table>
+      <div class="table-wrapper">
+        <table id="productTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Media</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th style="min-width:120px;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- CATEGORIES -->
@@ -252,6 +255,7 @@
 
 <script>
 // ===== FIREBASE CONFIG - APNA CONFIG YAHAN PASTE KARO =====
+// Firebase Console > Project Settings > General > Your apps > Web app
 
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
@@ -261,9 +265,7 @@ const firebaseConfig = {
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-};
-
-// FIX: Firebase config check
+}; 
 if (!firebase.apps.length) {
   if(firebaseConfig.apiKey === "AIzaSyXXXXXXXXXXXXXXXXXXXXX"){
     alert('⚠️ FIREBASE CONFIG KHALI HAI!\n\nLine 147 me apna Firebase config paste karo tabhi kaam karega.');
@@ -290,11 +292,13 @@ window.onload = function(){
   loadCategories();
 }
 
+// FIX 3: LOGOUT JALDI - sessionStorage clear + replace
 function logout(){
   localStorage.removeItem('current_admin');
   localStorage.removeItem('admin_logged_in');
+  sessionStorage.clear();
   alert('✅ Logged out successfully');
-  window.location.href = 'index.html';
+  window.location.replace('index.html');
 }
 
 function openTab(tabName){
@@ -343,7 +347,7 @@ function openFirebasePanel(){
           🔄 Sync Local Data to Firebase
         </button>
         <p style="font-size:12px;color:#94a3b8;margin-top:15px;">
-          <b>Note:</b> Images ab Base64 + ImgBB fallback se save ho rahi hain. Firebase Storage ki zarurat nahi.
+          <b>Note:</b> Images ab Base64 se save ho rahi hain - 100% Mobile Safe.
         </p>
       </div>
     </div>
@@ -404,7 +408,7 @@ async function syncLocalToFirebase(){
   }
 }
 
-// ===== IMGBB UPLOAD - BASE64 PRIMARY + IMGBB FALLBACK - MOBILE FIX =====
+// ===== BASE64 UPLOAD - COMPRESS + 2MB LIMIT =====
 async function uploadFromGallery(type){
   if(type!== 'image'){
     alert('Video/Document ke liye URL use karo abhi');
@@ -418,71 +422,71 @@ async function uploadFromGallery(type){
     let file = e.target.files[0];
     if(!file) return;
 
-    if(file.size > 5000000){ // 5MB limit for Base64
-      alert('Photo 5MB se chhoti honi chahiye Base64 ke liye. Ya ImgBB try karo.');
+    // FIX 1: 2MB limit - Firebase me 1MB se jyada field save nahi hota
+    if(file.size > 2000000){
+      alert('⚠️ Photo 2MB se chhoti honi chahiye.\n\nTip: Screenshot lo ya WhatsApp se compress karke bhejo.');
       return;
     }
 
-    document.getElementById('imagePreview').innerHTML = '<p style="color:#f59e0b;">⏳ Processing... Please wait</p>';
+    document.getElementById('imagePreview').innerHTML = '<p style="color:#f59e0b;">⏳ Compressing... Please wait</p>';
 
-    // METHOD 1: Base64 - 100% Mobile Compatible, No CORS
     try {
-      let reader = new FileReader();
-      reader.onload = function(event){
-        let base64String = event.target.result;
-        document.getElementById('imagePreview').innerHTML = `
-          <img src="${base64String}" style="max-width:150px;border:2px solid #10b981;border-radius:4px;">
-          <p style="font-size:10px;color:#10b981;">✅ Base64 Uploaded - 100% Mobile Safe</p>
-          <p style="font-size:10px;color:#94a3b8;">Size: ${(file.size/1024).toFixed(0)}KB</p>
-        `;
-        document.getElementById('pImageUrl').value = base64String;
-        document.getElementById('pImageUrlOriginal').value = base64String;
-      };
-      reader.readAsDataURL(file);
-      return; // Success with Base64
+      // FIX 2: Image compress karo - 800px max width, 70% quality
+      let compressedBase64 = await compressImage(file, 800, 0.7);
+
+      document.getElementById('imagePreview').innerHTML = `
+        <img src="${compressedBase64}" style="max-width:150px;border:2px solid #10b981;border-radius:4px;">
+        <p style="font-size:10px;color:#10b981;">✅ Compressed & Ready</p>
+        <p style="font-size:10px;color:#94a3b8;">Size: ${(compressedBase64.length/1024).toFixed(0)}KB</p>
+      `;
+      document.getElementById('pImageUrl').value = compressedBase64;
+      document.getElementById('pImageUrlOriginal').value = compressedBase64;
     } catch(err){
-      console.log('Base64 failed:', err);
-    }
-
-    // METHOD 2: Fallback - ImgBB only if Base64 fails
-    try {
-      let formData = new FormData();
-      formData.append('image', file);
-
-      let res = await fetch('https://api.imgbb.com/1/upload?key=6b5d24a382d90e8bbf98fe6c1a982681', {
-        method: 'POST',
-        body: formData
-      });
-
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-
-      let data = await res.json();
-
-      if(data.success){
-        let mediumUrl = data.data.medium.url || data.data.url;
-        let originalUrl = data.data.url;
-
-        document.getElementById('imagePreview').innerHTML = `
-          <img src="${mediumUrl}" style="max-width:150px;border:2px solid #10b981;border-radius:4px;">
-          <p style="font-size:10px;color:#10b981;">✅ ImgBB Uploaded</p>
-        `;
-        document.getElementById('pImageUrl').value = mediumUrl;
-        document.getElementById('pImageUrlOriginal').value = originalUrl;
-      } else {
-        throw new Error('ImgBB error');
-      }
-    } catch(err){
-      console.log('ImgBB Error:', err);
-      document.getElementById('imagePreview').innerHTML = '<p style="color:#ef4444;">❌ Upload Failed.<br><b>Solution:</b> "From URL" button use karo.</p>';
+      console.log('Compress Error:', err);
+      document.getElementById('imagePreview').innerHTML = '<p style="color:#ef4444;">❌ Error. "From URL" use karo.</p>';
     }
   }
   input.click();
 }
+// FIX 3: IMAGE COMPRESS FUNCTION - Base64 size kam karne ke liye
+function compressImage(file, maxWidth, quality){
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.onload = function(e){
+      let img = new Image();
+      img.onload = function(){
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+
+        // Aspect ratio maintain karke resize
+        let width = img.width;
+        let height = img.height;
+        if(width > maxWidth){
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress to JPEG with quality
+        let compressed = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressed);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function uploadFromUrl(type){
   let url = prompt('Enter ' + type + ' URL:');
   if(url){
     if(type==='image') {
-      document.getElementById('imagePreview').innerHTML = `<img src="${url}" style="max-width:150px;border-radius:4px;">`;
+      document.getElementById('imagePreview').innerHTML = `<img src="${url}" style="max-width:150px;border-radius:4px;" onerror="this.src='https://via.placeholder.com/150?text=Invalid+URL'">`;
       document.getElementById('pImageUrl').value = url;
       document.getElementById('pImageUrlOriginal').value = url;
     }
@@ -498,7 +502,7 @@ function browseComputer(type){
   uploadFromGallery(type);
 }
 
-// SAVE PRODUCT - FIXED VERSION
+// SAVE PRODUCT - WITH EDIT MODE
 async function saveProduct(){
   let name = document.getElementById('pName').value.trim();
   let price = document.getElementById('pPrice').value.trim();
@@ -521,10 +525,7 @@ async function saveProduct(){
     return;
   }
 
-  // FIX: Category se sirf naam nikalo - object nahi
   let catName = categoryVal;
-
-  // FIX: Image URL se sirf src lo, HTML tag nahi
   let imgUrl = document.getElementById('pImageUrl').value;
   let imgUrlOriginal = document.getElementById('pImageUrlOriginal').value;
 
@@ -533,10 +534,10 @@ async function saveProduct(){
     mrp: document.getElementById('pMrp').value || price,
     price: Number(price),
     stock: Number(stock),
-    category: catName, // ← FIXED: Sirf string
+    category: catName,
     desc: document.getElementById('pDesc').value,
     sizePrice: document.getElementById('pSizePrice').value,
-    imageUrl: imgUrl, // ← FIXED: Sirf URL ya Base64
+    imageUrl: imgUrl,
     imageUrlOriginal: imgUrlOriginal,
     created: new Date().toISOString()
   };
@@ -545,24 +546,75 @@ async function saveProduct(){
     await firebaseDB.collection('products').add(productData);
     alert('✅ Product saved! HOME PAGE PE TURANT DIKHEGA');
     loadProducts();
-    // Clear form
-    document.getElementById('pName').value = '';
-    document.getElementById('pMrp').value = '';
-    document.getElementById('pPrice').value = '';
-    document.getElementById('pStock').value = '';
-    document.getElementById('pCategory').value = '-- Select --';
-    document.getElementById('pSizePrice').value = '';
-    document.getElementById('pDesc').value = '';
-    document.getElementById('pImageUrl').value = '';
-    document.getElementById('pImageUrlOriginal').value = '';
-    document.getElementById('imagePreview').innerHTML = '';
+    clearForm();
   } catch(err) {
     alert('❌ Error saving product: ' + err.message);
     console.log(err);
   }
 }
 
-// LOAD PRODUCTS
+// UPDATE PRODUCT - EDIT MODE
+async function updateProduct(id){
+  let name = document.getElementById('pName').value.trim();
+  let price = document.getElementById('pPrice').value.trim();
+  let stock = document.getElementById('pStock').value.trim();
+  let categoryVal = document.getElementById('pCategory').value;
+
+  if(!name ||!price ||!stock){
+    alert('Please fill required fields: Name, Price, Stock!');
+    return;
+  }
+
+  if(categoryVal === '-- Select --'){
+    alert('Please select a category!');
+    return;
+  }
+
+  let imgUrl = document.getElementById('pImageUrl').value;
+  let imgUrlOriginal = document.getElementById('pImageUrlOriginal').value;
+
+  let productData = {
+    name: name,
+    mrp: document.getElementById('pMrp').value || price,
+    price: Number(price),
+    stock: Number(stock),
+    category: categoryVal,
+    desc: document.getElementById('pDesc').value,
+    sizePrice: document.getElementById('pSizePrice').value,
+    imageUrl: imgUrl,
+    imageUrlOriginal: imgUrlOriginal,
+    updated: new Date().toISOString()
+  };
+
+  try {
+    await firebaseDB.collection('products').doc(id).update(productData);
+    alert('✅ Product updated successfully!');
+    loadProducts();
+    clearForm();
+    // Reset button back to Save
+    let saveBtn = document.getElementById('saveBtn');
+    saveBtn.innerHTML = '💾 Save Product - HOME PAGE PE TURANT DIKHEGA';
+    saveBtn.onclick = function(){ saveProduct(); };
+  } catch(err) {
+    alert('❌ Error updating product: ' + err.message);
+    console.log(err);
+  }
+}
+
+function clearForm(){
+  document.getElementById('pName').value = '';
+  document.getElementById('pMrp').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pStock').value = '';
+  document.getElementById('pCategory').value = '-- Select --';
+  document.getElementById('pSizePrice').value = '';
+  document.getElementById('pDesc').value = '';
+  document.getElementById('pImageUrl').value = '';
+  document.getElementById('pImageUrlOriginal').value = '';
+  document.getElementById('imagePreview').innerHTML = '';
+}
+
+// LOAD PRODUCTS - FIXED ACTION + [object Object] FIX
 async function loadProducts(){
   let tbody = document.getElementById('productTableBody');
   tbody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
@@ -573,16 +625,19 @@ async function loadProducts(){
     querySnapshot.forEach((doc) => {
       let p = doc.data();
       total++;
+      // FIX: Category object ko string me convert karo
+      let catName = typeof p.category === 'object'? (p.category.name || p.category.id || 'Unknown') : p.category;
+
       tbody.innerHTML += `
         <tr>
-          <td>${doc.id.substring(0,8)}</td>
-          <td><img src="${p.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onerror="this.src='https://via.placeholder.com/40'"></td>
+          <td style="font-size:11px;">${doc.id.substring(0,6)}</td>
+          <td><img src="${p.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onerror="this.src='https://via.placeholder.com/40?text=No+Img'"></td>
           <td>${p.name}</td>
-          <td>${p.category || 'General'}</td>
+          <td>${catName || 'General'}</td>
           <td>₹${p.price}</td>
-          <td>
-            <button class="btn-edit" onclick="editProduct('${doc.id}')">✏️</button>
-            <button class="btn-del" onclick="deleteProduct('${doc.id}')">🗑️</button>
+          <td style="min-width:120px;">
+            <button class="btn-edit" onclick="editProduct('${doc.id}')" style="padding:4px 8px;margin:2px;font-size:11px;">✏️ Edit</button>
+            <button class="btn-del" onclick="deleteProduct('${doc.id}')" style="padding:4px 8px;margin:2px;font-size:11px;">🗑️ Del</button>
           </td>
         </tr>
       `;
@@ -601,10 +656,30 @@ async function deleteProduct(id){
   }
 }
 
-function editProduct(id){
-  alert('Edit feature - Coming soon');
-}
+// EDIT PRODUCT - LOAD DATA IN FORM
+async function editProduct(id){
+  let doc = await firebaseDB.collection('products').doc(id).get();
+  let p = doc.data();
 
+  document.getElementById('pName').value = p.name;
+  document.getElementById('pMrp').value = p.mrp || '';
+  document.getElementById('pPrice').value = p.price;
+  document.getElementById('pStock').value = p.stock;
+  document.getElementById('pCategory').value = p.category;
+  document.getElementById('pSizePrice').value = p.sizePrice || '';
+  document.getElementById('pDesc').value = p.desc || '';
+  document.getElementById('pImageUrl').value = p.imageUrl;
+  document.getElementById('pImageUrlOriginal').value = p.imageUrlOriginal || p.imageUrl;
+  document.getElementById('imagePreview').innerHTML = `<img src="${p.imageUrl}" style="max-width:150px;border:2px solid #10b981;border-radius:4px;">`;
+
+  // Save button ko Update me badal do
+  let saveBtn = document.getElementById('saveBtn');
+  saveBtn.innerHTML = '✏️ Update Product';
+  saveBtn.onclick = function(){ updateProduct(id); };
+
+  window.scrollTo(0, 0);
+  alert('✅ Product loaded for editing. Change karo aur Update dabao.');
+}
 // LOAD CATEGORIES - FIXED [object Object]
 function loadCategories(){
   let catSelect = document.getElementById('pCategory');
