@@ -32,3 +32,10 @@ firebase-debug.log
 # System files
 .DS_Store
 Thumbs.db
+# Secret files - Github pe upload nahi hongi
+config.php
+secrets.js
+oldsecrets.js
+*.env
+.env.local
+.env.*.local
