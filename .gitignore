@@ -1,0 +1,34 @@
+# Secret files - Github pe upload nahi hongi
+secrets.js
+oldsecrets.js
+*.env
+.env.local
+.env.*.local
+
+# Backup files
+*-backup-*.html
+*-backup-*.js
+script-backup-*.js
+old*.html
+old*.js
+index-old-backup.html
+index-backup-14-may-2026.html
+cart-backup-14-may-2026.html
+admin-login-backup-13-may-2026.html
+admin-password-reset-backup.html
+oldadmin-password-reset-backup.html
+
+# PHP sensitive files
+admin-verify.php
+send-otp.php
+send-whatsapp-otp.php
+verify-otp.php
+verify-whatsapp-otp.php
+
+# Firebase
+firebase-debug.log
+.firebase/
+
+# System files
+.DS_Store
+Thumbs.db
