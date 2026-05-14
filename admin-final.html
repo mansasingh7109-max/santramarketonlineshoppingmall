@@ -4,31 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - SANTRA MALL</title>
+  
+  <!-- FIREBASE ADD KIYA - ORDERS BACKUP KE LIYE -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="secrets.js"></script>
+  
   <style>
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding:20px;}
-    .header{background:var(--card);padding:15px;border-radius:8px;margin-bottom:20px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;}
-    .header h1{color:var(--accent);}
-    .logout-btn{padding:8px 15px;background:#f44336;color:white;border:none;border-radius:4px;cursor:pointer;}
-    .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-    .tab-btn{padding:10px 20px;background:#ddd;border:none;border-radius:4px;cursor:pointer;font-weight:bold;}
-    .tab-btn.active{background:var(--accent);color:white;}
-    .tab-content{background:var(--card);padding:20px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .hide{display:none!important;}
-    input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;}
-    label{font-weight:bold;margin-top:10px;display:block;}
-    button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:4px;cursor:pointer;margin:5px 0;}
-    .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;margin-top:20px;}
-    .product-item{border:1px solid #ddd;padding:10px;border-radius:6px;}
-    .product-item img{width:100%;height:120px;object-fit:cover;border-radius:4px;}
-    .order-item{border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:6px;background:#fafafa;}
-    .btn-delete{background:#f44336!important;}
-    .btn-edit{background:#2196F3!important;}
-    .media-preview{margin:10px 0;}
-    .media-preview img,.media-preview video{max-width:200px;border-radius:4px;}
-    .flex{display:flex;gap:10px;}
-    .flex > *{flex:1;}
+   .header{background:var(--card);padding:15px;border-radius:8px;margin-bottom:20px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;}
+   .header h1{color:var(--accent);}
+   .logout-btn{padding:8px 15px;background:#f44336;color:white;border:none;border-radius:4px;cursor:pointer;}
+   .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+   .tab-btn{padding:10px 20px;background:#ddd;border:none;border-radius:4px;cursor:pointer;font-weight:bold;}
+   .tab-btn.active{background:var(--accent);color:white;}
+   .tab-content{background:var(--card);padding:20px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+   .hide{display:none!important;}
+   input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;}
+   label{font-weight:bold;margin-top:10px;display:block;}
+   button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:4px;cursor:pointer;margin:5px 0;}
+   .product-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;margin-top:20px;}
+   .product-item{border:1px solid #ddd;padding:10px;border-radius:6px;}
+   .product-item img{width:100%;height:120px;object-fit:cover;border-radius:4px;}
+   .order-item{border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:6px;background:#fafafa;}
+   .btn-delete{background:#f44336!important;}
+   .btn-edit{background:#2196F3!important;}
+   .media-preview{margin:10px 0;}
+   .media-preview img,.media-preview video{max-width:200px;border-radius:4px;}
+   .flex{display:flex;gap:10px;}
+   .flex > *{flex:1;}
+   table{width:100%;border-collapse:collapse;margin-top:15px;font-size:12px}
+   th,td{padding:8px;border:1px solid #ddd;text-align:left}
+   th{background:#f1f3f6}
   </style>
 </head>
 <body>
@@ -71,6 +81,9 @@
     <label>Category</label>
     <input type="text" id="pCategory" placeholder="General">
 
+    <label>Product Code</label>
+    <input type="text" id="pCode" placeholder="SM-BT-01">
+
     <label>Description</label>
     <textarea id="pDesc" rows="3"></textarea>
 
@@ -99,10 +112,28 @@
   <div id="productList" class="product-list"></div>
 </div>
 
-<!-- ORDERS TAB -->
+<!-- ORDERS TAB - FIREBASE SE DATA -->
 <div id="orders" class="tab-content hide">
-  <h3>Customer Orders</h3>
-  <div id="orderList"></div>
+  <h3>Customer Orders - Live from Firebase</h3>
+  <p>Total Orders: <b id="orderCount">0</b></p>
+  <button onclick="loadOrders()" style="background:#10b981">🔄 Refresh Orders</button>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Phone</th>
+        <th>Products</th>
+        <th>Total</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTable">
+      <tr><td colspan="7" style="text-align:center;padding:20px">Loading orders...</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- CUSTOMERS TAB -->
@@ -162,7 +193,13 @@
 
 <script src="db.js"></script>
 <script>
-// CHECK ADMIN LOGIN
+// ========== FIREBASE INIT ==========
+if (typeof firebase!== 'undefined' && typeof firebaseConfig!== 'undefined') {
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  window.firebaseDB = firebase.firestore();
+}
+
+// ========== CHECK ADMIN LOGIN ==========
 window.onload = function(){
   let admin = localStorage.getItem('current_admin');
   if(!admin){
@@ -186,9 +223,10 @@ function openTab(tabName){
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(tabName).classList.remove('hide');
   event.target.classList.add('active');
+  if(tabName === 'orders') loadOrders();
 }
 
-// PRODUCT FUNCTIONS
+// ========== PRODUCT FUNCTIONS - SAME AS OLD ==========
 function clearForm(){
   document.getElementById('productForm').reset();
   document.getElementById('productId').value = '';
@@ -222,6 +260,7 @@ function saveProduct(){
   let price = document.getElementById('pPrice').value;
   let stock = document.getElementById('pStock').value;
   let category = document.getElementById('pCategory').value;
+  let code = document.getElementById('pCode').value;
   let desc = document.getElementById('pDesc').value;
   let mediaUrl = document.getElementById('pMediaUrl').value;
   let mediaType = document.getElementById('pMediaType').value;
@@ -231,35 +270,32 @@ function saveProduct(){
     return;
   }
 
-  // Handle file upload - Convert to base64
   let fileInput = document.getElementById('pMediaFile');
   if(fileInput.files.length > 0){
     let file = fileInput.files[0];
     let reader = new FileReader();
     reader.onload = function(e){
       mediaUrl = e.target.result;
-      saveProductData(id, name, mrp, price, stock, category, desc, mediaUrl, mediaType);
+      saveProductData(id, name, mrp, price, stock, category, code, desc, mediaUrl, mediaType);
     }
     reader.readAsDataURL(file);
   } else {
-    saveProductData(id, name, mrp, price, stock, category, desc, mediaUrl, mediaType);
+    saveProductData(id, name, mrp, price, stock, category, code, desc, mediaUrl, mediaType);
   }
 }
 
-function saveProductData(id, name, mrp, price, stock, category, desc, mediaUrl, mediaType){
+function saveProductData(id, name, mrp, price, stock, category, code, desc, mediaUrl, mediaType){
   if(!SANTRA_DB.products) SANTRA_DB.products = [];
   
   if(id){
-    // Edit
     let idx = SANTRA_DB.products.findIndex(p => p.id == id);
     if(idx > -1){
-      SANTRA_DB.products[idx] = {id:parseInt(id), name, mrp, price, stock, category, desc, mediaUrl, mediaType, img: mediaUrl};
+      SANTRA_DB.products[idx] = {id:parseInt(id), name, mrp, price, stock, category, code, desc, mediaUrl, mediaType, img: mediaUrl};
     }
   } else {
-    // Add
     SANTRA_DB.products.push({
       id: Date.now(),
-      name, mrp, price, stock, category, desc, mediaUrl, mediaType, img: mediaUrl
+      name, mrp, price, stock, category, code, desc, mediaUrl, mediaType, img: mediaUrl
     });
   }
   
@@ -293,6 +329,7 @@ function loadProducts(){
         ${mediaHtml}
         <h4>${p.name}</h4>
         <p>₹${p.price} | Stock: ${p.stock}</p>
+        <p style="font-size:11px;color:#999">Code: ${p.code || 'N/A'}</p>
         <button class="btn-edit" onclick="editProduct(${p.id})">Edit</button>
         <button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
       </div>
@@ -310,6 +347,7 @@ function editProduct(id){
   document.getElementById('pPrice').value = p.price;
   document.getElementById('pStock').value = p.stock;
   document.getElementById('pCategory').value = p.category || '';
+  document.getElementById('pCode').value = p.code || '';
   document.getElementById('pDesc').value = p.desc || '';
   document.getElementById('pMediaUrl').value = p.mediaUrl || '';
   document.getElementById('pMediaType').value = p.mediaType || 'image';
@@ -324,42 +362,69 @@ function deleteProduct(id){
   }
 }
 
-// ORDERS FUNCTIONS
+// ========== ORDERS FUNCTIONS - NEW FIREBASE SE ==========
 function loadOrders(){
-  let container = document.getElementById('orderList');
-  if(!SANTRA_DB.orders || SANTRA_DB.orders.length === 0){
-    container.innerHTML = '<p>No orders yet</p>';
+  if(!window.firebaseDB) {
+    document.getElementById('ordersTable').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:red">❌ Firebase not connected! Upload secrets.js</td></tr>';
     return;
   }
   
-  container.innerHTML = SANTRA_DB.orders.reverse().map(o => `
-    <div class="order-item">
-      <h4>Order #${o.id} - ${o.status}</h4>
-      <p><b>Customer:</b> ${o.customerName} | ${o.mobile}</p>
-      <p><b>Address:</b> ${o.address}</p>
-      <p><b>Total:</b> ₹${o.total} | <b>Payment:</b> ${o.paymentMode}</p>
-      <p><b>Items:</b> ${o.items.map(i => i.name + ' x' + i.qty).join(', ')}</p>
-      <p><b>Date:</b> ${new Date(o.time).toLocaleString()}</p>
-      <select onchange="updateOrderStatus(${o.id}, this.value)">
-        <option value="Confirmed" ${o.status==='Confirmed'?'selected':''}>Confirmed</option>
-        <option value="Shipped" ${o.status==='Shipped'?'selected':''}>Shipped</option>
-        <option value="Delivered" ${o.status==='Delivered'?'selected':''}>Delivered</option>
-        <option value="Canceled" ${o.status==='Canceled'?'selected':''}>Canceled</option>
-      </select>
-    </div>
-  `).join('');
+  document.getElementById('ordersTable').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px">Loading from Firebase...</td></tr>';
+  
+  window.firebaseDB.collection('orders').orderBy('orderDate', 'desc').get().then((snapshot) => {
+    let html = '';
+    let count = 0;
+    
+    snapshot.forEach((doc) => {
+      let order = doc.data();
+      count++;
+      
+      let productList = order.items.map(item => 
+        `${item.name} (${item.code || 'N/A'}) x${item.qty}`
+      ).join('<br>');
+      
+      html += `
+        <tr>
+          <td style="font-size:10px">${order.orderId}</td>
+          <td>${order.customerName}</td>
+          <td>${order.customerPhone}</td>
+          <td style="font-size:10px">${productList}</td>
+          <td style="font-weight:bold">₹${order.totalAmount}</td>
+          <td style="font-size:10px">${new Date(order.orderDate).toLocaleString('en-IN')}</td>
+          <td>
+            <select onchange="updateOrderStatus('${doc.id}', this.value)" style="padding:5px;font-size:11px">
+              <option value="New" ${order.status==='New'?'selected':''}>New</option>
+              <option value="Confirmed" ${order.status==='Confirmed'?'selected':''}>Confirmed</option>
+              <option value="Shipped" ${order.status==='Shipped'?'selected':''}>Shipped</option>
+              <option value="Delivered" ${order.status==='Delivered'?'selected':''}>Delivered</option>
+              <option value="Canceled" ${order.status==='Canceled'?'selected':''}>Canceled</option>
+            </select>
+          </td>
+        </tr>
+      `;
+    });
+    
+    document.getElementById('ordersTable').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:20px">No orders yet</td></tr>';
+    document.getElementById('orderCount').innerText = count;
+    
+  }).catch((error) => {
+    console.log('Error:', error);
+    document.getElementById('ordersTable').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:red">Error: ' + error.message + '</td></tr>';
+  });
 }
 
-function updateOrderStatus(id, status){
-  let order = SANTRA_DB.orders.find(o => o.id == id);
-  if(order){
-    order.status = status;
-    saveDB();
-    alert('Status updated!');
-  }
+function updateOrderStatus(docId, status){
+  if(!window.firebaseDB) return;
+  window.firebaseDB.collection('orders').doc(docId).update({
+    status: status
+  }).then(() => {
+    alert('✅ Status updated!');
+  }).catch((error) => {
+    alert('❌ Error: ' + error.message);
+  });
 }
 
-// CUSTOM FIELDS FUNCTIONS
+// ========== CUSTOM FIELDS - SAME AS OLD ==========
 document.getElementById('fieldType').addEventListener('change', function(){
   document.getElementById('fieldOptions').style.display = this.value === 'select' ? 'block' : 'none';
 });
@@ -414,7 +479,7 @@ function deleteField(idx){
   loadCustomFields();
 }
 
-// SETTINGS FUNCTIONS
+// ========== SETTINGS - SAME AS OLD ==========
 function loadSettings(){
   if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
   document.getElementById('setLogo').value = SANTRA_DB.settings.logo || '🛍️ SANTRA MALL';
