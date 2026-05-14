@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -8,54 +8,65 @@
     :root{--bg:#0f172a;--card:#1e293b;--accent:#e40046;--text:#e2e8f0;--border:#334155}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);}
-    .top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;}
-    .top-bar h1{color:var(--accent);font-size:18px;}
-    .top-btns{display:flex;gap:10px;}
-    .btn-firebase{background:#e40046;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
-    .btn-global{background:#7c3aed;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
-    .btn-logout{background:#475569;color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;}
-    .main{display:flex;gap:15px;padding:0 15px;}
-    .sidebar{width:220px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;}
-    .menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;}
-    .menu-item:hover{background:#334155;}
-    .menu-item.active{background:#334155;border-left:3px solid var(--accent);}
-    .content{flex:1;background:var(--card);border-radius:8px;padding:20px;}
+.top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;}
+.top-bar h1{color:var(--accent);font-size:18px;}
+.top-btns{display:flex;gap:10px;}
+.btn-firebase{background:#e40046;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
+.btn-global{background:#7c3aed;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
+.btn-logout{background:#475569;color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;}
+.main{display:flex;gap:15px;padding:0 15px;}
+.sidebar{width:220px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;}
+.menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;}
+.menu-item:hover{background:#334155;}
+.menu-item.active{background:#334155;border-left:3px solid var(--accent);}
+.content{flex:1;background:var(--card);border-radius:8px;padding:20px;}
     input,select,textarea{width:100%;padding:10px;margin:8px 0;background:#0f172a;border:1px solid var(--border);border-radius:4px;color:var(--text);}
     label{font-weight:bold;margin-top:10px;display:block;color:#cbd5e1;}
     button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:4px;cursor:pointer;margin:5px 0;font-weight:bold;}
-    .btn-del{background:#ef4444!important;}
-    .btn-edit{background:#3b82f6!important;}
-    .media-btn{display:inline-block;padding:8px 12px;border:none;border-radius:4px;margin:5px;cursor:pointer;font-size:13px;}
-    .btn-gallery{background:#3b82f6;}
-    .btn-url{background:#8b5cf6;}
-    .btn-github{background:#10b981;}
-    .btn-browse{background:#f59e0b;}
-    .btn-imgbb{background:#FFA000;}
-    .flex{display:flex;gap:10px;}
-    .flex > *{flex:1;}
+.btn-del{background:#ef4444!important;}
+.btn-edit{background:#3b82f6!important;}
+.media-btn{display:inline-block;padding:8px 12px;border:none;border-radius:4px;margin:5px;cursor:pointer;font-size:13px;}
+.btn-gallery{background:#3b82f6;}
+.btn-url{background:#8b5cf6;}
+.btn-github{background:#10b981;}
+.btn-browse{background:#f59e0b;}
+.btn-imgbb{background:#FFA000;}
+.flex{display:flex;gap:10px;}
+.flex > *{flex:1;}
     table{width:100%;border-collapse:collapse;margin-top:15px;}
     th,td{padding:10px;text-align:left;border-bottom:1px solid var(--border);}
     th{background:#0f172a;}
-    .table-wrapper{overflow-x:auto;}
-    .hide{display:none!important;}
-    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
-    .msg-success{background:#065f46;color:#d1fae5}
-    .msg-error{background:#7f1d1d;color:#fecaca}
-    .section-title{color:var(--accent);margin:20px 0 10px;font-size:16px;}
-    .badge{background:#FFA000;color:white;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;}
-    .badge-success{background:#10b981;color:white;padding:2px 6px;border-radius:4px;font-size:10px;}
-    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
-    .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:600px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
-    .modal-header h3{color:var(--accent);font-size:20px;}
-    .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
-    .modal-body{padding:20px;overflow-y:auto;}
-    #authLoader{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:10000;font-size:18px;color:var(--accent);}
+.table-wrapper{overflow-x:auto;}
+.hide{display:none!important;}
+.msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+.msg-success{background:#065f46;color:#d1fae5}
+.msg-error{background:#7f1d1d;color:#fecaca}
+.section-title{color:var(--accent);margin:20px 0 10px;font-size:16px;}
+.badge{background:#FFA000;color:white;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;}
+.badge-success{background:#10b981;color:white;padding:2px 6px;border-radius:4px;font-size:10px;}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
+.modal-content{background:var(--card);padding:0;border-radius:12px;max-width:600px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
+.modal-header h3{color:var(--accent);font-size:20px;}
+.close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
+.modal-body{padding:20px;overflow-y:auto;}
   </style>
+<script>
+  // Check karo backend se verify hoke aaya hai ya nahi
+  const token = sessionStorage.getItem('adminToken');
+  if(!token){
+    alert('Pehle login karo');
+    window.location.href = 'admin-login.html';
+  }
+
+  // Har 1 ghante me token expire ho jayega - Firebase ka rule
+  // User wapas login karega
+</script>
+if(!token){
+  window.location.replace('admin-login.html');
+}
 </head>
 <body>
-
-<div id="authLoader">🔒 Checking Admin Access...</div>
 
 <div class="top-bar">
   <h1>🛍️ SANTRA MALL - Admin Panel</h1>
@@ -256,106 +267,35 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+<script>
 <script type="module">
   import { firebaseConfig } from './secrets.js';
-
-  window.firebaseDB = null;
-  window.firebaseAuth = null;
-
-  try {
-    if (firebaseConfig && firebaseConfig.apiKey) {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
-      window.firebaseDB = firebase.firestore();
-      window.firebaseAuth = firebase.auth();
-      console.log('Firebase initialized successfully');
-    }
-  } catch(e) {
-    console.log('Firebase init failed:', e);
+  
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
   }
+  window.firebaseDB = firebase.firestore();
+</script>
+
+if (!firebase.apps.length) {
+  if(firebaseConfig.apiKey === "AIzaSyXXXXXXXXXXXXXXXXXXXXX"){
+    alert('⚠️ FIREBASE CONFIG KHALI HAI!\n\nFirebase config paste karo tabhi Firebase kaam karega. Sirf product save ke liye jaruri hai.');
+  }
+  firebase.initializeApp(firebaseConfig);
+}
+const firebaseDB = firebase.firestore();
 </script>
 
 <script>
-// ===== FIXED: LOGIN CHECK WITH ROLE + FIREBASE UID - 14/5/2026 =====
-document.addEventListener('DOMContentLoaded', async function() {
-  const loader = document.getElementById('authLoader');
-
-  if (!window.firebaseAuth ||!window.firebaseDB) {
-    loader.innerHTML = '❌ Firebase connect nahi hai! secrets.js check karo.';
-    return;
-  }
-
-  window.firebaseAuth.onAuthStateChanged(async (user) => {
-    if (!user) {
-      loader.innerHTML = '❌ Please login first!';
-      setTimeout(() => {
-        alert('Please login from Help Desk first!');
-        window.location.href = 'index.html';
-      }, 1500);
-      return;
-    }
-
-    try {
-      const adminRef = window.firebaseDB.collection('Manisha Tak').doc('main_admin');
-      const adminSnap = await adminRef.get();
-
-      // ===== YAHI THA BUG - exists() function hai =====
-      if (!adminSnap.exists) {
-        loader.innerHTML = '❌ Admin config nahi mila Firestore me!';
-        setTimeout(() => logout(), 2000);
-        return;
-      }
-
-      const adminData = adminSnap.data();
-
-      if (adminData.uid!== user.uid) {
-        loader.innerHTML = '❌ Access Denied! Aap admin nahi ho.';
-        console.log('Login UID:', user.uid, 'DB UID:', adminData.uid);
-        setTimeout(() => {
-          alert('Access Denied! Admin only.');
-          window.firebaseAuth.signOut();
-          window.location.href = 'index.html';
-        }, 2000);
-        return;
-      }
-
-      console.log('✅ Admin Access Granted:', user.email);
-      loader.style.display = 'none';
-
-      localStorage.setItem('admin_logged_in', 'true');
-      localStorage.setItem('current_admin', JSON.stringify({
-        email: user.email,
-        uid: user.uid,
-        name: adminData.name || 'Admin',
-        role: 'admin',
-        loginTime: Date.now()
-      }));
-
-      loadDashboard();
-      loadProducts();
-      loadOrders();
-      loadCustomers();
-      loadThemeFromStorage();
-      loadCategories();
-
-    } catch (err) {
-      loader.innerHTML = '❌ Error: ' + err.message;
-      console.log('Admin check error:', err);
-      setTimeout(() => logout(), 2000);
-    }
-  });
-});
-
-/* ===== OLD CODE BACKUP - 13/5/2026 =====
+// CHECK ADMIN LOGIN
 window.onload = function(){
   let admin = JSON.parse(localStorage.getItem('current_admin') || 'null');
-  if(!admin || admin.role!== 'admin'){
-    alert('Please login from Help Desk first!');
-    window.location.href = 'index.html';
-    return;
-  }
-
+  if(!admin){
+  alert('Please login from Help Desk first!');
+  window.location.href = 'index.html';
+  return;
+}
   loadDashboard();
   loadProducts();
   loadOrders();
@@ -363,12 +303,8 @@ window.onload = function(){
   loadThemeFromStorage();
   loadCategories();
 }
-===== OLD CODE END ===== */
 
 function logout(){
-  if (window.firebaseAuth) {
-    window.firebaseAuth.signOut();
-  }
   localStorage.removeItem('current_admin');
   localStorage.removeItem('admin_logged_in');
   sessionStorage.clear();
@@ -389,7 +325,7 @@ function openTab(tabName){
 
 // ===== FIREBASE SECURE BUTTON =====
 function openFirebasePanel(){
-  if(!window.firebaseDB){
+  if(!firebaseDB || firebaseConfig.apiKey === "AIzaSyXXXXXXXXXXXXXXXXXXXXX"){
     alert('❌ Firebase connect nahi hai!\n\nFix: firebaseConfig me apna API key daalo');
     return;
   }
@@ -406,13 +342,13 @@ function openFirebasePanel(){
           <p style="color:#d1fae5;margin:0;">✅ Firebase Connected Successfully</p>
         </div>
         <h4>📊 Database Stats:</h4>
-        <p><b>Project ID:</b> santra-mall</p>
+        <p><b>Project ID:</b> ${firebaseConfig.projectId}</p>
         <p><b>Orders Saved:</b> <span id="fbOrders">Loading...</span></p>
         <p><b>Customers Saved:</b> <span id="fbCustomers">Loading...</span></p>
         <p><b>Products Saved:</b> <span id="fbProducts">Loading...</span></p>
         <hr style="margin:20px 0;border-color:var(--border);">
         <h4>🔗 Quick Actions:</h4>
-        <button onclick="window.open('https://console.firebase.google.com/', '_blank')" style="width:100%;margin:5px 0;background:#3b82f6;">
+        <button onclick="window.open('https://console.firebase.google.com/project/${firebaseConfig.projectId}/firestore', '_blank')" style="width:100%;margin:5px 0;background:#3b82f6;">
           📂 Open Firestore Database
         </button>
         <button onclick="testFirebaseSave()" style="width:100%;margin:5px 0;background:#10b981;">
@@ -432,13 +368,13 @@ function openFirebasePanel(){
 }
 
 async function loadFirebaseStats(){
-  if(!window.firebaseDB) return;
+  if(!firebaseDB) return;
   try {
-    let orders = await window.firebaseDB.collection('orders').get();
+    let orders = await firebaseDB.collection('orders').get();
     document.getElementById('fbOrders').innerText = orders.size;
-    let customers = await window.firebaseDB.collection('customers').get();
+    let customers = await firebaseDB.collection('customers').get();
     document.getElementById('fbCustomers').innerText = customers.size;
-    let products = await window.firebaseDB.collection('products').get();
+    let products = await firebaseDB.collection('products').get();
     document.getElementById('fbProducts').innerText = products.size;
   } catch(err) {
     console.log('Stats error:', err);
@@ -449,11 +385,11 @@ async function loadFirebaseStats(){
 }
 
 async function testFirebaseSave(){
-  if(!window.firebaseDB){
+  if(!firebaseDB){
     alert('Firebase not connected!');
     return;
   }
-  await window.firebaseDB.collection('test').add({
+  await firebaseDB.collection('test').add({
     msg: 'Test successful',
     time: new Date().toISOString()
   });
@@ -461,19 +397,19 @@ async function testFirebaseSave(){
 }
 
 async function syncLocalToFirebase(){
-  if(!window.firebaseDB){
+  if(!firebaseDB){
     alert('Firebase not connected!');
     return;
   }
   if(confirm('Sabhi local orders/customers Firebase me upload kare?')){
     if(SANTRA_DB.orders){
       for(let order of SANTRA_DB.orders){
-        await window.firebaseDB.collection('orders').add(order);
+        await firebaseDB.collection('orders').add(order);
       }
     }
     if(SANTRA_DB.customers){
       for(let cust of SANTRA_DB.customers){
-        await window.firebaseDB.collection('customers').doc(cust.mobile).set(cust);
+        await firebaseDB.collection('customers').doc(cust.mobile).set(cust);
       }
     }
     alert('✅ Sync complete! Refresh karo.');
@@ -550,7 +486,7 @@ function browseComputer(type){
   uploadToImgbb();
 }
 
-// SAVE PRODUCT - WITH FIREBASE CHECK
+// SAVE PRODUCT - WITH EDIT MODE
 async function saveProduct(){
   let name = document.getElementById('pName').value.trim();
   let price = document.getElementById('pPrice').value.trim();
@@ -590,13 +526,8 @@ async function saveProduct(){
     created: new Date().toISOString()
   };
 
-  if(!window.firebaseDB){
-    alert('❌ Firebase connect nahi hai! secrets.js check karo.');
-    return;
-  }
-
   try {
-    await window.firebaseDB.collection('products').add(productData);
+    await firebaseDB.collection('products').add(productData);
     alert('✅ Product saved! HOME PAGE PE TURANT DIKHEGA');
     loadProducts();
     clearForm();
@@ -640,13 +571,8 @@ async function updateProduct(id){
     updated: new Date().toISOString()
   };
 
-  if(!window.firebaseDB){
-    alert('❌ Firebase connect nahi hai!');
-    return;
-  }
-
   try {
-    await window.firebaseDB.collection('products').doc(id).update(productData);
+    await firebaseDB.collection('products').doc(id).update(productData);
     alert('✅ Product updated successfully!');
     loadProducts();
     clearForm();
@@ -673,18 +599,12 @@ function clearForm(){
   document.getElementById('uploadStatus').innerText = '';
 }
 
-// LOAD PRODUCTS - WITH FIREBASE CHECK
+// LOAD PRODUCTS - FIXED ACTION + [object Object] FIX
 async function loadProducts(){
   let tbody = document.getElementById('productTableBody');
   tbody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
-
-  if(!window.firebaseDB){
-    tbody.innerHTML = '<tr><td colspan="6">❌ Firebase not connected</td></tr>';
-    return;
-  }
-
   try {
-    const querySnapshot = await window.firebaseDB.collection('products').orderBy('created', 'desc').get();
+    const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
     tbody.innerHTML = '';
     let total = 0;
     querySnapshot.forEach((doc) => {
@@ -708,29 +628,21 @@ async function loadProducts(){
     });
     document.getElementById('totalProducts').innerText = total;
   } catch(err) {
-    tbody.innerHTML = '<tr><td colspan="6">Error loading products: ' + err.message + '</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6">Error loading products</td></tr>';
     console.log(err);
   }
 }
 
 async function deleteProduct(id){
   if(confirm('Delete this product?')){
-    if(!window.firebaseDB){
-      alert('❌ Firebase not connected!');
-      return;
-    }
-    await window.firebaseDB.collection('products').doc(id).delete();
+    await firebaseDB.collection('products').doc(id).delete();
     loadProducts();
   }
 }
 
 // EDIT PRODUCT - LOAD DATA IN FORM
 async function editProduct(id){
-  if(!window.firebaseDB){
-    alert('❌ Firebase not connected!');
-    return;
-  }
-  let doc = await window.firebaseDB.collection('products').doc(id).get();
+  let doc = await firebaseDB.collection('products').doc(id).get();
   let p = doc.data();
 
   document.getElementById('pName').value = p.name;
@@ -752,7 +664,7 @@ async function editProduct(id){
   alert('✅ Product loaded for editing. Change karo aur Update dabao.');
 }
 
-// LOAD CATEGORIES - FIXED FOR OBJECT ARRAY 13/5/2026
+// LOAD CATEGORIES - FIXED DUPLICATE LINE
 function loadCategories(){
   let catSelect = document.getElementById('pCategory');
   let catList = document.getElementById('catList');
@@ -771,53 +683,33 @@ function loadCategories(){
   }
 }
 
-// ========== ADD CATEGORY - FIXED 13/5/2026 ==========
 function addCategory(){
   let catName = document.getElementById('catName').value.trim();
   if(!catName){
     alert('Enter category name');
     return;
   }
-
   if(!SANTRA_DB.categories) SANTRA_DB.categories = [];
-
-  let exists = SANTRA_DB.categories.find(c => {
-    let name = typeof c === 'object'? c.name : c;
-    return name.toLowerCase() === catName.toLowerCase();
-  });
-
-  if(exists){
+  if(SANTRA_DB.categories.includes(catName)){
     alert('Category already exists');
     return;
   }
-
-  SANTRA_DB.categories.push({
-    id: Date.now(),
-    name: catName,
-    img: "",
-    type: "image"
-  });
-
+  SANTRA_DB.categories.push(catName);
   saveDB();
   document.getElementById('catName').value = '';
   loadCategories();
   alert('✅ Category added');
 }
 
-// ========== DELETE CATEGORY - FIXED 13/5/2026 ==========
 function deleteCategory(catName){
   if(confirm('Delete category: ' + catName + '?')){
-    SANTRA_DB.categories = SANTRA_DB.categories.filter(c => {
-      let name = typeof c === 'object'? c.name : c;
-      return name!== catName;
-    });
+    SANTRA_DB.categories = SANTRA_DB.categories.filter(c => c!== catName);
     saveDB();
     loadCategories();
-    alert('✅ Category deleted');
   }
 }
 
-// LOAD ORDERS - FIXED 13/5/2026 - DUPLICATE REMOVED
+// LOAD ORDERS
 async function loadOrders(){
   let container = document.getElementById('orderList');
   container.innerHTML = '<p style="text-align:center;padding:40px;">Loading...</p>';
@@ -825,9 +717,9 @@ async function loadOrders(){
   if(SANTRA_DB.orders){
     allOrders = [...SANTRA_DB.orders];
   }
-  if(window.firebaseDB){
+  if(firebaseDB){
     try {
-      const snapshot = await window.firebaseDB.collection('orders').orderBy('time', 'desc').get();
+      const snapshot = await firebaseDB.collection('orders').orderBy('time', 'desc').get();
       snapshot.forEach(doc => {
         let order = doc.data();
         order.firebaseId = doc.id;
@@ -861,12 +753,12 @@ async function loadOrders(){
       ${order.otp? `<p><b>OTP Used:</b> <span style="color:#10b981;font-weight:bold;">${order.otp}</span></p>` : ''}
       <p><b>Total:</b> ₹${order.total}</p>
       <p style="font-size:12px;color:#94a3b8;margin-top:8px;"><b>Date:</b> ${new Date(order.time).toLocaleString()}</p>
-    </div>
+ </div>
   `).join('');
   document.getElementById('totalOrders').innerText = allOrders.length;
 }
 
-// LOAD CUSTOMERS - FIXED 13/5/2026
+// LOAD CUSTOMERS - FIXED
 async function loadCustomers(){
   let container = document.getElementById('customerList');
   container.innerHTML = '<p style="text-align:center;padding:40px;">Loading...</p>';
@@ -874,9 +766,9 @@ async function loadCustomers(){
   if(SANTRA_DB.customers){
     allCustomers = [...SANTRA_DB.customers];
   }
-  if(window.firebaseDB){
+  if(firebaseDB){
     try {
-      const snapshot = await window.firebaseDB.collection('customers').get();
+      const snapshot = await firebaseDB.collection('customers').get();
       snapshot.forEach(doc => {
         let cust = doc.data();
         if(!allCustomers.find(c => c.mobile == cust.mobile)){
@@ -904,9 +796,9 @@ async function loadCustomers(){
       }
     });
   }
-  if(window.firebaseDB){
+  if(firebaseDB){
     try {
-      const ordersSnapshot = await window.firebaseDB.collection('orders').get();
+      const ordersSnapshot = await firebaseDB.collection('orders').get();
       ordersSnapshot.forEach(doc => {
         let order = doc.data();
         if(!allCustomers.find(c => c.mobile == order.mobile)){
@@ -961,7 +853,7 @@ function loadDashboard(){
 
 function exportCSV(){
   let csv = 'Name,Price,Stock,Category\n';
-  window.firebaseDB.collection('products').get().then(snapshot => {
+  firebaseDB.collection('products').get().then(snapshot => {
     snapshot.forEach(doc => {
       let p = doc.data();
       let catName = typeof p.category === 'object'? (p.category.name || p.category.id || 'Unknown') : p.category;

@@ -11,8 +11,8 @@
       background: #0f172a;
       color: #e2e8f0;
     }
- .container { max-width: 800px; margin: 20px auto; padding: 20px; }
- .header {
+   .container { max-width: 800px; margin: 20px auto; padding: 20px; }
+   .header {
       background: #1e293b;
       padding: 20px;
       border-radius: 8px;
@@ -20,8 +20,8 @@
       border: 1px solid #334155;
       text-align: center;
     }
- .header h1 { color: #ef4444; font-size: 24px; }
- .warning {
+   .header h1 { color: #ef4444; font-size: 24px; }
+   .warning {
       background: #7f1d1d;
       color: #fecaca;
       padding: 12px;
@@ -30,29 +30,29 @@
       font-size: 14px;
       font-weight: 600;
     }
- .card {
+   .card {
       background: #1e293b;
       padding: 25px;
       border-radius: 8px;
       border: 1px solid #334155;
       margin-bottom: 20px;
     }
- .card h2 {
+   .card h2 {
       color: #7c3aed;
       margin-bottom: 15px;
       font-size: 18px;
       border-bottom: 1px solid #334155;
       padding-bottom: 10px;
     }
- .form-group { margin-bottom: 15px; }
- .form-group label {
+   .form-group { margin-bottom: 15px; }
+   .form-group label {
       display: block;
       margin-bottom: 6px;
       color: #cbd5e1;
       font-weight: 600;
       font-size: 14px;
     }
- .form-group input {
+   .form-group input {
       width: 100%;
       padding: 12px;
       background: #0f172a;
@@ -62,8 +62,8 @@
       font-size: 15px;
       outline: none;
     }
- .form-group input:focus { border-color: #7c3aed; }
- .btn {
+   .form-group input:focus { border-color: #7c3aed; }
+   .btn {
       padding: 12px 24px;
       border: none;
       border-radius: 6px;
@@ -73,13 +73,13 @@
       width: 100%;
       margin-top: 10px;
     }
- .btn-danger { background: #ef4444; color: white; }
- .btn-danger:hover { background: #dc2626; }
- .btn-success { background: #10b981; color: white; }
- .btn-success:hover { background: #059669; }
- .btn-primary { background: #7c3aed; color: white; }
- .btn-primary:hover { background: #6d28d9; }
- .alert {
+   .btn-danger { background: #ef4444; color: white; }
+   .btn-danger:hover { background: #dc2626; }
+   .btn-success { background: #10b981; color: white; }
+   .btn-success:hover { background: #059669; }
+   .btn-primary { background: #7c3aed; color: white; }
+   .btn-primary:hover { background: #6d28d9; }
+   .alert {
       padding: 12px;
       border-radius: 6px;
       margin-bottom: 15px;
@@ -87,17 +87,17 @@
       font-weight: 600;
       text-align: center;
     }
- .alert-success { background: #10b981; color: white; }
- .alert-error { background: #ef4444; color: white; }
- .user-info {
+   .alert-success { background: #10b981; color: white; }
+   .alert-error { background: #ef4444; color: white; }
+   .user-info {
       background: #0f172a;
       padding: 15px;
       border-radius: 6px;
       margin-bottom: 15px;
       font-size: 14px;
     }
- .user-info div { margin-bottom: 8px; }
- .user-info strong { color: #7c3aed; }
+   .user-info div { margin-bottom: 8px; }
+   .user-info strong { color: #7c3aed; }
     #imagePreview {
       max-width: 200px;
       margin-top: 10px;
@@ -176,26 +176,25 @@
       <div id="uploadProgress" style="margin-top: 10px; color: #10b981; display: none;"></div>
     </div>
 
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-    import { firebaseConfig } from './secrets.js';
 
-    /* ========== OLD CODE BACKUP - 13/5/2026 ==========
-    // Tera Firebase Config - Ye admin-login.html wala hi daal
-    const firebaseConfig = {
 
-    };
-    const app = initializeApp(firebaseConfig);
-    ========== OLD CODE END ========== */
 
-    // ========== NEW CODE - 13/5/2026 - SECRETS.JS SE CONFIG ==========
-    const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+// ========== OLD CODE END ==========
+
+// ========== NEW CODE - 13/5/2026 - SECRETS.JS SE CONFIG ==========
+
+const app = initializeApp(firebaseConfig);
+// ========== NEW CODE END ==========
     const auth = getAuth(app);
     const storage = getStorage(app);
     let currentUser = null;
-    // ========== NEW CODE END ==========
 
     // Login Check - Agar login nahi hai to band kar de
     onAuthStateChanged(auth, (user) => {

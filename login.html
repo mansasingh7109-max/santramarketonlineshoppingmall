@@ -1,172 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login - Santra Market</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { font-family: Arial; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 90%; max-width: 400px; }
-    h2 { text-align: center; color: #333; }
-    input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
-    .otp-btn, .google-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin: 8px 0; }
-    .otp-btn { background: #ff6b00; color: white; }
-    .google-btn { background: #4285f4; color: white; }
-    hr { margin: 20px 0; border: none; border-top: 1px solid #ddd; }
-    #recaptcha-container { margin: 10px 0; display: flex; justify-content: center; }
-    .msg { padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; font-size: 14px; }
-    .msg-success { background: #d4edda; color: #155724; }
-    .msg-error { background: #f8d7da; color: #721c24; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Password Reset</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .reset-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); width: 380px; text-align: center; }
+        h2 { color: #333; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 14px; margin-bottom: 30px; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 12px; }
+        .btn-email { background: #1976d2; color: white; }
+        .btn-email:hover { background: #1565c0; }
+        .btn-sms { background: #FF5722; color: white; }
+        .btn-sms:hover { background: #E64A19; }
+        .back-link { display: block; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; }
+        .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+        .msg-success{background:#d4edda;color:#155724}
+        .msg-error{background:#f8d7da;color:#721c24}
+    </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>👤 Customer Login</h2>
-    
-    <div id="msgBox"></div>
+    <div class="reset-box">
+        <h2>🔐 Admin Password Reset</h2>
+        <p class="subtitle">Choose any one method</p>
+        
+        <button class="btn btn-email" onclick="resetViaEmail()">📧 Reset via Email Link</button>
+        <button class="btn btn-sms" onclick="resetViaSMS()">📱 Reset via SMS OTP</button>
+        
+        <div id="recaptcha-container"></div>
+        <div id="adminMsg"></div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
 
-    <!-- Email Login -->
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button class="otp-btn" onclick="emailLogin()">Login with Email</button>
-    <p style="text-align:center;font-size:14px;"><a href="#" onclick="resetPassword()">Forgot Password?</a></p>
-
-    <hr>
-
-    <!-- Google Login -->
-    <button class="google-btn" id="googleLogin">Sign in with Google</button>
-
-    <hr>
-
-    <!-- Phone OTP Login -->
-    <h3>Phone OTP Login</h3>
-    <input type="tel" id="phoneNumber" placeholder="Enter phone number with +91">
-    <div id="recaptcha-container"></div>
-    <button class="otp-btn" id="sendOtp">Send OTP</button>
-
-    <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" style="display:none;">
-    <button class="otp-btn" id="verifyOtp" style="display:none;">Verify OTP</button>
-
-    <p style="text-align:center;margin-top:20px;font-size:14px;">
-      <a href="index.html">← Back to Home</a>
-    </p>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    // ✅ FIREBASE CONFIG - APNA CONFIG YAHA DAAL
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    function showMsg(text, type){
-      document.getElementById('msgBox').innerHTML = `<div class="msg msg-${type}">${text}</div>`;
-      setTimeout(()=>{document.getElementById('msgBox').innerHTML=''},4000);
-    }
-
-    // ✅ EMAIL LOGIN
-    window.emailLogin = function() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+    <script type="module">
+      import { getAuth, sendPasswordResetEmail, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { app } from './secrets.js';
       
-      if(!email || !password){
-        showMsg("❌ Email aur Password daalo!", "error");
-        return;
+      const auth = getAuth(app);
+      const ADMIN_EMAIL = "mansasingh7109@gmail.com";
+      const ADMIN_PHONE = "+919829508335";
+
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+
+      window.resetViaEmail = async () => {
+        const attempts = Number(localStorage.getItem('resetCountEmail') || 0);
+        if(Date.now() - Number(localStorage.getItem('lastResetTimeEmail') || 0) > 3600000) localStorage.setItem('resetCountEmail', 0);
+        if(attempts >= 3) return alert("Security: 1 ghante me 3 se zyada baar try nahi kar sakte.");
+        if(!confirm(`Password reset link ${ADMIN_EMAIL} par bheja jayega?`)) return;
+        
+        try {
+          await sendPasswordResetEmail(auth, ADMIN_EMAIL);
+          localStorage.setItem('resetCountEmail', attempts + 1);
+          localStorage.setItem('lastResetTimeEmail', Date.now());
+          document.getElementById('adminMsg').innerHTML = '<div class="msg msg-success">✅ Email link bheja gaya! Inbox + Spam check karo.</div>';
+        } catch (error) { 
+          document.getElementById('adminMsg').innerHTML = '<div class="msg msg-error">❌ Error: ' + error.message + '</div>'; 
+        }
       }
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => { 
-          showMsg("✅ Login successful!", "success");
-          setTimeout(()=>{ window.location.href = "index.html"; }, 1000);
-        })
-        .catch((error) => showMsg("❌ Error: " + error.message, "error"));
-    }
-
-    // ✅ GOOGLE LOGIN
-    document.getElementById('googleLogin').onclick = () => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then(() => { 
-          showMsg("✅ Google Login successful!", "success");
-          setTimeout(()=>{ window.location.href = "index.html"; }, 1000);
-        })
-        .catch((error) => showMsg("❌ Error: " + error.message, "error"));
-    };
-
-    // ✅ RESET PASSWORD
-    window.resetPassword = function() {
-      const email = document.getElementById("email").value.trim();
-      if (!email) {
-        showMsg("❌ Pehle email daalo", "error");
-        return;
+      window.resetViaSMS = async () => {
+        const attempts = Number(localStorage.getItem('resetCountSMS') || 0);
+        if(Date.now() - Number(localStorage.getItem('lastResetTimeSMS') || 0) > 3600000) localStorage.setItem('resetCountSMS', 0);
+        if(attempts >= 3) return alert("Security: 1 ghante me 3 se zyada OTP nahi. Email use karo.");
+        if(!confirm(`SMS OTP ${ADMIN_PHONE} par bheja jayega?`)) return;
+        
+        try {
+          const confirmationResult = await signInWithPhoneNumber(auth, ADMIN_PHONE, window.recaptchaVerifier);
+          localStorage.setItem('resetCountSMS', attempts + 1);
+          localStorage.setItem('lastResetTimeSMS', Date.now());
+          
+          const otp = prompt("📱 Phone pe aaya 6 digit OTP daalo:");
+          if(!otp) return;
+          
+          await confirmationResult.confirm(otp);
+          document.getElementById('adminMsg').innerHTML = '<div class="msg msg-success">✅ OTP Verified! Ab tum login ho. Admin panel pe ja rahe...</div>';
+          setTimeout(() => { window.location.href = 'admin-panel-final.html'; }, 2000);
+          
+        } catch (error) {
+          window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
+          document.getElementById('adminMsg').innerHTML = '<div class="msg msg-error">❌ Error: ' + error.message + '</div>';
+        }
       }
-      sendPasswordResetEmail(auth, email)
-      .then(() => {
-        showMsg("✅ Password reset link email pe bhej diya. Spam bhi check karo.", "success");
-      })
-      .catch((error) => {
-        showMsg("❌ Error: " + error.message, "error");
-      });
-    }
-
-    // ✅ PHONE OTP - FIX KIYA
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 
-      'size': 'normal',
-      'callback': (response) => {
-        console.log('reCAPTCHA solved');
-      }
-    });
-
-    document.getElementById('sendOtp').onclick = () => {
-      const phoneNumber = document.getElementById('phoneNumber').value.trim();
-      
-      if (!phoneNumber.startsWith('+91')) {
-        showMsg("❌ Number +91 se shuru karo. Jaise: +919876543210", "error");
-        return;
-      }
-
-      signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          showMsg("✅ OTP Sent! Testing number hai to 123456 daalo", "success");
-          document.getElementById('otpCode').style.display = 'block';
-          document.getElementById('verifyOtp').style.display = 'block';
-          document.getElementById('sendOtp').style.display = 'none';
-          document.getElementById('phoneNumber').disabled = true;
-        })
-        .catch((error) => {
-          showMsg("❌ Error: " + error.message, "error");
-          // Reset reCAPTCHA
-          window.recaptchaVerifier.render().then(widgetId => {
-            grecaptcha.reset(widgetId);
-          });
-        });
-    };
-
-    document.getElementById('verifyOtp').onclick = () => {
-      const code = document.getElementById('otpCode').value.trim();
-      
-      if(code.length !== 6){
-        showMsg("❌ 6 digit OTP daalo", "error");
-        return;
-      }
-
-      window.confirmationResult.confirm(code)
-        .then(() => { 
-          showMsg("✅ Login successful!", "success");
-          setTimeout(()=>{ window.location.href = "index.html"; }, 1000);
-        })
-        .catch((error) => showMsg("❌ Wrong OTP: " + error.message, "error"));
-    };
-  </script>
+    </script>
 </body>
 </html>

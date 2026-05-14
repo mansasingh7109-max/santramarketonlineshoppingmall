@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - SANTRA MALL</title>
+    
+    <!-- CSS Yaha Daalna Hai -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 350px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: #45a049;
+        }
+        
+        /* Forgot Password Button ka CSS */
+        .forgot-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #1a73e8;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 15px;
+            padding: 8px;
+            font-size: 14px;
+        }
+        
+        .forgot-btn:hover {
+            color: #0d47a1;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>SANTRA MALL Admin</h2>
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password" />
+        <button class="login-btn" onclick="adminLogin()">Login</button>
+        
+        <!-- Forgot Password Button -->
+        <button class="forgot-btn" onclick="secureForgotPassword()">Forgot Password?</button>
+    </div>
+
+    <!-- Tera Firebase wala Script -->
+    <script type="module">
+        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { app } from './secrets.js';
+        
+        const auth = getAuth(app);
+        const ADMIN_EMAIL = "mansasingh7109@gmail.com";
+
+        window.secureForgotPassword = async () => {
+            const attempts = Number(localStorage.getItem('resetCount') || 0);
+            const lastTry = Number(localStorage.getItem('lastResetTime') || 0);
+            
+            if(Date.now() - lastTry > 3600000) {
+                localStorage.setItem('resetCount', 0);
+            }
+            
+            if(attempts >= 3) {
+                alert("Security: 1 ghante me 3 se zyada baar try nahi kar sakte. Baad me try karo.");
+                return;
+            }
+
+            if(!confirm("Password reset link admin email mansasingh7109@gmail.com par bhej diya jayega. Continue?")) {
+                return;
+            }
+
+            try {
+              await sendPasswordResetEmail(auth, ADMIN_EMAIL);
+              localStorage.setItem('resetCount', attempts + 1);
+              localStorage.setItem('lastResetTime', Date.now());
+              alert("Password reset link bheja gaya hai. Email ka Inbox + Spam check karo.");
+            } catch (error) {
+              console.log(error);
+              alert("Error: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

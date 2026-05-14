@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTRA MALL</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e40046">
+
+  <style>
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding-bottom:70px;}
+    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+    .header h1{color:var(--accent);font-size:20px;}
+    .header-right{display:flex;gap:10px;align-items:center;}
+    .header-btn{width:auto;padding:8px 12px;background:var(--accent);color:white;border:none;border-radius:4px;font-size:11px;font-weight:bold;cursor:pointer;text-align:center;line-height:1.2;}
+    .help-desk-btn{background:#f57c00!important;}
+    .container{padding:15px;}
+    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+    .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);position:relative;}
+    .product-card img,.product-card video{width:100%;height:140px;object-fit:cover;border-radius:6px;cursor:pointer;}
+    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
+    .product-card p{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
+    .product-card.cat{font-size:11px;color:#999;}
+    .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+    .product-code-badge {position: absolute;top: 8px;left: 8px;background: #e40046;color: white;padding: 3px 8px;border-radius: 4px;font-size: 11px;font-weight: bold;z-index: 10;box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;cursor:pointer;}
+    .nav-item.active{color:var(--accent);}
+    .nav-item div{font-size:22px;}
+    .nav-item span{font-size:11px;display:block;margin-top:2px;}
+    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
+    .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
+    .modal-header h3{color:var(--accent);font-size:20px;}
+    .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
+    .modal-body{padding:20px;overflow-y:auto;}
+    .hide{display:none!important;}
+    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
+    .msg-success{background:#d4edda;color:#155724}
+    .msg-error{background:#f8d7da;color:#721c24}
+    .firebase-badge{background:#FFA000;color:white;padding:3px 8px;border-radius:4px;font-size:10px;margin-left:5px;}
+    .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
+    .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
+    .order-box h4{color:var(--accent);font-size:16px;}
+    .order-box-date{font-size:12px;color:#666;}
+    .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
+    .status-confirmed{background:#4caf50;color:white;}
+    .status-shipped{background:#2196F3;color:white;}
+    .status-delivered{background:#4caf50;color:white;}
+    .status-canceled{background:#f44336;color:white;}
+    .status-returned{background:#ff9800;color:white;}
+    .status-refunded{background:#9c27b0;color:white;}
+    .status-exchange{background:#00bcd4;color:white;}
+    .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0;}
+    .order-info p{margin:5px 0;}
+    .order-info b{color:#333;}
+    .otp-input{display:flex;gap:8px;justify-content:center;margin:15px 0;}
+    .otp-input input{width:45px;height:50px;text-align:center;font-size:20px;border:2px solid #ddd;border-radius:8px;}
+    .otp-input input:focus{border-color:var(--accent);outline:none;}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛍️ SANTRA MALL</h1>
+  <div class="header-right">
+    <button onclick="orderOnWhatsAppGeneral()" style="background:#0000ff;color:white;padding:10px 15px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
+      📱 ORDER US
+    </button>
+    <button class="header-btn help-desk-btn" onclick="openHelpDesk()">🤝 HELP<br>DESK</button>
+  </div>
+</div>
+
+<div class="container">
+  <h3 style="margin-bottom:15px;">WELCOME</h3>
+  <div id="productList" class="product-grid"></div>
+</div>
+
+<div id="ordersModal" class="modal hide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📦 My Orders & Inquiries</h3>
+      <button class="close-btn" onclick="closeOrdersPopup()">×</button>
+    </div>
+    <div class="modal-body" id="ordersPopupList"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item active">
+    <div>🏠</div>
+    <span>Home</span>
+  </a>
+  <a href="categories.html" class="nav-item">
+    <div>📱</div>
+    <span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item">
+    <div>🛒</div>
+    <span>Cart</span>
+    <span class="cart-badge" id="cartCount">0</span>
+  </a>
+  <a href="javascript:void(0)" class="nav-item" onclick="openOrdersPopup()">
+    <div>📦</div>
+    <span>Orders</span>
+  </a>
+</div>
+<script src="db.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
+    <script type="module">
+  import { firebaseConfig } from './secrets.js';
+  
+  let firebaseDB = null;
+  try {
+    if (firebaseConfig.apiKey) {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      firebaseDB = firebase.firestore();
+    }
+  } catch(e) {
+    console.log('Firebase init failed:', e);
+  }
+</script>
+  
+    // Yaha secrets.js se load karenge, abhi khali rakho
+
+  
+  const ADMIN_OTP_NUMBER = '9001654667';
+  const SECRET_ANSWERS = ['santra', 'dav', 'rajasthan', 'mall'];
+
+  let firebaseDB = null;
+  try {
+    if (firebaseConfig.apiKey) {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      firebaseDB = firebase.firestore();
+    } else {
+      console.log('Firebase config empty, running without Firebase');
+    }
+  } catch(e) {
+    console.log('Firebase init failed:', e);
+  }
+
+  let generatedOTP = '';
+  let currentOrderData = {};
+  let allProducts = [];
+  let adminOTP = '';
+  let otpTimer = null;
+
+  document.addEventListener('DOMContentLoaded', function(){
+    if(typeof SANTRA_DB !== 'undefined' && SANTRA_DB.settings){
+      let theme = SANTRA_DB.settings;
+      document.documentElement.style.setProperty('--accent', theme.primaryColor || '#e40046');
+      document.documentElement.style.setProperty('--bg', theme.bgColor || '#f1f3f6');
+      document.body.style.color = theme.textColor || '#212121';
+      document.body.style.fontFamily = theme.fontFamily || 'Arial, sans-serif';
+      document.body.style.fontSize = theme.fontSize || '16px';
+      if(theme.bgImage){
+        document.body.style.backgroundImage = `url(${theme.bgImage})`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundAttachment = 'fixed';
+      }
+      let logoEl = document.querySelector('.header h1');
+      if(logoEl) logoEl.innerText = theme.logo || '🛍️ SANTRA MALL';
+    }
+    loadAllProducts();
+    updateCartCount();
+  });
+
+  function addCategorySerials(products) {
+    const categoryCount = {};
+    products.sort((a, b) => {
+      const catA = typeof a.category === 'object' ? a.category.name || a.category.id : a.category || 'General';
+      const catB = typeof b.category === 'object' ? b.category.name || b.category.id : b.category || 'General';
+      return String(catA).localeCompare(String(catB));
+    });
+
+    return products.map(product => {
+      let catName = 'General';
+      if(typeof product.category === 'object' && product.category !== null){
+        catName = product.category.name || product.category.id || 'General';
+      } else if(typeof product.category === 'string'){
+        catName = product.category;
+      }
+
+      if (!product.product_code) {
+        if (!categoryCount[catName]) {
+          categoryCount[catName] = 1;
+        } else {
+          categoryCount[catName]++;
+        }
+        product.product_code = `${catName}-${categoryCount[catName]}`;
+      }
+
+      product.product_link = `https://santramall.com/product/${String(product.product_code).toLowerCase()}`;
+      return product;
+    });
+  }
+
+  function orderOnWhatsAppGeneral(){
+    let number = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
+    let msg = `Hello, I want to order from SANTRA MALL. Please share product details.`;
+    window.open(`https://api.whatsapp.com/send?phone=91${number}&text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function openHelpDesk(){
+    let modal = document.createElement('div');
+    modal.id = 'helpDeskModal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width:450px;">
+        <div class="modal-header">
+          <h3>💬 Help Desk</h3>
+          <button class="close-btn" onclick="closeHelpDesk()">×</button>
+        </div>
+        <div class="modal-body">
+          <div style="margin-bottom:20px;">
+            <h4>📞 Customer Support</h4>
+            <p><b>Phone:</b> ${SANTRA_DB.settings?.helpdeskPhone || '9829508335'}</p>
+            <p><b>Email:</b> ${SANTRA_DB.settings?.helpdeskEmail || 'mansasingh7109@gmail.com'}</p>
+            <p><b>WhatsApp:</b> <a href="https://api.whatsapp.com/send?phone=91${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}" target="_blank" style="color:#25D366;font-weight:bold;">${SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335'}</a></p>
+            <p><b>Hours:</b> ${SANTRA_DB.settings?.helpdeskHours || 'Mon-Sat: 12 AM - 12 PM'}</p>
+            <br>
+            <h4>📝 About Us</h4>
+            <p>${SANTRA_DB.settings?.helpdeskAbout || 'Welcome to SANTRA MALL!'}</p>
+          </div>
+                  <hr style="margin:20px 0;">
+          <div id="adminLoginSection">
+            <h4 style="margin-bottom:10px;">🔐 Admin Login</h4>
+            <input type="password" id="adminPassHelpdesk" placeholder="Enter Admin Password" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;">
+            <button onclick="adminLoginFromHelpdesk()" style="width:100%;padding:12px;background:#2874f0;color:white;border:none;border-radius:4px;font-weight:bold;margin-bottom:8px;">Login to Admin Panel</button>
+            
+            <a href="login.html" style="display:block;width:100%;padding:10px;background:#fff;color:#2874f0;border:1px solid #2874f0;border-radius:4px;font-weight:bold;text-align:center;text-decoration:none;margin-top:8px;">
+                Forgot Password?
+            </a>
+            <p style="font-size:11px;color:#666;margin-top:8px;">Authorized personnel only</p>
+          </div>
+          <div id="adminLoginMsg"></div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  function closeHelpDesk(){
+    let modal = document.getElementById('helpDeskModal');
+    if(modal) modal.remove();
+  }
+
+  function adminLoginFromHelpdesk(){
+    let pass = document.getElementById('adminPassHelpdesk').value.trim();
+    let msg = document.getElementById('adminLoginMsg');
+
+    let localDB = JSON.parse(localStorage.getItem('SANTRA_DB') || '{}');
+    let users = localDB.users || SANTRA_DB.users || [];
+
+    if(!users || users.length === 0){
+      msg.innerHTML = '<div class="msg msg-error">❌ Admin not found! Check db.js</div>';
+      return;
+    }
+    let admin = users.find(u => u.role === 'admin');
+    if(!admin){
+      msg.innerHTML = '<div class="msg msg-error">❌ Admin user not found!</div>';
+      return;
+    }
+    if(pass === admin.pass){
+      localStorage.setItem('current_admin', JSON.stringify(admin));
+      msg.innerHTML = '<div class="msg msg-success">✅ Login Success! Redirecting...</div>';
+      setTimeout(() => { window.location.href = 'admin-panel-final.html'; }, 1000);
+    } else {
+      msg.innerHTML = '<div class="msg msg-error">❌ Invalid Password!</div>';
+    }
+  }
+
+  // Baaki saare functions same rahenge - loadAllProducts, addToCart, buyNow, etc.
+  // Space ki wajah se chhote kiye hain, tere purane code me jo the wahi rakh de
+
+  async function loadAllProducts(){
+    let container = document.getElementById('productList');
+    container.innerHTML = '<p style="text-align:center;padding:40px;color:#999;grid-column:1/-1;">Loading products...</p>';
+
+    allProducts = [];
+
+    if(typeof SANTRA_DB !== 'undefined' && SANTRA_DB.products){
+      SANTRA_DB.products.forEach(p => {
+        allProducts.push({...p, source: 'local', id: String(p.id)});
+      });
+    }
+
+    const localDB = JSON.parse(localStorage.getItem('SANTRA_DB') || '{}');
+    if(localDB.products){
+      localDB.products.forEach(p => {
+        if(!allProducts.find(ap => String(ap.id) === String(p.id))){
+          allProducts.push({...p, source: 'local', id: String(p.id)});
+        }
+      });
+    }
+
+    if(firebaseDB){
+      try {
+        const querySnapshot = await firebaseDB.collection('products').orderBy('created', 'desc').get();
+        querySnapshot.forEach((doc) => {
+          let p = doc.data();
+          p.id = doc.id;
+          p.source = 'firebase';
+          allProducts.push(p);
+        });
+      } catch(err) {
+        console.log('Firebase error:', err);
+      }
+    }
+
+    allProducts = addCategorySerials(allProducts);
+    container.innerHTML = '';
+    
+    if(allProducts.length === 0){
+      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
+      return;
+    }
+
+    allProducts.forEach(p => {
+      let catName = typeof p.category === 'object' ? p.category.name || p.category.id : p.category || 'General';
+      let stockNum = Number(p.stock) || 0;
+      let imgUrl = p.imageUrl || p.img || '';
+      
+      let imgHtml = imgUrl && !imgUrl.startsWith('data:image') 
+        ? `<img src="${imgUrl}" alt="${p.name}" onclick="openProductDetail('${p.id}', '${p.source}')" style="cursor:pointer;width:100%;height:140px;object-fit:cover;border-radius:6px;" onerror="this.outerHTML='<div style=\\'width:100%;height:140px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#999;font-size:12px;\\'>📷 No Image</div>'">` 
+        : `<div style="width:100%;height:140px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#999;font-size:12px;">📷 No Image</div>`;
+
+      const productCode = p.product_code || '';
+      const productBadge = productCode ? `<span class="product-code-badge">${productCode}</span>` : '';
+
+      let buttonHTML = stockNum > 0
+        ? `<button onclick="addToCart('${p.id}', '${p.source || 'local'}', '${imgUrl}', '${productCode}', '${p.product_link}')" style="background:#e40046;color:white;padding:8px;border:none;border-radius:4px;width:48%;margin:1%;font-size:12px;">🛒 Add to Cart</button>
+           <button onclick="buyNow('${p.id}', '${p.source || 'local'}', '${imgUrl}', '${productCode}', '${p.product_link}')" style="background:#10b981;color:white;padding:8px;border:none;border-radius:4px;width:48%;margin:1%;font-size:12px;">⚡ Buy Now</button>`
+        : `<button onclick="orderOnWhatsApp('${p.id}', '${String(p.name).replace(/'/g, "\\'")}', '${p.price}', '${imgUrl}', '${p.source || 'local'}', '${productCode}', '${p.product_link}')" style="background:#25D366;color:white;padding:10px;border:none;border-radius:8px;width:100%;font-size:14px;font-weight:bold;">💬 Order on WhatsApp</button>`;
+
+      container.innerHTML += `
+        <div class="product-card">
+          ${productBadge}
+          ${imgHtml}
+          <h4>${p.name} ${p.source === 'firebase' ? '<span class="firebase-badge">NEW</span>' : ''}</h4>
+          <p><s style="font-size:12px;color:#999;">₹${p.mrp || ''}</s> ₹${p.price}</p>
+          <div class="cat">Category: ${catName} | Stock: ${stockNum}</div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            ${buttonHTML}
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  async function addToCart(productId, source, imgUrl, productCode, productLink) {
+    try {
+      let product = allProducts.find(p => String(p.id) === String(productId));
+      if (!product) {
+        alert("❌ Product not found! Page refresh karo.");
+        return;
+      }
+
+      let stockNum = Number(product.stock) || 0;
+      if(stockNum <= 0){
+        alert("❌ Out of Stock! WhatsApp pe order karo.");
+        orderOnWhatsApp(productId, product.name, product.price, product.imageUrl || product.img, source, product.product_code, product.product_link);
+        return;
+      }
+
+      let CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+      let item = CART.find(i => String(i.id) === String(productId));
+
+      let finalImageUrl = imgUrl && !imgUrl.startsWith('data:image') ? imgUrl : '';
+      let finalProductCode = productCode || product.product_code || 'N/A';
+      let finalCategory = typeof product.category === 'object' ? product.category.name || 'General' : product.category || 'General';
+      let finalProductLink = productLink || product.product_link || '';
+
+      if (item) {
+        item.qty += 1;
+        if(!item.image && finalImageUrl) item.image = finalImageUrl;
+        if(!item.product_code) item.product_code = finalProductCode;
+        if(!item.product_link) item.product_link = finalProductLink;
+        if(typeof item.category === 'object') item.category = finalCategory;
+      } else {
+        CART.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          mrp: product.mrp,
+          qty: 1,
+          source: source,
+          image: finalImageUrl,
+          product_code: finalProductCode,
+          product_link: finalProductLink,
+          category: finalCategory
+        });
+      }
+
+      localStorage.setItem('santra_cart', JSON.stringify(CART));
+      updateCartCount();
+      alert(`✅ ${product.name} cart me add ho gaya!`);
+    } catch(err) {
+      console.error('Add to cart error:', err);
+      alert('❌ Error: ' + err.message);
+    }
+  }
+
+  function updateCartCount(){
+    let CART = JSON.parse(localStorage.getItem('santra_cart') || '[]');
+    let count = CART.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('cartCount').innerText = count;
+  }
+
+  async function buyNow(productId, source, imgUrl, productCode, productLink){
+    await addToCart(productId, source, imgUrl, productCode, productLink);
+    window.location.href = 'cart.html';
+  }
+
+  function orderOnWhatsApp(productId, productName, productPrice, productImage, source, productCode, productLink) {
+    let number = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
+    let msg = `New Order - SANTRA MALL\n\nProduct: ${productCode || 'N/A'} | ${productName}\nPrice: Rs.${productPrice}\nLink: ${productLink || ''}\n\nName: [Apna naam]\nMobile: [Mobile]\nAddress: [Address]\nPayment: Cash on Delivery`;
+    window.open(`https://wa.me/91${number}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function openOrdersPopup(){
+    document.getElementById('ordersModal').classList.remove('hide');
+    trackOrderByMobile();
+  }
+
+  function closeOrdersPopup(){
+    document.getElementById('ordersModal').classList.add('hide');
+  }
+
+  async function trackOrderByMobile(){
+    let mobile = prompt('Enter your mobile number to track orders:');
+    if(!mobile) return;
+
+    let userOrders = [];
+    if(SANTRA_DB.orders){
+      userOrders = SANTRA_DB.orders.filter(o => o.mobile == mobile);
+    }
+
+    if(firebaseDB){
+      try {
+        const snapshot = await firebaseDB.collection('orders').where('mobile', '==', mobile).get();
+        snapshot.forEach(doc => userOrders.push(doc.data()));
+      } catch(err) {
+        console.log('Firebase track error:', err);
+      }
+    }
+
+    userOrders.sort((a,b) => new Date(b.time) - new Date(a.time));
+    let container = document.getElementById('ordersPopupList');
+
+    if(userOrders.length === 0){
+      container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No orders found for this number</p>';
+    } else {
+      container.innerHTML = userOrders.map(order => `
+        <div class="order-box">
+          <div class="order-box-header">
+            <div>
+              <h4>Order #${order.id}</h4>
+              <p class="order-box-date">${new Date(order.time).toLocaleString()}</p>
+            </div>
+            <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span>
+          </div>
+          <div class="order-info">
+            <p><b>Name:</b> ${order.customerName}</p>
+            <p><b>Mobile:</b> ${order.mobile}</p>
+            <p><b>Address:</b> ${order.address}</p>
+            <p><b>Total:</b> ₹${order.total}</p>
+          </div>
+          <div class="order-items" style="margin-top:10px;">
+            <p style="font-size:13px;color:#666;margin-bottom:8px;"><b>Items:</b></p>
+            ${order.items.map(item => `
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:13px;">
+                <span>${item.name} × ${item.qty}</span>
+                <span>₹${item.price * item.qty}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function openProductDetail(productId, source){
+    let p = allProducts.find(pr => String(pr.id) === String(productId));
+    if(!p){
+      alert('❌ Product not found! Refresh karke dekho.');
+      return;
+    }
+    // Modal code yaha add kar sakte hain
+    alert('Product: ' + p.name + '\nPrice: ₹' + p.price);
+  }
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
+</body>
+</html>
+

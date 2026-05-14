@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - SANTRA MALL</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+    .box{background:white;padding:30px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.1);width:100%;max-width:400px;text-align:center}
+    h2{text-align:center;color:#e40046;margin-bottom:20px}
+    input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
+    .btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin:8px 0;font-weight:600;background:#e40046;color:white}
+    .btn:hover{background:#c20038}
+    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px;display:none}
+    .msg-error{background:#7f1d1d;color:#fecaca}
+    .link-box{text-align:center;margin-top:15px;font-size:14px}
+    .link-box a{color:#e40046;text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🛒 SANTRA MALL Admin</h2>
+    <div id="msgBox" class="msg msg-error"></div>
+    
+    <input type="email" id="email" placeholder="Admin Email" value="mansasingh7109@gmail.com" readonly>
+    <input type="password" id="password" placeholder="Password">
+    <button class="btn" id="loginBtn">Login</button>
+    
+    <div class="link-box" id="passwordLinkBox">
+      <a href="admin-password-reset.html">🔓 Forgot Password?</a>
+    </div>
+    
+    <p style="text-align:center;margin-top:10px;font-size:13px;color:#666;">
+      <a href="index.html" style="color:#e40046;text-decoration:none;">← Back to Website</a>
+    </p>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { firebaseConfig } from './secret.js';
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  function showMsg(text){
+    let box = document.getElementById('msgBox');
+    box.innerText = text;
+    box.style.display = 'block';
+    setTimeout(() => box.style.display = 'none', 3000);
+  }
+
+  function checkAdminLoginStatus(){
+    let isLoggedIn = localStorage.getItem('admin_logged_in');
+    let linkBox = document.getElementById('passwordLinkBox');
+    
+    if(isLoggedIn === 'true'){
+      linkBox.innerHTML = '<a href="admin-change-password.html">🔑 Change Password</a>';
+    } else {
+      linkBox.innerHTML = '<a href="admin-password-reset.html">🔓 Forgot Password?</a>';
+    }
+  }
+  checkAdminLoginStatus();
+
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if(!password){
+      showMsg('Password daalo');
+      return;
+    }
+    
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        localStorage.setItem('admin_logged_in', 'true');
+        localStorage.setItem('current_admin', JSON.stringify({
+          email: userCredential.user.email,
+          uid: userCredential.user.uid
+        }));
+        alert("✅ Login Successful!");
+        window.location.href = "admin-panel-final.html";
+      })
+      .catch((error) => {
+        console.error("Login Error:", error);
+        if(error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential'){
+          showMsg('❌ Galat Password');
+        } else if(error.code === 'auth/user-not-found'){
+          showMsg('❌ Admin user nahi mila. Firebase me banao.');
+        } else if(error.code === 'auth/too-many-requests'){
+          showMsg('❌ Bahut try kar liya. Kuch der baad try karo');
+        } else {
+          showMsg('❌ Error: ' + error.message);
+        }
+      });
+  });
+
+  document.getElementById('password').addEventListener('keypress', function(e){
+    if(e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+</script>
+
+</body>
+</html>

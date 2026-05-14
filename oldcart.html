@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cart - SANTRA MALL</title>
+  <style>
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding-bottom:70px;}
+    .header{background:var(--card);padding:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);text-align:center;position:sticky;top:0;z-index:100;}
+    .header h1{color:var(--accent);font-size:20px;}
+    .back-btn{position:absolute;left:15px;top:15px;color:var(--accent);text-decoration:none;font-size:20px;}
+    .container{padding:15px;}
+    .cart-item{background:var(--card);border-radius:8px;padding:12px;margin-bottom:12px;display:flex;gap:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .cart-item img{width:80px;height:80px;object-fit:cover;border-radius:6px;}
+    .cart-item-info{flex:1;}
+    .cart-item-info h4{font-size:14px;margin-bottom:4px;}
+    .cart-item-info .price{color:var(--accent);font-weight:bold;font-size:16px;margin:4px 0;}
+    .product-code{font-size:12px;color:#666;margin:2px 0;}
+    .qty-control{display:flex;align-items:center;gap:10px;margin:8px 0;}
+    .qty-control button{width:30px;height:30px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;}
+    .qty-control span{font-weight:bold;}
+    .remove-btn{color:red;background:none;border:none;font-size:12px;cursor:pointer;margin-top:5px;}
+    .checkout-section{background:var(--card);padding:15px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);margin-top:15px;}
+    .total-row{display:flex;justify-content:space-between;margin:8px 0;font-size:16px;}
+    .total-row.final{font-weight:bold;font-size:18px;color:var(--accent);border-top:2px solid #eee;padding-top:10px;}
+    .checkout-btn{width:100%;padding:15px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;margin-top:15px;cursor:pointer;}
+    .empty-cart{text-align:center;padding:50px 20px;color:#999;}
+    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;}
+    .modal-content{background:var(--card);padding:20px;border-radius:12px;max-width:400px;width:90%;}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+    .close-btn{background:#999;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;}
+    .hide{display:none!important;}
+    input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px;}
+    label{display:block;margin-top:12px;font-size:14px;color:#333;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
+    .nav-item.active{color:var(--accent);}
+    .nav-item div{font-size:22px;}
+    .nav-item span{font-size:11px;display:block;margin-top:2px;}
+    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html" class="back-btn">←</a>
+  <h1>🛒 My Cart</h1>
+</div>
+
+<div class="container">
+  <div id="cartItems"></div>
+  
+  <div id="checkoutSection" class="checkout-section hide">
+    <h3 style="margin-bottom:15px;">Order Summary</h3>
+    <div class="total-row">
+      <span>Subtotal:</span>
+      <span id="subtotal">₹0</span>
+    </div>
+    <div class="total-row">
+      <span>Delivery:</span>
+      <span id="delivery">₹49</span>
+    </div>
+    <div class="total-row final">
+      <span>Total:</span>
+      <span id="total">₹0</span>
+    </div>
+    
+    <h4 style="margin:20px 0 10px;">Delivery Details</h4>
+    <label>Full Name *</label>
+    <input type="text" id="custName" placeholder="Enter your name">
+    <label>Mobile Number *</label>
+    <input type="tel" id="custMobile" placeholder="10 digit mobile" maxlength="10">
+    <label>Email (Optional)</label>
+    <input type="email" id="custEmail" placeholder="your@email.com">
+    <label>Complete Address *</label>
+    <textarea id="custAddress" rows="3" placeholder="House no, Street, City, Pincode"></textarea>
+    <label>Payment Mode *</label>
+    <select id="custPayment">
+      <option value="">Select Payment</option>
+      <option value="COD">Cash on Delivery</option>
+      <option value="Online">Online Payment</option>
+    </select>
+    
+    <button class="checkout-btn" onclick="sendCartOTP()">📱 Place Order with OTP</button>
+  </div>
+</div>
+
+<div id="cartOTPModal" class="modal hide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🔐 Verify OTP</h3>
+      <button class="close-btn" onclick="closeCartOTPModal()">×</button>
+    </div>
+    <div class="modal-body" id="cartOTPModalBody"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <div>🏠</div>
+    <span>Home</span>
+  </a>
+  <a href="categories.html" class="nav-item">
+    <div>📱</div>
+    <span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item active">
+    <div>🛒</div>
+    <span>Cart</span>
+    <span class="cart-badge" id="cartCount">0</span>
+  </a>
+  <a href="javascript:void(0)" class="nav-item" onclick="alert('Account page coming soon')">
+    <div>👤</div>
+    <span>Account</span>
+  </a>
+</div>
+
+<script src="db.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
+  
+  const firebaseConfig = {
+  
+};
+
+  let firebaseDB = null;
+  try {
+    if (firebaseConfig.apiKey) {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      firebaseDB = firebase.firestore();
+    } else {
+      console.log('Firebase config empty, running without Firebase');
+    }
+  } catch(e) {
+    console.log('Firebase init failed:', e);
+  }
+
+  let cartGeneratedOTP = '';
+  let cartOrderData = {};
+
+  document.addEventListener('DOMContentLoaded', function(){
+    loadCart();
+    updateCartCount();
+  });
+
+  function loadCart(){
+    let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+    let userCart = SANTRA_CART;
+    let container = document.getElementById('cartItems');
+
+    if(userCart.length === 0){
+      container.innerHTML = '<div class="empty-cart"><div>🛒</div><p>Your cart is empty</p><button onclick="window.location.href=\'index.html\'" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Continue Shopping</button></div>';
+      document.getElementById('checkoutSection').classList.add('hide');
+      return;
+    }
+
+    container.innerHTML = '';
+    let subtotal = 0;
+
+    userCart.forEach((item, index) => {
+      let itemTotal = item.price * item.qty;
+      subtotal += itemTotal;
+      
+      /* 
+      ========== OLD CODE BACKUP - 11/5/2026 - BROKEN IMAGE FIX ==========
+      let imgUrl = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || '';
+      let imgSrc = imgUrl && imgUrl.length > 5 ? imgUrl : 'https://via.placeholder.com/80x80/e40046/ffffff?text=SANTRA';
+      let productCode = item.product_code || item.code || item.sku || 'N/A';
+      ========== OLD CODE END ==========
+      */
+      
+      // ========== NEW CODE - 12/5/2026 - IMAGE + CODE FIX V2 ==========
+      let imgUrl = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || '';
+      if(imgUrl && typeof imgUrl === 'string'){
+        imgUrl = imgUrl.trim();
+        if(imgUrl.startsWith('data:image') && imgUrl.length > 50000){
+          imgUrl = ''; // Base64 hatao
+        }
+      }
+      let imgSrc = imgUrl && imgUrl.length > 5 ? imgUrl : 'https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE';
+      
+      let productCode = item.product_code || item.code || item.sku || 'N/A';
+      if(typeof productCode === 'object' && productCode !== null){
+        productCode = productCode.name || productCode.id || productCode.sku || productCode.code || 'N/A';
+      }
+      // ========== NEW CODE END ==========
+
+      container.innerHTML += `
+        <div class="cart-item">
+          <img src="${imgSrc}" alt="${item.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <div class="price">₹${item.price} x ${item.qty} = ₹${itemTotal}</div>
+            <div class="product-code">Code: ${productCode}</div>
+            <div class="qty-control">
+              <button onclick="updateQty(${index}, -1)">-</button>
+              <span>${item.qty}</span>
+              <button onclick="updateQty(${index}, 1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+        </div>
+      `;
+    });
+
+    let delivery = subtotal >= 500 ? 0 : 49;
+    let total = subtotal + delivery;
+
+    document.getElementById('subtotal').innerText = '₹' + subtotal;
+    document.getElementById('delivery').innerText = delivery === 0 ? 'FREE' : '₹' + delivery;
+    document.getElementById('total').innerText = '₹' + total;
+    document.getElementById('checkoutSection').classList.remove('hide');
+  }
+
+  function updateQty(index, change){
+    let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+    if(!SANTRA_CART[index]) return;
+
+    let newQty = SANTRA_CART[index].qty + change;
+
+    if(newQty < 1){
+      removeItem(index);
+      return;
+    }
+
+    SANTRA_CART[index].qty = newQty;
+    localStorage.setItem('santra_cart', JSON.stringify(SANTRA_CART));
+    loadCart();
+    updateCartCount();
+  }
+
+  function removeItem(index){
+    if(confirm('Remove this item?')){
+      let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+      SANTRA_CART.splice(index, 1);
+      localStorage.setItem('santra_cart', JSON.stringify(SANTRA_CART));
+      loadCart();
+      updateCartCount();
+    }
+  }
+
+  function updateCartCount(){
+    let SANTRA_CART = JSON.parse(localStorage.getItem('santra_cart')) || [];
+    let total = SANTRA_CART.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('cartCount').innerText = total;
+  }
+
+  function sendCartOTP(){
+     let cart = JSON.parse(localStorage.getItem('santra_cart')) || [];
+     if(cart.length === 0){
+        alert('Cart khali hai! Pehle product add karo.');
+        return;
+     }
+
+     let name = document.getElementById('custName').value.trim();
+     let mobile = document.getElementById('custMobile').value.trim();
+     let address = document.getElementById('custAddress').value.trim();
+     let payment = document.getElementById('custPayment').value;
+     let email = document.getElementById('custEmail').value.trim();
+
+     if(!name || !mobile || !address || !payment){
+        alert('Naam, Mobile, Address aur Payment mode bharna zaroori hai');
+        return;
+     }
+
+     if(mobile.length !== 10 || isNaN(mobile)){
+        alert('Please enter valid 10-digit mobile number!');
+        return;
+     }
+
+     cartGeneratedOTP = Math.floor(100000 + Math.random() * 900000);
+     
+     let subtotal = 0;
+     cart.forEach(item => subtotal += item.price * item.qty);
+     let delivery = subtotal >= 500 ? 0 : 49;
+     let total = subtotal + delivery;
+     
+     cartOrderData = {
+       cart, name, mobile, email, address, payment, subtotal, delivery, total
+     };
+     
+     document.getElementById('cartOTPModal').classList.remove('hide');
+     document.getElementById('cartOTPModalBody').innerHTML = `
+      <div style="background:#fff3cd;padding:15px;border-radius:8px;margin-bottom:15px;border:2px dashed #FFA000;">
+        <p style="color:#856404;margin:0;text-align:center;"><b>🔐 Your OTP</b></p>
+        <h2 style="text-align:center;color:#e40046;margin:10px 0;letter-spacing:5px;">${cartGeneratedOTP}</h2>
+        <p style="color:#856404;margin:0;text-align:center;font-size:12px;">Enter this OTP below to verify your order</p>
+      </div>
+      <label>Enter 6 Digit OTP *</label>
+      <input type="text" id="cartEnteredOTP" placeholder="Enter OTP" maxlength="6" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:4px;font-size:18px;text-align:center;letter-spacing:5px;">
+      <p id="cartOTPError" style="color:red;font-size:12px;display:none;"></p>
+      <button type="button" onclick="verifyCartOTPAndOrder()" style="width:100%;padding:15px;background:#25D366;font-size:18px;border:none;color:white;border-radius:8px;cursor:pointer;margin-top:10px;">
+        ✅ Verify OTP & Place Order
+      </button>
+     `;
+  }
+
+  function closeCartOTPModal(){
+    document.getElementById('cartOTPModal').classList.add('hide');
+    cartGeneratedOTP = '';
+  }
+
+  function verifyCartOTPAndOrder(){
+    let enteredOTP = document.getElementById('cartEnteredOTP').value.trim();
+    let errorEl = document.getElementById('cartOTPError');
+    
+    if(enteredOTP == cartGeneratedOTP){
+      let waNumber = SANTRA_DB.settings?.helpdeskWhatsapp || '9829508335';
+      
+      let itemsText = "";
+      cartOrderData.cart.forEach((item, idx) => {
+        let itemTotal = item.price * item.qty;
+        let imgUrl = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || '';
+        if(imgUrl.startsWith('data:image') && imgUrl.length > 50000){
+          imgUrl = '';
+        }
+        
+        let productCode = item.product_code || item.code || item.sku || 'N/A';
+        if(typeof productCode === 'object' && productCode !== null){
+          productCode = productCode.id || productCode.sku || productCode.code || productCode.name || 'N/A';
+        }
+        
+        let productLink = item.product_link || item.link || item.url || `https://santramall.com/product/${productCode}`;
+        
+        /* ========== OLD CODE - 11/5/2026 - %0A WALA ==========
+        itemsText += `${idx+1}. ${productCode} | ${item.name} x ${item.qty} = Rs.${itemTotal}%0A Photo: ${imgUrl}%0A Link: ${productLink}%0A`;
+        ========== OLD CODE END ========== */
+        
+        // ========== NEW CODE - 12/5/2026 - \n WALA + NO IMAGE FIX ==========
+        let photoLine = imgUrl && imgUrl.length > 5 ? `Photo: ${imgUrl}\n` : '';
+        itemsText += `${idx+1}. ${productCode} | ${item.name} x ${item.qty} = Rs.${itemTotal}\n${photoLine}Link: ${productLink}\n`;
+        // ========== NEW CODE END ==========
+      });
+
+      if(!SANTRA_DB.orders) SANTRA_DB.orders = [];
+      if(!SANTRA_DB.customers) SANTRA_DB.customers = [];
+      
+      let orderData = {
+        id: Date.now(),
+        uid: 0,
+        customerName: cartOrderData.name,
+        mobile: cartOrderData.mobile,
+        email: cartOrderData.email,
+        address: cartOrderData.address,
+        paymentMode: cartOrderData.payment,
+        items: cartOrderData.cart,
+        subtotal: cartOrderData.subtotal,
+        delivery: cartOrderData.delivery,
+        total: cartOrderData.total,
+        status: 'Confirmed',
+        otpVerified: true,
+        otp: cartGeneratedOTP,
+        time: new Date().toISOString()
+      };
+      
+      let existingCustomer = SANTRA_DB.customers.find(c => c.mobile == cartOrderData.mobile);
+      if(existingCustomer){
+        existingCustomer.orders = (existingCustomer.orders || 0) + 1;
+        existingCustomer.lastOrder = new Date().toISOString();
+        existingCustomer.name = cartOrderData.name;
+        existingCustomer.email = cartOrderData.email;
+        existingCustomer.address = cartOrderData.address;
+      } else {
+        SANTRA_DB.customers.push({
+          id: Date.now(),
+          name: cartOrderData.name,
+          mobile: cartOrderData.mobile,
+          email: cartOrderData.email,
+          address: cartOrderData.address,
+          orders: 1,
+          joined: new Date().toISOString(),
+          lastOrder: new Date().toISOString()
+        });
+      }
+      
+      SANTRA_DB.orders.push(orderData);
+      saveDB();
+      
+      if(firebaseDB){
+        firebaseDB.collection('orders').add(orderData)
+     .then(() => console.log('✅ Cart Order saved to Firebase Backup'))
+     .catch(err => console.log('Firebase save error:', err));
+      
+        firebaseDB.collection('customers').doc(cartOrderData.mobile).set({
+          name: cartOrderData.name,
+          mobile: cartOrderData.mobile,
+          email: cartOrderData.email,
+          address: cartOrderData.address,
+          updated: new Date().toISOString()
+        }, {merge: true});
+      }
+      
+      let msg = `🛒 New Order - SANTRA MALL
+OTP Verified: ${cartGeneratedOTP}
+
+CUSTOMER PROFILE:
+Name: ${cartOrderData.name}
+Mobile: ${cartOrderData.mobile}
+Email: ${cartOrderData.email || 'N/A'}
+Address: ${cartOrderData.address}
+Payment: ${cartOrderData.payment}
+
+Items:
+${itemsText}
+Subtotal: Rs.${cartOrderData.subtotal}
+Delivery: ${cartOrderData.delivery === 0 ? 'FREE' : 'Rs.' + cartOrderData.delivery}
+Total Amount: Rs.${cartOrderData.total}
+Time: ${new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'})}`;
+
+      /* ========== OLD CODE - 11/5/2026 - whatsapp:// + DOUBLE OPEN + TURANT REDIRECT ==========
+      const whatsappURL = `https://api.whatsapp.com/send?phone=91${waNumber}&text=${encodeURIComponent(msg)}`;
+      window.open(whatsappURL, '_blank');
+      window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(itemsText)}`);
+      window.location.href = 'index.html';
+      ========== OLD CODE END ========== */
+      
+      // ========== NEW CODE - 12/5/2026 - https://wa.me + SINGLE OPEN + 2 SEC DELAY ==========
+      const whatsappURL = `https://wa.me/91${waNumber}?text=${encodeURIComponent(msg)}`;
+      window.open(whatsappURL, '_blank');
+      
+      localStorage.setItem('santra_cart', JSON.stringify([]));
+      closeCartOTPModal();
+      alert('✅ Order placed successfully! OTP verified.');
+      cartGeneratedOTP = '';
+      cartOrderData = {};
+      
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 2000);
+      // ========== NEW CODE END ==========
+      
+    } else {
+      errorEl.innerText = '❌ Invalid OTP! Please check and try again.';
+      errorEl.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>
