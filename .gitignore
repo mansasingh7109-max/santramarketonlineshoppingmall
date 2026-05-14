@@ -39,3 +39,6 @@ oldsecrets.js
 *.env
 .env.local
 .env.*.local
+   order-success.php
+   order-success-old.php
+   .env
