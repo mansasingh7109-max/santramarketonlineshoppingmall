@@ -1,16 +1,20 @@
 # Secret files - Github pe upload nahi hongi
 secrets.js
 oldsecrets.js
-*.env
+config.php
+
+# Env files
+.env
 .env.local
 .env.*.local
 
-# Backup files
+# Backup & Old files
 *-backup-*.html
 *-backup-*.js
 script-backup-*.js
 old*.html
 old*.js
+order-success-old.php
 index-old-backup.html
 index-backup-14-may-2026.html
 cart-backup-14-may-2026.html
@@ -18,7 +22,7 @@ admin-login-backup-13-may-2026.html
 admin-password-reset-backup.html
 oldadmin-password-reset-backup.html
 
-# PHP sensitive files
+# PHP sensitive files jisme token ho sakta hai
 admin-verify.php
 send-otp.php
 send-whatsapp-otp.php
@@ -32,13 +36,3 @@ firebase-debug.log
 # System files
 .DS_Store
 Thumbs.db
-# Secret files - Github pe upload nahi hongi
-config.php
-secrets.js
-oldsecrets.js
-*.env
-.env.local
-.env.*.local
-   order-success.php
-   order-success-old.php
-   .env
