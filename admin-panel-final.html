@@ -5,52 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANTRA MALL - Admin Panel Final</title>
   <style>
-    :root{--bg:#0f172a;--card:#1e293b;--accent:#e40046;--text:#e2e8f0;--border:#334155}
+    :root{--bg:#0f172a;--card:#1e293b;--accent:#e40046;--text:#e2e8f0;--border:#334155;--success:#10b981;--sidebar:#0f172a;--table:#1e293b;--input:#0f172a;--popup:#1e293b;--btntext:#ffffff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);}
-    .top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;}
-    .top-bar h1{color:var(--accent);font-size:18px;}
-    .top-btns{display:flex;gap:10px;}
-    .btn-firebase{background:#e40046;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
-    .btn-global{background:#7c3aed;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
-    .btn-logout{background:#475569;color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;}
-    .main{display:flex;gap:15px;padding:0 15px;}
-    .sidebar{width:220px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;}
-    .menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;}
-    .menu-item:hover{background:#334155;}
-    .menu-item.active{background:#334155;border-left:3px solid var(--accent);}
-    .content{flex:1;background:var(--card);border-radius:8px;padding:20px;}
-    input,select,textarea{width:100%;padding:10px;margin:8px 0;background:#0f172a;border:1px solid var(--border);border-radius:4px;color:var(--text);}
+.top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;}
+.top-bar h1{color:var(--accent);font-size:18px;}
+.top-btns{display:flex;gap:10px;}
+.btn-firebase{background:var(--success);color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
+.btn-global{background:#7c3aed;color:white;border:none;padding:8px 15px;border-radius:4px;font-weight:bold;cursor:pointer;}
+.main{display:flex;gap:15px;padding:0 15px;}
+.sidebar{width:220px;background:var(--sidebar);border-radius:8px;padding:15px;height:fit-content;}
+.menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;}
+.menu-item:hover{background:#334155;}
+.menu-item.active{background:#334155;border-left:3px solid var(--accent);}
+.content{flex:1;background:var(--card);border-radius:8px;padding:20px;min-height:600px;}
+    input,select,textarea{width:100%;padding:10px;margin:8px 0;background:var(--input);border:1px solid var(--border);border-radius:4px;color:var(--text);}
     label{font-weight:bold;margin-top:10px;display:block;color:#cbd5e1;}
-    button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:4px;cursor:pointer;margin:5px 0;font-weight:bold;}
-    .btn-del{background:#ef4444!important;}
-    .btn-edit{background:#3b82f6!important;}
-    .media-btn{display:inline-block;padding:8px 12px;border:none;border-radius:4px;margin:5px;cursor:pointer;font-size:13px;}
-    .btn-gallery{background:#3b82f6;}
-    .btn-url{background:#8b5cf6;}
-    .btn-github{background:#10b981;}
-    .btn-browse{background:#f59e0b;}
-    .btn-imgbb{background:#FFA000;}
-    .flex{display:flex;gap:10px;}
-    .flex > *{flex:1;}
+    button{padding:10px 20px;background:var(--accent);color:var(--btntext);border:none;border-radius:4px;cursor:pointer;margin:5px 0;font-weight:bold;}
+.btn-del{background:#ef4444!important;}
+.btn-edit{background:#3b82f6!important;}
+.btn-preview{background:#2196f3!important;}
+.media-btn{display:inline-block;padding:8px 12px;border:none;border-radius:4px;margin:5px;cursor:pointer;font-size:13px;}
+.btn-url{background:#8b5cf6;}
+.btn-browse{background:#f59e0b;}
+.btn-firebase-backup{background:#10b981;}
+.btn-audio{background:#ec4899;}
+.btn-video{background:#06b6d4;}
+.btn-doc{background:#f97316;}
+.flex{display:flex;gap:10px;}
+.flex > *{flex:1;}
     table{width:100%;border-collapse:collapse;margin-top:15px;}
     th,td{padding:10px;text-align:left;border-bottom:1px solid var(--border);}
-    th{background:#0f172a;}
-    .table-wrapper{overflow-x:auto;}
-    .hide{display:none!important;}
-    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
-    .msg-success{background:#065f46;color:#d1fae5}
-    .msg-error{background:#7f1d1d;color:#fecaca}
-    .section-title{color:var(--accent);margin:20px 0 10px;font-size:16px;}
-    .badge{background:#FFA000;color:white;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;}
-    .badge-success{background:#10b981;color:white;padding:2px 6px;border-radius:4px;font-size:10px;}
-    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
-    .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:600px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
-    .modal-header h3{color:var(--accent);font-size:20px;}
-    .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
-    .modal-body{padding:20px;overflow-y:auto;}
-    #authLoader{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:10000;font-size:18px;color:var(--accent);}
+    th{background:var(--table);}
+.table-wrapper{overflow-x:auto;}
+.hide{display:none!important;}
+.section-title{color:var(--accent);margin:20px 0 10px;font-size:16px;}
+.loader{text-align:center;padding:20px;color:#94a3b8;}
+.stat-box{background:var(--table);padding:20px;border-radius:8px;flex:1;}
+.badge-success{background:var(--success);color:white;padding:2px 8px;border-radius:12px;font-size:11px;}
+  #authLoader{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:10000;font-size:18px;color:var(--accent);}
+  #uploadStatus{font-size:13px;color:#94a3b8;margin:5px 0;}
+.media-preview{margin:10px 0;padding:10px;background:var(--popup);border-radius:4px;}
   </style>
 </head>
 <body>
@@ -60,9 +55,8 @@
 <div class="top-bar">
   <h1>🛍️ SANTRA MALL - Admin Panel</h1>
   <div class="top-btns">
-    <button class="btn-firebase" onclick="openFirebasePanel()">🔒 Firebase Secure</button>
+    <button class="btn-firebase" onclick="showFirebaseStatus()">🔒 Firebase Live</button>
     <button class="btn-global" onclick="openTab('global')">🌐 Global Control</button>
-    <button class="btn-logout" onclick="logout()">Logout</button>
   </div>
 </div>
 
@@ -75,171 +69,145 @@
     <div class="menu-item" onclick="openTab('customers')">👥 Customers</div>
     <div class="menu-item" onclick="openTab('payment')">💳 Payment</div>
     <div class="menu-item" onclick="openTab('theme')">⚙️ Theme Settings</div>
+    <div class="menu-item" onclick="openTab('company')">🏢 Company Details</div>
     <div class="menu-item" onclick="openTab('helpdesk')">💬 Help Desk</div>
     <div class="menu-item" onclick="openTab('global')">🌐 Global Control</div>
     <div class="menu-item" onclick="window.location.href='index.html'">🏠 Back to Website</div>
-    <div class="menu-item" onclick="logout()">🚪 Logout</div>
+    <div class="menu-item" onclick="logout()" style="color:#ff4444;border-top:1px solid #334155;margin-top:15px;padding-top:15px;">🚪 Logout</div>
   </div>
 
   <div class="content">
     <!-- DASHBOARD -->
     <div id="dashboard" class="tab-page">
-      <h2>Dashboard</h2>
-      <p style="color:#94a3b8;margin:10px 0;">Welcome Admin! Firebase + Local data yahan dikhega.</p>
+      <h2>Dashboard - Firebase Live Data</h2>
       <div style="display:flex;gap:15px;margin:20px 0;">
-        <div style="background:#0f172a;padding:20px;border-radius:8px;flex:1;">
-          <h3>Total Products: <span id="totalProducts">0</span></h3>
-        </div>
-        <div style="background:#0f172a;padding:20px;border-radius:8px;flex:1;">
-          <h3>Total Orders: <span id="totalOrders">0</span></h3>
-        </div>
-        <div style="background:#0f172a;padding:20px;border-radius:8px;flex:1;">
-          <h3>Total Customers: <span id="totalCustomers">0</span></h3>
-        </div>
+        <div class="stat-box"><h3>Total Products: <span id="totalProducts">0</span></h3></div>
+        <div class="stat-box"><h3>Total Orders: <span id="totalOrders">0</span></h3></div>
+        <div class="stat-box"><h3>Total Customers: <span id="totalCustomers">0</span></h3></div>
       </div>
     </div>
 
     <!-- PRODUCTS -->
     <div id="products" class="tab-page hide">
       <h2>🛍️ Products Management</h2>
-      <button class="btn-logout" style="float:right;" onclick="logout()">Logout</button>
-      <div style="clear:both;"></div>
-
-      <h3 class="section-title">Product Name *</h3>
-      <input type="text" id="pName" placeholder="Pink Salwar Suit">
-
+      <input type="hidden" id="pId">
+      <h3 class="section-title" id="formTitle">Add Product</h3>
+      <input type="text" id="pName" placeholder="Product Name *">
       <div class="flex">
-        <div>
-          <label>MRP (Optional)</label>
-          <input type="number" id="pMrp" placeholder="15000">
-        </div>
-        <div>
-          <label>Selling Price *</label>
-          <input type="number" id="pPrice" placeholder="13005">
-        </div>
-        <div>
-          <label>Stock Quantity</label>
-          <input type="number" id="pStock" placeholder="20">
-        </div>
+        <div><label>MRP</label><input type="number" id="pMrp" placeholder="15000"></div>
+        <div><label>Selling Price *</label><input type="number" id="pPrice" placeholder="13005"></div>
+        <div><label>Stock *</label><input type="number" id="pStock" placeholder="20"></div>
       </div>
+      <label>Select Category *</label><select id="pCategory" required><option value="">-- Select --</option></select>
+      <label>Size & Price</label><textarea id="pSizePrice" rows="4" placeholder="S-12000&#10;M-13005"></textarea>
 
-      <label>Select Category *</label>
-      <select name="category_id" id="pCategory" required>
-        <option value="">-- Select --</option>
-      </select>
-
-      <label>Size & Price - Har line me ek</label>
-      <textarea id="pSizePrice" rows="4" placeholder="S-12000&#10;M-13005&#10;L-14000&#10;XL-15000"></textarea>
-
-      <h3 class="section-title">📁 Media Upload - imgbb Fast Upload</h3>
-
-      <label>🖼️ Image</label>
-      <button class="media-btn btn-imgbb" onclick="uploadToImgbb()">☁️ Upload to imgbb - 32MB</button>
-      <button class="media-btn btn-url" onclick="uploadFromUrl('image')">🔗 From URL</button>
-      <button class="media-btn btn-browse" onclick="browseComputer('image')">💻 Browse Computer</button>
-      <div id="imagePreview"></div>
-      <div id="uploadStatus" style="font-size:12px;color:#94a3b8;margin:5px 0;"></div>
+      <h3 class="section-title">📁 Product Media - Image + Audio + Video + Document</h3>
+      <button class="media-btn btn-url" onclick="uploadFromUrl('image')">🔗 Image URL</button>
+      <button class="media-btn btn-browse" onclick="browseFile('image')">🖼️ Image Gallery</button>
+      <button class="media-btn btn-audio" onclick="browseFile('audio')">🎵 Audio</button>
+      <button class="media-btn btn-video" onclick="browseFile('video')">🎬 Video</button>
+      <button class="media-btn btn-doc" onclick="browseFile('document')">📄 Document</button>
+      <button class="media-btn btn-firebase-backup" onclick="browseFirebase('image')">🔥 Firebase Backup</button>
+      <div id="uploadStatus"></div>
+      <div id="mediaPreview" class="media-preview"></div>
       <input type="hidden" id="pImageUrl">
-      <input type="hidden" id="pImageUrlOriginal">
-
-      <label>🎬 Video (Optional)</label>
-      <button class="media-btn btn-url" onclick="uploadFromUrl('video')">🔗 From URL</button>
-      <div id="videoPreview"></div>
-
-      <label>📄 Document/PDF (Optional)</label>
-      <button class="media-btn btn-url" onclick="uploadFromUrl('document')">🔗 From URL</button>
-      <div id="docPreview"></div>
-
-      <label>🎵 Audio (Optional)</label>
-      <button class="media-btn btn-url" onclick="uploadFromUrl('audio')">🔗 From URL</button>
-      <div id="audioPreview"></div>
+      <input type="hidden" id="pAudioUrl">
+      <input type="hidden" id="pVideoUrl">
+      <input type="hidden" id="pDocUrl">
 
       <label>Product Description</label>
-      <textarea id="pDesc" rows="3" placeholder="Product ke baare me likho..."></textarea>
+      <textarea id="pDesc" rows="3" placeholder="Product ke baare me..."></textarea>
+      <button id="saveBtn" onclick="saveProduct()" style="width:100%;padding:15px;font-size:16px;">💾 Save Product</button>
+      <button id="cancelBtn" onclick="cancelEdit()" style="width:100%;padding:12px;background:#666;display:none;">❌ Cancel Edit</button>
 
-      <button id="saveBtn" onclick="saveProduct()" style="width:100%;padding:15px;font-size:16px;">💾 Save Product - HOME PAGE PE TURANT DIKHEGA</button>
-
-      <h3 class="section-title" style="margin-top:30px;">📦 Product List - SAB PRODUCTS YAHAN HAIN</h3>
-      <button onclick="exportCSV()" style="background:#3b82f6;">📊 Export CSV</button>
-
+      <h3 class="section-title" style="margin-top:30px;">📦 Product List - Live Update</h3>
       <div class="table-wrapper">
         <table id="productTable">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Media</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Price</th>
-              <th style="min-width:120px;">Action</th>
-            </tr>
-          </thead>
-          <tbody id="productTableBody"></tbody>
+          <thead><tr><th>ID</th><th>Media</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+          <tbody id="productTableBody"><tr><td colspan="6" class="loader">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
 
     <!-- CATEGORIES -->
     <div id="categories" class="tab-page hide">
-      <h2>Categories</h2>
-      <input type="text" id="catName" placeholder="Category Name">
-      <button onclick="addCategory()">Add Category</button>
-      <div id="catList"></div>
+      <h2>Categories - Auto Image + Manual Edit</h2>
+      <input type="hidden" id="catId">
+      <input type="text" id="catName" placeholder="Category Name *" oninput="autoFetchCategoryImage()" autocomplete="off">
+      <label>Category Image - Auto fetch hoga ya manual upload karo</label>
+      <button class="media-btn btn-url" onclick="uploadCatFromUrl()">🔗 From URL</button>
+      <button class="media-btn btn-browse" onclick="browseCatImage()">💻 Upload Category Image</button>
+      <button class="media-btn btn-preview" onclick="autoFetchCategoryImage()">🔄 Auto Fetch Image</button>
+      <div id="catUploadStatus"></div>
+      <div id="catImagePreview"></div>
+      <input type="hidden" id="catImg">
+      <button onclick="addCategory()" id="catSaveBtn" style="width:100%;margin-top:10px;">Add Category</button>
+      <button id="catCancelBtn" onclick="cancelCatEdit()" style="width:100%;padding:12px;background:#666;display:none;">❌ Cancel Edit</button>
+      <div id="catList" style="margin-top:20px;"></div>
     </div>
 
     <!-- ORDERS -->
     <div id="orders" class="tab-page hide">
-      <h2>Orders - OTP Verified</h2>
-      <div id="orderList"></div>
+      <h2>Orders - Real-time</h2>
+      <div id="orderList"><div class="loader">Loading...</div></div>
     </div>
 
     <!-- CUSTOMERS -->
     <div id="customers" class="tab-page hide">
-      <h2>Customers - With OTP History</h2>
-      <div id="customerList"></div>
+      <h2>Customers - Firebase</h2>
+      <div id="customerList"><div class="loader">Loading...</div></div>
     </div>
 
     <!-- PAYMENT -->
     <div id="payment" class="tab-page hide">
-      <h2>Payment Settings</h2>
-      <label>UPI ID</label>
-      <input type="text" id="upiId" placeholder="yourname@upi">
-      <label>Bank Account</label>
-      <input type="text" id="bankAccount" placeholder="Account Number">
+      <h2>Payment Settings - Auto Save</h2>
+      <label>UPI ID</label><input type="text" id="upiId" placeholder="yourname@upi">
+      <label>Bank Account</label><input type="text" id="bankAccount" placeholder="Account Number">
       <button onclick="savePayment()">Save Payment</button>
     </div>
 
-    <!-- THEME SETTINGS -->
+    <!-- THEME SETTINGS - 9 COLORS -->
     <div id="theme" class="tab-page hide">
-      <h2>Theme Settings</h2>
-      <p style="color:#94a3b8;">Website ka logo, color, banner change karo.</p>
-      <label>Logo Text</label>
-      <input type="text" id="logoText" placeholder="🛍️ SANTRA MALL">
-      <label>Accent Color</label>
-      <input type="color" id="primaryColor" value="#e40046">
-      <label>Background Color</label>
-      <input type="color" id="bgColor" value="#0f172a">
-      <label>Card Color</label>
-      <input type="color" id="cardColor" value="#1e293b">
-      <label>Text Color</label>
-      <input type="color" id="textColor" value="#e2e8f0">
-      <button onclick="saveTheme()">Save Theme</button>
+      <h2>Theme Settings - Live Preview</h2>
+      <label>Logo Text</label><input type="text" id="logoText" placeholder="🛍️ SANTRA MALL">
+      <label>Accent Color</label><input type="color" id="primaryColor" value="#e40046">
+      <label>Background Color</label><input type="color" id="bgColor" value="#0f172a">
+      <label>Card Color</label><input type="color" id="cardColor" value="#1e293b">
+      <label>Text Color</label><input type="color" id="textColor" value="#e2e8f0">
+      <label>Sidebar Color</label><input type="color" id="sidebarColor" value="#0f172a">
+      <label>Table/Header Color</label><input type="color" id="tableColor" value="#1e293b">
+      <label>Input Box Color</label><input type="color" id="inputColor" value="#0f172a">
+      <label>Popup/Modal Color</label><input type="color" id="popupColor" value="#1e293b">
+      <label>Button Text Color</label><input type="color" id="btnTextColor" value="#ffffff">
+      <button class="btn-preview" onclick="applyThemeLive()">👁️ Preview</button>
+      <button onclick="saveTheme()">💾 Save Theme - All Pages Update</button>
+    </div>
+
+    <!-- COMPANY DETAILS -->
+    <div id="company" class="tab-page hide">
+      <h2>🏢 Company Details - Live Update</h2>
+      <label>About Company</label>
+      <textarea id="companyAbout" rows="4" placeholder="Company ke baare me likho..."></textarea>
+      <label>Features</label>
+      <textarea id="companyFeatures" rows="6" placeholder="✓ 100% Original Products&#10;✓ Free Delivery"></textarea>
+      <label>Development Info</label>
+      <textarea id="companyDev" rows="4" placeholder="Platform: Firebase&#10;Version: 2.0"></textarea>
+      <label>Rules & Regulations</label>
+      <textarea id="companyRules" rows="6" placeholder="1. All prices include GST"></textarea>
+      <button onclick="saveCompanyDetails()" style="width:100%;padding:15px;font-size:16px;margin-top:15px;">💾 Save Company Details</button>
     </div>
 
     <!-- HELP DESK -->
     <div id="helpdesk" class="tab-page hide">
-      <h2>Help Desk</h2>
-      <p style="color:#94a3b8;">Phone number change karo jo Help Desk me dikhta hai.</p>
-      <label>Help Desk Phone</label>
-      <input type="text" id="helpPhone" placeholder="9829508335">
-      <label>Help Desk WhatsApp</label>
-      <input type="text" id="helpWhatsapp" placeholder="9829508335">
-      <label>Help Desk Email</label>
-      <input type="email" id="helpEmail" placeholder="mansasingh7109@gmail.com">
+      <h2>Help Desk - Live Update</h2>
+      <label>Help Desk Phone</label><input type="text" id="helpPhone" placeholder="9829508335">
+      <label>Help Desk WhatsApp</label><input type="text" id="helpWhatsapp" placeholder="9829508335">
+      <label>Help Desk Email</label><input type="email" id="helpEmail" placeholder="mansasingh7109@gmail.com">
+      <label>Working Hours</label><input type="text" id="helpHours" placeholder="Mon-Sat: 12 AM - 12 PM">
       <button onclick="saveHelpdesk()">Save Help Desk</button>
     </div>
 
-    <!-- GLOBAL CONTROL -->
+    <!-- GLOBAL CONTROL - EK HI BUTTON -->
     <div id="global" class="tab-page hide">
       <h2>Global Control</h2>
       <label>Site Status</label>
@@ -252,791 +220,596 @@
   </div>
 </div>
 
-<script src="db.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script type="module">
-  import { firebaseConfig } from './secrets.js';
-
-  window.firebaseDB = null;
-  window.firebaseAuth = null;
-
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
+  import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+  import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
+  import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js'
+  
+  // ===== IMGBB + FIREBASE CONFIG =====
+  let IMGBB_KEY = '';
   try {
-    if (firebaseConfig && firebaseConfig.apiKey) {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
-      window.firebaseDB = firebase.firestore();
-      window.firebaseAuth = firebase.auth();
-      console.log('Firebase initialized successfully');
-    }
+    const secrets = await import('./Secrets.js');
+    if(secrets.IMGBB_KEY) IMGBB_KEY = secrets.IMGBB_KEY;
+    if(secrets.firebaseConfig) var firebaseConfig = secrets.firebaseConfig;
   } catch(e) {
-    console.log('Firebase init failed:', e);
+    console.error('Secrets.js error:', e);
   }
-</script>
 
-<script>
-// ===== FIXED: LOGIN CHECK WITH ROLE + FIREBASE UID - 14/5/2026 =====
-document.addEventListener('DOMContentLoaded', async function() {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const storage = getStorage(app);
+
+  // ===== LOGIN CHECK =====
   const loader = document.getElementById('authLoader');
-
-  if (!window.firebaseAuth ||!window.firebaseDB) {
-    loader.innerHTML = '❌ Firebase connect nahi hai! secrets.js check karo.';
-    return;
-  }
-
-  window.firebaseAuth.onAuthStateChanged(async (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (!user) {
       loader.innerHTML = '❌ Please login first!';
-      setTimeout(() => {
-        alert('Please login from Help Desk first!');
-        window.location.href = 'index.html';
-      }, 1500);
+      setTimeout(() => window.location.href = 'admin-login.html', 1500);
       return;
     }
-
     try {
-      const adminRef = window.firebaseDB.collection('Manisha Tak').doc('main_admin');
-      const adminSnap = await adminRef.get();
-
-      // ===== YAHI THA BUG - exists() function hai =====
-      if (!adminSnap.exists) {
-        loader.innerHTML = '❌ Admin config nahi mila Firestore me!';
-        setTimeout(() => logout(), 2000);
+      const adminRef = doc(db, 'Manisha Tak', 'main_admin');
+      const adminSnap = await getDoc(adminRef);
+      if (!adminSnap.exists() || adminSnap.data().uid!== user.uid) {
+        loader.innerHTML = '❌ Access Denied! Admin only.';
+        setTimeout(() => { signOut(auth); window.location.href = 'index.html'; }, 2000);
         return;
       }
-
-      const adminData = adminSnap.data();
-
-      if (adminData.uid!== user.uid) {
-        loader.innerHTML = '❌ Access Denied! Aap admin nahi ho.';
-        console.log('Login UID:', user.uid, 'DB UID:', adminData.uid);
-        setTimeout(() => {
-          alert('Access Denied! Admin only.');
-          window.firebaseAuth.signOut();
-          window.location.href = 'index.html';
-        }, 2000);
-        return;
-      }
-
-      console.log('✅ Admin Access Granted:', user.email);
       loader.style.display = 'none';
-
-      localStorage.setItem('admin_logged_in', 'true');
-      localStorage.setItem('current_admin', JSON.stringify({
-        email: user.email,
-        uid: user.uid,
-        name: adminData.name || 'Admin',
-        role: 'admin',
-        loginTime: Date.now()
-      }));
-
-      loadDashboard();
-      loadProducts();
-      loadOrders();
-      loadCustomers();
-      loadThemeFromStorage();
-      loadCategories();
-
+      initApp();
     } catch (err) {
       loader.innerHTML = '❌ Error: ' + err.message;
-      console.log('Admin check error:', err);
-      setTimeout(() => logout(), 2000);
+      loader.style.display = 'none';
+      initApp();
     }
   });
-});
 
-/* ===== OLD CODE BACKUP - 13/5/2026 =====
-window.onload = function(){
-  let admin = JSON.parse(localStorage.getItem('current_admin') || 'null');
-  if(!admin || admin.role!== 'admin'){
-    alert('Please login from Help Desk first!');
-    window.location.href = 'index.html';
-    return;
-  }
-
-  loadDashboard();
-  loadProducts();
-  loadOrders();
-  loadCustomers();
-  loadThemeFromStorage();
-  loadCategories();
-}
-===== OLD CODE END ===== */
-
-function logout(){
-  if (window.firebaseAuth) {
-    window.firebaseAuth.signOut();
-  }
-  localStorage.removeItem('current_admin');
-  localStorage.removeItem('admin_logged_in');
-  sessionStorage.clear();
-  alert('✅ Logged out successfully');
-  window.location.replace('index.html');
-}
-
-function openTab(tabName){
-  document.querySelectorAll('.tab-page').forEach(t => t.classList.add('hide'));
-  document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabName).classList.remove('hide');
-  event.target.classList.add('active');
-  if(tabName === 'customers') loadCustomers();
-  if(tabName === 'orders') loadOrders();
-  if(tabName === 'products') loadProducts();
-  if(tabName === 'categories') loadCategories();
-}
-
-// ===== FIREBASE SECURE BUTTON =====
-function openFirebasePanel(){
-  if(!window.firebaseDB){
-    alert('❌ Firebase connect nahi hai!\n\nFix: firebaseConfig me apna API key daalo');
-    return;
-  }
-  let modal = document.createElement('div');
-  modal.className = 'modal';
-  modal.innerHTML = `
-    <div class="modal-content" style="max-width:600px;">
-      <div class="modal-header">
-        <h3>🔒 Firebase Secure Status</h3>
-        <button class="close-btn" onclick="this.closest('.modal').remove()">×</button>
-      </div>
-      <div class="modal-body">
-        <div style="background:#065f46;padding:15px;border-radius:8px;margin-bottom:15px;">
-          <p style="color:#d1fae5;margin:0;">✅ Firebase Connected Successfully</p>
-        </div>
-        <h4>📊 Database Stats:</h4>
-        <p><b>Project ID:</b> santra-mall</p>
-        <p><b>Orders Saved:</b> <span id="fbOrders">Loading...</span></p>
-        <p><b>Customers Saved:</b> <span id="fbCustomers">Loading...</span></p>
-        <p><b>Products Saved:</b> <span id="fbProducts">Loading...</span></p>
-        <hr style="margin:20px 0;border-color:var(--border);">
-        <h4>🔗 Quick Actions:</h4>
-        <button onclick="window.open('https://console.firebase.google.com/', '_blank')" style="width:100%;margin:5px 0;background:#3b82f6;">
-          📂 Open Firestore Database
-        </button>
-        <button onclick="testFirebaseSave()" style="width:100%;margin:5px 0;background:#10b981;">
-          🧪 Test Firebase Save
-        </button>
-        <button onclick="syncLocalToFirebase()" style="width:100%;margin:5px 0;background:#f59e0b;">
-          🔄 Sync Local Data to Firebase
-        </button>
-        <p style="font-size:12px;color:#94a3b8;margin-top:15px;">
-          <b>Note:</b> Images ab imgbb pe save ho rahi hain - Direct Link.
-        </p>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  loadFirebaseStats();
-}
-
-async function loadFirebaseStats(){
-  if(!window.firebaseDB) return;
-  try {
-    let orders = await window.firebaseDB.collection('orders').get();
-    document.getElementById('fbOrders').innerText = orders.size;
-    let customers = await window.firebaseDB.collection('customers').get();
-    document.getElementById('fbCustomers').innerText = customers.size;
-    let products = await window.firebaseDB.collection('products').get();
-    document.getElementById('fbProducts').innerText = products.size;
-  } catch(err) {
-    console.log('Stats error:', err);
-    document.getElementById('fbOrders').innerText = 'Error';
-    document.getElementById('fbCustomers').innerText = 'Error';
-    document.getElementById('fbProducts').innerText = 'Error';
-  }
-}
-
-async function testFirebaseSave(){
-  if(!window.firebaseDB){
-    alert('Firebase not connected!');
-    return;
-  }
-  await window.firebaseDB.collection('test').add({
-    msg: 'Test successful',
-    time: new Date().toISOString()
-  });
-  alert('✅ Test data Firebase me save ho gaya!');
-}
-
-async function syncLocalToFirebase(){
-  if(!window.firebaseDB){
-    alert('Firebase not connected!');
-    return;
-  }
-  if(confirm('Sabhi local orders/customers Firebase me upload kare?')){
-    if(SANTRA_DB.orders){
-      for(let order of SANTRA_DB.orders){
-        await window.firebaseDB.collection('orders').add(order);
-      }
-    }
-    if(SANTRA_DB.customers){
-      for(let cust of SANTRA_DB.customers){
-        await window.firebaseDB.collection('customers').doc(cust.mobile).set(cust);
-      }
-    }
-    alert('✅ Sync complete! Refresh karo.');
-    loadFirebaseStats();
-    loadCustomers();
+  function initApp(){
+    loadDashboard();
+    loadProducts();
     loadOrders();
+    loadCustomers();
+    loadCategories();
+    loadSettings();
+    loadCompanyDetails();
+    applyTheme();
   }
-}
 
-// ========== IMGBB UPLOAD - NO BASE64 - FIXED ==========
-async function uploadToImgbb(){
+  window.openTab = function(tabName){
+    document.querySelectorAll('.tab-page').forEach(t => t.classList.add('hide'));
+    document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabName).classList.remove('hide');
+    event.target.classList.add('active');
+  }
+
+  // ===== LOGOUT FAST =====
+  window.logout = function(){
+    signOut(auth).then(() => window.location.replace('admin-login.html'));
+  }
+
+  function loadDashboard(){
+    onSnapshot(collection(db, "products"), snap => {
+      document.getElementById('totalProducts').innerText = snap.size;
+    });
+    onSnapshot(collection(db, "orders"), snap => {
+      document.getElementById('totalOrders').innerText = snap.size;
+    });
+    onSnapshot(collection(db, "customers"), snap => {
+      document.getElementById('totalCustomers').innerText = snap.size;
+    });
+  }
+
+  // ===== MEDIA UPLOAD =====
+  window.browseFile = function(type){
+    let fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    if(type=='image') fileInput.accept = 'image/*';
+    else if(type=='audio') fileInput.accept = 'audio/*';
+    else if(type=='video') fileInput.accept = 'video/*';
+    else if(type=='document') fileInput.accept = '.pdf,.doc,.docx,.txt';
+    
+    fileInput.onchange = async function(e){
+      let file = e.target.files[0];
+      if(!file) return;
+      if(file.size > 32000000){ alert('⚠️ 32MB se chhoti file'); return; }
+      
+      document.getElementById('uploadStatus').innerText = `⏳ Uploading ${type}...`;
+      
+      if(type=='image' && IMGBB_KEY && IMGBB_KEY!== '' && IMGBB_KEY!== 'TERI_IMGBB_KEY'){
+        try {
+          const formData = new FormData();
+          formData.append('image', file);
+          const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method: 'POST', body: formData});
+          const data = await res.json();
+          if(data.success) {
+            saveMediaUrl(type, data.data.url);
+            document.getElementById('uploadStatus').innerText = '✅ imgbb Upload Success';
+            return;
+          }
+        } catch(err) { console.log('imgbb failed'); }
+      }
+      
+      try {
+        document.getElementById('uploadStatus').innerText = `⏳ Firebase pe upload...`;
+        const storageRef = ref(storage, `products/${type}/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+        saveMediaUrl(type, url);
+        document.getElementById('uploadStatus').innerText = `✅ Firebase ${type} Upload Success`;
+      } catch(err2) {
+        document.getElementById('uploadStatus').innerText = '❌ Failed: ' + err2.message;
+      }
+    };
+    fileInput.click();
+  }
+
+  window.uploadFromUrl = function(type){
+    let url = prompt(`Enter ${type} URL:`);
+    if(url) {
+      saveMediaUrl(type, url);
+      document.getElementById('uploadStatus').innerText = '✅ URL Set';
+    }
+  }
+
+  window.browseFirebase = function(type){
+    browseFile(type);
+  }
+
+  function saveMediaUrl(type, url){
+    if(type=='image') document.getElementById('pImageUrl').value = url;
+    else if(type=='audio') document.getElementById('pAudioUrl').value = url;
+    else if(type=='video') document.getElementById('pVideoUrl').value = url;
+    else if(type=='document') document.getElementById('pDocUrl').value = url;
+    updateMediaPreview();
+  }
+
+  function updateMediaPreview(){
+    let html = '';
+    const img = document.getElementById('pImageUrl').value;
+    const audio = document.getElementById('pAudioUrl').value;
+    const video = document.getElementById('pVideoUrl').value;
+    const doc = document.getElementById('pDocUrl').value;
+    
+    if(img) html += `<div><b>Image:</b><br><img src="${img}" style="max-width:150px;border-radius:4px;"></div>`;
+    if(audio) html += `<div><b>Audio:</b><br><audio controls src="${audio}" style="width:100%;"></audio></div>`;
+    if(video) html += `<div><b>Video:</b><br><video controls src="${video}" style="max-width:200px;"></video></div>`;
+    if(doc) html += `<div><b>Document:</b><br><a href="${doc}" target="_blank">📄 View Document</a></div>`;
+    document.getElementById('mediaPreview').innerHTML = html;
+  }
+
+  // ===== PRODUCT SAVE FAST =====
+  window.saveProduct = async function(){
+    const id = document.getElementById('pId').value;
+    const name = document.getElementById('pName').value.trim();
+    const price = document.getElementById('pPrice').value.trim();
+    const stock = document.getElementById('pStock').value.trim();
+    const category = document.getElementById('pCategory').value;
+    const img = document.getElementById('pImageUrl').value;
+
+    if(!name ||!price ||!stock ||!category ||!img){
+      alert('Please fill all required fields!'); return;
+    }
+
+    const productData = {
+      name, price: Number(price), stock: Number(stock), category,
+      mrp: Number(document.getElementById('pMrp').value) || Number(price),
+      desc: document.getElementById('pDesc').value,
+      sizePrice: document.getElementById('pSizePrice').value,
+      image: img,
+      audio: document.getElementById('pAudioUrl').value,
+      video: document.getElementById('pVideoUrl').value,
+      document: document.getElementById('pDocUrl').value,
+      updatedAt: new Date().toISOString()
+    };
+
+    if(id){ 
+      updateDoc(doc(db, "products", id), productData);
+    } else { 
+      productData.createdAt = new Date().toISOString();
+      addDoc(collection(db, "products"), productData);
+    }
+    cancelEdit();
+  }
+
+  window.cancelEdit = function(){
+    document.getElementById('pId').value = '';
+    document.getElementById('pName').value = '';
+    document.getElementById('pMrp').value = '';
+    document.getElementById('pPrice').value = '';
+    document.getElementById('pStock').value = '';
+    document.getElementById('pCategory').value = '';
+    document.getElementById('pSizePrice').value = '';
+    document.getElementById('pDesc').value = '';
+    document.getElementById('pImageUrl').value = '';
+    document.getElementById('pAudioUrl').value = '';
+    document.getElementById('pVideoUrl').value = '';
+    document.getElementById('pDocUrl').value = '';
+    document.getElementById('mediaPreview').innerHTML = '';
+    document.getElementById('uploadStatus').innerText = '';
+    document.getElementById('formTitle').innerText = 'Add Product';
+    document.getElementById('saveBtn').innerText = '💾 Save Product';
+    document.getElementById('cancelBtn').style.display = 'none';
+  }
+
+  window.editProduct = async function(id){
+    const docSnap = await getDoc(doc(db, "products", id));
+    if(docSnap.exists()){
+      const p = docSnap.data();
+      document.getElementById('pId').value = id;
+      document.getElementById('pName').value = p.name;
+      document.getElementById('pMrp').value = p.mrp || '';
+      document.getElementById('pPrice').value = p.price;
+      document.getElementById('pStock').value = p.stock;
+      document.getElementById('pCategory').value = p.category;
+      document.getElementById('pSizePrice').value = p.sizePrice || '';
+      document.getElementById('pDesc').value = p.desc || '';
+      document.getElementById('pImageUrl').value = p.image || '';
+      document.getElementById('pAudioUrl').value = p.audio || '';
+      document.getElementById('pVideoUrl').value = p.video || '';
+      document.getElementById('pDocUrl').value = p.document || '';
+      updateMediaPreview();
+      document.getElementById('formTitle').innerText = 'Edit Product';
+      document.getElementById('saveBtn').innerText = '✅ Update Product';
+      document.getElementById('cancelBtn').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function loadProducts(){
+    onSnapshot(collection(db, "products"), (snapshot) => {
+      const tbody = document.getElementById('productTableBody');
+      tbody.innerHTML = '';
+      if(snapshot.empty){ tbody.innerHTML = '<tr><td colspan="6" class="loader">No products</td></tr>'; return; }
+      snapshot.forEach((doc) => {
+        const p = doc.data();
+        let mediaIcon = '';
+        if(p.image) mediaIcon += '🖼️';
+        if(p.audio) mediaIcon += '🎵';
+        if(p.video) mediaIcon += '🎬';
+        if(p.document) mediaIcon += '📄';
+        tbody.innerHTML += `
+          <tr>
+            <td style="font-size:11px;">${doc.id.substring(0,6)}</td>
+            <td>${mediaIcon} <img src="${p.image}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'"></td>
+            <td>${p.name}</td>
+            <td>₹${p.price}</td>
+            <td>${p.stock}</td>
+            <td>
+              <button class="btn-edit" onclick="editProduct('${doc.id}')" style="padding:4px 8px;font-size:11px;">✏️ Edit</button>
+              <button class="btn-del" onclick="deleteProduct('${doc.id}')" style="padding:4px 8px;font-size:11px;">🗑️ Del</button>
+            </td>
+          </tr>
+        `;
+      });
+    });
+  }
+
+  window.deleteProduct = function(id){
+    if(confirm('Delete this product?')){
+      deleteDoc(doc(db, "products", id));
+    }
+  }
+    // ===== CATEGORIES - AUTO IMAGE FOR ANY NAME - FIXED =====
+  window.autoFetchCategoryImage = function(){
+    const name = document.getElementById('catName').value.trim();
+    
+    if(!name){ 
+      alert('Pehle Category Name likho!'); 
+      return; 
+    }
+    
+    if(document.getElementById('catImg').value){
+      if(!confirm('Pehle se image hai. Nayi wali se replace karna hai?')) return;
+    }
+    
+    document.getElementById('catUploadStatus').innerText = '⏳ Image fetch kar rahe hain...';
+    document.getElementById('catUploadStatus').style.color = '#f59e0b';
+    
+    // Primary API - LoremFlickr - 99% working
+    const imageUrl = `https://loremflickr.com/400/400/${encodeURIComponent(name)}?lock=${Date.now()}`;
+    
+    const img = new Image();
+    img.crossOrigin = "Anonymous"; 
+    img.onload = function(){
+      document.getElementById('catImg').value = imageUrl;
+      document.getElementById('catImagePreview').innerHTML = `<img src="${imageUrl}" style="max-width:100px;border-radius:50%;border:2px solid #10b981;">`;
+      document.getElementById('catUploadStatus').innerText = '✅ Auto image mil gayi';
+      document.getElementById('catUploadStatus').style.color = '#10b981';
+    };
+    img.onerror = function(){
+      // Fallback API - Unsplash
+      const fallbackUrl = `https://source.unsplash.com/400x400/?${encodeURIComponent(name)}&${Date.now()}`;
+      const img2 = new Image();
+      img2.onload = function(){
+        document.getElementById('catImg').value = fallbackUrl;
+        document.getElementById('catImagePreview').innerHTML = `<img src="${fallbackUrl}" style="max-width:100px;border-radius:50%;border:2px solid #10b981;">`;
+        document.getElementById('catUploadStatus').innerText = '✅ Auto image mil gayi';
+        document.getElementById('catUploadStatus').style.color = '#10b981';
+      };
+      img2.onerror = function(){
+        document.getElementById('catUploadStatus').innerText = '❌ Image nahi mili. Manual upload karo.';
+        document.getElementById('catUploadStatus').style.color = '#ef4444';
+      };
+      img2.src = fallbackUrl;
+    };
+    img.src = imageUrl;
+  }
+
+  function loadCategories(){
+    onSnapshot(collection(db, "categories"), (snapshot) => {
+      const catSelect = document.getElementById('pCategory');
+      const catList = document.getElementById('catList');
+      catSelect.innerHTML = '<option value="">-- Select --</option>';
+      catList.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const cat = doc.data();
+        catSelect.innerHTML += `<option value="${cat.name}">${cat.name}</option>`;
+        catList.innerHTML += `
+          <div style="background:var(--table);padding:10px;margin:5px 0;border-radius:4px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="${cat.img}" onerror="this.src='https://via.placeholder.com/50?text=No+Image'" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+              <span>${cat.name}</span>
+            </div>
+            <div>
+              <button class="btn-edit" onclick="editCategory('${doc.id}')" style="padding:5px 10px;font-size:12px;">Edit</button>
+              <button class="btn-del" onclick="deleteCategory('${doc.id}')" style="padding:5px 10px;font-size:12px;">Delete</button>
+            </div>
+          </div>`;
+      });
+    });
+  }
+
+  window.addCategory = function(){
+    const id = document.getElementById('catId').value;
+    const catName = document.getElementById('catName').value.trim();
+    const catImg = document.getElementById('catImg').value.trim();
+    if(!catName){ alert('Enter category name'); return; }
+    
+    const catData = { name: catName, img: catImg, updatedAt: new Date().toISOString() };
+    
+    if(id){
+      updateDoc(doc(db, "categories", id), catData);
+    } else {
+      catData.createdAt = new Date().toISOString();
+      addDoc(collection(db, "categories"), catData);
+    }
+    cancelCatEdit();
+  }
+
+  window.editCategory = async function(id){
+    const docSnap = await getDoc(doc(db, "categories", id));
+    if(docSnap.exists()){
+      const cat = docSnap.data();
+      document.getElementById('catId').value = id;
+      document.getElementById('catName').value = cat.name;
+      document.getElementById('catImg').value = cat.img || '';
+      document.getElementById('catImagePreview').innerHTML = cat.img ? `<img src="${cat.img}" style="max-width:100px;border-radius:50%;" onerror="this.src='https://via.placeholder.com/100?text=No+Image'">` : '';
+      document.getElementById('catSaveBtn').innerText = '✅ Update Category';
+      document.getElementById('catCancelBtn').style.display = 'block';
+    }
+  }
+
+  window.cancelCatEdit = function(){
+    document.getElementById('catId').value = '';
+    document.getElementById('catName').value = '';
+    document.getElementById('catImg').value = '';
+    document.getElementById('catImagePreview').innerHTML = '';
+    document.getElementById('catUploadStatus').innerText = '';
+    document.getElementById('catSaveBtn').innerText = 'Add Category';
+    document.getElementById('catCancelBtn').style.display = 'none';
+  }
+
+  window.deleteCategory = function(id){
+    if(confirm('Delete category?')){
+      deleteDoc(doc(db, "categories", id));
+    }
+  }
+
+  window.browseCatImage = function(){
     let fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.onchange = async function(e){
-        let file = e.target.files[0];
-        if(!file) return;
-
-        if(file.size > 32000000){
-            alert('⚠️ Photo 32MB se chhoti honi chahiye');
-            return;
-        }
-
-        document.getElementById('uploadStatus').innerText = '⏳ Uploading to imgbb...';
-
-        let formData = new FormData();
-        formData.append('image', file);
-
+      let file = e.target.files[0];
+      if(!file) return;
+      document.getElementById('catUploadStatus').innerText = '⏳ Uploading...';
+      
+      if(IMGBB_KEY && IMGBB_KEY!== '' && IMGBB_KEY!== 'TERI_IMGBB_KEY'){
         try {
-            let response = await fetch('https://api.imgbb.com/1/upload?key=6b5d24a382d90e8bbf98fe6c1a982681', {
-                method: 'POST',
-                body: formData
-            });
-
-            let result = await response.json();
-
-            if(result.success){
-                let url = result.data.url;
-                document.getElementById('pImageUrl').value = url;
-                document.getElementById('pImageUrlOriginal').value = url;
-                document.getElementById('imagePreview').innerHTML = `
-                    <img src="${url}" style="max-width:150px;border:2px solid #10b981;border-radius:4px;">
-                    <p style="font-size:10px;color:#10b981;">✅ Uploaded to imgbb</p>
-                    <p style="font-size:10px;color:#94a3b8;">Link: ${url.substring(0,35)}...</p>
-                `;
-                document.getElementById('uploadStatus').innerText = '✅ Uploaded - 2 sec me ho gaya';
-            } else {
-                throw new Error(result.error?.message || 'Upload failed');
-            }
-        } catch(err) {
-            document.getElementById('uploadStatus').innerText = '❌ Upload failed';
-            alert('Upload failed: ' + err.message + '\n\nFrom URL use karo');
-            document.getElementById('imagePreview').innerHTML = '';
-            document.getElementById('pImageUrl').value = '';
-            document.getElementById('pImageUrlOriginal').value = '';
-        }
+          const formData = new FormData();
+          formData.append('image', file);
+          const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method: 'POST', body: formData});
+          const data = await res.json();
+          if(data.success) {
+            document.getElementById('catImg').value = data.data.url;
+            document.getElementById('catImagePreview').innerHTML = `<img src="${data.data.url}" style="max-width:100px;border:2px solid #10b981;border-radius:50%;">`;
+            document.getElementById('catUploadStatus').innerText = '✅ Upload Success';
+            return;
+          }
+        } catch(err) { }
+      }
+      
+      try {
+        const storageRef = ref(storage, `categories/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+        document.getElementById('catImg').value = url;
+        document.getElementById('catImagePreview').innerHTML = `<img src="${url}" style="max-width:100px;border:2px solid #10b981;border-radius:50%;">`;
+        document.getElementById('catUploadStatus').innerText = '✅ Firebase Upload Success';
+      } catch(err2) {
+        document.getElementById('catUploadStatus').innerText = '❌ Failed: ' + err2.message;
+      }
     };
     fileInput.click();
-}
+  }
 
-function uploadFromUrl(type){
-  let url = prompt('Enter ' + type + ' URL:');
-  if(url){
-    if(type==='image') {
-      document.getElementById('imagePreview').innerHTML = `<img src="${url}" style="max-width:150px;border-radius:4px;" onerror="this.src='https://via.placeholder.com/150?text=Invalid+URL'">`;
-      document.getElementById('pImageUrl').value = url;
-      document.getElementById('pImageUrlOriginal').value = url;
+  window.uploadCatFromUrl = function(){
+    let url = prompt('Enter Category Image URL:');
+    if(url) {
+      document.getElementById('catImagePreview').innerHTML = `<img src="${url}" style="max-width:100px;border-radius:50%;">`;
+      document.getElementById('catImg').value = url;
+      document.getElementById('catUploadStatus').innerText = '✅ URL Set';
     }
-    if(type==='video') document.getElementById('videoPreview').innerHTML = `<video src="${url}" controls style="max-width:150px;"></video>`;
-  }
-}
-
-function browseComputer(type){
-  uploadToImgbb();
-}
-
-// SAVE PRODUCT - WITH FIREBASE CHECK
-async function saveProduct(){
-  let name = document.getElementById('pName').value.trim();
-  let price = document.getElementById('pPrice').value.trim();
-  let stock = document.getElementById('pStock').value.trim();
-  let categoryEl = document.getElementById('pCategory');
-  let categoryVal = categoryEl.value;
-
-  if(!name ||!price ||!stock){
-    alert('Please fill required fields: Name, Price, Stock!');
-    return;
   }
 
-  if(categoryVal === '-- Select --' || categoryVal === ''){
-    alert('Please select a category!');
-    return;
-  }
-
-  if(!document.getElementById('pImageUrl').value){
-    alert('Photo upload karo pehle!');
-    return;
-  }
-
-  let imgUrl = document.getElementById('pImageUrl').value;
-  let imgUrlOriginal = document.getElementById('pImageUrlOriginal').value;
-
-  let productData = {
-    name: name,
-    mrp: document.getElementById('pMrp').value || price,
-    price: Number(price),
-    stock: Number(stock),
-    category: categoryVal,
-    desc: document.getElementById('pDesc').value,
-    sizePrice: document.getElementById('pSizePrice').value,
-    imageUrl: imgUrl,
-    imageUrlOriginal: imgUrlOriginal,
-    image: imgUrl,
-    created: new Date().toISOString()
-  };
-
-  if(!window.firebaseDB){
-    alert('❌ Firebase connect nahi hai! secrets.js check karo.');
-    return;
-  }
-
-  try {
-    await window.firebaseDB.collection('products').add(productData);
-    alert('✅ Product saved! HOME PAGE PE TURANT DIKHEGA');
-    loadProducts();
-    clearForm();
-  } catch(err) {
-    alert('❌ Error saving product: ' + err.message);
-    console.log(err);
-  }
-}
-
-// UPDATE PRODUCT - EDIT MODE
-async function updateProduct(id){
-  let name = document.getElementById('pName').value.trim();
-  let price = document.getElementById('pPrice').value.trim();
-  let stock = document.getElementById('pStock').value.trim();
-  let categoryVal = document.getElementById('pCategory').value;
-
-  if(!name ||!price ||!stock){
-    alert('Please fill required fields: Name, Price, Stock!');
-    return;
-  }
-
-  if(categoryVal === '-- Select --' || categoryVal === ''){
-    alert('Please select a category!');
-    return;
-  }
-
-  let imgUrl = document.getElementById('pImageUrl').value;
-  let imgUrlOriginal = document.getElementById('pImageUrlOriginal').value;
-
-  let productData = {
-    name: name,
-    mrp: document.getElementById('pMrp').value || price,
-    price: Number(price),
-    stock: Number(stock),
-    category: categoryVal,
-    desc: document.getElementById('pDesc').value,
-    sizePrice: document.getElementById('pSizePrice').value,
-    imageUrl: imgUrl,
-    imageUrlOriginal: imgUrlOriginal,
-    image: imgUrl,
-    updated: new Date().toISOString()
-  };
-
-  if(!window.firebaseDB){
-    alert('❌ Firebase connect nahi hai!');
-    return;
-  }
-
-  try {
-    await window.firebaseDB.collection('products').doc(id).update(productData);
-    alert('✅ Product updated successfully!');
-    loadProducts();
-    clearForm();
-    let saveBtn = document.getElementById('saveBtn');
-    saveBtn.innerHTML = '💾 Save Product - HOME PAGE PE TURANT DIKHEGA';
-    saveBtn.onclick = function(){ saveProduct(); };
-  } catch(err) {
-    alert('❌ Error updating product: ' + err.message);
-    console.log(err);
-  }
-}
-
-function clearForm(){
-  document.getElementById('pName').value = '';
-  document.getElementById('pMrp').value = '';
-  document.getElementById('pPrice').value = '';
-  document.getElementById('pStock').value = '';
-  document.getElementById('pCategory').value = '';
-  document.getElementById('pSizePrice').value = '';
-  document.getElementById('pDesc').value = '';
-  document.getElementById('pImageUrl').value = '';
-  document.getElementById('pImageUrlOriginal').value = '';
-  document.getElementById('imagePreview').innerHTML = '';
-  document.getElementById('uploadStatus').innerText = '';
-}
-
-// LOAD PRODUCTS - WITH FIREBASE CHECK
-async function loadProducts(){
-  let tbody = document.getElementById('productTableBody');
-  tbody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
-
-  if(!window.firebaseDB){
-    tbody.innerHTML = '<tr><td colspan="6">❌ Firebase not connected</td></tr>';
-    return;
-  }
-
-  try {
-    const querySnapshot = await window.firebaseDB.collection('products').orderBy('created', 'desc').get();
-    tbody.innerHTML = '';
-    let total = 0;
-    querySnapshot.forEach((doc) => {
-      let p = doc.data();
-      total++;
-      let catName = typeof p.category === 'object'? (p.category.name || p.category.id || 'Unknown') : p.category;
-
-      tbody.innerHTML += `
-        <tr>
-          <td style="font-size:11px;">${doc.id.substring(0,6)}</td>
-          <td><img src="${p.imageUrl || p.image}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onerror="this.src='https://via.placeholder.com/40?text=No+Img'"></td>
-          <td>${p.name}</td>
-          <td>${catName || 'General'}</td>
-          <td>₹${p.price}</td>
-          <td style="min-width:120px;">
-            <button class="btn-edit" onclick="editProduct('${doc.id}')" style="padding:4px 8px;margin:2px;font-size:11px;">✏️ Edit</button>
-            <button class="btn-del" onclick="deleteProduct('${doc.id}')" style="padding:4px 8px;margin:2px;font-size:11px;">🗑️ Del</button>
-          </td>
-        </tr>
-      `;
-    });
-    document.getElementById('totalProducts').innerText = total;
-  } catch(err) {
-    tbody.innerHTML = '<tr><td colspan="6">Error loading products: ' + err.message + '</td></tr>';
-    console.log(err);
-  }
-}
-
-async function deleteProduct(id){
-  if(confirm('Delete this product?')){
-    if(!window.firebaseDB){
-      alert('❌ Firebase not connected!');
-      return;
-    }
-    await window.firebaseDB.collection('products').doc(id).delete();
-    loadProducts();
-  }
-}
-
-// EDIT PRODUCT - LOAD DATA IN FORM
-async function editProduct(id){
-  if(!window.firebaseDB){
-    alert('❌ Firebase not connected!');
-    return;
-  }
-  let doc = await window.firebaseDB.collection('products').doc(id).get();
-  let p = doc.data();
-
-  document.getElementById('pName').value = p.name;
-  document.getElementById('pMrp').value = p.mrp || '';
-  document.getElementById('pPrice').value = p.price;
-  document.getElementById('pStock').value = p.stock;
-  document.getElementById('pCategory').value = p.category;
-  document.getElementById('pSizePrice').value = p.sizePrice || '';
-  document.getElementById('pDesc').value = p.desc || '';
-  document.getElementById('pImageUrl').value = p.imageUrl || p.image;
-  document.getElementById('pImageUrlOriginal').value = p.imageUrlOriginal || p.imageUrl || p.image;
-  document.getElementById('imagePreview').innerHTML = `<img src="${p.imageUrl || p.image}" style="max-width:150px;border:2px solid #10b981;border-radius:4px;">`;
-
-  let saveBtn = document.getElementById('saveBtn');
-  saveBtn.innerHTML = '✏️ Update Product';
-  saveBtn.onclick = function(){ updateProduct(id); };
-
-  window.scrollTo(0, 0);
-  alert('✅ Product loaded for editing. Change karo aur Update dabao.');
-}
-
-// LOAD CATEGORIES - FIXED FOR OBJECT ARRAY 13/5/2026
-function loadCategories(){
-  let catSelect = document.getElementById('pCategory');
-  let catList = document.getElementById('catList');
-  catSelect.innerHTML = '<option value="">-- Select --</option>';
-  catList.innerHTML = '';
-
-  if(SANTRA_DB.categories){
-    SANTRA_DB.categories.forEach(cat => {
-      let catName = typeof cat === 'object'? (cat.name || cat.id || 'Unknown') : cat;
-      catSelect.innerHTML += `<option value="${catName}">${catName}</option>`;
-      catList.innerHTML += `<div style="background:#0f172a;padding:10px;margin:5px 0;border-radius:4px;display:flex;justify-content:space-between;align-items:center;">
-        <span>${catName}</span>
-        <button class="btn-del" onclick="deleteCategory('${catName}')" style="padding:5px 10px;font-size:12px;">Delete</button>
-      </div>`;
-    });
-  }
-}
-
-// ========== ADD CATEGORY - FIXED 13/5/2026 ==========
-function addCategory(){
-  let catName = document.getElementById('catName').value.trim();
-  if(!catName){
-    alert('Enter category name');
-    return;
-  }
-
-  if(!SANTRA_DB.categories) SANTRA_DB.categories = [];
-
-  let exists = SANTRA_DB.categories.find(c => {
-    let name = typeof c === 'object'? c.name : c;
-    return name.toLowerCase() === catName.toLowerCase();
-  });
-
-  if(exists){
-    alert('Category already exists');
-    return;
-  }
-
-  SANTRA_DB.categories.push({
-    id: Date.now(),
-    name: catName,
-    img: "",
-    type: "image"
-  });
-
-  saveDB();
-  document.getElementById('catName').value = '';
-  loadCategories();
-  alert('✅ Category added');
-}
-
-// ========== DELETE CATEGORY - FIXED 13/5/2026 ==========
-function deleteCategory(catName){
-  if(confirm('Delete category: ' + catName + '?')){
-    SANTRA_DB.categories = SANTRA_DB.categories.filter(c => {
-      let name = typeof c === 'object'? c.name : c;
-      return name!== catName;
-    });
-    saveDB();
-    loadCategories();
-    alert('✅ Category deleted');
-  }
-}
-
-// LOAD ORDERS - FIXED 13/5/2026 - DUPLICATE REMOVED
-async function loadOrders(){
-  let container = document.getElementById('orderList');
-  container.innerHTML = '<p style="text-align:center;padding:40px;">Loading...</p>';
-  let allOrders = [];
-  if(SANTRA_DB.orders){
-    allOrders = [...SANTRA_DB.orders];
-  }
-  if(window.firebaseDB){
-    try {
-      const snapshot = await window.firebaseDB.collection('orders').orderBy('time', 'desc').get();
-      snapshot.forEach(doc => {
-        let order = doc.data();
-        order.firebaseId = doc.id;
-        if(!allOrders.find(o => o.id == order.id)){
-          allOrders.push(order);
-        }
+  // ===== ORDERS + CUSTOMERS =====
+  function loadOrders(){
+    onSnapshot(collection(db, "orders"), (snapshot) => {
+      const container = document.getElementById('orderList');
+      if(snapshot.empty){ container.innerHTML = '<p class="loader">No orders yet</p>'; return; }
+      container.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const order = doc.data();
+        container.innerHTML += `
+          <div style="background:var(--table);padding:15px;border-radius:8px;margin-bottom:10px;">
+            <h4>Order #${doc.id.substring(0,6)} ${order.otpVerified? '<span class="badge-success">✓ OTP Verified</span>' : ''}</h4>
+            <p><b>Customer:</b> ${order.customerName} | ${order.mobile}</p>
+            <p><b>Total:</b> ₹${order.total}</p>
+            <p style="font-size:12px;color:#94a3b8;"><b>Date:</b> ${new Date(order.time).toLocaleString()}</p>
+          </div>
+        `;
       });
-    } catch(err) {
-      console.log('Firebase orders error:', err);
-    }
+    });
   }
-  allOrders.sort((a,b) => new Date(b.time) - new Date(a.time));
-  if(allOrders.length === 0){
-    container.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">No orders yet</p>';
-    document.getElementById('totalOrders').innerText = 0;
-    return;
-  }
-  container.innerHTML = allOrders.map(order => `
-    <div style="background:#0f172a;padding:15px;border-radius:8px;margin-bottom:10px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-        <h4 style="margin:0;">Order #${order.id}
-          ${order.otpVerified? '<span class="badge-success">✓ OTP Verified</span>' : ''}
-        </h4>
-        <span style="background:${order.status === 'Confirmed'? '#10b981' : '#f59e0b'};color:white;padding:4px 10px;border-radius:4px;font-size:12px;">
-          ${order.status}
-        </span>
-      </div>
-      <p><b>Customer:</b> ${order.customerName} | ${order.mobile}</p>
-      <p><b>Address:</b> ${order.address}</p>
-      <p><b>Payment:</b> ${order.paymentMode}</p>
-      ${order.otp? `<p><b>OTP Used:</b> <span style="color:#10b981;font-weight:bold;">${order.otp}</span></p>` : ''}
-      <p><b>Total:</b> ₹${order.total}</p>
-      <p style="font-size:12px;color:#94a3b8;margin-top:8px;"><b>Date:</b> ${new Date(order.time).toLocaleString()}</p>
-    </div>
-  `).join('');
-  document.getElementById('totalOrders').innerText = allOrders.length;
-}
 
-// LOAD CUSTOMERS - FIXED 13/5/2026
-async function loadCustomers(){
-  let container = document.getElementById('customerList');
-  container.innerHTML = '<p style="text-align:center;padding:40px;">Loading...</p>';
-  let allCustomers = [];
-  if(SANTRA_DB.customers){
-    allCustomers = [...SANTRA_DB.customers];
-  }
-  if(window.firebaseDB){
-    try {
-      const snapshot = await window.firebaseDB.collection('customers').get();
-      snapshot.forEach(doc => {
-        let cust = doc.data();
-        if(!allCustomers.find(c => c.mobile == cust.mobile)){
-          allCustomers.push({...cust, source: 'firebase'});
-        }
+  function loadCustomers(){
+    onSnapshot(collection(db, "customers"), (snapshot) => {
+      const container = document.getElementById('customerList');
+      if(snapshot.empty){ container.innerHTML = '<p class="loader">No customers yet</p>'; return; }
+      container.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const c = doc.data();
+        container.innerHTML += `
+          <div style="background:var(--table);padding:15px;border-radius:8px;margin-bottom:10px;">
+            <h4>${c.name || 'Unknown'} ${c.otpVerified? '<span class="badge-success">✓ OTP</span>' : ''}</h4>
+            <p><b>Mobile:</b> ${c.mobile}</p>
+            <p><b>Email:</b> ${c.email || 'N/A'}</p>
+          </div>
+        `;
       });
-    } catch(err) {
-      console.log('Firebase customers error:', err);
+    });
+  }
+
+  // ===== SETTINGS =====
+  async function loadSettings(){
+    const docSnap = await getDoc(doc(db, "settings", "main"));
+    if(docSnap.exists()){
+      const s = docSnap.data();
+      document.getElementById('upiId').value = s.upiId || '';
+      document.getElementById('bankAccount').value = s.bankAccount || '';
+      document.getElementById('logoText').value = s.logo || '';
+      document.getElementById('primaryColor').value = s.accentColor || '#e40046';
+      document.getElementById('bgColor').value = s.bgColor || '#0f172a';
+      document.getElementById('cardColor').value = s.cardColor || '#1e293b';
+      document.getElementById('textColor').value = s.textColor || '#e2e8f0';
+      document.getElementById('sidebarColor').value = s.sidebarColor || '#0f172a';
+      document.getElementById('tableColor').value = s.tableColor || '#1e293b';
+      document.getElementById('inputColor').value = s.inputColor || '#0f172a';
+      document.getElementById('popupColor').value = s.popupColor || '#1e293b';
+      document.getElementById('btnTextColor').value = s.btnTextColor || '#ffffff';
+      document.getElementById('helpPhone').value = s.helpdeskPhone || '';
+      document.getElementById('helpWhatsapp').value = s.helpdeskWhatsapp || '';
+      document.getElementById('helpEmail').value = s.helpdeskEmail || '';
+      document.getElementById('helpHours').value = s.helpdeskHours || '';
+      document.getElementById('siteStatus').value = s.siteStatus || 'live';
     }
   }
-  if(SANTRA_DB.orders){
-    SANTRA_DB.orders.forEach(order => {
-      if(!allCustomers.find(c => c.mobile == order.mobile)){
-        allCustomers.push({
-          name: order.customerName,
-          mobile: order.mobile,
-          email: order.email,
-          address: order.address,
-          orders: 1,
-          lastOrder: order.time,
-          otpVerified: order.otpVerified || false,
-          otp: order.otp || '',
-          source: 'order'
-        });
+
+  window.savePayment = function(){
+    setDoc(doc(db, "settings", "main"), {
+      upiId: document.getElementById('upiId').value,
+      bankAccount: document.getElementById('bankAccount').value
+    }, { merge: true });
+  }
+
+  // ===== THEME - 9 COLORS + LIVE PREVIEW =====
+  window.applyThemeLive = function() {
+    document.documentElement.style.setProperty('--bg', document.getElementById('bgColor').value);
+    document.documentElement.style.setProperty('--card', document.getElementById('cardColor').value);
+    document.documentElement.style.setProperty('--text', document.getElementById('textColor').value);
+    document.documentElement.style.setProperty('--accent', document.getElementById('primaryColor').value);
+    document.documentElement.style.setProperty('--sidebar', document.getElementById('sidebarColor').value);
+    document.documentElement.style.setProperty('--table', document.getElementById('tableColor').value);
+    document.documentElement.style.setProperty('--input', document.getElementById('inputColor').value);
+    document.documentElement.style.setProperty('--popup', document.getElementById('popupColor').value);
+    document.documentElement.style.setProperty('--btntext', document.getElementById('btnTextColor').value);
+  }
+
+  function applyTheme() {
+    onSnapshot(doc(db, "settings", "main"), (docSnap) => {
+      if(docSnap.exists()){
+        const t = docSnap.data();
+        if(t.accentColor) document.documentElement.style.setProperty('--accent', t.accentColor);
+        if(t.bgColor) document.documentElement.style.setProperty('--bg', t.bgColor);
+        if(t.cardColor) document.documentElement.style.setProperty('--card', t.cardColor);
+        if(t.textColor) document.documentElement.style.setProperty('--text', t.textColor);
+        if(t.sidebarColor) document.documentElement.style.setProperty('--sidebar', t.sidebarColor);
+        if(t.tableColor) document.documentElement.style.setProperty('--table', t.tableColor);
+        if(t.inputColor) document.documentElement.style.setProperty('--input', t.inputColor);
+        if(t.popupColor) document.documentElement.style.setProperty('--popup', t.popupColor);
+        if(t.btnTextColor) document.documentElement.style.setProperty('--btntext', t.btnTextColor);
       }
     });
   }
-  if(window.firebaseDB){
-    try {
-      const ordersSnapshot = await window.firebaseDB.collection('orders').get();
-      ordersSnapshot.forEach(doc => {
-        let order = doc.data();
-        if(!allCustomers.find(c => c.mobile == order.mobile)){
-          allCustomers.push({
-            name: order.customerName,
-            mobile: order.mobile,
-            email: order.email,
-            address: order.address,
-            orders: 1,
-            lastOrder: order.time,
-            otpVerified: order.otpVerified || false,
-            otp: order.otp || '',
-            source: 'firebase-order'
-          });
-        }
-      });
-    } catch(err) {
-      console.log('Firebase orders error:', err);
+
+  window.saveTheme = function(){
+    setDoc(doc(db, "settings", "main"), {
+      logo: document.getElementById('logoText').value,
+      accentColor: document.getElementById('primaryColor').value,
+      bgColor: document.getElementById('bgColor').value,
+      cardColor: document.getElementById('cardColor').value,
+      textColor: document.getElementById('textColor').value,
+      sidebarColor: document.getElementById('sidebarColor').value,
+      tableColor: document.getElementById('tableColor').value,
+      inputColor: document.getElementById('inputColor').value,
+      popupColor: document.getElementById('popupColor').value,
+      btnTextColor: document.getElementById('btnTextColor').value
+    }, { merge: true });
+    applyThemeLive();
+  }
+
+  window.saveHelpdesk = function(){
+    setDoc(doc(db, "settings", "main"), {
+      helpdeskPhone: document.getElementById('helpPhone').value,
+      helpdeskWhatsapp: document.getElementById('helpWhatsapp').value,
+      helpdeskEmail: document.getElementById('helpEmail').value,
+      helpdeskHours: document.getElementById('helpHours').value
+    }, { merge: true });
+  }
+
+  window.saveGlobal = function(){
+    setDoc(doc(db, "settings", "main"), {
+      siteStatus: document.getElementById('siteStatus').value
+    }, { merge: true });
+  }
+
+  // ===== COMPANY DETAILS =====
+  window.saveCompanyDetails = function(){
+    setDoc(doc(db, "settings", "company"), {
+      about: document.getElementById('companyAbout').value,
+      features: document.getElementById('companyFeatures').value,
+      development: document.getElementById('companyDev').value,
+      rules: document.getElementById('companyRules').value,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  }
+
+  async function loadCompanyDetails(){
+    const docSnap = await getDoc(doc(db, "settings", "company"));
+    if(docSnap.exists()){
+      const d = docSnap.data();
+      document.getElementById('companyAbout').value = d.about || '';
+      document.getElementById('companyFeatures').value = d.features || '';
+      document.getElementById('companyDev').value = d.development || '';
+      document.getElementById('companyRules').value = d.rules || '';
     }
   }
-  allCustomers.sort((a,b) => new Date(b.lastOrder || 0) - new Date(a.lastOrder || 0));
-  if(allCustomers.length === 0){
-    container.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">No customers yet</p>';
-    document.getElementById('totalCustomers').innerText = 0;
-    return;
+
+  window.showFirebaseStatus = function(){
+    alert('✅ Firebase Connected\nProject: santra-mall\nStatus: Live\n\nSab data real-time sync ho raha hai.');
   }
-  container.innerHTML = allCustomers.map(c => `
-    <div style="background:#0f172a;padding:15px;border-radius:8px;margin-bottom:10px;">
-      <div style="display:flex;justify-content:space-between;align-items:start;">
-        <div style="flex:1;">
-          <h4 style="margin:0 0 8px 0;">${c.name || 'Unknown'}
-            ${c.otpVerified? '<span class="badge-success">✓ OTP Verified</span>' : ''}
-            ${c.source === 'firebase'? '<span class="badge">Firebase</span>' : ''}
-          </h4>
-          <p style="margin:4px 0;font-size:14px;"><b>Mobile:</b> ${c.mobile || 'N/A'}</p>
-          <p style="margin:4px 0;font-size:14px;"><b>Email:</b> ${c.email || 'N/A'}</p>
-          <p style="margin:4px 0;font-size:14px;"><b>Address:</b> ${c.address || 'N/A'}</p>
-          ${c.otp? `<p style="margin:4px 0;font-size:14px;"><b>Last OTP:</b> <span style="color:#10b981;font-weight:bold;">${c.otp}</span></p>` : ''}
-          <p style="margin:4px 0;font-size:12px;color:#94a3b8;"><b>Orders:</b> ${c.orders || 0} | <b>Last:</b> ${c.lastOrder? new Date(c.lastOrder).toLocaleString() : 'N/A'}</p>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('totalCustomers').innerText = allCustomers.length;
-}
-
-function loadDashboard(){
-  loadProducts();
-  loadOrders();
-  loadCustomers();
-}
-
-function exportCSV(){
-  let csv = 'Name,Price,Stock,Category\n';
-  window.firebaseDB.collection('products').get().then(snapshot => {
-    snapshot.forEach(doc => {
-      let p = doc.data();
-      let catName = typeof p.category === 'object'? (p.category.name || p.category.id || 'Unknown') : p.category;
-      csv += `"${p.name}","${p.price}","${p.stock}","${catName}"\n`;
-    });
-    let blob = new Blob([csv], {type: 'text/csv'});
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = 'santra-products.csv';
-    a.click();
-  });
-}
-
-function savePayment(){
-  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
-  SANTRA_DB.settings.upiId = document.getElementById('upiId').value;
-  SANTRA_DB.settings.bankAccount = document.getElementById('bankAccount').value;
-  saveDB();
-  alert('✅ Payment settings saved!');
-}
-
-function saveTheme(){
-  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
-  SANTRA_DB.settings.logo = document.getElementById('logoText').value;
-  SANTRA_DB.settings.accentColor = document.getElementById('primaryColor').value;
-  SANTRA_DB.settings.bgColor = document.getElementById('bgColor').value;
-  SANTRA_DB.settings.cardColor = document.getElementById('cardColor').value;
-  SANTRA_DB.settings.textColor = document.getElementById('textColor').value;
-  saveDB();
-  loadThemeFromStorage();
-  alert('✅ Theme saved! Hard reload karo');
-}
-
-function loadThemeFromStorage(){
-  let theme = SANTRA_DB.settings || {};
-  if(theme.bgColor) document.documentElement.style.setProperty('--bg', theme.bgColor);
-  if(theme.cardColor) document.documentElement.style.setProperty('--card', theme.cardColor);
-  if(theme.textColor) document.documentElement.style.setProperty('--text', theme.textColor);
-  if(theme.accentColor) document.documentElement.style.setProperty('--accent', theme.accentColor);
-
-  if(theme.logo) document.getElementById('logoText').value = theme.logo;
-  if(theme.accentColor) document.getElementById('primaryColor').value = theme.accentColor;
-  if(theme.bgColor) document.getElementById('bgColor').value = theme.bgColor;
-  if(theme.cardColor) document.getElementById('cardColor').value = theme.cardColor;
-  if(theme.textColor) document.getElementById('textColor').value = theme.textColor;
-
-  if(theme.upiId) document.getElementById('upiId').value = theme.upiId;
-  if(theme.bankAccount) document.getElementById('bankAccount').value = theme.bankAccount;
-
-  if(theme.helpdeskPhone) document.getElementById('helpPhone').value = theme.helpdeskPhone;
-  if(theme.helpdeskWhatsapp) document.getElementById('helpWhatsapp').value = theme.helpdeskWhatsapp;
-  if(theme.helpdeskEmail) document.getElementById('helpEmail').value = theme.helpdeskEmail;
-}
-
-function saveHelpdesk(){
-  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
-  SANTRA_DB.settings.helpdeskPhone = document.getElementById('helpPhone').value;
-  SANTRA_DB.settings.helpdeskWhatsapp = document.getElementById('helpWhatsapp').value;
-  SANTRA_DB.settings.helpdeskEmail = document.getElementById('helpEmail').value;
-  saveDB();
-  alert('✅ Help Desk saved!');
-}
-
-function saveGlobal(){
-  if(!SANTRA_DB.settings) SANTRA_DB.settings = {};
-  SANTRA_DB.settings.siteStatus = document.getElementById('siteStatus').value;
-  saveDB();
-  alert('✅ Global settings saved!');
-}
-
-function saveDB(){
-  localStorage.setItem('SANTRA_DB', JSON.stringify(SANTRA_DB));
-  console.log('DB saved:', SANTRA_DB);
-}
 </script>
 
 </body>
