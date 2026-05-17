@@ -40,3 +40,9 @@ Thumbs.db
 .env*
 *.save
 *.log
+.git-credentials
+.bash_history
+.gitconfig
+.env
+.env.save
+*.save
