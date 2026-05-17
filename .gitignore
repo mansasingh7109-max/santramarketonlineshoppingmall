@@ -7,6 +7,8 @@ config.php
 .env
 .env.local
 .env.*.local
+*.save
+*.log
 
 # Backup & Old files
 *-backup-*.html
@@ -36,7 +38,8 @@ firebase-debug.log
 # System files
 .DS_Store
 Thumbs.db
-.env
-.env*
-*.save
-*.log
+
+# Git credentials - KABHI PUSH NAHI KARNA
+.git-credentials
+.bash_history
+.gitconfig
