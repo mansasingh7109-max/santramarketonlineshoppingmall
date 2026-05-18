@@ -5,76 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🛍️ SANTRA MALL - Online Shopping</title>
   <style>
-    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--shadow:0 2px 8px rgba(0,0,0,0.1)}
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--shadow:0 2px 8px rgba(0,0,0,0.1);--wish:#ff6b6b}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-   .header{background:var(--accent);color:white;padding:12px 15px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
-   .header h1{font-size:18px;display:flex;align-items:center;gap:8px}
-   .header-btns{display:flex;gap:8px;align-items:center}
-   .header-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-weight:bold}
-   .header-btn.hide{display:none!important}
-   .user-name{background:rgba(255,255,255,0.2);padding:6px 10px;border-radius:4px;font-size:11px;}
-   .search-bar{background:white;margin:0 15px 15px;padding:10px;border-radius:8px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
-   .search-bar input{flex:1;border:none;outline:none;font-size:14px;padding:8px;}
-   .search-bar button{background:var(--accent);color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;font-weight:bold}
-   .banner{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;padding:30px 15px;text-align:center;margin:15px;border-radius:12px}
-   .banner h2{font-size:24px;margin-bottom:8px}
-   .categories{display:flex;gap:10px;padding:15px;overflow-x:auto;background:white;margin:15px;border-radius:8px}
-   .cat-item{text-align:center;min-width:70px;cursor:pointer}
-   .cat-item img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--border)}
-   .cat-item p{font-size:11px;margin-top:5px;font-weight:bold}
-   .section-title{padding:15px;font-size:18px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
-   .products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 15px}
-   .product{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;position:relative}
-   .product:active{transform:scale(0.98)}
-   .product img{width:100%;height:150px;object-fit:cover}
-   .product-info{padding:10px}
-   .product h3{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden}
-   .price{color:var(--accent);font-weight:bold;font-size:16px}
-   .mrp{color:#999;text-decoration:line-through;font-size:12px;margin-left:5px}
-   .stock{font-size:11px;color:#10b981;margin-top:3px}
-   .new-badge{position:absolute;top:5px;left:5px;background:#FFA000;color:white;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:bold}
-   .product-btns{display:flex;gap:5px;margin-top:8px}
-   .btn-cart{flex:1;background:#e40046;color:white;border:none;padding:6px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold}
-   .btn-buy{flex:1;background:#10b981;color:white;border:none;padding:6px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold}
-   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 8px rgba(0,0,0,0.1);z-index:100}
-   .nav-item{text-align:center;font-size:11px;color:#666;cursor:pointer;padding:5px;position:relative}
-   .nav-item.active{color:var(--accent)}
-   .nav-item i{font-size:20px;display:block;margin-bottom:2px}
-   .cart-count{background:red;color:white;border-radius:50%;width:18px;height:18px;font-size:10px;position:absolute;top:-5px;right:15px;display:flex;align-items:center;justify-content:center}
-   .loading{text-align:center;padding:40px;color:#999}
-   .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;padding:15px}
-   .modal-content{background:var(--card);border-radius:12px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto}
-   .modal-header{padding:20px;border-bottom:3px solid var(--accent);display:flex;justify-content:space-between;align-items:center}
-   .modal-header h3{color:var(--accent);font-size:20px}
-   .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
-   .modal-body{padding:20px}
-   .modal-body img{width:100%;border-radius:8px;margin-bottom:15px}
-   .modal-price{font-size:24px;color:var(--accent);font-weight:bold;margin:10px 0}
-   .modal-mrp{font-size:16px;color:#999;text-decoration:line-through;margin-left:10px}
-   .modal-desc{color:#666;font-size:14px;line-height:1.5;margin:15px 0}
-   .btn{width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:6px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:14px}
-   .btn-secondary{background:#3b82f6}
-   .btn-success{background:#10b981}
+    .header{background:var(--accent);color:white;padding:12px 15px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+    .header h1{font-size:18px;display:flex;align-items:center;gap:8px}
+    .header-btns{display:flex;gap:8px;align-items:center}
+    .header-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-weight:bold;text-decoration:none}
+    .header-btn.hide{display:none!important}
+    .user-name{background:rgba(255,255,255,0.2);padding:6px 10px;border-radius:4px;font-size:11px;}
+    .search-bar{background:white;margin:15px;padding:10px;border-radius:8px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
+    .search-bar input{flex:1;border:none;outline:none;font-size:14px;padding:8px;}
+    .search-bar button{background:var(--accent);color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;font-weight:bold}
+    .filter-btn{background:#2196f3!important;padding:8px 12px!important;}
+    
+    /* ===== FILTER POPUP ===== */
+    .filter-popup{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:9999;padding:15px;}
+    .filter-popup.show{display:flex;}
+    .filter-content{background:white;border-radius:12px;max-width:400px;width:100%;padding:20px;}
+    .filter-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+    .filter-header h3{color:var(--accent);margin:0;}
+    .close-filter{background:#999;color:white;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;}
+    .filter-group{margin:12px 0;}
+    .filter-group label{display:block;font-weight:bold;margin-bottom:5px;font-size:13px;}
+    .filter-group select{width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;font-size:14px;}
+    .filter-actions{display:flex;gap:10px;margin-top:15px;}
+    .filter-actions button{flex:1;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
+    .btn-apply{background:var(--accent);color:white;}
+    .btn-clear{background:#6c757d;color:white;}
+    
+    .banner{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;padding:30px 15px;text-align:center;margin:15px;border-radius:12px}
+    .banner h2{font-size:24px;margin-bottom:8px}
+    .categories{display:flex;gap:10px;padding:15px;overflow-x:auto;background:white;margin:15px;border-radius:8px}
+    .cat-item{text-align:center;min-width:70px;cursor:pointer}
+    .cat-item img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--border)}
+    .cat-item p{font-size:11px;margin-top:5px;font-weight:bold}
+    .section-title{padding:15px;font-size:18px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
+    .products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 15px}
+    .product{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;position:relative}
+    .product:active{transform:scale(0.98)}
+    .product img{width:100%;height:150px;object-fit:cover}
+    .product-info{padding:10px}
+    .product h3{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden}
+    .price{color:var(--accent);font-weight:bold;font-size:16px}
+    .mrp{color:#999;text-decoration:line-through;font-size:12px;margin-left:5px}
+    .stock{font-size:11px;color:#10b981;margin-top:3px}
+    .new-badge{position:absolute;top:5px;left:5px;background:#FFA000;color:white;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:bold}
+    .wish-icon{position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.9);border:none;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+    .wish-icon.active{background:var(--wish);color:white}
+    .product-btns{display:flex;gap:5px;margin-top:8px}
+    .btn-cart{flex:1;background:#e40046;color:white;border:none;padding:6px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold}
+    .btn-buy{flex:1;background:#10b981;color:white;border:none;padding:6px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold}
+    .qty-controls{display:flex;gap:5px;margin-top:8px;align-items:center;justify-content:center;background:#f5f5f5;border-radius:4px;padding:4px}
+    .qty-btn{background:var(--accent);color:white;border:none;width:28px;height:28px;border-radius:4px;font-size:16px;cursor:pointer;font-weight:bold;line-height:1}
+    .qty-display{background:white;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:bold;min-width:35px;text-align:center}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 8px rgba(0,0,0,0.1);z-index:100}
+    .nav-item{text-align:center;font-size:11px;color:#666;cursor:pointer;padding:5px;position:relative}
+    .nav-item.active{color:var(--accent)}
+    .nav-item i{font-size:20px;display:block;margin-bottom:2px}
+    .cart-count{background:red;color:white;border-radius:50%;width:18px;height:18px;font-size:10px;position:absolute;top:-5px;right:15px;display:flex;align-items:center;justify-content:center}
+    .loading{text-align:center;padding:40px;color:#999}
+    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;padding:15px}
+    .modal-content{background:var(--card);border-radius:12px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto}
+    .modal-header{padding:20px;border-bottom:3px solid var(--accent);display:flex;justify-content:space-between;align-items:center}
+    .modal-header h3{color:var(--accent);font-size:20px}
+    .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
+    .modal-body{padding:20px}
+    .modal-body img{width:100%;border-radius:8px;margin-bottom:15px}
+    .modal-price{font-size:24px;color:var(--accent);font-weight:bold;margin:10px 0}
+    .modal-mrp{font-size:16px;color:#999;text-decoration:line-through;margin-left:10px}
+    .modal-desc{color:#666;font-size:14px;line-height:1.5;margin:15px 0}
+    .btn{width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:6px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:14px}
+    .btn-secondary{background:#3b82f6}
+    .btn-success{background:#10b981}
     input,select{width:100%;padding:10px;margin:8px 0;border:1px solid var(--border);border-radius:4px}
-   .hide{display:none!important}
-   .link{text-align:center;margin-top:15px;font-size:14px;color:#3b82f6;cursor:pointer}
-   .company-section{margin:15px;background:var(--card);padding:15px;border-radius:8px;border-left:3px solid var(--accent);box-shadow:var(--shadow)}
-   .company-section h4{color:var(--accent);margin-bottom:8px;font-size:15px}
-   .company-section p{font-size:13px;line-height:1.6;color:#555}
-   .page-content{padding:15px}
-   .admin-trigger{user-select:none}
+    .hide{display:none!important}
+    .link{text-align:center;margin-top:15px;font-size:14px;color:#3b82f6;cursor:pointer}
   </style>
 </head>
 <body>
 
+<!-- ===== HEADER ===== -->
 <div class="header">
   <h1 id="logoText">🛍️ SANTRA MALL</h1>
   <div class="header-btns">
     <div id="userInfo" class="user-name hide"></div>
     <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">👤 Login</button>
     <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">🚪 Logout</button>
-    <button class="header-btn" onclick="openHelpDesk()">💬 HELP DESK</button>
+    <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
 </div>
 
@@ -82,10 +100,76 @@
 <div id="homePage">
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="🔍 Search products, brands..." onkeypress="if(event.key==='Enter') searchProducts()">
+    <button class="filter-btn" onclick="openFilterPopup()">🔍 Filter</button>
     <button onclick="searchProducts()">Search</button>
   </div>
 
-  <div class="banner">
+  <!-- FILTER POPUP -->
+  <div id="filterPopup" class="filter-popup" onclick="closeFilterPopup()">
+    <div class="filter-content" onclick="event.stopPropagation()">
+      <div class="filter-header">
+        <h3>🔍 Filter Products</h3>
+        <button class="close-filter" onclick="closeFilterPopup()">×</button>
+      </div>
+      
+      <div class="filter-group">
+        <label>Size</label>
+        <select id="filterSize">
+          <option value="">All Sizes</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+          <option value="XXL">XXL</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Color</label>
+        <select id="filterColor">
+          <option value="">All Colors</option>
+          <option value="Red">Red</option>
+          <option value="Blue">Blue</option>
+          <option value="Black">Black</option>
+          <option value="White">White</option>
+          <option value="Green">Green</option>
+          <option value="Yellow">Yellow</option>
+          <option value="Pink">Pink</option>
+          <option value="Purple">Purple</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Fabric</label>
+        <select id="filterFabric">
+          <option value="">All Fabrics</option>
+          <option value="Cotton">Cotton</option>
+          <option value="Silk">Silk</option>
+          <option value="Polyester">Polyester</option>
+          <option value="Wool">Wool</option>
+          <option value="Linen">Linen</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Material</label>
+        <select id="filterMaterial">
+          <option value="">All Materials</option>
+          <option value="Leather">Leather</option>
+          <option value="Metal">Metal</option>
+          <option value="Plastic">Plastic</option>
+          <option value="Wood">Wood</option>
+          <option value="Glass">Glass</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-clear" onclick="clearHomeFilters()">Clear All</button>
+        <button class="btn-apply" onclick="applyHomeFilters()">Apply Filters</button>
+      </div>
+    </div>
+  </div>
+    <div class="banner">
     <h2>Welcome to SANTRA MALL</h2>
     <p>Best Products, Best Prices!</p>
   </div>
@@ -104,75 +188,8 @@
   </div>
 </div>
 
-<!-- HELP DESK FULL PAGE -->
-<div id="helpDeskPage" class="hide">
-  <div class="page-content">
-    <h2 style="color:var(--accent);margin-bottom:15px">💬 Help Desk</h2>
-    <div class="company-section">
-      <p><b>📞 Phone:</b> <span id="helpPhoneText">9829508335</span></p>
-      <p><b>📧 Email:</b> <span id="helpEmailText">mansasingh7109@gmail.com</span></p>
-      <p><b>📱 WhatsApp:</b> <span id="helpWhatsappText">9829508335</span></p>
-      <p><b>🕐 Hours:</b> <span id="helpHoursText">Mon-Sat: 12 AM - 12 PM</span></p>
-    </div>
-    <button class="btn btn-success" onclick="window.open('https://wa.me/919829508335','_blank')">💬 Chat on WhatsApp</button>
-    <button class="btn btn-secondary" onclick="window.location.href='tel:9829508335'">📞 Call Now</button>
-    <button class="btn" style="background:#7c3aed" onclick="openCompanyDetails()">🏢 Company Details</button>
-  </div>
-</div>
-
-<!-- COMPANY DETAILS FULL PAGE -->
-<div id="companyPage" class="hide">
-  <div class="page-content">
-    <h2 style="color:var(--accent);margin-bottom:15px">🏢 Company Details</h2>
-    
-    <div class="company-section">
-      <h4>📋 About Company</h4>
-      <p id="companyAbout">SANTRA MALL is India's fastest growing online shopping platform. We provide quality products at best prices with fast delivery.</p>
-    </div>
-    
-    <div class="company-section">
-      <h4>⭐ Our Features</h4>
-      <p id="companyFeatures">
-      ✓ 100% Original Products<br>
-      ✓ Free Delivery Above ₹500<br>
-      ✓ 7 Days Easy Return<br>
-      ✓ 24/7 Customer Support<br>
-      ✓ Secure Payment Gateway
-      </p>
-    </div>
-    
-    <div class="company-section">
-      <h4>⚙️ Development Info</h4>
-      <p id="companyDev">
-      Platform: Firebase + HTML5<br>
-      Last Updated: 15/05/2026<br>
-      Version: 2.0<br>
-      Developer: SANTRA MALL Tech Team
-      </p>
-    </div>
-    
-    <div class="company-section">
-      <h4>📜 Rules & Regulations</h4>
-      <p id="companyRules">
-      1. All prices include GST<br>
-      2. Delivery within 5-7 business days<br>
-      3. Return accepted only for defective items<br>
-      4. COD available on orders below ₹5000<br>
-      5. Customer data is 100% secure
-      </p>
-    </div>
-    
-    <div class="company-section">
-      <h4>👨‍💻 CREATOR</h4>
-      <p>Developed by <span class="admin-trigger" onclick="openAdminLogin()" style="color:var(--accent);font-weight:bold;cursor:pointer;">SANTRA</span> MALL Team</p>
-    </div>
-    
-    <button class="btn btn-secondary" onclick="window.open('https://wa.me/919829508335','_blank')">💬 Contact Support</button>
-  </div>
-</div>
-
 <div class="bottom-nav">
-  <div class="nav-item active" id="navHome" onclick="showPage('home')">
+  <div class="nav-item active" id="navHome" onclick="goHome()">
     <i>🏠</i>Home
   </div>
   <div class="nav-item" onclick="openCategories()">
@@ -187,23 +204,7 @@
   </div>
 </div>
 
-<!-- Modals same rahenge - Part 2 me dunga -->
-<div class="bottom-nav">
-  <div class="nav-item active" id="navHome" onclick="showPage('home')">
-    <i>🏠</i>Home
-  </div>
-  <div class="nav-item" onclick="openCategories()">
-    <i>📱</i>Categories
-  </div>
-  <div class="nav-item" onclick="openCart()" style="position:relative">
-    <i>🛒</i>Cart
-    <span class="cart-count" id="cartCount">0</span>
-  </div>
-  <div class="nav-item" onclick="openOrders()">
-    <i>📦</i>Orders
-  </div>
-</div>
-
+<!-- Product Modal -->
 <div id="productModal" class="modal hide">
   <div class="modal-content">
     <div class="modal-header">
@@ -219,12 +220,19 @@
       <p style="margin:10px 0"><b>Category:</b> <span id="modalCat"></span></p>
       <p style="margin:10px 0"><b>Stock:</b> <span id="modalStock"></span></p>
       <p class="modal-desc" id="modalDesc"></p>
+      <div class="qty-controls" id="modalQtyControls">
+        <button class="qty-btn" onclick="changeModalQty(-1)">-</button>
+        <span class="qty-display" id="modalQty">1</span>
+        <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+      </div>
       <button class="btn btn-cart" onclick="addToCartFromModal()">🛒 Add to Cart</button>
       <button class="btn btn-success" onclick="buyNowFromModal()">⚡ Buy Now</button>
+      <button class="btn" style="background:var(--wish)" onclick="addToWishlistFromModal()">😍 Add to Wishlist</button>
     </div>
   </div>
 </div>
 
+<!-- Login Modal -->
 <div id="customerLoginModal" class="modal hide">
   <div class="modal-content">
     <div class="modal-header">
@@ -236,7 +244,7 @@
       <input type="text" id="custName" placeholder="Full Name *">
       <input type="tel" id="custMobile" placeholder="Mobile Number *" maxlength="10">
       <input type="email" id="custEmail" placeholder="Email (Optional)">
-       <button class="btn btn-success" onclick="sendCustomerOTP()">📱 WhatsApp par OTP Bhejo</button>
+      <button class="btn btn-success" onclick="sendCustomerOTP()">📱 WhatsApp par OTP Bhejo</button>
     </div>
     <div class="modal-body hide" id="loginStep2">
       <p style="margin-bottom:15px;">OTP WhatsApp par bhej diya hai: <b id="otpMobileText"></b></p>
@@ -247,156 +255,111 @@
   </div>
 </div>
 
-<script src="db.js?v=31"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
   import { getFirestore, doc, onSnapshot, collection } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-  import { firebaseConfig } from './Secrets.js'
-  
+
+  // 🔥 FIXED: Sahi import - secrets.js se FIREBASE_CONFIG le rahe hain
+  import { FIREBASE_CONFIG as firebaseConfig } from './secrets.js'; 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  window.firebaseDB = null;
-  
-  try {
-    if (firebaseConfig && firebaseConfig.apiKey) {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
-      window.firebaseDB = firebase.firestore();
-      console.log('✅ Firebase Ready');
-    }
-  } catch(e) {
-    console.log('Firebase init failed:', e);
-  }
+  window.db = db;
 
   // ===== LIVE THEME UPDATE =====
-  onSnapshot(doc(db, "settings", "main"), (docSnap) => {
+  onSnapshot(doc(db, "settings", "theme"), (docSnap) => {
     if(docSnap.exists()){
       const t = docSnap.data();
       if(t.accentColor) document.documentElement.style.setProperty('--accent', t.accentColor);
       if(t.bgColor) document.documentElement.style.setProperty('--bg', t.bgColor);
       if(t.cardColor) document.documentElement.style.setProperty('--card', t.cardColor);
       if(t.textColor) document.documentElement.style.setProperty('--text', t.textColor);
-      if(t.logo) document.getElementById('logoText').innerText = t.logo;
-      
-      // Help desk live update
-      if(t.helpdeskPhone) document.getElementById('helpPhoneText').innerText = t.helpdeskPhone;
-      if(t.helpdeskEmail) document.getElementById('helpEmailText').innerText = t.helpdeskEmail;
-      if(t.helpdeskWhatsapp) document.getElementById('helpWhatsappText').innerText = t.helpdeskWhatsapp;
-      if(t.helpdeskHours) document.getElementById('helpHoursText').innerText = t.helpdeskHours;
-    }
-  });
-  
-  // ===== LIVE COMPANY DETAILS =====
-  onSnapshot(doc(db, "settings", "company"), (docSnap) => {
-    if(docSnap.exists()){
-      const d = docSnap.data();
-      if(d.about) document.getElementById('companyAbout').innerText = d.about;
-      if(d.features) document.getElementById('companyFeatures').innerHTML = d.features.replace(/\n/g, '<br>');
-      if(d.development) document.getElementById('companyDev').innerHTML = d.development.replace(/\n/g, '<br>');
-      if(d.rules) document.getElementById('companyRules').innerHTML = d.rules.replace(/\n/g, '<br>');
+      if(t.logoText) document.getElementById('logoText').innerText = t.logoText;
     }
   });
 
-  // ===== LIVE PRODUCTS - Admin me add karte hi yahan dikhega =====
+  // ===== LIVE PRODUCTS =====
   onSnapshot(collection(db, "products"), (snapshot) => {
     SANTRA_DB.products = [];
-    allProducts = [];
+    allProductsCache = [];
     snapshot.forEach(doc => {
-      let product = { id: doc.id, ...doc.data() };
+      let product = { id: doc.id,...doc.data() };
       SANTRA_DB.products.push(product);
-      allProducts.push(product);
+      allProductsCache.push(product);
     });
     saveDB();
     loadProducts();
   });
 
-  // ===== LIVE CATEGORIES - Admin me add karte hi yahan dikhegi =====
+  // ===== LIVE CATEGORIES =====
   onSnapshot(collection(db, "categories"), (snapshot) => {
     SANTRA_DB.categories = [];
     snapshot.forEach(doc => {
-      SANTRA_DB.categories.push({ id: doc.id, ...doc.data() });
+      SANTRA_DB.categories.push({ id: doc.id,...doc.data() });
     });
     saveDB();
     loadCategories();
   });
+
+  window.loadCategories = function(){
+    const catContainer = document.getElementById('categoryList');
+    catContainer.innerHTML = '';
+    if(!SANTRA_DB.categories || SANTRA_DB.categories.length === 0){
+      catContainer.innerHTML = '<p style="padding:20px;color:#999">No categories</p>';
+      return;
+    }
+    SANTRA_DB.categories.forEach((cat) => {
+      const catName = cat.name || 'Category';
+      const catImg = cat.image || cat.img || 'https://via.placeholder.com/50';
+      catContainer.innerHTML += `
+        <div class="cat-item" onclick="filterByCategory('${catName}')">
+          <img src="${catImg}" onerror="this.src='https://via.placeholder.com/50'" alt="${catName}">
+          <p>${catName}</p>
+        </div>
+      `;
+    });
+  }
 </script>
 
 <script>
 let currentCustomer = null;
 let generatedOTP = '';
 let selectedProduct = null;
-let allProducts = [];
+let allProductsCache = [];
+let modalQuantity = 1;
+let wishlist = [];
+
+let SANTRA_DB = {
+  products: [],
+  categories: [],
+  cart: [],
+  customers: []
+};
+
+function saveDB(){
+  localStorage.setItem('santra_db', JSON.stringify(SANTRA_DB));
+}
+
+function loadDB(){
+  let db = localStorage.getItem('santra_db');
+  if(db) {
+    SANTRA_DB = JSON.parse(db);
+  }
+}
+loadDB();
 
 document.addEventListener('DOMContentLoaded', async function() {
-  console.log('SANTRA MALL Loaded - 16/5/2026');
+  console.log('SANTRA MALL Loaded - 18/5/2026');
   checkCustomerLogin();
   loadProducts();
   loadCategories();
+  loadWishlist();
   updateCartCount();
 });
-
-// ===== PAGE NAVIGATION =====
-function showPage(page) {
-  document.getElementById('homePage').classList.add('hide');
-  document.getElementById('helpDeskPage').classList.add('hide');
-  document.getElementById('companyPage').classList.add('hide');
-  
-  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-  
-  if(page === 'home') {
-    document.getElementById('homePage').classList.remove('hide');
-    document.getElementById('navHome').classList.add('active');
-  } else if(page === 'helpdesk') {
-    document.getElementById('helpDeskPage').classList.remove('hide');
-  } else if(page === 'company') {
-    document.getElementById('companyPage').classList.remove('hide');
-  }
-  window.scrollTo(0, 0);
+function loadWishlist(){
+  wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '[]');
 }
 
-window.openHelpDesk = function() {
-  showPage('helpdesk');
-}
-
-window.openCompanyDetails = function(){
-  showPage('company');
-}
-
-window.openAdminLogin = function(){
-  window.location.href = 'admin-login.html';
-}
-
-// ===== SEARCH =====
-window.searchProducts = function(){
-  const query = document.getElementById('searchInput').value.toLowerCase().trim();
-  if(!query) {
-    loadProducts();
-    return;
-  }
-  
-  const filtered = allProducts.filter(p => 
-    p.name.toLowerCase().includes(query) || 
-    (p.desc && p.desc.toLowerCase().includes(query)) ||
-    (p.category && p.category.toLowerCase().includes(query))
-  );
-  
-  let container = document.getElementById('productGrid');
-  if(filtered.length === 0) {
-    container.innerHTML = `<div class="loading">No products found for "${query}"</div>`;
-    return;
-  }
-  
-  renderProducts(filtered);
-  window.scrollTo(0, 400);
-}
-
-// ===== CUSTOMER LOGIN - SAME AS BEFORE =====
-function openCustomerLogin() {
+window.openCustomerLogin = function() {
   let cust = localStorage.getItem('santra_customer');
   if(cust) {
     window.location.href = 'profile.html';
@@ -407,70 +370,42 @@ function openCustomerLogin() {
   }
 }
 
-function closeCustomerLogin() {
+window.closeCustomerLogin = function() {
   document.getElementById('customerLoginModal').classList.add('hide');
 }
 
-function sendCustomerOTP() {
+window.sendCustomerOTP = function() {
   let name = document.getElementById('custName').value.trim();
   let mobile = document.getElementById('custMobile').value.trim();
-  
-  if(!name || !mobile) {
-    alert('Name aur Mobile dalo');
-    return;
-  }
-  
-  if(mobile.length !== 10) {
-    alert('10 digit mobile number dalo');
-    return;
-  }
-  
+  if(!name ||!mobile) { alert('Name aur Mobile dalo'); return; }
+  if(mobile.length!== 10) { alert('10 digit mobile number dalo'); return; }
   generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
   let msg = `SANTRA MALL OTP: ${generatedOTP}%0A%0AHi ${name},%0AOrder karne ke liye ye OTP use kare.%0A%0AThank you!`;
   window.open(`https://wa.me/91${mobile}?text=${msg}`, '_blank');
-  
   document.getElementById('otpMobileText').innerText = mobile;
   document.getElementById('loginStep1').classList.add('hide');
   document.getElementById('loginStep2').classList.remove('hide');
-  
   localStorage.setItem('temp_cust_name', name);
   localStorage.setItem('temp_cust_mobile', mobile);
   localStorage.setItem('temp_cust_email', document.getElementById('custEmail').value);
 }
 
-function verifyCustomerOTP() {
+window.verifyCustomerOTP = function() {
   let enteredOTP = document.getElementById('custOTP').value.trim();
-  
-  if(enteredOTP !== generatedOTP) {
-    alert('❌ Galat OTP! Sahi OTP dalo');
-    return;
-  }
-  
+  if(enteredOTP!== generatedOTP) { alert('❌ Galat OTP! Sahi OTP dalo'); return; }
   currentCustomer = {
     name: localStorage.getItem('temp_cust_name'),
     mobile: localStorage.getItem('temp_cust_mobile'),
     email: localStorage.getItem('temp_cust_email'),
     loginTime: Date.now()
   };
-  
   localStorage.setItem('santra_customer', JSON.stringify(currentCustomer));
-  
-  if(window.firebaseDB) {
-    window.firebaseDB.collection('customers').doc(currentCustomer.mobile).set({
-      name: currentCustomer.name,
-      mobile: currentCustomer.mobile,
-      email: currentCustomer.email,
-      lastLogin: new Date().toISOString(),
-      otpVerified: true
-    }, {merge: true});
-  }
-  
   alert('✅ Login Success! Ab order kar sakte ho');
   closeCustomerLogin();
   checkCustomerLogin();
 }
 
-function backToStep1() {
+window.backToStep1 = function() {
   document.getElementById('loginStep1').classList.remove('hide');
   document.getElementById('loginStep2').classList.add('hide');
 }
@@ -486,7 +421,7 @@ function checkCustomerLogin() {
   }
 }
 
-function customerLogout() {
+window.customerLogout = function() {
   localStorage.removeItem('santra_customer');
   currentCustomer = null;
   document.getElementById('userInfo').classList.add('hide');
@@ -495,11 +430,61 @@ function customerLogout() {
   alert('Logged out');
 }
 
-// ===== PRODUCTS - [object Object] BUG FIX =====
+window.searchProducts = function(){
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  if(!query) { loadProducts(); return; }
+  const filtered = allProductsCache.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    (p.desc && p.desc.toLowerCase().includes(query)) ||
+    (p.category && p.category.toLowerCase().includes(query))
+  );
+  let container = document.getElementById('productGrid');
+  if(filtered.length === 0) {
+    container.innerHTML = `<div class="loading">No products found for "${query}"</div>`;
+    return;
+  }
+  renderProducts(filtered);
+  window.scrollTo(0, 400);
+}
+
+// ===== HOME PAGE FILTERS =====
+window.openFilterPopup = function(){
+  document.getElementById('filterPopup').classList.add('show');
+}
+
+window.closeFilterPopup = function(){
+  document.getElementById('filterPopup').classList.remove('show');
+}
+
+window.applyHomeFilters = function(){
+  const size = document.getElementById('filterSize').value;
+  const color = document.getElementById('filterColor').value;
+  const fabric = document.getElementById('filterFabric').value;
+  const material = document.getElementById('filterMaterial').value;
+
+  let filtered = allProductsCache.filter(p => {
+    let matchSize = size === '' || (p.size && p.size.toLowerCase().includes(size.toLowerCase()));
+    let matchColor = color === '' || (p.color && p.color.toLowerCase().includes(color.toLowerCase()));
+    let matchFabric = fabric === '' || (p.fabric && p.fabric.toLowerCase().includes(fabric.toLowerCase()));
+    let matchMaterial = material === '' || (p.material && p.material.toLowerCase().includes(material.toLowerCase()));
+    return matchSize && matchColor && matchFabric && matchMaterial;
+  });
+
+  renderProducts(filtered);
+  closeFilterPopup();
+}
+
+window.clearHomeFilters = function(){
+  document.getElementById('filterSize').value = '';
+  document.getElementById('filterColor').value = '';
+  document.getElementById('filterFabric').value = '';
+  document.getElementById('filterMaterial').value = '';
+  renderProducts(allProductsCache);
+}
+
 function loadProducts(filterCat = null) {
   let container = document.getElementById('productGrid');
-  let products = SANTRA_DB.products;
-  
+  let products = allProductsCache;
   if(filterCat) {
     products = products.filter(p => {
       let cat = p.category || p.cat;
@@ -507,123 +492,184 @@ function loadProducts(filterCat = null) {
       return cat === filterCat;
     });
   }
-  
   if(products.length === 0) {
     container.innerHTML = '<div class="loading">No products found</div>';
     return;
   }
-  
   renderProducts(products);
 }
 
 function renderProducts(products) {
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
   let container = document.getElementById('productGrid');
   container.innerHTML = products.map(p => {
     let catName = p.category || p.cat || 'General';
     if(typeof catName === 'object') catName = catName.name || catName.id || 'General';
-    
+    let cartItem = cart.find(item => item.id == p.id);
+    let qtyInCart = cartItem? cartItem.qty : 0;
+    let inWishlist = wishlist.find(item => item.id == p.id);
+    let images = [];
+    try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+    if(!images.length && p.image) images = [p.image];
+    let mainImg = images[0] || 'https://via.placeholder.com/200?text=No+Image';
     return `
-    <div class="product" onclick="viewProduct('${p.id}')">
-      ${p.new ? '<span class="new-badge">NEW</span>' : ''}
-      <img src="${p.imageUrl || p.image || p.img}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-      <div class="product-info">
+    <div class="product">
+      ${p.new? '<span class="new-badge">NEW</span>' : ''}
+      <button class="wish-icon ${inWishlist? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.id}')">😍</button>
+      <img src="${mainImg}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'" onclick="viewProduct('${p.id}')">
+      <div class="product-info" onclick="viewProduct('${p.id}')">
         <h3>${p.name}</h3>
         <div>
           <span class="price">₹${p.price}</span>
-          ${p.mrp ? `<span class="mrp">₹${p.mrp}</span>` : ''}
+          ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
         </div>
         <div class="stock">Category: ${catName} | Stock: ${p.stock || 0}</div>
-        <div class="product-btns">
-          <button class="btn-cart" onclick="event.stopPropagation(); addToCart('${p.id}')">🛒 Add to Cart</button>
-          <button class="btn-buy" onclick="event.stopPropagation(); buyNow('${p.id}')">⚡ Buy Now</button>
-        </div>
+        ${qtyInCart > 0? `
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="event.stopPropagation(); updateCartQty('${p.id}', -1)">-</button>
+            <span class="qty-display">${qtyInCart}</span>
+            <button class="qty-btn" onclick="event.stopPropagation(); updateCartQty('${p.id}', 1)">+</button>
+          </div>
+        ` : `
+          <div class="product-btns">
+            <button class="btn-cart" onclick="event.stopPropagation(); addToCart('${p.id}')">🛒 Add to Cart</button>
+            <button class="btn-buy" onclick="event.stopPropagation(); buyNow('${p.id}')">⚡ Buy Now</button>
+          </div>
+        `}
       </div>
     </div>
   `}).join('');
 }
 
-function viewProduct(id) {
-  let p = SANTRA_DB.products.find(prod => prod.id == id);
+window.toggleWishlist = function(productId) {
+  let p = allProductsCache.find(prod => prod.id == productId);
   if(!p) return;
-  
+  let index = wishlist.findIndex(item => item.id == productId);
+  if(index > -1) {
+    wishlist.splice(index, 1);
+    alert('Removed from Wishlist');
+  } else {
+    let images = [];
+    try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+    if(!images.length && p.image) images = [p.image];
+    wishlist.push({ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: 1 });
+    alert('Added to Wishlist 😍');
+  }
+  localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
+  loadProducts();
+}
+
+window.updateCartQty = function(productId, change) {
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
+  let itemIndex = cart.findIndex(item => item.id == productId);
+  if(itemIndex > -1) {
+    cart[itemIndex].qty += change;
+    if(cart[itemIndex].qty <= 0) cart.splice(itemIndex, 1);
+    localStorage.setItem('santra_cart', JSON.stringify(cart));
+    updateCartCount();
+    loadProducts();
+  }
+}
+window.viewProduct = function(id) {
+  let p = allProductsCache.find(prod => prod.id == id);
+  if(!p) return;
   selectedProduct = p;
+  modalQuantity = 1;
   let catName = p.category || p.cat || 'General';
   if(typeof catName === 'object') catName = catName.name || catName.id || 'General';
-  
+  let images = [];
+  try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+  if(!images.length && p.image) images = [p.image];
   document.getElementById('modalTitle').innerText = p.name;
-  document.getElementById('modalImg').src = p.imageUrl || p.image || p.img;
+  document.getElementById('modalImg').src = images[0] || 'https://via.placeholder.com/400?text=No+Image';
   document.getElementById('modalPrice').innerText = '₹' + p.price;
-  document.getElementById('modalMrp').innerText = p.mrp ? '₹' + p.mrp : '';
+  document.getElementById('modalMrp').innerText = p.mrp? '₹' + p.mrp : '';
   document.getElementById('modalCat').innerText = catName;
   document.getElementById('modalStock').innerText = p.stock || 0;
   document.getElementById('modalDesc').innerText = p.desc || 'No description available';
+  document.getElementById('modalQty').innerText = modalQuantity;
   document.getElementById('productModal').classList.remove('hide');
 }
 
-function closeProductModal() {
+window.closeProductModal = function() {
   document.getElementById('productModal').classList.add('hide');
   selectedProduct = null;
+  modalQuantity = 1;
 }
 
-function addToCartFromModal() {
+window.changeModalQty = function(change) {
+  modalQuantity += change;
+  if(modalQuantity < 1) modalQuantity = 1;
+  if(modalQuantity > 99) modalQuantity = 99;
+  document.getElementById('modalQty').innerText = modalQuantity;
+}
+
+window.addToCartFromModal = function() {
   if(!selectedProduct) return;
-  addToCart(selectedProduct.id);
-  closeProductModal();
-}
-
-function buyNowFromModal() {
-  if(!selectedProduct) return;
-  buyNow(selectedProduct.id);
-  closeProductModal();
-}
-
-function addToCart(productId) {
-  let p = SANTRA_DB.products.find(prod => prod.id == productId);
-  if(!p) {
-    alert('Product not found');
-    return;
-  }
-  
+  let p = selectedProduct;
   let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let existing = cart.find(item => item.id == productId);
-  
-  if(existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({
-      id: productId,
-      name: p.name,
-      price: p.price,
-      image: p.imageUrl || p.image || p.img,
-      code: p.code || 'N/A',
-      qty: 1
-    });
-  }
-  
+  let images = [];
+  try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+  if(!images.length && p.image) images = [p.image];
+  let existing = cart.find(item => item.id == p.id);
+  if(existing) { existing.qty += modalQuantity; }
+  else { cart.push({ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: modalQuantity }); }
   localStorage.setItem('santra_cart', JSON.stringify(cart));
   updateCartCount();
-  alert('✅ Added to Cart!');
+  loadProducts();
+  alert(`✅ ${modalQuantity} item(s) added to Cart!`);
+  closeProductModal();
 }
 
-function buyNow(productId) {
-  if(!currentCustomer) {
-    alert('Pehle login karo order karne ke liye');
-    openCustomerLogin();
-    return;
-  }
-  
-  let p = SANTRA_DB.products.find(prod => prod.id == productId);
+window.addToWishlistFromModal = function() {
+  if(!selectedProduct) return;
+  let p = selectedProduct;
+  let index = wishlist.findIndex(item => item.id == p.id);
+  let images = [];
+  try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+  if(!images.length && p.image) images = [p.image];
+  if(index > -1) { wishlist[index].qty += modalQuantity; }
+  else { wishlist.push({ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: modalQuantity }); }
+  localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
+  alert(`✅ Added to Wishlist 😍`);
+  closeProductModal();
+  loadProducts();
+}
+
+window.buyNowFromModal = function() {
+  if(!selectedProduct) return;
+  if(!currentCustomer) { alert('Pehle login karo order karne ke liye'); openCustomerLogin(); return; }
+  let p = selectedProduct;
+  let images = [];
+  try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+  if(!images.length && p.image) images = [p.image];
+  localStorage.setItem('santra_checkout', JSON.stringify([{ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: modalQuantity }]));
+  window.location.href = 'checkout.html';
+}
+
+window.addToCart = function(productId) {
+  let p = allProductsCache.find(prod => prod.id == productId);
+  if(!p) { alert('Product not found'); return; }
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
+  let images = [];
+  try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+  if(!images.length && p.image) images = [p.image];
+  let existing = cart.find(item => item.id == productId);
+  if(existing) { existing.qty += 1; }
+  else { cart.push({ id: productId, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: 1 }); }
+  localStorage.setItem('santra_cart', JSON.stringify(cart));
+  updateCartCount();
+  loadProducts();
+}
+
+window.buyNow = function(productId) {
+  if(!currentCustomer) { alert('Pehle login karo order karne ke liye'); openCustomerLogin(); return; }
+  let p = allProductsCache.find(prod => prod.id == productId);
   if(!p) return;
-  
-  localStorage.setItem('santra_checkout', JSON.stringify([{
-    id: productId,
-    name: p.name,
-    price: p.price,
-    image: p.imageUrl || p.image || p.img,
-    code: p.code || 'N/A',
-    qty: 1
-  }]));
-  
+  let images = [];
+  try{ images = JSON.parse(p.images || '[]'); }catch(e){}
+  if(!images.length && p.image) images = [p.image];
+  localStorage.setItem('santra_checkout', JSON.stringify([{ id: productId, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: 1 }]));
   window.location.href = 'checkout.html';
 }
 
@@ -633,47 +679,25 @@ function updateCartCount() {
   document.getElementById('cartCount').innerText = totalQty;
 }
 
-function loadCategories() {
-  let container = document.getElementById('categoryList');
-  if(!SANTRA_DB.categories || SANTRA_DB.categories.length === 0) {
-    container.innerHTML = '<p style="padding:20px;color:#999">No categories</p>';
-    return;
-  }
-  container.innerHTML = SANTRA_DB.categories.map(cat => {
-    let catName = typeof cat === 'object' ? (cat.name || cat.id) : cat;
-    let catImg = typeof cat === 'object' ? (cat.img || 'https://via.placeholder.com/50') : 'https://via.placeholder.com/50';
-    return `
-      <div class="cat-item" onclick="filterByCategory('${catName}')">
-        <img src="${catImg}" onerror="this.src='https://via.placeholder.com/50'">
-        <p>${catName}</p>
-      </div>
-    `;
-  }).join('');
-}
-
-function filterByCategory(catName) {
+window.filterByCategory = function(catName) {
   loadProducts(catName);
   window.scrollTo(0, 400);
 }
 
-function goHome() {
-  showPage('home');
+window.goHome = function() {
+  window.scrollTo(0, 0);
 }
 
-function openCategories() {
+window.openCategories = function() {
   document.getElementById('categoryList').scrollIntoView({behavior: 'smooth'});
 }
 
-function openCart() {
+window.openCart = function() {
   window.location.href = 'cart.html';
 }
 
-function openOrders() {
-  if(!currentCustomer) {
-    alert('Pehle login karo');
-    openCustomerLogin();
-    return;
-  }
+window.openOrders = function() {
+  if(!currentCustomer) { alert('Pehle login karo'); openCustomerLogin(); return; }
   window.location.href = 'orders.html';
 }
 
@@ -685,3 +709,9 @@ window.viewAllProducts = function() {
 
 </body>
 </html>
+  
+  
+  
+
+
+
