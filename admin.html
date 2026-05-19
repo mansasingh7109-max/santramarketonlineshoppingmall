@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SANTRA MALL - Admin Panel v3.8</title>
+  <title>SANTRA MALL - Admin Panel v4.0</title>
   <style>
     :root{--bg:#ffffff;--card:#f8f9fa;--accent:#e40046;--text:#212121;--border:#dee2e6;--success:#10b981;--sidebar:#ffffff;--table:#ffffff;--input:#ffffff;--popup:#ffffff;--btntext:#ffffff;--tabactive:#e40046;--tabtext:#212121;--sidebartext:#212121;}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
@@ -27,7 +27,7 @@
     button:disabled{background:#999;cursor:not-allowed;transform:scale(1);}
     .btn-del{background:#ef4444!important;}
     .btn-edit{background:#3b82f6!important;}
-       .btn-preview{background:#2196f3!important;}
+    .btn-preview{background:#2196f3!important;}
     .hide{display:none!important;}
     .table-wrapper{overflow-x:auto;margin-top:15px;border-radius:8px;}
     table{width:100%;border-collapse:collapse;background:var(--table);}
@@ -83,6 +83,21 @@
     .locked-field{background:#fef2f2!important;border:2px solid #ef4444!important;}
     .filter-box{background:var(--card);padding:15px;border-radius:8px;margin:15px 0;border:1px solid var(--border);}
     .filter-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin:15px 0;padding:15px;border:2px dashed var(--accent);border-radius:8px;background:#fef2f2;min-height:120px}
+    .grid-item{position:relative}
+    .grid img{width:100%;height:100px;object-fit:cover;border-radius:8px;border:3px solid #ddd}
+    .grid-item.uploaded img{border-color:#10b981}
+    .badge{position:absolute;top:-8px;right:-8px;background:#10b981;color:white;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:12px;font-weight:bold}
+    .remove{position:absolute;top:-8px;left:-8px;background:#ef4444;color:white;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;cursor:pointer;font-size:16px}
+    .status{padding:12px;margin:10px 0;border-radius:6px;text-align:center;font-weight:bold;font-size:14px}
+    .success{background:#d1fae5;color:#065f46;border-left:4px solid #10b981}
+    .error{background:#fee2e2;color:#991b1b;border-left:4px solid #ef4444}
+    .info{background:#dbeafe;color:#1e40af;border-left:4px solid #3b82f6}
+    .loading{background:#fef3c7;color:#92400e;border-left:4px solid #f59e0b}
+    .progress{width:100%;height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin:10px 0;display:none}
+    .progress-bar{height:100%;background:linear-gradient(90deg,#f59e0b,#10b981);transition:width 0.3s;width:0%}
+    .upload-label{display:block;width:100%;padding:18px;background:#3b82f6;color:white;text-align:center;border-radius:8px;font-size:16px;font-weight:bold;margin:15px 0;cursor:pointer}
+    .upload-label:hover{background:#2563eb}
   </style>
 </head>
 <body>
@@ -107,7 +122,7 @@
   <div class="floating-ai" onclick="toggleAI()">🤖</div>
 
   <div class="top-bar">
-    <h1>🛍️ SANTRA MALL - Admin Panel v3.8</h1>
+    <h1>🛍️ SANTRA MALL - Admin Panel v4.0</h1>
     <div class="top-btns">
       <button class="btn-firebase" onclick="showFirebaseStatus()">🔒 Firebase Connected</button>
       <button class="btn-global" onclick="sendGmailBackup()">📧 Gmail Backup</button>
@@ -203,8 +218,8 @@
           <div class="upload-area" style="flex:1" onclick="selectSingleImage()">
             <p>📤 Single Image<br><small>Gallery/Browser se 1 image</small></p>
           </div>
-          <div class="upload-area" style="flex:1" onclick="selectMultipleImages()">
-            <p>📤 Multiple Images<br><small>3-4 images | Gallery/Browser</small></p>
+          <div class="upload-area" style="flex:2" onclick="selectMultipleImages()">
+         <p>📤 Multiple Images<br><small>Gallery/Browser se multiple</small></p>
           </div>
         </div>
 
@@ -249,7 +264,8 @@
         <button id="catCancelBtn" onclick="cancelCatEdit()" style="width:100%;padding:12px;background:#666;display:none;">❌ Cancel Edit</button>
         <div id="catList" style="margin-top:20px;"></div>
       </div>
-          <div id="orders" class="tab-page hide">
+
+      <div id="orders" class="tab-page hide">
         <h2>Orders - Real-time</h2>
         <button class="btn-preview" onclick="downloadOrdersExcel()">📥 Download Orders Excel</button>
         <div id="orderList"><div class="loader">Loading...</div></div>
@@ -337,7 +353,7 @@
         <h2>🏢 Company Details - Live Update</h2>
         <label>About Company</label><textarea id="companyAbout" rows="4" placeholder="Company ke baare me likho..."></textarea>
         <label>Features</label><textarea id="companyFeatures" rows="6" placeholder="✓ 100% Original Products&#10;✓ Free Delivery"></textarea>
-        <label>Development Info</label><textarea id="companyDev" rows="4" placeholder="Platform: Firebase&#10;Version: 3.8"></textarea>
+        <label>Development Info</label><textarea id="companyDev" rows="4" placeholder="Platform: Firebase&#10;Version: 4.0"></textarea>
         <label>Rules & Regulations</label><textarea id="companyRules" rows="6" placeholder="1. All prices include GST"></textarea>
         <button onclick="saveCompanyDetails()" style="width:100%;padding:15px;font-size:16px;margin-top:15px;">💾 Save Company Details</button>
       </div>
@@ -356,9 +372,9 @@
       <div id="helpdesk" class="tab-page hide">
         <h2>💬 Help Desk - Live Update</h2>
         <label>Help Desk Phone</label><input type="text" id="helpPhone" placeholder="9829508335">
-        <label>Help Desk WhatsApp</label><input type="text" id="helpWhatsapp" placeholder="9829508335">
-        <label>Help Desk Email</label><input type="email" id="helpEmail" placeholder="mansasingh7109@gmail.com">
-        <label>Working Hours</label><input type="text" id="helpHours" placeholder="Mon-Sat: 12 AM - 12 PM">
+        <label>Help Desk WhatsApp</label><input type="text" id="helpWhatsapp" placeholder="9829508335">      
+     <label>Help Desk Email</label><input type="email" id="helpEmail" placeholder="mansasingh7109@gmail.com">
+          <label>Working Hours</label><input type="text" id="helpHours" placeholder="Mon-Sat: 12 AM - 12 PM">
         <button onclick="saveHelpdesk()">Save Help Desk</button>
       </div>
 
@@ -405,17 +421,28 @@
     </div>
   </div>
 
+<!-- ✅ FIX 1: secrets.js sabse pehle load kar -->
+<script src="secrets.js"></script>
+
+<!-- ✅ FIX 2: import wali line hata di, window.FIREBASE_CONFIG use kiya -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
   import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDoc, setDoc, getDocs, query, where, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
   import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
   import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js'
-  import { firebaseConfig, ADMIN_EMAIL, ADMIN_NAME, ADMIN_MOBILE, IMGBB_API_KEY } from './secrets.js';
-
-  const app = initializeApp(firebaseConfig);
+  
+  // ❌ Ye line DELETE kar de: import { firebaseConfig, ADMIN_EMAIL } from './secrets.js';
+  
+  // ✅ window se config le
+  const app = initializeApp(window.FIREBASE_CONFIG);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
+  const ADMIN_EMAIL = window.BUSINESS_CONFIG.EMAIL;
+  const ADMIN_NAME = window.BUSINESS_CONFIG.ADMIN_NAME;
+  const ADMIN_MOBILE = window.BUSINESS_CONFIG.WHATSAPP_NUMBER;
+  const IMGBB_API_KEY = window.IMGBB_API_KEY;
+  
   const loader = document.getElementById('authLoader');
 
   let allProductsCache = [];
@@ -449,7 +476,7 @@
   });
 
   function initApp(){
-    console.log('🚀 SANTRA MALL Admin Panel v3.8 Starting...');
+    console.log('🚀 SANTRA MALL Admin Panel v4.0 Starting...');
     loadDashboard();
     loadProducts();
     loadCategories();
@@ -507,31 +534,23 @@
     count = 0;
     recentProducts.forEach(doc => {
       const p = doc.data();
-      productsHTML += `<tr><td><b>${p.seriesCode||'N/A'}</b></td><td><img src="${p.image||''}" style="width:40px;height:40px;object-fit:cover;"></td><td>${p.name}</td><td>₹${p.price}</td><td>${p.stock}</td><td>${p.uploadDate}</td><td>${p.uploadedBy||'Admin'}</td></tr>`;
+      productsHTML += `<tr><td><b>${p.seriesCode||'N/A'}</b></td><td><img src="${p.image||''}" style="width:40px;height:40px;object-fit:cover;"></td><td>${p.name}</td><td>₹${p.price}</td><td>${p.stock}</td><td>${p.uploadDate||'N/A'}</td><td>${p.uploadedBy||'Admin'}</td></tr>`;
       count++;
     });
     if(count === 0) productsHTML += '<tr><td colspan="7">No products yet</td></tr>';
     productsHTML += '</table>';
     document.getElementById('productHistory').innerHTML = productsHTML;
   }
-  
-   function createFileInput(multiple = false) {
+
+  window.selectSingleImage = function() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    if(multiple) input.multiple = true;
-    input.style.display = 'none';
-    document.body.appendChild(input);
-    return input;
-  }
-
-  window.selectSingleImage = function() {
-    const input = createFileInput(false);
     input.click();
     input.onchange = function(e) {
       if(e.target.files.length > 0) {
         window.selectedFiles = [e.target.files[0]];
-        showStatus('✅ Single image selected: ' + e.target.files[0].name);
+        showStatus('✅ 1 image selected: ' + e.target.files[0].name);
         showLocalPreview(window.selectedFiles);
       }
       input.remove();
@@ -539,7 +558,10 @@
   }
 
   window.selectMultipleImages = function() {
-    const input = createFileInput(true);
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
     input.click();
     input.onchange = function(e) {
       if(e.target.files.length > 0) {
@@ -578,7 +600,7 @@
 
   window.uploadToImgBB = async function() {
     if(!window.selectedFiles || window.selectedFiles.length === 0) {
-      alert('⚠️ Pehle image select karo!\n\n1. Single/Multiple pe click karo\n2. Photo select karo\n3. Fir ye button dabao');
+      alert('⚠️ Pehle images select karo!\n\n1. Multiple Images pe click karo\n2. 3-4 photo select karo\n3. Fir ye button dabao');
       return;
     }
 
@@ -592,9 +614,8 @@
     document.getElementById('saveBtn').disabled = true;
 
     try {
-      for(let i = 0; i < window.selectedFiles.length; i++) {
-        const file = window.selectedFiles[i];
-        showStatus(`⏳ Uploading ${i+1}/${window.selectedFiles.length}: ${file.name}`);
+      for (const [index, file] of window.selectedFiles.entries()) {
+        showStatus(`⏳ Uploading ${index+1}/${window.selectedFiles.length}: ${file.name}`);
 
         const formData = new FormData();
         formData.append('image', file);
@@ -603,26 +624,30 @@
           method: 'POST',
           body: formData
         });
+
         const data = await res.json();
 
-        if(data.success) {
+        if (data.success) {
           window.uploadedImageUrls.push(data.data.url);
+          console.log(`✅ Image ${index+1} uploaded:`, data.data.url);
         } else {
           throw new Error(data.error.message);
         }
       }
-      showStatus('✅ ' + window.uploadedImageUrls.length + ' images uploaded!');
+
+      showStatus(`✅ ${window.uploadedImageUrls.length} images uploaded!`);
       showImagesPreview(window.uploadedImageUrls);
       addLog(`🖼️ ImgBB Upload: ${window.selectedFiles.length} images by ${ADMIN_NAME}`);
     } catch(err) {
       showStatus('❌ Error: ' + err.message);
+      console.error(err);
     }
     document.getElementById('saveBtn').disabled = false;
   }
 
   window.uploadToFirebase = async function() {
     if(!window.selectedFiles || window.selectedFiles.length === 0) {
-      alert('⚠️ Pehle image select karo!');
+      alert('⚠️ Pehle images select karo!');
       return;
     }
 
@@ -631,20 +656,21 @@
     document.getElementById('saveBtn').disabled = true;
 
     try {
-      for(let i = 0; i < window.selectedFiles.length; i++) {
-        const file = window.selectedFiles[i];
-        showStatus(`⏳ Uploading ${i+1}/${window.selectedFiles.length}...`);
+      for (const [index, file] of window.selectedFiles.entries()) {
+        showStatus(`⏳ Uploading ${index+1}/${window.selectedFiles.length}...`);
 
         const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
         await uploadBytes(storageRef, file);
         const url = await getDownloadURL(storageRef);
         window.uploadedImageUrls.push(url);
+        console.log(`✅ Firebase Image ${index+1} uploaded:`, url);
       }
-      showStatus('✅ ' + window.uploadedImageUrls.length + ' images Firebase pe uploaded!');
+      showStatus(`✅ ${window.uploadedImageUrls.length} images Firebase pe uploaded!`);
       showImagesPreview(window.uploadedImageUrls);
       addLog(`🔥 Firebase Upload: ${window.selectedFiles.length} images by ${ADMIN_NAME}`);
     } catch(err) {
       showStatus('❌ Firebase Error: ' + err.message);
+      console.error(err);
     }
     document.getElementById('saveBtn').disabled = false;
   }
@@ -899,7 +925,7 @@
           <td>${p.productType||'-'}</td>
           <td>₹${p.price}</td>
           <td>${p.stock}</td>
-          <td>${p.uploadDate}<br><small style="color:#64748b;">By ${p.uploadedBy}</small></td>
+          <td>${p.uploadDate||'N/A'}<br><small style="color:#64748b;">By ${p.uploadedBy||'Admin'}</small></td>
           <td>
             <button class="btn-edit" onclick="editProduct('${docSnap.id}')">Edit</button>
             <button class="btn-del" onclick="deleteProduct('${docSnap.id}')">🗑️</button>
@@ -942,7 +968,7 @@
         <td>${p.productType||'-'}</td>
         <td>₹${p.price}</td>
         <td>${p.stock}</td>
-        <td>${p.uploadDate}<br><small style="color:#64748b;">By ${p.uploadedBy}</small></td>
+        <td>${p.uploadDate||'N/A'}<br><small style="color:#64748b;">By ${p.uploadedBy||'Admin'}</small></td>
         <td>
           <button class="btn-edit" onclick="editProduct('${p.id}')">Edit</button>
           <button class="btn-del" onclick="deleteProduct('${p.id}')">🗑️</button>
@@ -982,7 +1008,7 @@
       snap.forEach(docSnap => {
         let c = docSnap.data();
         allCategoriesCache.push({...c, id: docSnap.id});
-        html += `<tr><td><img src="${c.image||'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td><td>${c.name}</td><td>${c.productCount||0}</td><td><button class="btn-del" onclick="deleteCategory('${docSnap.id}')">Delete</button></td></tr>`;
+         html += `<tr><td><img src="${c.image||'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td><td>${c.name}</td><td>${c.productCount||0}</td><td><button class="btn-edit" onclick="editCategory('${docSnap.id}')">Edit</button><button class="btn-del" onclick="deleteCategory('${docSnap.id}')">Delete</button></td></tr>`;
         options += `<option value="${c.name}">${c.name}</option>`;
         filterOptions += `<option value="${c.name}">${c.name}</option>`;
       });
@@ -1004,6 +1030,20 @@
     document.getElementById('catImagePreview').innerHTML = '';
     addLog(`📁 Added category: ${name} by ${ADMIN_NAME}`);
     showBackupIndicator();
+  }
+
+  window.editCategory = async function(id) {
+    const docSnap = await getDoc(doc(db, "categories", id));
+    if(docSnap.exists()){
+      let c = docSnap.data();
+      document.getElementById('catId').value = id;
+      document.getElementById('catName').value = c.name;
+      document.getElementById('catImg').value = c.image;
+      document.getElementById('catImagePreview').innerHTML = `<img src="${c.image}" style="max-width:200px;">`;
+      document.getElementById('catSaveBtn').innerText = 'Update Category';
+      document.getElementById('catCancelBtn').style.display = 'block';
+      window.scrollTo(0,0);
+    }
   }
 
   window.deleteCategory = async function(id) {
@@ -1040,7 +1080,9 @@
   }
 
   window.browseCatImage = function() {
-    const input = createFileInput(false);
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
     input.click();
     input.onchange = async function(e) {
       if(e.target.files.length > 0) {
@@ -1080,7 +1122,7 @@
       let html = '<table><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th></tr>';
       snap.forEach(o => {
         let d = o.data();
-        html += `<tr><td>#${o.id.substring(0,8)}</td><td>${d.customerName||'N/A'}</td><td>${d.mobile||'N/A'}</td><td>₹${d.total||0}</td><td><span class="badge-success">${d.status||'Pending'}</span></td><td>${new Date(d.time||Date.now()).toLocaleDateString()}</td><td><button class="btn-edit" onclick="updateOrderStatus('${o.id}')">Update</button></td></tr>`;
+        html += `<tr><td>#${o.id.substring(0,8)}</td><td>${d.customerName||'N/A'}</td><td>${d.mobile||'N/A'}</td><td>₹${d.total||0}</td><span class="badge-success">${d.status||'Pending'}</span></td><td>${new Date(d.time||Date.now()).toLocaleDateString()}</td><td><button class="btn-edit" onclick="updateOrderStatus('${o.id}')">Update</button></td></tr>`;
       });
       html += '</table>';
       container.innerHTML = html;
@@ -1166,7 +1208,8 @@
   function loadPaymentSettings(){
     onSnapshot(doc(db, 'settings', 'payment'), (doc) => {
       if(doc.exists()){
-        let d = doc.data();             document.getElementById('upiId').value = d.upiId || '';
+        let d = doc.data();
+        document.getElementById('upiId').value = d.upiId || '';
         document.getElementById('bankAccount').value = d.bankAccount || '';
         document.getElementById('ifscCode').value = d.ifscCode || '';
       }
@@ -1184,6 +1227,10 @@
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
+
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+    canvas.addEventListener('touchend', stopDrawing);
   }
 
   window.setDrawColor = function(color, el) {
@@ -1571,7 +1618,7 @@
     const orders = await getDocs(collection(db, 'orders'));
     const customers = await getDocs(collection(db, 'users'));
 
-    let body = `SANTRA MALL Backup\nDate: ${new Date().toLocaleString('en-IN')}\nBy Admin: ${ADMIN_NAME}\n\nTotal Products: ${products.size}\nTotal Orders: ${orders.size}\nTotal Customers: ${customers.size}\n\nThis is auto backup from Firebase.\n\nRegards,\nSANTRA MALL Admin Panel`;
+    let body = `SANTRA MALL Backup\nDate: ${new Date().toLocaleString('en-IN')}\nBy Admin: ${ADMIN_NAME}\n\nTotal Products: ${products.size}\nTotal Orders: ${orders.size}\nTotal Customers: ${customers.size}\n\nThis is manual backup from Firebase.\n\nRegards,\nSANTRA MALL Admin Panel`;
 
     window.open(`mailto:${ADMIN_EMAIL}?subject=SANTRA MALL Backup ${new Date().toLocaleDateString()}&body=${encodeURIComponent(body)}`);
     addLog(`📧 Gmail backup sent by ${ADMIN_NAME}`);
@@ -1642,7 +1689,7 @@
     }
 
     setTimeout(() => {
-      body.innerHTML += `<div class="ai-msg">${reply}</div>`;
+         body.innerHTML += `<div class="ai-msg">${reply}</div>`;
       body.scrollTop = body.scrollHeight;
     }, 500);
 
@@ -1706,15 +1753,14 @@
   }
 
   window.logout = async function() {
-    if(confirm('Logout karna hai? Data safe rahega.')){
+    if(confirm('Logout karna hai?')){
       document.getElementById('authLoader').style.display = 'flex';
+      localStorage.clear();
+      sessionStorage.clear();
       try {
         await signOut(auth);
-        localStorage.clear();
-        sessionStorage.clear();
         window.location.replace('admin-login.html');
       } catch(err) {
-        localStorage.clear();
         window.location.replace('admin-login.html');
       }
     }
@@ -1722,7 +1768,7 @@
 
   function scheduleAutoBackup(){
     const now = new Date();
-    const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+    const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0);
     const msToMidnight = night.getTime() - now.getTime();
     setTimeout(() => {
       createBackup();
@@ -1731,7 +1777,7 @@
     }, msToMidnight);
   }
 
-  console.log('✅ SANTRA MALL Admin Panel v3.8 Loaded - All Features Active');
+  console.log('✅ SANTRA MALL Admin Panel v4.0 Loaded - All Features Active');
 </script>
 </body>
 </html>
