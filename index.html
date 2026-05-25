@@ -3,106 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🛍️ SANTRA MALL - Online Shopping</title>
+  <title>🛒 SANTRA MALL - Online Shopping</title>
+  
+  <style id="themePreload">
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--shadow:0 2px 8px rgba(0,0,0,0.1);--wish:#ff6b6b}
+    body{background:var(--bg)!important;color:var(--text);padding-bottom:70px}
+  </style>
+  
   <style>
-    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0;--shadow:0 2px 8px rgba(0,0,0,0.1);--wish:#ff6b6b}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);color:var(--text);padding-bottom:70px}
-  .header{background:var(--accent);color:white;padding:12px 15px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
-  .header h1{font-size:18px;display:flex;align-items:center;gap:8px}
-  .header-btns{display:flex;gap:8px;align-items:center}
-  .header-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-weight:bold;text-decoration:none}
-  .header-btn.hide{display:none!important}
-  .user-name{background:rgba(255,255,255,0.2);padding:6px 10px;border-radius:4px;font-size:11px;}
-  .search-bar{background:white;margin:15px;padding:10px;border-radius:8px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
-  .search-bar input{flex:1;border:none;outline:none;font-size:14px;padding:8px;}
-  .search-bar button{background:var(--accent);color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;font-weight:bold}
-  .filter-btn{background:#2196f3!important;padding:8px 12px!important;}
-  .filter-popup{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:9999;padding:15px;}
-  .filter-popup.show{display:flex;}
-  .filter-content{background:white;border-radius:12px;max-width:400px;width:100%;padding:20px;}
-  .filter-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
-  .filter-header h3{color:var(--accent);margin:0;}
-  .close-filter{background:#999;color:white;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;}
-  .filter-group{margin:12px 0;}
-  .filter-group label{display:block;font-weight:bold;margin-bottom:5px;font-size:13px;}
-  .filter-group select{width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;font-size:14px;}
-  .filter-actions{display:flex;gap:10px;margin-top:15px;}
-  .filter-actions button{flex:1;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
-  .btn-apply{background:var(--accent);color:white;}
-  .btn-clear{background:#6c757d;color:white;}
-  .banner{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;padding:30px 15px;text-align:center;margin:15px;border-radius:12px}
-  .banner h2{font-size:24px;margin-bottom:8px}
-  .categories{display:flex;gap:10px;padding:15px;overflow-x:auto;background:white;margin:15px;border-radius:8px}
-  .cat-item{text-align:center;min-width:70px;cursor:pointer}
-  .cat-item img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--border)}
-  .cat-item p{font-size:11px;margin-top:5px;font-weight:bold}
-  .section-title{padding:15px;font-size:18px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
-  .products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 15px}
-  .product{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;position:relative}
-  .product:active{transform:scale(0.98)}
-  .product img{width:100%;height:150px;object-fit:cover}
-  .product-info{padding:10px}
-  .product h3{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden}
-  .price{color:var(--accent);font-weight:bold;font-size:16px}
-  .mrp{color:#999;text-decoration:line-through;font-size:12px;margin-left:5px}
-  .stock{font-size:11px;color:#10b981;margin-top:3px}
-  .new-badge{position:absolute;top:5px;left:5px;background:#FFA000;color:white;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:bold;z-index:5}
-  .wish-icon{position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.9);border:none;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
-  .wish-icon.active{background:var(--wish);color:white}
-  .product-btns{display:flex;gap:5px;margin-top:8px}
-  .btn-cart{flex:1;background:#e40046;color:white;border:none;padding:6px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold}
-  .btn-buy{flex:1;background:#10b981;color:white;border:none;padding:6px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold}
-  .qty-controls{display:flex;gap:5px;margin-top:8px;align-items:center;justify-content:center;background:#f5f5f5;border-radius:4px;padding:4px}
-  .qty-btn{background:var(--accent);color:white;border:none;width:28px;height:28px;border-radius:4px;font-size:16px;cursor:pointer;font-weight:bold;line-height:1}
-  .qty-display{background:white;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:bold;min-width:35px;text-align:center}
-  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 8px rgba(0,0,0,0.1);z-index:100}
-  .nav-item{text-align:center;font-size:11px;color:#666;cursor:pointer;padding:5px;position:relative}
-  .nav-item.active{color:var(--accent)}
-  .nav-item i{font-size:20px;display:block;margin-bottom:2px}
-  .cart-count{background:red;color:white;border-radius:50%;width:18px;height:18px;font-size:10px;position:absolute;top:-5px;right:15px;display:flex;align-items:center;justify-content:center}
-  .loading{text-align:center;padding:40px;color:#999}
-  .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;padding:15px}
-  .modal-content{background:var(--card);border-radius:12px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto}
-  .modal-header{padding:20px;border-bottom:3px solid var(--accent);display:flex;justify-content:space-between;align-items:center}
-  .modal-header h3{color:var(--accent);font-size:20px}
-  .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
-  .modal-body{padding:20px}
-  .modal-body img{width:100%;border-radius:8px;margin-bottom:15px}
-  .modal-price{font-size:24px;color:var(--accent);font-weight:bold;margin:10px 0}
-  .modal-mrp{font-size:16px;color:#999;text-decoration:line-through;margin-left:10px}
-  .modal-desc{color:#666;font-size:14px;line-height:1.5;margin:15px 0}
-  .btn{width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:6px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:14px}
-  .btn-secondary{background:#3b82f6}
-  .btn-success{background:#10b981}
+   .header{background:var(--accent);color:white;padding:12px 15px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+   .header h1{font-size:18px;display:flex;align-items:center;gap:8px}
+   .header-btns{display:flex;gap:8px;align-items:center}
+   .header-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-weight:bold;text-decoration:none;position:relative}
+   .header-btn.hide{display:none!important}
+   .user-name{background:rgba(255,255,255,0.2);padding:6px 10px;border-radius:4px;font-size:11px;}
+   .wishlist-count{background:red;color:white;border-radius:50%;width:18px;height:18px;font-size:10px;position:absolute;top:-5px;right:-5px;display:flex;align-items:center;justify-content:center}
+   .search-bar{background:white;margin:15px;padding:10px;border-radius:8px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
+   .search-bar input{flex:1;border:none;outline:none;font-size:14px;padding:8px;}
+   .search-bar button{background:var(--accent);color:white;border:none;padding:8px 15px;border-radius:4px;cursor:pointer;font-weight:bold}
+   .filter-btn{background:#2196f3!important;padding:8px 12px!important;}
+   .filter-popup{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:9999;padding:15px;}
+   .filter-popup.show{display:flex;}
+   .filter-content{background:white;border-radius:12px;max-width:400px;width:100%;padding:20px;}
+   .filter-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+   .filter-header h3{color:var(--accent);margin:0;}
+   .close-filter{background:#999;color:white;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;}
+   .filter-group{margin:12px 0;}
+   .filter-group label{display:block;font-weight:bold;margin-bottom:5px;font-size:13px;}
+   .filter-group select{width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;font-size:14px;}
+   .filter-actions{display:flex;gap:10px;margin-top:15px;}
+   .filter-actions button{flex:1;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
+   .btn-apply{background:var(--accent);color:white;}
+   .btn-clear{background:#6c757d;color:white;}
+   .banner{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;padding:30px 15px;text-align:center;margin:15px;border-radius:12px}
+   .banner h2{font-size:24px;margin-bottom:8px}
+   .categories{display:flex;gap:10px;padding:15px;overflow-x:auto;background:white;margin:15px;border-radius:8px}
+   .cat-item{text-align:center;min-width:70px;cursor:pointer}
+   .cat-item img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--border)}
+   .cat-item p{font-size:11px;margin-top:5px;font-weight:bold}
+   .section-title{padding:15px;font-size:18px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
+   .products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 15px}
+   .product-card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;position:relative}
+   .product-card:active{transform:scale(0.98)}
+   .product-card img{width:100%!important;height:150px!important;object-fit:contain!important;background:#f9f9f9!important;display:block!important;}
+   .product-info{padding:10px}
+   .product-card h3{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+   .price{color:var(--accent);font-weight:bold;font-size:16px}
+   .mrp{color:#999;text-decoration:line-through;font-size:12px;margin-left:5px}
+   .stock{font-size:11px;color:#10b981;margin-top:3px}
+   .new-badge{position:absolute;top:5px;left:5px;background:#FFA000;color:white;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:bold;z-index:5}
+   .wish-icon{position:absolute;top:8px;right:8px;background:#ffeaea!important;border:2px solid #ffb3b3!important;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:15!important;box-shadow:0 2px 4px rgba(0,0,0,0.2);transition:all 0.3s}
+   .wish-icon:hover{background:#ffd6d6!important;transform:scale(1.1)}
+   .wish-icon.active{background:#ff4444!important;color:white!important;border-color:#ff0000!important}
+   .img-count{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.7);color:white;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold;z-index:10;display:flex;align-items:center;gap:3px}
+   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 8px rgba(0,0,0,0.1);z-index:100}
+   .nav-item{text-align:center;font-size:11px;color:#666;cursor:pointer;padding:5px;position:relative;text-decoration:none}
+   .nav-item.active{color:var(--accent)}
+   .nav-item i{font-size:20px;display:block;margin-bottom:2px}
+   .cart-count{background:red;color:white;border-radius:50%;width:18px;height:18px;font-size:10px;position:absolute;top:-5px;right:15px;display:flex;align-items:center;justify-content:center}
+   .loading{text-align:center;padding:40px;color:#999}
+   .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;padding:15px}
+   .modal-content{background:var(--card);border-radius:12px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto}
+   .modal-header{padding:20px;border-bottom:3px solid var(--accent);display:flex;justify-content:space-between;align-items:center}
+   .modal-header h3{color:var(--accent);font-size:20px}
+   .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1}
+   .modal-body{padding:20px}
+   .modal-body img{width:100%;border-radius:8px;margin-bottom:15px}
+   .modal-price{font-size:24px;color:var(--accent);font-weight:bold;margin:10px 0}
+   .modal-mrp{font-size:16px;color:#999;text-decoration:line-through;margin-left:10px}
+   .modal-desc{color:#666;font-size:14px;line-height:1.5;margin:15px 0}
+   .btn{width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:6px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:14px}
+   .btn-secondary{background:#3b82f6}
+   .btn-success{background:#10b981}
+   .qty-controls{display:flex;gap:5px;margin-top:8px;align-items:center;justify-content:center;background:#f5f5f5;border-radius:4px;padding:4px}
+   .qty-btn{background:var(--accent);color:white;border:none;width:28px;height:28px;border-radius:4px;font-size:16px;cursor:pointer;font-weight:bold;line-height:1}
+   .qty-display{background:white;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:bold;min-width:35px;text-align:center}
     input,select{width:100%;padding:10px;margin:8px 0;border:1px solid var(--border);border-radius:4px}
-  .hide{display:none!important}
-  .link{text-align:center;margin-top:15px;font-size:14px;color:#3b82f6;cursor:pointer}
-    
-  .image-slider{position:relative;width:100%;height:300px;overflow:hidden;border-radius:8px;background:#f5f5f5}
-  .slide-img{width:100%;height:300px;object-fit:cover;display:none}
-  .slide-img.active{display:block}
-  .prev-btn,.next-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:white;border:none;padding:8px 12px;cursor:pointer;border-radius:4px;font-size:18px;z-index:10}
-  .prev-btn:hover,.next-btn:hover{background:rgba(0,0,0,0.8)}
-  .prev-btn{left:5px}
-  .next-btn{right:5px}
-  .dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10}
-  .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.6);cursor:pointer;transition:0.3s}
-  .dot.active{background:white;width:20px;border-radius:4px}
-  .img-count{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);color:white;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold;z-index:10}
-    
-  .product.image-slider{height:150px;}
-  .product.slide-img{height:150px;}
+   .hide{display:none!important}
+   .link{text-align:center;margin-top:15px;font-size:14px;color:#3b82f6;cursor:pointer}
+   .image-slider{position:relative;width:100%;height:150px;overflow:hidden;border-radius:8px 8px 0 0;background:#f5f5}
+   .slide-img{width:100%;height:150px;object-fit:contain!important;background:#f9f9f9;display:none}
+   .slide-img.active{display:block}
+   .prev-btn,.next-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:white;border:none;padding:8px 12px;cursor:pointer;border-radius:4px;font-size:18px;z-index:10}
+   .prev-btn:hover,.next-btn:hover{background:rgba(0,0,0,0.8)}
+   .prev-btn{left:5px}
+   .next-btn{right:5px}
+   .dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10}
+   .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.6);cursor:pointer;transition:0.3s}
+   .dot.active{background:white;width:20px;border-radius:4px}
+    @media (min-width: 768px) {
+    .products {grid-template-columns: repeat(4,1fr)!important; gap: 20px!important;}
+    .product-card img {height: 200px!important;}
+    .image-slider,.slide-img {height: 200px!important;}
+    }
+    @media (min-width: 481px) and (max-width: 767px) {
+    .products {grid-template-columns: repeat(3,1fr)!important;}
+    .product-card img {height: 180px!important;}
+    .image-slider,.slide-img {height: 180px!important;}
+    }
   </style>
 </head>
 <body>
-
 <div class="header">
-  <h1 id="logoText">🛍️ SANTRA MALL</h1>
+  <h1 id="logoText">🛒 SANTRA MALL</h1>
   <div class="header-btns">
     <div id="userInfo" class="user-name hide"></div>
     <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">👤 Login</button>
     <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">🚪 Logout</button>
+    <a href="cart.html#wishlist" class="header-btn">
+      ❤️ Wishlist
+      <span class="wishlist-count" id="wishlist-count">0</span>
+    </a>
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
 </div>
@@ -229,9 +241,9 @@
         <span class="qty-display" id="modalQty">1</span>
         <button class="qty-btn" onclick="changeModalQty(1)">+</button>
       </div>
-      <button class="btn btn-cart" onclick="addToCartFromModal()">🛒 Add to Cart</button>
+      <button class="btn" style="background:#e40046" onclick="ToCartFromModal()">🛒 Add to Cart</button>
       <button class="btn btn-success" onclick="buyNowFromModal()">⚡ Buy Now</button>
-      <button class="btn" style="background:var(--wish)" onclick="addToWishlistFromModal()">😍 Add to Wishlist</button>
+      <button class="btn" style="background:var(--wish)" onclick="ToWishlistFromModal()">😍 Add to Wishlist</button>
     </div>
   </div>
 </div>
@@ -247,536 +259,581 @@
       <input type="text" id="custName" placeholder="Full Name *">
       <input type="tel" id="custMobile" placeholder="Mobile Number *" maxlength="10">
       <input type="email" id="custEmail" placeholder="Email (Optional)">
-      <button class="btn btn-success" onclick="sendCustomerOTP()">📱 WhatsApp par OTP Bhejo</button>
-    </div>
-    <div class="modal-body hide" id="loginStep2">
-      <p style="margin-bottom:15px;">OTP WhatsApp par bhej diya hai: <b id="otpMobileText"></b></p>
-      <input type="number" id="custOTP" placeholder="6 Digit OTP" maxlength="6">
-      <button class="btn" onclick="verifyCustomerOTP()">✅ Verify & Login</button>
-      <div class="link" onclick="backToStep1()">← Change Number</div>
+      <button onclick="loginCustomerWithoutOTP()" style="width:100%;background:#4CAF50;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;margin-top:10px;">✅ Login</button>
     </div>
   </div>
 </div>
 
-<!-- ✅ FIX 1: secrets.js pehle load karo -->
-<script src="secrets.js"></script>
+<!-- ✅ Firebase - SIRF 1 BAAR -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
-<!-- ✅ FIX 2: import wali line hata di, window.firebaseConfig use kiya -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
-  import { getFirestore, doc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+<!-- ✅ Firebase Config - SIRF 1 BAAR -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+  };
+  window.FIREBASE_CONFIG = firebaseConfig;
+  window.BUSINESS_CONFIG = {
+    EMAIL: "mansasingh7109@gmail.com",
+    ADMIN_NAME: "Manisha Tak",
+    WHATSAPP_NUMBER: "+919829508335"
+  };
   
-  // ❌ YE LINE DELETE KAR DI: import { FIREBASE_CONFIG as firebaseConfig } from './secrets.js';
-  
-  // ✅ window.firebaseConfig use karo
-  const app = initializeApp(window.firebaseConfig);
-  const db = getFirestore(app);
-  window.db = db;
+  // Firebase Init
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+</script>
 
-  window.allProductsCache = [];
-  window.allCategoriesCache = [];
+<!-- ✅ Theme Manager - SIRF 1 BAAR -->
+<script src="theme.js"></script>
 
-  onSnapshot(doc(db, "settings", "theme"), (docSnap) => {
-    if(docSnap.exists()){
-      const t = docSnap.data();
-      if(t.accentColor) document.documentElement.style.setProperty('--accent', t.accentColor);
-      if(t.bgColor) document.documentElement.style.setProperty('--bg', t.bgColor);
-      if(t.cardColor) document.documentElement.style.setProperty('--card', t.cardColor);
-      if(t.textColor) document.documentElement.style.setProperty('--text', t.textColor);
-      if(t.logoText) document.getElementById('logoText').innerText = t.logoText;
+<!-- ✅ MAIN SCRIPT - SIRF 1 BAAR -->
+<script>
+  function loginCustomerWithoutOTP() {
+  const name = document.getElementById('custName').value.trim();
+  const mobile = document.getElementById('custMobile').value.trim();
+  if (!name || mobile.length!== 10) {
+    alert('❌ Name aur 10 digit mobile daalo');
+    return;
+  }
+  localStorage.setItem('santra_customer', JSON.stringify({name: name, mobile: mobile}));
+  alert('✅ Login Successful!');
+  closeCustomerLogin();
+  location.reload();
+}
+let currentModalProduct = null;
+let allProducts = [];
+let currentSlideIndex = {};
+const WISHLIST_KEY = 'SANTRA_WISHLIST';
+const CART_KEY = 'SANTRA_CART';
+
+window.onload = function() {
+  updateCartCount();
+  updateWishlistCount();
+  loadProducts();
+  loadCategories();
+  checkCustomerLogin();
+  loadCompanyDetails();
+}
+
+async function loadCompanyDetails() {
+  if (!db) return;
+  try {
+    const docRef = db.collection("settings").doc("company");
+    const docSnap = await docRef.get();
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (document.getElementById("aboutText")) {
+        document.getElementById("aboutText").innerHTML = data.about;
+      }
     }
-  });
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
 
-  onSnapshot(collection(db, "products"), (snapshot) => {
-    window.allProductsCache = []; 
-    snapshot.forEach(doc => {
-      let product = { id: doc.id,...doc.data() };
-      window.allProductsCache.push(product);
+function loadProducts() {
+  if(!db){
+    console.log('DB not ready, using dummy data');
+    setTimeout(loadDummyData, 500);
+    return;
+  }
+
+  console.log('🔄 Loading products from Firebase...');
+  db.collection('products').onSnapshot((snapshot) => {
+    allProducts = [];
+    snapshot.forEach((doc) => {
+      let p = doc.data();
+      p.id = doc.id;
+
+      if(!p.images ||!Array.isArray(p.images) || p.images.length === 0){
+        if(p.image && p.image.trim()!== ''){
+          p.images = [p.image];
+        } else {
+          p.images = ['https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image'];
+        }
+      } else {
+        p.images = p.images.filter(img => img && img.trim()!== '');
+        if(p.images.length === 0){
+          p.images = ['https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image'];
+        }
+      }
+
+      allProducts.push(p);
     });
-    loadProducts();
-  }, (error) => {
-    console.error("Firebase Error:", error);
-    document.getElementById('productGrid').innerHTML = '<div class="loading">⚠️ Products load nahi hue. Firebase rules check karo.</div>';
-  });
 
-  onSnapshot(collection(db, "categories"), (snapshot) => {
-    window.allCategoriesCache = []; 
-    snapshot.forEach(doc => {
-      window.allCategoriesCache.push({ id: doc.id,...doc.data() });
-    });
-    loadCategories();
+    console.log('✅ Products loaded:', allProducts.length);
+    renderProducts(allProducts);
   }, (error) => {
-    console.error("Categories Error:", error);
+    console.log("❌ Firebase Error: ", error);
+    loadDummyData();
   });
+}
 
-  window.loadCategories = function(){
-    const catContainer = document.getElementById('categoryList');
-    catContainer.innerHTML = '';
-    if(!window.allCategoriesCache || window.allCategoriesCache.length === 0){
-      catContainer.innerHTML = '<p style="padding:20px;color:#999">No categories</p>';
-      return;
+function loadDummyData(){
+  let dummyProducts = [
+    {id:'1', name:'Dish soap vim', price:1000, mrp:1500, images:['https://via.placeholder.com/300x300/00cc00/ffffff?text=Vim+1','https://via.placeholder.com/300x300/00cc00/ffffff?text=Vim+2','https://via.placeholder.com/300x300/00cc00/ffffff?text=Vim+3'], stock:1000, category:'Dish soap'},
+    {id:'2', name:'Vim bar', price:1000, mrp:1500, images:['https://via.placeholder.com/300x300/00aa00/ffffff?text=Bar+1','https://via.placeholder.com/300x300/00aa00/ffffff?text=Bar+2','https://via.placeholder.com/300x300/00aa00/ffffff?text=Bar+3','https://via.placeholder.com/300x300/00aa00/ffffff?text=Bar+4','https://via.placeholder.com/300x300/00aa00/ffffff?text=Bar+5'], stock:500, category:'Dish soap'},
+    {id:'3', name:'Dettol Soap', price:1300, mrp:2000, images:['https://via.placeholder.com/300x300/00ff00/ffffff?text=Dettol'], stock:20, category:'Soap'}
+  ];
+  allProducts = dummyProducts;
+  renderProducts(dummyProducts);
+
+  let dummyCats = [
+    {name:'Soap', image:'https://via.placeholder.com/50/00ff00/ffffff?text=S'},
+    {name:'Dish soap', image:'https://via.placeholder.com/50/00cc00/ffffff?text=D'},
+    {name:'Utensils', image:'https://via.placeholder.com/50/cccccc/ffffff?text=U'},
+    {name:'Stationaries', image:'https://via.placeholder.com/50/999999/ffffff?text=St'}
+  ];
+  renderCategories(dummyCats);
+}
+
+function renderProducts(products){
+  let html = '';
+  products.forEach((p) => {
+    currentSlideIndex[p.id] = 0;
+
+    let images = [];
+    if(p.images && Array.isArray(p.images) && p.images.length > 0){
+      images = p.images;
+    } else if(p.image){
+      images = [p.image];
+    } else {
+      images = ['https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image'];
     }
-    window.allCategoriesCache.forEach((cat) => {
-      const catName = cat.name || 'Category';
-      const catImg = cat.image || cat.img || 'https://via.placeholder.com/50';
-      catContainer.innerHTML += `
-        <div class="cat-item" onclick="filterByCategory('${catName}')">
-          <img src="${catImg}" onerror="this.src='https://via.placeholder.com/50'" alt="${catName}">
-          <p>${catName}</p>
+
+    let isWishlisted = isInWishlist(p.id);
+
+    html += `
+      <div class="product-card">
+        ${p.stock < 5? '<div class="new-badge">Low Stock</div>' : ''}
+        ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ''}
+        <div class="wish-icon ${isWishlisted? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)">
+          ${isWishlisted? '❤️' : '💗'}
+        </div>
+        <div class="image-slider" onclick="showProduct('${p.id}')">
+          ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? 'active' : ''}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x300/ff0000/ffffff?text=Image+Error'">`).join('')}
+          ${images.length > 1? `
+            <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
+            <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
+            <div class="dots">
+              ${images.map((_, idx) => `<span class="dot ${idx === 0? 'active' : ''}" onclick="goToSlide('${p.id}', ${idx}, event)"></span>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+        <div class="product-info" onclick="showProduct('${p.id}')">
+          <h3>${p.name}</h3>
+          <div>
+            <span class="price">₹${p.price}</span>
+            ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
+          </div>
+          <p class="stock">Stock: ${p.stock}</p>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('productGrid').innerHTML = html || '<div class="loading">No products found</div>';
+}
+
+function changeSlide(productId, direction, event) {
+  event.stopPropagation();
+  let product = allProducts.find(p => p.id === productId);
+  if(!product) return;
+
+  let images = product.images && Array.isArray(product.images) && product.images.length > 0? product.images : [product.image || 'https://via.placeholder.com/150'];
+  currentSlideIndex[productId] = (currentSlideIndex[productId] + direction + images.length) % images.length;
+  updateSlider(productId);
+}
+
+function goToSlide(productId, index, event) {
+  event.stopPropagation();
+  currentSlideIndex[productId] = index;
+  updateSlider(productId);
+}
+
+function updateSlider(productId) {
+  let card = document.querySelector(`[onclick*="showProduct('${productId}')"]`);
+  if(!card) return;
+
+  let sliderCard = card.closest('.product-card');
+  if(!sliderCard) return;
+
+  let slides = sliderCard.querySelectorAll('.slide-img');
+  let dots = sliderCard.querySelectorAll('.dot');
+
+  if(!slides || slides.length === 0) return;
+
+  slides.forEach((slide, idx) => {
+    slide.classList.toggle('active', idx === currentSlideIndex[productId]);
+  });
+  dots.forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === currentSlideIndex[productId]);
+  });
+}
+
+function loadCategories() {
+  if(!db) return;
+  db.collection('categories').onSnapshot((snapshot) => {
+    let html = '';
+    snapshot.forEach((doc) => {
+      let c = doc.data();
+      html += `
+        <div class="cat-item" onclick="filterByCategory('${c.name}')">
+          <img src="${c.image || 'https://via.placeholder.com/50'}" alt="${c.name}" onerror="this.src='https://via.placeholder.com/50/ff0000/ffffff?text=Err'">
+          <p>${c.name}</p>
         </div>
       `;
     });
-  }
-</script>
-
-<script>
-let currentCustomer = null;
-let generatedOTP = '';
-let selectedProduct = null;
-let modalQuantity = 1;
-let wishlist = [];
-let currentModalSlide = 0;
-
-document.addEventListener('DOMContentLoaded', async function() {
-  console.log('SANTRA MALL Loaded - 20/5/2026');
-  checkCustomerLogin();
-  loadProducts();
-  loadCategories();
-  loadWishlist();
-  updateCartCount();
-});
-
-function loadWishlist(){
-  wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '[]');
+    document.getElementById('categoryList').innerHTML = html || '<div class="loading">No categories</div>';
+  });
 }
 
-window.openCustomerLogin = function() {
-  let cust = localStorage.getItem('santra_customer');
-  if(cust) {
-    window.location.href = 'profile.html';
-  } else {
-    document.getElementById('customerLoginModal').classList.remove('hide');
-    document.getElementById('loginStep1').classList.remove('hide');
-    document.getElementById('loginStep2').classList.add('hide');
+function renderCategories(categories){
+  let html = '';
+  categories.forEach(c => {
+    html += `
+      <div class="cat-item" onclick="filterByCategory('${c.name}')">
+        <img src="${c.image || 'https://via.placeholder.com/50'}" alt="${c.name}" onerror="this.src='https://via.placeholder.com/50/ff0000/ffffff?text=Err'">
+        <p>${c.name}</p>
+      </div>
+    `;
+  });
+  document.getElementById('categoryList').innerHTML = html;
+}
+
+function showProduct(productId) {
+  let product = allProducts.find(p => p.id === productId);
+  if(!product && db){
+    db.collection('products').doc(productId).get().then((doc) => {
+      if (doc.exists()) {
+        product = doc.data();
+        product.id = doc.id;
+        openModal(product);
+      }
+    });
+  } else if(product) {
+    openModal(product);
   }
 }
 
-window.closeCustomerLogin = function() {
-  document.getElementById('customerLoginModal').classList.add('hide');
+function openModal(product){
+  currentModalProduct = product;
+  document.getElementById('modalTitle').innerText = product.name;
+  document.getElementById('modalPrice').innerText = '₹' + product.price;
+  document.getElementById('modalMrp').innerText = product.mrp? '₹' + product.mrp : '';
+  document.getElementById('modalCat').innerText = product.category || '';
+  document.getElementById('modalStock').innerText = product.stock || 0;
+  document.getElementById('modalDesc').innerText = product.desc || 'No description';
+  document.getElementById('modalQty').innerText = '1';
+
+  let images = product.images && Array.isArray(product.images) && product.images.length > 0? product.images : [product.image || 'https://via.placeholder.com/300'];
+  let imgHTML = images.map((img, idx) => `
+    <img src="${img}" style="width:100%;border-radius:8px;${idx > 0? 'margin-top:10px;' : ''}" onerror="this.src='https://via.placeholder.com/300x300/ff0000/ffffff?text=Image+Error'">
+  `).join('');
+  document.getElementById('modalImgSlider').innerHTML = imgHTML;
+  document.getElementById('productModal').classList.remove('hide');
 }
 
-window.sendCustomerOTP = function() {
-  let name = document.getElementById('custName').value.trim();
-  let mobile = document.getElementById('custMobile').value.trim();
-  if(!name ||!mobile) { alert('Name aur Mobile dalo'); return; }
-  if(mobile.length!== 10) { alert('10 digit mobile number dalo'); return; }
-  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-  let msg = `SANTRA MALL OTP: ${generatedOTP}%0A%0AHi ${name},%0AOrder karne ke liye ye OTP use kare.%0A%0AThank you!`;
-  window.open(`https://wa.me/91${mobile}?text=${msg}`, '_blank');
-  document.getElementById('otpMobileText').innerText = mobile;
-  document.getElementById('loginStep1').classList.add('hide');
-  document.getElementById('loginStep2').classList.remove('hide');
-  localStorage.setItem('temp_cust_name', name);
-  localStorage.setItem('temp_cust_mobile', mobile);
-  localStorage.setItem('temp_cust_email', document.getElementById('custEmail').value);
+function closeProductModal() {
+  document.getElementById('productModal').classList.add('hide');
 }
 
-window.verifyCustomerOTP = function() {
-  let enteredOTP = document.getElementById('custOTP').value.trim();
-  if(enteredOTP!== generatedOTP) { alert('❌ Galat OTP! Sahi OTP dalo'); return; }
-  currentCustomer = {
-    name: localStorage.getItem('temp_cust_name'),
-    mobile: localStorage.getItem('temp_cust_mobile'),
-    email: localStorage.getItem('temp_cust_email'),
-    loginTime: Date.now()
-  };
-  localStorage.setItem('santra_customer', JSON.stringify(currentCustomer));
-  alert('✅ Login Success! Ab order kar sakte ho');
-  closeCustomerLogin();
-  checkCustomerLogin();
+function changeModalQty(change) {
+  let qty = parseInt(document.getElementById('modalQty').innerText);
+  qty += change;
+  if (qty < 1) qty = 1;
+  if (currentModalProduct && qty > currentModalProduct.stock) qty = currentModalProduct.stock;
+  document.getElementById('modalQty').innerText = qty;
 }
 
-window.backToStep1 = function() {
-  document.getElementById('loginStep1').classList.remove('hide');
-  document.getElementById('loginStep2').classList.add('hide');
-}
-
-function checkCustomerLogin() {
-  let cust = localStorage.getItem('santra_customer');
-  if(cust) {
-    currentCustomer = JSON.parse(cust);
-    document.getElementById('userInfo').innerText = `Hi, ${currentCustomer.name}`;
-    document.getElementById('userInfo').classList.remove('hide');
-    document.getElementById('loginBtn').classList.add('hide');
-    document.getElementById('logoutBtn').classList.remove('hide');
-  }
-}
-
-window.customerLogout = function() {
-  localStorage.removeItem('santra_customer');
-  currentCustomer = null;
-  document.getElementById('userInfo').classList.add('hide');
-  document.getElementById('loginBtn').classList.remove('hide');
-  document.getElementById('logoutBtn').classList.add('hide');
-  alert('Logged out');
-}
-
-window.searchProducts = function(){
-  const query = document.getElementById('searchInput').value.toLowerCase().trim();
-  if(!query) { loadProducts(); return; }
-  const filtered = window.allProductsCache.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.desc && p.desc.toLowerCase().includes(query)) ||
-    (p.category && p.category.toLowerCase().includes(query))
-  );
-  let container = document.getElementById('productGrid');
-  if(filtered.length === 0) {
-    container.innerHTML = `<div class="loading">No products found for "${query}"</div>`;
+function ToCartFromModal() {
+  if (!currentModalProduct) {
+    alert('Please select a product first');
     return;
   }
-  renderProducts(filtered);
-  window.scrollTo(0, 400);
+  let qty = parseInt(document.getElementById('modalQty').innerText);
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  let existingIndex = cart.findIndex(item => item.id === currentModalProduct.id);
+  if (existingIndex >= 0) {
+    cart[existingIndex].qty += qty;
+  } else {
+    let imgUrl = '';
+    if(currentModalProduct.images && Array.isArray(currentModalProduct.images) && currentModalProduct.images.length > 0){
+      imgUrl = currentModalProduct.images[0];
+    } else if(currentModalProduct.image){
+      imgUrl = currentModalProduct.image;
+    } else {
+      imgUrl = 'https://via.placeholder.com/150x150/cccccc/ffffff?text=No+Image';
+    }
+
+    let product = {
+      id: currentModalProduct.id,
+      name: currentModalProduct.name,
+      price: parseFloat(currentModalProduct.price) || 0,
+      image: imgUrl,
+      code: currentModalProduct.code || currentModalProduct.sku || currentModalProduct.productCode || 'SM' + currentModalProduct.id,
+      mrp: currentModalProduct.mrp || 0,
+      stock: currentModalProduct.stock || 0,
+      qty: qty
+    };
+    cart.push(product);
+  }
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  alert('Added to cart!');
+  updateCartCount();
+  closeProductModal();
 }
 
-window.openFilterPopup = function(){
+function buyNowFromModal() {
+  if (!currentModalProduct) {
+    alert('Please select a product first');
+    return;
+  }
+  let cart = [];
+  let qty = parseInt(document.getElementById('modalQty').innerText);
+
+  let imgUrl = '';
+  if(currentModalProduct.images && Array.isArray(currentModalProduct.images) && currentModalProduct.images.length > 0){
+    imgUrl = currentModalProduct.images[0];
+  } else if(currentModalProduct.image){
+    imgUrl = currentModalProduct.image;
+  } else {
+    imgUrl = 'https://via.placeholder.com/150x150/cccccc/ffffff?text=No+Image';
+  }
+
+  let product = {
+    id: currentModalProduct.id,
+    name: currentModalProduct.name,
+    price: parseFloat(currentModalProduct.price) || 0,
+    image: imgUrl,
+    code: currentModalProduct.code || currentModalProduct.sku || 'N/A',
+    mrp: currentModalProduct.mrp || 0,
+    stock: currentModalProduct.stock || 0,
+    qty: qty
+  };
+  cart.push(product);
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  window.location.href = 'cart.html';
+}
+
+function toggleWishlist(productId, event) {
+  event.stopPropagation();
+  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
+  let index = wishlist.findIndex(item => item.id === productId);
+
+  if (index >= 0) {
+    wishlist.splice(index, 1);
+  } else {
+    let product = allProducts.find(p => p.id === productId);
+    if(product){
+      let imgUrl = '';
+      if(product.images && Array.isArray(product.images) && product.images.length > 0){
+        imgUrl = product.images[0];
+      } else if(product.image){
+        imgUrl = product.image;
+      } else {
+        imgUrl = 'https://via.placeholder.com/150x150/cccccc/ffffff?text=No+Image';
+      }
+
+      wishlist.push({
+        id: product.id,
+        name: product.name,
+        price: parseFloat(product.price) || 0,
+        image: imgUrl,
+        code: product.code || product.sku || 'N/A',
+        mrp: product.mrp || 0,
+        stock: product.stock || 0
+      });
+    }
+  }
+  localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+  updateWishlistCount();
+  renderProducts(allProducts);
+}
+
+function isInWishlist(productId) {
+  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
+  return wishlist.some(item => item.id === productId);
+}
+
+function updateWishlistCount() {
+  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
+  document.getElementById('wishlist-count').innerText = wishlist.length;
+}
+
+function ToWishlistFromModal() {
+  if (!currentModalProduct) return;
+  toggleWishlist(currentModalProduct.id, {stopPropagation:()=>{}});
+  alert('Added to wishlist!');
+  closeProductModal();
+}
+
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  let totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
+  document.getElementById('cartCount').innerText = totalQty;
+}
+
+function searchProducts() {
+  let query = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = allProducts.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    (p.category && p.category.toLowerCase().includes(query))
+  );
+  renderProducts(filtered);
+}
+
+function openFilterPopup() {
   document.getElementById('filterPopup').classList.add('show');
 }
 
-window.closeFilterPopup = function(){
+function closeFilterPopup() {
   document.getElementById('filterPopup').classList.remove('show');
 }
 
-window.applyHomeFilters = function(){
-  const size = document.getElementById('filterSize').value;
-  const color = document.getElementById('filterColor').value;
-  const fabric = document.getElementById('filterFabric').value;
-  const material = document.getElementById('filterMaterial').value;
-
-  let filtered = window.allProductsCache.filter(p => {
-    let matchSize = size === '' || (p.size && p.size.toLowerCase().includes(size.toLowerCase()));
-    let matchColor = color === '' || (p.color && p.color.toLowerCase().includes(color.toLowerCase()));
-    let matchFabric = fabric === '' || (p.fabric && p.fabric.toLowerCase().includes(fabric.toLowerCase()));
-    let matchMaterial = material === '' || (p.material && p.material.toLowerCase().includes(material.toLowerCase()));
-    return matchSize && matchColor && matchFabric && matchMaterial;
+function applyHomeFilters() {
+  let size = document.getElementById('filterSize').value;
+  let color = document.getElementById('filterColor').value;
+  let fabric = document.getElementById('filterFabric').value;
+  let material = document.getElementById('filterMaterial').value;
+  let filtered = allProducts.filter(p => {
+    let match = true;
+    if (size && p.size &&!p.size.includes(size)) match = false;
+    if (color && p.color &&!p.color.includes(color)) match = false;
+    if (fabric && p.fabric &&!p.fabric.includes(fabric)) match = false;
+    if (material && p.material &&!p.material.includes(material)) match = false;
+    return match;
   });
-
   renderProducts(filtered);
   closeFilterPopup();
 }
 
-window.clearHomeFilters = function(){
+function clearHomeFilters() {
   document.getElementById('filterSize').value = '';
   document.getElementById('filterColor').value = '';
   document.getElementById('filterFabric').value = '';
   document.getElementById('filterMaterial').value = '';
-  renderProducts(window.allProductsCache);
+  renderProducts(allProducts);
+  closeFilterPopup();
 }
 
-function loadProducts(category = null) {
-  let products = window.allProductsCache;
-  if(category) {
-    products = products.filter(p => {
-      let cat = p.category || p.cat || '';
-      if(typeof cat === 'object') cat = cat.name || cat.id || '';
-      return cat.toLowerCase() === category.toLowerCase();
-    });
-  }
-  let container = document.getElementById('productGrid');
-  if(products.length === 0) {
-    container.innerHTML = '<div class="loading">No products found</div>';
-    return;
-  }
-  renderProducts(products);
+function filterByCategory(catName) {
+  let filtered = allProducts.filter(p => p.category === catName);
+  renderProducts(filtered);
 }
 
-function renderProducts(products) {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let container = document.getElementById('productGrid');
-  container.innerHTML = products.map(p => {
-    let catName = p.category || p.cat || 'General';
-    if(typeof catName === 'object') catName = catName.name || catName.id || 'General';
-    let cartItem = cart.find(item => item.id == p.id);
-    let qtyInCart = cartItem? cartItem.qty : 0;
-    let inWishlist = wishlist.find(item => item.id == p.id);
-    
-    let images = [];
-    try{ 
-      if(Array.isArray(p.images)) images = p.images;
-      else images = JSON.parse(p.images || '[]');
-    }catch(e){}
-    if(!images.length && p.image) images = [p.image];
-    if(!images.length) images = ['https://via.placeholder.com/200?text=No+Image'];
-    
-    return `
-    <div class="product">
-      ${p.new? '<span class="new-badge">NEW</span>' : ''}
-      <button class="wish-icon ${inWishlist? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.id}')">😍</button>
-      
-      <div class="image-slider" onclick="viewProduct('${p.id}')">
-        <div class="img-count">${images.length} 📷</div>
-        <img src="${images[0]}" class="slide-img active" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-      </div>
-      
-      <div class="product-info" onclick="viewProduct('${p.id}')">
-        <h3>${p.name}</h3>
-        <div>
-          <span class="price">₹${p.price}</span>
-          ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
-        </div>
-        <div class="stock">Category: ${catName} | Stock: ${p.stock || 0}</div>
-        ${qtyInCart > 0? `
-          <div class="qty-controls">
-            <button class="qty-btn" onclick="event.stopPropagation(); updateCartQty('${p.id}', -1)">-</button>
-            <span class="qty-display">${qtyInCart}</span>
-            <button class="qty-btn" onclick="event.stopPropagation(); updateCartQty('${p.id}', 1)">+</button>
-          </div>
-        ` : `
-          <div class="product-btns">
-            <button class="btn-cart" onclick="event.stopPropagation(); addToCart('${p.id}')">🛒 Add to Cart</button>
-            <button class="btn-buy" onclick="event.stopPropagation(); buyNow('${p.id}')">⚡ Buy Now</button>
-          </div>
-        `}
-      </div>
-    </div>
-  `}).join('');
+function viewAllProducts() {
+  renderProducts(allProducts);
 }
 
-window.toggleWishlist = function(productId) {
-  let p = window.allProductsCache.find(prod => prod.id == productId);
-  if(!p) return;
-  let index = wishlist.findIndex(item => item.id == productId);
-  if(index > -1) {
-    wishlist.splice(index, 1);
-    alert('Removed from Wishlist');
-  } else {
-    let images = [];
-    try{ 
-      if(Array.isArray(p.images)) images = p.images;
-      else images = JSON.parse(p.images || '[]');
-    }catch(e){}
-    if(!images.length && p.image) images = [p.image];
-    wishlist.push({ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: 1 });
-    alert('Added to Wishlist 😍');
-  }
-  localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
-  loadProducts();
-}
-
-window.updateCartQty = function(productId, change) {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let itemIndex = cart.findIndex(item => item.id == productId);
-  if(itemIndex > -1) {
-    cart[itemIndex].qty += change;
-    if(cart[itemIndex].qty <= 0) cart.splice(itemIndex, 1);
-    localStorage.setItem('santra_cart', JSON.stringify(cart));
-    updateCartCount();
-    loadProducts();
-  }
-}
-
-window.viewProduct = function(id) {
-  let p = window.allProductsCache.find(prod => prod.id == id);
-  if(!p) return;
-  selectedProduct = p;
-  modalQuantity = 1;
-  let catName = p.category || p.cat || 'General';
-  if(typeof catName === 'object') catName = catName.name || catName.id || 'General';
-  
-  let images = [];
-  try{
-    if(Array.isArray(p.images)) images = p.images;
-    else images = JSON.parse(p.images || '[]');
-  }catch(e){}
-  if(!images.length && p.image) images = [p.image];
-  if(!images.length) images = ['https://via.placeholder.com/400?text=No+Image'];
-  
-       let modalImgHTML = `
-    <div class="image-slider" id="modal-slider" style="height:300px;">
-      <div class="img-count">${images.length} 📷</div>
-      ${images.map((img, i) => 
-        `<img src="${img}" class="slide-img ${i===0?'active':''}" style="height:300px;" onerror="this.src='https://via.placeholder.com/400?text=No+Image'">`
-      ).join('')}
-      ${images.length > 1? `
-        <button class="prev-btn" onclick="changeModalSlide(-1)">❮</button>
-        <button class="next-btn" onclick="changeModalSlide(1)">❯</button>
-        <div class="dots">
-          ${images.map((img, i) => 
-            `<span class="dot ${i===0?'active':''}" onclick="showModalSlide(${i})"></span>`
-          ).join('')}
-        </div>
-      ` : ''}
-    </div>
-  `;
-  
-  document.getElementById('modalTitle').innerText = p.name;
-  document.getElementById('modalImgSlider').innerHTML = modalImgHTML;
-  document.getElementById('modalPrice').innerText = '₹' + p.price;
-  document.getElementById('modalMrp').innerText = p.mrp? '₹' + p.mrp : '';
-  document.getElementById('modalCat').innerText = catName;
-  document.getElementById('modalStock').innerText = p.stock || 0;
-  document.getElementById('modalDesc').innerText = p.desc || 'No description available';
-  document.getElementById('modalQty').innerText = modalQuantity;
-  document.getElementById('productModal').classList.remove('hide');
-  currentModalSlide = 0;
-}
-
-window.changeModalSlide = function(direction) {
-  if(!selectedProduct) return;
-  let images = [];
-  try{ 
-    if(Array.isArray(selectedProduct.images)) images = selectedProduct.images;
-    else images = JSON.parse(selectedProduct.images || '[]');
-  }catch(e){}
-  if(!images.length && selectedProduct.image) images = [selectedProduct.image];
-  
-  currentModalSlide += direction;
-  if(currentModalSlide >= images.length) currentModalSlide = 0;
-  if(currentModalSlide < 0) currentModalSlide = images.length - 1;
-  showModalSlide(currentModalSlide);
-}
-
-window.showModalSlide = function(index) {
-  const slider = document.getElementById('modal-slider');
-  if(!slider) return;
-  const slides = slider.querySelectorAll('.slide-img');
-  const dots = slider.querySelectorAll('.dot');
-  slides.forEach(s => s.classList.remove('active'));
-  dots.forEach(d => d.classList.remove('active'));
-  if(slides[index]) slides[index].classList.add('active');
-  if(dots[index]) dots[index].classList.add('active');
-  currentModalSlide = index;
-}
-
-window.closeProductModal = function() {
-  document.getElementById('productModal').classList.add('hide');
-  selectedProduct = null;
-  modalQuantity = 1;
-  currentModalSlide = 0;
-}
-
-window.changeModalQty = function(change) {
-  modalQuantity += change;
-  if(modalQuantity < 1) modalQuantity = 1;
-  if(modalQuantity > 99) modalQuantity = 99;
-  document.getElementById('modalQty').innerText = modalQuantity;
-}
-
-window.addToCartFromModal = function() {
-  if(!selectedProduct) return;
-  let p = selectedProduct;
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let images = [];
-  try{ 
-    if(Array.isArray(p.images)) images = p.images;
-    else images = JSON.parse(p.images || '[]');
-  }catch(e){}
-  if(!images.length && p.image) images = [p.image];
-  let existing = cart.find(item => item.id == p.id);
-  if(existing) { existing.qty += modalQuantity; }
-  else { cart.push({ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: modalQuantity }); }
-  localStorage.setItem('santra_cart', JSON.stringify(cart));
-  updateCartCount();
-  loadProducts();
-  alert(`✅ ${modalQuantity} item(s) added to Cart!`);
-  closeProductModal();
-}
-
-window.addToWishlistFromModal = function() {
-  if(!selectedProduct) return;
-  let p = selectedProduct;
-  let index = wishlist.findIndex(item => item.id == p.id);
-  let images = [];
-  try{ 
-    if(Array.isArray(p.images)) images = p.images;
-    else images = JSON.parse(p.images || '[]');
-  }catch(e){}
-  if(!images.length && p.image) images = [p.image];
-  if(index > -1) { wishlist[index].qty += modalQuantity; }
-  else { wishlist.push({ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: modalQuantity }); }
-  localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
-  alert(`✅ Added to Wishlist 😍`);
-  closeProductModal();
-  loadProducts();
-}
-
-window.buyNowFromModal = function() {
-  if(!selectedProduct) return;
-  if(!currentCustomer) { alert('Pehle login karo order karne ke liye'); openCustomerLogin(); return; }
-  let p = selectedProduct;
-  let images = [];
-  try{ 
-    if(Array.isArray(p.images)) images = p.images;
-    else images = JSON.parse(p.images || '[]');
-  }catch(e){}
-  if(!images.length && p.image) images = [p.image];
-  localStorage.setItem('santra_checkout', JSON.stringify([{ id: p.id, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: modalQuantity }]));
-  window.location.href = 'checkout.html';
-}
-
-window.addToCart = function(productId) {
-  let p = window.allProductsCache.find(prod => prod.id == productId);
-  if(!p) { alert('Product not found'); return; }
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let images = [];
-  try{ 
-    if(Array.isArray(p.images)) images = p.images;
-    else images = JSON.parse(p.images || '[]');
-  }catch(e){}
-  if(!images.length && p.image) images = [p.image];
-  let existing = cart.find(item => item.id == productId);
-  if(existing) { existing.qty += 1; }
-  else { cart.push({ id: productId, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: 1 }); }
-  localStorage.setItem('santra_cart', JSON.stringify(cart));
-  updateCartCount();
-  loadProducts();
-}
-
-window.buyNow = function(productId) {
-  if(!currentCustomer) { alert('Pehle login karo order karne ke liye'); openCustomerLogin(); return; }
-  let p = window.allProductsCache.find(prod => prod.id == productId);
-  if(!p) return;
-  let images = [];
-  try{ 
-    if(Array.isArray(p.images)) images = p.images;
-    else images = JSON.parse(p.images || '[]');
-  }catch(e){}
-  if(!images.length && p.image) images = [p.image];
-  localStorage.setItem('santra_checkout', JSON.stringify([{ id: productId, name: p.name, price: p.price, image: images[0], code: p.code || 'N/A', qty: 1 }]));
-  window.location.href = 'checkout.html';
-}
-
-function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').innerText = totalQty;
-}
-
-window.filterByCategory = function(catName) {
-  loadProducts(catName);
-  window.scrollTo(0, 400);
-}
-
-window.goHome = function() {
+function goHome() {
   window.scrollTo(0, 0);
 }
 
-window.openCategories = function() {
+function openCategories() {
   document.getElementById('categoryList').scrollIntoView({behavior: 'smooth'});
 }
 
-window.openCart = function() {
+function openCart() {
   window.location.href = 'cart.html';
 }
 
-window.openOrders = function() {
-  if(!currentCustomer) { alert('Pehle login karo'); openCustomerLogin(); return; }
+function openOrders() {
   window.location.href = 'orders.html';
 }
 
-window.viewAllProducts = function() {
-  loadProducts();
-  window.scrollTo(0, 400);
+function openCustomerLogin() {
+  document.getElementById('customerLoginModal').classList.remove('hide');
+}
+
+function closeCustomerLogin() {
+  document.getElementById('customerLoginModal').classList.add('hide');
+}
+
+function sendCustomerOTP() {
+  let name = document.getElementById('custName').value.trim();
+  let mobile = document.getElementById('custMobile').value.trim();
+  let email = document.getElementById('custEmail').value.trim();
+  
+  if (!name ||!mobile || mobile.length!== 10) {
+    alert('Please enter valid name and 10 digit mobile number');
+    return;
+  }
+  
+  alert('OTP sent to WhatsApp: 123456 (Demo)');
+  document.getElementById('otpMobileText').innerText = mobile;
+  document.getElementById('loginStep1').classList.add('hide');
+  document.getElementById('loginStep2').classList.remove('hide');
+  
+  localStorage.setItem('tempOTP', '123456');
+  localStorage.setItem('tempUserData', JSON.stringify({name: name, mobile: mobile, email: email}));
+}
+
+function verifyCustomerOTP() {
+  let otp = document.getElementById('custOTP').value.trim();
+  let savedOTP = localStorage.getItem('tempOTP');
+  let userData = JSON.parse(localStorage.getItem('tempUserData') || '{}');
+  
+  if (otp === savedOTP && otp === '123456') {
+    localStorage.setItem('customerLoggedIn', 'true');
+    localStorage.setItem('customerName', userData.name);
+    localStorage.setItem('customerMobile', userData.mobile);
+    localStorage.setItem('customerEmail', userData.email || '');
+    
+    if(db && userData.mobile){
+      db.collection('customers').doc(userData.mobile).set({
+        name: userData.name,
+        mobile: userData.mobile,
+        email: userData.email || '',
+        loginTime: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true }).catch(e => console.log('Customer save error:', e));
+    }
+    
+    alert('Login successful!');
+    closeCustomerLogin();
+    location.reload();
+  } else {
+    alert('Invalid OTP. Demo OTP: 123456');
+  }
+}
+
+function backToStep1() {
+  document.getElementById('loginStep2').classList.add('hide');
+  document.getElementById('loginStep1').classList.remove('hide');
+  localStorage.removeItem('tempOTP');
+  localStorage.removeItem('tempUserData');
+}
+
+function customerLogout() {
+  localStorage.removeItem('customerLoggedIn');
+  localStorage.removeItem('customerName');
+  localStorage.removeItem('customerMobile');
+  localStorage.removeItem('customerEmail');
+  localStorage.removeItem('tempOTP');
+  localStorage.removeItem('tempUserData');
+  alert('Logged out successfully');
+  location.reload();
+}
+
+function checkCustomerLogin() {
+  if (localStorage.getItem('customerLoggedIn') === 'true') {
+    document.getElementById('loginBtn').classList.add('hide');
+    document.getElementById('logoutBtn').classList.remove('hide');
+    document.getElementById('userInfo').innerText = '👤 ' + localStorage.getItem('customerName');
+    document.getElementById('userInfo').classList.remove('hide');
+  }
 }
 </script>
+    <script src="theme.js"></script>
+  
 </body>
-</html>
+</html>    
