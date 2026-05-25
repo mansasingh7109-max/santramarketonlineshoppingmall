@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Company Details - SANTRA MALL</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
   <style>
     body{background:#f1f3f6;font-family:Arial;padding:20px;margin:0;}
     .card{background:white;padding:20px;border-radius:8px;max-width:600px;margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
@@ -15,15 +20,53 @@
 <body>
 <div class="card">
   <h2>🏢 Company Details</h2>
-  <p><b>Name:</b> SANTRA MALL</p>
-  <p><b>Address:</b> Jaipur, Rajasthan</p>
-  <p><b>Email:</b> mansasingh7109@gmail.com</p>
-  <p><b>Phone:</b> 9829508335</p>
-  <p><b>Business Type:</b> E-commerce Store</p>
+  <p><b>Name:</b> <span id="companyName">SANTRA MALL</span></p>
+  <p><b>Address:</b> <span id="address">Jaipur, Rajasthan</span></p>
+  <p><b>Email:</b> <span id="email">mansasingh7109@gmail.com</span></p>
+  <p><b>Phone:</b> <span id="phone">9829508335</span></p>
+  <p><b>Business Type:</b> <span id="businessType">E-commerce Store</span></p>
   
   <div style="text-align:center;">
     <a href="creator.html" class="btn">CREATOR →</a>
   </div>
 </div>
+
+<script>
+  // Step 1: Firebase Config - YAHAN APNI REAL KEY DAAL
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+  };
+
+alert("Config test: " + firebaseConfig.projectId);
+
+  // Step 2: Firebase Initialize
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+
+  // Step 3: Data Load Kar Firebase Se
+  db.collection("settings").doc("company").get().then((doc) => {
+    if (doc.exists) {
+      const data = doc.data();
+      if(data.companyName) document.getElementById("companyName").innerText = data.companyName;
+      if(data.address) document.getElementById("address").innerText = data.address;
+      if(data.email) document.getElementById("email").innerText = data.email;
+      if(data.phone) document.getElementById("phone").innerText = data.phone;
+      if(data.businessType) document.getElementById("businessType").innerText = data.businessType;
+    }
+  }).catch((error) => {
+    console.log("Firebase Error:", error);
+  });
+</script>
+  <script src="theme.js"></script>
+  
 </body>
 </html>

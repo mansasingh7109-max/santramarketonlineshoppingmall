@@ -11,12 +11,9 @@
        .header{background:#e40046;color:white;padding:20px;text-align:center}
        .header h1{font-size:24px;margin-bottom:5px}
        .content{padding:25px}
-       .otp-section{text-align:center;padding:20px 0}
-       .otp-box{display:flex;justify-content:center;gap:10px;margin:20px 0}
-       .otp-input{width:50px;height:50px;text-align:center;font-size:24px;border:2px solid #ddd;border-radius:8px}
-       .otp-input:focus{border-color:#e40046;outline:none}
        .btn{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}
        .btn:hover{background:#c20038}
+       .btn:disabled{background:#ccc;cursor:not-allowed}
        .btn-whatsapp{background:#25D366}
        .btn-whatsapp:hover{background:#1ea952}
        .form-group{margin-bottom:15px}
@@ -29,7 +26,28 @@
        .error{color:red;font-size:14px;margin-top:5px}
        .success{text-align:center;padding:30px}
        .success-icon{font-size:60px;color:#25D366;margin-bottom:15px}
+       .loader{display:none;text-align:center;padding:10px;color:#e40046;font-weight:bold}
     </style>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+      // ===== FIREBASE CONFIG - APNI REAL KEYS DAAL DE =====
+          const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+  };
+      
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      // ================================================
+    </script>
 </head>
 <body>
     <div class="container">
@@ -39,22 +57,8 @@
         </div>
 
         <div class="content">
-            <!-- Step 1: OTP Verification -->
-            <div id="otpSection" class="otp-section">
-                <h2>Enter OTP</h2>
-                <p>We sent OTP to admin WhatsApp. Enter here to verify:</p>
-                <div class="otp-box">
-                    <input type="text" class="otp-input" maxlength="1" onkeyup="moveNext(this,0)">
-                    <input type="text" class="otp-input" maxlength="1" onkeyup="moveNext(this,1)">
-                    <input type="text" class="otp-input" maxlength="1" onkeyup="moveNext(this,2)">
-                    <input type="text" class="otp-input" maxlength="1" onkeyup="moveNext(this,3)">
-                </div>
-                <div id="otpError" class="error hidden">Invalid OTP. Please try again.</div>
-                <button class="btn" onclick="verifyOTP()">Verify OTP</button>
-            </div>
-
-            <!-- Step 2: Customer Details Form -->
-            <div id="detailsSection" class="hidden">
+            <!-- Step 1: Customer Details Form - OTP REMOVED -->
+            <div id="detailsSection">
                 <h2 style="margin-bottom:20px">Delivery Details</h2>
 
                 <div class="product-summary" id="productSummary"></div>
@@ -88,10 +92,11 @@
                     <div id="address2Error" class="error hidden">Area is required</div>
                 </div>
 
-                <button class="btn btn-whatsapp" onclick="submitFinalOrder()">📲 Send Order on WhatsApp</button>
+                <div class="loader" id="loader">📲 Saving order to Firebase...</div>
+                <button class="btn btn-whatsapp" id="submitBtn" onclick="submitFinalOrder()">📲 Send Order on WhatsApp</button>
             </div>
 
-            <!-- Step 3: Success -->
+            <!-- Step 2: Success -->
             <div id="successSection" class="hidden">
                 <div class="success">
                     <div class="success-icon">✅</div>
@@ -115,6 +120,13 @@ if(productId){
     if(data){
         pendingOrder = JSON.parse(data);
         showProductSummary();
+        // Auto-fill if customer logged in
+        const customer = localStorage.getItem('santra_customer');
+        if(customer){
+            const custData = JSON.parse(customer);
+            document.getElementById('custName').value = custData.name || '';
+            document.getElementById('custMobile').value = custData.mobile || '';
+        }
     } else {
         alert('Order session expired. Please start again.');
         window.location.href = 'index.html';
@@ -133,14 +145,13 @@ function showProductSummary(){
     `;
 }
 
-// OTP Input Auto Move
+/* === OLD CODE BACKUP - 23/5/2026 - OTP SECTION REMOVED ===
 function moveNext(input, index){
     if(input.value.length === 1 && index < 3){
         document.getElementsByClassName('otp-input')[index + 1].focus();
     }
 }
 
-// Verify OTP
 function verifyOTP(){
     let inputs = document.getElementsByClassName('otp-input');
     let enteredOTP = '';
@@ -156,9 +167,10 @@ function verifyOTP(){
         document.getElementById('otpError').classList.remove('hidden');
     }
 }
+=== END OLD CODE BACKUP === */
 
-// Validate and Submit
-function submitFinalOrder(){
+// Validate and Submit - FIREBASE BACKUP ADDED
+async function submitFinalOrder(){
     let name = document.getElementById('custName').value.trim();
     let mobile = document.getElementById('custMobile').value.trim();
     let email = document.getElementById('custEmail').value.trim();
@@ -177,32 +189,105 @@ function submitFinalOrder(){
 
     if(!valid) return;
 
-    // ========== NEW CODE - 12/5/2026 - SERIES NUMBER ADDED ==========
-    // Build WhatsApp Message - Series No added for category-wise tracking
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('submitBtn').disabled = true;
+
+    // ========== NEW CODE - 24/5/2026 - FIREBASE SAVE ADDED ==========
     let productCode = pendingOrder.productCode || pendingOrder.productId;
     let productLink = window.location.origin + '/product.php?code=' + encodeURIComponent(productCode);
     let seriesNo = pendingOrder.serial_no || 'N/A';
     let category = pendingOrder.category || pendingOrder.cat || 'General';
+    const orderId = 'SM' + Date.now();
+    const orderDate = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
 
-    let message = `🛒 *NEW ORDER - SANTRA MALL*\n` +
-      `*OTP Verified:* ${pendingOrder.otp} ✅\n\n` +
-      `*PRODUCT DETAILS:*\n` +
-      `Category: ${category}\n` +
-      `Series No: ${seriesNo}\n` +
-      `Code: ${productCode}\n` +
-      `Name: ${pendingOrder.productName}\n` +
-      `Price: ₹${pendingOrder.productPrice}\n` +
-      `Link: ${productLink}\n\n` +
-      `*CUSTOMER PROFILE:*\n` +
-      `Name: ${name}\n` +
-      `Mobile: ${mobile}\n` +
-      `Email: ${email || 'Not provided'}\n` +
-      `Address: ${addr1}, ${addr2}\n\n` +
-      `*Payment:* Cash on Delivery\n` +
-      `*Time:* ${new Date().toLocaleString('en-IN')}`;
+    const orderData = {
+      orderId: orderId,
+      customerName: name,
+      customerMobile: mobile,
+      customerEmail: email,
+      customerAddress: addr1 + ', ' + addr2,
+      items: [{
+        id: pendingOrder.productId,
+        name: pendingOrder.productName,
+        price: pendingOrder.productPrice,
+        qty: 1,
+        imageUrl: pendingOrder.productImage,
+        product_code: productCode,
+        category: category,
+        serial_no: seriesNo,
+        product_link: productLink
+      }],
+      subtotal: pendingOrder.productPrice,
+      delivery: 0,
+      totalAmount: pendingOrder.productPrice,
+      paymentMode: 'Cash on Delivery',
+      status: "pending_otp",
+      orderDate: firebase.firestore.FieldValue.serverTimestamp(),
+      orderDateString: orderDate,
+      source: 'whatsapp_order_page'
+    };
+
+    try {
+      // 1. Save to Firebase First
+      await db.collection("orders").add(orderData);
+      console.log('✅ Order saved to Firebase');
+
+      // 2. Build WhatsApp Message
+      let message = `🛒 *NEW ORDER - SANTRA MALL*\n` +
+        `*ORDER REQUEST* ✅\n\n` +
+        `*PRODUCT DETAILS:*\n` +
+        `Category: ${category}\n` +
+        `Series No: ${seriesNo}\n` +
+        `Code: ${productCode}\n` +
+        `Name: ${pendingOrder.productName}\n` +
+        `Price: ₹${pendingOrder.productPrice}\n` +
+        `Link: ${productLink}\n\n` +
+        `*CUSTOMER PROFILE:*\n` +
+        `Name: ${name}\n` +
+        `Mobile: ${mobile}\n` +
+        `Email: ${email || 'Not provided'}\n` +
+        `Address: ${addr1}, ${addr2}\n\n` +
+        `*Payment:* Cash on Delivery\n` +
+        `*Time:* ${orderDate}\n\n` +
+        `⚠️ ACTION: Confirm order with customer on WhatsApp`;
+
+      // 3. Save to localStorage for admin panel backup
+      let allOrders = JSON.parse(localStorage.getItem('santra_orders')) || [];
+      allOrders.push({
+          time: Date.now(),
+          orderId: orderId,
+          customerName: name,
+          mobile: mobile,
+          email: email,
+          address: addr1 + ', ' + addr2,
+          productName: pendingOrder.productName,
+          productCode: productCode,
+          category: category,
+          serial_no: seriesNo,
+          price: pendingOrder.productPrice,
+          status: 'New'
+      });
+      localStorage.setItem('santra_orders', JSON.stringify(allOrders));
+
+      // 4. Open WhatsApp
+      window.open(`https://wa.me/918769171078?text=${encodeURIComponent(message)}`, '_blank');
+
+      // 5. Show success
+      document.getElementById('detailsSection').classList.add('hidden');
+      document.getElementById('successSection').classList.remove('hidden');
+
+      // 6. Clear pending order
+      localStorage.removeItem('pending_whatsapp_order_' + productId);
+
+    } catch (error) {
+      console.error('Order Error:', error);
+      alert('❌ Error saving order: ' + error.message);
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('submitBtn').disabled = false;
+    }
     // ========== NEW CODE END ==========
 
-    /* === OLD CODE BACKUP - 11/5/2026 - WITHOUT SERIES NO ===
+    /* === OLD CODE BACKUP - 11/5/2026 - WITHOUT FIREBASE ===
     let productCode = pendingOrder.productCode || pendingOrder.productId;
     let productLink = window.location.origin + '/product.php?code=' + encodeURIComponent(productCode);
 
@@ -220,9 +305,7 @@ function submitFinalOrder(){
       `Address: ${addr1}, ${addr2}\n\n` +
       `*Payment:* Cash on Delivery\n` +
       `*Time:* ${new Date().toLocaleString('en-IN')}`;
-    === END OLD CODE BACKUP === */
 
-    // Save to localStorage for admin panel
     let allOrders = JSON.parse(localStorage.getItem('santra_orders')) || [];
     allOrders.push({
         time: Date.now(),
@@ -239,16 +322,15 @@ function submitFinalOrder(){
     });
     localStorage.setItem('santra_orders', JSON.stringify(allOrders));
 
-    // Open WhatsApp
     window.open(`https://wa.me/919829508335?text=${encodeURIComponent(message)}`, '_blank');
 
-    // Show success
     document.getElementById('detailsSection').classList.add('hidden');
     document.getElementById('successSection').classList.remove('hidden');
 
-    // Clear pending order
     localStorage.removeItem('pending_whatsapp_order_' + productId);
+    === END OLD CODE BACKUP === */
 }
 </script>
+<script src="theme.js"></script>
 </body>
 </html>

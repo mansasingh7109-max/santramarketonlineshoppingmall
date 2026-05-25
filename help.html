@@ -1,7 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Desk - SANTRA MALL</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <style>
+    body{
+      background:#f1f3f6;
+      font-family:Arial;
+      padding:20px;
+      margin:0;
+    }
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:8px;
+      max-width:600px;
+      margin:20px auto;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2{color:#e40046;margin-top:0;}
+    .btn{
+      background:#e40046;
+      color:white;
+      padding:12px 24px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:bold;
+      display:inline-block;
+      margin-top:20px;
+    }
+  </style>
+</head>
+<body>
 
+<div class="card">
+  <h2>💬 CUSTOMER CARE DETAIL</h2>
+  <p><b>CUSTOMER CARE CONTACT NUMBER:</b> <span id="phone">Loading...</span></p>
+  <p><b>Email:</b> <span id="email">Loading...</span></p>
+  <p><b>WhatsApp:</b> <span id="whatsapp">Loading...</span></p>
+  
+  <!-- Company Details Button -->
+  <div style="text-align:center;">
+    <a href="company-details.html" class="btn">Company Details →</a>
+  </div>
 
+  <!-- ADMIN LOGIN LINK HATA DIYA HAI - AB PUBLIC SE ADMIN NAHI KHULEGA -->
+</div>
 
+<script>
+  // STEP 1: REAL FIREBASE CONFIG - admin.html se copy karke yahan paste kar
+     const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
 
-CUSTOMER CARE DETAIL 
+  // STEP 2: Firebase Start Kar
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  var db = firebase.firestore();
 
-CUSTOMERCL CARE CONTACT NUMBER 9829508335
+  // STEP 3: Company Details Live Load Karna
+  async function loadCompanyDetails() {
+    try {
+      const docRef = db.collection("settings").doc("company");
+      const docSnap = await docRef.get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        
+        document.getElementById("phone").innerHTML = data.phone || "9829508335";
+        document.getElementById("email").innerHTML = data.email || "mansasingh7109@gmail.com";
+        document.getElementById("whatsapp").innerHTML = data.whatsapp || data.phone || "9829508335";
+        
+      } else {
+        // Firebase me data nahi mila to default dikha de
+        document.getElementById("phone").innerHTML = "9829508335";
+        document.getElementById("email").innerHTML = "mansasingh7109@gmail.com";
+        document.getElementById("whatsapp").innerHTML = "9829508335";
+      }
+    } catch (error) {
+      console.log("Firebase Error:", error);
+      // Error aaye to bhi default data dikha de
+      document.getElementById("phone").innerHTML = "9829508335";
+      document.getElementById("email").innerHTML = "mansasingh7109@gmail.com";
+      document.getElementById("whatsapp").innerHTML = "9829508335";
+    }
+  }
+  loadCompanyDetails();
+</script>
+<script src="theme.js"></script>
+</body>
+</html>

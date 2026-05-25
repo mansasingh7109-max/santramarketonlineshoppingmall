@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTRA MALL - Products</title>
+  <style>
+    :root{--accent:#e40046;--text:#212121;--border:#dee2e6;--success:#10b981;--bg:#f8f9fa;--card:#ffffff;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);padding:0;}
+    .header{background:var(--accent);color:white;padding:15px;text-align:center;position:sticky;top:0;z-index:100;}
+    .container{max-width:1200px;margin:0 auto;padding:15px;}
+    #productGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;margin-top:20px;}
+    .product-card{background:var(--card);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);overflow:hidden;position:relative;cursor:pointer;}
+    .product-card img{width:100%;height:160px;object-fit:cover;}
+    .product-info{padding:10px;}
+    .product-info h3{font-size:14px;margin:5px 0;height:40px;overflow:hidden;}
+    .price{color:var(--accent);font-weight:bold;font-size:16px;}
+    .mrp{text-decoration:line-through;color:#999;font-size:12px;margin-left:5px;}
+    .stock{font-size:11px;color:#666;margin:5px 0;}
+    .product-btns{display:flex;gap:5px;margin-top:8px;}
+    .btn-cart,.btn-buy{flex:1;padding:8px;border:none;border-radius:4px;font-size:11px;cursor:pointer;font-weight:bold;}
+    .btn-cart{background:#ff9800;color:white;}
+    .btn-buy{background:#4CAF50;color:white;}
+    .wish-icon{position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px;z-index:10;}
+    .wish-icon.active{color:#e91e63;}
+    .new-badge{position:absolute;top:8px;left:8px;background:#e91e63;color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:bold;}
+    .img-count{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:10px;}
+    .image-slider{position:relative;height:160px;overflow:hidden;}
+    .slide-img{width:100%;height:160px;object-fit:cover;display:none;}
+    .slide-img.active{display:block;}
+    .prev-btn,.next-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;padding:5px 10px;cursor:pointer;font-size:16px;}
+    .prev-btn{left:5px;}
+    .next-btn{right:5px;}
+    .dots{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);display:flex;gap:5px;}
+    .dot{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;cursor:pointer;}
+    .dot.active{background:white;}
+    .loading{text-align:center;padding:40px;color:#999;}
+    
+    /* Modal Styles */
+    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;}
+    .modal.hide{display:none;}
+    .modal-content{background:var(--card);width:90%;max-width:500px;max-height:90vh;overflow-y:auto;border-radius:8px;position:relative;}
+    .close{position:absolute;top:10px;right:15px;font-size:28px;cursor:pointer;color:#999;z-index:10;}
+    #modalImgSlider{position:relative;}
+    .modal-content h2{padding:15px 15px 0 15px;font-size:18px;}
+    .modal-content p{padding:0 15px;color:#666;font-size:14px;}
+    .modal-content .price{padding:0 15px;font-size:20px;}
+    
+    /* Order Form Styles - NEW */
+    #orderFormSection{display:none;padding:15px;border-top:2px solid var(--accent);margin-top:15px;}
+    #orderFormSection input,#orderFormSection select,#orderFormSection textarea{width:100%;padding:10px;margin:5px 0;border:1px solid var(--border);border-radius:5px;font-size:14px;}
+    #orderFormSection h3{color:var(--accent);margin-bottom:10px;font-size:16px;}
+    .qty-selector{display:flex;align-items:center;gap:10px;margin:10px 0;padding:0 15px;}
+    .qty-selector button{width:30px;height:30px;border:1px solid var(--border);background:white;cursor:pointer;border-radius:4px;}
+    #modalQty{font-weight:bold;font-size:16px;}
+    #modalActionBtns{padding:15px;}
+    .success-box{background:#d1fae5;border:2px solid #10b981;padding:30px;border-radius:8px;text-align:center;margin:20px 0;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛍️ SANTRA MALL</h1>
+  </div>
+  
+  <div class="container">
+    <div id="categoryList" style="display:flex;gap:10px;overflow-x:auto;padding:10px 0;"></div>
+    <div id="productGrid"><div class="loading">⏳ Loading products...</div></div>
+  </div>
+
+  <!-- Product Modal - UPDATED WITH ORDER FORM -->
+  <div id="productModal" class="modal hide">
+    <div class="modal-content">
+      <span class="close" onclick="closeProductModal()">&times;</span>
+      <div id="modalImgSlider"></div>
+      <h2 id="modalTitle"></h2>
+      <div style="padding:0 15px;">
+        <span id="modalPrice" class="price"></span>
+        <span id="modalMrp" class="mrp"></span>
+      </div>
+      <p style="padding:5px 15px;">Category: <span id="modalCat"></span> | Stock: <span id="modalStock"></span></p>
+      <p id="modalDesc" style="padding:0 15px 10px 15px;font-size:13px;"></p>
+      
+      <!-- Qty Selector -->
+      <div class="qty-selector">
+        <span>Qty:</span>
+        <button onclick="changeModalQty(-1)">-</button>
+        <span id="modalQty">1</span>
+        <button onclick="changeModalQty(1)">+</button>
+      </div>
+      
+      <!-- Normal Action Buttons -->
+      <div id="modalActionBtns">
+        <button onclick="addToCartFromModal()" style="width:100%;background:#ff9800;color:white;padding:12px;border:none;border-radius:5px;margin:5px 0;font-weight:bold;">🛒 Add to Cart</button>
+        <button onclick="buyNowFromModal()" style="width:100%;background:#4CAF50;color:white;padding:12px;border:none;border-radius:5px;margin:5px 0;font-weight:bold;">⚡ Buy Now</button>
+        <button onclick="addToWishlistFromModal()" style="width:100%;background:#e91e63;color:white;padding:12px;border:none;border-radius:5px;margin:5px 0;font-weight:bold;">😍 Add to Wishlist</button>
+      </div>
+      
+      <!-- Order Form - NEW -->
+      <div id="orderFormSection">
+        <h3>📦 Order Details</h3>
+        <input type="text" id="orderCustName" placeholder="Full Name *" required>
+        <input type="tel" id="orderCustMobile" placeholder="Mobile Number *" required maxlength="10">
+        <input type="email" id="orderCustEmail" placeholder="Email (Optional)">
+        <textarea id="orderCustAddress" placeholder="Full Address *" required rows="3"></textarea>
+        <select id="orderPaymentMode" required>
+          <option value="">Select Payment Mode *</option>
+          <option value="COD">💰 Cash on Delivery</option>
+          <option value="Online">💳 Online Payment</option>
+        </select>
+        <button onclick="submitOrderFromPopup()" style="width:100%;background:#e91e63;color:white;padding:14px;border:none;border-radius:5px;font-size:16px;font-weight:bold;margin-top:10px;cursor:pointer;">
+          📦 Place Order - Request OTP
+        </button>
+        <button onclick="closeProductModal()" style="width:100%;background:#999;color:white;padding:10px;border:none;border-radius:5px;margin-top:5px;cursor:pointer;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Login Modal - OLD OTP CODE COMMENTED FOR BACKUP -->
+  <!--
+  <div id="customerLoginModal" class="modal hide">
+    <div class="modal-content" style="max-width:400px;">
+      <span class="close" onclick="closeCustomerLogin()">&times;</span>
+      <div style="padding:20px;">
+        <h2 style="color:#e91e63;text-align:center;margin-bottom:20px;">Customer Login</h2>
+        <div id="loginStep1">
+          <input type="text" id="custName" placeholder="Full Name *" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:5px;">
+          <input type="tel" id="custMobile" placeholder="Mobile Number *" maxlength="10" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:5px;">
+          <button onclick="sendCustomerOTP()" style="width:100%;background:#e91e63;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;margin-top:10px;">📱 Send OTP</button>
+        </div>
+        <div id="loginStep2" class="hide">
+          <p style="text-align:center;margin:10px 0;">OTP sent to <b id="otpMobileText"></b></p>
+          <input type="text" id="custOTP" placeholder="Enter 6 digit OTP" maxlength="6" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:5px;text-align:center;font-size:18px;">
+          <button onclick="verifyCustomerOTP()" style="width:100%;background:#4CAF50;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;margin-top:10px;">✅ Verify OTP</button>
+          <button onclick="backToStep1()" style="width:100%;background:#999;color:white;padding:10px;border:none;border-radius:5px;margin-top:5px;">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  -->
+
+  <!-- Filter Popup -->
+  <div id="filterPopup" class="modal hide">
+    <div class="modal-content" style="max-width:400px;">
+      <span class="close" onclick="closeFilterPopup()">&times;</span>
+      <div style="padding:20px;">
+        <h2 style="color:#e91e63;margin-bottom:15px;">🔍 Filter Products</h2>
+        <input type="text" id="filterSize" placeholder="Size (S, M, L, XL)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px;">
+        <input type="text" id="filterColor" placeholder="Color (Red, Blue)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px;">
+        <input type="text" id="filterFabric" placeholder="Fabric (Cotton, Silk)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px;">
+        <input type="text" id="filterMaterial" placeholder="Material (Plastic, Steel)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px;">
+        <button onclick="applyHomeFilters()" style="width:100%;background:#e91e63;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;margin-top:10px;">Apply Filters</button>
+        <button onclick="clearHomeFilters()" style="width:100%;background:#999;color:white;padding:10px;border:none;border-radius:5px;margin-top:5px;">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  
+  <!-- EmailJS for sending emails -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <script>
+    // ===== FIREBASE CONFIG - APNI KEY YAHAN DAAL DE =====
+         const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+  };
+    
+    // Firebase Init
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+    window.auth = firebase.auth();
+    
+    // ===== EMAILJS CONFIG - APNI KEY YAHAN DAAL DE =====
+    const EMAILJS_CONFIG = {
+      PUBLIC_KEY: "user_ABC123XYZ",
+      SERVICE_ID: "service_xyz123",
+      TEMPLATE_ID: "template_abc123"
+    };
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+
+    // ===== BUSINESS CONFIG =====
+    const BUSINESS_CONFIG = {
+      WHATSAPP_NUMBER: "8769171078",
+      EMAIL: "santramarketshoppingmall@gmail.com",
+      EMAIL_2: "mansasingh7109@gmail.com"
+    };
+
+    const BUSINESS_WHATSAPP_NUMBER = BUSINESS_CONFIG.WHATSAPP_NUMBER;
+    const BUSINESS_EMAIL = BUSINESS_CONFIG.EMAIL;
+    const BUSINESS_EMAIL_2 = BUSINESS_CONFIG.EMAIL_2;
+    const EMAILJS_SERVICE_ID = EMAILJS_CONFIG.SERVICE_ID;
+    const EMAILJS_TEMPLATE_ID = EMAILJS_CONFIG.TEMPLATE_ID;
+    // ================================================
+
+    // ===== GLOBAL VARS =====
+    let allProducts = [];
+    let currentModalProduct = null;
+    let modalQty = 1;
+    const CART_KEY = 'SANTRA_CART';
+    const WISHLIST_KEY = 'SANTRA_WISHLIST';
+
+    // ===== LOAD PRODUCTS =====
+    document.addEventListener('DOMContentLoaded', function() {
+      loadProducts();
+      loadCategories();
+    });
+
+    function loadProducts() {
+      db.collection("products").onSnapshot((snapshot) => {
+        allProducts = [];
+        snapshot.forEach((doc) => {
+          allProducts.push({ id: doc.id, ...doc.data() });
+        });
+        renderProducts(allProducts);
+      });
+    }
+
+    function renderProducts(products) {
+      let grid = document.getElementById('productGrid');
+      if(products.length === 0) {
+        grid.innerHTML = '<div class="loading">No products found</div>';
+        return;
+      }
+      
+      grid.innerHTML = products.map(product => {
+        let imgUrl = product.imageUrl || product.img || product.mediaUrl || 'https://via.placeholder.com/160x160/e40046/ffffff?text=NO+IMAGE';
+        let isNew = product.isNew || false;
+        let inStock = product.stock > 0;
+        
+        return `
+        <div class="product-card" onclick="openProductModal('${product.id}')">
+          ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+          <button class="wish-icon" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">😍</button>
+          <img src="${imgUrl}" onerror="this.src='https://via.placeholder.com/160x160/e40046/ffffff?text=NO+IMAGE'">
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <div>
+              <span class="price">₹${product.price}</span>
+              ${product.mrp ? `<span class="mrp">₹${product.mrp}</span>` : ''}
+            </div>
+            <div class="stock">${inStock ? 'In Stock: ' + product.stock : 'Out of Stock'}</div>
+            <div class="product-btns">
+              <button class="btn-cart" onclick="event.stopPropagation(); addToCart('${product.id}')">🛒 Cart</button>
+              <button class="btn-buy" onclick="event.stopPropagation(); buyNow('${product.id}')">⚡ Buy</button>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    // ===== MODAL FUNCTIONS =====
+    function openProductModal(productId) {
+      currentModalProduct = allProducts.find(p => p.id === productId);
+      if(!currentModalProduct) return;
+      
+      modalQty = 1;
+      document.getElementById('modalQty').innerText = modalQty;
+      document.getElementById('modalTitle').innerText = currentModalProduct.name;
+      document.getElementById('modalPrice').innerText = '₹' + currentModalProduct.price;
+      document.getElementById('modalMrp').innerText = currentModalProduct.mrp ? '₹' + currentModalProduct.mrp : '';
+      document.getElementById('modalCat').innerText = currentModalProduct.category || 'N/A';
+      document.getElementById('modalStock').innerText = currentModalProduct.stock || 0;
+      document.getElementById('modalDesc').innerText = currentModalProduct.description || '';
+      
+      let imgUrl = currentModalProduct.imageUrl || currentModalProduct.img || 'https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE';
+      document.getElementById('modalImgSlider').innerHTML = `<img src="${imgUrl}" style="width:100%;height:300px;object-fit:cover;">`;
+      
+      document.getElementById('orderFormSection').style.display = 'none';
+      document.getElementById('modalActionBtns').style.display = 'block';
+      document.getElementById('productModal').classList.remove('hide');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.add('hide');
+    }
+
+    function changeModalQty(change) {
+      modalQty = Math.max(1, modalQty + change);
+      document.getElementById('modalQty').innerText = modalQty;
+    }
+
+    function addToCartFromModal() {
+      if(!currentModalProduct) return;
+      let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      let existing = cart.find(item => item.id === currentModalProduct.id);
+      if(existing) {
+        existing.qty += modalQty;
+      } else {
+        cart.push({...currentModalProduct, qty: modalQty});
+      }
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      alert('Added to Cart 🛒');
+      closeProductModal();
+    }
+
+    function buyNowFromModal() {
+      document.getElementById('modalActionBtns').style.display = 'none';
+      document.getElementById('orderFormSection').style.display = 'block';
+    }
+
+    function addToWishlistFromModal() {
+      if(!currentModalProduct) return;
+      let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+      if(!wishlist.find(item => item.id === currentModalProduct.id)) {
+        wishlist.push({...currentModalProduct, qty: modalQty});
+        localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+        alert('Added to Wishlist 😍');
+      } else {
+        alert('Already in Wishlist');
+      }
+    }
+
+    // ===== NEW ORDER FLOW - NO OTP ON WEBSITE =====
+    async function submitOrderFromPopup() {
+      const name = document.getElementById('orderCustName').value.trim();
+      const mobile = document.getElementById('orderCustMobile').value.trim();
+      const email = document.getElementById('orderCustEmail').value.trim();
+      const address = document.getElementById('orderCustAddress').value.trim();
+      const paymentMode = document.getElementById('orderPaymentMode').value;
+
+      if (!name ||!mobile ||!address ||!paymentMode) {
+        alert('❌ Please fill all required fields');
+        return;
+      }
+      if (mobile.length!== 10 || isNaN(mobile)) {
+        alert('❌ Enter valid 10 digit mobile number');
+        return;
+      }
+
+      const orderId = 'SM' + Date.now();
+      const orderDate = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
+
+      let productCode = currentModalProduct.product_code || currentModalProduct.code || currentModalProduct.sku || 'N/A';
+      let imgUrl = currentModalProduct.imageUrl || currentModalProduct.img || '';
+      let productLink = currentModalProduct.product_link || `https://santramarketshoppingmall.web.app/product.html?id=${currentModalProduct.id}`;
+      let photoLine = imgUrl && imgUrl.length > 5? `Photo: ${imgUrl}%0A` : '';
+      
+      let itemTotal = (currentModalProduct.price || 0) * modalQty;
+      let delivery = itemTotal >= 500? 0 : 49;
+      let totalAmount = itemTotal + delivery;
+
+      const productsList = `1. ${currentModalProduct.name} | ${productCode} | Qty: ${modalQty} = ₹${itemTotal}%0A${photoLine}Link: ${productLink}%0A%0A`;
+
+      const orderData = {
+        orderId: orderId,
+        customerName: name,
+        customerMobile: mobile,
+        customerEmail: email,
+        customerAddress: address,
+        items: [{...currentModalProduct, qty: modalQty}],
+        subtotal: itemTotal,
+        delivery: delivery,
+        totalAmount: totalAmount,
+        paymentMode: paymentMode,
+        status: "pending_otp",
+        orderDate: firebase.firestore.FieldValue.serverTimestamp(),
+        orderDateString: orderDate
+      };
+
+      try {
+        await db.collection("orders").add(orderData);
+
+        document.getElementById('orderFormSection').innerHTML = `
+          <div class="success-box">
+            <div style="font-size:60px;">✅</div>
+            <h2 style="color:#065f46; margin:15px 0;">Order Request Sent!</h2>
+            <p style="font-size:16px; color:#333;"><b>Order ID:</b> ${orderId}</p>
+            <p style="margin:15px 0; color:#333;">Admin will send you OTP on WhatsApp shortly.</p>
+            <p style="font-size:14px; color:#666;">Please wait for confirmation</p>
+            <button onclick="closeProductModal()" style="background:#e91e63; color:white; padding:12px 30px; border:none; border-radius:5px; font-size:16px; margin-top:20px; cursor:pointer;">
+              OK
+            </button>
+          </div>
+        `;
+
+        const whatsappMsg = `🔔 NEW ORDER REQUEST #${orderId}%0A%0A📅 Date & Time: ${orderDate}%0A%0A💳 Payment Mode: ${paymentMode}%0A⚠️ OTP REQUIRED FOR ${paymentMode}%0A%0A👤 CUSTOMER FORM DETAILS:%0AName: ${name}%0AMobile: ${mobile}%0AEmail: ${email || 'N/A'}%0AAddress: ${address}%0A%0A🛒 ORDER ITEMS:%0A${productsList}💰 Subtotal: ₹${itemTotal}%0A📦 Delivery: ${delivery === 0? 'FREE' : '₹' + delivery}%0A💰 Total Amount: ₹${totalAmount}%0A%0A⚠️ ACTION REQUIRED:%0A1. Send OTP to customer on WhatsApp%0A2. Save OTP in Admin Panel%0A3. Verify when customer replies`;
+
+        window.open(`https://wa.me/91${BUSINESS_WHATSAPP_NUMBER}?text=${whatsappMsg}`, '_blank');
+
+        sendOrderEmailToAdmin(orderData, orderDate, productsList);
+
+      } catch (error) {
+        console.error('Order Error:', error);
+        alert('❌ Error placing order: ' + error.message);
+      }
+    }
+
+    function sendOrderEmailToAdmin(data, orderDate, productsList) {
+      if (typeof emailjs === 'undefined') {
+        console.log('EmailJS not loaded');
+        return;
+      }
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: BUSINESS_EMAIL + ', ' + BUSINESS_EMAIL_2,
+        order_id: data.orderId,
+        order_date: orderDate,
+        customer_name: data.customerName,
+        customer_mobile: data.customerMobile,
+        customer_email: data.customerEmail || 'N/A',
+        customer_address: data.customerAddress,
+        payment_mode: data.paymentMode,
+        products_list: productsList.replace(/%0A/g, '\n'),
+        subtotal: data.subtotal,
+        delivery: data.delivery,
+        total_amount: data.totalAmount
+      }).then(() => {
+        console.log('✅ Email sent to admin');
+      }).catch((err) => {
+        console.error('Email Error:', err);
+      });
+    }
+
+    // ===== OTHER FUNCTIONS =====
+    function addToCart(productId) {
+      let product = allProducts.find(p => p.id === productId);
+      if(!product) return;
+      let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      let existing = cart.find(item => item.id === productId);
+      if(existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({...product, qty: 1});
+      }
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      alert('Added to Cart 🛒');
+    }
+
+    function buyNow(productId) {
+      openProductModal(productId);
+      setTimeout(() => {
+        buyNowFromModal();
+      }, 300);
+    }
+
+    function toggleWishlist(productId) {
+      let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+      let index = wishlist.findIndex(item => item.id === productId);
+      if(index > -1) {
+        wishlist.splice(index, 1);
+      } else {
+        let product = allProducts.find(p => p.id === productId);
+        if(product) wishlist.push({...product, qty: 1});
+      }
+      localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+      loadProducts();
+    }
+
+    function loadCategories() {
+      // Add category loading logic if needed
+    }
+
+    // ===== OLD OTP FUNCTIONS - COMMENTED FOR BACKUP =====
+    /*
+    function sendCustomerOTP() {
+      // OLD CODE - DO NOT USE
+    }
+    
+    function verifyCustomerOTP() {
+      // OLD CODE - DO NOT USE
+    }
+    */
+  </script>
+</body>
+</html>
