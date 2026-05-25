@@ -4,106 +4,116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login - SANTRA MALL</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+  };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const ADMIN_EMAIL = "mansasingh7109@gmail.com";
+
+    // ✅ LOOP FIX: Agar pehle se login hai to turant admin.html bhejo
+    auth.onAuthStateChanged(user => {
+      if(user && user.email === ADMIN_EMAIL) {
+        window.location.href = 'admin.html';
+      }
+    });
+
+    // ✅ LOGIN - Loop Fix
+    function adminLogin() {
+      let email = document.getElementById('email').value.trim();
+      let pass = document.getElementById('pass').value;
+      
+      if(!email || !pass) {
+        showMsg('Email aur Password dono daalo', 'error');
+        return;
+      }
+      if(email !== ADMIN_EMAIL) {
+        showMsg('Access Denied! Sirf Admin login kar sakta hai', 'error');
+        return;
+      }
+
+      document.getElementById('loginBtn').disabled = true;
+      document.getElementById('loginBtn').innerText = 'Logging in...';
+
+      auth.signInWithEmailAndPassword(email, pass)
+      .then(() => {
+          window.location.href = 'admin.html';
+      })
+      .catch(e => {
+          document.getElementById('loginBtn').disabled = false;
+          document.getElementById('loginBtn').innerText = 'Login';
+          showMsg('Login Failed: ' + e.message, 'error');
+      });
+    }
+
+    // ✅ FORGOT PASSWORD
+    function forgotPass() {
+      let email = document.getElementById('email').value.trim();
+      if(!email) {
+        showMsg('Pehle email daalo', 'error');
+        return;
+      }
+      if(email !== ADMIN_EMAIL) {
+        showMsg('Sirf admin ka email', 'error');
+        return;
+      }
+
+      auth.sendPasswordResetEmail(email)
+      .then(() => {
+          showMsg('✅ Password reset link bhej diya! Gmail check karo: ' + email, 'success');
+        })
+      .catch(e => showMsg('Error: ' + e.message, 'error'));
+    }
+
+    // Message Box Function
+    function showMsg(text, type) {
+      let msgBox = document.getElementById('msgBox');
+      msgBox.innerText = text;
+      msgBox.className = 'msg-box ' + type;
+      msgBox.style.display = 'block';
+      setTimeout(() => {
+        msgBox.style.display = 'none';
+      }, 5000);
+    }
+  </script>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:#f1f3f6;display:flex;align-items:center;justify-content:center;min-height:100vh;}
-    .box{background:white;padding:30px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);width:90%;max-width:380px;text-align:center;}
-    h2{color:#e40046;margin-bottom:20px;}
-    input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:6px;font-size:15px;}
-    button{width:100%;padding:12px;background:#e40046;color:white;border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px;}
-    button:disabled{background:#ccc;cursor:not-allowed;}
-    .msg{padding:10px;border-radius:6px;margin:10px 0;font-size:14px;display:none;}
-    .msg-error{background:#ffebee;color:#c62828;display:block;}
-    .msg-success{background:#e8f5e9;color:#2e7d32;display:block;}
-    .link{color:#e40046;cursor:pointer;margin-top:15px;font-size:14px;}
+    body{font-family:Arial;background:#f1f5f9;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;}
+    .login-box{background:white;padding:30px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);width:100%;max-width:400px;}
+    h2{color:#e40046;text-align:center;margin-bottom:20px;font-size:24px;}
+    .msg-box{padding:12px;border-radius:6px;margin-bottom:15px;font-size:14px;display:none;}
+    .msg-box.success{background:#d1fae5;color:#065f46;border:1px solid #10b981;}
+    .msg-box.error{background:#fee2e2;color:#991b1b;border:1px solid #ef4444;}
+    input{width:100%;padding:12px;margin:10px 0;border:2px solid #e5e7eb;border-radius:8px;box-sizing:border-box;font-size:15px;}
+    input:focus{outline:none;border-color:#e40046;}
+    button{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:10px 0;font-size:16px;}
+    button:hover{opacity:0.9;}
+    button:disabled{background:#999;cursor:not-allowed;}
+    .forgot{color:#3b82f6;cursor:pointer;text-align:center;margin-top:15px;font-size:14px;display:block;text-decoration:none;}
+    .forgot:hover{text-decoration:underline;}
+    .back-link{color:#6b7280;text-align:center;margin-top:10px;font-size:14px;display:block;text-decoration:none;}
+    .back-link:hover{color:#e40046;}
   </style>
 </head>
 <body>
-
-<div class="box">
-  <h2>🛒 SANTRA MALL Admin</h2>
-  <div id="msg"></div>
-  <input type="email" id="email" placeholder="Admin Email" value="mansasingh7109@gmail.com">
-  <input type="password" id="pass" placeholder="Password" onkeypress="if(event.key==='Enter') doLogin()">
-  <button id="loginBtn" onclick="doLogin()">Login</button>
-  <div class="link" onclick="forgotPass()">🔒 Forgot Password?</div>
-  <div class="link" onclick="window.location.href='index.html'">← Back to Website</div>
-</div>
-
-<!-- ✅ secrets.js sabse pehle load kar -->
-<script src="secrets.js"></script>
-
-<!-- ✅ Ek hi module script -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  
-  // ✅ window se config le
-  const app = initializeApp(window.FIREBASE_CONFIG);
-  const auth = getAuth(app);
-  
-  // ✅ Admin email bhi window se
-  const ADMIN_EMAIL = window.BUSINESS_CONFIG.EMAIL;
-
-  function showMsg(text, type){
-    const msgDiv = document.getElementById('msg');
-    msgDiv.className = `msg msg-${type}`;
-    msgDiv.innerHTML = text;
-  }
-
-  window.doLogin = async function(){
-    const email = document.getElementById('email').value.trim();
-    const pass = document.getElementById('pass').value.trim();
-    const btn = document.getElementById('loginBtn');
-    
-    if(!email || !pass){ 
-      showMsg('Email aur Password dalo', 'error'); 
-      return; 
-    }
-    
-    if(email !== ADMIN_EMAIL){ 
-      showMsg('Sirf Admin login kar sakta hai', 'error'); 
-      return; 
-    }
-    
-    btn.disabled = true;
-    btn.innerText = 'Checking...';
-    showMsg('Login ho raha hai...', 'success');
-    
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      showMsg('✅ Login Success! Redirecting...', 'success');
-      setTimeout(() => { 
-        window.location.href = 'admin.html'; 
-      }, 800);
-      
-    } catch(err) {
-      let errorMsg = 'Login Failed: ';
-      if(err.code === 'auth/invalid-credential') errorMsg += 'Email ya Password galat hai';
-      else if(err.code === 'auth/too-many-requests') errorMsg += 'Bahut try kar liya. 5 min baad try karo';
-      else errorMsg += err.message;
-      
-      showMsg('❌ ' + errorMsg, 'error');
-      btn.disabled = false;
-      btn.innerText = 'Login';
-    }
-  }
-
-  window.forgotPass = async function(){
-    const email = document.getElementById('email').value.trim();
-    if(!email){ 
-      showMsg('Pehle email dalo', 'error'); 
-      return; 
-    }
-    
-    try {
-      await sendPasswordResetEmail(auth, email);
-      showMsg('✅ Password reset link bhej diya! Gmail check karo: ' + email, 'success');
-    } catch(err) {
-      showMsg('❌ Error: ' + err.message, 'error');
-    }
-  }
-</script>
-
+  <div class="login-box">
+    <h2>🛒 SANTRA MALL Admin</h2>
+    <div id="msgBox" class="msg-box"></div>
+    <input type="email" id="email" placeholder="Admin Email" value="mansasingh7109@gmail.com">
+    <input type="password" id="pass" placeholder="Password">
+    <button id="loginBtn" onclick="adminLogin()">Login</button>
+    <a class="forgot" onclick="forgotPass()">🔒 Forgot Password?</a>
+    <a href="index.html" class="back-link">← Back to Website</a>
+  </div>
 </body>
 </html>

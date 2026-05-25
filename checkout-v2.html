@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  4  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+5  <script src="Secrets.js"></script>  <!-- 👈 YE LINE ADD KAR -->
+6  <script>
+7    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY); // 👈 YE CHANGE KAR
+8  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Checkout - SANTRA MALL</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f5f5f5; padding-bottom: 70px; }
+ .header { background: #b71c1c; color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 10; }
+ .container { max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+ .cart-item { display: flex; gap: 15px; padding: 15px 0; border-bottom: 1px solid #eee; }
+ .cart-item img { width: 80px; height: 80px; object-fit: contain; background:#f9f9f9; border-radius: 4px; border: 1px solid #eee; }
+ .cart-item h4 { margin: 0 0 5px 0; font-size: 16px; }
+ .input-group { margin: 15px 0; }
+ .input-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
+ .input-group input,.input-group textarea,.input-group select {
+      width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;
+    }
+ .input-group input:focus,.input-group textarea:focus { border-color: #b71c1c; outline: none; }
+ .btn { background: #b71c1c; color: white; padding: 15px; border: none; width: 100%;
+           border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+ .btn:hover { background: #8e0000; }
+ .btn:disabled { background: #ccc; cursor: not-allowed; }
+ .order-summary { background: #f9f9f9; padding: 15px; border-radius: 4px; margin: 15px 0; }
+ .order-summary h3 { margin-bottom: 10px; }
+ .order-summary p { display: flex; justify-content: space-between; margin: 8px 0; }
+ .loader { display: none; text-align: center; padding: 10px; color: #b71c1c; font-weight: bold; }
+ .series-tag { background: #b71c1c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+ .empty-cart { text-align: center; padding: 40px 20px; color: #666; }
+ .empty-cart a { color: #b71c1c; font-weight: bold; text-decoration: none; }
+ .tabs{display:flex;background:#fff;margin:10px 15px;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;color:#666}
+ .tab.active{background:#b71c1c;color:white}
+ .hide{display:none!important}
+ .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+ .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+ .nav-item.active{color:#b71c1c}
+ .nav-item div{font-size:22px}
+ .nav-item span{font-size:11px;display:block;margin-top:2px}
+ .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+ .qty-control{display:flex;align-items:center;gap:8px;margin:8px 0}
+ .qty-btn{width:30px;height:30px;border:1px solid #ddd;background:white;border-radius:4px;font-size:18px;cursor:pointer}
+ .qty-num{font-weight:bold;min-width:20px;text-align:center}
+ .remove-btn{color:#ef4444;font-size:13px;cursor:pointer;font-weight:bold;background:none;border:none;margin-right:10px}
+ .wish-btn{color:#ff6b6b;font-size:18px;cursor:pointer;background:none;border:none}
+ .success-box{background:#d1fae5;border:2px solid #10b981;padding:30px;border-radius:8px;text-align:center;margin:20px 0;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="back-btn" onclick="window.location.href='index.html'" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;position:absolute;left:15px;">←</button>
+    <h1 id="pageTitle">🛒 My Cart</h1>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="cartTab" onclick="switchTab('cart')">🛒 Cart (<span id="cartCount">0</span>)</button>
+    <button class="tab" id="wishTab" onclick="switchTab('wishlist')">😍 Wishlist (<span id="wishCount">0</span>)</button>
+  </div>
+
+  <div class="container" id="cartView">
+    <h3>Cart Items</h3>
+    <div id="cartList"></div>
+
+    <div class="order-summary" id="orderSummary" style="display:none;">
+      <h3>Order Summary</h3>
+      <p><span>Subtotal:</span> <span>₹<b id="subtotal">0</b></span></p>
+      <p><span>Delivery:</span> <span style="color:green;font-weight:bold;" id="deliveryCharge">FREE</span></p>
+      <hr style="margin:10px 0;border:none;border-top:1px dashed #ddd;">
+      <p style="font-size:18px;"><span>Total:</span> <span>₹<b id="grandTotal">0</b></span></p>
+    </div>
+
+    <div id="checkoutForm" style="display:none;">
+      <h3>Delivery Details</h3>
+      <div class="input-group">
+        <label>Full Name *</label>
+        <input type="text" id="custName" placeholder="Enter your name" required>
+      </div>
+      <div class="input-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="custMobile" placeholder="10 digit number" maxlength="10" required>
+      </div>
+      <div class="input-group">
+        <label>Email (Optional)</label>
+        <input type="email" id="custEmail" placeholder="your@email.com">
+      </div>
+      <div class="input-group">
+        <label>Complete Address *</label>
+        <textarea id="custAddress" rows="3" placeholder="House no, Street, City, Pincode" required></textarea>
+      </div>
+      <div class="input-group">
+        <label>Payment Mode *</label>
+        <select id="paymentMode" required>
+          <option value="">Select Payment</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="Online Payment">Online Payment - Pay After Confirmation</option>
+        </select>
+      </div>
+
+      <div class="loader" id="loader">📲 Sending order request to admin...</div>
+      <button class="btn" id="placeOrderBtn" onclick="placeOrderWithOTPRequest()">📦 Place Order</button>
+    </div>
+  </div>
+
+  <div class="container hide" id="wishlistView">
+    <h3>Wishlist Items</h3>
+    <div id="wishList"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <div>🏠</div><span>Home</span>
+    </a>
+    <a href="category.html" class="nav-item">
+      <div>📱</div><span>Categories</span>
+    </a>
+    <a href="cart.html" class="nav-item active">
+      <div>🛒</div><span>Cart</span>
+      <span class="cart-badge" id="navCartCount">0</span>
+    </a>
+    <a href="customer-account.html" class="nav-item">
+      <div>👤</div><span>Account</span>
+    </a>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <script>
+    // ===== CONFIG - APNI REAL KEYS YAHAN DAAL DE =====
+         const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+  };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    const EMAILJS_CONFIG = {
+      PUBLIC_KEY: "user_ABC123XYZ", // 👈 YAHAN
+      SERVICE_ID: "service_xyz123", // 👈 YAHAN
+      TEMPLATE_ID: "template_abc123" // 👈 YAHAN
+    };
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+
+    const BUSINESS_WHATSAPP_NUMBER = "8769171078";
+    const BUSINESS_EMAIL = "santramarketshoppingmall@gmail.com";
+    const BUSINESS_EMAIL_2 = "mansasingh7109@gmail.com";
+    // ================================================
+
+    const WISHLIST_KEY = 'SANTRA_WISHLIST';
+    const CART_KEY = 'SANTRA_CART';
+
+    let cart = [];
+    let wishlist = [];
+    let currentUserId = null;
+    let currentTab = 'cart';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      let customer = localStorage.getItem('santra_customer');
+      if(customer){
+        currentUserId = JSON.parse(customer).mobile;
+        let custData = JSON.parse(customer);
+        document.getElementById('custName').value = custData.name || '';
+        document.getElementById('custMobile').value = custData.mobile || '';
+      }
+      loadCart();
+      loadWishlist();
+      updateCounts();
+    });
+
+    function switchTab(tab){
+      currentTab = tab;
+      document.getElementById('cartTab').classList.toggle('active', tab === 'cart');
+      document.getElementById('wishTab').classList.toggle('active', tab === 'wishlist');
+      document.getElementById('cartView').classList.toggle('hide', tab!== 'cart');
+      document.getElementById('wishlistView').classList.toggle('hide', tab!== 'wishlist');
+      document.getElementById('pageTitle').innerText = tab === 'cart'? '🛒 My Cart' : '😍 My Wishlist';
+    }
+
+    function loadCart() {
+      cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      cart = cart.map(item => ({...item, qty: item.qty || 1}));
+      renderCart();
+      updateCounts();
+    }
+
+    function renderCart() {
+      let container = document.getElementById('cartList');
+      let summary = document.getElementById('orderSummary');
+      let checkoutForm = document.getElementById('checkoutForm');
+
+      if(cart.length === 0) {
+        container.innerHTML = '<div class="empty-cart">🛒 Your cart is empty<br><br><a href="index.html">Continue Shopping</a></div>';
+        summary.style.display = 'none';
+        checkoutForm.style.display = 'none';
+        return;
+      }
+
+      container.innerHTML = cart.map((item, index) => {
+        let imgUrl = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || '';
+        if(imgUrl && typeof imgUrl === 'string'){
+          imgUrl = imgUrl.trim();
+          if(imgUrl.startsWith('data:image') && imgUrl.length > 50000){
+            imgUrl = '';
+          }
+        }
+        let imgSrc = imgUrl && imgUrl.length > 5? imgUrl : 'https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE';
+
+        let productCode = item.product_code || item.code || item.sku || item.seriesNumber || 'N/A';
+        if(typeof productCode === 'object' && productCode!== null){
+          productCode = productCode.name || productCode.id || productCode.sku || productCode.code || 'N/A';
+        }
+
+        let qty = item.qty || 1;
+        let price = item.price || 0;
+
+        return `
+        <div class="cart-item">
+          <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
+          <div class="item-info" style="flex:1;">
+            <h4>${item.name}</h4>
+            <div style="font-size:13px;color:#666;">Code: <span class="series-tag">${productCode}</span></div>
+            <div style="font-weight:bold;color:#b71c1c;margin:5px 0;">₹${price} x ${qty} = ₹${price * qty}</div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+            </div>
+            <div>
+              <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+              <button class="wish-btn" onclick="moveToWishlist(${index})" title="Move to Wishlist">😍</button>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+
+      let subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
+      let delivery = subtotal >= 500? 0 : 49;
+      let total = subtotal + delivery;
+
+      document.getElementById('subtotal').innerText = subtotal;
+      document.getElementById('deliveryCharge').innerText = delivery === 0? 'FREE' : '₹' + delivery;
+      document.getElementById('grandTotal').innerText = total;
+      summary.style.display = 'block';
+      checkoutForm.style.display = 'block';
+    }
+
+    function updateQty(index, change) {
+      cart[index].qty = (cart[index].qty || 1) + change;
+      if(cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      saveCart();
+      loadCart();
+    }
+
+    function removeItem(index) {
+      if(confirm('Remove this item from cart?')) {
+        cart.splice(index, 1);
+        saveCart();
+        loadCart();
+      }
+    }
+
+    function moveToWishlist(index){
+      let item = cart[index];
+      let wishItem = wishlist.find(w => w.id === item.id);
+      if(wishItem){
+        wishItem.qty = (wishItem.qty || 1) + (item.qty || 1);
+      } else {
+        wishlist.push({...item, qty: item.qty || 1});
+      }
+      cart.splice(index, 1);
+      saveCart();
+      saveWishlist();
+      loadCart();
+      loadWishlist();
+      alert('Moved to Wishlist 😍');
+    }
+
+    function saveCart(){
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      updateCounts();
+    }
+
+    function loadWishlist() {
+       wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+      wishlist = wishlist.map(item => ({...item, qty: item.qty || 1}));
+      renderWishlist();
+      updateCounts();
+    }
+
+    function renderWishlist(){
+      let container = document.getElementById('wishList');
+      if(wishlist.length === 0) {
+        container.innerHTML = '<div class="empty-cart">😍 Your wishlist is empty<br><br><a href="index.html">Browse Products</a></div>';
+        return;
+      }
+      container.innerHTML = wishlist.map((item, index) => {
+        let imgUrl = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || '';
+        if(imgUrl.startsWith('data:image') && imgUrl.length > 50000) imgUrl = '';
+        let imgSrc = imgUrl || 'https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE';
+        let productCode = item.product_code || item.code || item.sku || item.seriesNumber || 'N/A';
+        if(typeof productCode === 'object') productCode = productCode.id || 'N/A';
+        let qty = item.qty || 1;
+
+        return `
+        <div class="cart-item">
+          <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
+          <div class="item-info" style="flex:1;">
+            <h4>${item.name}</h4>
+            <div style="font-size:13px;color:#666;">Code: <span class="series-tag">${productCode}</span></div>
+            <div style="font-weight:bold;color:#b71c1c;margin:5px 0;">₹${item.price}</div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateWishQty(${index}, -1)">-</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="updateWishQty(${index}, 1)">+</button>
+            </div>
+            <div>
+              <button class="remove-btn" onclick="removeWishItem(${index})">Remove</button>
+              <button class="wish-btn" onclick="moveToCart(${index})" title="Move to Cart" style="color:#b71c1c">🛒</button>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    function updateWishQty(index, change) {
+      wishlist[index].qty = (wishlist[index].qty || 1) + change;
+      if(wishlist[index].qty <= 0) {
+        wishlist.splice(index, 1);
+      }
+      saveWishlist();
+      loadWishlist();
+    }
+
+    function removeWishItem(index) {
+      if(confirm('Remove from wishlist?')) {
+        wishlist.splice(index, 1);
+        saveWishlist();
+        loadWishlist();
+      }
+    }
+
+    function moveToCart(index){
+      let item = wishlist[index];
+      let cartItem = cart.find(c => c.id === item.id);
+      if(cartItem){
+        cartItem.qty = (cartItem.qty || 1) + (item.qty || 1);
+      } else {
+        cart.push({...item, qty: item.qty || 1});
+      }
+      wishlist.splice(index, 1);
+      saveCart();
+      saveWishlist();
+      loadCart();
+      loadWishlist();
+      alert('Moved to Cart 🛒');
+      switchTab('cart');
+    }
+
+    function saveWishlist(){
+      localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+      updateCounts();
+    }
+
+    function updateCounts(){
+      let cartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+      let wishCount = wishlist.length;
+      document.getElementById('cartCount').innerText = cartCount;
+      document.getElementById('wishCount').innerText = wishCount;
+      document.getElementById('navCartCount').innerText = cartCount;
+    }
+
+    // ===== NEW FLOW - NO OTP POPUP ON WEBSITE =====
+    async function placeOrderWithOTPRequest() {
+      const name = document.getElementById('custName').value.trim();
+      const mobile = document.getElementById('custMobile').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const paymentMode = document.getElementById('paymentMode').value;
+
+      if (!name ||!mobile ||!address ||!paymentMode) {
+        alert('❌ Please fill all required fields');
+        return;
+      }
+      if (mobile.length!== 10 || isNaN(mobile)) {
+        alert('❌ Enter valid 10 digit mobile number');
+        return;
+      }
+
+      if(cart.length === 0) {
+        alert('❌ Cart is empty');
+        return;
+      }
+
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('placeOrderBtn').disabled = true;
+
+      const orderId = 'SM' + Date.now();
+      const orderDate = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
+
+      let productsList = '';
+      let totalAmount = 0;
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        const itemTotal = (item.price || 0) * (item.qty || 1);
+        subtotal += itemTotal;
+        totalAmount += itemTotal;
+
+        let productCode = item.product_code || item.code || item.sku || item.seriesNumber || 'N/A';
+        if(typeof productCode === 'object' && productCode!== null){
+          productCode = productCode.id || productCode.sku || productCode.code || productCode.name || 'N/A';
+        }
+
+        let imgUrl = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || '';
+        if(imgUrl.startsWith('data:image') && imgUrl.length > 50000){
+          imgUrl = '';
+        }
+
+        let productLink = item.product_link || item.link || item.url || `https://santramarketshoppingmall.web.app/product.html?id=${item.id}`;
+        let photoLine = imgUrl && imgUrl.length > 5? `Photo: ${imgUrl}%0A` : '';
+
+        productsList += `${index+1}. ${item.name} | ${productCode} | Qty: ${item.qty || 1} = ₹${itemTotal}%0A${photoLine}Link: ${productLink}%0A%0A`;
+      });
+
+      let delivery = subtotal >= 500? 0 : 49;
+      totalAmount += delivery;
+
+      const orderData = {
+        orderId: orderId,
+        customerName: name,
+        customerMobile: mobile,
+        customerEmail: email,
+        customerAddress: address,
+        items: cart,
+        subtotal: subtotal,
+        delivery: delivery,
+        totalAmount: totalAmount,
+        paymentMode: paymentMode,
+        status: "pending_otp",
+        orderDate: firebase.firestore.FieldValue.serverTimestamp(),
+        orderDateString: orderDate
+      };
+
+      try {
+        await db.collection("orders").add(orderData);
+
+        document.getElementById('checkoutForm').innerHTML = `
+          <div class="success-box">
+            <div style="font-size:60px;">✅</div>
+            <h2 style="color:#065f46; margin:15px 0;">Order Request Sent!</h2>
+            <p style="font-size:16px; color:#333;"><b>Order ID:</b> ${orderId}</p>
+            <p style="margin:15px 0; color:#333;">Admin will send you OTP on WhatsApp shortly.</p>
+            <p style="font-size:14px; color:#666;">Please wait for confirmation</p>
+            <button onclick="window.location.href='index.html'" style="background:#e91e63; color:white; padding:12px 30px; border:none; border-radius:5px; font-size:16px; margin-top:20px; cursor:pointer;">
+              Back to Home
+            </button>
+          </div>
+        `;
+
+        const whatsappMsg = `🔔 NEW ORDER REQUEST #${orderId}%0A%0A📅 Date & Time: ${orderDate}%0A%0A💳 Payment Mode: ${paymentMode}%0A⚠️ OTP REQUIRED FOR ${paymentMode}%0A%0A👤 CUSTOMER FORM DETAILS:%0AName: ${name}%0AMobile: ${mobile}%0AEmail: ${email || 'N/A'}%0AAddress: ${address}%0A%0A🛒 ORDER ITEMS:%0A${productsList}💰 Subtotal: ₹${subtotal}%0A📦 Delivery: ${delivery === 0? 'FREE' : '₹' + delivery}%0A💰 Total Amount: ₹${totalAmount}%0A%0A⚠️ ACTION REQUIRED:%0A1. Send OTP to customer on WhatsApp%0A2. Save OTP in Admin Panel%0A3. Verify when customer replies`;
+
+        window.open(`https://wa.me/91${BUSINESS_WHATSAPP_NUMBER}?text=${whatsappMsg}`, '_blank');
+
+        sendOrderEmailToAdmin(orderData, orderDate, productsList);
+
+        localStorage.setItem(CART_KEY, JSON.stringify([]));
+        cart = [];
+        updateCounts();
+
+      } catch (error) {
+        console.error('Order Error:', error);
+        alert('❌ Error placing order: ' + error.message);
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('placeOrderBtn').disabled = false;
+      }
+    }
+
+    function sendOrderEmailToAdmin(data, orderDate, productsList) {
+      if (typeof emailjs === 'undefined') {
+        console.log('EmailJS not loaded');
+        return;
+      }
+
+      emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
+        to_email: BUSINESS_EMAIL + ', ' + BUSINESS_EMAIL_2,
+        order_id: data.orderId,
+        order_date: orderDate,
+        customer_name: data.customerName,
+        customer_mobile: data.customerMobile,
+        customer_email: data.customerEmail || 'N/A',
+        customer_address: data.customerAddress,
+        payment_mode: data.paymentMode,
+        products_list: productsList.replace(/%0A/g, '\n'),
+            customer_message: productsList.replace(/%0A/g, '\n'),
+    whatsapp_number: data.customerMobile,
+        subtotal: data.subtotal,
+        delivery: data.delivery,
+        total_amount: data.totalAmount
+      }).then(() => {
+        console.log('✅ Email sent to admin');
+      }).catch((err) => {
+        console.error('Email Error:', err);
+      });
+    }
+  </script>
+</body>
+</html>
