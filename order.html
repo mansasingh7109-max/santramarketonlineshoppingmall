@@ -3,97 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SANTRA MALL</title>
+  <title>My Cart - SANTRA MALL</title>
   <style>
-    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
+    :root{--accent:#b71c1c;--bg:#f1f3f6;--card:#fff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
-    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-    .header h1{color:var(--accent);font-size:20px;}
-    .header-right{display:flex;gap:15px;align-items:center;}
-    .icon-btn{text-align:center;text-decoration:none;color:#333;}
-    .icon-btn div{font-size:20px;}
-    .icon-btn span{font-size:11px;display:block;color:var(--accent);font-weight:bold;}
-    .container{padding:15px;}
-    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-    .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
-    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
-    .product-card .price-row{display:flex;gap:8px;align-items:center;margin:4px 0;}
-    .product-card .price{color:var(--accent);font-weight:bold;font-size:16px;}
-    .product-card .mrp{color:#999;font-size:13px;text-decoration:line-through;}
-    .product-card .cat{font-size:11px;color:#999;}
-    .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;cursor:pointer;}
-    .nav-item.active{color:var(--accent);}
-    .nav-item div{font-size:22px;}
-    .nav-item span{font-size:11px;display:block;margin-top:2px;}
-    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-start;justify-content:center;z-index:9999;overflow-y:auto;padding:20px 0;}
-    .modal-content{background:var(--card);padding:0;border-radius:12px;max-width:650px;width:94%;margin:20px 0;max-height:95vh;display:flex;flex-direction:column;}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:3px solid var(--accent);position:sticky;top:0;background:var(--card);z-index:10;border-radius:12px 12px 0 0;}
-    .modal-header h3{color:var(--accent);font-size:20px;}
-    .close-btn{background:#999;color:white;border:none;width:35px;height:35px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;}
-    .modal-body{padding:20px;overflow-y:auto;}
-    .hide{display:none!important;}
-    .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
-    .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
-    .order-box h4{color:var(--accent);font-size:16px;}
-    .order-box-date{font-size:12px;color:#666;}
-    .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
-    .status-placed{background:#4caf50;color:white;}
-    .status-shipped{background:#2196F3;color:white;}
-    .status-delivered{background:#4caf50;color:white;}
-    .status-canceled{background:#f44336;color:white;}
-    .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
-    .order-info p{margin:5px 0;}
-    .order-info b{color:#333;}
-    .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
-    .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
-    .order-item-info{flex:1;}
-    .order-item-info h5{font-size:13px;margin-bottom:3px;}
-    .order-item-info p{font-size:12px;color:#666;}
-    .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
-    .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
-    .btn-track{background:#2196F3;color:white;}
-    .btn-cancel{background:#f44336;color:white;}
-    .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
+   .header{background:var(--accent);color:#fff;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+   .header a{color:#fff;text-decoration:none;font-size:20px;}
+   .container{padding:15px;}
+   .cart-item{background:var(--card);border-radius:8px;padding:12px;margin-bottom:12px;display:flex;gap:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+   .cart-item img{width:80px;height:80px;object-fit:cover;border-radius:6px;}
+   .cart-item-info{flex:1;}
+   .cart-item-info h4{font-size:14px;margin-bottom:4px;}
+   .cart-item-info.price{color:var(--accent);font-weight:bold;font-size:16px;}
+   .qty-controls{display:flex;align-items:center;gap:10px;margin-top:8px;}
+   .qty-controls button{width:28px;height:28px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;}
+   .qty-controls span{font-weight:bold;}
+   .remove-btn{color:red;font-size:12px;cursor:pointer;margin-top:5px;display:inline-block;}
+   .order-summary{background:var(--card);border-radius:8px;padding:15px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+   .order-summary h3{margin-bottom:12px;color:var(--accent);}
+   .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px;}
+   .summary-row.total{font-weight:bold;font-size:16px;border-top:2px solid #eee;padding-top:10px;margin-top:10px;}
+   .delivery-form{background:var(--card);border-radius:8px;padding:15px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+   .delivery-form h3{margin-bottom:12px;color:var(--accent);}
+   .form-group{margin-bottom:12px;}
+   .form-group label{display:block;font-size:13px;margin-bottom:5px;font-weight:bold;}
+   .form-group input,.form-group textarea,.form-group select{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;}
+   .place-order-btn{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;margin-top:15px;cursor:pointer;}
+   .place-order-btn:disabled{background:#ccc;cursor:not-allowed;}
+   .empty-cart{text-align:center;padding:60px 20px;color:#999;}
+   .empty-cart div{font-size:60px;margin-bottom:10px;}
+   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+   .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
+   .nav-item.active{color:var(--accent);}
+   .nav-item div{font-size:22px;}
+   .nav-item span{font-size:11px;display:block;margin-top:2px;}
+   .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
   </style>
 </head>
 <body>
 
 <div class="header">
-  <h1 id="siteLogo">🛍️ SANTRA MALL</h1>
-  <div class="header-right">
-    <a href="admin.html" class="icon-btn">
-      <div>⚙️</div>
-      <span>ADMIN</span>
-    </a>
-    <a href="customer-account.html" class="icon-btn" id="loginBtn">
-      <div>👤</div>
-      <span id="loginText">LOGIN</span>
-    </a>
-  </div>
+  <a href="index.html">←</a>
+  <h1 style="font-size:18px;">🛒 My Cart</h1>
 </div>
 
-<div class="container">
-  <h3 style="margin-bottom:15px;">Featured Products</h3>
-  <div id="productList" class="product-grid"></div>
-</div>
-
-<div id="ordersModal" class="modal hide">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>📦 My Orders</h3>
-      <button class="close-btn" onclick="closeOrdersPopup()">×</button>
-    </div>
-    <div class="modal-body" id="ordersPopupList"></div>
-  </div>
+<div class="container" id="cartContainer">
+  <!-- Cart items yahan aayenge -->
 </div>
 
 <div class="bottom-nav">
-  <a href="index.html" class="nav-item active">
+  <a href="index.html" class="nav-item">
     <div>🏠</div>
     <span>Home</span>
   </a>
@@ -101,198 +61,231 @@
     <div>📱</div>
     <span>Categories</span>
   </a>
-  <a href="cart.html" class="nav-item">
+  <a href="cart.html" class="nav-item active">
     <div>🛒</div>
     <span>Cart</span>
     <span class="cart-badge" id="cartCount">0</span>
   </a>
-  <a href="javascript:void(0)" class="nav-item" onclick="openOrdersPopup()">
-    <div>📦</div>
-    <span>Orders</span>
+  <a href="customer-account.html" class="nav-item">
+    <div>👤</div>
+    <span>Account</span>
   </a>
 </div>
 
-<script src="db.js"></script>
-<script>
-window.onload = function(){
-  document.getElementById('siteLogo').innerText = DB.settings.logo;
-  document.documentElement.style.setProperty('--accent', DB.settings.primaryColor);
-  loadProducts();
-  updateLoginStatus();
-  updateCartCount();
-}
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="./secrets.js"></script>
 
-function loadProducts(){
-  let container = document.getElementById('productList');
-  container.innerHTML = '';
-  if(!DB.products || DB.products.length === 0){
-    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products yet. Add from Admin Panel.</p>';
+<script>
+let cart = [];
+let currentUser = null;
+
+// Page load hote hi cart load karo
+window.addEventListener('load', async () => {
+  await checkLogin();
+  loadCart();
+});
+
+async function checkLogin() {
+  const userId = localStorage.getItem('currentUserId');
+  if(!userId) {
+    alert('Please login first!');
+    window.location.href = 'customer-account.html';
     return;
   }
-  DB.products.forEach(p => {
-    let discount = p.mrp ? Math.round(((p.mrp-p.price)/p.mrp)*100) : 0;
-    container.innerHTML += `
-      <div class="product-card">
-        <img src="${p.img}" alt="${p.name}">
-        <h4>${p.name}</h4>
-        <div class="price-row">
-          <span class="price">₹${p.price}</span>
-          ${p.mrp ? `<span class="mrp">₹${p.mrp}</span>` : ''}
+
+  // Firebase se user data le ao
+  const userDoc = await db.collection('users').doc(userId).get();
+  if(userDoc.exists) {
+    currentUser = {id: userDoc.id,...userDoc.data()};
+  }
+}
+
+function loadCart() {
+  const userId = localStorage.getItem('currentUserId');
+  cart = JSON.parse(localStorage.getItem('cart') || '[]').filter(c => c.uid == userId);
+
+  const container = document.getElementById('cartContainer');
+
+  if(cart.length === 0) {
+    container.innerHTML = `
+      <div class="empty-cart">
+        <div>🛒</div>
+        <p>Your cart is empty</p>
+        <button onclick="window.location.href='index.html'" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Shop Now</button>
+      </div>
+    `;
+    updateCartCount();
+    return;
+  }
+
+  let subtotal = 0;
+  let cartHtml = '';
+
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+    cartHtml += `
+      <div class="cart-item">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <div class="price">₹${item.price} x ${item.qty} = ₹${itemTotal}</div>
+          <div class="qty-controls">
+            <button onclick="updateQty(${index}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button onclick="updateQty(${index}, 1)">+</button>
+          </div>
+          <span class="remove-btn" onclick="removeItem(${index})">🗑️ Remove</span>
         </div>
-        <div class="cat">Category: ${p.category || 'General'} | Stock: ${p.stock}</div>
-        <button onclick="addToCart(${p.id})" ${p.stock<=0?'disabled style="background:#ccc"':''}>${p.stock<=0?'Out of Stock':'Add to Cart'}</button>
       </div>
     `;
   });
-}
 
-function addToCart(pid){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId){
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
-    return;
-  }
-  
-  userId = parseInt(userId);
-  let product = DB.products.find(p => p.id == pid);
-  if(!product || product.stock<=0) {
-    alert('Product out of stock!');
-    return;
-  }
-  
-  let cartItem = DB.cart.find(c => c.pid == pid && c.uid == userId);
-  if(cartItem){
-    if(cartItem.qty >= product.stock){ alert('No more stock available!'); return; }
-    cartItem.qty += 1;
-  } else {
-    DB.cart.push({
-      id: Date.now(),
-      uid: userId, 
-      pid: pid,
-      name: product.name,
-      price: product.price,
-      img: product.img,
-      qty: 1
-    });
-  }
-  saveDB();
+  const delivery = 49;
+  const total = subtotal + delivery;
+
+  cartHtml += `
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span>₹${subtotal}</span>
+      </div>
+      <div class="summary-row">
+        <span>Delivery:</span>
+        <span>₹${delivery}</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total:</span>
+        <span>₹${total}</span>
+      </div>
+    </div>
+
+    <div class="delivery-form">
+      <h3>Delivery Details</h3>
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="custName" value="${currentUser?.name || ''}" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="custMobile" value="${currentUser?.mobile || ''}" placeholder="10 digit mobile" maxlength="10">
+      </div>
+      <div class="form-group">
+        <label>Email (Optional)</label>
+        <input type="email" id="custEmail" value="${currentUser?.email || ''}" placeholder="email@example.com">
+      </div>
+      <div class="form-group">
+        <label>Complete Address *</label>
+        <textarea id="custAddress" rows="3" placeholder="House no, Street, Area, City, Pincode">${currentUser?.address || ''}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Payment Mode *</label>
+        <select id="paymentMode">
+          <option value="COD">Cash on Delivery</option>
+          <option value="Online">Online Payment</option>
+        </select>
+      </div>
+      <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">📦 Place Order</button>
+    </div>
+  `;
+
+  container.innerHTML = cartHtml;
   updateCartCount();
-  alert('Added to cart!');
 }
 
-function updateCartCount(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId) {
-    document.getElementById('cartCount').innerText = '0';
-    return;
+function updateQty(index, change) {
+  cart[index].qty += change;
+  if(cart[index].qty <= 0) {
+    cart.splice(index, 1);
   }
-  userId = parseInt(userId);
-  let userCart = DB.cart.filter(c => c.uid == userId);
-  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').innerText = total;
+  saveCart();
+  loadCart();
 }
 
-function updateLoginStatus(){
-  let userId = localStorage.getItem('currentUserId');
-  if(userId){
-    let user = DB.users.find(u => u.id == parseInt(userId));
-    if(user){
-      document.getElementById('loginText').innerHTML = 'ACCOUNT';
-    }
+function removeItem(index) {
+  if(confirm('Remove this item?')) {
+    cart.splice(index, 1);
+    saveCart();
+    loadCart();
   }
 }
 
-function openOrdersPopup(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId){
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
-    return;
+function saveCart() {
+  const userId = localStorage.getItem('currentUserId');
+  let allCart = JSON.parse(localStorage.getItem('cart') || '[]');
+  // Purana user ka cart hatao
+  allCart = allCart.filter(c => c.uid!= userId);
+  // Naya cart add karo
+  allCart = allCart.concat(cart);
+  localStorage.setItem('cart', JSON.stringify(allCart));
+}
+
+function updateCartCount() {
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = count;
+}
+
+async function placeOrder() {
+  const name = document.getElementById('custName').value.trim();
+  const mobile = document.getElementById('custMobile').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
+  const address = document.getElementById('custAddress').value.trim();
+  const payment = document.getElementById('paymentMode').value;
+
+  if(!name ||!mobile ||!address) {
+    return alert('❌ Please fill all required fields');
   }
-  
-  userId = parseInt(userId);
-  let userOrders = DB.orders.filter(o => o.uid == userId).reverse();
-  let container = document.getElementById('ordersPopupList');
-  
-  if(userOrders.length === 0){
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:#999;"><p style="font-size:50px;">📦</p><p>No orders yet</p><button onclick="closeOrdersPopup()" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Start Shopping</button></div>';
-  } else {
-    container.innerHTML = '';
-    userOrders.forEach(order => {
-      let statusClass = order.status.toLowerCase();
-      let canCancel = ['Placed', 'Shipped'].includes(order.status);
-      
-      let itemsHtml = order.items.map(item => `
-        <div class="order-item-box">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="order-item-info">
-            <h5>${item.name}</h5>
-            <p>Qty: ${item.qty} x ₹${item.price} = ₹${item.price * item.qty}</p>
-          </div>
-        </div>
-      `).join('');
-      
-      container.innerHTML += `
-        <div class="order-box">
-          <div class="order-box-header">
-            <div>
-              <h4>Order #${order.id}</h4>
-              <p class="order-box-date">${new Date(order.time).toLocaleString()}</p>
-            </div>
-            <span class="status-badge status-${statusClass}">${order.status}</span>
-          </div>
-          
-          <div class="order-info">
-            <p><b>Name:</b> ${order.customerName}</p>
-            <p><b>Mobile:</b> ${order.mobile}</p>
-            <p><b>Address:</b> ${order.address}</p>
-            <p><b>Total:</b> ₹${order.total}</p>
-          </div>
-          
-          <details>
-            <summary style="cursor:pointer;color:var(--accent);font-weight:bold;font-size:13px;margin:8px 0;">▶ Items (${order.items.length})</summary>
-            ${itemsHtml}
-          </details>
-          
-          <div class="action-grid">
-            <button class="action-btn btn-track" onclick="trackOrderPopup(${order.id})">📍 Track</button>
-            <button class="action-btn btn-cancel ${!canCancel ? 'btn-disabled' : ''}" onclick="${canCancel ? `cancelOrder(${order.id})` : ''}" ${!canCancel ? 'disabled' : ''}>❌ Cancel</button>
-          </div>
-        </div>
-      `;
-    });
+  if(mobile.length!== 10) {
+    return alert('❌ Mobile number must be 10 digits');
   }
-  
-  document.getElementById('ordersModal').classList.remove('hide');
-}
+  if(cart.length === 0) {
+    return alert('❌ Cart is empty');
+  }
 
-function closeOrdersPopup(){
-  document.getElementById('ordersModal').classList.add('hide');
-}
+  const btn = document.getElementById('placeOrderBtn');
+  btn.innerText = '⏳ Placing Order...';
+  btn.disabled = true;
 
-function trackOrderPopup(orderId){
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
-  
-  let statusMsg = {
-    'Placed': 'Your order is confirmed and will be shipped soon',
-    'Shipped': 'Your order is on the way! Expected delivery in 2-3 days',
-    'Delivered': 'Your order has been delivered successfully',
-    'Canceled': 'This order has been cancelled'
-  };
-  
-  alert('📍 Order Tracking\n\nOrder ID: #' + order.id + '\nStatus: ' + order.status + '\n\n' + statusMsg[order.status]);
-}
+  try {
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const delivery = 49;
+    const total = subtotal + delivery;
 
-function cancelOrder(orderId){
-  if(!confirm('Cancel this order?')) return;
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
-  order.status = 'Canceled';
-  saveDB();
-  alert('✅ Order cancelled!');
-  openOrdersPopup();
+    const orderData = {
+      uid: currentUser.id,
+      customerName: name,
+      mobile: mobile,
+      email: email,
+      address: address,
+      paymentMode: payment,
+      items: cart,
+      subtotal: subtotal,
+      delivery: delivery,
+      total: total,
+      status: 'Placed',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    // Firebase me order save karo
+    await db.collection('orders').add(orderData);
+
+    // Cart khali kar do
+    cart = [];
+    saveCart();
+
+    alert('✅ Order Placed Successfully!\n\nOrder ID: #' + Date.now());
+    window.location.href = 'index.html';
+
+  } catch(error) {
+    console.error(error);
+    alert('❌ Error placing order: ' + error.message);
+    btn.innerText = '📦 Place Order';
+    btn.disabled = false;
+  }
 }
 </script>
 
