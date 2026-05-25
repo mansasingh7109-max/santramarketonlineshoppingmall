@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Settings - SANTRA MALL</title>
+  cky
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#f1f3f6;padding:20px}
+    .container{max-width:600px;margin:0 auto;background:white;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    h1{color:#e40046;margin-bottom:20px;text-align:center}
+    .form-group{margin:15px 0}
+    label{display:block;font-weight:bold;margin-bottom:5px;color:#333}
+    input[type="color"]{width:100%;height:50px;border:2px solid #e0e0e0;border-radius:8px;cursor:pointer}
+    input[type="text"]{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px}
+    .btn{width:100%;padding:15px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:20px}
+    .btn:hover{background:#c4003e}
+    .preview{margin:20px 0;padding:20px;border-radius:8px;text-align:center;font-weight:bold}
+  </style>
+  cky
+</head>
+<body>
+  cky
+  <div class="container">
+    <h1>🎨 Theme Settings</h1>
+    
+    <div class="form-group">
+      <label>Background Color:</label>
+      <input type="color" id="bgColor" value="#f1f3f6">
+    </div>
+    
+    <div class="form-group">
+      <label>Card Color:</label>
+      <input type="color" id="cardColor" value="#ffffff">
+    </div>
+    
+    <div class="form-group">
+      <label>Accent Color (Header/Button):</label>
+      <input type="color" id="accentColor" value="#e40046">
+    </div>
+    
+    <div class="form-group">
+      <label>Text Color:</label>
+      <input type="color" id="textColor" value="#212121">
+    </div>
+    
+    <div class="form-group">
+      <label>Border Color:</label>
+      <input type="color" id="borderColor" value="#e0e0e0">
+    </div>
+    
+    <div class="form-group">
+      <label>Wishlist Color:</label>
+      <input type="color" id="wishColor" value="#ff6b6b">
+    </div>
+    
+    <div class="form-group">
+      <label>Logo Text:</label>
+      <input type="text" id="logoText" value="🛒 SANTRA MALL" placeholder="Enter logo text">
+    </div>
+    
+    <div class="preview" id="previewBox" style="background:#f1f3f6;color:#212121;border:2px solid #e0e0e0">
+      Preview: Background, Text & Border
+    </div>
+    
+    <button class="btn" onclick="saveThemeData()">💾 Save Theme</button>
+    <button class="btn" style="background:#6c757d" onclick="loadCurrentTheme()">🔄 Load Current Theme</button>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  
+  <!-- Config -->
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+    window.FIREBASE_CONFIG = firebaseConfig;
+  </script>
+  
+  <!-- Theme Manager -->
+  <script src="theme.js"></script>
+  
+  <script>
+    // Live preview update
+    document.querySelectorAll('input[type="color"]').forEach(input => {
+      input.addEventListener('input', updatePreview);
+    });
+    
+    function updatePreview() {
+      document.getElementById('previewBox').style.backgroundColor = document.getElementById('bgColor').value;
+      document.getElementById('previewBox').style.color = document.getElementById('textColor').value;
+      document.getElementById('previewBox').style.borderColor = document.getElementById('borderColor').value;
+    }
+    
+    async function saveThemeData() {
+      const themeData = {
+        bg: document.getElementById('bgColor').value,
+        card: document.getElementById('cardColor').value,
+        accent: document.getElementById('accentColor').value,
+        text: document.getElementById('textColor').value,
+        border: document.getElementById('borderColor').value,
+        wish: document.getElementById('wishColor').value,
+        logoText: document.getElementById('logoText').value
+      };
+      
+      await ThemeManager.saveTheme(themeData);
+    }
+    
+    async function loadCurrentTheme() {
+      const theme = await ThemeManager.getCurrentTheme();
+      if(theme) {
+        document.getElementById('bgColor').value = theme.bg || '#f1f3f6';
+        document.getElementById('cardColor').value = theme.card || '#ffffff';
+        document.getElementById('accentColor').value = theme.accent || '#e40046';
+        document.getElementById('textColor').value = theme.text || '#212121';
+        document.getElementById('borderColor').value = theme.border || '#e0e0e0';
+        document.getElementById('wishColor').value = theme.wish || '#ff6b6b';
+        document.getElementById('logoText').value = theme.logoText || '🛒 SANTRA MALL';
+        updatePreview();
+        alert('Current theme loaded!');
+      } else {
+        alert('No theme found in database');
+      }
+    }
+    
+    // Auto load on page open
+    window.onload = loadCurrentTheme;
+  </script>
+  <script src="theme.js"></script>
+</body>
+</html>
