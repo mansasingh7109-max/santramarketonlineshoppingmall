@@ -3,83 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Cart - SANTRA MALL</title>
+  <title>📦 My Orders - SANTRA MALL</title>
   <style>
-    :root{--accent:#b71c1c;--bg:#f1f3f6;--card:#fff}
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);padding-bottom:70px;}
-  .header{background:var(--accent);color:#fff;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
-  .header a{color:#fff;text-decoration:none;font-size:20px;}
-  .container{padding:15px;}
-  .cart-item{background:var(--card);border-radius:8px;padding:12px;margin-bottom:12px;display:flex;gap:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-  .cart-item img{width:80px;height:80px;object-fit:cover;border-radius:6px;}
-  .cart-item-info{flex:1;}
-  .cart-item-info h4{font-size:14px;margin-bottom:4px;}
-  .cart-item-info.price{color:var(--accent);font-weight:bold;font-size:16px;}
-  .qty-controls{display:flex;align-items:center;gap:10px;margin-top:8px;}
-  .qty-controls button{width:28px;height:28px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;}
-  .qty-controls span{font-weight:bold;}
-  .remove-btn{color:red;font-size:12px;cursor:pointer;margin-top:5px;display:inline-block;}
-  .order-summary{background:var(--card);border-radius:8px;padding:15px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-  .order-summary h3{margin-bottom:12px;color:var(--accent);}
-  .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px;}
-  .summary-row.total{font-weight:bold;font-size:16px;border-top:2px solid #eee;padding-top:10px;margin-top:10px;}
-  .delivery-form{background:var(--card);border-radius:8px;padding:15px;margin-top:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-  .delivery-form h3{margin-bottom:12px;color:var(--accent);}
-  .form-group{margin-bottom:12px;}
-  .form-group label{display:block;font-size:13px;margin-bottom:5px;font-weight:bold;}
-  .form-group input,.form-group textarea,.form-group select{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;}
-  .place-order-btn{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;margin-top:15px;cursor:pointer;}
-  .place-order-btn:disabled{background:#ccc;cursor:not-allowed;}
-  .empty-cart{text-align:center;padding:60px 20px;color:#999;}
-  .empty-cart div{font-size:60px;margin-bottom:10px;}
-  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-  .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
-  .nav-item.active{color:var(--accent);}
-  .nav-item div{font-size:22px;}
-  .nav-item span{font-size:11px;display:block;margin-top:2px;}
-  .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+    body{background:var(--bg);color:var(--text);padding-bottom:70px}
+  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+  .header h1{font-size:18px}
+  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+  .container{max-width:700px;margin:15px auto;padding:0 15px}
+  .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+  .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+  .order-id{font-size:14px;color:#666}
+  .order-id b{color:var(--text);font-size:16px}
+  .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+  .status-pending_otp{background:#fef3c7;color:#92400e}
+  .status-confirmed{background:#d1fae5;color:#065f46}
+  .status-shipped{background:#dbeafe;color:#1e40af}
+  .status-delivered{background:#d1fae5;color:#065f46}
+  .status-cancelled{background:#fee2e2;color:#991b1b}
+  .order-info{margin:15px 0}
+  .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+  .info-row span:first-child{color:#666}
+  .info-row span:last-child{font-weight:bold;color:var(--text)}
+  .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
+  .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
+  .item-row img{width:60px;height:60px;object-fit:contain;background:white;border-radius:6px}
+  .item-details{flex:1}
+  .item-details h4{font-size:13px;margin-bottom:4px}
+  .item-details p{font-size:12px;color:#666}
+  .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
+  .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+  .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
+  .otp-box{background:#fff3cd;border:2px dashed #ffc107;border-radius:8px;padding:20px;margin:15px 0;text-align:center}
+  .otp-box h3{color:#856404;margin-bottom:10px;font-size:16px}
+  .otp-box p{color:#856404;font-size:13px;margin-bottom:15px}
+  .otp-input{width:200px;padding:12px;font-size:20px;text-align:center;letter-spacing:10px;border:2px solid #ffc107;border-radius:8px;margin:10px auto;font-weight:bold}
+  .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+  .btn:disabled{background:#ccc;cursor:not-allowed}
+  .btn-green{background:var(--green)}
+  .btn-blue{background:var(--blue)}
+  .timeline{margin:20px 0}
+  .timeline-item{display:flex;gap:12px;margin:15px 0;opacity:0.4}
+  .timeline-item.active{opacity:1}
+  .timeline-dot{width:24px;height:24px;border-radius:50%;background:#ddd;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:white}
+  .timeline-dot.done{background:var(--green)}
+  .timeline-dot.current{background:var(--orange);animation:pulse 2s infinite}
+  .timeline-content{flex:1}
+  .timeline-content h4{font-size:14px;margin-bottom:2px}
+  .timeline-content p{font-size:12px;color:#666}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.7)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+  .empty{text-align:center;padding:60px 20px;color:#999}
+  .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+  .hide{display:none!important}
   </style>
 </head>
 <body>
 
 <div class="header">
-  <a href="index.html">←</a>
-  <h1 style="font-size:18px;">🛒 My Cart</h1>
+  <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+  <h1>📦 My Orders</h1>
 </div>
 
-<div class="container" id="cartContainer">
-  <!-- Cart items yahan aayenge -->
+<div class="container">
+  
+  <div class="search-box">
+    <input type="text" id="searchOrder" placeholder="🔍 Search by Order ID or Mobile Number" onkeyup="filterOrders()">
+  </div>
+
+  <div id="ordersList">
+    <div class="loader">⏳ Loading your orders...</div>
+  </div>
+
 </div>
 
-<div class="bottom-nav">
-  <a href="index.html" class="nav-item">
-    <div>🏠</div>
-    <span>Home</span>
-  </a>
-  <a href="categories.html" class="nav-item">
-    <div>📱</div>
-    <span>Categories</span>
-  </a>
-  <a href="cart.html" class="nav-item active">
-    <div>🛒</div>
-    <span>Cart</span>
-    <span class="cart-badge" id="cartCount">0</span>
-  </a>
-  <a href="customer-account.html" class="nav-item">
-    <div>👤</div>
-    <span>Account</span>
-  </a>
-</div>
-
-<!-- Firebase Scripts -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-// 👇 YAHAN APNI FIREBASE KEY DIRECT PASTE KAR DE
- const firebaseConfig = {
+// ===== FIREBASE CONFIG - APNI KEY DAAL ⚠️ =====
+  const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -89,223 +95,266 @@
   measurementId: "G-ZW1ZR8HETY"
 };
 
-// Firebase Initialize
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth();
 
-let cart = [];
-let currentUser = null;
+let allOrders = [];
+let currentCustomerMobile = null;
 
-// Page load hote hi cart load karo
-window.addEventListener('load', async () => {
-  await checkLogin();
-  loadCart();
+// ===== PAGE LOAD =====
+document.addEventListener('DOMContentLoaded', function() {
+  let customer = localStorage.getItem('santra_customer');
+  if(customer){
+    currentCustomerMobile = JSON.parse(customer).mobile;
+    loadOrders();
+  } else {
+    document.getElementById('ordersList').innerHTML = `
+      <div class="empty">
+        😔 Please login first to see your orders<br><br>
+        <button class="btn" onclick="window.location.href='customer-account.html'">Login Now</button>
+      </div>
+    `;
+  }
+
+  // URL se orderId check karo
+  const urlParams = new URLSearchParams(window.location.search);
+  const orderId = urlParams.get('orderId');
+  if(orderId) {
+    setTimeout(() => {
+      document.getElementById('searchOrder').value = orderId;
+      filterOrders();
+    }, 1000);
+  }
 });
 
-async function checkLogin() {
-  const userId = localStorage.getItem('currentUserId');
-  if(!userId) {
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
-    return;
-  }
-
+// ===== LOAD ALL ORDERS =====
+async function loadOrders() {
   try {
-    const userDoc = await db.collection('users').doc(userId).get();
-    if(userDoc.exists) {
-      currentUser = {id: userDoc.id,...userDoc.data()};
-    }
+    const snapshot = await db.collection('orders')
+      .where('customerMobile', '==', currentCustomerMobile)
+      .orderBy('orderDate', 'desc')
+      .get();
+    
+    allOrders = [];
+    snapshot.forEach(doc => {
+      allOrders.push({id: doc.id, ...doc.data()});
+    });
+
+    renderOrders(allOrders);
   } catch(error) {
-    console.error('User fetch error:', error);
+    console.error('Error:', error);
+    document.getElementById('ordersList').innerHTML = `
+      <div class="empty">❌ Error loading orders: ${error.message}</div>
+    `;
   }
 }
 
-function loadCart() {
-  const userId = localStorage.getItem('currentUserId');
-  cart = JSON.parse(localStorage.getItem('cart') || '[]').filter(c => c.uid == userId);
-
-  const container = document.getElementById('cartContainer');
-
-  if(cart.length === 0) {
+// ===== RENDER ORDERS =====
+function renderOrders(orders) {
+  let container = document.getElementById('ordersList');
+  
+  if(orders.length === 0) {
     container.innerHTML = `
-      <div class="empty-cart">
-        <div>🛒</div>
-        <p>Your cart is empty</p>
-        <button onclick="window.location.href='index.html'" style="margin-top:15px;padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Shop Now</button>
+      <div class="empty">
+        📦 No orders found<br><br>
+        <button class="btn" onclick="window.location.href='index.html'">Start Shopping</button>
       </div>
     `;
-    updateCartCount();
     return;
   }
 
-  let subtotal = 0;
-  let cartHtml = '';
+  container.innerHTML = orders.map(order => {
+    const statusClass = `status-${order.status.toLowerCase().replace(' ', '_')}`;
+    const statusText = getStatusText(order.status);
+    
+    let otpSection = '';
+    if(order.status === 'pending_otp') {
+      otpSection = `
+        <div class="otp-box">
+          <h3>🔐 OTP Verification Required</h3>
+          <p>Admin ne aapke WhatsApp pe OTP bheja hai. Yahan enter karein:</p>
+          <input type="text" class="otp-input" id="otp_${order.id}" maxlength="6" placeholder="000000">
+          <button class="btn btn-green" onclick="verifyOTP('${order.id}', '${order.orderId}')">✅ Verify OTP</button>
+          <p style="font-size:11px;margin-top:10px;color:#999">OTP nahi mila? Admin se contact karein</p>
+        </div>
+      `;
+    }
 
-  cart.forEach((item, index) => {
-    const itemTotal = item.price * item.qty;
-    subtotal += itemTotal;
-    cartHtml += `
-      <div class="cart-item">
-        <img src="${item.img}" alt="${item.name}">
-        <div class="cart-item-info">
+    let itemsHTML = order.items.map(item => `
+      <div class="item-row">
+        <img src="${item.image || 'https://via.placeholder.com/60x60'}" onerror="this.src='https://via.placeholder.com/60x60'">
+        <div class="item-details">
           <h4>${item.name}</h4>
-          <div class="price">₹${item.price} x ${item.qty} = ₹${itemTotal}</div>
-          <div class="qty-controls">
-            <button onclick="updateQty(${index}, -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="updateQty(${index}, 1)">+</button>
-          </div>
-          <span class="remove-btn" onclick="removeItem(${index})">🗑️ Remove</span>
+          <p>Qty: ${item.qty} × ₹${item.price} = ₹${item.price * item.qty}</p>
+          <p style="font-size:11px;color:#999">Code: ${item.code}</p>
         </div>
       </div>
+    `).join('');
+
+    return `
+      <div class="order-card" id="order_${order.id}">
+        <div class="order-header">
+          <div class="order-id">Order ID: <b>${order.orderId}</b></div>
+          <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+
+        ${otpSection}
+
+        <div class="order-info">
+          <div class="info-row">
+            <span>Order Date:</span>
+            <span>${order.orderDateString || 'N/A'}</span>
+          </div>
+          <div class="info-row">
+            <span>Customer:</span>
+            <span>${order.customerName}</span>
+          </div>
+          <div class="info-row">
+            <span>Mobile:</span>
+            <span>${order.customerMobile}</span>
+          </div>
+          <div class="info-row">
+            <span>Payment:</span>
+            <span>${order.paymentMode}</span>
+          </div>
+          <div class="info-row">
+            <span>Delivery Address:</span>
+            <span style="text-align:right;max-width:60%">${order.customerAddress}</span>
+          </div>
+        </div>
+
+        <div class="items-list">
+          <h4 style="margin-bottom:10px;font-size:14px">📦 Order Items (${order.items.length})</h4>
+          ${itemsHTML}
+        </div>
+
+        <div class="total-section">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span>₹${order.subtotal}</span>
+          </div>
+          <div class="total-row">
+            <span>Delivery:</span>
+            <span style="color:#10b981">${order.delivery === 0 ? 'FREE' : '₹' + order.delivery}</span>
+          </div>
+          <div class="total-row grand-total">
+            <span>Total Amount:</span>
+            <span>₹${order.totalAmount}</span>
+          </div>
+        </div>
+
+        ${getTimeline(order.status)}
+
+        ${order.status === 'pending_otp' ? '' : `
+          <button class="btn btn-blue" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>
+        `}
+      </div>
     `;
-  });
+  }).join('');
+}
 
-  const delivery = 49;
-  const total = subtotal + delivery;
+// ===== STATUS TEXT =====
+function getStatusText(status) {
+  const statusMap = {
+    'pending_otp': '⏳ OTP Pending',
+    'confirmed': '✅ Confirmed',
+    'shipped': '🚚 Shipped',
+    'delivered': '📦 Delivered',
+    'cancelled': '❌ Cancelled'
+  };
+  return statusMap[status] || status;
+}
 
-  cartHtml += `
-    <div class="order-summary">
-      <h3>Order Summary</h3>
-      <div class="summary-row">
-        <span>Subtotal:</span>
-        <span>₹${subtotal}</span>
-      </div>
-      <div class="summary-row">
-        <span>Delivery:</span>
-        <span>₹${delivery}</span>
-      </div>
-      <div class="summary-row total">
-        <span>Total:</span>
-        <span>₹${total}</span>
-      </div>
-    </div>
+// ===== TIMELINE =====
+function getTimeline(status) {
+  const steps = [
+    {key: 'pending_otp', label: 'Order Placed', desc: 'Waiting for OTP verification'},
+    {key: 'confirmed', label: 'Confirmed', desc: 'Order confirmed by admin'},
+    {key: 'shipped', label: 'Shipped', desc: 'Out for delivery'},
+    {key: 'delivered', label: 'Delivered', desc: 'Order delivered successfully'}
+  ];
 
-    <div class="delivery-form">
-      <h3>Delivery Details</h3>
-      <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" id="custName" value="${currentUser?.name || ''}" placeholder="Enter your name">
-      </div>
-      <div class="form-group">
-        <label>Mobile Number *</label>
-        <input type="tel" id="custMobile" value="${currentUser?.mobile || ''}" placeholder="10 digit mobile" maxlength="10">
-      </div>
-      <div class="form-group">
-        <label>Email (Optional)</label>
-        <input type="email" id="custEmail" value="${currentUser?.email || ''}" placeholder="email@example.com">
-      </div>
-      <div class="form-group">
-        <label>Complete Address *</label>
-        <textarea id="custAddress" rows="3" placeholder="House no, Street, Area, City, Pincode">${currentUser?.address || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Payment Mode *</label>
-        <select id="paymentMode">
-          <option value="COD">Cash on Delivery</option>
-          <option value="Online">Online Payment</option>
-        </select>
-      </div>
-      <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">📦 Place Order</button>
+  const currentIndex = steps.findIndex(s => s.key === status);
+  
+  return `
+    <div class="timeline">
+      <h4 style="margin-bottom:15px;font-size:14px">📍 Order Timeline</h4>
+      ${steps.map((step, idx) => {
+        let dotClass = '';
+        if(idx < currentIndex) dotClass = 'done';
+        else if(idx === currentIndex) dotClass = 'current';
+        
+        let icon = idx < currentIndex ? '✓' : (idx === currentIndex ? '•' : '');
+        
+        return `
+          <div class="timeline-item ${idx <= currentIndex ? 'active' : ''}">
+            <div class="timeline-dot ${dotClass}">${icon}</div>
+            <div class="timeline-content">
+              <h4>${step.label}</h4>
+              <p>${step.desc}</p>
+            </div>
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
-
-  container.innerHTML = cartHtml;
-  updateCartCount();
 }
 
-function updateQty(index, change) {
-  cart[index].qty += change;
-  if(cart[index].qty <= 0) {
-    cart.splice(index, 1);
-  }
-  saveCart();
-  loadCart();
-}
-
-function removeItem(index) {
-  if(confirm('Remove this item?')) {
-    cart.splice(index, 1);
-    saveCart();
-    loadCart();
-  }
-}
-
-function saveCart() {
-  const userId = localStorage.getItem('currentUserId');
-  let allCart = JSON.parse(localStorage.getItem('cart') || '[]');
-  allCart = allCart.filter(c => c.uid!= userId);
-  allCart = allCart.concat(cart);
-  localStorage.setItem('cart', JSON.stringify(allCart));
-}
-
-function updateCartCount() {
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').innerText = count;
-}
-
-async function placeOrder() {
-  if(typeof db === 'undefined') {
-    return alert('❌ Database connect nahi hua. Firebase config check karo');
+// ===== VERIFY OTP =====
+async function verifyOTP(docId, orderId) {
+  const otpInput = document.getElementById(`otp_${docId}`);
+  const enteredOTP = otpInput.value.trim();
+  
+  if(!enteredOTP || enteredOTP.length !== 6) {
+    alert('❌ Please enter 6-digit OTP');
+    return;
   }
 
-  const name = document.getElementById('custName').value.trim();
-  const mobile = document.getElementById('custMobile').value.trim();
-  const email = document.getElementById('custEmail').value.trim();
-  const address = document.getElementById('custAddress').value.trim();
-  const payment = document.getElementById('paymentMode').value;
-
-  if(!name ||!mobile ||!address) {
-    return alert('❌ Please fill all required fields');
-  }
-  if(mobile.length!== 10) {
-    return alert('❌ Mobile number must be 10 digits');
-  }
-  if(cart.length === 0) {
-    return alert('❌ Cart is empty');
-  }
-
-  const btn = document.getElementById('placeOrderBtn');
-  btn.innerText = '⏳ Placing Order...';
-  btn.disabled = true;
-
+  // Yahan admin panel se OTP check karna hai
+  // Abhi ke liye simple check - admin panel me OTP save hoga
   try {
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const delivery = 49;
-    const total = subtotal + delivery;
-
-    const orderData = {
-      uid: currentUser?.id || localStorage.getItem('currentUserId'),
-      customerName: name,
-      mobile: mobile,
-      email: email,
-      address: address,
-      paymentMode: payment,
-      items: cart,
-      subtotal: subtotal,
-      delivery: delivery,
-      total: total,
-      status: 'Placed',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    await db.collection('orders').add(orderData);
-
-    cart = [];
-    saveCart();
-
-    alert('✅ Order Placed Successfully!');
-    window.location.href = 'index.html';
-
+    const orderDoc = await db.collection('orders').doc(docId).get();
+    const orderData = orderDoc.data();
+    
+    if(orderData.otp === enteredOTP || enteredOTP === '123456') { // 123456 = test OTP
+      await db.collection('orders').doc(docId).update({
+        status: 'confirmed',
+        otpVerifiedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      alert('✅ OTP Verified! Order Confirmed');
+      loadOrders();
+    } else {
+      alert('❌ Invalid OTP! Please check and try again');
+      otpInput.value = '';
+    }
   } catch(error) {
-    console.error(error);
-    alert('❌ Error: ' + error.message);
-    btn.innerText = '📦 Place Order';
-    btn.disabled = false;
+    console.error('OTP Error:', error);
+    alert('❌ Error verifying OTP: ' + error.message);
   }
+}
+
+// ===== SEARCH/FILTER ORDERS =====
+function filterOrders() {
+  const searchTerm = document.getElementById('searchOrder').value.toLowerCase().trim();
+  
+  if(!searchTerm) {
+    renderOrders(allOrders);
+    return;
+  }
+
+  const filtered = allOrders.filter(order => 
+    order.orderId.toLowerCase().includes(searchTerm) ||
+    order.customerMobile.includes(searchTerm)
+  );
+  
+  renderOrders(filtered);
+}
+
+// ===== DOWNLOAD INVOICE - BASIC =====
+function downloadInvoice(docId) {
+  alert('📄 Invoice download feature coming soon!\n\nOrder ID: ' + docId);
+  // Yahan PDF generate kar sakte hai jsPDF use karke
 }
 </script>
 
