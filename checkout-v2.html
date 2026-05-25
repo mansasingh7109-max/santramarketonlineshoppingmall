@@ -11,9 +11,31 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-  <!-- Tere Firebase Keys - s small hai dhyan rakhna -->
-  <script src="secrets.js"></script>
   <script>
+    // 👇 YAHAN APNI FIREBASE KEY DIRECT PASTE KAR
+      const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+    // Firebase Initialize
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // 👇 YAHAN EMAILJS KEY DAAL - Agar use kar rahi hai to
+    const EMAILJS_CONFIG = {
+      PUBLIC_KEY: "your_emailjs_public_key", // ← Teri EmailJS Key
+      SERVICE_ID: "your_service_id",
+      TEMPLATE_ID: "your_template_id"
+    };
     emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
   </script>
 
@@ -280,7 +302,7 @@
     }
 
     function loadWishlist() {
-       wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+      wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
       wishlist = wishlist.map(item => ({...item, qty: item.qty || 1}));
       renderWishlist();
       updateCounts();
@@ -369,6 +391,10 @@
     }
 
     async function placeOrderWithOTPRequest() {
+      if(typeof db === 'undefined') {
+        return alert('❌ Database connect nahi hua. Firebase config check karo');
+      }
+
       const name = document.getElementById('custName').value.trim();
       const mobile = document.getElementById('custMobile').value.trim();
       const email = document.getElementById('custEmail').value.trim();
