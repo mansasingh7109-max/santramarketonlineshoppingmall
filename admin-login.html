@@ -7,29 +7,24 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script>
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    // ✅ FIX 1: Sabse upar declare karo
+    const ADMIN_EMAIL = "mansasingh7109@gmail.com";
+    
+    // ✅ FIX 2: FIREBASE CONFIG - YAHAN APNI ASLI KEYS DAAL
+         const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-  };
-    
+};
+
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const ADMIN_EMAIL = "mansasingh7109@gmail.com";
 
-    // ✅ LOOP FIX: Agar pehle se login hai to turant admin.html bhejo
-    auth.onAuthStateChanged(user => {
-      if(user && user.email === ADMIN_EMAIL) {
-        window.location.href = 'admin.html';
-      }
-    });
-
-    // ✅ LOGIN - Loop Fix
+    // ✅ Auto-login hata diya - ab loop nahi marega
     function adminLogin() {
       let email = document.getElementById('email').value.trim();
       let pass = document.getElementById('pass').value;
@@ -48,7 +43,10 @@
 
       auth.signInWithEmailAndPassword(email, pass)
       .then(() => {
-          window.location.href = 'admin.html';
+          showMsg('✅ Login Successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = 'admin.html'; // ✅ Sahi dashboard pe jayega
+          }, 800);
       })
       .catch(e => {
           document.getElementById('loginBtn').disabled = false;
@@ -57,7 +55,6 @@
       });
     }
 
-    // ✅ FORGOT PASSWORD
     function forgotPass() {
       let email = document.getElementById('email').value.trim();
       if(!email) {
@@ -65,26 +62,28 @@
         return;
       }
       if(email !== ADMIN_EMAIL) {
-        showMsg('Sirf admin ka email', 'error');
+        showMsg('Sirf admin ka email: mansasingh7109@gmail.com', 'error');
         return;
       }
 
+      document.getElementById('forgotBtn').disabled = true;
       auth.sendPasswordResetEmail(email)
       .then(() => {
-          showMsg('✅ Password reset link bhej diya! Gmail check karo: ' + email, 'success');
+          showMsg('✅ Password reset link bhej diya! Gmail inbox/spam check karo', 'success');
+          document.getElementById('forgotBtn').disabled = false;
         })
-      .catch(e => showMsg('Error: ' + e.message, 'error'));
+      .catch(e => {
+        showMsg('Error: ' + e.message, 'error');
+        document.getElementById('forgotBtn').disabled = false;
+      });
     }
 
-    // Message Box Function
     function showMsg(text, type) {
       let msgBox = document.getElementById('msgBox');
       msgBox.innerText = text;
       msgBox.className = 'msg-box ' + type;
       msgBox.style.display = 'block';
-      setTimeout(() => {
-        msgBox.style.display = 'none';
-      }, 5000);
+      setTimeout(() => { msgBox.style.display = 'none'; }, 6000);
     }
   </script>
   <style>
@@ -99,7 +98,7 @@
     button{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:10px 0;font-size:16px;}
     button:hover{opacity:0.9;}
     button:disabled{background:#999;cursor:not-allowed;}
-    .forgot{color:#3b82f6;cursor:pointer;text-align:center;margin-top:15px;font-size:14px;display:block;text-decoration:none;}
+    .forgot{color:#3b82f6;cursor:pointer;text-align:center;margin-top:15px;font-size:14px;display:block;text-decoration:none;background:none;border:none;width:auto;padding:0;margin:15px auto;}
     .forgot:hover{text-decoration:underline;}
     .back-link{color:#6b7280;text-align:center;margin-top:10px;font-size:14px;display:block;text-decoration:none;}
     .back-link:hover{color:#e40046;}
@@ -112,7 +111,7 @@
     <input type="email" id="email" placeholder="Admin Email" value="mansasingh7109@gmail.com">
     <input type="password" id="pass" placeholder="Password">
     <button id="loginBtn" onclick="adminLogin()">Login</button>
-    <a class="forgot" onclick="forgotPass()">🔒 Forgot Password?</a>
+    <button class="forgot" id="forgotBtn" onclick="forgotPass()">🔒 Forgot Password?</button>
     <a href="index.html" class="back-link">← Back to Website</a>
   </div>
 </body>
