@@ -8,56 +8,59 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px}
-  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .container{max-width:700px;margin:15px auto;padding:0 15px}
-  .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
-  .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
-  .order-id{font-size:14px;color:#666}
-  .order-id b{color:var(--text);font-size:16px}
-  .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
-  .status-pending_otp{background:#fef3c7;color:#92400e}
-  .status-confirmed{background:#d1fae5;color:#065f46}
-  .status-shipped{background:#dbeafe;color:#1e40af}
-  .status-delivered{background:#d1fae5;color:#065f46}
-  .status-cancelled{background:#fee2e2;color:#991b1b}
-  .order-info{margin:15px 0}
-  .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-  .info-row span:first-child{color:#666}
-  .info-row span:last-child{font-weight:bold;color:var(--text)}
-  .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
-  .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
-  .item-row img{width:60px;height:60px;object-fit:contain;background:white;border-radius:6px}
-  .item-details{flex:1}
-  .item-details h4{font-size:13px;margin-bottom:4px}
-  .item-details p{font-size:12px;color:#666}
-  .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
-  .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
-  .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
-  .otp-box{background:#fff3cd;border:2px dashed #ffc107;border-radius:8px;padding:20px;margin:15px 0;text-align:center}
-  .otp-box h3{color:#856404;margin-bottom:10px;font-size:16px}
-  .otp-box p{color:#856404;font-size:13px;margin-bottom:15px}
-  .otp-input{width:200px;padding:12px;font-size:20px;text-align:center;letter-spacing:10px;border:2px solid #ffc107;border-radius:8px;margin:10px auto;font-weight:bold}
-  .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-  .btn:disabled{background:#ccc;cursor:not-allowed}
-  .btn-green{background:var(--green)}
-  .btn-blue{background:var(--blue)}
-  .timeline{margin:20px 0}
-  .timeline-item{display:flex;gap:12px;margin:15px 0;opacity:0.4}
-  .timeline-item.active{opacity:1}
-  .timeline-dot{width:24px;height:24px;border-radius:50%;background:#ddd;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:white}
-  .timeline-dot.done{background:var(--green)}
-  .timeline-dot.current{background:var(--orange);animation:pulse 2s infinite}
-  .timeline-content{flex:1}
-  .timeline-content h4{font-size:14px;margin-bottom:2px}
-  .timeline-content p{font-size:12px;color:#666}
-  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.7)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
-  .hide{display:none!important}
+.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.header h1{font-size:18px}
+.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+.container{max-width:700px;margin:15px auto;padding:0 15px}
+.search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+.order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+.order-id{font-size:14px;color:#666}
+.order-id b{color:var(--text);font-size:16px}
+.status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+.status-pending_otp{background:#fef3c7;color:#92400e}
+.status-confirmed{background:#d1fae5;color:#065f46}
+.status-shipped{background:#dbeafe;color:#1e40af}
+.status-delivered{background:#d1fae5;color:#065f46}
+.status-cancelled{background:#fee2e2;color:#991b1b}
+.order-info{margin:15px 0}
+.info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+.info-row span:first-child{color:#666}
+.info-row span:last-child{font-weight:bold;color:var(--text)}
+.items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
+.item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
+.item-row img{width:60px;height:60px;object-fit:contain;background:white;border-radius:6px}
+.item-details{flex:1}
+.item-details h4{font-size:13px;margin-bottom:4px}
+.item-details p{font-size:12px;color:#666;margin:2px 0}
+.item-details a{font-size:11px;color:var(--blue);text-decoration:none;font-weight:bold}
+.total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
+.total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+.grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
+.otp-box{background:#fff3cd;border:2px dashed #ffc107;border-radius:8px;padding:20px;margin:15px 0;text-align:center}
+.otp-box h3{color:#856404;margin-bottom:10px;font-size:16px}
+.otp-box p{color:#856404;font-size:13px;margin-bottom:15px}
+.otp-input{width:200px;padding:12px;font-size:20px;text-align:center;letter-spacing:10px;border:2px solid #ffc107;border-radius:8px;margin:10px auto;font-weight:bold}
+.btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+.btn:disabled{background:#ccc;cursor:not-allowed}
+.btn-green{background:var(--green)}
+.btn-blue{background:var(--blue)}
+.timeline{margin:20px 0}
+.timeline-item{display:flex;gap:12px;margin:15px 0;opacity:0.4}
+.timeline-item.active{opacity:1}
+.timeline-dot{width:24px;height:24px;border-radius:50%;background:#ddd;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:white}
+.timeline-dot.done{background:var(--green)}
+.timeline-dot.current{background:var(--orange);animation:pulse 2s infinite}
+.timeline-content{flex:1}
+.timeline-content h4{font-size:14px;margin-bottom:2px}
+.timeline-content p{font-size:12px;color:#666}
+ @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.7)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+.empty{text-align:center;padding:60px 20px;color:#999}
+.loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+.hide{display:none!important}
+.address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
+.address-box p{font-size:13px;margin:4px 0;color:#1e40af}
   </style>
 </head>
 <body>
@@ -68,7 +71,7 @@
 </div>
 
 <div class="container">
-  
+
   <div class="search-box">
     <input type="text" id="searchOrder" placeholder="🔍 Search by Order ID or Mobile Number" onkeyup="filterOrders()">
   </div>
@@ -85,6 +88,7 @@
 
 <script>
 // ===== FIREBASE CONFIG - APNI KEY DAAL ⚠️ =====
+
   const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -131,13 +135,13 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadOrders() {
   try {
     const snapshot = await db.collection('orders')
-      .where('customerMobile', '==', currentCustomerMobile)
-      .orderBy('orderDate', 'desc')
-      .get();
-    
+     .where('customerMobile', '==', currentCustomerMobile)
+     .orderBy('orderDate', 'desc')
+     .get();
+
     allOrders = [];
     snapshot.forEach(doc => {
-      allOrders.push({id: doc.id, ...doc.data()});
+      allOrders.push({id: doc.id,...doc.data()});
     });
 
     renderOrders(allOrders);
@@ -149,10 +153,10 @@ async function loadOrders() {
   }
 }
 
-// ===== RENDER ORDERS =====
+// ===== RENDER ORDERS - UPDATED 26/5/2026 - ALL FIELDS =====
 function renderOrders(orders) {
   let container = document.getElementById('ordersList');
-  
+
   if(orders.length === 0) {
     container.innerHTML = `
       <div class="empty">
@@ -166,7 +170,7 @@ function renderOrders(orders) {
   container.innerHTML = orders.map(order => {
     const statusClass = `status-${order.status.toLowerCase().replace(' ', '_')}`;
     const statusText = getStatusText(order.status);
-    
+
     let otpSection = '';
     if(order.status === 'pending_otp') {
       otpSection = `
@@ -182,14 +186,29 @@ function renderOrders(orders) {
 
     let itemsHTML = order.items.map(item => `
       <div class="item-row">
-        <img src="${item.image || 'https://via.placeholder.com/60x60'}" onerror="this.src='https://via.placeholder.com/60x60'">
+        <img src="${item.imageUrl || item.image || 'https://via.placeholder.com/60x60'}" onerror="this.src='https://via.placeholder.com/60x60'">
         <div class="item-details">
           <h4>${item.name}</h4>
           <p>Qty: ${item.qty} × ₹${item.price} = ₹${item.price * item.qty}</p>
-          <p style="font-size:11px;color:#999">Code: ${item.code}</p>
+          <p>Code: ${item.product_code || item.id} | Category: ${item.category || 'General'}</p>
+          <p>Series: ${item.serial_no || 'N/A'}</p>
+          ${item.product_link? `<a href="${item.product_link}" target="_blank">🔗 View Product</a>` : ''}
         </div>
       </div>
     `).join('');
+
+    // Address Box with Landmark, Pincode, City, State
+    let addressBox = '';
+    if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
+      addressBox = `
+        <div class="address-box">
+          ${order.customerLandmark? `<p><b>📍 Landmark:</b> ${order.customerLandmark}</p>` : ''}
+          ${order.customerPincode? `<p><b>📮 Pincode:</b> ${order.customerPincode}</p>` : ''}
+          ${order.customerCity? `<p><b>🏙️ City:</b> ${order.customerCity}</p>` : ''}
+          ${order.customerState? `<p><b>🗺️ State:</b> ${order.customerState}</p>` : ''}
+        </div>
+      `;
+    }
 
     return `
       <div class="order-card" id="order_${order.id}">
@@ -213,6 +232,11 @@ function renderOrders(orders) {
             <span>Mobile:</span>
             <span>${order.customerMobile}</span>
           </div>
+          ${order.customerEmail? `
+          <div class="info-row">
+            <span>Email:</span>
+            <span>${order.customerEmail}</span>
+          </div>` : ''}
           <div class="info-row">
             <span>Payment:</span>
             <span>${order.paymentMode}</span>
@@ -222,6 +246,8 @@ function renderOrders(orders) {
             <span style="text-align:right;max-width:60%">${order.customerAddress}</span>
           </div>
         </div>
+
+        ${addressBox}
 
         <div class="items-list">
           <h4 style="margin-bottom:10px;font-size:14px">📦 Order Items (${order.items.length})</h4>
@@ -235,7 +261,7 @@ function renderOrders(orders) {
           </div>
           <div class="total-row">
             <span>Delivery:</span>
-            <span style="color:#10b981">${order.delivery === 0 ? 'FREE' : '₹' + order.delivery}</span>
+            <span style="color:#10b981">${order.delivery === 0? 'FREE' : '₹' + order.delivery}</span>
           </div>
           <div class="total-row grand-total">
             <span>Total Amount:</span>
@@ -245,7 +271,7 @@ function renderOrders(orders) {
 
         ${getTimeline(order.status)}
 
-        ${order.status === 'pending_otp' ? '' : `
+        ${order.status === 'pending_otp'? '' : `
           <button class="btn btn-blue" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>
         `}
       </div>
@@ -275,7 +301,7 @@ function getTimeline(status) {
   ];
 
   const currentIndex = steps.findIndex(s => s.key === status);
-  
+
   return `
     <div class="timeline">
       <h4 style="margin-bottom:15px;font-size:14px">📍 Order Timeline</h4>
@@ -283,11 +309,11 @@ function getTimeline(status) {
         let dotClass = '';
         if(idx < currentIndex) dotClass = 'done';
         else if(idx === currentIndex) dotClass = 'current';
-        
-        let icon = idx < currentIndex ? '✓' : (idx === currentIndex ? '•' : '');
-        
+
+        let icon = idx < currentIndex? '✓' : (idx === currentIndex? '•' : '');
+
         return `
-          <div class="timeline-item ${idx <= currentIndex ? 'active' : ''}">
+          <div class="timeline-item ${idx <= currentIndex? 'active' : ''}">
             <div class="timeline-dot ${dotClass}">${icon}</div>
             <div class="timeline-content">
               <h4>${step.label}</h4>
@@ -304,24 +330,22 @@ function getTimeline(status) {
 async function verifyOTP(docId, orderId) {
   const otpInput = document.getElementById(`otp_${docId}`);
   const enteredOTP = otpInput.value.trim();
-  
-  if(!enteredOTP || enteredOTP.length !== 6) {
+
+  if(!enteredOTP || enteredOTP.length!== 6) {
     alert('❌ Please enter 6-digit OTP');
     return;
   }
 
-  // Yahan admin panel se OTP check karna hai
-  // Abhi ke liye simple check - admin panel me OTP save hoga
   try {
     const orderDoc = await db.collection('orders').doc(docId).get();
     const orderData = orderDoc.data();
-    
+
     if(orderData.otp === enteredOTP || enteredOTP === '123456') { // 123456 = test OTP
       await db.collection('orders').doc(docId).update({
         status: 'confirmed',
         otpVerifiedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      
+
       alert('✅ OTP Verified! Order Confirmed');
       loadOrders();
     } else {
@@ -337,24 +361,23 @@ async function verifyOTP(docId, orderId) {
 // ===== SEARCH/FILTER ORDERS =====
 function filterOrders() {
   const searchTerm = document.getElementById('searchOrder').value.toLowerCase().trim();
-  
+
   if(!searchTerm) {
     renderOrders(allOrders);
     return;
   }
 
-  const filtered = allOrders.filter(order => 
+  const filtered = allOrders.filter(order =>
     order.orderId.toLowerCase().includes(searchTerm) ||
     order.customerMobile.includes(searchTerm)
   );
-  
+
   renderOrders(filtered);
 }
 
 // ===== DOWNLOAD INVOICE - BASIC =====
 function downloadInvoice(docId) {
   alert('📄 Invoice download feature coming soon!\n\nOrder ID: ' + docId);
-  // Yahan PDF generate kar sakte hai jsPDF use karke
 }
 </script>
 

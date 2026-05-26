@@ -8,67 +8,73 @@
     :root{--accent:#e40046;--text:#212121;--green:#10b981;--blue:#3b82f6;--orange:#f59e0b}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:#f1f3f6;padding-bottom:85px}
- .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
- .back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
- .header h1{font-size:18px;flex:1}
- .share-btn{background:rgba(255,255,255,0.2);border:none;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:18px}
- .container{max-width:600px;margin:0 auto;background:white}
- .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
- .slider-container{width:100%;height:100%;position:relative}
- .slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
- .slide-img.active{display:block}
- .slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:45px;height:45px;border-radius:50%;font-size:28px;cursor:pointer;z-index:10;font-weight:bold}
- .slide-btn:hover{background:rgba(0,0,0,0.8)}
- .slide-btn.prev{left:10px}
- .slide-btn.next{right:10px}
- .slide-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
- .dot{width:10px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;cursor:pointer;border:2px solid white}
- .dot.active{background:white;width:25px;border-radius:5px}
- .img-count{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.7);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
- .img-badge{position:absolute;top:15px;left:15px;background:var(--green);color:white;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
- .details{padding:20px}
- .product-name{font-size:22px;margin-bottom:8px;font-weight:bold;color:var(--text);line-height:1.3}
- .product-meta{color:#666;font-size:13px;margin-bottom:15px;display:flex;gap:15px;flex-wrap:wrap}
- .product-meta span{background:#f3f4f6;padding:4px 10px;border-radius:4px}
- .price-box{display:flex;align-items:center;gap:12px;margin:20px 0;padding:15px;background:#fff5f7;border-radius:8px}
- .price{font-size:34px;font-weight:bold;color:var(--accent)}
- .mrp{text-decoration:line-through;color:#999;font-size:20px}
- .discount{background:var(--green);color:white;padding:5px 12px;border-radius:6px;font-size:14px;font-weight:bold}
- .section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
- .section h3{font-size:16px;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
- .variant-grid{display:flex;flex-wrap:wrap;gap:10px}
- .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s}
- .variant-btn:hover{border-color:var(--accent);background:#fff0f5}
- .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent);box-shadow:0 0 0 3px rgba(228,0,70,0.1)}
- .variant-btn:disabled{opacity:0.4;cursor:not-allowed;text-decoration:line-through}
- .variant-btn.variant-price{font-size:11px;display:block;color:#666;margin-top:2px}
- .variant-btn.active.variant-price{color:var(--accent)}
- .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
- .features{background:linear-gradient(135deg,#f9f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
- .features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
- .features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
- .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
- .btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;transition:all 0.3s}
- .btn:active{transform:scale(0.95)}
- .btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
- .btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
- .btn-buy{background:var(--accent);color:white}
- .btn:disabled{opacity:0.5;cursor:not-allowed}
- .loader{text-align:center;padding:100px 20px;color:var(--accent);font-size:18px}
- .error{text-align:center;padding:100px 20px}
- .error h2{color:#ef4444;margin-bottom:10px}
- .error p{color:#666;margin-bottom:20px}
- .qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9f9;border-radius:8px}
- .qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
- .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
- .similar-products{padding:20px;background:white;margin-top:15px}
- .similar-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}
- .similar-card{background:#f9f9f9;border-radius:8px;overflow:hidden;cursor:pointer}
- .similar-card img{width:100%;height:120px;object-fit:cover}
- .similar-info{padding:10px}
- .similar-info h4{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden}
- .similar-price{color:var(--accent);font-weight:bold;font-size:14px}
- .selected-variant-info{background:#e8f5e9;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid var(--green);font-size:14px}
+.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
+.header h1{font-size:18px;flex:1}
+.share-btn{background:rgba(255,255,255,0.2);border:none;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:18px}
+.container{max-width:600px;margin:0 auto;background:white}
+.image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
+.slider-container{width:100%;height:100%;position:relative}
+.slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
+.slide-img.active{display:block}
+.slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:45px;height:45px;border-radius:50%;font-size:28px;cursor:pointer;z-index:10;font-weight:bold}
+.slide-btn:hover{background:rgba(0,0,0,0.8)}
+.slide-btn.prev{left:10px}
+.slide-btn.next{right:10px}
+.slide-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.dot{width:10px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;cursor:pointer;border:2px solid white}
+.dot.active{background:white;width:25px;border-radius:5px}
+.img-count{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.7);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
+.img-badge{position:absolute;top:15px;left:15px;background:var(--green);color:white;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
+.details{padding:20px}
+.product-name{font-size:22px;margin-bottom:8px;font-weight:bold;color:var(--text);line-height:1.3}
+.product-meta{color:#666;font-size:13px;margin-bottom:15px;display:flex;gap:15px;flex-wrap:wrap}
+.product-meta span{background:#f3f4f6;padding:4px 10px;border-radius:4px}
+.price-box{display:flex;align-items:center;gap:12px;margin:20px 0;padding:15px;background:#fff5f7;border-radius:8px}
+.price{font-size:34px;font-weight:bold;color:var(--accent)}
+.mrp{text-decoration:line-through;color:#999;font-size:20px}
+.discount{background:var(--green);color:white;padding:5px 12px;border-radius:6px;font-size:14px;font-weight:bold}
+.section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
+.section h3{font-size:16px;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
+.variant-grid{display:flex;flex-wrap:wrap;gap:10px}
+.variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
+.variant-btn:hover:not(:disabled){border-color:var(--accent);background:#fff0f5}
+.variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent);box-shadow:0 0 0 3px rgba(228,0,70,0.1)}
+.variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5f5;border-color:#ddd;color:#aaa}
+.variant-btn:disabled::after{content:'✕';position:absolute;top:3px;right:5px;font-size:14px;color:#ef4444;font-weight:bold}
+.variant-price{font-size:11px;display:block;color:#666;margin-top:2px;font-weight:normal}
+.variant-btn.active.variant-price{color:var(--accent)}
+.variant-stock{font-size:10px;margin-top:2px;font-weight:normal;display:block}
+.variant-stock.in-stock{color:var(--green)}
+.variant-stock.out-stock{color:#ef4444;font-weight:bold}
+.desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
+.features{background:linear-gradient(135deg,#f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
+.features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
+.features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
+.action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
+.btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;transition:all 0.3s}
+.btn:active:not(:disabled){transform:scale(0.95)}
+.btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
+.btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
+.btn-buy{background:var(--accent);color:white}
+.btn:disabled{opacity:0.5;cursor:not-allowed;background:#f5f5f5;color:#999;border-color:#ddd}
+.loader{text-align:center;padding:100px 20px;color:var(--accent);font-size:18px}
+.error{text-align:center;padding:100px 20px}
+.error h2{color:#ef4444;margin-bottom:10px}
+.error p{color:#666;margin-bottom:20px}
+.qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9;border-radius:8px}
+.qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
+.qty-box button:disabled{opacity:0.3;cursor:not-allowed}
+.qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
+.similar-products{padding:20px;background:white;margin-top:15px}
+.similar-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}
+.similar-card{background:#f9f9f9;border-radius:8px;overflow:hidden;cursor:pointer}
+.similar-card img{width:100%;height:120px;object-fit:cover}
+.similar-info{padding:10px}
+.similar-info h4{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden}
+.similar-price{color:var(--accent);font-weight:bold;font-size:14px}
+.selected-variant-info{background:#e8f5e9;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid var(--green);font-size:14px}
+.no-variants{text-align:center;padding:20px;color:#999;font-size:14px}
   </style>
 </head>
 <body>
@@ -85,8 +91,8 @@
 
 <div class="action-btns" id="actionBtns" style="display:none">
   <button class="btn btn-wish" onclick="addToWishlist()">😍</button>
-  <button class="btn btn-cart" onclick="addToCart()">🛒 ADD TO CART</button>
-  <button class="btn btn-buy" onclick="buyNow()">⚡ BUY NOW</button>
+  <button class="btn btn-cart" onclick="addToCart()" id="cartBtn">🛒 ADD TO CART</button>
+  <button class="btn btn-buy" onclick="buyNow()" id="buyBtn">⚡ BUY NOW</button>
 </div>
 
 <!-- FIREBASE SDK -->
@@ -94,8 +100,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-// ===== FIREBASE CONFIG - ⚠️ YAHAN APNI KEYS DAALO index.html SE =====
- const firebaseConfig = {
+// ===== FIREBASE CONFIG - ⚠️ YAHAN APNI KEYS DAALO =====
+ 
+  const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -168,72 +175,205 @@ async function loadProduct(productId) {
 function getVariantType(category) {
   const cat = (category || '').toLowerCase();
 
-  // Clothes/Fashion
   if(cat.includes('dress') || cat.includes('cloth') || cat.includes('shirt') || cat.includes('tshirt') ||
      cat.includes('jeans') || cat.includes('kurta') || cat.includes('salwar') || cat.includes('suit') ||
      cat.includes('gown') || cat.includes('saree')) {
     return { label: 'Size', icon: '👕', unit: '' };
   }
 
-  // Liquids
   if(cat.includes('oil') || cat.includes('liquid') || cat.includes('juice') || cat.includes('milk') ||
      cat.includes('water') || cat.includes('handwash') || cat.includes('shampoo') || cat.includes('soap')) {
     return { label: 'Volume', icon: '💧', unit: '' };
   }
 
-  // Weight based
   if(cat.includes('food') || cat.includes('grain') || cat.includes('rice') || cat.includes('wheat') ||
      cat.includes('dal') || cat.includes('seed') || cat.includes('sugar') || cat.includes('salt') ||
      cat.includes('flour') || cat.includes('atta')) {
     return { label: 'Weight', icon: '⚖️', unit: '' };
   }
 
-  // Electronics
   if(cat.includes('mobile') || cat.includes('laptop') || cat.includes('electronic') || cat.includes('phone')) {
     return { label: 'Storage', icon: '💾', unit: '' };
   }
 
-  // Default
+  if(cat.includes('jewellery') || cat.includes('ring') || cat.includes('bangle')) {
+    return { label: 'Size', icon: '💍', unit: '' };
+  }
+
+  if(cat.includes('plant') || cat.includes('seed')) {
+    return { label: 'Packet', icon: '🌱', unit: '' };
+  }
+
+  if(cat.includes('utensils') || cat.includes('home') || cat.includes('stationar')) {
+    return { label: 'Type', icon: '📦', unit: '' };
+  }
+
   return { label: 'Variant', icon: '📦', unit: '' };
 }
 
-// ===== RENDER PRODUCT DETAILS =====
+// ===== RENDER PRODUCT DETAILS - AUTO VARIANTS FOR ALL CATEGORIES =====
 function renderProduct(p) {
-  let images = p.images || [p.imageUrl || p.image || ''];
-  images = images.filter(img => img);
-  if(images.length === 0) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
-
-  let currentSlide = 0;
-
-  // ===== DYNAMIC VARIANTS =====
-  let variants = p.variants || p.sizes || p.size || p.volumes || p.weights || ['Default'];
-  if(typeof variants === 'string') {
-    variants = variants.split(',').map(s => s.trim());
+  let images = [];
+  if(p.images) {
+    if(Array.isArray(p.images)) {
+      images = p.images;
+    } else if(typeof p.images === 'string') {
+      images = [p.images];
+    }
+  } else if(p.imageUrl) {
+    images = [p.imageUrl];
+  } else if(p.image) {
+    images = [p.image];
   }
 
-  // If variants have price, handle object format
+  images = images.filter(img => img && img.trim()!== '');
+  if(images.length === 0) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
+
+  // ===== VARIANTS LOGIC =====
+  let variants = [];
+
+  // 1. Pehle Firebase se check karo
+  if(p.variants && Array.isArray(p.variants) && p.variants.length > 0) {
+    variants = p.variants;
+  }
+  else if(p.sizes) {
+    let sizesArray = typeof p.sizes === 'string'? p.sizes.split(',').map(s => s.trim()) : p.sizes;
+    variants = sizesArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+  }
+  else if(p.size) {
+    let sizeArray = typeof p.size === 'string'? p.size.split(',').map(s => s.trim()) : [p.size];
+    variants = sizeArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+  }
+  else if(p.volumes) {
+    let volArray = typeof p.volumes === 'string'? p.volumes.split(',').map(s => s.trim()) : p.volumes;
+    variants = volArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+  }
+  else if(p.weights) {
+    let weightArray = typeof p.weights === 'string'? p.weights.split(',').map(s => s.trim()) : p.weights;
+    variants = weightArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+  }
+  // 2. Agar Firebase me nahi hai to AUTO GENERATE karo
+  else {
+    let cat = (p.category || '').toLowerCase();
+    let autoVariants = [];
+
+    // CLOTHES - S, M, L, XL, XXL
+    if(cat.includes('dress') || cat.includes('cloth') || cat.includes('shirt') ||
+       cat.includes('tshirt') || cat.includes('jeans') || cat.includes('kurta') ||
+       cat.includes('salwar') || cat.includes('suit') || cat.includes('gown') ||
+       cat.includes('saree')) {
+      autoVariants = ['S','M','L','XL','XXL'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+    // LIQUIDS - ml, L
+    else if(cat.includes('oil') || cat.includes('liquid') || cat.includes('juice') ||
+            cat.includes('milk') || cat.includes('water') || cat.includes('handwash') ||
+            cat.includes('shampoo') || cat.includes('soap') || cat.includes('dish soap')) {
+      autoVariants = ['50ml','100ml','250ml','500ml','1L','2L','5L'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+    // FOOD/GRAINS - g, kg
+    else if(cat.includes('food') || cat.includes('grain') || cat.includes('rice') ||
+            cat.includes('wheat') || cat.includes('dal') || cat.includes('seed') ||
+            cat.includes('sugar') || cat.includes('salt') || cat.includes('flour') ||
+            cat.includes('atta')) {
+      autoVariants = ['100g','250g','500g','1kg','2kg','5kg','10kg'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+    // ELECTRONICS - Storage
+    else if(cat.includes('mobile') || cat.includes('laptop') || cat.includes('electronic') ||
+            cat.includes('phone')) {
+      autoVariants = ['64GB','128GB','256GB','512GB','1TB'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+    // JEWELLERY
+    else if(cat.includes('jewellery') || cat.includes('ring') || cat.includes('bangle')) {
+      autoVariants = ['Small','Medium','Large','XL'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+    // PLANTS/SEEDS
+    else if(cat.includes('plant') || cat.includes('seed')) {
+      autoVariants = ['1 Pack','2 Pack','5 Pack','10 Pack'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+    // UTENSILS/HOME/STATIONARY
+    else if(cat.includes('utensils') || cat.includes('home') || cat.includes('stationar')) {
+      autoVariants = ['Small','Medium','Large','XL'].map(s => ({
+        name: s,
+        price: p.price,
+        stock: 999
+      }));
+    }
+
+    variants = autoVariants;
+  }
+
   let variantType = getVariantType(p.category);
 
-  let variantHTML = variants.map(v => {
-    let variantName = typeof v === 'object'? v.name || v.size || v.volume || v.weight : v;
-    let variantPrice = typeof v === 'object'? v.price : p.price;
-    let variantStock = typeof v === 'object'? v.stock : p.stock;
+  let variantHTML = '';
 
-    return `
-      <button class="variant-btn"
-              onclick='selectVariant(${JSON.stringify(v)}, this)'
-              ${variantStock === 0? 'disabled' : ''}>
-        ${variantName}
-        ${variantPrice && variantPrice!== p.price? `<span class="variant-price">₹${variantPrice}</span>` : ''}
-      </button>
-    `;
-  }).join('');
+  if(variants.length > 0) {
+    variantHTML = variants.map((v, index) => {
+      let variantName = typeof v === 'object'? v.name || v.size || v.volume || v.weight : v;
+      let variantPrice = typeof v === 'object'? v.price : p.price;
+      let variantStock = typeof v === 'object'? v.stock : undefined;
+
+      // RULE 1: stock > 0 ya undefined = Available = Dark text
+      // RULE 2: stock = 0 = Out of stock = Blur + Disabled
+      let isAvailable = variantStock === undefined || variantStock > 0;
+      let isOutOfStock = variantStock === 0;
+
+      let stockText = '';
+      let stockClass = '';
+
+      if(isOutOfStock) {
+        stockText = 'Out of stock';
+        stockClass = 'out-stock';
+      } else if(variantStock === undefined) {
+        stockText = 'Available';
+        stockClass = 'in-stock';
+      } else {
+        stockText = variantStock + ' left';
+        stockClass = 'in-stock';
+      }
+
+      return `
+        <button class="variant-btn ${!isAvailable? 'unavailable' : ''}"
+                onclick='selectVariant(${JSON.stringify(v)}, this)'
+                ${!isAvailable? 'disabled' : ''}>
+          ${variantName}
+          ${variantPrice && variantPrice!== p.price? `<span class="variant-price">₹${variantPrice}</span>` : ''}
+          <span class="variant-stock ${stockClass}">${stockText}</span>
+        </button>
+      `;
+    }).join('');
+  } else {
+    variantHTML = '<div class="no-variants">No variants available</div>';
+  }
 
   let discount = p.mrp && p.price? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
   let productCode = p.code || p.product_code || p.sku || p.id;
   let category = p.category || 'General';
+  let seriesNo = getSeriesNumber(p.category, p.id);
 
-  // ===== IMAGE SLIDER HTML =====
   let sliderHTML = `
     <div class="image-slider-box">
       <div class="slider-container" id="imgSlider">
@@ -267,6 +407,7 @@ function renderProduct(p) {
           <span>📦 Code: ${productCode}</span>
           <span>📁 ${category}</span>
           <span>📊 Stock: ${p.stock || 'Available'}</span>
+          <span>🔖 Series: ${seriesNo}</span>
         </div>
 
         <div class="price-box">
@@ -279,16 +420,18 @@ function renderProduct(p) {
           <strong>Selected:</strong> <span id="variantText"></span>
         </div>
 
-        <div class="section">
-          <h3>${variantType.icon} Select ${variantType.label}:</h3>
-          <div class="variant-grid">${variantHTML}</div>
-        </div>
+        ${variants.length > 0? `
+          <div class="section">
+            <h3>${variantType.icon} Select ${variantType.label}:</h3>
+            <div class="variant-grid">${variantHTML}</div>
+          </div>
+        ` : ''}
 
         <div class="qty-box">
           <span style="font-weight:bold">Quantity:</span>
-          <button onclick="changeQty(-1)">-</button>
+          <button onclick="changeQty(-1)" id="qtyMinus">-</button>
           <span id="qtyDisplay">1</span>
-          <button onclick="changeQty(1)">+</button>
+          <button onclick="changeQty(1)" id="qtyPlus">+</button>
         </div>
 
         <div class="section">
@@ -317,27 +460,45 @@ function renderProduct(p) {
   window.productImages = images;
   window.currentSlideIndex = 0;
 
-  // Auto select first variant
-  if(variants.length > 0) {
-    setTimeout(() => {
-      const firstBtn = document.querySelector('.variant-btn:not(:disabled)');
-      if(firstBtn) {
-        firstBtn.click();
+  // Auto select first available variant
+  setTimeout(() => {
+    const firstBtn = document.querySelector('.variant-btn:not(:disabled)');
+    if(firstBtn) {
+      firstBtn.click();
+    } else if(variants.length > 0) {
+      document.getElementById('cartBtn').disabled = true;
+      document.getElementById('buyBtn').disabled = true;
+      document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
+      document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
+    } else {
+      let productStock = p.stock;
+      if(productStock === 0) {
+        document.getElementById('cartBtn').disabled = true;
+        document.getElementById('buyBtn').disabled = true;
+        document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
+        document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
       }
-    }, 100);
-  }
+    }
+  }, 100);
 }
 
 // ===== VARIANT SELECT =====
 function selectVariant(variant, btn) {
-  selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
+  if(btn.disabled || btn.classList.contains('unavailable')) {
+    return;
+  }
 
+  selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
   selectedVariant = selectedVariantData.name || selectedVariantData.size || selectedVariantData.volume || selectedVariantData.weight;
+
+  let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
+  if(stock <= 0) {
+    return;
+  }
 
   document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  // Update price if variant has different price
   if(selectedVariantData.price) {
     document.getElementById('displayPrice').innerText = '₹' + selectedVariantData.price;
     if(selectedVariantData.mrp) {
@@ -347,9 +508,20 @@ function selectVariant(variant, btn) {
     }
   }
 
-  // Show selected variant info
   document.getElementById('selectedVariantInfo').style.display = 'block';
-  document.getElementById('variantText').innerText = selectedVariant;
+  document.getElementById('variantText').innerText = selectedVariant + (selectedVariantData.price? ' - ₹' + selectedVariantData.price : '');
+
+  let isOutOfStock = stock <= 0;
+  document.getElementById('cartBtn').disabled = isOutOfStock;
+  document.getElementById('buyBtn').disabled = isOutOfStock;
+
+  if(isOutOfStock) {
+    document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
+    document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
+  } else {
+    document.getElementById('cartBtn').innerText = '🛒 ADD TO CART';
+    document.getElementById('buyBtn').innerText = '⚡ BUY NOW';
+  }
 }
 
 // ===== SLIDER FUNCTIONS =====
@@ -390,10 +562,16 @@ function changeQty(change) {
   document.getElementById('qtyDisplay').innerText = selectedQty;
 }
 
-// ===== ADD TO CART =====
+// ===== ADD TO CART - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY FIXED =====
 function addToCart() {
   if(!selectedVariant) {
     alert('⚠️ Please select a variant first!');
+    return;
+  }
+
+  let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
+  if(stock <= 0) {
+    alert('❌ This variant is out of stock!');
     return;
   }
 
@@ -408,7 +586,7 @@ function addToCart() {
     price: finalPrice,
     image: currentProduct.imageUrl || currentProduct.image,
     code: currentProduct.code || currentProduct.product_code || seriesNo,
-    seriesNo: seriesNo,
+    serial_no: seriesNo,
     category: currentProduct.category || 'General',
     variant: selectedVariant,
     variantType: getVariantType(currentProduct.category).label,
@@ -427,13 +605,24 @@ function addToCart() {
   alert('✅ Added to Cart! 🛒');
 }
 
-// ===== BUY NOW =====
+// ===== BUY NOW - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY FIXED =====
 function buyNow() {
+  if(!selectedVariant) {
+    alert('⚠️ Please select a variant first!');
+    return;
+  }
+
+  let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
+  if(stock <= 0) {
+    alert('❌ This variant is out of stock!');
+    return;
+  }
+
   addToCart();
   window.location.href = 'cart.html';
 }
 
-// ===== ADD TO WISHLIST =====
+// ===== ADD TO WISHLIST - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY FIXED =====
 function addToWishlist() {
   if(!selectedVariant) {
     alert('⚠️ Please select a variant first!');
@@ -450,8 +639,8 @@ function addToWishlist() {
     name: currentProduct.name,
     price: finalPrice,
     image: currentProduct.imageUrl || currentProduct.image,
-    code: currentProduct.code || seriesNo,
-    seriesNo: seriesNo,
+    code: currentProduct.code || currentProduct.product_code || seriesNo,
+    serial_no: seriesNo,
     category: currentProduct.category || 'General',
     variant: selectedVariant,
     variantType: getVariantType(currentProduct.category).label,
