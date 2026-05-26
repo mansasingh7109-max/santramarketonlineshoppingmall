@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product - Admin Panel</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Arial;padding:15px;background:#f0f2f5}
+   .card{background:white;padding:20px;border-radius:12px;max-width:700px;margin:auto;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+    h2{color:#e40046;text-align:center;margin-bottom:15px}
+    label{display:block;width:100%;padding:18px;background:#3b82f6;color:white;text-align:center;
+      border-radius:8px;font-size:16px;font-weight:bold;margin:15px 0;cursor:pointer;transition:0.2s}
+    label:hover{background:#2563eb}
+    input[type="file"]{display:none}
+    input[type="text"],input[type="number"],select,textarea{
+      width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:6px;
+      font-size:14px;font-family:Arial
+    }
+    input:focus,select:focus,textarea:focus{border-color:#3b82f6;outline:none}
+    button{width:100%;padding:14px;margin:8px 0;border:none;border-radius:6px;
+      font-weight:bold;font-size:15px;cursor:pointer;transition:0.2s}
+    button:hover:not(:disabled){transform:scale(1.02)}
+    button:disabled{background:#999!important;cursor:not-allowed;transform:scale(1)}
+   .btn-upload{background:#f59e0b;color:white}
+   .btn-save{background:#10b981;color:white}
+   .btn-reset{background:#ef4444;color:white}
+   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;
+      margin:15px 0;padding:15px;border:2px dashed #e40046;border-radius:8px;
+      background:#fef2f2;min-height:120px}
+   .grid-item{position:relative}
+   .grid img{width:100%;height:100px;object-fit:cover;border-radius:8px;border:3px solid #ddd}
+   .grid-item.uploaded img{border-color:#10b981}
+   .grid-item.badge{position:absolute;top:-8px;right:-8px;background:#10b981;color:white;
+      border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:12px;font-weight:bold}
+   .grid-item.remove{position:absolute;top:-8px;left:-8px;background:#ef4444;color:white;
+      border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;cursor:pointer;font-size:16px}
+   .status{padding:12px;margin:10px 0;border-radius:6px;text-align:center;font-weight:bold;font-size:14px}
+   .success{background:#d1fae5;color:#065f46;border-left:4px solid #10b981}
+   .error{background:#fee2e2;color:#991b1b;border-left:4px solid #ef4444}
+   .info{background:#dbeafe;color:#1e40af;border-left:4px solid #3b82f6}
+   .loading{background:#fef3c7;color:#92400e;border-left:4px solid #f59e0b}
+   .progress{width:100%;height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;
+      margin:10px 0;display:none}
+   .progress-bar{height:100%;background:linear-gradient(90deg,#f59e0b,#10b981);transition:width 0.3s;width:0%}
+   .hint{background:#fff3cd;border-left:4px solid #ffc107;padding:10px;border-radius:4px;
+      margin:10px 0;font-size:13px;color:#856404}
+   .form-group{margin:15px 0}
+   .form-group label{all:unset;display:block;font-weight:bold;margin-bottom:5px;color:#333;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🛒 Add Product - Admin Panel</h2>
+    
+    <div class="form-group">
+      <label>Product Name *</label>
+      <input type="text" id="pName" placeholder="Vim Dishwash Lemon 500ml" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Selling Price *</label>
+      <input type="number" id="pPrice" placeholder="99" required>
+    </div>
+    
+    <div class="form-group">
+      <label>MRP</label>
+      <input type="number" id="pMRP" placeholder="120">
+    </div>
+
+    <div class="form-group">
+      <label>Category *</label>
+      <input type="text" id="pCategory" placeholder="Dish soap" required>
+    </div>
+
+    <div class="form-group">
+      <label>Series No</label>
+      <input type="text" id="pSeries" placeholder="Dish soap-1">
+    </div>
+
+    <div class="form-group">
+      <label>Code/Barcode</label>
+      <input type="text" id="pCode" placeholder="1779191365011">
+    </div>
+    
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="pDesc" rows="3" placeholder="Product ke baare me likho..."></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>Upload Method</label>
+      <select id="uploadType">
+        <option value="base64" selected>Base64 - Bina API Key Ke (Fast)</option>
+        <option value="imgbb">ImgBB - API Key Chahiye (Real URLs)</option>
+      </select>
+    </div>
+    
+    <div class="hint" id="apiHint" style="display:none;">
+      <b>⚠️ ImgBB API Key chahiye:</b> Line 26 me daalo<br>
+      Free key: <a href="https://api.imgbb.com" target="_blank">api.imgbb.com</a>
+    </div>
+    
+    <label for="photos">📤 PHOTOS SELECT KARO - YAHAN CLICK KARO</label>
+    <input type="file" id="photos" accept="image/*" multiple>
+    
+    <button class="btn-upload" onclick="uploadAll()" id="uploadBtn" disabled>
+      ☁️ Upload All Images
+    </button>
+    <button class="btn-save" onclick="saveTo()" id="saveBtn" disabled>
+      💾 Save to Firebase
+    </button>
+    <button class="btn-reset" onclick="resetAll()">🔄 Reset All</button>
+    
+    <div id="status"></div>
+    <div class="progress" id="progressBar">
+      <div class="progress-bar" id="progressFill"></div>
+    </div>
+    
+    <div class="grid" id="gridBox">
+      <p style="grid-column:1/-1;text-align:center;color:#666;">
+        Photos select karte hi yahan dikhengi
+      </p>
+    </div>
+  </div>
+
+<!-- Firebase SDK - FIRESTORE VERSION ✅ -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ===== FIREBASE CONFIG - YAHAN APNI KEYS DAAL ⚠️ =====
+const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+console.log('✅ Firebase Firestore Connected');
+
+// ✅ STEP 2: IMGBB API KEY - Agar ImgBB use karna hai to yahan daal
+const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY";
+
+let files = [];
+let urls = [];
+let uploaded = false;
+
+function showStatus(msg, type = 'info') {
+  document.getElementById('status').innerHTML = `<div class="status ${type}">${msg}</div>`;
+}
+
+function updateProgress(current, total) {
+  const percent = (current / total) * 100;
+  document.getElementById('progressFill').style.width = percent + '%';
+  document.getElementById('progressBar').style.display = 'block';
+}
+
+// Upload type change
+document.getElementById('uploadType').onchange = function() {
+  document.getElementById('apiHint').style.display = this.value === 'imgbb' ? 'block' : 'none';
+  resetUpload();
+};
+
+// Photos select
+document.getElementById('photos').onchange = e => {
+  files = Array.from(e.target.files);
+  if(files.length === 0) return;
+  
+  showStatus(`✅ ${files.length} photos selected!`, 'success');
+  showPreview();
+  document.getElementById('uploadBtn').disabled = false;
+  document.getElementById('saveBtn').disabled = true;
+  resetUpload();
+};
+
+function showPreview() {
+  const box = document.getElementById('gridBox');
+  box.innerHTML = '';
+  
+  files.forEach((f, i) => {
+    const r = new FileReader();
+    r.onload = e => {
+      box.innerHTML += `
+        <div class="grid-item" id="item-${i}">
+          <img src="${e.target.result}">
+          <span class="badge">${i+1}</span>
+          <span class="remove" onclick="removeImg(${i})">×</span>
+        </div>
+      `;
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+window.removeImg = i => {
+  files.splice(i, 1);
+  if(files.length === 0) {
+    resetAll();
+  } else {
+    showPreview();
+    resetUpload();
+  }
+};
+
+// Upload All Images
+async function uploadAll() {
+  if(files.length === 0) {
+    showStatus('⚠️ Pehle photos select karo!', 'error');
+    return;
+  }
+  
+  const type = document.getElementById('uploadType').value;
+  
+  if(type === 'imgbb' && IMGBB_API_KEY === "YOUR_IMGBB_API_KEY") {
+    showStatus('❌ ImgBB API Key daalo pehle! Line 26 me', 'error');
+    return;
+  }
+  
+  showStatus('⏳ Uploading shuru...', 'loading');
+  document.getElementById('uploadBtn').disabled = true;
+  urls = [];
+  
+  try {
+    for(let i = 0; i < files.length; i++) {
+      const file = files[i];
+      showStatus(`⏳ Uploading ${i+1}/${files.length}: ${file.name}`, 'loading');
+      updateProgress(i, files.length);
+      
+      if(type === 'imgbb') {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if(data.success) {
+          urls.push(data.data.url);
+          document.getElementById(`item-${i}`).classList.add('uploaded');
+        } else {
+          throw new Error(data.error.message);
+        }
+      } else {
+        const base64 = await new Promise(resolve => {
+          const r = new FileReader();
+          r.onload = e => resolve(e.target.result);
+          r.readAsDataURL(file);
+        });
+        urls.push(base64);
+        document.getElementById(`item-${i}`).classList.add('uploaded');
+        await new Promise(r => setTimeout(r, 500));
+      }
+    }
+    
+    updateProgress(files.length, files.length);
+    showStatus(`✅ SUCCESS! ${urls.length} images uploaded!`, 'success');
+    document.getElementById('saveBtn').disabled = false;
+    uploaded = true;
+    
+    setTimeout(() => {
+      document.getElementById('progressBar').style.display = 'none';
+    }, 1000);
+    
+  } catch(err) {
+    showStatus(`❌ Error: ${err.message}`, 'error');
+    document.getElementById('uploadBtn').disabled = false;
+  }
+}
+
+// Save to Firestore - UPDATED 26/5/2026 ✅
+async function saveToFirebase() {
+  if(!uploaded || urls.length === 0) {
+    showStatus('⚠️ Pehle Upload button dabao!', 'error');
+    return;
+  }
+  
+  const name = document.getElementById('pName').value.trim();
+  const price = parseFloat(document.getElementById('pPrice').value.trim());
+  
+  if(!name || !price) {
+    showStatus('⚠️ Product Name aur Price required hai!', 'error');
+    return;
+  }
+  
+  const mrp = parseFloat(document.getElementById('pMRP').value.trim()) || price;
+  const desc = document.getElementById('pDesc').value.trim() || '';
+  const category = document.getElementById('pCategory').value.trim() || 'General';
+  const seriesCode = document.getElementById('pSeries').value.trim() || 'N/A';
+  const code = document.getElementById('pCode').value.trim() || '';
+  
+  showStatus('💾 Firebase me save ho raha hai...', 'loading');
+  document.getElementById('saveBtn').disabled = true;
+  
+  try {
+    // ✅ FIRESTORE ME SAVE KAR RAHA HAI
+    const productData = {
+      name: name,
+      price: price,
+      mrp: mrp,
+      description: desc,
+      category: category,
+      seriesCode: seriesCode,
+      code: code,
+      imageUrl: urls[0], // Main image
+      images: urls, // All images
+      image: urls[0], // Backup field
+      totalImages: urls.length,
+      uploadDate: new Date().toISOString(),
+      uploadType: document.getElementById('uploadType').value,
+      stock: 999, // Default stock
+      sizePrice: '1piece-' + price // Default variant
+    };
+    
+    const docRef = await db.collection('products').add(productData);
+    
+    console.log('=== PRODUCT SAVED ===');
+    console.log('ID:', docRef.id);
+    console.log('Data:', productData);
+    
+    showStatus(`✅ SUCCESS! Product save ho gaya!<br>
+      📱 Home page pe ab dikhega<br>
+      🆔 ID: ${docRef.id}`, 'success');
+    
+    setTimeout(() => {
+      if(confirm('Product save ho gaya! Reset karna hai?')) {
+        resetAll();
+      }
+    }, 1500);
+    
+  } catch(err) {
+    showStatus(`❌ Firebase Error: ${err.message}`, 'error');
+    document.getElementById('saveBtn').disabled = false;
+  }
+}
+
+function resetUpload() {
+  urls = [];
+  uploaded = false;
+  document.getElementById('saveBtn').disabled = true;
+  document.querySelectorAll('.grid-item').forEach(el => el.classList.remove('uploaded'));
+}
+
+function resetAll() {
+  files = [];
+  urls = [];
+  uploaded = false;
+  document.getElementById('photos').value = '';
+  document.getElementById('pName').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pMRP').value = '';
+  document.getElementById('pDesc').value = '';
+  document.getElementById('pCategory').value = '';
+  document.getElementById('pSeries').value = '';
+  document.getElementById('pCode').value = '';
+  document.getElementById('gridBox').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#666;">Photos select karte hi yahan dikhengi</p>';
+  document.getElementById('status').innerHTML = '';
+  document.getElementById('uploadBtn').disabled = true;
+  document.getElementById('saveBtn').disabled = true;
+  document.getElementById('progressBar').style.display = 'none';
+}
+
+window.onload = () => {
+  console.log('✅ Add Product Page Loaded - Firestore Version');
+  showStatus('👆 Photos select karo, phir Upload dabao', 'info');
+};
+</script>
+<script src="theme.js"></script>
+</body>
+</html>
