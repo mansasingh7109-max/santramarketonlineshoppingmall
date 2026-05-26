@@ -332,7 +332,7 @@ function updateCounts(){
   document.getElementById('wishCount').innerText = wishCount;
 }
 
-// ===== WHATSAPP CHECKOUT - UPDATED 26/5/2026 - SERIES + CATEGORY FIXED =====
+// ===== WHATSAPP CHECKOUT - UPDATED 26/5/2026 - AUTO DOMAIN + FOLDER FIX =====
 function checkoutWhatsApp(){
   if(cart.length === 0){
     alert('Cart khali hai!');
@@ -340,6 +340,19 @@ function checkoutWhatsApp(){
   }
 
   let firstItem = cart[0];
+
+  // ✅ AUTO DOMAIN + FOLDER FIX - 3 JAGAH CHALEGA
+  const baseUrl = window.location.origin;
+  const pathName = window.location.pathname;
+
+  // GitHub pe "/santramarketonlineshoppingmall" folder check kar
+  let productPath = '/product.html';
+  if(pathName.includes('/santramarketonlineshoppingmall')){
+      productPath = '/santramarketonlineshoppingmall/product.html';
+  }
+
+  const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(firstItem.id)}`;
+  // ========== END UPDATE ==========
 
   // YE SAB FIELD ZARURI HAI WHATSAPP MESSAGE KE LIYE
   localStorage.setItem('pending_whatsapp_order_' + firstItem.id, JSON.stringify({
@@ -349,7 +362,8 @@ function checkoutWhatsApp(){
     productImage: firstItem.image,
     productCode: firstItem.code,
     category: firstItem.category,
-    serial_no: firstItem.serial_no
+    serial_no: firstItem.serial_no,
+    productLink: productLink // Link bhi save kar de
   }));
 
   window.location.href = 'whatsapp-order.html?product=' + firstItem.id;
