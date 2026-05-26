@@ -37,17 +37,14 @@
  .section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
  .section h3{font-size:16px;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
  .variant-grid{display:flex;flex-wrap:wrap;gap:10px}
- .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
+ .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s}
  .variant-btn:hover{border-color:var(--accent);background:#fff0f5}
  .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent);box-shadow:0 0 0 3px rgba(228,0,70,0.1)}
- .variant-btn:disabled{opacity:0.4;cursor:not-allowed;background:#f5f5f5;border-color:#ddd}
- .variant-btn:disabled::after{content:'✕';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:#999}
- .variant-price{font-size:11px;display:block;color:#666;margin-top:2px;font-weight:normal}
- .variant-btn.active .variant-price{color:var(--accent)}
- .variant-stock{font-size:10px;color:var(--green);margin-top:2px}
- .variant-btn:disabled .variant-stock{color:#999}
+ .variant-btn:disabled{opacity:0.4;cursor:not-allowed;text-decoration:line-through}
+ .variant-btn.variant-price{font-size:11px;display:block;color:#666;margin-top:2px}
+ .variant-btn.active.variant-price{color:var(--accent)}
  .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
- .features{background:linear-gradient(135deg,#f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
+ .features{background:linear-gradient(135deg,#f9f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
  .features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
  .features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
  .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
@@ -72,7 +69,6 @@
  .similar-info h4{font-size:13px;margin-bottom:5px;height:35px;overflow:hidden}
  .similar-price{color:var(--accent);font-weight:bold;font-size:14px}
  .selected-variant-info{background:#e8f5e9;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid var(--green);font-size:14px}
- .out-of-stock-banner{background:#fee2e2;color:#991b1b;padding:10px;border-radius:8px;text-align:center;font-weight:bold;margin:10px 0}
   </style>
 </head>
 <body>
@@ -89,8 +85,8 @@
 
 <div class="action-btns" id="actionBtns" style="display:none">
   <button class="btn btn-wish" onclick="addToWishlist()">😍</button>
-  <button class="btn btn-cart" onclick="addToCart()" id="cartBtn">🛒 ADD TO CART</button>
-  <button class="btn btn-buy" onclick="buyNow()" id="buyBtn">⚡ BUY NOW</button>
+  <button class="btn btn-cart" onclick="addToCart()">🛒 ADD TO CART</button>
+  <button class="btn btn-buy" onclick="buyNow()">⚡ BUY NOW</button>
 </div>
 
 <!-- FIREBASE SDK -->
@@ -207,60 +203,28 @@ function renderProduct(p) {
   images = images.filter(img => img);
   if(images.length === 0) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
 
-  // ===== DYNAMIC VARIANTS - FIXED =====
-  let variants = [];
+  let currentSlide = 0;
 
-  // Priority 1: variants array from Firebase
-  if(p.variants && Array.isArray(p.variants) && p.variants.length > 0) {
-    variants = p.variants;
-  }
-  // Priority 2: sizes field
-  else if(p.sizes) {
-    variants = typeof p.sizes === 'string'? p.sizes.split(',').map(s => s.trim()) : p.sizes;
-  }
-  // Priority 3: size field
-  else if(p.size) {
-    variants = typeof p.size === 'string'? p.size.split(',').map(s => s.trim()) : [p.size];
-  }
-  // Priority 4: volumes field for liquids
-  else if(p.volumes) {
-    variants = typeof p.volumes === 'string'? p.volumes.split(',').map(s => s.trim()) : p.volumes;
-  }
-  // Priority 5: weights field
-  else if(p.weights) {
-    variants = typeof p.weights === 'string'? p.weights.split(',').map(s => s.trim()) : p.weights;
-  }
-  // Priority 6: Auto generate from category
-  else {
-    let variantType = getVariantType(p.category);
-    if(variantType.label === 'Size') variants = ['S', 'M', 'L', 'XL', 'XXL'];
-    else if(variantType.label === 'Volume') variants = ['100ml', '250ml', '500ml', '1L'];
-    else if(variantType.label === 'Weight') variants = ['500g', '1kg', '5kg', '10kg'];
-    else variants = ['Standard'];
+  // ===== DYNAMIC VARIANTS =====
+  let variants = p.variants || p.sizes || p.size || p.volumes || p.weights || ['Default'];
+  if(typeof variants === 'string') {
+    variants = variants.split(',').map(s => s.trim());
   }
 
+  // If variants have price, handle object format
   let variantType = getVariantType(p.category);
 
-  // Find first available variant
-  let firstAvailable = variants.find(v => {
-    let stock = typeof v === 'object'? v.stock : p.stock;
-    return stock === undefined || stock > 0;
-  });
-
-  let variantHTML = variants.map((v, index) => {
+  let variantHTML = variants.map(v => {
     let variantName = typeof v === 'object'? v.name || v.size || v.volume || v.weight : v;
     let variantPrice = typeof v === 'object'? v.price : p.price;
     let variantStock = typeof v === 'object'? v.stock : p.stock;
-    let isAvailable = variantStock === undefined || variantStock > 0;
 
     return `
       <button class="variant-btn"
               onclick='selectVariant(${JSON.stringify(v)}, this)'
-              ${!isAvailable? 'disabled' : ''}
-              id="variant-${index}">
+              ${variantStock === 0? 'disabled' : ''}>
         ${variantName}
         ${variantPrice && variantPrice!== p.price? `<span class="variant-price">₹${variantPrice}</span>` : ''}
-        ${variantStock !== undefined? `<span class="variant-stock">${isAvailable? variantStock + ' left' : 'Out of stock'}</span>` : ''}
       </button>
     `;
   }).join('');
@@ -353,13 +317,15 @@ function renderProduct(p) {
   window.productImages = images;
   window.currentSlideIndex = 0;
 
-  // Auto select first available variant
-  setTimeout(() => {
-    if(firstAvailable) {
+  // Auto select first variant
+  if(variants.length > 0) {
+    setTimeout(() => {
       const firstBtn = document.querySelector('.variant-btn:not(:disabled)');
-      if(firstBtn) firstBtn.click();
-    }
-  }, 100);
+      if(firstBtn) {
+        firstBtn.click();
+      }
+    }, 100);
+  }
 }
 
 // ===== VARIANT SELECT =====
@@ -383,22 +349,7 @@ function selectVariant(variant, btn) {
 
   // Show selected variant info
   document.getElementById('selectedVariantInfo').style.display = 'block';
-  document.getElementById('variantText').innerText = selectedVariant + (selectedVariantData.price? ' - ₹' + selectedVariantData.price : '');
-
-  // Enable/disable buttons based on stock
-  let stock = selectedVariantData.stock !== undefined? selectedVariantData.stock : currentProduct.stock;
-  let isOutOfStock = stock === 0;
-
-  document.getElementById('cartBtn').disabled = isOutOfStock;
-  document.getElementById('buyBtn').disabled = isOutOfStock;
-
-  if(isOutOfStock) {
-    document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
-    document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
-  } else {
-    document.getElementById('cartBtn').innerText = '🛒 ADD TO CART';
-    document.getElementById('buyBtn').innerText = '⚡ BUY NOW';
-  }
+  document.getElementById('variantText').innerText = selectedVariant;
 }
 
 // ===== SLIDER FUNCTIONS =====
@@ -446,12 +397,6 @@ function addToCart() {
     return;
   }
 
-  let stock = selectedVariantData.stock !== undefined? selectedVariantData.stock : currentProduct.stock;
-  if(stock === 0) {
-    alert('❌ This variant is out of stock!');
-    return;
-  }
-
   let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
   let seriesNo = getSeriesNumber(currentProduct.category, currentProduct.id);
 
@@ -484,17 +429,6 @@ function addToCart() {
 
 // ===== BUY NOW =====
 function buyNow() {
-  if(!selectedVariant) {
-    alert('⚠️ Please select a variant first!');
-    return;
-  }
-
-  let stock = selectedVariantData.stock !== undefined? selectedVariantData.stock : currentProduct.stock;
-  if(stock === 0) {
-    alert('❌ This variant is out of stock!');
-    return;
-  }
-
   addToCart();
   window.location.href = 'cart.html';
 }
