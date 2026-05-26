@@ -3,58 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SANTRA MALL - Admin Panel v4.0</title>
+  <title>SANTRA MALL - Admin Panel v4.2</title>
   <style>
-    :root{--bg:#ffffff;--card:#f8f9fa;--accent:#e40046;--text:#212121;--border:#dee2e6;--success:#10b981;}
+    :root{--bg:#ffffff;--card:#f8f9fa;--accent:#e40046;--text:#212121;--border:#dee2e6;--success:#10b981;--warning:#f59e0b}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);opacity:0;transition:opacity 0.3s}
-    .top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-    .top-bar h1{color:var(--accent);font-size:18px;}
-    .main{display:flex;gap:15px;padding:0 15px;}
-    .sidebar{width:220px;background:#fff;border-radius:8px;padding:15px;height:fit-content;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:sticky;top:15px;}
-    .menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:600;}
-    .menu-item:hover{background:#f1f3f6;}
-    .menu-item.active{background:#f1f3f6;border-left:3px solid var(--accent);color:var(--accent);}
-    .content{flex:1;background:var(--card);border-radius:8px;padding:20px;min-height:600px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-    input,select,textarea{width:100%;padding:10px;margin:8px 0;background:#fff;border:1px solid var(--border);border-radius:4px;color:var(--text);}
-    button{padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;margin:5px 0;font-weight:bold;}
-    button:disabled{background:#999;cursor:not-allowed;}
-    .btn-del{background:#ef4444!important;}
-    .btn-edit{background:#3b82f6!important;}
-    .hide{display:none!important;}
-    table{width:100%;border-collapse:collapse;background:#fff;}
-    th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border);}
-    th{background:var(--card);color:var(--accent);font-weight:bold;}
+    .top-bar{background:var(--card);padding:15px;margin:15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    .top-bar h1{color:var(--accent);font-size:18px}
+    .main{display:flex;gap:15px;padding:0 15px}
+    .sidebar{width:220px;background:#fff;border-radius:8px;padding:15px;height:fit-content;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:sticky;top:15px}
+    .menu-item{padding:10px;border-radius:4px;margin:5px 0;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:600;transition:all 0.2s}
+    .menu-item:hover{background:#f1f3f6}
+    .menu-item.active{background:#f1f3f6;border-left:3px solid var(--accent);color:var(--accent)}
+    .content{flex:1;background:var(--card);border-radius:8px;padding:20px;min-height:600px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    input,select,textarea{width:100%;padding:10px;margin:8px 0;background:#fff;border:1px solid var(--border);border-radius:4px;color:var(--text)}
+    button{padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;margin:5px 0;font-weight:bold;transition:all 0.2s}
+    button:hover{opacity:0.9;transform:translateY(-1px)}
+    button:disabled{background:#999;cursor:not-allowed;transform:none}
+    .btn-del{background:#ef4444!important}
+    .btn-edit{background:#3b82f6!important}
+    .btn-success{background:#10b981!important}
+    .hide{display:none!important}
+    table{width:100%;border-collapse:collapse;background:#fff}
+    th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border)}
+    th{background:var(--card);color:var(--accent);font-weight:bold}
     .w-48{width:48%!important;margin:5px 1%!important}
     .w-32{width:32%!important;margin:5px 1%!important}
-    .auth-loader{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,0.95);display:flex;align-items:center;justify-content:center;z-index:9999;}
-    .spinner{border:4px solid #f3f3f3;border-top:4px solid var(--accent);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:0 auto 20px;}
-    @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-    .admin-card{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:20px;border-radius:10px;margin:15px 0;display:flex;gap:20px;align-items:center;}
-    .admin-photo{width:80px;height:80px;border-radius:50%;border:3px solid white;object-fit:cover;}
+    .auth-loader{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;z-index:9999}
+    .spinner{border:4px solid #f3f3f3;border-top:4px solid var(--accent);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:0 auto 20px}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .admin-card{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:20px;border-radius:10px;margin:15px 0;display:flex;gap:20px;align-items:center}
+    .admin-photo{width:80px;height:80px;border-radius:50%;border:3px solid white;object-fit:cover}
     .media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;margin:10px 0}
-    .media-item{position:relative;}
+    .media-item{position:relative}
     .media-item img,.media-item video{width:100%;height:80px;object-fit:cover;border-radius:8px;border:3px solid #ddd}
     .media-item .del-btn{position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;line-height:1}
     .media-item .type-badge{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;border-radius:3px}
-    .badge-success{background:var(--success);color:white;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold;}
+    .badge-success{background:var(--success);color:white;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold}
+    .badge-warning{background:var(--warning);color:white;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold}
     .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:20px 0}
-    .stat-card{padding:15px;text-align:center;border:1px solid #ddd;border-radius:8px;background:white}
+    .stat-card{padding:15px;text-align:center;border:1px solid #ddd;border-radius:8px;background:white;transition:all 0.2s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+    .toast{position:fixed;bottom:20px;right:20px;background:#333;color:white;padding:15px 20px;border-radius:8px;z-index:10000;animation:slideIn 0.3s}
+    @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
   </style>
 </head>
 <body>
   <div class="auth-loader" id="authLoader">
     <div>
       <div class="spinner"></div>
-      <h3 style="color:var(--accent);">🔒 Checking Admin Access...</h3>
+      <h3 style="color:var(--accent)">🔒 Checking Admin Access...</h3>
     </div>
   </div>
 
   <div class="top-bar">
-    <h1>🛒 SANTRA MALL - Admin Panel v4.0</h1>
+    <h1>🛒 SANTRA MALL - Admin Panel v4.2</h1>
     <div>
-      <button style="background:#10b981;">🔒 Firebase Connected</button>
-      <button onclick="logout()" style="background:#ef4444;">🚪 Fast Logout</button>
+      <button id="firebaseStatus" style="background:#10b981">🔒 Firebase Connected</button>
+      <button onclick="fastLogout()" style="background:#ef4444">🚪 Fast Logout</button>
     </div>
   </div>
 
@@ -66,267 +72,251 @@
       <div class="menu-item" onclick="openTab('orders')">📦 Orders</div>
       <div class="menu-item" onclick="openTab('customers')">👥 Customers</div>
       <div class="menu-item" onclick="openTab('payment')">💳 Payment</div>
-      <div class="menu-item" onclick="openTab('theme')">🎨 Theme Settings</div>
-      <div class="menu-item" onclick="openTab('company')">🏢 Company Details</div>
-      <div class="menu-item" onclick="openTab('creator')">👤 Creator Details</div>
+      <div class="menu-item" onclick="openTab('theme')">🎨 Theme</div>
+      <div class="menu-item" onclick="openTab('company')">🏢 Company</div>
+      <div class="menu-item" onclick="openTab('creator')">👤 Creator</div>
       <div class="menu-item" onclick="openTab('helpdesk')">💬 Help Desk</div>
       <div class="menu-item" onclick="openTab('backup')">📦 Backup</div>
     </div>
 
     <div class="content">
-          <!-- DASHBOARD -->
-    <div id="dashboard" class="tab-page">
-      <h2>📊 Dashboard - Firebase Live Data</h2>
-      <div class="admin-card">
-        <img id="dashAdminPhoto" src="https://via.placeholder.com/80" class="admin-photo" style="display:none">
-        <div>
-          <h3 id="dashAdminName">Loading...</h3>
-          <p>📱 <span id="dashAdminMobile">Loading...</span></p>
-          <p>📧 <span id="dashAdminEmail">Loading...</span></p>
-          <p>🌐 <b>SANTRA MALL</b> | <span class="badge-success">Data Safe ✓</span></p>
-        </div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card"><h3>Total Products</h3><h1 id="totalProducts" style="color:#007bff">0</h1></div>
-        <div class="stat-card"><h3>Total Orders</h3><h1 id="totalOrders" style="color:#28a745">0</h1></div>
-        <div class="stat-card"><h3>Total Customers</h3><h1 id="totalCustomers" style="color:#ffc107">0</h1></div>
-        <div class="stat-card"><h3>Revenue</h3><h1 id="totalRevenue" style="color:#dc3545">₹0</h1></div>
-      </div>
-    </div>
-    
-    <!-- PRODUCTS -->
-    <div id="products" class="tab-page hide">
-      <h2>🛍️ Products Management</h2>
-
-      <!-- FILTER SECTION -->
-      <div style="border:2px solid #3b82f6;padding:15px;margin:10px 0;border-radius:8px;background:#f0f9ff">
-        <h4>🔍 Filter Products</h4>
-        <input type="text" id="searchName" placeholder="Search by name..." class="w-48" oninput="filterProducts()">
-        <select id="filterCat" class="w-32" onchange="filterProducts()"><option value="">All Categories</option></select>
-        <select id="filterStock" class="w-32" onchange="filterProducts()">
-          <option value="">All Stock</option><option value="in">In Stock</option><option value="out">Out of Stock</option>
-        </select>
-        <input type="number" id="minPrice" placeholder="Min Price" class="w-48" oninput="filterProducts()">
-        <input type="number" id="maxPrice" placeholder="Max Price" class="w-48" oninput="filterProducts()">
-        <button onclick="clearFilters()" style="background:#3b82f6">🧹 Clear Filters</button>
-      </div>
-
-      <!-- ADD PRODUCT -->
-      <div style="border:1px solid #ddd;padding:20px;margin:10px 0;border-radius:8px">
-        <h3>Add Product</h3>
-        <input type="hidden" id="editId">
-        <input type="text" id="pName" placeholder="Product Name *">
-        <input type="text" id="pCode" placeholder="Product Code/SKU" class="w-48">
-        <input type="number" id="pMrp" placeholder="MRP" class="w-32">
-        <input type="number" id="pPrice" placeholder="Selling Price *" class="w-32">
-        <input type="number" id="pStock" placeholder="Stock *" class="w-32">
-        
-        <select id="pCategory" onchange="showCategoryFields();loadProductTypes();" class="w-48">
-          <option value="">-- Select Category --</option>
-        </select>
-        
-        <select id="pType" class="w-48"><option value="">-- Select Type --</option></select>
-        <button onclick="aiSuggestType()" style="background:#6f42c1;width:auto;padding:5px 10px;font-size:12px">🤖 AI Suggest</button>
-
-        <div id="dynamicFields" style="background:#f8f9fa;padding:10px;margin:10px 0;border-radius:5px;border-left:4px solid #e40046">
-          <p style="color:#666">Category select karo, fields aa jayenge</p>
-        </div>
-
-        <label style="font-weight:bold;margin-top:10px;display:block">📁 Product Media - IMGBB + FIREBASE BOTH</label>
-        <div style="display:flex;gap:10px;margin:5px 0;flex-wrap:wrap">
-          <div onclick="uploadMedia('image',false)" style="border:2px dashed #999;padding:20px;border-radius:8px;cursor:pointer;text-align:center;flex:1">
-            <b>🖼️ Single Image</b><br><small>Gallery/Browser se 1 image</small>
-          </div>
-          <div onclick="uploadMedia('image',true)" style="border:2px dashed #999;padding:20px;border-radius:8px;cursor:pointer;text-align:center;flex:1">
-            <b>🖼️ Multiple Images</b><br><small>Gallery/Browser se multiple</small>
+      <!-- DASHBOARD -->
+      <div id="dashboard" class="tab-page">
+        <h2>📊 Dashboard - Real Time Data</h2>
+        <div class="admin-card">
+          <img id="dashAdminPhoto" src="https://via.placeholder.com/80" class="admin-photo" style="display:none">
+          <div>
+            <h3 id="dashAdminName">Loading...</h3>
+            <p>📱 <span id="dashAdminMobile">Loading...</span></p>
+            <p>📧 <span id="dashAdminEmail">Loading...</span></p>
+            <p>🌐 <b>SANTRA MALL</b> | <span class="badge-success">Live Data ✓</span></p>
           </div>
         </div>
-        
-        <div style="display:flex;gap:10px;margin:5px 0;flex-wrap:wrap">
-          <button onclick="uploadImgBB()" style="background:#ff7f00">☁️ ImgBB Upload - FAST</button>
-          <button onclick="uploadFirebase()" style="background:#10b981">🔥 Firebase Upload - SECURE</button>
-          <button onclick="uploadMedia('video')" style="background:#9c27b0">🎥 Video</button>
-          <button onclick="uploadMedia('audio')" style="background:#00bcd4">🎵 Audio</button>
-          <button onclick="uploadMedia('pdf')" style="background:#795548">📄 PDF</button>
-          <button onclick="addFromUrl()" style="background:#6f42c1">🔗 From URL</button>
+        <div class="stats-grid">
+          <div class="stat-card"><h3>Total Products</h3><h1 id="totalProducts" style="color:#007bff">0</h1></div>
+          <div class="stat-card"><h3>Total Orders</h3><h1 id="totalOrders" style="color:#28a745">0</h1></div>
+          <div class="stat-card"><h3>Total Customers</h3><h1 id="totalCustomers" style="color:#ffc107">0</h1></div>
+          <div class="stat-card"><h3>Revenue</h3><h1 id="totalRevenue" style="color:#e40046">₹0</h1></div>
         </div>
-        <input type="file" id="pMedia" multiple style="display:none">
-        <input type="text" id="pMediaUrl" placeholder="Image/Video/Audio/PDF URL paste karo">
-        <div id="mediaPreview" class="media-grid"></div>
-
-        <textarea id="pDesc" placeholder="Product ke baare me..." style="height:60px"></textarea>
-        <button onclick="aiGenerateDesc()" style="background:#6f42c1;width:100%">🤖 AI Se Description Likho</button>
-
-        <br><button onclick="saveProduct()" id="saveBtn" style="background:#28a745;padding:12px 30px;margin-top:10px;font-weight:bold;width:100%">
-          💾 Save Product - HOME PAGE PE TURANT DIKHEGA
-        </button>
+        <button onclick="refreshDashboard()" style="background:#3b82f6">🔄 Refresh Dashboard</button>
       </div>
 
-      <!-- PRODUCT LIST -->
-      <div style="margin-top:20px">
-        <h3>📦 Product List - Live Update</h3>
-        <div id="productsList">Loading products...</div>
-      </div>
-    </div>
-
-    <!-- CATEGORIES -->
-    <div id="categories" class="tab-page hide">
-      <h2>📂 Categories - Auto Image + Manual Edit + Lock</h2>
-      <div style="border:1px solid #ddd;padding:20px;margin:10px 0;border-radius:8px">
-        <h3>Add New Category</h3>
-        <input type="text" id="catName" placeholder="Category Name *" oninput="autoFetchCatImage()">
-        <input type="text" id="catImg" placeholder="Category Image URL - Auto fetch hoga">
-        <div style="display:flex;gap:10px;margin:5px 0">
-          <button onclick="uploadCatFile()" style="background:#ff7f00">📁 Upload Image</button>
-          <button onclick="fetchCatFromGoogle()" style="background:#4285f4">🔍 Auto Fetch Image</button>
+      <!-- PRODUCTS -->
+      <div id="products" class="tab-page hide">
+        <h2>🛍️ Products Management - Super Fast</h2>
+        <div style="border:2px solid #3b82f6;padding:15px;margin:10px 0;border-radius:8px;background:#f0f9ff">
+          <h4>🔍 Filter Products</h4>
+          <input type="text" id="searchName" placeholder="Search by name..." class="w-48" oninput="debounceFilter()">
+          <select id="filterCat" class="w-32" onchange="filterProducts()"><option value="">All Categories</option></select>
+          <select id="filterStock" class="w-32" onchange="filterProducts()">
+            <option value="">All Stock</option><option value="in">In Stock</option><option value="out">Out of Stock</option>
+          </select>
+          <input type="number" id="minPrice" placeholder="Min Price" class="w-48" oninput="debounceFilter()">
+          <input type="number" id="maxPrice" placeholder="Max Price" class="w-48" oninput="debounceFilter()">
+          <button onclick="clearFilters()" style="background:#3b82f6">🧹 Clear</button>
+          <span id="filterCount" class="badge-success" style="margin-left:10px">Total: 0</span>
         </div>
-        <input type="file" id="catFile" accept="image/*" style="display:none">
-        <div id="catImagePreview" style="margin:10px 0"></div>
-        <button onclick="addCategory()" style="background:#28a745">Add Category</button>
+
+        <div style="border:1px solid #ddd;padding:20px;margin:10px 0;border-radius:8px">
+          <h3>Add/Edit Product</h3>
+          <input type="hidden" id="editId">
+          <input type="text" id="pName" placeholder="Product Name *" required>
+          <input type="text" id="pCode" placeholder="Product Code/SKU" class="w-48">
+          <input type="number" id="pMrp" placeholder="MRP" class="w-32">
+          <input type="number" id="pPrice" placeholder="Selling Price *" class="w-32" required>
+          <input type="number" id="pStock" placeholder="Stock *" class="w-32" required>
+          <select id="pCategory" onchange="showCategoryFields();loadProductTypes();" class="w-48"><option value="">-- Select Category --</option></select>
+          <select id="pType" class="w-48"><option value="">-- Select Type --</option></select>
+          <button onclick="aiSuggestType()" style="background:#6f42c1;width:auto;padding:5px 10px;font-size:12px">🤖 AI Suggest</button>
+          <div id="dynamicFields" style="background:#f8f9fa;padding:10px;margin:10px 0;border-radius:5px;border-left:4px solid #e40046"><p style="color:#666">Category select karo, fields aa jayenge</p></div>
+          <label style="font-weight:bold;margin-top:10px;display:block">📁 Product Media</label>
+          <div style="display:flex;gap:10px;margin:5px 0;flex-wrap:wrap">
+            <div onclick="uploadMedia('image',false)" style="border:2px dashed #999;padding:20px;border-radius:8px;cursor:pointer;text-align:center;flex:1"><b>🖼️ Single Image</b><br><small>1 image</small></div>
+            <div onclick="uploadMedia('image',true)" style="border:2px dashed #999;padding:20px;border-radius:8px;cursor:pointer;text-align:center;flex:1"><b>🖼️ Multiple Images</b><br><small>Multiple</small></div>
+          </div>
+          <div style="display:flex;gap:10px;margin:5px 0;flex-wrap:wrap">
+            <button onclick="uploadImgBB()" style="background:#ff7f00">☁️ ImgBB Fast</button>
+            <button onclick="uploadFirebase()" style="background:#10b981">🔥 Firebase Secure</button>
+            <button onclick="uploadMedia('video')" style="background:#9c27b0">🎥 Video</button>
+            <button onclick="uploadMedia('audio')" style="background:#00bcd4">🎵 Audio</button>
+            <button onclick="uploadMedia('pdf')" style="background:#795548">📄 PDF</button>
+            <button onclick="addFromUrl()" style="background:#6f42c1">🔗 From URL</button>
+          </div>
+          <input type="file" id="pMedia" multiple style="display:none">
+          <input type="text" id="pMediaUrl" placeholder="Image/Video/Audio/PDF URL paste karo">
+          <div id="mediaPreview" class="media-grid"></div>
+          <textarea id="pDesc" placeholder="Product description..." style="height:60px"></textarea>
+          <button onclick="aiGenerateDesc()" style="background:#6f42c1;width:100%">🤖 AI Se Description Likho</button>
+          <br><button onclick="saveProduct()" id="saveBtn" style="background:#28a745;padding:12px 30px;margin-top:10px;font-weight:bold;width:100%">💾 Save Product - INSTANT</button>
+        </div>
+
+        <div style="margin-top:20px">
+          <h3>📦 Product List - <span id="productCount">0</span> Products</h3>
+          <div id="productsList">Loading products...</div>
+        </div>
       </div>
-      <div id="catList">Loading categories...</div>
-    </div>
-        <!-- ORDERS -->
-    <div id="orders" class="tab-page hide">
-      <h2>📦 Orders Management - Live from Firebase</h2>
-      <div style="margin:15px 0">
-        <select id="orderStatus" onchange="filterOrders()" class="w-32">
-          <option value="">All Orders</option>
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
-        <button onclick="loadOrders()" style="background:#3b82f6">🔄 Refresh</button>
+
+      <!-- CATEGORIES -->
+      <div id="categories" class="tab-page hide">
+        <h2>📂 Categories Management</h2>
+        <div style="border:1px solid #ddd;padding:20px;margin:10px 0;border-radius:8px">
+          <h3>Add New Category</h3>
+          <input type="text" id="catName" placeholder="Category Name *" oninput="autoFetchCatImage()">
+          <input type="text" id="catImg" placeholder="Category Image URL - Auto fetch hoga">
+          <div style="display:flex;gap:10px;margin:5px 0">
+            <button onclick="uploadCatFile()" style="background:#ff7f00">📁 Upload Image</button>
+            <button onclick="fetchCatFromGoogle()" style="background:#4285f4">🔍 Auto Fetch</button>
+          </div>
+          <input type="file" id="catFile" accept="image/*" style="display:none">
+          <div id="catImagePreview" style="margin:10px 0"></div>
+          <button onclick="addCategory()" style="background:#28a745">Add Category</button>
+        </div>
+        <div id="catList">Loading categories...</div>
       </div>
-      <div id="ordersList">Loading orders...</div>
-    </div>
 
-    <!-- CUSTOMERS -->
-    <div id="customers" class="tab-page hide">
-      <h2>👥 Customers - Firebase Live</h2>
-      <input type="text" id="custSearch" placeholder="Search by name/mobile..." oninput="searchCustomers()" style="width:300px">
-      <div id="customersList" style="margin-top:15px">Loading customers...</div>
-    </div>
+      <!-- ORDERS - OTP VERIFY SECTION ADDED -->
+      <div id="orders" class="tab-page hide">
+        <h2>📦 Orders Management - Live</h2>
+        
+        <!-- ✅ OTP VERIFY SECTION - NAYA -->
+        <div style="border:2px solid #f59e0b;padding:15px;margin:10px 0;border-radius:8px;background:#fffbeb">
+          <h4>🔐 Verify OTP & Confirm Order</h4>
+          <input type="text" id="verifyOrderId" placeholder="Order ID: SM..." class="w-48">
+          <input type="text" id="verifyOtp" placeholder="Enter 6 Digit OTP" class="w-32">
+          <button onclick="verifyOtpAndConfirm()" style="background:#10b981">✅ Verify & Confirm Order</button>
+          <p style="font-size:11px;color:#666;margin-top:5px">Customer ko WhatsApp pe OTP bhejo, phir yahan daal ke confirm karo</p>
+        </div>
 
-    <!-- PAYMENT -->
-    <div id="payment" class="tab-page hide">
-      <h2>💳 Payment Settings</h2>
-      <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
-        <h3>UPI Payment Details</h3>
-        <input type="text" id="upiId" placeholder="UPI ID: mansasingh7109@paytm">
-        <input type="text" id="upiName" placeholder="UPI Name: Manisha Tak">
-        <input type="text" id="upiNumber" placeholder="WhatsApp: 9829508335">
-        <h4>QR Code</h4>
-        <input type="file" id="qrFile" accept="image/*">
-        <img id="qrPreview" style="width:150px;height:150px;display:none;margin:10px 0">
-        <button onclick="savePayment()" style="background:#28a745;width:100%">💾 Save Payment Details</button>
+        <div style="margin:15px 0">
+          <select id="orderStatus" onchange="filterOrders()" class="w-32">
+            <option value="">All Orders</option>
+            <option value="Pending OTP">Pending OTP</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+          <button onclick="loadOrders()" style="background:#3b82f6">🔄 Refresh</button>
+          <span id="orderCount" class="badge-success" style="margin-left:10px">Total: 0</span>
+        </div>
+        <div id="ordersList">Loading orders...</div>
       </div>
-    </div>
 
-    <!-- THEME SETTINGS -->
-    <div id="theme" class="tab-page hide">
-      <h2>🎨 Theme Settings - Live Preview</h2>
-      <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
-        <h3>Color Scheme</h3>
-        <label>Primary Color (Buttons/Header)</label>
-        <input type="color" id="primaryColor" value="#e40046" onchange="previewTheme()">
-        <label>Background Color</label>
-        <input type="color" id="bgColor" value="#ffffff" onchange="previewTheme()">
-        <label>Card Color</label>
-        <input type="color" id="cardColor" value="#f8f9fa" onchange="previewTheme()">
-        <label>Text Color</label>
-        <input type="color" id="textColor" value="#212121" onchange="previewTheme()">
-        
-        <h4 style="margin-top:20px">Logo & Banner</h4>
-        <label>Logo URL</label>
-        <input type="text" id="logoUrl" placeholder="https://i.ibb.co/..." onchange="previewTheme()">
-        <button onclick="uploadLogo()" style="background:#ff7f00">📁 Upload Logo</button>
-        <input type="file" id="logoFile" accept="image/*" style="display:none">
-        
-        <label>Banner URL</label>
-        <input type="text" id="bannerUrl" placeholder="https://i.ibb.co/..." onchange="previewTheme()">
-        <button onclick="uploadBanner()" style="background:#ff7f00">📁 Upload Banner</button>
-        <input type="file" id="bannerFile" accept="image/*" style="display:none">
-        
-        <label>Font Family</label>
-        <select id="fontFamily" onchange="previewTheme()">
-          <option value="Arial,sans-serif">Arial</option>
-          <option value="'Roboto',sans-serif">Roboto</option>
-          <option value="'Poppins',sans-serif">Poppins</option>
-          <option value="'Open Sans',sans-serif">Open Sans</option>
-        </select>
-        
-        <button onclick="saveTheme()" style="background:#28a745;width:100%;margin-top:15px">💾 Save Theme - HOME PAGE PE APPLY HOGA</button>
-        <button onclick="resetTheme()" style="background:#6c757d;width:100%">🔄 Reset to Default</button>
+      <!-- CUSTOMERS -->
+      <div id="customers" class="tab-page hide">
+        <h2>👥 Customers - Live Data</h2>
+        <input type="text" id="custSearch" placeholder="Search by name/mobile..." oninput="debounceCustomerSearch()" style="width:300px">
+        <span id="customerCount" class="badge-success" style="margin-left:10px">Total: 0</span>
+        <div id="customersList" style="margin-top:15px">Loading customers...</div>
       </div>
-    </div>
 
-    <!-- COMPANY DETAILS -->
-    <div id="company" class="tab-page hide">
-      <h2>🏢 Company Details - Dashboard Pe Dikhega</h2>
-      <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
-        <h3>About Us</h3>
-        <textarea id="cAbout" placeholder="About SANTRA MALL..." style="height:100px"></textarea>
-        <button onclick="aiGenerateAbout()" style="background:#6f42c1">🤖 AI Generate About</button>
-        
-        <h3>Features</h3>
-        <textarea id="cFeatures" placeholder="✓ Fast Delivery\n✓ Best Prices..." style="height:100px"></textarea>
-        <button onclick="aiGenerateFeatures()" style="background:#6f42c1">🤖 AI Generate Features</button>
-        
-        <h3>Rules & Policies</h3>
-        <textarea id="cRules" placeholder="Terms & Conditions..." style="height:100px"></textarea>
-        <button onclick="aiGenerateRules()" style="background:#6f42c1">🤖 AI Generate Rules</button>
-        
-        <h3>Admin Details</h3>
-        <input type="text" id="adminName" placeholder="Admin Name: Manisha Tak">
-        <input type="text" id="adminMobile" placeholder="Admin Mobile: 9829508335">
-        <input type="email" id="adminEmail" placeholder="Admin Email: mansasingh7109@gmail.com">
-        
-        <label>Admin Photo</label>
-        <input type="file" id="adminPhoto" accept="image/*" onchange="previewAdminPhoto()">
-        <img id="adminPhotoPreview" style="width:100px;height:100px;border-radius:50%;display:none;margin:10px 0">
-        
-        <button onclick="saveCompanyDetails()" style="background:#28a745;width:100%;margin-top:15px">💾 Save All - Live Update</button>
+      <!-- PAYMENT -->
+      <div id="payment" class="tab-page hide">
+        <h2>💳 Payment Settings</h2>
+        <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
+          <h3>UPI Payment Details</h3>
+          <input type="text" id="upiId" placeholder="UPI ID: mansasingh7109@paytm">
+          <input type="text" id="upiName" placeholder="UPI Name: Manisha Tak">
+          <input type="text" id="upiNumber" placeholder="WhatsApp: 9829508335">
+          <h4>QR Code</h4>
+          <input type="file" id="qrFile" accept="image/*">
+          <img id="qrPreview" style="width:150px;height:150px;display:none;margin:10px 0">
+          <button onclick="savePayment()" style="background:#28a745;width:100%">💾 Save Payment Details</button>
+        </div>
       </div>
-    </div>
-          <!-- CREATOR DETAILS -->
-    <div id="creator" class="tab-page hide">
-      <h2>👤 Creator Details</h2>
-      <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
-        <input type="text" id="creatorName" placeholder="Creator Name">
-        <input type="text" id="creatorBio" placeholder="Bio/About Creator">
-        <input type="text" id="creatorWebsite" placeholder="Website URL">
-        <input type="text" id="creatorSocial" placeholder="Instagram/Facebook Link">
-        <button onclick="saveCreator()" style="background:#28a745;width:100%">💾 Save Creator Details</button>
+
+      <!-- THEME -->
+      <div id="theme" class="tab-page hide">
+        <h2>🎨 Theme Settings - Live Preview</h2>
+        <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
+          <h3>Color Scheme</h3>
+          <label>Primary Color</label>
+          <input type="color" id="primaryColor" value="#e40046" onchange="previewTheme()">
+          <label>Background Color</label>
+          <input type="color" id="bgColor" value="#ffffff" onchange="previewTheme()">
+          <label>Card Color</label>
+          <input type="color" id="cardColor" value="#f8f9fa" onchange="previewTheme()">
+          <label>Text Color</label>
+          <input type="color" id="textColor" value="#212121" onchange="previewTheme()">
+          <h4 style="margin-top:20px">Logo & Banner</h4>
+          <label>Logo URL</label>
+          <input type="text" id="logoUrl" placeholder="https://i.ibb.co/..." onchange="previewTheme()">
+          <button onclick="uploadLogo()" style="background:#ff7f00">📁 Upload Logo</button>
+          <input type="file" id="logoFile" accept="image/*" style="display:none">
+          <label>Banner URL</label>
+          <input type="text" id="bannerUrl" placeholder="https://i.ibb.co/..." onchange="previewTheme()">
+          <button onclick="uploadBanner()" style="background:#ff7f00">📁 Upload Banner</button>
+          <input type="file" id="bannerFile" accept="image/*" style="display:none">
+          <label>Font Family</label>
+          <select id="fontFamily" onchange="previewTheme()">
+            <option value="Arial,sans-serif">Arial</option>
+            <option value="'Roboto',sans-serif">Roboto</option>
+            <option value="'Poppins',sans-serif">Poppins</option>
+            <option value="'Open Sans',sans-serif">Open Sans</option>
+          </select>
+          <button onclick="saveTheme()" style="background:#28a745;width:100%;margin-top:15px">💾 Save Theme - INSTANT APPLY</button>
+          <button onclick="resetTheme()" style="background:#6c757d;width:100%">🔄 Reset to Default</button>
+        </div>
       </div>
-    </div>
 
-    <!-- HELP DESK -->
-    <div id="helpdesk" class="tab-page hide">
-      <h2>💬 Help Desk - Customer Messages</h2>
-      <div id="helpMessages">Loading messages...</div>
-    </div>
-
-    <!-- BACKUP -->
-    <div id="backup" class="tab-page hide">
-      <h2>📦 Backup & Restore</h2>
-      <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
-        <h3>Export Data</h3>
-        <button onclick="exportProducts()" style="background:#3b82f6">📥 Export Products (JSON)</button>
-        <button onclick="exportOrders()" style="background:#3b82f6">📥 Export Orders (JSON)</button>
-        <button onclick="exportAll()" style="background:#10b981">📥 Export All Data</button>
-
-        <h3 style="margin-top:20px">Import Data</h3>
-        <input type="file" id="importFile" accept=".json">
-        <button onclick="importData()" style="background:#f59e0b">📤 Import & Restore</button>
-
-        <h3 style="margin-top:20px;color:#ef4444">⚠️ Danger Zone</h3>
-        <button onclick="clearAllData()" style="background:#ef4444">🗑️ Delete All Products</button>
+      <!-- COMPANY -->
+      <div id="company" class="tab-page hide">
+        <h2>🏢 Company Details</h2>
+        <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
+          <h3>About Us</h3>
+          <textarea id="cAbout" placeholder="About SANTRA MALL..." style="height:100px"></textarea>
+          <button onclick="aiGenerateAbout()" style="background:#6f42c1">🤖 AI Generate About</button>
+          <h3>Features</h3>
+          <textarea id="cFeatures" placeholder="✓ Fast Delivery\n✓ Best Prices..." style="height:100px"></textarea>
+          <button onclick="aiGenerateFeatures()" style="background:#6f42c1">🤖 AI Generate Features</button>
+          <h3>Rules & Policies</h3>
+          <textarea id="cRules" placeholder="Terms & Conditions..." style="height:100px"></textarea>
+          <button onclick="aiGenerateRules()" style="background:#6f42c1">🤖 AI Generate Rules</button>
+          <h3>Admin Details</h3>
+          <input type="text" id="adminName" placeholder="Admin Name: Manisha Tak">
+          <input type="text" id="adminMobile" placeholder="Admin Mobile: 9829508335">
+          <input type="email" id="adminEmail" placeholder="Admin Email: mansasingh7109@gmail.com">
+          <label>Admin Photo</label>
+          <input type="file" id="adminPhoto" accept="image/*" onchange="previewAdminPhoto()">
+          <img id="adminPhotoPreview" style="width:100px;height:100px;border-radius:50%;display:none;margin:10px 0">
+          <button onclick="saveCompanyDetails()" style="background:#28a745;width:100%;margin-top:15px">💾 Save All - Live Update</button>
+        </div>
       </div>
-    </div>
 
+      <!-- CREATOR -->
+      <div id="creator" class="tab-page hide">
+        <h2>👤 Creator Details</h2>
+        <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
+          <input type="text" id="creatorName" placeholder="Creator Name">
+          <input type="text" id="creatorBio" placeholder="Bio/About Creator">
+          <input type="text" id="creatorWebsite" placeholder="Website URL">
+          <input type="text" id="creatorSocial" placeholder="Instagram/Facebook Link">
+          <button onclick="saveCreator()" style="background:#28a745;width:100%">💾 Save Creator Details</button>
+        </div>
+      </div>
+
+      <!-- HELP DESK -->
+      <div id="helpdesk" class="tab-page hide">
+        <h2>💬 Help Desk - Customer Messages</h2>
+        <div id="helpMessages">Loading messages...</div>
+      </div>
+
+      <!-- BACKUP -->
+      <div id="backup" class="tab-page hide">
+        <h2>📦 Backup & Restore</h2>
+        <div style="border:1px solid #ddd;padding:20px;border-radius:8px">
+          <h3>Export Data</h3>
+          <button onclick="exportProducts()" style="background:#3b82f6">📥 Export Products (JSON)</button>
+          <button onclick="exportOrders()" style="background:#3b82f6">📥 Export Orders (JSON)</button>
+          <button onclick="exportAll()" style="background:#10b981">📥 Export All Data</button>
+          <h3 style="margin-top:20px">Import Data</h3>
+          <input type="file" id="importFile" accept=".json">
+          <button onclick="importData()" style="background:#f59e0b">📤 Import & Restore</button>
+          <h3 style="margin-top:20px;color:#ef4444">⚠️ Danger Zone</h3>
+          <button onclick="clearAllData()" style="background:#ef4444">🗑️ Delete All Products</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -337,15 +327,16 @@
 
 <script>
   // ✅ FIREBASE CONFIG - APNA YAHAN DAAL
-  const firebaseConfig = {
-    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  
+     const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-  };
+};
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
@@ -355,11 +346,15 @@
   // ===== GLOBAL VARS =====
   window.uploadedMedia = [];
   window.allProducts = [];
+  window.allOrders = [];
+  window.allCustomers = [];
   window.googleFetched = false;
   window.currentCatFetched = false;
-  const IMGBB_KEY = 'YOUR_IMGBB_KEY'; // ImgBB se free key lelo
+  window.filterTimeout = null;
+  const IMGBB_KEY = 'YOUR_IMGBB_KEY'; // ✅ IMGBB KEY
+  const ADMIN_WHATSAPP = '919829508335'; // ✅ ADMIN NUMBER
 
-  // ===== AUTH LOOP FIX =====
+  // ===== AUTH =====
   let authChecked = false;
   auth.onAuthStateChanged(user => {
     if(authChecked) return;
@@ -375,12 +370,20 @@
       loadCategories();
       loadOrders();
       loadCustomers();
+      loadHelpMessages();
+      loadCompanyDetails();
+      loadThemeSettings();
+      loadCreatorDetails();
+      loadPaymentSettings();
     }
   });
 
-  function logout() {
+  function fastLogout() {
     if(confirm('Logout karna hai?')){
-      auth.signOut().then(() => window.location.href = 'admin-login.html');
+      auth.signOut().then(() => {
+        showToast('✅ Logged out successfully');
+        setTimeout(() => window.location.href = 'admin-login.html', 500);
+      });
     }
   }
 
@@ -391,31 +394,67 @@
     event.target.closest('.menu-item').classList.add('active');
   }
 
-  // ===== DASHBOARD =====
+  function showToast(msg, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.background = type === 'error'? '#ef4444' : '#10b981';
+    toast.innerText = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // ===== DASHBOARD - FIXED =====
   async function initDashboardTab() {
-    const companySnap = await db.collection("company").doc("details").get();
-    if(companySnap.exists) {
-      const data = companySnap.data();
-      document.getElementById('dashAdminName').innerText = data.adminName || 'Admin';
-      document.getElementById('dashAdminMobile').innerText = data.adminMobile || 'Not Set';
-      document.getElementById('dashAdminEmail').innerText = data.adminEmail || 'Not Set';
-      if(data.adminPhoto) {
-        document.getElementById('dashAdminPhoto').src = data.adminPhoto;
-        document.getElementById('dashAdminPhoto').style.display = 'block';
+    try {
+      const companySnap = await db.collection("company").doc("details").get();
+      if(companySnap.exists) {
+        const data = companySnap.data();
+        document.getElementById('dashAdminName').innerText = data.adminName || 'Manisha Tak';
+        document.getElementById('dashAdminMobile').innerText = data.adminMobile || '9829508335';
+        document.getElementById('dashAdminEmail').innerText = data.adminEmail || 'mansasingh7109@gmail.com';
+        if(data.adminPhoto) {
+          document.getElementById('dashAdminPhoto').src = data.adminPhoto;
+          document.getElementById('dashAdminPhoto').style.display = 'block';
+        }
+      } else {
+        document.getElementById('dashAdminName').innerText = 'Manisha Tak';
+        document.getElementById('dashAdminMobile').innerText = '9829508335';
+        document.getElementById('dashAdminEmail').innerText = 'mansasingh7109@gmail.com';
       }
+
+      const [productsSnap, ordersSnap, customersSnap] = await Promise.all([
+        db.collection("products").get(),
+        db.collection("orders").get(),
+        db.collection("customers").get()
+      ]);
+
+      document.getElementById('totalProducts').innerText = productsSnap.size || 0;
+      document.getElementById('totalOrders').innerText = ordersSnap.size || 0;
+      document.getElementById('totalCustomers').innerText = customersSnap.size || 0;
+
+      let revenue = 0;
+      ordersSnap.forEach(doc => {
+        const data = doc.data();
+        if(data.status === 'Delivered') revenue += Number(data.total || 0);
+      });
+      document.getElementById('totalRevenue').innerText = '₹' + revenue;
+    } catch(err) {
+      console.error('Dashboard error:', err);
+      document.getElementById('dashAdminName').innerText = 'Manisha Tak';
+      document.getElementById('dashAdminMobile').innerText = '9829508335';
+      document.getElementById('dashAdminEmail').innerText = 'mansasingh7109@gmail.com';
     }
-    const productsSnap = await db.collection("products").get();
-    document.getElementById('totalProducts').innerText = productsSnap.size;
-    const ordersSnap = await db.collection("orders").get();
-    document.getElementById('totalOrders').innerText = ordersSnap.size;
-    const customersSnap = await db.collection("customers").get();
-    document.getElementById('totalCustomers').innerText = customersSnap.size;
-    let revenue = 0;
-    ordersSnap.forEach(doc => {
-      const data = doc.data();
-      if(data.status === 'Delivered') revenue += Number(data.total || 0);
-    });
-    document.getElementById('totalRevenue').innerText = '₹' + revenue;
+  }
+
+  function refreshDashboard() {
+    showToast('🔄 Refreshing...');
+    initDashboardTab();
+  }
+
+  // ===== CATEGORY WISE SERIES NUMBER - NAYA =====
+  async function getCategorySeriesNumber(category) {
+    const snap = await db.collection("products").where("category", "==", category).get();
+    return snap.size + 1;
   }
 
   // ===== UPLOAD MEDIA =====
@@ -431,21 +470,26 @@
 
     input.onchange = async function(e) {
       const files = e.target.files;
+      showToast(`⏳ Uploading ${files.length} files...`);
+
       for(let file of files) {
-        const storageRef = storage.ref(`products/${Date.now()}_${file.name}`);
-        const snap = await storageRef.put(file);
-        const url = await snap.ref.getDownloadURL();
+        try {
+          const storageRef = storage.ref(`products/${Date.now()}_${file.name}`);
+          const snap = await storageRef.put(file);
+          const url = await snap.ref.getDownloadURL();
 
-        let fileType = type;
-        if(file.type.startsWith('image/')) fileType = 'image';
-        else if(file.type.startsWith('video/')) fileType = 'video';
-        else if(file.type.startsWith('audio/')) fileType = 'audio';
-        else if(file.name.match(/\.pdf$/i)) fileType = 'pdf';
+          let fileType = type;
+          if(file.type.startsWith('image/')) fileType = 'image';
+          else if(file.type.startsWith('video/')) fileType = 'video';
+          else if(file.type.startsWith('audio/')) fileType = 'audio';
+          else if(file.name.match(/\.pdf$/i)) fileType = 'pdf';
 
-        window.uploadedMedia.push({url: url, type: fileType, name: file.name});
-        addToPreview(url, fileType, file.name);
-      }
-      alert(`✅ ${files.length} ${type.toUpperCase()} Upload Complete!`);
+          window.uploadedMedia.push({url: url, type: fileType, name: file.name});
+          addToPreview(url, fileType, file.name);
+        } catch(err) {
+          showToast('❌ Upload failed: ' + err.message, 'error');
+        }
+      showToast(`✅ ${files.length} files uploaded!`);
       input.value = '';
     }
   }
@@ -458,6 +502,8 @@
 
     input.onchange = async function(e) {
       const files = e.target.files;
+      showToast(`⏳ Uploading to ImgBB...`);
+
       for(let file of files) {
         const formData = new FormData();
         formData.append('image', file);
@@ -472,10 +518,10 @@
             addToPreview(data.data.url, 'image', file.name);
           }
         } catch(err) {
-          alert('ImgBB Error: Key add karo ya Firebase use karo');
+          showToast('ImgBB Error: Add API Key', 'error');
         }
       }
-      alert('✅ ImgBB Upload Complete!');
+      showToast('✅ ImgBB Upload Complete!');
       input.value = '';
     }
   }
@@ -484,7 +530,7 @@
 
   window.addFromUrl = function() {
     const url = document.getElementById('pMediaUrl').value.trim();
-    if(!url) return alert('URL daalo!');
+    if(!url) return showToast('URL daalo!', 'error');
 
     let type = 'url';
     if(url.match(/\.(jpg|jpeg|png|gif|webp)$/i)) type = 'image';
@@ -495,6 +541,7 @@
     window.uploadedMedia.push({url: url, type: type, name: 'URL File'});
     addToPreview(url, type, 'URL File');
     document.getElementById('pMediaUrl').value = '';
+    showToast('✅ URL Added!');
   }
 
   function addToPreview(url, type, name) {
@@ -502,7 +549,7 @@
     div.className = 'media-item';
     div.innerHTML = `
       <img src="${type==='image'?url:'https://via.placeholder.com/80?text='+type.toUpperCase()}"
-           style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:3px solid #ddd">
+         style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:3px solid #ddd">
       <span class="type-badge">${type}</span>
       <button onclick="deleteMedia('${url}')" class="del-btn">×</button>
     `;
@@ -513,16 +560,18 @@
     window.uploadedMedia = window.uploadedMedia.filter(m => m.url!== url);
     document.getElementById('mediaPreview').innerHTML = '';
     window.uploadedMedia.forEach(m => addToPreview(m.url, m.type, m.name));
+    showToast('🗑️ Media removed');
   }
 
   // ===== AI FUNCTIONS =====
   window.aiGenerateDesc = function() {
     const name = document.getElementById('pName').value;
     const cat = document.getElementById('pCategory').value;
-    if(!name) return alert('Pehle Product Name likho!');
+    if(!name) return showToast('Pehle Product Name likho!', 'error');
 
     const desc = `✨ ${name} - Premium Quality Product\n\n✓ 100% Original & Genuine\n✓ Category: ${cat}\n✓ Fast Delivery All Over India\n✓ Cash on Delivery Available\n✓ 7 Days Easy Return Policy\n✓ 24/7 Customer Support\n\nOrder Now! Limited Stock Available.`;
     document.getElementById('pDesc').value = desc;
+    showToast('🤖 AI Description Generated!');
   }
 
   window.aiSuggestType = function() {
@@ -535,10 +584,11 @@
     } else if(cat === 'Home item' || cat === 'Dish soap' || cat === 'Handwash') {
       typeSelect.innerHTML += `<option>Liquid</option><option>Powder</option><option>Gel</option><option>Bar</option>`;
     } else if(cat === 'Hair Oil') {
-      typeSelect.innerHTML += `<option>Hair Oil</option><option>Hair Serum</option><option>Shampoo</option>`;
+      typeSelect.innerHTML += `<option>Hair Oil</option><option>Hair Serum</option><option>Shampoo</option><option>Conditioner</option>`;
     } else {
       typeSelect.innerHTML += `<option>Standard</option><option>Premium</option><option>Economy</option>`;
     }
+    showToast('🤖 AI Type Suggested!');
   }
 
   window.loadProductTypes = function() {
@@ -557,9 +607,9 @@
       <input type="text" id="pFabric" placeholder="Fabric: Cotton,Silk,Polyester" class="w-48">
       <input type="text" id="pMaterial" placeholder="Material: Leather,Metal,Plastic" class="w-48">
       <textarea id="pSizePrice" placeholder="Size & Price: S-12000, M-13005" style="height:60px"></textarea>`;
-    } else if(cat === 'Hair Oil' || cat === 'Handwash' || cat === 'Dish soap') {
+    } else if(cat === 'Hair Oil' || cat === 'Handwash' || cat === 'Dish soap' || cat === 'Home item') {
       html += `<input type="number" id="pQty" placeholder="Quantity: 500" class="w-32">
-      <select id="pUnit" class="w-32"><option>ML</option><option>Litre</option><option>Kg</option><option>Gram</option></select>
+      <select id="pUnit" class="w-32"><option>ML</option><option>Litre</option><option>Kg</option><option>Gram</option><option>Pcs</option></select>
       <input type="date" id="pExpiry" placeholder="Expiry Date" class="w-32">
       <input type="text" id="pIngredients" placeholder="Ingredients">
       <textarea id="pVolumePrice" placeholder="Volume & Price: 250ml-50, 500ml-90, 1L-170, 5L-800" style="height:60px"></textarea>`;
@@ -569,25 +619,36 @@
     div.innerHTML = html;
   }
 
-  // ===== SAVE PRODUCT =====
+  // ===== SAVE PRODUCT - UPDATED WITH SERIES NO =====
   window.saveProduct = async function() {
     const btn = document.getElementById('saveBtn');
     btn.innerText = '⏳ Saving...';
     btn.disabled = true;
 
     const editId = document.getElementById('editId').value;
+    const category = document.getElementById('pCategory').value;
 
-    if(!document.getElementById('pName').value ||!document.getElementById('pCategory').value ||!document.getElementById('pPrice').value){
-      alert('Product Name, Category, Price required hai!');
-      btn.innerText = '💾 Save Product - HOME PAGE PE TURANT DIKHEGA';
+    if(!document.getElementById('pName').value ||!category ||!document.getElementById('pPrice').value){
+      showToast('Product Name, Category, Price required hai!', 'error');
+      btn.innerText = '💾 Save Product - INSTANT';
       btn.disabled = false;
       return;
+    }
+
+    // ✅ SERIES NUMBER NIKALO - Sirf new product ke liye
+    let seriesNo = 1;
+    if(!editId) {
+      seriesNo = await getCategorySeriesNumber(category);
+    } else {
+      const doc = await db.collection("products").doc(editId).get();
+      seriesNo = doc.data().seriesNo || 1;
     }
 
     const productData = {
       name: document.getElementById('pName').value,
       code: document.getElementById('pCode').value,
-      category: document.getElementById('pCategory').value,
+      category: category,
+      seriesNo: seriesNo, // ✅ NAYA FIELD
       type: document.getElementById('pType').value,
       desc: document.getElementById('pDesc').value,
       price: Number(document.getElementById('pPrice').value),
@@ -607,28 +668,47 @@
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    if(editId) {
-      await db.collection("products").doc(editId).update(productData);
-      document.getElementById('editId').value = '';
-    } else {
-      productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      productData.uploadedBy = auth.currentUser?.email || 'Admin';
-      await db.collection("products").add(productData);
-    }
+    try {
+      if(editId) {
+        await db.collection("products").doc(editId).update(productData);
+        document.getElementById('editId').value = '';
+        showToast('✅ Product Updated!');
+      } else {
+        productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        productData.uploadedBy = auth.currentUser?.email || 'Admin';
+        const docRef = await db.collection("products").add(productData);
+        // ✅ PRODUCT URL UPDATE KARO
+        await docRef.update({productUrl: window.location.origin + "/product.html?id=" + docRef.id});
+        showToast('✅ Product Added! Series: #' + seriesNo);
+      }
 
-    btn.innerText = '✅ Saved! HOME PAGE PE TURANT DIKHEGA';
-    setTimeout(() => {
-      btn.innerText = '💾 Save Product - HOME PAGE PE TURANT DIKHEGA';
+      btn.innerText = '✅ Saved!';
+      setTimeout(() => {
+        btn.innerText = '💾 Save Product - INSTANT';
+        btn.disabled = false;
+        window.uploadedMedia = [];
+        document.getElementById('mediaPreview').innerHTML = '';
+        document.getElementById('pName').value = '';
+        document.getElementById('pDesc').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pStock').value = '';
+        document.getElementById('pMrp').value = '';
+        document.getElementById('pCode').value = '';
+        loadProducts();
+      }, 1000);
+    } catch(err) {
+      showToast('❌ Error: ' + err.message, 'error');
+      btn.innerText = '💾 Save Product - INSTANT';
       btn.disabled = false;
-      window.uploadedMedia = [];
-      document.getElementById('mediaPreview').innerHTML = '';
-      document.getElementById('pName').value = '';
-      document.getElementById('pDesc').value = '';
-      loadProducts();
-    }, 2000);
+    }
   }
 
   // ===== FILTER PRODUCTS =====
+  window.debounceFilter = function() {
+    clearTimeout(window.filterTimeout);
+    window.filterTimeout = setTimeout(() => filterProducts(), 300);
+  }
+
   window.filterProducts = function() {
     const search = document.getElementById('searchName').value.toLowerCase();
     const cat = document.getElementById('filterCat').value;
@@ -643,6 +723,7 @@
              p.price >= minP && p.price <= maxP;
     });
     renderProducts(filtered);
+    document.getElementById('filterCount').innerText = `Total: ${filtered.length}`;
   }
 
   window.clearFilters = function() {
@@ -652,31 +733,39 @@
     document.getElementById('minPrice').value = '';
     document.getElementById('maxPrice').value = '';
     renderProducts(window.allProducts);
+    document.getElementById('filterCount').innerText = `Total: ${window.allProducts.length}`;
   }
 
-  // ===== LOAD PRODUCTS =====
+  // ===== LOAD PRODUCTS - UPDATED WITH SERIES NO =====
   window.loadProducts = async function() {
-    const productsSnap = await db.collection("products").orderBy("createdAt", "desc").get();
-    window.allProducts = [];
-    productsSnap.forEach(doc => {
-      window.allProducts.push({id: doc.id,...doc.data()});
-    });
-    renderProducts(window.allProducts);
+    try {
+      const productsSnap = await db.collection("products").orderBy("createdAt", "desc").get();
+      window.allProducts = [];
+      productsSnap.forEach(doc => {
+        window.allProducts.push({id: doc.id,...doc.data()});
+      });
+      renderProducts(window.allProducts);
+      document.getElementById('filterCount').innerText = `Total: ${window.allProducts.length}`;
+    } catch(err) {
+      showToast('❌ Error loading products', 'error');
+    }
   }
 
   function renderProducts(products) {
+    document.getElementById('productCount').innerText = products.length;
     let html = '<table width="100%" border="1" style="border-collapse:collapse"><thead style="background:#f8f9fa"><tr><th style="padding:8px">Series</th><th style="padding:8px">Image</th><th style="padding:8px">Name</th><th style="padding:8px">Category</th><th style="padding:8px">Type</th><th style="padding:8px">Price</th><th style="padding:8px">Stock</th><th style="padding:8px">Uploaded</th><th style="padding:8px">Action</th></tr></thead><tbody>';
     products.forEach((p, i) => {
       const imgUrl = p.media?.[0]?.url || p.media?.[0] || 'https://via.placeholder.com/50';
+      const stockBadge = p.stock > 0? `<span class="badge-success">${p.stock}</span>` : `<span class="badge-warning">0</span>`;
       html += `<tr>
-        <td style="padding:8px">${i+1}</td>
-        <td style="padding:8px"><img src="${imgUrl}" style="width:50px;height:50px;object-fit:cover"></td>
-        <td style="padding:8px">${p.name}</td>
+        <td style="padding:8px"><b>#${p.seriesNo || i+1}</b></td>
+        <td style="padding:8px"><img src="${imgUrl}" style="width:50px;height:50px;object-fit:cover;border-radius:4px"></td>
+        <td style="padding:8px"><b>${p.name}</b><br><small style="color:#666">${p.code||''}</small></td>
         <td style="padding:8px"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:12px;font-size:12px">${p.category}</span></td>
         <td style="padding:8px">${p.type || '-'}</td>
-        <td style="padding:8px">₹${p.price}</td>
-        <td style="padding:8px">${p.stock}</td>
-        <td style="padding:8px">${p.createdAt? new Date(p.createdAt.seconds*1000).toLocaleString() : 'N/A'}<br><small>By ${p.uploadedBy || 'Admin'}</small></td>
+        <td style="padding:8px"><b>₹${p.price}</b><br><small style="text-decoration:line-through;color:#999">₹${p.mrp||''}</small></td>
+        <td style="padding:8px">${stockBadge}</td>
+        <td style="padding:8px"><small>${p.createdAt? new Date(p.createdAt.seconds*1000).toLocaleDateString() : 'N/A'}</small><br><small>By ${p.uploadedBy || 'Admin'}</small></td>
         <td style="padding:8px">
           <button onclick="editProduct('${p.id}')" class="btn-edit" style="padding:5px 10px">Edit</button>
           <button onclick="deleteProduct('${p.id}')" class="btn-del" style="padding:5px 10px">🗑️</button>
@@ -684,7 +773,7 @@
       </tr>`;
     });
     html += '</tbody></table>';
-    document.getElementById('productsList').innerHTML = html;
+    document.getElementById('productsList').innerHTML = html || '<p>No products found</p>';
   }
 
   window.editProduct = async function(id) {
@@ -721,11 +810,13 @@
 
     document.getElementById('saveBtn').innerText = '💾 Update Product';
     window.scrollTo(0, 0);
+    showToast('✏️ Edit Mode Active');
   }
 
   window.deleteProduct = async function(id) {
     if(confirm('Delete this product?')) {
       await db.collection("products").doc(id).delete();
+      showToast('🗑️ Product Deleted');
       loadProducts();
     }
   }
@@ -750,6 +841,7 @@
       const url = await snap.ref.getDownloadURL();
       document.getElementById('catImg').value = url;
       document.getElementById('catImagePreview').innerHTML = `<img src="${url}" style="width:100px;height:100px;object-fit:cover;border-radius:8px">`;
+      showToast('✅ Category Image Uploaded');
     }
   }
 
@@ -761,7 +853,8 @@
   window.addCategory = async function() {
     const name = document.getElementById('catName').value;
     const img = document.getElementById('catImg').value;
-    if(!name) return alert('Category Name required!');
+    if(!name) return showToast('Category Name required!', 'error');
+
     await db.collection("categories").add({
       name: name,
       image: img,
@@ -771,6 +864,7 @@
     document.getElementById('catName').value = '';
     document.getElementById('catImg').value = '';
     document.getElementById('catImagePreview').innerHTML = '';
+    showToast('✅ Category Added');
     loadCategories();
   }
 
@@ -779,7 +873,8 @@
     let html = '<table width="100%" border="1" style="border-collapse:collapse"><thead><tr><th>Image</th><th>Name</th><th>Products</th><th>Action</th></tr></thead><tbody>';
     catSnap.forEach(doc => {
       const c = doc.data();
-      html += `<tr><td><img src="${c.image||'https://via.placeholder.com/50'}" style="width:50px;height:50px"></td><td>${c.name}</td><td>0</td><td><button onclick="deleteCategory('${doc.id}')" class="btn-del">Delete</button></td></tr>`;
+      const productCount = window.allProducts.filter(p => p.category === c.name).length;
+      html += `<tr><td><img src="${c.image||'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:4px"></td><b>${c.name}</b></td><td>${productCount}</td><td><button onclick="deleteCategory('${doc.id}')" class="btn-del">Delete</button></td></tr>`;
     });
     html += '</tbody></table>';
     document.getElementById('catList').innerHTML = html;
@@ -800,70 +895,182 @@
   window.deleteCategory = async function(id) {
     if(confirm('Delete this category?')) {
       await db.collection("categories").doc(id).delete();
+      showToast('🗑️ Category Deleted');
       loadCategories();
     }
   }
 
-  // ===== ORDERS =====
+  // ===== ORDERS - OTP VERIFY ADDED =====
   window.loadOrders = async function() {
     const ordersSnap = await db.collection("orders").orderBy("date","desc").get();
-    let html = '<table width="100%" border="1"><thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>';
+    window.allOrders = [];
+    let html = '<table width="100%" border="1"><thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>OTP</th><th>Date</th><th>Action</th></tr></thead><tbody>';
     ordersSnap.forEach(doc => {
       const o = doc.data();
+      window.allOrders.push({id: doc.id,...o});
+      const statusColor = o.status === 'Delivered'? '#10b981' : o.status === 'Cancelled'? '#ef4444' : o.status === 'Confirmed'? '#3b82f6' : '#f59e0b';
       html += `<tr>
-        <td>${o.orderId}</td>
+        <td><b>${o.orderId}</b></td>
         <td>${o.name||'N/A'}</td>
         <td>${o.mobile||'N/A'}</td>
-        <td>₹${o.total||0}</td>
-        <td><select onchange="updateOrderStatus('${doc.id}',this.value)">
+        <td><b>₹${o.total||0}</b></td>
+        <td><select onchange="updateOrderStatus('${doc.id}',this.value)" style="background:${statusColor};color:white;border:none;padding:5px;border-radius:4px">
+          <option ${o.status==='Pending OTP'?'selected':''}>Pending OTP</option>
           <option ${o.status==='Pending'?'selected':''}>Pending</option>
           <option ${o.status==='Confirmed'?'selected':''}>Confirmed</option>
           <option ${o.status==='Shipped'?'selected':''}>Shipped</option>
           <option ${o.status==='Delivered'?'selected':''}>Delivered</option>
           <option ${o.status==='Cancelled'?'selected':''}>Cancelled</option>
         </select></td>
+        <td>${o.otpVerified? '<span class="badge-success">✓ Verified</span>' : '<span class="badge-warning">Pending</span>'}</td>
         <td>${o.date? new Date(o.date.seconds*1000).toLocaleDateString() : 'N/A'}</td>
         <td><button class="btn-edit" onclick="viewOrder('${doc.id}')">View</button></td>
       </tr>`;
     });
     html += '</tbody></table>';
-    document.getElementById('ordersList').innerHTML = html;
+    document.getElementById('ordersList').innerHTML = html || '<p>No orders found</p>';
+    document.getElementById('orderCount').innerText = `Total: ${ordersSnap.size}`;
   }
 
   window.updateOrderStatus = async function(id, status) {
     await db.collection("orders").doc(id).update({status: status});
+    showToast('✅ Order Status Updated');
     loadOrders();
+  }
+
+  // ✅ OTP VERIFY FUNCTION - NAYA
+  window.verifyOtpAndConfirm = async function() {
+    const oid = document.getElementById("verifyOrderId").value.trim();
+    const otp = document.getElementById("verifyOtp").value.trim();
+
+    if(!oid ||!otp) return showToast("Order ID aur OTP daalo", "error");
+    if(otp.length!== 6) return showToast("6 digit OTP daalo", "error");
+
+    const orderDoc = await db.collection("orders").doc(oid).get();
+    if(!orderDoc.exists) return showToast("Order ID nahi mila", "error");
+
+    await db.collection("orders").doc(oid).update({
+      status: "Confirmed",
+      otpVerified: true,
+      otpEntered: otp,
+      confirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    showToast("✅ Order Confirmed! Customer ko WhatsApp kar do");
+    loadOrders();
+    document.getElementById("verifyOrderId").value = "";
+    document.getElementById("verifyOtp").value = "";
   }
 
   window.viewOrder = async function(id) {
     const doc = await db.collection("orders").doc(id).get();
     const o = doc.data();
-    let items = o.items.map(i => `${i.name} x${i.qty} = ₹${i.price*i.qty}`).join('\n');
-    alert(`Order: ${o.orderId}\nCustomer: ${o.name}\nMobile: ${o.mobile}\nAddress: ${o.address}\n\nItems:\n${items}\n\nTotal: ₹${o.total}\nStatus: ${o.status}`);
+    let items = o.items? o.items.map(i => `${i.name} x${i.qty} = ₹${i.price*i.qty}`).join('\n') : 'N/A';
+    alert(`Order: ${o.orderId}\nCustomer: ${o.name}\nMobile: ${o.mobile}\nAddress: ${o.address}\n\nProduct: ${o.productName}\nCategory: ${o.category} | Series: #${o.seriesNo}\nProduct Link: ${o.productUrl}\n\nItems:\n${items}\n\nTotal: ₹${o.total}\nStatus: ${o.status}\nOTP: ${o.otpVerified? 'Verified' : 'Pending'}`);
   }
 
   window.filterOrders = function() {
-    loadOrders();
+    const status = document.getElementById('orderStatus').value;
+    if(!status) {
+      loadOrders();
+      return;
+    }
+    const filtered = window.allOrders.filter(o => o.status === status);
+    let html = '<table width="100%" border="1"><thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>OTP</th><th>Date</th><th>Action</th></tr></thead><tbody>';
+    filtered.forEach(o => {
+      const statusColor = o.status === 'Delivered'? '#10b981' : o.status === 'Cancelled'? '#ef4444' : o.status === 'Confirmed'? '#3b82f6' : '#f59e0b';
+      html += `<tr>
+        <td><b>${o.orderId}</b></td>
+        <td>${o.name||'N/A'}</td>
+        <td>${o.mobile||'N/A'}</td>
+        <td><b>₹${o.total||0}</b></td>
+        <td><select onchange="updateOrderStatus('${o.id}',this.value)" style="background:${statusColor};color:white;border:none;padding:5px;border-radius:4px">
+          <option ${o.status==='Pending OTP'?'selected':''}>Pending OTP</option>
+          <option ${o.status==='Pending'?'selected':''}>Pending</option>
+          <option ${o.status==='Confirmed'?'selected':''}>Confirmed</option>
+          <option ${o.status==='Shipped'?'selected':''}>Shipped</option>
+          <option ${o.status==='Delivered'?'selected':''}>Delivered</option>
+          <option ${o.status==='Cancelled'?'selected':''}>Cancelled</option>
+        </select></td>
+        <td>${o.otpVerified? '<span class="badge-success">✓ Verified</span>' : '<span class="badge-warning">Pending</span>'}</td>
+        <td>${o.date? new Date(o.date.seconds*1000).toLocaleDateString() : 'N/A'}</td>
+        <td><button class="btn-edit" onclick="viewOrder('${o.id}')">View</button></td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('ordersList').innerHTML = html;
+    document.getElementById('orderCount').innerText = `Total: ${filtered.length}`;
   }
 
   // ===== CUSTOMERS =====
   window.loadCustomers = async function() {
-    const custSnap = await db.collection("customers").get();
-    let html = '<table width="100%" border="1"><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Orders</th><th>Joined</th></tr></thead><tbody>';
+    const custSnap = await db.collection("customers").orderBy("loginTime", "desc").get();
+    window.allCustomers = [];
+    let html = '<table width="100%" border="1"><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Orders</th><th>Joined</th><th>Last Login</th></tr></thead><tbody>';
     custSnap.forEach(doc => {
       const c = doc.data();
-      html += `<tr><td>${c.name}</td><td>${c.mobile}</td><td>${c.email||'N/A'}</td><td>${c.orders||0}</td><td>${c.loginTime? new Date(c.loginTime.seconds*1000).toLocaleDateString() : 'N/A'}</td></tr>`;
+      window.allCustomers.push({id: doc.id,...c});
+      html += `<tr>
+        <td><b>${c.name||'N/A'}</b></td>
+        <td>${c.mobile||'N/A'}</td>
+        <td>${c.email||'N/A'}</td>
+        <td><span class="badge-success">${c.orders||0}</span></td>
+        <td>${c.createdAt? new Date(c.createdAt.seconds*1000).toLocaleDateString() : 'N/A'}</td>
+        <td>${c.loginTime? new Date(c.loginTime.seconds*1000).toLocaleString() : 'N/A'}</td>
+      </tr>`;
     });
     html += '</tbody></table>';
-    document.getElementById('customersList').innerHTML = html;
+    document.getElementById('customersList').innerHTML = html || '<p>No customers found</p>';
+    document.getElementById('customerCount').innerText = `Total: ${custSnap.size}`;
+  }
+
+  window.debounceCustomerSearch = function() {
+    clearTimeout(window.filterTimeout);
+    window.filterTimeout = setTimeout(() => searchCustomers(), 300);
   }
 
   window.searchCustomers = function() {
     const query = document.getElementById('custSearch').value.toLowerCase();
-    loadCustomers();
+    if(!query) {
+      loadCustomers();
+      return;
+    }
+    const filtered = window.allCustomers.filter(c => 
+      (c.name||'').toLowerCase().includes(query) || 
+      (c.mobile||'').includes(query) ||
+      (c.email||'').toLowerCase().includes(query)
+    );
+    let html = '<table width="100%" border="1"><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Orders</th><th>Joined</th><th>Last Login</th></tr></thead><tbody>';
+    filtered.forEach(c => {
+      html += `<tr>
+        <td><b>${c.name||'N/A'}</b></td>
+        <td>${c.mobile||'N/A'}</td>
+        <td>${c.email||'N/A'}</td>
+        <td><span class="badge-success">${c.orders||0}</span></td>
+        <td>${c.createdAt? new Date(c.createdAt.seconds*1000).toLocaleDateString() : 'N/A'}</td>
+        <td>${c.loginTime? new Date(c.loginTime.seconds*1000).toLocaleString() : 'N/A'}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('customersList').innerHTML = html;
+    document.getElementById('customerCount').innerText = `Total: ${filtered.length}`;
   }
 
   // ===== PAYMENT =====
+  window.loadPaymentSettings = async function() {
+    const paySnap = await db.collection("payment").doc("details").get();
+    if(paySnap.exists) {
+      const p = paySnap.data();
+      document.getElementById('upiId').value = p.upiId || '';
+      document.getElementById('upiName').value = p.upiName || '';
+      document.getElementById('upiNumber').value = p.upiNumber || '';
+      if(p.qrCode) {
+        document.getElementById('qrPreview').src = p.qrCode;
+        document.getElementById('qrPreview').style.display = 'block';
+      }
+    }
+  }
+
   window.savePayment = async function() {
     const btn = event.target;
     btn.innerText = '⏳ Saving...';
@@ -877,15 +1084,19 @@
       qrUrl = await snap.ref.getDownloadURL();
     }
 
+    const existingSnap = await db.collection("payment").doc("details").get();
+    const existingData = existingSnap.exists? existingSnap.data() : {};
+
     await db.collection("payment").doc("details").set({
       upiId: document.getElementById('upiId').value,
       upiName: document.getElementById('upiName').value,
       upiNumber: document.getElementById('upiNumber').value,
-      qrCode: qrUrl,
+      qrCode: qrUrl || existingData.qrCode || '',
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     btn.innerText = '✅ Saved!';
+    showToast('✅ Payment Details Saved');
     setTimeout(() => {
       btn.innerText = '💾 Save Payment Details';
       btn.disabled = false;
@@ -893,6 +1104,21 @@
   }
 
   // ===== THEME =====
+  window.loadThemeSettings = async function() {
+    const themeSnap = await db.collection("theme").doc("settings").get();
+    if(themeSnap.exists) {
+      const t = themeSnap.data();
+      document.getElementById('primaryColor').value = t.primaryColor || '#e40046';
+      document.getElementById('bgColor').value = t.bgColor || '#ffffff';
+      document.getElementById('cardColor').value = t.cardColor || '#f8f9fa';
+      document.getElementById('textColor').value = t.textColor || '#212121';
+      document.getElementById('logoUrl').value = t.logoUrl || '';
+      document.getElementById('bannerUrl').value = t.bannerUrl || '';
+      document.getElementById('fontFamily').value = t.fontFamily || 'Arial,sans-serif';
+      previewTheme();
+    }
+  }
+
   window.previewTheme = function() {
     document.documentElement.style.setProperty('--accent', document.getElementById('primaryColor').value);
     document.documentElement.style.setProperty('--bg', document.getElementById('bgColor').value);
@@ -910,6 +1136,7 @@
       const url = await snap.ref.getDownloadURL();
       document.getElementById('logoUrl').value = url;
       previewTheme();
+      showToast('✅ Logo Uploaded');
     }
   }
 
@@ -922,6 +1149,7 @@
       const url = await snap.ref.getDownloadURL();
       document.getElementById('bannerUrl').value = url;
       previewTheme();
+      showToast('✅ Banner Uploaded');
     }
   }
 
@@ -930,8 +1158,7 @@
     btn.innerText = '⏳ Saving...';
     btn.disabled = true;
 
-    await db.collection("theme").doc("settings").set({
-      primaryColor: document.getElementById('primaryColor').value,
+    await db.collection("theme").doc("settings").set({primaryColor: document.getElementById('primaryColor').value,
       bgColor: document.getElementById('bgColor').value,
       cardColor: document.getElementById('cardColor').value,
       textColor: document.getElementById('textColor').value,
@@ -942,8 +1169,9 @@
     });
 
     btn.innerText = '✅ Saved! HOME PAGE PE APPLY HOGA';
+    showToast('✅ Theme Saved - Live on Website');
     setTimeout(() => {
-      btn.innerText = '💾 Save Theme - HOME PAGE PE APPLY HOGA';
+      btn.innerText = '💾 Save Theme - INSTANT APPLY';
       btn.disabled = false;
     }, 2000);
   }
@@ -959,10 +1187,11 @@
       document.getElementById('fontFamily').value = 'Arial,sans-serif';
       previewTheme();
       await saveTheme();
+      showToast('🔄 Theme Reset to Default');
     }
   }
 
-  // ===== COMPANY DETAILS =====
+  // ===== COMPANY =====
   window.loadCompanyDetails = async function() {
     const companySnap = await db.collection("company").doc("details").get();
     if(companySnap.exists) {
@@ -993,6 +1222,9 @@
       photoUrl = await snap.ref.getDownloadURL();
     }
 
+    const existingSnap = await db.collection("company").doc("details").get();
+    const existingData = existingSnap.exists? existingSnap.data() : {};
+
     await db.collection("company").doc("details").set({
       about: document.getElementById('cAbout').value,
       features: document.getElementById('cFeatures').value,
@@ -1000,11 +1232,12 @@
       adminName: document.getElementById('adminName').value,
       adminMobile: document.getElementById('adminMobile').value,
       adminEmail: document.getElementById('adminEmail').value,
-      adminPhoto: photoUrl || document.getElementById('adminPhotoPreview').src,
+      adminPhoto: photoUrl || existingData.adminPhoto || '',
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     btn.innerText = '✅ Saved! Dashboard Pe Dikhega';
+    showToast('✅ Company Details Saved');
     setTimeout(() => {
       btn.innerText = '💾 Save All - Live Update';
       btn.disabled = false;
@@ -1013,7 +1246,7 @@
   }
 
   window.previewAdminPhoto = function() {
-        const file = document.getElementById('adminPhoto').files[0];
+    const file = document.getElementById('adminPhoto').files[0];
     if(file) {
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -1024,23 +1257,36 @@
     }
   }
 
-  // ===== AI GENERATORS =====
   window.aiGenerateAbout = function() {
-    const about = `🌟 SANTRA MALL - Aapka Apna Digital Shopping Mall\n\nHum laaye hain best quality products sabse kam price me. Hamara mission hai har ghar tak genuine products pahunchana.\n\n✨ Kyun Chune SANTRA MALL?\n✓ 100% Original Products\n✓ Best Price Guarantee\n✓ Fast Delivery - 2-3 Days\n✓ Cash on Delivery Available\n✓ Easy 7 Days Return\n✓ 24/7 Customer Support\n\nTrusted by 10,000+ Happy Customers!`;
+     const about = `🌟 SANTRA MALL - Aapka Apna Digital Shopping Mall\n\nHum laaye hain best quality products sabse kam price me. Hamara mission hai har ghar tak genuine products pahunchana.\n\n✨ Kyun Chune SANTRA MALL?\n✓ 100% Original Products\n✓ Best Price Guarantee\n✓ Fast Delivery - 2-3 Days\n✓ Cash on Delivery Available\n✓ 7 Days Easy Return\n✓ 24/7 Customer Support\n\nTrusted by 10,000+ Happy Customers!`;
     document.getElementById('cAbout').value = about;
+    showToast('🤖 AI About Generated!');
   }
 
   window.aiGenerateFeatures = function() {
     const features = `🚀 SANTRA MALL Features:\n\n1. ✓ Wide Product Range - Electronics, Fashion, Home, Beauty\n2. ✓ Best Prices - Direct from Manufacturer\n3. ✓ Fast Delivery - All India Delivery in 2-5 Days\n4. ✓ Cash on Delivery - Pay After Receiving\n5. ✓ Easy Returns - 7 Days No Question Asked\n6. ✓ Secure Payment - UPI, Card, Net Banking\n7. ✓ 24/7 Support - WhatsApp/Call Support\n8. ✓ Quality Assured - 100% Genuine Products`;
     document.getElementById('cFeatures').value = features;
+    showToast('🤖 AI Features Generated!');
   }
 
   window.aiGenerateRules = function() {
     const rules = `📋 Terms & Conditions - SANTRA MALL\n\n1. ORDER: Order confirm hone ke baad cancel nahi hoga\n2. PAYMENT: COD available. Online payment secure hai\n3. DELIVERY: 2-5 working days me delivery\n4. RETURN: 7 days me return, product unused hona chahiye\n5. REFUND: Return approve hone ke 5-7 days me refund\n6. WARRANTY: Brand warranty applicable\n7. DISPUTE: Company ka decision final hoga\n\nCustomer Care: 9829508335`;
     document.getElementById('cRules').value = rules;
+    showToast('🤖 AI Rules Generated!');
   }
 
-  // ===== CREATOR DETAILS =====
+  // ===== CREATOR =====
+  window.loadCreatorDetails = async function() {
+    const creatorSnap = await db.collection("creator").doc("details").get();
+    if(creatorSnap.exists) {
+      const data = creatorSnap.data();
+      document.getElementById('creatorName').value = data.name || '';
+      document.getElementById('creatorBio').value = data.bio || '';
+      document.getElementById('creatorWebsite').value = data.website || '';
+      document.getElementById('creatorSocial').value = data.social || '';
+    }
+  }
+
   window.saveCreator = async function() {
     const btn = event.target;
     btn.innerText = '⏳ Saving...';
@@ -1055,6 +1301,7 @@
     });
 
     btn.innerText = '✅ Saved!';
+    showToast('✅ Creator Details Saved');
     setTimeout(() => {
       btn.innerText = '💾 Save Creator Details';
       btn.disabled = false;
@@ -1064,19 +1311,24 @@
   // ===== HELP DESK =====
   window.loadHelpMessages = async function() {
     const msgSnap = await db.collection("helpdesk").orderBy("date","desc").get();
-    let html = '<table width="100%" border="1"><thead><tr><th>Name</th><th>Mobile</th><th>Message</th><th>Date</th><th>Action</th></tr></thead><tbody>';
+    let html = '<table width="100%" border="1"><thead><tr><th>Name</th><th>Mobile</th><th>Message</th><th>Date</th><th>Reply</th><th>Action</th></tr></thead><tbody>';
     msgSnap.forEach(doc => {
       const m = doc.data();
+      const replyStatus = m.reply? `<span class="badge-success">Replied</span>` : `<span class="badge-warning">Pending</span>`;
       html += `<tr>
-        <td>${m.name}</td>
+        <td><b>${m.name}</b></td>
         <td>${m.mobile}</td>
         <td>${m.message}</td>
         <td>${m.date? new Date(m.date.seconds*1000).toLocaleString() : 'N/A'}</td>
-        <td><button onclick="replyHelp('${doc.id}')" class="btn-edit">Reply</button></td>
+        <td>${m.reply || '-'}</td>
+        <td>
+          <button onclick="replyHelp('${doc.id}')" class="btn-edit" style="padding:5px 10px">Reply</button>
+          ${replyStatus}
+        </td>
       </tr>`;
     });
     html += '</tbody></table>';
-    document.getElementById('helpMessages').innerHTML = html;
+    document.getElementById('helpMessages').innerHTML = html || '<p>No messages found</p>';
   }
 
   window.replyHelp = function(id) {
@@ -1086,7 +1338,7 @@
         reply: reply,
         repliedAt: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
-        alert('Reply sent!');
+        showToast('✅ Reply sent!');
         loadHelpMessages();
       });
     }
@@ -1094,48 +1346,55 @@
 
   // ===== BACKUP =====
   window.exportProducts = async function() {
+    showToast('⏳ Exporting products...');
     const snap = await db.collection("products").get();
     const data = [];
     snap.forEach(doc => data.push({id: doc.id,...doc.data()}));
-    downloadJSON(data, 'santra_products_backup.json');
+    downloadJSON(data, 'santra_products_backup_' + Date.now() + '.json');
+    showToast('✅ Products Exported');
   }
 
   window.exportOrders = async function() {
+    showToast('⏳ Exporting orders...');
     const snap = await db.collection("orders").get();
     const data = [];
     snap.forEach(doc => data.push({id: doc.id,...doc.data()}));
-    downloadJSON(data, 'santra_orders_backup.json');
+    downloadJSON(data, 'santra_orders_backup_' + Date.now() + '.json');
+    showToast('✅ Orders Exported');
   }
 
   window.exportAll = async function() {
+    showToast('⏳ Exporting all data...');
     const allData = {
       products: [],
       orders: [],
       customers: [],
       categories: [],
       company: {},
-      theme: {}
+      theme: {},
+      creator: {}
     };
 
-    const pSnap = await db.collection("products").get();
+    const [pSnap, oSnap, cSnap, catSnap, compSnap, themeSnap, creatorSnap] = await Promise.all([
+      db.collection("products").get(),
+      db.collection("orders").get(),
+      db.collection("customers").get(),
+      db.collection("categories").get(),
+      db.collection("company").doc("details").get(),
+      db.collection("theme").doc("settings").get(),
+      db.collection("creator").doc("details").get()
+    ]);
+
     pSnap.forEach(doc => allData.products.push({id: doc.id,...doc.data()}));
-
-    const oSnap = await db.collection("orders").get();
     oSnap.forEach(doc => allData.orders.push({id: doc.id,...doc.data()}));
-
-    const cSnap = await db.collection("customers").get();
     cSnap.forEach(doc => allData.customers.push({id: doc.id,...doc.data()}));
-
-    const catSnap = await db.collection("categories").get();
     catSnap.forEach(doc => allData.categories.push({id: doc.id,...doc.data()}));
-
-    const compSnap = await db.collection("company").doc("details").get();
     if(compSnap.exists) allData.company = compSnap.data();
-
-    const themeSnap = await db.collection("theme").doc("settings").get();
     if(themeSnap.exists) allData.theme = themeSnap.data();
+    if(creatorSnap.exists) allData.creator = creatorSnap.data();
 
     downloadJSON(allData, 'santra_mall_full_backup_' + Date.now() + '.json');
+    showToast('✅ Full Backup Downloaded');
   }
 
   function downloadJSON(data, filename) {
@@ -1145,20 +1404,19 @@
     a.href = url;
     a.download = filename;
     a.click();
-    alert('✅ Backup Downloaded: ' + filename);
   }
 
   window.importData = function() {
     const file = document.getElementById('importFile').files[0];
-    if(!file) return alert('File select karo!');
+    if(!file) return showToast('File select karo!', 'error');
 
     const reader = new FileReader();
     reader.onload = async function(e) {
       try {
         const data = JSON.parse(e.target.result);
         if(confirm('Import karne se purana data overwrite ho sakta hai. Continue?')) {
+          showToast('⏳ Importing data...');
 
-          // Products import
           if(data.products) {
             for(let p of data.products) {
               const id = p.id;
@@ -1167,7 +1425,6 @@
             }
           }
 
-          // Orders import
           if(data.orders) {
             for(let o of data.orders) {
               const id = o.id;
@@ -1176,11 +1433,37 @@
             }
           }
 
-          alert('✅ Data Import Complete! Refresh karo');
-          location.reload();
+          if(data.categories) {
+            for(let c of data.categories) {
+              const id = c.id;
+              delete c.id;
+              await db.collection("categories").doc(id).set(c);
+            }
+          }
+
+          if(data.customers) {
+            for(let c of data.customers) {
+              const id = c.id;
+              delete c.id;
+              await db.collection("customers").doc(id).set(c);
+            }
+          }
+
+          if(data.company && Object.keys(data.company).length > 0) {
+            await db.collection("company").doc("details").set(data.company);
+          }
+          if(data.theme && Object.keys(data.theme).length > 0) {
+            await db.collection("theme").doc("settings").set(data.theme);
+          }
+          if(data.creator && Object.keys(data.creator).length > 0) {
+            await db.collection("creator").doc("details").set(data.creator);
+          }
+
+          showToast('✅ Data Import Complete!');
+          setTimeout(() => location.reload(), 1000);
         }
       } catch(err) {
-        alert('❌ Import Error: ' + err.message);
+        showToast('❌ Import Error: ' + err.message, 'error');
       }
     }
     reader.readAsText(file);
@@ -1189,11 +1472,12 @@
   window.clearAllData = async function() {
     if(confirm('⚠️ SAARE PRODUCTS DELETE HO JAYENGE! Confirm?')) {
       if(confirm('LAST WARNING: Ye action undo nahi hoga!')) {
+        showToast('⏳ Deleting all products...');
         const snap = await db.collection("products").get();
         const batch = db.batch();
         snap.forEach(doc => batch.delete(doc.ref));
         await batch.commit();
-        alert('✅ All Products Deleted');
+        showToast('✅ All Products Deleted');
         loadProducts();
       }
     }
@@ -1201,18 +1485,23 @@
 
   // ===== AUTO INIT =====
   document.addEventListener('DOMContentLoaded', () => {
-    if(document.getElementById('dashAdminName')) initDashboardTab();
-    if(document.getElementById('productsList')) loadProducts();
-    if(document.getElementById('cAbout')) loadCompanyDetails();
-    if(document.getElementById('catList')) loadCategories();
-    if(document.getElementById('ordersList')) loadOrders();
-    if(document.getElementById('customersList')) loadCustomers();
-    if(document.getElementById('helpMessages')) loadHelpMessages();
+    setTimeout(() => {
+      if(document.getElementById('dashAdminName')) initDashboardTab();
+      if(document.getElementById('productsList')) loadProducts();
+      if(document.getElementById('cAbout')) loadCompanyDetails();
+      if(document.getElementById('catList')) loadCategories();
+      if(document.getElementById('ordersList')) loadOrders();
+      if(document.getElementById('customersList')) loadCustomers();
+      if(document.getElementById('helpMessages')) loadHelpMessages();
+      if(document.getElementById('creatorName')) loadCreatorDetails();
+      if(document.getElementById('upiId')) loadPaymentSettings();
+      if(document.getElementById('primaryColor')) loadThemeSettings();
+    }, 500);
   });
 
-  console.log('✅ SANTRA MALL Admin Panel v4.0 Loaded - All Features Active');
+  console.log('✅ SANTRA MALL Admin Panel v4.2 Loaded - OTP Flow Active');
 </script>
 </body>
 </html>
-    
-    
+
+  
