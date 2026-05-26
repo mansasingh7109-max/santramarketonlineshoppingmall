@@ -48,7 +48,7 @@
 .variant-stock.in-stock{color:var(--green)}
 .variant-stock.out-stock{color:#ef4444;font-weight:bold}
 .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
-.features{background:linear-gradient(135deg,#f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
+.features{background:linear-gradient(135deg,#f9f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
 .features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
 .features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
 .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
@@ -62,7 +62,7 @@
 .error{text-align:center;padding:100px 20px}
 .error h2{color:#ef4444;margin-bottom:10px}
 .error p{color:#666;margin-bottom:20px}
-.qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9;border-radius:8px}
+.qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9f9;border-radius:8px}
 .qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
 .qty-box button:disabled{opacity:0.3;cursor:not-allowed}
 .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
@@ -101,7 +101,7 @@
 
 <script>
 // ===== FIREBASE CONFIG - ⚠️ YAHAN APNI KEYS DAALO =====
- const firebaseConfig = {
+  const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -195,23 +195,12 @@ function getVariantType(category) {
     return { label: 'Storage', icon: '💾', unit: '' };
   }
 
-  if(cat.includes('jewellery') || cat.includes('ring') || cat.includes('bangle')) {
-    return { label: 'Size', icon: '💍', unit: '' };
-  }
-
-  if(cat.includes('plant') || cat.includes('seed')) {
-    return { label: 'Packet', icon: '🌱', unit: '' };
-  }
-
-  if(cat.includes('utensils') || cat.includes('home') || cat.includes('stationar')) {
-    return { label: 'Type', icon: '📦', unit: '' };
-  }
-
   return { label: 'Variant', icon: '📦', unit: '' };
 }
 
-// ===== RENDER PRODUCT DETAILS - AUTO VARIANTS FOR ALL CATEGORIES =====
+// ===== RENDER PRODUCT DETAILS - FIXED ALL BUGS =====
 function renderProduct(p) {
+  // FIX 1: Images array ya string dono handle karo
   let images = [];
   if(p.images) {
     if(Array.isArray(p.images)) {
@@ -228,104 +217,37 @@ function renderProduct(p) {
   images = images.filter(img => img && img.trim()!== '');
   if(images.length === 0) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
 
-  // ===== VARIANTS LOGIC =====
+  // FIX 2: Sirf Firebase me jo variants hain wahi dikhao - NO AUTO GENERATE
   let variants = [];
 
-  // 1. Pehle Firebase se check karo
   if(p.variants && Array.isArray(p.variants) && p.variants.length > 0) {
     variants = p.variants;
   }
   else if(p.sizes) {
     let sizesArray = typeof p.sizes === 'string'? p.sizes.split(',').map(s => s.trim()) : p.sizes;
-    variants = sizesArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+    variants = sizesArray.map(s => ({name: s, stock: p.stock}));
   }
   else if(p.size) {
     let sizeArray = typeof p.size === 'string'? p.size.split(',').map(s => s.trim()) : [p.size];
-    variants = sizeArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+    variants = sizeArray.map(s => ({name: s, stock: p.stock}));
   }
   else if(p.volumes) {
     let volArray = typeof p.volumes === 'string'? p.volumes.split(',').map(s => s.trim()) : p.volumes;
-    variants = volArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+    variants = volArray.map(s => ({name: s, stock: p.stock}));
   }
   else if(p.weights) {
     let weightArray = typeof p.weights === 'string'? p.weights.split(',').map(s => s.trim()) : p.weights;
-    variants = weightArray.map(s => ({name: s, price: p.price, stock: p.stock}));
+    variants = weightArray.map(s => ({name: s, stock: p.stock}));
   }
-  // 2. Agar Firebase me nahi hai to AUTO GENERATE karo
-  else {
-    let cat = (p.category || '').toLowerCase();
-    let autoVariants = [];
-
-    // CLOTHES - S, M, L, XL, XXL
-    if(cat.includes('dress') || cat.includes('cloth') || cat.includes('shirt') ||
-       cat.includes('tshirt') || cat.includes('jeans') || cat.includes('kurta') ||
-       cat.includes('salwar') || cat.includes('suit') || cat.includes('gown') ||
-       cat.includes('saree')) {
-      autoVariants = ['S','M','L','XL','XXL'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-    // LIQUIDS - ml, L
-    else if(cat.includes('oil') || cat.includes('liquid') || cat.includes('juice') ||
-            cat.includes('milk') || cat.includes('water') || cat.includes('handwash') ||
-            cat.includes('shampoo') || cat.includes('soap') || cat.includes('dish soap')) {
-      autoVariants = ['50ml','100ml','250ml','500ml','1L','2L','5L'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-    // FOOD/GRAINS - g, kg
-    else if(cat.includes('food') || cat.includes('grain') || cat.includes('rice') ||
-            cat.includes('wheat') || cat.includes('dal') || cat.includes('seed') ||
-            cat.includes('sugar') || cat.includes('salt') || cat.includes('flour') ||
-            cat.includes('atta')) {
-      autoVariants = ['100g','250g','500g','1kg','2kg','5kg','10kg'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-    // ELECTRONICS - Storage
-    else if(cat.includes('mobile') || cat.includes('laptop') || cat.includes('electronic') ||
-            cat.includes('phone')) {
-      autoVariants = ['64GB','128GB','256GB','512GB','1TB'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-    // JEWELLERY
-    else if(cat.includes('jewellery') || cat.includes('ring') || cat.includes('bangle')) {
-      autoVariants = ['Small','Medium','Large','XL'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-    // PLANTS/SEEDS
-    else if(cat.includes('plant') || cat.includes('seed')) {
-      autoVariants = ['1 Pack','2 Pack','5 Pack','10 Pack'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-    // UTENSILS/HOME/STATIONARY
-    else if(cat.includes('utensils') || cat.includes('home') || cat.includes('stationar')) {
-      autoVariants = ['Small','Medium','Large','XL'].map(s => ({
-        name: s,
-        price: p.price,
-        stock: 0
-      }));
-    }
-
-    variants = autoVariants;
-  }
+  // NO AUTO S,M,L,XL - Sirf admin se jo add kiya
 
   let variantType = getVariantType(p.category);
+
+  // FIX 3: Pehla available variant dhoondo
+  let firstAvailable = variants.find(v => {
+    let stock = typeof v === 'object'? v.stock : undefined;
+    return stock === undefined || stock > 0;
+  });
 
   let variantHTML = '';
 
@@ -463,11 +385,13 @@ function renderProduct(p) {
     if(firstBtn) {
       firstBtn.click();
     } else if(variants.length > 0) {
+      // Agar koi bhi available nahi hai
       document.getElementById('cartBtn').disabled = true;
       document.getElementById('buyBtn').disabled = true;
       document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
       document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
     } else {
+      // Agar variants hi nahi hain, product stock check karo
       let productStock = p.stock;
       if(productStock === 0) {
         document.getElementById('cartBtn').disabled = true;
@@ -479,8 +403,9 @@ function renderProduct(p) {
   }, 100);
 }
 
-// ===== VARIANT SELECT =====
+// ===== VARIANT SELECT - FIXED =====
 function selectVariant(variant, btn) {
+  // Disabled button pe click prevent - Alert nahi aayega
   if(btn.disabled || btn.classList.contains('unavailable')) {
     return;
   }
@@ -488,6 +413,7 @@ function selectVariant(variant, btn) {
   selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
   selectedVariant = selectedVariantData.name || selectedVariantData.size || selectedVariantData.volume || selectedVariantData.weight;
 
+  // Stock check - undefined = available
   let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
   if(stock <= 0) {
     return;
