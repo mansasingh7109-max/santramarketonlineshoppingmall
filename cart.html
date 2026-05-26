@@ -8,33 +8,33 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px}
-  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;color:#666}
-  .tab.active{background:var(--accent);color:white}
-  .cart-item{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .cart-item img{width:80px;height:80px;object-fit:contain;background:#f9f9f9;border-radius:6px}
-  .item-info{flex:1}
-  .item-info h3{font-size:14px;margin-bottom:5px}
-  .item-price{color:var(--accent);font-weight:bold;font-size:16px}
-  .item-code{font-size:11px;color:#999;margin:3px 0}
-  .qty-control{display:flex;align-items:center;gap:8px;margin:8px 0}
-  .qty-btn{width:30px;height:30px;border:1px solid var(--border);background:white;border-radius:4px;font-size:18px;cursor:pointer}
-  .qty-num{font-weight:bold;min-width:20px;text-align:center}
-  .remove-btn{color:#ef4444;font-size:13px;cursor:pointer;font-weight:bold;background:none;border:none;margin-right:10px}
-  .wish-btn{color:#ff6b6b;font-size:18px;cursor:pointer;background:none;border:none}
-  .summary{background:var(--card);margin:15px;border-radius:8px;padding:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-  .total-row{font-weight:bold;font-size:18px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
-  .checkout-btn{width:100%;padding:15px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin:15px;cursor:pointer}
-  .checkout-btn:disabled{background:#ccc;cursor:not-allowed}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .hide{display:none!important}
+.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.header h1{font-size:18px}
+.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+.tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;color:#666}
+.tab.active{background:var(--accent);color:white}
+.cart-item{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.cart-item img{width:80px;height:80px;object-fit:contain;background:#f9f9f9;border-radius:6px}
+.item-info{flex:1}
+.item-info h3{font-size:14px;margin-bottom:5px}
+.item-price{color:var(--accent);font-weight:bold;font-size:16px}
+.item-code{font-size:11px;color:#999;margin:3px 0}
+.qty-control{display:flex;align-items:center;gap:8px;margin:8px 0}
+.qty-btn{width:30px;height:30px;border:1px solid var(--border);background:white;border-radius:4px;font-size:18px;cursor:pointer}
+.qty-num{font-weight:bold;min-width:20px;text-align:center}
+.remove-btn{color:#ef4444;font-size:13px;cursor:pointer;font-weight:bold;background:none;border:none;margin-right:10px}
+.wish-btn{color:#ff6b6b;font-size:18px;cursor:pointer;background:none;border:none}
+.summary{background:var(--card);margin:15px;border-radius:8px;padding:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+.total-row{font-weight:bold;font-size:18px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
+.checkout-btn{width:100%;padding:15px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin:15px;cursor:pointer}
+.checkout-btn:disabled{background:#ccc;cursor:not-allowed}
+.empty{text-align:center;padding:60px 20px;color:#999}
+.hide{display:none!important}
     input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px}
     label{display:block;margin-top:12px;font-size:14px;color:#333}
-  .loader{display:none;text-align:center;padding:10px;color:#e40046;font-weight:bold}
+.loader{display:none;text-align:center;padding:10px;color:#e40046;font-weight:bold}
   </style>
 </head>
 <body>
@@ -65,38 +65,20 @@
       <span>Total:</span>
       <span id="grandTotal">₹0</span>
     </div>
-
-    <h4 style="margin:20px 0 10px;">Delivery Details</h4>
-    <label>Full Name *</label>
-    <input type="text" id="custName" placeholder="Enter your name">
-    <label>Mobile Number *</label>
-    <input type="tel" id="custMobile" placeholder="10 digit mobile" maxlength="10">
-    <label>Email (Optional)</label>
-    <input type="email" id="custEmail" placeholder="your@email.com">
-    <label>Complete Address *</label>
-    <textarea id="custAddress" rows="3" placeholder="House no, Street, City, Pincode"></textarea>
-    <label>Payment Mode *</label>
-    <select id="custPayment">
-      <option value="">Select Payment</option>
-      <option value="COD">Cash on Delivery</option>
-      <option value="Online">Online Payment - Pay After Confirmation</option>
-    </select>
-
-    <div class="loader" id="loader">⏳ Placing your order...</div>
   </div>
-  <button id="checkoutBtn" class="checkout-btn hide" onclick="placeOrder()">📦 Place Order</button>
+  <button id="checkoutBtn" class="checkout-btn hide" onclick="checkoutWhatsApp()">📲 Order on WhatsApp</button>
 </div>
 
 <div id="wishlistView" class="hide">
   <div id="wishList"></div>
 </div>
 
-<!-- FIREBASE SDK - COMPAT VERSION -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
 // ===== FIREBASE CONFIG - YAHAN APNI KEY DAAL ⚠️ =====
+
   const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -107,14 +89,9 @@
   measurementId: "G-ZW1ZR8HETY"
 };
 
-// ===== ADMIN WHATSAPP NUMBER - YAHAN APNA NUMBER DAAL ⚠️ =====
-const ADMIN_WHATSAPP = "8769171078";
-
-// ===== FIREBASE INIT =====
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ===== TERA CODE =====
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
 
@@ -123,12 +100,6 @@ let wishlist = [];
 let currentTab = 'cart';
 
 document.addEventListener('DOMContentLoaded', function() {
-  let customer = localStorage.getItem('santra_customer');
-  if(customer){
-    let custData = JSON.parse(customer);
-    document.getElementById('custName').value = custData.name || '';
-    document.getElementById('custMobile').value = custData.mobile || '';
-  }
   loadCart();
   loadWishlist();
   updateCounts();
@@ -159,6 +130,8 @@ function loadCart() {
     price: parseFloat(item.price) || 0,
     image: getImageUrl(item),
     code: item.code || item.sku || item.product_code || 'N/A',
+    category: item.category || 'General',
+    serial_no: item.serial_no || 'N/A',
     qty: parseInt(item.qty) || 1
   }));
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
@@ -190,7 +163,7 @@ function renderCart() {
       <div class="item-info">
         <h3>${item.name}</h3>
         <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
-        <div class="item-code">Code: ${productCode}</div>
+        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no}</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
           <span class="qty-num">${qty}</span>
@@ -262,6 +235,8 @@ function loadWishlist() {
     price: parseFloat(item.price) || 0,
     image: getImageUrl(item),
     code: item.code || item.sku || item.product_code || 'N/A',
+    category: item.category || 'General',
+    serial_no: item.serial_no || 'N/A',
     qty: parseInt(item.qty) || 1
   }));
   localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
@@ -286,7 +261,7 @@ function renderWishlist(){
       <div class="item-info">
         <h3>${item.name}</h3>
         <div class="item-price">₹${item.price || 0}</div>
-        <div class="item-code">Code: ${productCode}</div>
+        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no}</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="updateWishQty(${index}, -1)">-</button>
           <span class="qty-num">${qty}</span>
@@ -331,6 +306,8 @@ function moveToCart(index){
       price: item.price || 0,
       image: getImageUrl(item),
       code: item.code || 'N/A',
+      category: item.category || 'General',
+      serial_no: item.serial_no || 'N/A',
       qty: item.qty || 1
     });
   }
@@ -355,126 +332,66 @@ function updateCounts(){
   document.getElementById('wishCount').innerText = wishCount;
 }
 
-// ===== PLACE ORDER - WHATSAPP + SUCCESS SCREEN =====
-async function placeOrder(){
-  if(typeof db === 'undefined') {
-    alert('❌ ERROR: Database connect nahi hua');
-    console.error('db is undefined');
-    return;
-  }
-
+// ===== WHATSAPP CHECKOUT - UPDATED 26/5/2026 - SERIES + CATEGORY FIXED =====
+function checkoutWhatsApp(){
   if(cart.length === 0){
-    alert('Cart khali hai! Pehle product add karo.');
+    alert('Cart khali hai!');
     return;
   }
 
-  let name = document.getElementById('custName').value.trim();
-  let mobile = document.getElementById('custMobile').value.trim();
-  let address = document.getElementById('custAddress').value.trim();
-  let payment = document.getElementById('custPayment').value;
-  let email = document.getElementById('custEmail').value.trim();
+  let firstItem = cart[0];
 
-  if(!name ||!mobile ||!address ||!payment){
-    alert('Naam, Mobile, Address aur Payment mode bharna zaroori hai');
-    return;
-  }
+  // YE SAB FIELD ZARURI HAI WHATSAPP MESSAGE KE LIYE
+  localStorage.setItem('pending_whatsapp_order_' + firstItem.id, JSON.stringify({
+    productId: firstItem.id,
+    productName: firstItem.name,
+    productPrice: firstItem.price,
+    productImage: firstItem.image,
+    productCode: firstItem.code,
+    category: firstItem.category,
+    serial_no: firstItem.serial_no
+  }));
 
-  if(mobile.length!== 10 || isNaN(mobile)){
-    alert('Please enter valid 10-digit mobile number!');
-    return;
-  }
-
-  document.getElementById('loader').style.display = 'block';
-  document.getElementById('loader').innerText = '⏳ Placing your order...';
-  document.getElementById('checkoutBtn').disabled = true;
-  document.getElementById('checkoutBtn').innerText = '⏳ Processing...';
-
-  let subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
-  let delivery = subtotal >= 500? 0 : 49;
-  let total = subtotal + delivery;
-
-  const orderId = 'SM' + Date.now();
-  const orderDate = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
-
-  const orderData = {
-    orderId: orderId,
-    customerName: name,
-    customerMobile: mobile,
-    customerEmail: email,
-    customerAddress: address,
-    items: cart,
-    subtotal: subtotal,
-    delivery: delivery,
-    totalAmount: total,
-    paymentMode: payment,
-    status: "pending_otp",
-    orderDate: firebase.firestore.FieldValue.serverTimestamp(),
-    orderDateString: orderDate
-  };
-
-  try {
-    await db.collection("orders").add(orderData);
-    console.log('✅ Order saved to Firebase');
-
-    // ===== WHATSAPP MESSAGE TO ADMIN =====
-    let itemsText = "";
-    cart.forEach((item, idx) => {
-      let itemTotal = (item.price || 0) * (item.qty || 1);
-      let productCode = item.code || 'N/A';
-      itemsText += `${idx+1}. ${productCode} | ${item.name} x ${item.qty || 1} = Rs.${itemTotal}\n`;
-    });
-
-    let adminMessage = `🛒 *NEW ORDER REQUEST* #${orderId}\n\n` +
-      `*Payment Mode:* ${payment}\n` +
-      `⚠️ *OTP REQUIRED FOR ${payment}*\n\n` +
-      `*CUSTOMER DETAILS:*\n` +
-      `Name: ${name}\n` +
-      `Mobile: ${mobile}\n` +
-      `Email: ${email || 'N/A'}\n` +
-      `Address: ${address}\n\n` +
-      `*ORDER ITEMS:*\n${itemsText}` +
-      `💰 Subtotal: Rs.${subtotal}\n` +
-      `📦 Delivery: ${delivery === 0? 'FREE' : 'Rs.' + delivery}\n` +
-      `💰 Total Amount: Rs.${total}\n\n` +
-      `⚠️ ACTION: Send OTP to customer on WhatsApp`;
-
-    // WhatsApp khol dega admin ke liye
-    window.open(`https://wa.me/91${ADMIN_WHATSAPP}?text=${encodeURIComponent(adminMessage)}`, '_blank');
-    // ===== WHATSAPP CODE END =====
-
-    localStorage.setItem(CART_KEY, JSON.stringify([]));
-
-    // Success screen cart.html pe hi dikha
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('cartView').innerHTML = `
-      <div style="text-align:center;padding:40px 20px;">
-        <div style="font-size:60px;color:#25D366;margin-bottom:15px">✅</div>
-        <h2 style="color:#25D366;margin-bottom:10px">Order Placed Successfully!</h2>
-        <p style="color:#666;margin-bottom:5px">Order ID: <b>${orderId}</b></p>
-        <p style="color:#666;margin-bottom:20px">We will contact you on <b>${mobile}</b> shortly for OTP.</p>
-        <p style="color:#999;font-size:13px;margin-bottom:20px">Please keep your phone active</p>
-        <button class="checkout-btn" onclick="window.location.href='index.html'">Continue Shopping</button>
-        <button class="checkout-btn" style="background:#25D366;margin-top:10px" onclick="alert('Order tracking coming soon!')">Track My Order</button>
-      </div>
-    `;
-
-    updateCounts();
-
-  } catch (error) {
-    console.error('Firebase Error:', error);
-    alert('❌ Error placing order: ' + error.message);
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('checkoutBtn').disabled = false;
-    document.getElementById('checkoutBtn').innerText = '📦 Place Order';
-  }
+  window.location.href = 'whatsapp-order.html?product=' + firstItem.id;
 }
 
+// ===== Add to Cart Function - Product Page se call hoga =====
+window.addToCart = function(product){
+  let item = cart.find(c => c.id === product.id);
+  if(item){
+    item.qty = (item.qty || 1) + 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price || 0,
+      image: getImageUrl(product),
+      code: product.code || product.product_code || 'N/A',
+      category: product.category || 'General',
+      serial_no: product.serial_no || 'N/A',
+      qty: 1
+    });
+  }
+  saveCart();
+  alert('Added to Cart 🛒');
+}
+
+// ===== Add to Wishlist Function - Product Page se call hoga =====
 window.addToWishlist = function(product){
   let item = wishlist.find(w => w.id === product.id);
   if(item){
     item.qty = (item.qty || 1) + 1;
   } else {
-    wishlist.push({...product, qty: 1});
+    wishlist.push({
+      id: product.id,
+      name: product.name,
+      price: product.price || 0,
+      image: getImageUrl(product),
+      code: product.code || product.product_code || 'N/A',
+      category: product.category || 'General',
+      serial_no: product.serial_no || 'N/A',
+      qty: 1
+    });
   }
   saveWishlist();
   alert('Added to Wishlist 😍');
