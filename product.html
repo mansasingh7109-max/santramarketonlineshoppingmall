@@ -102,7 +102,7 @@
 <script>
 // ===== FIREBASE CONFIG - ⚠️ YAHAN APNI KEYS DAALO =====
  
-  const firebaseConfig = {
+   const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -562,7 +562,7 @@ function changeQty(change) {
   document.getElementById('qtyDisplay').innerText = selectedQty;
 }
 
-// ===== ADD TO CART - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY FIXED =====
+// ===== ADD TO CART - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY + AUTO LINK FIXED =====
 function addToCart() {
   if(!selectedVariant) {
     alert('⚠️ Please select a variant first!');
@@ -577,8 +577,16 @@ function addToCart() {
 
   let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
   let seriesNo = getSeriesNumber(currentProduct.category, currentProduct.id);
-
   let finalPrice = selectedVariantData.price || currentProduct.price;
+
+  // ✅ AUTO LINK FIX - DONO DOMAIN PE CHALEGA
+  const baseUrl = window.location.origin;
+  const pathName = window.location.pathname;
+  let productPath = '/product.html';
+  if(pathName.includes('/santramarketonlineshoppingmall')){
+      productPath = '/santramarketonlineshoppingmall/product.html';
+  }
+  const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(currentProduct.id)}`;
 
   let cartItem = {
     id: currentProduct.id,
@@ -590,7 +598,7 @@ function addToCart() {
     category: currentProduct.category || 'General',
     variant: selectedVariant,
     variantType: getVariantType(currentProduct.category).label,
-    productLink: window.location.href,
+    productLink: productLink, // ✅ AUTO LINK
     qty: selectedQty
   };
 
@@ -605,7 +613,7 @@ function addToCart() {
   alert('✅ Added to Cart! 🛒');
 }
 
-// ===== BUY NOW - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY FIXED =====
+// ===== BUY NOW - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY + AUTO LINK FIXED =====
 function buyNow() {
   if(!selectedVariant) {
     alert('⚠️ Please select a variant first!');
@@ -622,7 +630,7 @@ function buyNow() {
   window.location.href = 'cart.html';
 }
 
-// ===== ADD TO WISHLIST - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY FIXED =====
+// ===== ADD TO WISHLIST - UPDATED 26/5/2026 - SERIAL_NO + CATEGORY + AUTO LINK FIXED =====
 function addToWishlist() {
   if(!selectedVariant) {
     alert('⚠️ Please select a variant first!');
@@ -631,8 +639,16 @@ function addToWishlist() {
 
   let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
   let seriesNo = getSeriesNumber(currentProduct.category, currentProduct.id);
-
   let finalPrice = selectedVariantData.price || currentProduct.price;
+
+  // ✅ AUTO LINK FIX - DONO DOMAIN PE CHALEGA
+  const baseUrl = window.location.origin;
+  const pathName = window.location.pathname;
+  let productPath = '/product.html';
+  if(pathName.includes('/santramarketonlineshoppingmall')){
+      productPath = '/santramarketonlineshoppingmall/product.html';
+  }
+  const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(currentProduct.id)}`;
 
   let wishItem = {
     id: currentProduct.id,
@@ -644,7 +660,7 @@ function addToWishlist() {
     category: currentProduct.category || 'General',
     variant: selectedVariant,
     variantType: getVariantType(currentProduct.category).label,
-    productLink: window.location.href,
+    productLink: productLink, // ✅ AUTO LINK
     qty: selectedQty
   };
 
@@ -672,16 +688,25 @@ function getSeriesNumber(category, productId) {
   return `${code}${numId.padStart(4, '0')}`;
 }
 
-// ===== SHARE PRODUCT =====
+// ===== SHARE PRODUCT - UPDATED 26/5/2026 - AUTO LINK FIX =====
 function shareProduct() {
+  // ✅ AUTO LINK FIX - DONO DOMAIN PE SAHI LINK JAYEGA
+  const baseUrl = window.location.origin;
+  const pathName = window.location.pathname;
+  let productPath = '/product.html';
+  if(pathName.includes('/santramarketonlineshoppingmall')){
+      productPath = '/santramarketonlineshoppingmall/product.html';
+  }
+  const shareUrl = `${baseUrl}${productPath}?id=${encodeURIComponent(currentProduct.id)}`;
+
   if(navigator.share) {
     navigator.share({
       title: currentProduct.name,
       text: `Check out ${currentProduct.name} on SANTRA MALL - ₹${selectedVariantData?.price || currentProduct.price}`,
-      url: window.location.href
+      url: shareUrl
     });
   } else {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(shareUrl);
     alert('🔗 Link copied to clipboard!');
   }
 }
