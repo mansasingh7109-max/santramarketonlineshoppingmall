@@ -3,7 +3,7 @@
 body{padding-bottom:70px;background:#E8F5E9!important}
 
 /* ===== HEADER - ORANGE SIDEBAR + LEMON YELLOW ===== */
-.header{padding:0;position:sticky;top:0;z-index:100;display:flex;flex-direction:row;align-items:center;box-shadow:0 5px 0 #E65100;min-height:280px;background:linear-gradient(90deg, #FFF176 0%, #FFB74D 100%)!important;border-bottom:4px solid #E65100!important}
+.header:not(.admin-header){padding:0;position:sticky;top:0;z-index:100;display:flex;min-height:240px!important;background:linear-gradient(90deg, #FFF176 0%, #FFB74D 100%)!important;border-bottom:4px solid #E65100!important;width:100%!important;position:relative!important;box-shadow:0 5px 0 #E65100!important;}
 
 /* LEFT ORANGE SIDEBAR 100px */
 .header::before{
@@ -367,4 +367,79 @@ label{display:block;margin-top:12px;font-size:14px}
 .header-btn span {
   font-size: 9px !important;
   line-height: 1 !important;
+}
+/* ===== ADMIN SAFE + SIDEBAR FIX ===== */
+.header::before{content:''!important;position:absolute!important;left:0!important;top:0!important;width:100px!important;height:100%!important;background:linear-gradient(180deg,#FB8C00 0%,#E65100 100%)!important;box-shadow:5px 0 0 #BF360C!important;z-index:1!important;}
+.header h1{position:absolute!important;right:15px!important;top:30%!important;transform:translateY(-50%)!important;color:#BF360C!important;font-size:24px!important;font-weight:bold!important;text-shadow:2px 2px 0 rgba(255,255,255,0.7)!important;z-index:5!important;}
+.header-btn[onclick*="logout"], .header-btn.logout-btn, button[class*="logout"], #logoutBtn{display:none!important;}
+.header-btns{position:absolute!important;left:0!important;top:0!important;width:100px!important;height:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:20px!important;padding:15px 0!important;z-index:20!important;}
+.header-btn{width:60px!important;height:60px!important;font-size:9px!important;font-weight:bold!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:4px!important;}
+.header-btn[onclick*="login"], .login-btn{background:linear-gradient(145deg,#E1F5FE,#B3E5FC)!important;color:#01579B!important;border-radius:12px!important;border:3px solid #0277BD!important;outline:2px solid #BBDEFB!important;outline-offset:-6px!important;box-shadow:0 4px 0 #01579B!important;}
+.header-btn[onclick*="wishlist"], .wishlist-btn{background:linear-gradient(145deg,#F1F8E9,#AED581)!important;color:#33691E!important;border-radius:50% 50% / 65% 65% 35%!important;border:3px solid #558B2F!important;outline:2px solid #DCEDC8!important;outline-offset:-6px!important;box-shadow:0 4px 0 #33691E!important;}
+.header-btn[onclick*="help"], .help-btn, #helpBtn{background:linear-gradient(145deg,#E3F2FD,#90CAF9)!important;color:#0D47A1!important;border-radius:50px!important;height:70px!important;border:3px solid #1976D2!important;outline:2px solid #BBDEFB!important;outline-offset:-6px!important;box-shadow:0 4px 0 #0D47A1!important;}
+.banner video, .banner img{width:100%!important;height:160px!important;object-fit:cover!important;display:block!important;margin:0!important;}
+/* PRODUCT SLIDER BAND */
+.image-slider{height:150px!important}
+.slide-img{display:none!important}
+.slide-img:first-child{display:block!important;width:100%!important;height:150px!important;object-fit:contain!important}
+.prev-btn,.next-btn,.dots{display:none!important}
+
+/* ===== 1. VIDEO BANNER - FULL WIDTH LEFT TO RIGHT FIX ===== */
+.banner, .mall-video-banner{
+  margin:0!important;padding:0!important;width:100%!important;
+  border-radius:0!important;max-width:100%!important;
+}
+.banner video, .banner img, .mall-video-banner video, .mall-video-banner img{
+  width:100%!important;max-width:100%!important;height:160px!important;
+  object-fit:cover!important;display:block!important;
+  margin:0!important;padding:0!important;border:none!important;
+}
+
+/* ===== 2. HEADER SIDEBAR - 3 BUTTON 20px GAP FIX ===== */
+.header-btns{
+  position:absolute!important;left:0!important;top:0!important;
+  width:100px!important;height:100%!important;display:flex!important;
+  flex-direction:column!important;align-items:center!important;
+  justify-content:flex-start!important;gap:20px!important;
+  padding:15px 0!important;z-index:20!important;
+}
+
+.header-btn{
+  width:60px!important;height:60px!important;font-size:9px!important;
+  font-weight:bold!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  margin:0!important;padding:4px!important;
+}
+
+/* LOGIN - ROW 1 - SQUARE */
+.header-btn[onclick*="login"], .login-btn, button[class*="login"], #loginBtn{
+  background:linear-gradient(145deg,#E1F5FE,#B3E5FC)!important;
+  color:#01579B!important;border-radius:12px!important;
+  border:3px solid #0277BD!important;outline:2px solid #BBDEFB!important;
+  outline-offset:-6px!important;box-shadow:0 4px 0 #01579B!important;
+  order:1!important;
+}
+
+/* WISHLIST - ROW 2 - HEART SHAPE */
+.header-btn[onclick*="wishlist"], .wishlist-btn, button[class*="wishlist"], #wishlistBtn{
+  background:linear-gradient(145deg,#F1F8E9,#AED581)!important;
+  color:#33691E!important;
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%!important;
+  border:3px solid #558B2F!important;outline:2px solid #DCEDC8!important;
+  outline-offset:-6px!important;box-shadow:0 4px 0 #33691E!important;
+  order:2!important;
+}
+
+/* HELP DESK - ROW 3 - PILL SHAPE */
+.header-btn[onclick*="help"], .help-btn, button[class*="help"], #helpBtn, #helpDeskBtn{
+  background:linear-gradient(145deg,#E3F2FD,#90CAF9)!important;
+  color:#0D47A1!important;border-radius:50px!important;height:70px!important;
+  border:3px solid #1976D2!important;outline:2px solid #BBDEFB!important;
+  outline-offset:-6px!important;box-shadow:0 4px 0 #0D47A1!important;
+  order:3!important;
+}
+
+/* LOGOUT BUTTON HIDE - ADMIN SAFE */
+.header-btn[onclick*="logout"], .header-btn.logout-btn, button[class*="logout"], #logoutBtn{
+  display:none!important;
 }
