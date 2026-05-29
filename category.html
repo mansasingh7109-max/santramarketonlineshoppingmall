@@ -1,35 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Categories - SANTRA MALL</title>
   <style>
-    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
+    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff;--ai:#007bff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
-    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-    .header h1{color:var(--accent);font-size:20px;}
-    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
-    .container{padding:15px;}
-    .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-    .cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
-    .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
-    .cat-card h4{font-size:14px;color:#333;}
-    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;}
-    .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
-    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
-    .product-card .price{color:var(--accent);font-weight:bold;font-size:16px;}
-    .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;}
-    .nav-item.active{color:var(--accent);}
-    .nav-item div{font-size:22px;}
-    .nav-item span{font-size:11px;display:block;margin-top:2px;}
-    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-    .hide{display:none!important;}
-    .loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
+  .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+  .header h1{color:var(--accent);font-size:20px;}
+  .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+  .container{padding:15px;}
+  .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
+  .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
+  .cat-card h4{font-size:14px;color:#333;}
+  .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;}
+  .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+  .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
+  .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;min-height:36px;}
+  .price{color:var(--accent);font-weight:bold;font-size:16px;}
+  .mrp{color:#999;font-size:13px;text-decoration:line-through;margin-left:6px;}
+  .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+  .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
+  .nav-item.active{color:var(--accent);}
+  .nav-item div{font-size:22px;}
+  .nav-item span{font-size:11px;display:block;margin-top:2px;}
+  .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+  .hide{display:none!important;}
+  .loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
+  .filter-btn{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;}
+  .ai-btn{background:var(--ai);color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-left:8px;}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999;}
+  .modal-content{background:#fff;width:90%;max-width:400px;border-radius:12px;padding:20px;max-height:80vh;overflow-y:auto;}
+  .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+  .modal-header h3{color:var(--accent);font-size:18px;}
+  .ai-header h3{color:var(--ai);}
+  .close-btn{background:#ddd;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;}
+  .search-box{width:100%;padding:10px;border:2px solid var(--accent);border-radius:6px;margin-bottom:15px;font-size:14px;}
+  .ai-search{border-color:var(--ai);}
+  .filter-group{margin-bottom:15px;}
+  .filter-group label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px;}
+  .filter-group select{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;}
+  .modal-footer{display:flex;gap:10px;margin-top:20px;}
+  .modal-footer button{flex:1;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
+  .clear-btn{background:#777;color:#fff;}
+  .apply-btn{background:var(--accent);color:#fff;}
+  .ai-apply-btn{background:var(--ai);color:#fff;}
+  .all-prod-btn{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-right:8px;}
+  .ai-result{background:#f0f7ff;border-left:4px solid var(--ai);padding:10px;border-radius:6px;margin:10px 0;font-size:13px;}
   </style>
 </head>
 <body>
@@ -42,15 +63,57 @@
 
 <div class="container">
   <div id="catView">
-    <h3 style="margin-bottom:15px;">Shop by Category</h3>
+    <button class="all-prod-btn" onclick="showAllProducts()">🛍️ All Products</button>
+    <button class="ai-btn" onclick="openAIModal()">🤖 AI Help</button>
+    <h3 style="margin:15px 0;">Shop by Category</h3>
     <div id="catList" class="cat-grid">
       <div class="loader">Loading...</div>
     </div>
   </div>
-  
+
   <div id="productView" class="hide">
-    <h3 style="margin-bottom:15px;" id="catTitle"></h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
+      <h3 id="catTitle"></h3>
+      <div>
+        <button class="all-prod-btn" onclick="backToCategories()">← Categories</button>
+        <button class="ai-btn" onclick="openAIModal()">🤖 AI Help</button>
+        <button class="filter-btn" onclick="openFilterModal()">🔍 Filter</button>
+      </div>
+    </div>
     <div id="productList" class="product-grid"></div>
+  </div>
+</div>
+
+<!-- FILTER MODAL -->
+<div id="filterModal" class="modal hide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🔍 Filter Products</h3>
+      <button class="close-btn" onclick="closeFilterModal()">×</button>
+    </div>
+    <input type="text" class="search-box" id="filterSearch" placeholder="Search by name, brand..." onkeyup="liveFilterSearch()">
+    <div id="filterContainer"></div>
+    <div class="modal-footer">
+      <button class="clear-btn" onclick="clearFilters()">Clear All</button>
+      <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI HELP MODAL -->
+<div id="aiModal" class="modal hide">
+  <div class="modal-content">
+    <div class="modal-header ai-header">
+      <h3>🤖 AI Shopping Helper</h3>
+      <button class="close-btn" onclick="closeAIModal()">×</button>
+    </div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px;">Apni need likho, AI product suggest karega</p>
+    <input type="text" class="search-box ai-search" id="aiQuery" placeholder="Jaise: Sardi ke liye soap, Gift ke liye, Baal jhadne ka oil...">
+    <div id="aiResult"></div>
+    <div class="modal-footer">
+      <button class="clear-btn" onclick="closeAIModal()">Close</button>
+      <button class="ai-apply-btn" onclick="askAI()">🔍 Suggest Products</button>
+    </div>
   </div>
 </div>
 
@@ -71,92 +134,335 @@
 </div>
 
 <script type="module">
-  import { firebaseConfig } from './secrets.js';
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
-  import { getFirestore, collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-  
+  import { getFirestore, collection, onSnapshot, getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-</script>
 
   let allProducts = [];
+  let currentCategory = '';
+  let activeFilters = {};
+  let searchTerm = '';
+  let showAll = false;
+  let categoryFilterMap = {};
 
-  // Products load karo - Real-time
+  // AI Keywords mapping - tu apne hisab se add kar sakti hai
+  const aiKeywords = {
+    'sardi|cold|winter': { category: 'Personal Care', filters: { Type: 'Soap' }, msg: 'Sardi me moisturizing soap best rahenge' },
+    'gift|tohfa': { category: '', filters: { price: '<500' }, msg: 'Gift ke liye ye products dekho' },
+    'baal|hair|jhhad': { category: 'Hair Care', filters: {}, msg: 'Baalon ke liye ye oil/shampoo try karo' },
+    'bartan|utensil|kitchen': { category: 'Utensils', filters: {}, msg: 'Kitchen ke liye ye items hain' },
+    'bacha|baby|kid': { category: 'Personal Care', filters: { Type: 'Baby Soap' }, msg: 'Bachchon ke liye gentle products' },
+    'face|chehra|skin': { category: 'Skin Care', filters: {}, msg: 'Face ke liye ye products hain' },
+    'dandruff|rushee': { category: 'Hair Care', filters: { Type: 'Anti-Dandruff' }, msg: 'Dandruff ke liye ye shampoo dekho' }
+  };
+
   onSnapshot(collection(db, "products"), (snapshot) => {
     allProducts = [];
     snapshot.forEach((doc) => {
-      allProducts.push({ id: doc.id, ...doc.data() });
+      allProducts.push({ id: doc.id,...doc.data() });
     });
-    loadCategories();
+    if (showAll) {
+      renderProducts();
+    } else if (!currentCategory) {
+      loadCategories();
+    } else {
+      renderProducts();
+    }
+    updateCartCount();
   });
 
-  // ===== FIXED: SIRF ADMIN DASHBOARD WALI IMAGE DIKHEGI =====
+  async function loadCategoryFilters(catName) {
+    const docSnap = await getDoc(doc(db, "category_filters", catName));
+    return docSnap.exists()? docSnap.data().filters : [];
+  }
+
   function loadCategories(){
     const catList = document.getElementById('catList');
-    onSnapshot(collection(db, "categories"), (snapshot) => {
-      catList.innerHTML = '';
-      if(snapshot.empty){
-        catList.innerHTML = '<p class="loader">No categories yet</p>';
-        return;
-      }
-      snapshot.forEach((doc) => {
-        const cat = doc.data();
-        const count = allProducts.filter(p => p.category === cat.name).length;
-        // FIX: Sirf cat.img use karo - koi auto-fetch nahi
-        const imageUrl = cat.img || 'https://via.placeholder.com/80?text=No+Image';
-        catList.innerHTML += `
-          <div class="cat-card" onclick="showCategoryProducts('${cat.name}')">
-            <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}">
-            <h4>${cat.name}</h4>
-            <p style="font-size:12px;color:#999;">${count} Products</p>
-          </div>
-        `;
-      });
+    const categories = [...new Set(allProducts.map(p => p.Category).filter(Boolean))];
+
+    if(categories.length === 0){
+      catList.innerHTML = '<p class="loader">No categories yet. Add products from Admin Panel</p>';
+      return;
+    }
+
+    catList.innerHTML = '';
+    categories.forEach(catName => {
+      const count = allProducts.filter(p => p.Category === catName && p.stock > 0).length;
+      const firstProd = allProducts.find(p => p.Category === catName);
+      const imageUrl = firstProd?.imageUrl || 'https://via.placeholder.com/80?text=' + catName;
+
+      catList.innerHTML += `
+        <div class="cat-card" onclick="showCategoryProducts('${catName}')">
+          <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${catName}">
+          <h4>${catName}</h4>
+          <p style="font-size:12px;color:#999;">${count} Products</p>
+        </div>
+      `;
     });
   }
 
+  window.showAllProducts = function(){
+    showAll = true;
+    currentCategory = '';
+    activeFilters = {};
+    searchTerm = '';
+    document.getElementById('catView').classList.add('hide');
+    document.getElementById('productView').classList.remove('hide');
+    document.getElementById('catTitle').innerText = 'All Products';
+    document.getElementById('pageTitle').innerText = 'All Products';
+    renderProducts();
+  }
+
   window.showCategoryProducts = function(catName){
+    showAll = false;
+    currentCategory = catName;
+    activeFilters = {};
+    searchTerm = '';
     document.getElementById('catView').classList.add('hide');
     document.getElementById('productView').classList.remove('hide');
     document.getElementById('catTitle').innerText = catName;
     document.getElementById('pageTitle').innerText = catName;
-    
+    renderProducts();
+  }
+
+  window.backToCategories = function(){
+    showAll = false;
+    currentCategory = '';
+    document.getElementById('productView').classList.add('hide');
+    document.getElementById('catView').classList.remove('hide');
+    document.getElementById('pageTitle').innerText = '📱 Categories';
+    loadCategories();
+  }
+
+  function renderProducts(){
     const container = document.getElementById('productList');
-    const products = allProducts.filter(p => p.category === catName);
-    
+    let products = showAll? [...allProducts] : allProducts.filter(p => p.Category === currentCategory);
+
+    products = products.filter(p => p.stock > 0);
+
+    if(searchTerm){
+      products = products.filter(p => {
+        const searchLower = searchTerm.toLowerCase();
+        return p.name?.toLowerCase().includes(searchLower) ||
+               p.Brand?.toLowerCase().includes(searchLower) ||
+               p.description?.toLowerCase().includes(searchLower);
+      });
+    }
+
+    Object.keys(activeFilters).forEach(key => {
+      if(activeFilters[key]){
+        if(key === 'price'){
+          const [op, val] = activeFilters[key].match(/(<|>|<=|>=)(\d+)/).slice(1);
+          products = products.filter(p => {
+            if(op === '<') return p.price < Number(val);
+            if(op === '>') return p.price > Number(val);
+            if(op === '<=') return p.price <= Number(val);
+            if(op === '>=') return p.price >= Number(val);
+          });
+        } else {
+          products = products.filter(p => p[key] == activeFilters[key]);
+        }
+      }
+    });
+
     if(products.length === 0){
-      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products in this category</p>';
+      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found</p>';
       return;
     }
-    
+
     container.innerHTML = '';
     products.forEach(p => {
       container.innerHTML += `
         <div class="product-card">
-          <img src="${p.image || p.img}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
+          <img src="${p.imageUrl || 'https://via.placeholder.com/140?text=No+Image'}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
           <h4>${p.name}</h4>
-          <div class="price">₹${p.price}</div>
-          <button onclick="addToCart('${p.id}')" ${p.stock<=0?'disabled style="background:#ccc"':''}>
-            ${p.stock<=0?'Out of Stock':'Add to Cart'}
-          </button>
+          <div>
+            <span class="price">₹${p.price}</span>
+            ${p.mrp > p.price? `<span class="mrp">₹${p.mrp}</span>` : ''}
+          </div>
+          <p style="font-size:11px;color:#666;margin:4px 0;">Stock: ${p.stock}</p>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
         </div>
       `;
     });
+  }
+
+  // FILTER MODAL
+  window.openFilterModal = async function(){
+    const container = document.getElementById('filterContainer');
+    document.getElementById('filterSearch').value = searchTerm;
+
+    let baseProducts = showAll? allProducts : allProducts.filter(p => p.Category === currentCategory);
+    baseProducts = baseProducts.filter(p => p.stock > 0);
+
+    // Load filters from admin settings
+    const filters = currentCategory? await loadCategoryFilters(currentCategory) : ['Brand','Price','Material','Color'];
+    
+    container.innerHTML = '';
+    filters.forEach(field => {
+      if(field === 'Price') {
+        container.innerHTML += `
+          <div class="filter-group">
+            <label>Price Range</label>
+            <select id="filter_price" data-key="price">
+              <option value="">All Prices</option>
+              <option value="<100" ${activeFilters.price === '<100'? 'selected':''}>Under ₹100</option>
+              <option value="<500" ${activeFilters.price === '<500'? 'selected':''}>Under ₹500</option>
+              <option value="<1000" ${activeFilters.price === '<1000'? 'selected':''}>Under ₹1000</option>
+              <option value=">1000" ${activeFilters.price === '>1000'? 'selected':''}>Above ₹1000</option>
+            </select>
+          </div>
+        `;
+      } else {
+        const values = [...new Set(baseProducts.map(p => p[field]).filter(Boolean))];
+        if(values.length > 0){
+          let optionsHTML = `<option value="">All ${field}s</option>`;
+          values.sort().forEach(opt => {
+            const selected = activeFilters[field] === opt? 'selected' : '';
+            optionsHTML += `<option value="${opt}" ${selected}>${opt}</option>`;
+          });
+
+          container.innerHTML += `
+            <div class="filter-group">
+              <label>${field}</label>
+              <select id="filter_${field}" data-key="${field}">
+                ${optionsHTML}
+              </select>
+            </div>
+          `;
+        }
+      }
+    });
+
+    if(container.innerHTML === ''){
+      container.innerHTML = '<p style="text-align:center;color:#999;">No filters available</p>';
+    }
+
+    document.getElementById('filterModal').classList.remove('hide');
+  }
+
+  window.liveFilterSearch = function(){
+    searchTerm = document.getElementById('filterSearch').value;
+  }
+
+  window.closeFilterModal = function(){
+    document.getElementById('filterModal').classList.add('hide');
+  }
+
+  window.applyFilters = function(){
+    const selects = document.querySelectorAll('#filterContainer select');
+    selects.forEach(sel => {
+      const key = sel.getAttribute('data-key');
+      if(sel.value) activeFilters[key] = sel.value;
+      else delete activeFilters[key];
+    });
+    searchTerm = document.getElementById('filterSearch').value;
+    renderProducts();
+    closeFilterModal();
+  }
+
+  window.clearFilters = function(){
+    activeFilters = {};
+    searchTerm = '';
+    document.getElementById('filterSearch').value = '';
+    renderProducts();
+    closeFilterModal();
+  }
+
+  // AI HELP MODAL
+  window.openAIModal = function(){
+    document.getElementById('aiQuery').value = '';
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('aiModal').classList.remove('hide');
+  }
+
+  window.closeAIModal = function(){
+    document.getElementById('aiModal').classList.add('hide');
+  }
+
+  window.askAI = function(){
+    const query = document.getElementById('aiQuery').value.toLowerCase();
+    const resultDiv = document.getElementById('aiResult');
+    
+    if(!query) {
+      resultDiv.innerHTML = '<div class="ai-result">⚠️ Please type your need first</div>';
+      return;
+    }
+
+    let found = false;
+    for(let key in aiKeywords){
+      const regex = new RegExp(key, 'i');
+      if(regex.test(query)){
+        const ai = aiKeywords[key];
+        found = true;
+        
+        // Auto apply filters
+        showAll =!ai.category;
+        currentCategory = ai.category || '';
+        activeFilters = ai.filters || {};
+        searchTerm = '';
+        
+        resultDiv.innerHTML = `<div class="ai-result">✅ ${ai.msg}. Showing results...</div>`;
+        
+        setTimeout(() => {
+          closeAIModal();
+          if(showAll) {
+            showAllProducts();
+          } else {
+            showCategoryProducts(currentCategory);
+          }
+        }, 1500);
+        break;
+      }
+    }
+
+    if(!found){
+      // Fallback: simple search
+      searchTerm = query;
+      showAll = true;
+      currentCategory = '';
+      activeFilters = {};
+      resultDiv.innerHTML = `<div class="ai-result">🔍 Searching for "${query}" in all products...</div>`;
+      setTimeout(() => {
+        closeAIModal();
+        showAllProducts();
+      }, 1500);
+    }
   }
 
   window.addToCart = function(pid){
     let userId = localStorage.getItem('currentUserId');
     if(!userId){ alert('Please login first!'); window.location.href = 'customer-account.html'; return; }
     const product = allProducts.find(p => p.id == pid);
-    if(!product || product.stock<=0) { alert('Product out of stock!'); return; }
-    
+    if(!product || product.stock <= 0) { alert('Product out of stock!'); return; }
+
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let cartItem = cart.find(c => c.pid == pid && c.uid == userId);
     if(cartItem){
       if(cartItem.qty >= product.stock){ alert('No more stock available!'); return; }
       cartItem.qty += 1;
     } else {
-      cart.push({ id: Date.now(), uid: userId, pid: pid, name: product.name, price: product.price, img: product.image || product.img, qty: 1 });
+      cart.push({
+        id: Date.now(),
+        uid: userId,
+        pid: pid,
+        name: product.name,
+        price: product.price,
+        img: product.imageUrl,
+        qty: 1
+      });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
@@ -177,10 +483,9 @@
     let urlParams = new URLSearchParams(window.location.search);
     let catName = urlParams.get('cat');
     if(catName) {
-      setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 1000);
+      setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 500);
     }
   }
 </script>
-<script src="theme.js"></script>
 </body>
 </html>

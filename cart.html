@@ -4,38 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🛒 My Cart - SANTRA MALL</title>
-  <style>
-    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);color:var(--text);padding-bottom:70px}
-.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.header h1{font-size:18px}
-.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-.tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;color:#666}
-.tab.active{background:var(--accent);color:white}
-.cart-item{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.cart-item img{width:80px;height:80px;object-fit:contain;background:#f9f9f9;border-radius:6px}
-.item-info{flex:1}
-.item-info h3{font-size:14px;margin-bottom:5px}
-.item-price{color:var(--accent);font-weight:bold;font-size:16px}
-.item-code{font-size:11px;color:#999;margin:3px 0}
-.qty-control{display:flex;align-items:center;gap:8px;margin:8px 0}
-.qty-btn{width:30px;height:30px;border:1px solid var(--border);background:white;border-radius:4px;font-size:18px;cursor:pointer}
-.qty-num{font-weight:bold;min-width:20px;text-align:center}
-.remove-btn{color:#ef4444;font-size:13px;cursor:pointer;font-weight:bold;background:none;border:none;margin-right:10px}
-.wish-btn{color:#ff6b6b;font-size:18px;cursor:pointer;background:none;border:none}
-.summary{background:var(--card);margin:15px;border-radius:8px;padding:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-.total-row{font-weight:bold;font-size:18px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
-.checkout-btn{width:100%;padding:15px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin:15px;cursor:pointer}
-.checkout-btn:disabled{background:#ccc;cursor:not-allowed}
-.empty{text-align:center;padding:60px 20px;color:#999}
-.hide{display:none!important}
-    input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px}
-    label{display:block;margin-top:12px;font-size:14px;color:#333}
-.loader{display:none;text-align:center;padding:10px;color:#e40046;font-weight:bold}
-  </style>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="layout.css">
+
 </head>
 <body>
 
@@ -51,6 +23,73 @@
 
 <div id="cartView">
   <div id="cartList"></div>
+
+  <!-- DELIVERY DETAILS FORM - FULL UPDATED -->
+  <div class="delivery-details" id="deliveryForm">
+    <div class="summary">
+      <h3 style="color:var(--accent);margin-bottom:15px">📋 Delivery Details</h3>
+
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="custName" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="custPhone" placeholder="10 digit mobile number" maxlength="10" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email (Optional)</label>
+        <input type="email" id="custEmail" placeholder="your@email.com">
+      </div>
+
+      <div class="form-group">
+        <label>House No. / Building *</label>
+        <input type="text" id="houseNo" placeholder="Flat no, Building name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Area / Street *</label>
+        <input type="text" id="area" placeholder="Area, Street" required>
+      </div>
+
+      <div class="form-group">
+        <label>Landmark *</label>
+        <input type="text" id="landmark" placeholder="Near temple, school, etc" required>
+      </div>
+
+      <div class="form-group">
+        <label>Pincode *</label>
+        <input type="tel" id="pincode" placeholder="6 digit pincode" maxlength="6" required>
+      </div>
+
+      <div class="form-group">
+        <label>City *</label>
+        <input type="text" id="city" placeholder="Your city name" required>
+      </div>
+
+      <div class="form-group">
+        <label>State *</label>
+        <input type="text" id="state" placeholder="Your state name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea id="instructions" rows="2" placeholder="Any delivery instructions"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Mode *</label>
+        <select id="payMode" required>
+          <option value="">Select Payment</option>
+          <option value="COD">Cash on Delivery (COD)</option>
+          <option value="Online">Online Payment - OTP</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div id="cartSummary" class="summary hide">
     <h3>Order Summary</h3>
     <div class="summary-row">
@@ -66,7 +105,12 @@
       <span id="grandTotal">₹0</span>
     </div>
   </div>
-  <button id="checkoutBtn" class="checkout-btn hide" onclick="checkoutWhatsApp()">📲 Order on WhatsApp</button>
+
+  <button id="checkoutBtn" class="checkout-btn hide" onclick="checkoutOrder()">
+    📲 Order on WhatsApp + Email
+  </button>
+
+  <button id="oldBackupBtn" class="checkout-btn hide" onclick="sendOldFormatMessage()" style="background:#10b981;margin-top:8px;">📱 Old Format Backup</button>
 </div>
 
 <div id="wishlistView" class="hide">
@@ -77,9 +121,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-// ===== FIREBASE CONFIG - YAHAN APNI KEY DAAL ⚠️ =====
-
-  const firebaseConfig = {
+ // Teri Firebase Config Yaha
+   const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -89,11 +132,21 @@
   measurementId: "G-ZW1ZR8HETY"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+let db;
+try {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  db = firebase.firestore();
+  console.log('✅ Firebase Connected');
+} catch(e) {
+  console.log('⚠️ Firebase not connected');
+}
 
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
+const ADMIN_WHATSAPP = '918769171078';
+const ADMIN_EMAIL = 'santramall@gmail.com'; // ← Apna Email Daal
 
 let cart = [];
 let wishlist = [];
@@ -103,6 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
   loadCart();
   loadWishlist();
   updateCounts();
+  const urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('admin') === 'santra123'){
+    document.getElementById('oldBackupBtn').classList.remove('hide');
+  }
 });
 
 function switchTab(tab){
@@ -119,7 +176,17 @@ function getImageUrl(item) {
   img = String(img).trim();
   if(img.startsWith('data:image') && img.length > 50000) return '';
   if(img.length > 5) return img;
-  return 'https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE';
+  return 'https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE';
+}
+
+function getProductLink(productId) {
+  const baseUrl = window.location.origin;
+  const pathName = window.location.pathname;
+  let productPath = '/product.html';
+  if(pathName.includes('/santramarketonlineshoppingmall')){
+      productPath = '/santramarketonlineshoppingmall/product.html';
+  }
+  return `${baseUrl}${productPath}?id=${encodeURIComponent(productId)}`;
 }
 
 function loadCart() {
@@ -131,8 +198,9 @@ function loadCart() {
     image: getImageUrl(item),
     code: item.code || item.sku || item.product_code || 'N/A',
     category: item.category || 'General',
-    serial_no: item.serial_no || 'N/A',
-    qty: parseInt(item.qty) || 1
+    serial_no: item.serial_no || item.code || item.id || 'N/A',
+    qty: parseInt(item.qty) || 1,
+    variant: item.variant || 'Default'
   }));
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
   renderCart();
@@ -143,13 +211,17 @@ function renderCart() {
   let container = document.getElementById('cartList');
   let summary = document.getElementById('cartSummary');
   let checkoutBtn = document.getElementById('checkoutBtn');
+  let deliveryForm = document.getElementById('deliveryForm');
 
   if(cart.length === 0) {
     container.innerHTML = '<div class="empty">🛒 Your cart is empty<br><br><button class="checkout-btn" onclick="window.location.href=\'index.html\'">Continue Shopping</button></div>';
     summary.classList.add('hide');
     checkoutBtn.classList.add('hide');
+    deliveryForm.classList.add('hide');
     return;
   }
+
+  deliveryForm.classList.remove('hide');
 
   container.innerHTML = cart.map((item, index) => {
     let imgSrc = getImageUrl(item);
@@ -159,11 +231,11 @@ function renderCart() {
 
     return `
     <div class="cart-item">
-      <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
+      <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'">
       <div class="item-info">
         <h3>${item.name}</h3>
         <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
-        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no}</div>
+        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no} | Variant: ${item.variant}</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
           <span class="qty-num">${qty}</span>
@@ -191,9 +263,7 @@ function renderCart() {
 
 function updateQty(index, change) {
   cart[index].qty = (cart[index].qty || 1) + change;
-  if(cart[index].qty <= 0) {
-    cart.splice(index, 1);
-  }
+  if(cart[index].qty <= 0) cart.splice(index, 1);
   saveCart();
   loadCart();
 }
@@ -208,7 +278,7 @@ function removeItem(index) {
 
 function moveToWishlist(index){
   let item = cart[index];
-  let wishItem = wishlist.find(w => w.id === item.id);
+  let wishItem = wishlist.find(w => w.id === item.id && w.variant === item.variant);
   if(wishItem){
     wishItem.qty = (wishItem.qty || 1) + (item.qty || 1);
   } else {
@@ -236,8 +306,9 @@ function loadWishlist() {
     image: getImageUrl(item),
     code: item.code || item.sku || item.product_code || 'N/A',
     category: item.category || 'General',
-    serial_no: item.serial_no || 'N/A',
-    qty: parseInt(item.qty) || 1
+    serial_no: item.serial_no || item.code || item.id || 'N/A',
+    qty: parseInt(item.qty) || 1,
+    variant: item.variant || 'Default'
   }));
   localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
   renderWishlist();
@@ -257,11 +328,11 @@ function renderWishlist(){
 
     return `
     <div class="cart-item">
-      <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
+      <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'">
       <div class="item-info">
         <h3>${item.name}</h3>
         <div class="item-price">₹${item.price || 0}</div>
-        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no}</div>
+        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no} | Variant: ${item.variant}</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="updateWishQty(${index}, -1)">-</button>
           <span class="qty-num">${qty}</span>
@@ -279,9 +350,7 @@ function renderWishlist(){
 
 function updateWishQty(index, change) {
   wishlist[index].qty = (wishlist[index].qty || 1) + change;
-  if(wishlist[index].qty <= 0) {
-    wishlist.splice(index, 1);
-  }
+  if(wishlist[index].qty <= 0) wishlist.splice(index, 1);
   saveWishlist();
   loadWishlist();
 }
@@ -296,7 +365,7 @@ function removeWishItem(index) {
 
 function moveToCart(index){
   let item = wishlist[index];
-  let cartItem = cart.find(c => c.id === item.id);
+  let cartItem = cart.find(c => c.id === item.id && c.variant === item.variant);
   if(cartItem){
     cartItem.qty = (cartItem.qty || 1) + (item.qty || 1);
   } else {
@@ -308,7 +377,8 @@ function moveToCart(index){
       code: item.code || 'N/A',
       category: item.category || 'General',
       serial_no: item.serial_no || 'N/A',
-      qty: item.qty || 1
+      qty: item.qty || 1,
+      variant: item.variant || 'Default'
     });
   }
   wishlist.splice(index, 1);
@@ -332,46 +402,154 @@ function updateCounts(){
   document.getElementById('wishCount').innerText = wishCount;
 }
 
-// ===== WHATSAPP CHECKOUT - UPDATED 26/5/2026 - AUTO DOMAIN + FOLDER FIX =====
-function checkoutWhatsApp(){
+// ===== UPDATED CHECKOUT - SABHI FIELDS KE SAATH =====
+function checkoutOrder(){
   if(cart.length === 0){
     alert('Cart khali hai!');
     return;
   }
 
-  let firstItem = cart[0];
+  // SABHI FIELDS UTHAO
+  let name = document.getElementById('custName').value.trim();
+  let phone = document.getElementById('custPhone').value.trim();
+  let email = document.getElementById('custEmail').value.trim();
+  let houseNo = document.getElementById('houseNo').value.trim();
+  let area = document.getElementById('area').value.trim();
+  let landmark = document.getElementById('landmark').value.trim();
+  let pincode = document.getElementById('pincode').value.trim();
+  let city = document.getElementById('city').value.trim();
+  let state = document.getElementById('state').value.trim();
+  let instructions = document.getElementById('instructions').value.trim();
+  let payment = document.getElementById('payMode').value;
 
-  // ✅ AUTO DOMAIN + FOLDER FIX - 3 JAGAH CHALEGA
-  const baseUrl = window.location.origin;
-  const pathName = window.location.pathname;
-
-  // GitHub pe "/santramarketonlineshoppingmall" folder check kar
-  let productPath = '/product.html';
-  if(pathName.includes('/santramarketonlineshoppingmall')){
-      productPath = '/santramarketonlineshoppingmall/product.html';
+  // VALIDATION
+  if(!name ||!phone ||!houseNo ||!area ||!landmark ||!pincode ||!city ||!state ||!payment){
+    alert('⚠️ Please fill all required fields!');
+    return;
   }
 
-  const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(firstItem.id)}`;
-  // ========== END UPDATE ==========
+  if(phone.length!== 10 ||!/^[6-9]\d{9}$/.test(phone)){
+    alert('⚠️ Please enter valid 10 digit mobile number');
+    return;
+  }
 
-  // YE SAB FIELD ZARURI HAI WHATSAPP MESSAGE KE LIYE
-  localStorage.setItem('pending_whatsapp_order_' + firstItem.id, JSON.stringify({
-    productId: firstItem.id,
-    productName: firstItem.name,
-    productPrice: firstItem.price,
-    productImage: firstItem.image,
-    productCode: firstItem.code,
-    category: firstItem.category,
-    serial_no: firstItem.serial_no,
-    productLink: productLink // Link bhi save kar de
-  }));
+  if(pincode.length!== 6 ||!/^\d{6}$/.test(pincode)){
+    alert('⚠️ Please enter valid 6 digit pincode');
+    return;
+  }
 
-  window.location.href = 'whatsapp-order.html?product=' + firstItem.id;
+  let orderId = 'SM' + Date.now();
+  let date = new Date().toLocaleString('en-IN');
+  let itemsText = '';
+  let subtotal = 0;
+
+  // SABHI PRODUCTS + SERIES + LINK
+  cart.forEach((item, index) => {
+    let itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+    let productLink = getProductLink(item.id);
+
+    itemsText += `${index + 1}. ${item.id} | ${item.name} x ${item.qty} = Rs.${itemTotal}\n`;
+    itemsText += `Variant: ${item.variant}\n`;
+    itemsText += `Series: ${item.serial_no}\n`;
+    itemsText += `Category: ${item.category}\n`;
+    itemsText += `🔗 Product Link: ${productLink}\n\n`;
+  });
+
+  let delivery = subtotal >= 500? 0 : 49;
+  let total = subtotal + delivery;
+
+  // FINAL MESSAGE - SABHI DETAILS KE SAATH
+  let message = `🛍️ *NEW ORDER REQUEST* #${orderId}\n`;
+  message += `📅 *Date:* ${date}\n\n`;
+  message += `*👤 CUSTOMER DETAILS:*\n`;
+  message += `Name: ${name}\n`;
+  message += `Phone: ${phone}\n`;
+  if(email) message += `Email: ${email}\n`;
+  message += `Address: ${houseNo}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}\n`;
+  if(instructions) message += `Instructions: ${instructions}\n`;
+  message += `Payment: ${payment}\n\n`;
+  message += `*📦 ORDER ITEMS:*\n`;
+  message += `${itemsText}`;
+  message += `💰 Subtotal: Rs.${subtotal}\n`;
+  message += `🚚 Delivery: ${delivery === 0? 'FREE' : 'Rs.' + delivery}\n`;
+  message += `💵 *Total Amount: Rs.${total}*\n\n`;
+  message += `📍 ACTION: Confirm order & dispatch\n`;
+  message += `🔔 Sent to SANTRA - Wait for confirmation`;
+
+  // 1. WHATSAPP ME BHEJO
+  let whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+
+  // 2. GMAIL ME BHI BHEJO - SAME MESSAGE
+  setTimeout(() => {
+    let subject = `New Order #${orderId} - SANTRA MALL`;
+    let gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${ADMIN_EMAIL}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    window.open(gmailUrl, '_blank');
+  }, 1500);
+
+  // FIREBASE + CART CLEAR
+  saveOrderToFirebase(orderId, cart, total, {name, phone, email, houseNo, area, landmark, pincode, city, state, instructions, payment});
+  clearCartAfterOrder();
 }
 
-// ===== Add to Cart Function - Product Page se call hoga =====
+function sendOldFormatMessage() {
+  if(cart.length === 0){
+    alert('Cart khali hai!');
+    return;
+  }
+  let item = cart[0];
+  let productLink = getProductLink(item.id);
+  let message = `🛒 *ORDER REQUEST* - SANTRA MALL\n\n*Product:* ${item.name}\n*Price:* Rs.${item.price} x ${item.qty} = Rs.${item.price * item.qty}\n*Variant:* ${item.variant}\n*Code:* ${item.serial_no || item.id}\n*Link:* ${productLink}\n\n💰 Total: Rs.${item.price * item.qty}\n\n📍 Confirm this order`;
+  let whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+
+  setTimeout(() => {
+    let gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${ADMIN_EMAIL}&su=Old Format Order&body=${encodeURIComponent(message)}`;
+    window.open(gmailUrl, '_blank');
+  }, 1000);
+
+  localStorage.removeItem(CART_KEY);
+  cart = [];
+  renderCart();
+  updateCounts();
+  alert('✅ Old format sent to WhatsApp + Gmail!\n\nCart cleared!');
+}
+
+function clearCartAfterOrder(){
+  localStorage.removeItem(CART_KEY);
+  cart = [];
+  renderCart();
+  updateCounts();
+  alert('✅ Order sent to WhatsApp + Gmail!\n\nCart cleared successfully!');
+}
+
+function saveOrderToFirebase(orderId, cartItems, total, customer) {
+  if(typeof db === 'undefined' ||!db) {
+    console.log('⚠️ Firebase skip');
+    return;
+  }
+  try {
+    db.collection('orders').doc(orderId).set({
+      orderId: orderId,
+      customer: customer,
+      items: cartItems,
+      totalAmount: total,
+      status: 'pending',
+      source: 'cart.html',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      console.log('✅ Order saved: ' + orderId);
+    }).catch((error) => {
+      console.log('❌ Firebase save failed:', error);
+    });
+  } catch(e) {
+    console.log('Firebase error:', e);
+  }
+}
+
 window.addToCart = function(product){
-  let item = cart.find(c => c.id === product.id);
+  let item = cart.find(c => c.id === product.id && c.variant === (product.variant || 'Default'));
   if(item){
     item.qty = (item.qty || 1) + 1;
   } else {
@@ -382,17 +560,18 @@ window.addToCart = function(product){
       image: getImageUrl(product),
       code: product.code || product.product_code || 'N/A',
       category: product.category || 'General',
-      serial_no: product.serial_no || 'N/A',
-      qty: 1
+      serial_no: product.serial_no || product.code || 'N/A',
+      qty: 1,
+      variant: product.variant || 'Default'
     });
   }
   saveCart();
+  loadCart();
   alert('Added to Cart 🛒');
 }
 
-// ===== Add to Wishlist Function - Product Page se call hoga =====
 window.addToWishlist = function(product){
-  let item = wishlist.find(w => w.id === product.id);
+  let item = wishlist.find(w => w.id === product.id && w.variant === (product.variant || 'Default'));
   if(item){
     item.qty = (item.qty || 1) + 1;
   } else {
@@ -403,13 +582,16 @@ window.addToWishlist = function(product){
       image: getImageUrl(product),
       code: product.code || product.product_code || 'N/A',
       category: product.category || 'General',
-      serial_no: product.serial_no || 'N/A',
-      qty: 1
+      serial_no: product.serial_no || product.code || 'N/A',
+      qty: 1,
+      variant: product.variant || 'Default'
     });
   }
   saveWishlist();
+  loadWishlist();
   alert('Added to Wishlist 😍');
 }
 </script>
+
 </body>
 </html>
