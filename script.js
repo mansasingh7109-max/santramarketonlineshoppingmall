@@ -40,7 +40,7 @@ const CART_KEY = 'SANTRA_CART';
 let allProducts = [];
 let SANTRA_DB = JSON.parse(localStorage.getItem('SANTRA_DB')) || {
   settings: {
-    helpdeskPhone: '9829508335',
+    helpdeskPhone: '8769171078',
     helpdeskWhatsapp: '8769171078',
     helpdeskEmail: 'santramarketshoppingmall@gmail.com',
     helpdeskEmail2: 'mansasingh7109@gmail.com'
@@ -252,8 +252,10 @@ function buyNow(productId) {
 function orderOnWhatsApp(productId, productName, productPrice, productImage, source, productCode, productLink) {
   let number = SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078';
   let serial = productCode || 'N/A';
-  let link = productLink || `${window.location.origin}/product.html?id=${productId}`;
-
+  const baseURL = window.location.origin.includes('localhost') 
+  ? 'https://mansasingh7109-max.github.io/santramarketonlineshoppingmall' 
+  : window.location.origin;
+let link = productLink || `${baseURL}/product.html?id=${productId}`;
   const message = `New Order - SANTRA MALL
 
 CUSTOMER PROFILE:
