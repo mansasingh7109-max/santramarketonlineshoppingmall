@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔍 Smart Filter Manager - SANTRA ADMIN</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Arial;padding:20px;background:#f1f5f9}
+   .box{background:white;padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    h1{color:#e40046;text-align:center;margin-bottom:20px}
+    h3{color:#334155;margin:20px 0 10px 0;border-bottom:2px solid #e40046;padding-bottom:5px}
+    select,input{width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:8px;margin:8px 0;font-size:14px}
+    select:focus,input:focus{outline:none;border-color:#e40046}
+   .btn{background:#e40046;color:white;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px 0;width:100%;font-size:15px}
+   .btn:hover{background:#c10039}
+   .btn-secondary{background:#3b82f6}
+   .btn-ai{background:#10b981}
+   .btn-danger{background:#ef4444;padding:6px 10px;font-size:12px;width:auto}
+   .filter-list{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:12px;margin:15px 0}
+   .filter-item{background:#f8fafc;padding:12px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;border:2px solid #e2e8f0}
+   .filter-item label{display:flex;align-items:center;gap:8px;cursor:pointer;flex:1}
+   .filter-item input[type="checkbox"]{width:18px;height:18px;accent-color:#e40046}
+   .status{padding:12px;border-radius:8px;margin:10px 0;display:none;text-align:center;font-weight:bold}
+   .success{background:#dcfce7;color:#166534;border:2px solid #22c55e}
+   .add-filter-box{display:flex;gap:10px;margin:15px 0}
+   .add-filter-box input{flex:1;margin:0}
+   .add-filter-box button{width:auto;padding:12px 20px;margin:0}
+   .info-box{background:#dbeafe;border:2px solid #3b82f6;padding:15px;border-radius:8px;margin:15px 0;font-size:13px;color:#1e40af}
+   .ai-box{background:#fef3c7;border:2px solid #f59e0b;padding:15px;border-radius:8px;margin:15px 0}
+   .preset-btns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+   .preset-btn{background:#8b5cf6;color:white;border:none;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:bold}
+   .preset-btn:hover{background:#7c3aed}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>🤖 Smart Filter Manager</h1>
+    <div id="status" class="status"></div>
+    
+    <label><b>1. Category Chuno:</b></label>
+    <select id="catSelect" onchange="loadCatFilters()">
+      <option value="">-- Select Category --</option>
+    </select>
+
+    <div id="filterSection" style="display:none;">
+      
+      <div class="ai-box">
+        <b>🤖 AI Help:</b> Category select karte hi niche button daba, AI suggest karega ki is category ke liye kaunse filter best hain.
+        <button class="btn btn-ai" onclick="aiSuggestFilters()" style="margin-top:10px">✨ AI Se Suggest Karwao</button>
+      </div>
+
+      <h3>2. Quick Presets:</h3>
+      <div class="preset-btns">
+        <button class="preset-btn" onclick="applyPreset('food')">🍔 Food Items</button>
+        <button class="preset-btn" onclick="applyPreset('electronics')">📱 Electronics</button>
+        <button class="preset-btn" onclick="applyPreset('clothing')">👕 Clothing</button>
+        <button class="preset-btn" onclick="applyPreset('grocery')">🛒 Grocery</button>
+        <button class="preset-btn" onclick="applyPreset('cosmetics')">💄 Cosmetics</button>
+      </div>
+
+      <h3>3. Is Category Ke Liye Filters Select Karo:</h3>
+      <div class="info-box">
+        💡 <b>Tip:</b> Tick kiye hue filter customer ko <code>index.html</code> pe dikhenge. <b>Color, Size, RAM, Storage</b> jaise variant fields product ke andar se auto filter ho jayenge.
+      </div>
+      
+      <div class="filter-list" id="filterList"></div>
+
+      <h3>4. Naya Custom Filter Add Karo:</h3>
+      <div class="add-filter-box">
+        <input type="text" id="newFilterName" placeholder="Filter naam: GSM, Occasion, Spicy Level, Warranty...">
+        <button class="btn btn-secondary" onclick="addNewFilter()">➕ Add</button>
+      </div>
+
+      <button class="btn" onclick="saveFilters()">💾 Save Filter Settings</button>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script>
+     const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+  
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  auth.onAuthStateChanged(user => {
+    if(!user || user.email!== "mansasingh7109@gmail.com") {
+      window.top.location.href = '../admin-login.html';
+    } else {
+      loadCategories();
+      loadAllFilters();
+    }
+  });
+
+  // Default + Custom filters
+  let allFilters = ['Brand', 'Price Range', 'Color', 'Size', 'Material', 'Fabric', 'Weight', 'RAM', 'Storage', 'Type', 'Fragrance', 'Expiry', 'Volume'];
+
+  // AI Presets - Category wise smart filters
+  const aiPresets = {
+    food: ['Brand', 'Weight', 'Type', 'Expiry', 'Spicy Level', 'Veg/Non-Veg', 'Pack Size'],
+    electronics: ['Brand', 'RAM', 'Storage', 'Color', 'Warranty', 'Screen Size', 'Battery', 'Processor'],
+    clothing: ['Brand', 'Size', 'Color', 'Fabric', 'Pattern', 'Occasion', 'Sleeve', 'Fit Type'],
+    grocery: ['Brand', 'Weight', 'Expiry', 'Pack Size', 'Type', 'Organic'],
+    cosmetics: ['Brand', 'Shade', 'Skin Type', 'Volume', 'Fragrance', 'Expiry', 'Gender']
+  };
+
+  async function loadAllFilters() {
+    const docSnap = await db.collection("settings").doc("all_filters").get();
+    if(docSnap.exists) {
+      allFilters = docSnap.data().list || allFilters;
+    }
+  }
+
+  async function loadCategories() {
+    const snap = await db.collection("categories").get();
+    const select = document.getElementById('catSelect');
+    select.innerHTML = '<option value="">-- Select Category --</option>';
+    snap.forEach(doc => {
+      select.innerHTML += `<option value="${doc.data().name}">${doc.data().name}</option>`;
+    });
+  }
+
+  async function loadCatFilters() {
+    const cat = document.getElementById('catSelect').value;
+    if(!cat) {
+      document.getElementById('filterSection').style.display = 'none';
+      return;
+    }
+    
+    document.getElementById('filterSection').style.display = 'block';
+    const docSnap = await db.collection("category_filters").doc(cat).get();
+    const savedFilters = docSnap.exists? docSnap.data().filters : [];
+    renderFilterList(savedFilters);
+  }
+
+  function renderFilterList(savedFilters) {
+    document.getElementById('filterList').innerHTML = allFilters.map(f => `
+      <div class="filter-item">
+        <label for="f_${f}">
+          <input type="checkbox" id="f_${f}" ${savedFilters.includes(f)? 'checked' : ''}>
+          <span>${f}</span>
+        </label>
+        <button class="btn-danger" onclick="deleteFilter('${f}')">❌</button>
+      </div>
+    `).join('');
+  }
+
+  // 🤖 AI SUGGEST - Category ke naam se smart filter suggest karega
+  function aiSuggestFilters() {
+    const cat = document.getElementById('catSelect').value.toLowerCase();
+    if(!cat) {
+      alert('Pehle category select karo');
+      return;
+    }
+
+    let suggested = [];
+    
+    // Smart AI Logic
+    if(cat.includes('food') || cat.includes('snack') || cat.includes('grocery')) {
+      suggested = aiPresets.food;
+    } else if(cat.includes('electronic') || cat.includes('mobile') || cat.includes('laptop')) {
+      suggested = aiPresets.electronics;
+    } else if(cat.includes('cloth') || cat.includes('fashion') || cat.includes('apparel')) {
+      suggested = aiPresets.clothing;
+    } else if(cat.includes('cosmetic') || cat.includes('beauty') || cat.includes('makeup')) {
+      suggested = aiPresets.cosmetics;
+    } else {
+      suggested = ['Brand', 'Price Range', 'Color', 'Type'];
+    }
+
+    // Auto tick kar do suggested filters
+    allFilters.forEach(f => {
+      const checkbox = document.getElementById(`f_${f}`);
+      if(checkbox) checkbox.checked = suggested.includes(f);
+    });
+
+    showStatus('🤖 AI ne suggest kiya: ' + suggested.join(', '), 'success');
+  }
+
+  // Preset apply karo
+  function applyPreset(type) {
+    const preset = aiPresets[type] || [];
+    allFilters.forEach(f => {
+      const checkbox = document.getElementById(`f_${f}`);
+      if(checkbox) checkbox.checked = preset.includes(f);
+    });
+    showStatus('✅ ' + type + ' preset apply ho gaya', 'success');
+  }
+
+  async function addNewFilter() {
+    const newName = document.getElementById('newFilterName').value.trim();
+    if(!newName) {
+      alert('Filter ka naam daalo');
+      return;
+    }
+    if(allFilters.includes(newName)) {
+      alert('Ye filter already hai');
+      return;
+    }
+    
+    allFilters.push(newName);
+    await db.collection("settings").doc("all_filters").set({ list: allFilters });
+    document.getElementById('newFilterName').value = '';
+    
+    const cat = document.getElementById('catSelect').value;
+    const docSnap = await db.collection("category_filters").doc(cat).get();
+    const savedFilters = docSnap.exists? docSnap.data().filters : [];
+    renderFilterList(savedFilters);
+    
+    showStatus('✅ Naya filter add ho gaya: ' + newName, 'success');
+  }
+
+  async function deleteFilter(filterName) {
+    if(!confirm(`"${filterName}" filter delete karna hai? Ye sab categories se hat jayega.`)) return;
+    
+    allFilters = allFilters.filter(f => f!== filterName);
+    await db.collection("settings").doc("all_filters").set({ list: allFilters });
+    
+    const snap = await db.collection("category_filters").get();
+    snap.forEach(async doc => {
+      let filters = doc.data().filters || [];
+      if(filters.includes(filterName)) {
+        filters = filters.filter(f => f!== filterName);
+        await db.collection("category_filters").doc(doc.id).update({ filters: filters });
+      }
+    });
+    
+    loadCatFilters();
+    showStatus('🗑️ Filter delete ho gaya: ' + filterName, 'success');
+  }
+
+  async function saveFilters() {
+    const cat = document.getElementById('catSelect').value;
+    const filters = [];
+    allFilters.forEach(f => {
+      const checkbox = document.getElementById(`f_${f}`);
+      if(checkbox && checkbox.checked) filters.push(f);
+    });
+    
+    await db.collection("category_filters").doc(cat).set({ 
+      filters: filters,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    showStatus('✅ Filter save ho gaya! Website pe turant dikhega', 'success');
+    window.parent.postMessage({type: 'reload'}, '*');
+  }
+
+  function showStatus(msg, type) {
+    const div = document.getElementById('status');
+    div.className = `status ${type}`;
+    div.innerText = msg;
+    div.style.display = 'block';
+    setTimeout(() => div.style.display = 'none', 4000);
+  }
+</script>
+</body>
+</html>
