@@ -5,10 +5,42 @@
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
 
+ // ===== YE 3 FUNCTION YAHAN ADD KAR =====
+ // ADD TO CART FUNCTION
+ function addToCart(productId) {
+   let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+   let existingItem = cart.find(item => item.id === productId);
+   if(existingItem) {
+     existingItem.qty += 1;
+   } else {
+     cart.push({ id: productId, qty: 1, name: 'Product' });
+   }
+   localStorage.setItem(CART_KEY, JSON.stringify(cart));
+   updateCartCount();
+   alert('Added to Cart! ✅');
+ }
+
+ // BUY NOW FUNCTION  
+ function buyNow(productId) {
+   addToCart(productId);
+   window.location.href = 'cart.html';
+ }
+
+ // CART COUNT UPDATE FUNCTION - YE MISSING THA
+ function updateCartCount() {
+   let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+   let totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+   let cartCountEl = document.querySelector('.cart-count');
+   if(cartCountEl) {
+     cartCountEl.textContent = totalItems;
+   }
+ }
+ // ===== YAHAN TAK ADD KAR =====
+
 let allProducts = [];
 let SANTRA_DB = JSON.parse(localStorage.getItem('SANTRA_DB')) || {
   settings: {
-    helpdeskPhone: '9829508335',
+    helpdeskPhone: '8769171078',
     helpdeskWhatsapp: '8769171078',
     helpdeskEmail: 'santramarketshoppingmall@gmail.com',
     helpdeskEmail2: 'mansasingh7109@gmail.com'
@@ -220,8 +252,10 @@ function buyNow(productId) {
 function orderOnWhatsApp(productId, productName, productPrice, productImage, source, productCode, productLink) {
   let number = SANTRA_DB.settings?.helpdeskWhatsapp || '8769171078';
   let serial = productCode || 'N/A';
-  let link = productLink || `${window.location.origin}/product.html?id=${productId}`;
-
+  const baseURL = window.location.origin.includes('localhost') 
+  ? 'https://mansasingh7109-max.github.io/santramarketonlineshoppingmall' 
+  : window.location.origin;
+let link = productLink || `${baseURL}/product.html?id=${productId}`;
   const message = `New Order - SANTRA MALL
 
 CUSTOMER PROFILE:
@@ -320,6 +354,12 @@ function renderProducts(products) {
             <h3>${p.name}</h3>
             <div><span class="price">₹${p.price}</span>${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}</div>
             <div class="stock">Category: ${p.category} | Stock: ${p.stock}</div>
+                  let buttonHTML = `
+            <div class="product-actions">
+              341         <button class="cart-btn" onclick="event.stopPropagation(); addToCart('${p.id}')">Add to Cart</button>
+342         <button class="buy-btn" onclick="event.stopPropagation(); buyNow('${p.id}')">Buy Now</button>
+            </div>
+          `;
             ${buttonHTML}
           </div>
         </div>
@@ -627,3 +667,7 @@ async function submitOrderFromPopup() {
 
 // 17. START EVERYTHING
 document.addEventListener('DOMContentLoaded', waitForFirebase);
+// PAGE LOAD PE CART COUNT DIKHAO
+document.addEventListener('DOMContentLoaded', function() {
+  updateCartCount();
+});
