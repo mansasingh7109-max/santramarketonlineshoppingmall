@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🛒 My Cart - SANTRA MALL</title>
-
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="layout.css">
-
 </head>
 <body>
 
@@ -122,7 +120,7 @@
 
 <script>
  // Teri Firebase Config Yaha
-   const firebaseConfig = {
+     const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -146,7 +144,7 @@ try {
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
 const ADMIN_WHATSAPP = '918769171078';
-const ADMIN_EMAIL = 'santramall@gmail.com'; // ← Apna Email Daal
+const ADMIN_EMAIL = 'santramall@gmail.com';
 
 let cart = [];
 let wishlist = [];
@@ -175,6 +173,9 @@ function getImageUrl(item) {
   let img = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || item.src || '';
   img = String(img).trim();
   if(img.startsWith('data:image') && img.length > 50000) return '';
+  if(img && !img.startsWith('http') && !img.startsWith('data:') && !img.startsWith('/')) {
+  img = '/' + img;
+}
   if(img.length > 5) return img;
   return 'https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE';
 }
@@ -207,6 +208,7 @@ function loadCart() {
   updateCounts();
 }
 
+// 🔥 UPDATED: CLICK KARNE PE PRODUCT PAGE KHULEGA
 function renderCart() {
   let container = document.getElementById('cartList');
   let summary = document.getElementById('cartSummary');
@@ -228,20 +230,23 @@ function renderCart() {
     let productCode = item.code || 'N/A';
     let qty = item.qty || 1;
     let price = item.price || 0;
+    let productLink = getProductLink(item.id); // ✅ Product link
 
     return `
-    <div class="cart-item">
-      <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'">
-      <div class="item-info">
+    <div class="cart-item" style="cursor:pointer">
+      <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'" onclick="window.location.href='${productLink}'">
+      <div class="item-info" onclick="window.location.href='${productLink}'">
         <h3>${item.name}</h3>
         <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
         <div class="item-code">Code: ${productCode} | Series: ${item.serial_no} | Variant: ${item.variant}</div>
-        <div class="qty-control">
+      </div>
+      <div class="item-actions">
+        <div class="qty-control" onclick="event.stopPropagation()">
           <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
           <span class="qty-num">${qty}</span>
           <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
         </div>
-        <div>
+        <div onclick="event.stopPropagation()">
           <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
           <button class="wish-btn" onclick="moveToWishlist(${index})" title="Move to Wishlist">😍</button>
         </div>
@@ -315,6 +320,7 @@ function loadWishlist() {
   updateCounts();
 }
 
+// 🔥 UPDATED: WISHLIST ME BHI CLICK KARNE PE PRODUCT PAGE KHULEGA
 function renderWishlist(){
   let container = document.getElementById('wishList');
   if(wishlist.length === 0) {
@@ -325,20 +331,23 @@ function renderWishlist(){
     let imgSrc = getImageUrl(item);
     let productCode = item.code || 'N/A';
     let qty = item.qty || 1;
+    let productLink = getProductLink(item.id); // ✅ Product link
 
     return `
-    <div class="cart-item">
-      <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'">
-      <div class="item-info">
+    <div class="cart-item" style="cursor:pointer">
+      <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'" onclick="window.location.href='${productLink}'">
+      <div class="item-info" onclick="window.location.href='${productLink}'">
         <h3>${item.name}</h3>
         <div class="item-price">₹${item.price || 0}</div>
         <div class="item-code">Code: ${productCode} | Series: ${item.serial_no} | Variant: ${item.variant}</div>
-        <div class="qty-control">
+      </div>
+      <div class="item-actions">
+        <div class="qty-control" onclick="event.stopPropagation()">
           <button class="qty-btn" onclick="updateWishQty(${index}, -1)">-</button>
           <span class="qty-num">${qty}</span>
           <button class="qty-btn" onclick="updateWishQty(${index}, 1)">+</button>
         </div>
-        <div>
+        <div onclick="event.stopPropagation()">
           <button class="remove-btn" onclick="removeWishItem(${index})">Remove</button>
           <button class="wish-btn" onclick="moveToCart(${index})" title="Move to Cart" style="color:var(--accent)">🛒</button>
         </div>
@@ -402,14 +411,12 @@ function updateCounts(){
   document.getElementById('wishCount').innerText = wishCount;
 }
 
-// ===== UPDATED CHECKOUT - SABHI FIELDS KE SAATH =====
 function checkoutOrder(){
   if(cart.length === 0){
     alert('Cart khali hai!');
     return;
   }
 
-  // SABHI FIELDS UTHAO
   let name = document.getElementById('custName').value.trim();
   let phone = document.getElementById('custPhone').value.trim();
   let email = document.getElementById('custEmail').value.trim();
@@ -422,7 +429,6 @@ function checkoutOrder(){
   let instructions = document.getElementById('instructions').value.trim();
   let payment = document.getElementById('payMode').value;
 
-  // VALIDATION
   if(!name ||!phone ||!houseNo ||!area ||!landmark ||!pincode ||!city ||!state ||!payment){
     alert('⚠️ Please fill all required fields!');
     return;
@@ -443,7 +449,6 @@ function checkoutOrder(){
   let itemsText = '';
   let subtotal = 0;
 
-  // SABHI PRODUCTS + SERIES + LINK
   cart.forEach((item, index) => {
     let itemTotal = item.price * item.qty;
     subtotal += itemTotal;
@@ -459,7 +464,6 @@ function checkoutOrder(){
   let delivery = subtotal >= 500? 0 : 49;
   let total = subtotal + delivery;
 
-  // FINAL MESSAGE - SABHI DETAILS KE SAATH
   let message = `🛍️ *NEW ORDER REQUEST* #${orderId}\n`;
   message += `📅 *Date:* ${date}\n\n`;
   message += `*👤 CUSTOMER DETAILS:*\n`;
@@ -477,18 +481,15 @@ function checkoutOrder(){
   message += `📍 ACTION: Confirm order & dispatch\n`;
   message += `🔔 Sent to SANTRA - Wait for confirmation`;
 
-  // 1. WHATSAPP ME BHEJO
   let whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
   window.open(whatsappUrl, '_blank');
 
-  // 2. GMAIL ME BHI BHEJO - SAME MESSAGE
   setTimeout(() => {
     let subject = `New Order #${orderId} - SANTRA MALL`;
     let gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${ADMIN_EMAIL}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
     window.open(gmailUrl, '_blank');
   }, 1500);
 
-  // FIREBASE + CART CLEAR
   saveOrderToFirebase(orderId, cart, total, {name, phone, email, houseNo, area, landmark, pincode, city, state, instructions, payment});
   clearCartAfterOrder();
 }
@@ -595,4 +596,3 @@ window.addToWishlist = function(product){
 
 </body>
 </html>
-
