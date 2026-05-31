@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,17 +19,19 @@
     .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;}
     .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
     .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
-    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;}
-    .product-card .price{color:var(--accent);font-weight:bold;font-size:16px;}
+    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;min-height:36px;}
+    .price{color:var(--accent);font-weight:bold;font-size:16px;}
+    .mrp{color:#999;font-size:13px;text-decoration:line-through;margin-left:6px;}
     .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;}
+    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
     .nav-item.active{color:var(--accent);}
     .nav-item div{font-size:22px;}
     .nav-item span{font-size:11px;display:block;margin-top:2px;}
     .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
     .hide{display:none!important;}
     .loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
+    .all-prod-btn{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-right:8px;}
   </style>
 </head>
 <body>
@@ -42,14 +44,20 @@
 
 <div class="container">
   <div id="catView">
-    <h3 style="margin-bottom:15px;">Shop by Category</h3>
+    <button class="all-prod-btn" onclick="showAllProducts()">🛍️ All Products</button>
+    <h3 style="margin:15px 0;">Shop by Category</h3>
     <div id="catList" class="cat-grid">
       <div class="loader">Loading...</div>
     </div>
   </div>
-  
+
   <div id="productView" class="hide">
-    <h3 style="margin-bottom:15px;" id="catTitle"></h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
+      <h3 id="catTitle"></h3>
+      <div>
+        <button class="all-prod-btn" onclick="backToCategories()">← Categories</button>
+      </div>
+    </div>
     <div id="productList" class="product-grid"></div>
   </div>
 </div>
@@ -70,75 +78,156 @@
   </a>
 </div>
 
-<script type="module">
-  import { firebaseConfig } from './secrets.js';
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
-  import { getFirestore, collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
   
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-</script>
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  
+  // const firestore = firebase.firestore(); // ❌ OLD FIRESTORE - COMMENT KAR DIYA
+  const rtdb = firebase.database();
 
   let allProducts = [];
+  let allCategories = [];
+  let currentCategory = '';
+  let showAll = false;
 
-  // Products load karo - Real-time
-  onSnapshot(collection(db, "products"), (snapshot) => {
+  // ✅ NAYA CODE - SIRF REALTIME DATABASE
+  async function loadProducts() {
     allProducts = [];
-    snapshot.forEach((doc) => {
-      allProducts.push({ id: doc.id, ...doc.data() });
-    });
-    loadCategories();
-  });
-
-  // ===== FIXED: SIRF ADMIN DASHBOARD WALI IMAGE DIKHEGI =====
-  function loadCategories(){
-    const catList = document.getElementById('catList');
-    onSnapshot(collection(db, "categories"), (snapshot) => {
-      catList.innerHTML = '';
-      if(snapshot.empty){
-        catList.innerHTML = '<p class="loader">No categories yet</p>';
-        return;
+    try {
+      const rtdbSnap = await rtdb.ref('products').once('value');
+      if(rtdbSnap.exists()){
+        rtdbSnap.forEach((child) => {
+          let p = child.val();
+          p.id = child.key;
+          p.price = parseFloat(p.price) || 0;
+          p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+          p.mrp = parseFloat(p.mrp) || p.price;
+          p.source = 'rtdb';
+          allProducts.push(p);
+        });
       }
-      snapshot.forEach((doc) => {
-        const cat = doc.data();
-        const count = allProducts.filter(p => p.category === cat.name).length;
-        // FIX: Sirf cat.img use karo - koi auto-fetch nahi
-        const imageUrl = cat.img || 'https://via.placeholder.com/80?text=No+Image';
-        catList.innerHTML += `
-          <div class="cat-card" onclick="showCategoryProducts('${cat.name}')">
-            <img src="${imageUrl}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}">
-            <h4>${cat.name}</h4>
-            <p style="font-size:12px;color:#999;">${count} Products</p>
-          </div>
-        `;
-      });
+      renderProducts();
+      loadCategories();
+      updateCartCount();
+    } catch(e) {
+      console.log('Product load error:', e);
+      document.getElementById('productList').innerHTML = '<div class="loader">Error loading products</div>';
+    }
+  }
+
+  // ✅ NAYA CODE - SIRF REALTIME DATABASE SE LOAD KARO
+  async function loadCategories() {
+    allCategories = [];
+    try {
+      const rtdbSnap = await rtdb.ref("categories").once('value');
+      if(rtdbSnap.exists()){
+        rtdbSnap.forEach((child) => {
+          const data = child.val();
+          allCategories.push({
+            id: child.key,
+            name: data.name,
+            image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat',
+            source: 'rtdb'
+          });
+        });
+      }
+      renderCategories();
+    } catch(e) {
+      console.log('Category load error:', e);
+      document.getElementById('catList').innerHTML = '<p class="loader">Error loading categories</p>';
+    }
+  }
+
+  function renderCategories() {
+    const catList = document.getElementById('catList');
+    const unique = [];
+    const seen = new Set();
+    allCategories.forEach(c => {
+      if (!seen.has(c.name)) {
+        seen.add(c.name);
+        unique.push(c);
+      }
+    });
+
+    if(unique.length === 0){
+      catList.innerHTML = '<p class="loader">No categories yet. Add from Admin Panel</p>';
+      return;
+    }
+
+    catList.innerHTML = '';
+    unique.forEach(cat => {
+      const count = allProducts.filter(p => p.category === cat.name && p.stock > 0).length;
+      catList.innerHTML += `
+        <div class="cat-card" onclick="showCategoryProducts('${cat.name}')">
+          <img src="${cat.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}">
+          <h4>${cat.name}</h4>
+          <p style="font-size:12px;color:#999;">${count} Products</p>
+        </div>
+      `;
     });
   }
 
+  window.showAllProducts = function(){
+    showAll = true; currentCategory = '';
+    document.getElementById('catView').classList.add('hide');
+    document.getElementById('productView').classList.remove('hide');
+    document.getElementById('catTitle').innerText = 'All Products';
+    document.getElementById('pageTitle').innerText = 'All Products';
+    renderProducts();
+  }
+
   window.showCategoryProducts = function(catName){
+    showAll = false; currentCategory = catName;
     document.getElementById('catView').classList.add('hide');
     document.getElementById('productView').classList.remove('hide');
     document.getElementById('catTitle').innerText = catName;
     document.getElementById('pageTitle').innerText = catName;
-    
+    renderProducts();
+  }
+
+  window.backToCategories = function(){
+    showAll = false; currentCategory = '';
+    document.getElementById('productView').classList.add('hide');
+    document.getElementById('catView').classList.remove('hide');
+    document.getElementById('pageTitle').innerText = '📱 Categories';
+    loadCategories();
+  }
+
+  function renderProducts(){
     const container = document.getElementById('productList');
-    const products = allProducts.filter(p => p.category === catName);
-    
+    let products = showAll ? [...allProducts] : allProducts.filter(p => p.category === currentCategory);
+    products = products.filter(p => p.stock > 0);
+
     if(products.length === 0){
-      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products in this category</p>';
+      container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found</p>';
       return;
     }
-    
+
     container.innerHTML = '';
     products.forEach(p => {
       container.innerHTML += `
         <div class="product-card">
-          <img src="${p.image || p.img}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
+          <img src="${p.imageUrl || p.image || 'https://via.placeholder.com/140?text=No+Image'}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
           <h4>${p.name}</h4>
-          <div class="price">₹${p.price}</div>
-          <button onclick="addToCart('${p.id}')" ${p.stock<=0?'disabled style="background:#ccc"':''}>
-            ${p.stock<=0?'Out of Stock':'Add to Cart'}
-          </button>
+          <div>
+            <span class="price">₹${p.price}</span>
+            ${p.mrp > p.price? `<span class="mrp">₹${p.mrp}</span>` : ''}
+          </div>
+          <p style="font-size:11px;color:#666;margin:4px 0;">Stock: ${p.stock}</p>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
         </div>
       `;
     });
@@ -148,15 +237,15 @@
     let userId = localStorage.getItem('currentUserId');
     if(!userId){ alert('Please login first!'); window.location.href = 'customer-account.html'; return; }
     const product = allProducts.find(p => p.id == pid);
-    if(!product || product.stock<=0) { alert('Product out of stock!'); return; }
-    
+    if(!product || product.stock <= 0) { alert('Product out of stock!'); return; }
+
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let cartItem = cart.find(c => c.pid == pid && c.uid == userId);
     if(cartItem){
       if(cartItem.qty >= product.stock){ alert('No more stock available!'); return; }
       cartItem.qty += 1;
     } else {
-      cart.push({ id: Date.now(), uid: userId, pid: pid, name: product.name, price: product.price, img: product.image || product.img, qty: 1 });
+      cart.push({ id: Date.now(), uid: userId, pid: pid, name: product.name, price: product.price, img: product.imageUrl || product.image, qty: 1 });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
@@ -173,13 +262,43 @@
   }
 
   window.onload = function(){
+    loadProducts(); // Products load honge, uske baad categories bhi
     updateCartCount();
     let urlParams = new URLSearchParams(window.location.search);
     let catName = urlParams.get('cat');
     if(catName) {
-      setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 1000);
+      setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 500);
     }
   }
+
+  /*
+  ===== PURANA FIRESTORE CODE - BACKUP KE LIYE COMMENT KIYA HAI =====
+  
+  firestore.collection("categories").onSnapshot((snapshot) => {
+    allCategories = allCategories.filter(c => c.source !== 'firestore');
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      allCategories.push({ 
+        id: doc.id, 
+        name: d.name || d.categoryName,
+        image: d.image || d.categoryImage || d.img || 'https://via.placeholder.com/80?text=' + (d.name || 'Cat'),
+        source: 'firestore'
+      });
+    });
+    loadCategories();
+  });
+
+  firestore.collection("products").onSnapshot((snapshot) => {
+    allProducts = allProducts.filter(p => p.source !== 'firestore');
+    snapshot.forEach((doc) => {
+      allProducts.push({ id: doc.id, ...doc.data(), source: 'firestore' });
+    });
+    if (showAll || currentCategory) renderProducts();
+    loadCategories();
+    updateCartCount();
+  });
+  ===== BACKUP END =====
+  */
 </script>
 </body>
 </html>

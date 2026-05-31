@@ -5,36 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🛒 My Cart - SANTRA MALL</title>
   <style>
-    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);color:var(--text);padding-bottom:70px}
-.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.header h1{font-size:18px}
-.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-.tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;color:#666}
-.tab.active{background:var(--accent);color:white}
-.cart-item{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.cart-item img{width:80px;height:80px;object-fit:contain;background:#f9f9f9;border-radius:6px}
-.item-info{flex:1}
-.item-info h3{font-size:14px;margin-bottom:5px}
-.item-price{color:var(--accent);font-weight:bold;font-size:16px}
-.item-code{font-size:11px;color:#999;margin:3px 0}
-.qty-control{display:flex;align-items:center;gap:8px;margin:8px 0}
-.qty-btn{width:30px;height:30px;border:1px solid var(--border);background:white;border-radius:4px;font-size:18px;cursor:pointer}
-.qty-num{font-weight:bold;min-width:20px;text-align:center}
-.remove-btn{color:#ef4444;font-size:13px;cursor:pointer;font-weight:bold;background:none;border:none;margin-right:10px}
-.wish-btn{color:#ff6b6b;font-size:18px;cursor:pointer;background:none;border:none}
-.summary{background:var(--card);margin:15px;border-radius:8px;padding:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-.total-row{font-weight:bold;font-size:18px;border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
-.checkout-btn{width:100%;padding:15px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin:15px;cursor:pointer}
-.checkout-btn:disabled{background:#ccc;cursor:not-allowed}
-.empty{text-align:center;padding:60px 20px;color:#999}
-.hide{display:none!important}
-    input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:4px}
-    label{display:block;margin-top:12px;font-size:14px;color:#333}
-.loader{display:none;text-align:center;padding:10px;color:#e40046;font-weight:bold}
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
+    body{background:var(--bg);color:var(--text);padding-bottom:140px}
+   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+   .header h1{font-size:18px;flex:1}
+   .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+   .tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden}
+   .tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent}
+   .tab.active{background:var(--accent);color:white}
+   .cart-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .cart-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;border:1px solid #eee}
+   .item-info{flex:1}
+   .item-info h3{font-size:16px;margin-bottom:5px}
+   .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
+   .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
+   .item-code{font-size:12px;color:#666;margin-top:4px}
+   .qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+   .qty-btn{background:#eee;border:none;width:30px;height:30px;border-radius:6px;cursor:pointer;font-weight:bold}
+   .qty-display{padding:0 10px;font-weight:bold}
+   .btn-remove{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+   .btn-wish{background:#ff9800;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+   .empty{text-align:center;padding:60px 20px;color:#999}
+   .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+   .delivery-details{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px}
+   .form-group{margin-bottom:12px}
+   .form-group label{display:block;font-size:13px;margin-bottom:4px;font-weight:600}
+   .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px}
+   .summary{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px}
+   .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+   .total-row{font-weight:bold;font-size:18px;border-top:2px solid var(--border);padding-top:10px;margin-top:10px}
+   .checkout-btn{position:fixed;bottom:60px;left:15px;right:15px;background:var(--accent);color:white;border:none;padding:15px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(228,0,70,0.3);z-index:50}
+   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+   .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+   .nav-item.active{color:var(--accent)}
+   .nav-item div{font-size:22px}
+   .nav-item span{font-size:11px;display:block;margin-top:2px}
+   .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+   .hide{display:none}
   </style>
 </head>
 <body>
@@ -51,6 +59,72 @@
 
 <div id="cartView">
   <div id="cartList"></div>
+
+  <div class="delivery-details" id="deliveryForm">
+    <div class="summary">
+      <h3 style="color:var(--accent);margin-bottom:15px">📋 Delivery Details</h3>
+
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="custName" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="custPhone" placeholder="10 digit mobile number" maxlength="10" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email (Optional)</label>
+        <input type="email" id="custEmail" placeholder="your@email.com">
+      </div>
+
+      <div class="form-group">
+        <label>House No. / Building *</label>
+        <input type="text" id="houseNo" placeholder="Flat no, Building name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Area / Street *</label>
+        <input type="text" id="area" placeholder="Area, Street" required>
+      </div>
+
+      <div class="form-group">
+        <label>Landmark *</label>
+        <input type="text" id="landmark" placeholder="Near temple, school, etc" required>
+      </div>
+
+      <div class="form-group">
+        <label>Pincode *</label>
+        <input type="tel" id="pincode" placeholder="6 digit pincode" maxlength="6" required>
+      </div>
+
+      <div class="form-group">
+        <label>City *</label>
+        <input type="text" id="city" placeholder="Your city name" required>
+      </div>
+
+      <div class="form-group">
+        <label>State *</label>
+        <input type="text" id="state" placeholder="Your state name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea id="instructions" rows="2" placeholder="Any delivery instructions"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Mode *</label>
+        <select id="payMode" required>
+          <option value="">Select Payment</option>
+          <option value="COD">Cash on Delivery (COD)</option>
+          <option value="Online">Online Payment - OTP</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div id="cartSummary" class="summary hide">
     <h3>Order Summary</h3>
     <div class="summary-row">
@@ -66,43 +140,73 @@
       <span id="grandTotal">₹0</span>
     </div>
   </div>
-  <button id="checkoutBtn" class="checkout-btn hide" onclick="checkoutWhatsApp()">📲 Order on WhatsApp</button>
+
+  <button id="checkoutBtn" class="checkout-btn hide" onclick="checkoutOrder()">
+    📲 Order on WhatsApp + Email
+  </button>
+
+  <button id="oldBackupBtn" class="checkout-btn hide" onclick="sendOldFormatMessage()" style="background:#10b981;margin-top:8px;">📱 Old Format Backup</button>
 </div>
 
 <div id="wishlistView" class="hide">
   <div id="wishList"></div>
 </div>
 
+<div class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <div>🏠</div><span>Home</span>
+  </a>
+  <a href="category.html" class="nav-item">
+    <div>📱</div><span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item active">
+    <div>🛒</div><span>Cart</span>
+    <span class="cart-badge" id="navCartCount" style="display:none">0</span>
+  </a>
+  <a href="customer-account.html" class="nav-item">
+    <div>👤</div><span>Account</span>
+  </a>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
-// ===== FIREBASE CONFIG - YAHAN APNI KEY DAAL ⚠️ =====
-
-  const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+ const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-};
+  };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const rtdb = firebase.database();
+const auth = firebase.auth();
 
-const WISHLIST_KEY = 'SANTRA_WISHLIST';
-const CART_KEY = 'SANTRA_CART';
+const ADMIN_WHATSAPP = '918769171078';
+const ADMIN_EMAIL = 'santramall@gmail.com';
 
-let cart = [];
-let wishlist = [];
+let currentUser = null;
 let currentTab = 'cart';
+let cart = {};
+let wishlist = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-  loadCart();
-  loadWishlist();
-  updateCounts();
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    currentUser = user;
+    loadCart();
+    loadWishlist();
+  } else {
+    document.getElementById('cartList').innerHTML = '<div class="empty">Please login to see cart<br><br><button class="checkout-btn" onclick="window.location.href=\'index.html\'">Go to Home</button></div>';
+  }
+  const urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('admin') === 'santra123'){
+    document.getElementById('oldBackupBtn').classList.remove('hide');
+  }
 });
 
 function switchTab(tab){
@@ -118,67 +222,83 @@ function getImageUrl(item) {
   let img = item.imageUrl || item.img || item.mediaUrl || item.image || item.photo || item.thumbnail || item.src || '';
   img = String(img).trim();
   if(img.startsWith('data:image') && img.length > 50000) return '';
+  if(img &&!img.startsWith('http') &&!img.startsWith('data:') &&!img.startsWith('/')) {
+    img = '/' + img;
+  }
   if(img.length > 5) return img;
-  return 'https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE';
+  return 'https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE';
 }
 
+function getProductLink(productId) {
+  const baseUrl = window.location.origin;
+  const pathName = window.location.pathname;
+  let productPath = '/product.html';
+  if(pathName.includes('/santramarketonlineshoppingmall')){
+      productPath = '/santramarketonlineshoppingmall/product.html';
+  }
+  return `${baseUrl}${productPath}?id=${encodeURIComponent(productId)}`;
+}
+
+// ✅ CART - AB RTDB SE LOAD HOGA
 function loadCart() {
-  cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-  cart = cart.filter(item => item && item.id && item.name && item.price > 0).map(item => ({
-    id: item.id,
-    name: item.name || 'Product',
-    price: parseFloat(item.price) || 0,
-    image: getImageUrl(item),
-    code: item.code || item.sku || item.product_code || 'N/A',
-    category: item.category || 'General',
-    serial_no: item.serial_no || 'N/A',
-    qty: parseInt(item.qty) || 1
-  }));
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  renderCart();
-  updateCounts();
+  if(!currentUser) return;
+  const cartRef = rtdb.ref('carts/' + currentUser.uid);
+  cartRef.on('value', (snapshot) => {
+    cart = snapshot.val() || {};
+    renderCart();
+    updateCounts();
+  });
 }
 
 function renderCart() {
   let container = document.getElementById('cartList');
   let summary = document.getElementById('cartSummary');
   let checkoutBtn = document.getElementById('checkoutBtn');
+  let deliveryForm = document.getElementById('deliveryForm');
+  let cartKeys = Object.keys(cart);
 
-  if(cart.length === 0) {
+  if(cartKeys.length === 0) {
     container.innerHTML = '<div class="empty">🛒 Your cart is empty<br><br><button class="checkout-btn" onclick="window.location.href=\'index.html\'">Continue Shopping</button></div>';
     summary.classList.add('hide');
     checkoutBtn.classList.add('hide');
+    deliveryForm.classList.add('hide');
     return;
   }
 
-  container.innerHTML = cart.map((item, index) => {
+  deliveryForm.classList.remove('hide');
+
+  container.innerHTML = cartKeys.map((key) => {
+    let item = cart[key];
     let imgSrc = getImageUrl(item);
     let productCode = item.code || 'N/A';
     let qty = item.qty || 1;
     let price = item.price || 0;
+    let productLink = getProductLink(key);
 
     return `
-    <div class="cart-item">
-      <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
-      <div class="item-info">
+    <div class="cart-card" style="cursor:pointer">
+      <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'" onclick="window.location.href='${productLink}'">
+      <div class="item-info" onclick="window.location.href='${productLink}'">
         <h3>${item.name}</h3>
         <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
-        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no}</div>
-        <div class="qty-control">
-          <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
-          <span class="qty-num">${qty}</span>
-          <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no || item.code} | Variant: ${item.variant || 'Default'}</div>
+      </div>
+      <div class="item-actions">
+        <div class="qty-controls" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="updateQty('${key}', -1)">-</button>
+          <span class="qty-display">${qty}</span>
+          <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
         </div>
-        <div>
-          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-          <button class="wish-btn" onclick="moveToWishlist(${index})" title="Move to Wishlist">😍</button>
+        <div onclick="event.stopPropagation()">
+          <button class="btn-remove" onclick="removeItem('${key}')">Remove</button>
+          <button class="btn-wish" onclick="moveToWishlist('${key}')" title="Move to Wishlist">😍</button>
         </div>
       </div>
     </div>
   `;
   }).join('');
 
-  let subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
+  let subtotal = Object.values(cart).reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
   let delivery = subtotal >= 500? 0 : 49;
   let total = subtotal + delivery;
 
@@ -189,87 +309,78 @@ function renderCart() {
   checkoutBtn.classList.remove('hide');
 }
 
-function updateQty(index, change) {
-  cart[index].qty = (cart[index].qty || 1) + change;
-  if(cart[index].qty <= 0) {
-    cart.splice(index, 1);
+window.updateQty = async (productId, change) => {
+  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+  const snap = await cartRef.once('value');
+  if(snap.exists()){
+    let newQty = snap.val().qty + change;
+    if(newQty < 1) {
+      cartRef.remove();
+    } else {
+      cartRef.update({qty: newQty});
+    }
   }
-  saveCart();
-  loadCart();
 }
 
-function removeItem(index) {
+window.removeItem = (productId) => {
   if(confirm('Remove this item from cart?')) {
-    cart.splice(index, 1);
-    saveCart();
-    loadCart();
+    rtdb.ref('carts/' + currentUser.uid + '/' + productId).remove();
   }
 }
 
-function moveToWishlist(index){
-  let item = cart[index];
-  let wishItem = wishlist.find(w => w.id === item.id);
-  if(wishItem){
-    wishItem.qty = (wishItem.qty || 1) + (item.qty || 1);
-  } else {
-    wishlist.push({...item, qty: item.qty || 1});
+window.moveToWishlist = async (productId) => {
+  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+  const snap = await cartRef.once('value');
+  if(snap.exists()){
+    await wishRef.set(snap.val());
+    await cartRef.remove();
+    alert('Moved to Wishlist 😍');
   }
-  cart.splice(index, 1);
-  saveCart();
-  saveWishlist();
-  loadCart();
-  loadWishlist();
-  alert('Moved to Wishlist 😍');
 }
 
-function saveCart(){
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  updateCounts();
-}
-
+// ✅ WISHLIST - AB RTDB SE LOAD HOGA
 function loadWishlist() {
-  wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
-  wishlist = wishlist.filter(item => item && item.id && item.name && item.price > 0).map(item => ({
-    id: item.id,
-    name: item.name || 'Product',
-    price: parseFloat(item.price) || 0,
-    image: getImageUrl(item),
-    code: item.code || item.sku || item.product_code || 'N/A',
-    category: item.category || 'General',
-    serial_no: item.serial_no || 'N/A',
-    qty: parseInt(item.qty) || 1
-  }));
-  localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
-  renderWishlist();
-  updateCounts();
+  if(!currentUser) return;
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
+  wishRef.on('value', (snapshot) => {
+    wishlist = snapshot.val() || {};
+    renderWishlist();
+    updateCounts();
+  });
 }
 
 function renderWishlist(){
   let container = document.getElementById('wishList');
-  if(wishlist.length === 0) {
+  let wishKeys = Object.keys(wishlist);
+  if(wishKeys.length === 0) {
     container.innerHTML = '<div class="empty">😍 Your wishlist is empty<br><br><button class="checkout-btn" onclick="window.location.href=\'index.html\'">Browse Products</button></div>';
     return;
   }
-  container.innerHTML = wishlist.map((item, index) => {
+  container.innerHTML = wishKeys.map((key) => {
+    let item = wishlist[key];
     let imgSrc = getImageUrl(item);
     let productCode = item.code || 'N/A';
     let qty = item.qty || 1;
+    let productLink = getProductLink(key);
 
     return `
-    <div class="cart-item">
-      <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/e40046/ffffff?text=NO+IMAGE'">
-      <div class="item-info">
+    <div class="cart-card" style="cursor:pointer">
+      <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE'" onclick="window.location.href='${productLink}'">
+      <div class="item-info" onclick="window.location.href='${productLink}'">
         <h3>${item.name}</h3>
         <div class="item-price">₹${item.price || 0}</div>
-        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no}</div>
-        <div class="qty-control">
-          <button class="qty-btn" onclick="updateWishQty(${index}, -1)">-</button>
-          <span class="qty-num">${qty}</span>
-          <button class="qty-btn" onclick="updateWishQty(${index}, 1)">+</button>
+        <div class="item-code">Code: ${productCode} | Series: ${item.serial_no || item.code} | Variant: ${item.variant || 'Default'}</div>
+      </div>
+      <div class="item-actions">
+        <div class="qty-controls" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="updateWishQty('${key}', -1)">-</button>
+          <span class="qty-display">${qty}</span>
+          <button class="qty-btn" onclick="updateWishQty('${key}', 1)">+</button>
         </div>
-        <div>
-          <button class="remove-btn" onclick="removeWishItem(${index})">Remove</button>
-          <button class="wish-btn" onclick="moveToCart(${index})" title="Move to Cart" style="color:var(--accent)">🛒</button>
+        <div onclick="event.stopPropagation()">
+          <button class="btn-remove" onclick="removeWishItem('${key}')">Remove</button>
+          <button class="btn-wish" onclick="moveToCart('${key}')" title="Move to Cart" style="color:var(--accent)">🛒</button>
         </div>
       </div>
     </div>
@@ -277,139 +388,174 @@ function renderWishlist(){
   }).join('');
 }
 
-function updateWishQty(index, change) {
-  wishlist[index].qty = (wishlist[index].qty || 1) + change;
-  if(wishlist[index].qty <= 0) {
-    wishlist.splice(index, 1);
+window.updateWishQty = async (productId, change) => {
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+  const snap = await wishRef.once('value');
+  if(snap.exists()){
+    let newQty = snap.val().qty + change;
+    if(newQty < 1) {
+      wishRef.remove();
+    } else {
+      wishRef.update({qty: newQty});
+    }
   }
-  saveWishlist();
-  loadWishlist();
 }
 
-function removeWishItem(index) {
+window.removeWishItem = (productId) => {
   if(confirm('Remove from wishlist?')) {
-    wishlist.splice(index, 1);
-    saveWishlist();
-    loadWishlist();
+    rtdb.ref('wishlist/' + currentUser.uid + '/' + productId).remove();
   }
 }
 
-function moveToCart(index){
-  let item = wishlist[index];
-  let cartItem = cart.find(c => c.id === item.id);
-  if(cartItem){
-    cartItem.qty = (cartItem.qty || 1) + (item.qty || 1);
-  } else {
-    cart.push({
-      id: item.id,
-      name: item.name,
-      price: item.price || 0,
-      image: getImageUrl(item),
-      code: item.code || 'N/A',
-      category: item.category || 'General',
-      serial_no: item.serial_no || 'N/A',
-      qty: item.qty || 1
-    });
+window.moveToCart = async (productId) => {
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+  const snap = await wishRef.once('value');
+  if(snap.exists()){
+    let data = snap.val();
+    data.qty = 1;
+    await cartRef.set(data);
+    await wishRef.remove();
+    alert('Moved to Cart 🛒');
+    switchTab('cart');
   }
-  wishlist.splice(index, 1);
-  saveCart();
-  saveWishlist();
-  loadCart();
-  loadWishlist();
-  alert('Moved to Cart 🛒');
-  switchTab('cart');
-}
-
-function saveWishlist(){
-  localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
-  updateCounts();
 }
 
 function updateCounts(){
-  let cartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-  let wishCount = wishlist.length;
+  let cartCount = Object.values(cart).reduce((sum, item) => sum + (item.qty || 1), 0);
+  let wishCount = Object.keys(wishlist).length;
   document.getElementById('cartCount').innerText = cartCount;
   document.getElementById('wishCount').innerText = wishCount;
+  document.getElementById('navCartCount').innerText = cartCount;
+  document.getElementById('navCartCount').style.display = cartCount > 0? 'block' : 'none';
 }
 
-// ===== WHATSAPP CHECKOUT - UPDATED 26/5/2026 - AUTO DOMAIN + FOLDER FIX =====
-function checkoutWhatsApp(){
-  if(cart.length === 0){
+function checkoutOrder(){
+  if(Object.keys(cart).length === 0){
     alert('Cart khali hai!');
     return;
   }
 
-  let firstItem = cart[0];
+  let name = document.getElementById('custName').value.trim();
+  let phone = document.getElementById('custPhone').value.trim();
+  let email = document.getElementById('custEmail').value.trim();
+  let houseNo = document.getElementById('houseNo').value.trim();
+  let area = document.getElementById('area').value.trim();
+  let landmark = document.getElementById('landmark').value.trim();
+  let pincode = document.getElementById('pincode').value.trim();
+  let city = document.getElementById('city').value.trim();
+  let state = document.getElementById('state').value.trim();
+  let instructions = document.getElementById('instructions').value.trim();
+  let payment = document.getElementById('payMode').value;
 
-  // ✅ AUTO DOMAIN + FOLDER FIX - 3 JAGAH CHALEGA
-  const baseUrl = window.location.origin;
-  const pathName = window.location.pathname;
-
-  // GitHub pe "/santramarketonlineshoppingmall" folder check kar
-  let productPath = '/product.html';
-  if(pathName.includes('/santramarketonlineshoppingmall')){
-      productPath = '/santramarketonlineshoppingmall/product.html';
+  if(!name ||!phone ||!houseNo ||!area ||!landmark ||!pincode ||!city ||!state ||!payment){
+    alert('⚠️ Please fill all required fields!');
+    return;
   }
 
-  const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(firstItem.id)}`;
-  // ========== END UPDATE ==========
+  if(phone.length!== 10 ||!/^[6-9]\d{9}$/.test(phone)){
+    alert('⚠️ Please enter valid 10 digit mobile number');
+    return;
+  }
 
-  // YE SAB FIELD ZARURI HAI WHATSAPP MESSAGE KE LIYE
-  localStorage.setItem('pending_whatsapp_order_' + firstItem.id, JSON.stringify({
-    productId: firstItem.id,
-    productName: firstItem.name,
-    productPrice: firstItem.price,
-    productImage: firstItem.image,
-    productCode: firstItem.code,
-    category: firstItem.category,
-    serial_no: firstItem.serial_no,
-    productLink: productLink // Link bhi save kar de
-  }));
+  if(pincode.length!== 6 ||!/^\d{6}$/.test(pincode)){
+    alert('⚠️ Please enter valid 6 digit pincode');
+    return;
+  }
 
-  window.location.href = 'whatsapp-order.html?product=' + firstItem.id;
+  let orderId = 'SM' + Date.now();
+  let date = new Date().toLocaleString('en-IN');
+  let itemsText = '';
+  let subtotal = 0;
+  let cartArr = Object.entries(cart);
+
+  cartArr.forEach(([key, item], index) => {
+    let itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+    let productLink = getProductLink(key);
+
+    itemsText += `${index + 1}. ${key} | ${item.name} x ${item.qty} = Rs.${itemTotal}\n`;
+    itemsText += `Variant: ${item.variant || 'Default'}\n`;
+    itemsText += `Series: ${item.serial_no || item.code}\n`;
+    itemsText += `Category: ${item.category || 'General'}\n`;
+    itemsText += `🔗 Product Link: ${productLink}\n\n`;
+  });
+
+  let delivery = subtotal >= 500? 0 : 49;
+  let total = subtotal + delivery;
+
+  let message = `🛍️ *NEW ORDER REQUEST* #${orderId}\n`;
+  message += `📅 *Date:* ${date}\n\n`;
+  message += `*👤 CUSTOMER DETAILS:*\n`;
+  message += `Name: ${name}\n`;
+  message += `Phone: ${phone}\n`;
+  if(email) message += `Email: ${email}\n`;
+  message += `Address: ${houseNo}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}\n`;
+  if(instructions) message += `Instructions: ${instructions}\n`;
+  message += `Payment: ${payment}\n\n`;
+  message += `*📦 ORDER ITEMS:*\n`;
+  message += `${itemsText}`;
+  message += `💰 Subtotal: Rs.${subtotal}\n`;
+  message += `🚚 Delivery: ${delivery === 0? 'FREE' : 'Rs.' + delivery}\n`;
+  message += `💵 *Total Amount: Rs.${total}*\n\n`;
+  message += `📍 ACTION: Confirm order & dispatch\n`;
+  message += `🔔 Sent to SANTRA - Wait for confirmation`;
+
+  let whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+
+  setTimeout(() => {
+    let subject = `New Order #${orderId} - SANTRA MALL`;
+    let gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${ADMIN_EMAIL}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    window.open(gmailUrl, '_blank');
+  }, 1500);
+
+  saveOrderToRTDB(orderId, cart, total, {name, phone, email, houseNo, area, landmark, pincode, city, state, instructions, payment});
+  clearCartAfterOrder();
 }
 
-// ===== Add to Cart Function - Product Page se call hoga =====
-window.addToCart = function(product){
-  let item = cart.find(c => c.id === product.id);
-  if(item){
-    item.qty = (item.qty || 1) + 1;
-  } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price || 0,
-      image: getImageUrl(product),
-      code: product.code || product.product_code || 'N/A',
-      category: product.category || 'General',
-      serial_no: product.serial_no || 'N/A',
-      qty: 1
-    });
+function sendOldFormatMessage() {
+  let cartKeys = Object.keys(cart);
+  if(cartKeys.length === 0){
+    alert('Cart khali hai!');
+    return;
   }
-  saveCart();
-  alert('Added to Cart 🛒');
+  let item = cart[cartKeys[0]];
+  let productLink = getProductLink(cartKeys[0]);
+  let message = `🛒 *ORDER REQUEST* - SANTRA MALL\n\n*Product:* ${item.name}\n*Price:* Rs.${item.price} x ${item.qty} = Rs.${item.price * item.qty}\n*Variant:* ${item.variant || 'Default'}\n*Code:* ${item.serial_no || cartKeys[0]}\n*Link:* ${productLink}\n\n💰 Total: Rs.${item.price * item.qty}\n\n📍 Confirm this order`;
+  let whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+
+  setTimeout(() => {
+    let gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${ADMIN_EMAIL}&su=Old Format Order&body=${encodeURIComponent(message)}`;
+    window.open(gmailUrl, '_blank');
+  }, 1000);
+
+  rtdb.ref('carts/' + currentUser.uid).remove();
+  alert('✅ Old format sent to WhatsApp + Gmail!\n\nCart cleared!');
 }
 
-// ===== Add to Wishlist Function - Product Page se call hoga =====
-window.addToWishlist = function(product){
-  let item = wishlist.find(w => w.id === product.id);
-  if(item){
-    item.qty = (item.qty || 1) + 1;
-  } else {
-    wishlist.push({
-      id: product.id,
-      name: product.name,
-      price: product.price || 0,
-      image: getImageUrl(product),
-      code: product.code || product.product_code || 'N/A',
-      category: product.category || 'General',
-      serial_no: product.serial_no || 'N/A',
-      qty: 1
-    });
-  }
-  saveWishlist();
-  alert('Added to Wishlist 😍');
+function clearCartAfterOrder(){
+  rtdb.ref('carts/' + currentUser.uid).remove();
+  alert('✅ Order sent to WhatsApp + Gmail!\n\nCart cleared successfully!');
+}
+
+function saveOrderToRTDB(orderId, cartItems, total, customer) {
+  rtdb.ref('orders/' + orderId).set({
+    orderId: orderId,
+    customer: customer,
+    items: cartItems,
+    totalAmount: total,
+    status: 'pending',
+    source: 'cart.html',
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+  }).then(() => {
+    console.log('✅ Order saved: ' + orderId);
+  }).catch((error) => {
+    console.log('❌ Order save failed:', error);
+  });
 }
 </script>
+
 </body>
 </html>
