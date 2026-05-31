@@ -97,6 +97,9 @@ function getImageUrl(product) {
 
   img = String(img).trim();
   if(img.startsWith('data:image') && img.length > 50000) return '';
+  if(img && !img.startsWith('http') && !img.startsWith('data:') && !img.startsWith('/')) {
+  img = '/' + img;
+}
   if(img.length > 5) return img;
 
   return 'https://via.placeholder.com/100x100/e40046/ffffff?text=NO+IMAGE';
