@@ -181,3 +181,21 @@ h1, .header .title, .navbar-brand, .site-name {
 header * {
   max-width:100%!important;
 }
+/* ===== GITHUB FINAL - FRUIT PEEL NARANGI ===== */
+html body header,
+html body .header,
+html body div[class*="header"] {
+  background: #FA8128 !important;
+  background-color: #FA8128 !important;
+  background-image: none !important;
+}
+
+html body .logo-text, 
+html body h1.logo, 
+html body header h1 {
+  color: #C62828 !important;
+  text-shadow:
+    3px 3px 0px #1B5E20,
+    6px 6px 0px #FFF176,
+    9px 9px 18px rgba(0,0,0,0.6) !important;
+}
