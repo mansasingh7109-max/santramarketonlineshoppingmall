@@ -30,11 +30,11 @@ h1, .header .title, .navbar-brand, .site-name {
   font-size:40px!important; 
   font-weight:900!important; 
   color:#C62828!important; /* Bold Santra Red */
-  text-align:absolute!important;
+  text-align:right!important;
   margin:0!important;
   padding:0!important;
   letter-spacing:2px!important;
-  line-height:3!important;
+  line-height:2!important;
   width:100%!important;
   text-transform:uppercase!important;
   font-family:Arial Black, Impact, sans-serif!important;
