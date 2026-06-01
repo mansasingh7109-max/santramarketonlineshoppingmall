@@ -3,42 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>❤️ My Wishlist - SANTRA MALL</title>
+  <title>😍 My Wishlist - SANTRA MALL</title>
   <style>
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px;flex:1}
-  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .clear-btn{background:white;color:var(--accent);border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:12px;cursor:pointer}
-  .wishlist-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .wishlist-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;cursor:pointer;border:1px solid #eee}
-  .item-info{flex:1}
-  .item-info h3{font-size:16px;margin-bottom:5px;height:40px;overflow:hidden;cursor:pointer}
-  .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
-  .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
-  .btn-group{display:flex;gap:8px;margin-top:10px}
-  .btn-cart{background:var(--accent);color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
-  .btn-remove{background:#ef4444;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-  .loading{text-align:center;padding:60px 20px;color:#999}
-  .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;display:none}
-  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
-  .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
-  .nav-item.active{color:var(--accent)}
-  .nav-item div{font-size:22px}
-  .nav-item span{font-size:11px;display:block;margin-top:2px}
-  .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
-  .code-text{font-size:12px;color:#666;margin-top:4px}
+ .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+ .header h1{font-size:18px;flex:1}
+ .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+ .clear-btn{background:white;color:var(--accent);border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:12px;cursor:pointer}
+ .wishlist-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .wishlist-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;cursor:pointer;border:1px solid #eee}
+ .item-info{flex:1}
+ .item-info h3{font-size:16px;margin-bottom:5px;height:40px;overflow:hidden;cursor:pointer}
+ .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
+ .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
+ .btn-group{display:flex;gap:8px;margin-top:10px}
+ .btn-cart{background:var(--accent);color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
+ .btn-remove{background:#ef4444;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
+ .empty{text-align:center;padding:60px 20px;color:#999}
+ .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+ .loading{text-align:center;padding:60px 20px;color:#999}
+ .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;display:none}
+ .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+ .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+ .nav-item.active{color:var(--accent)}
+ .nav-item div{font-size:22px}
+ .nav-item span{font-size:11px;display:block;margin-top:2px}
+ .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+ .code-text{font-size:12px;color:#666;margin-top:4px}
   </style>
 </head>
 <body>
 
 <div class="header">
   <button class="back-btn" onclick="window.location.href='index.html'">←</button>
-  <h1>❤️ My Wishlist (<span id="wishCount">0</span>)</h1>
+  <h1>😍 My Wishlist (<span id="wishCount">0</span>)</h1>
   <button class="clear-btn" id="clearBtn" onclick="clearWishlist()" style="display:none">Clear All</button>
 </div>
 
@@ -79,7 +79,7 @@
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-  
+
   firebase.initializeApp(firebaseConfig);
   var rtdb = firebase.database();
   var auth = firebase.auth();
@@ -102,16 +102,17 @@
     }
   });
 
-  // ✅ UNIVERSAL IMAGE FUNCTION
+  // ✅ UPDATED - RTDB ka 'image' field pehle check hoga
   function getProductImage(p) {
-    if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
-    if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
+    // Priority: RTDB ka naya 'image' field sabse pehle
     if(p.image) return p.image;
     if(p.imageUrl) return p.imageUrl;
     if(p.img) return p.img;
+    if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
+    if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
     if(p.photo) return p.photo;
     if(p.thumbnail) return p.thumbnail;
-    return 'https://via.placeholder.com/100x100?text=No+Image';
+    return 'https://via.placeholder.com/100x100/4CAF50/ffffff?text=NO+IMAGE';
   }
 
   function loadWishlistFromRTDB() {
@@ -148,7 +149,7 @@
         html += `
           <div class="wishlist-card">
             <img src="${imgSrc}"
-                 onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100?text=No+Image'"
+                 onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100/4CAF50/ffffff?text=NO+IMAGE'"
                  onclick="viewProduct('${p.id || key}')">
             <div class="item-info">
               <h3 onclick="viewProduct('${p.id || key}')">${p.name || 'Product'}</h3>
@@ -188,7 +189,7 @@
     const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
     try {
       await cartRef.set({
-       ...productData,
+      ...productData,
         qty: 1,
         addedAt: new Date().toISOString()
       });
