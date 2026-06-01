@@ -11,45 +11,38 @@ header *, .header * {
 
 /* 1. HEADER = LEFT SIDEBAR + RIGHT CONTENT */
 header, .header {
-  background: linear-gradient(90deg, #FFF176 0%, #FFB74D 100%) !important;
+  background: #FFB74D !important;
   display: flex !important;
   flex-direction: row !important;
   padding: 0 !important;
   min-height: 290px !important;
   border-bottom: 4px solid #E65100 !important;
   position: relative !important;
+  box-shadow: 0 5px 0 #E65100, 0 8px 15px rgba(230,81,0,0.3) !important;
 }
 
-/* 2. LEFT ORANGE SIDEBAR - FAKE DIV */
+/* 2. LEFT LIGHT YELLOW SIDEBAR - FAKE DIV */
 header::before {
   content: '' !important;
   display: block !important;
   width: 95px !important;
   min-width: 95px !important;
-  background: linear-gradient(180deg, #FB8C00 0%, #E65100 100%) !important;
-  box-shadow: 4px 0 0 #FFF176 !important;
-}
-
-/* 3. SANTRA MALL LOGO - RIGHT SIDE */
-header > .logo, header > h1, header > h2, .header .brand-name {
+  background: linear-gradient(180deg, #FFF176 0%, #FFF176 100%) !important;
+  box-shadow: 4px 0 0 #FBC02D !important;
+  z-index: 1 !important;
   position: absolute !important;
-  left: 110px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  color: #BF360C !important;
-  font-size: 24px !important;
-  font-weight: bold !important;
-  text-shadow: 2px 2px 0 rgba(255,255,255,0.6) !important;
-  z-index: 10 !important;
+  left: 0 !important;
+  top: 0 !important;
+  height: 100% !important;
 }
 
-/* 4. BUTTONS KO LEFT SIDEBAR ME FORCE KARO */
+/* 3. BUTTONS KO LEFT SIDEBAR ME FORCE KARO */
 #loginBtn, .login-btn, .wishlist-btn, .help-btn {
   position: absolute !important;
-  left: 10px !important;
-  width: 75px !important;
-  height: 75px !important;
-  font-size: 10px !important;
+  left: 5px !important;
+  width: 60px !important;
+  height: 20px !important;
+  font-size: 5px !important;
   font-weight: bold !important;
   display: flex !important;
   flex-direction: column !important;
@@ -58,408 +51,454 @@ header > .logo, header > h1, header > h2, .header .brand-name {
   z-index: 20 !important;
   cursor: pointer !important;
   transition: all 0.15s ease !important;
+  text-decoration: none !important;
+  padding: 2px !important;
 }
 
-/* 5. LOGIN - SQUARE SKY BLUE */
+/* 4. LOGIN - SQUARE SKY BLUE */
 #loginBtn, .login-btn { 
-  top: 15px !important; 
-  background: linear-gradient(145deg, #E1F5FE, #B3E5FC) !important;
-  color: #01579B !important;
+  top: 5px !important; 
+  background: linear-gradient(30deg, #E1F5FE, #B3E5FC) !important;
+  color: #81C784 !important;
   border-radius: 12px !important;
   border: 3px solid #0277BD !important;
   outline: 2px solid #BBDEFB !important;
   outline-offset: -6px !important;
-  box-shadow: 0 4px 0 #01579B !important;
+  box-shadow: 0 4px 0 #81C784 !important;
 }
 
-/* 6. WISHLIST - HEART SHAPE GREEN - SQUARE NAHI HAI */
+/* 5. WISHLIST - HEART SHAPE YELLOW */
 .wishlist-btn { 
   top: 105px !important;
-  background: linear-gradient(145deg, #FFF176, #FFF176) !important;
-  color: #FFF176 !important;
+  background: linear-gradient(145deg, #81C784, #81C784) !important;
+  color: #F57F17 !important;
   /* HEART SHAPE CSS */
-  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35% !important;
-  border: 3px solid #FFF176 !important;
-  outline: 2px solid #FFF176 !important;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% !important;
+  border: 3px solid #FBC02D !important;
+  outline: 2px solid #81C784 !important;
   outline-offset: -6px !important;
-  box-shadow: 0 4px 0 #FFF176 !important;
+  box-shadow: 0 4px 0 #F57F17 !important;
 }
 
-/* 7. HELP DESK - PILL SHAPE SKY BLUE */
+/* 6. HELP DESK - PILL SHAPE SKY BLUE */
 .help-btn { 
   top: 195px !important;
-  background: linear-gradient(145deg, #E3F2FD, #90CAF9) !important;
+  background: linear-gradient(50deg, #E3F2FD, #90CAF9) !important;
   color: #0D47A1 !important;
-  border-radius: 50px !important;
-  height: 85px !important;
+  border-radius: 5px !important;
+  height: 40px !important;
   border: 3px solid #1976D2 !important;
   outline: 2px solid #BBDEFB !important;
   outline-offset: -6px !important;
   box-shadow: 0 4px 0 #0D47A1 !important;
 }
 
-/* 8. HOVER + CLICK EFFECT */
+/* 7. HOVER + CLICK EFFECT */
 #loginBtn:hover, .wishlist-btn:hover, .help-btn:hover {
-  transform: translateX(4px) !important;
+  transform: translateX(2px) scale(1.05) !important;
 }
 #loginBtn:active, .wishlist-btn:active, .help-btn:active {
-  transform: translateX(6px) scale(0.95) !important;
+  transform: translateX(3px) scale(0.95) !important;
   box-shadow: 0 0 0 transparent !important;
 }
 
-/* 9. WISHLIST COUNT BADGE */
+/* 8. WISHLIST COUNT BADGE */
 .wishlist-btn .count {
-  background: #FFF176 !important;
+  background: #F44336 !important;
   color: white !important;
   border-radius: 50% !important;
   padding: 1px 5px !important;
   font-size: 9px !important;
-  position: absolute !important;
+  position: center !important;
   top: -3px !important;
   right: -3px !important;
   border: 2px solid white !important;
+  font-weight: bold !important;
 }
 
-/* 10. ICONS */
+/* 9. ICONS */
 #loginBtn i, .wishlist-btn i, .help-btn i {
-  font-size: 16px !important;
-  margin-bottom: 2px !important;
+  font-size: 2px !important;
+  margin-bottom: 1px !important;
+  display: block !important;
 }
-/* =====================================================
-   ===== ULTIMATE FIX - SIDEBAR LAYOUT FORCED =====
-   ===================================================== */
+/* ===== LOGOUT + LOGIN BUTTON - LIGHT GREEN THEME ===== */
 
-/* 1. HEADER KO RESET + FLEX BANAYO */
-header,.header,.top-header,.navbar {
-  all: unset!important;
-  display: flex!important;
-  flex-direction: row!important;
-  width: 100%!important;
-  min-height: 320px!important;
-  background: linear-gradient(90deg, #FFF176 0%, #FFB74D 100%)!important;
-  position: relative!important;
-  box-shadow: 0 5px 0 #E65100!important;
-  border-bottom: 3px solid #E65100!important;
-}
-
-/* 2. LEFT ORANGE SIDEBAR - FAKE CREATE */
-header::after,.header::after {
-  content: ''!important;
-  position: absolute!important;
-  left: 0!important;
-  top: 0!important;
-  width: 100px!important;
-  height: 100%!important;
-  background: linear-gradient(180deg, #FB8C00 0%, #E65100 100%)!important;
-  box-shadow: 5px 0 0 #FFF176!important;
-  z-index: 1!important;
+/* 1. LOGOUT BUTTON - WHITE HATAO, LIGHT GREEN LAGAO */
+.header-btn[onclick*="logout"], 
+.logout-btn, 
+button[class*="logout"], 
+#logoutBtn,
+.logout,
+button.logout {
+  background: #F0FFF0 !important; /* Very Light Green BG */
+  color: #1B5E20 !important; /* Dark Green Text */
+  border: 1px solid #98FB98 !important; /* Pale Green Border */
+  border-radius: 1px !important;
+  box-shadow: 0 1px 0 #90EE90, 0 1px 1px rgba(144,238,144,0.5) !important; /* Light Green 3D Shadow */
+  outline: 1px solid #98FB98 !important; /* Light Green Outline */
+  outline-offset: -3px !important;
+  padding: 1px 1px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
 }
 
-/* 3. SANTRA MALL LOGO - CENTER RIGHT ME */
-header.logo,
-header h1,
-header h2,
-.header.brand-name,
-.header > div:first-child {
-  position: absolute!important;
-  left: 120px!important;
-  top: 50%!important;
-  transform: translateY(-50%)!important;
-  color: #BF360C!important;
-  font-size: 28px!important;
-  font-weight: bold!important;
-  text-shadow: 2px 2px 0 rgba(255,255,255,0.7)!important;
-  z-index: 5!important;
-  margin: 0!important;
+.header-btn[onclick*="logout"]:hover {
+  background: #E8F5E9 !important;
+  transform: translateX(2px) !important;
+  box-shadow: 0 2px 0 #32CD32, 0 4px 6px rgba(50,205,50,0.6) !important;
+  border-color: #32CD32 !important;
 }
 
-/* 4. SAB BUTTONS KO LEFT SIDEBAR ME FORCE KARO */
+/* 2. LOGIN BUTTON KA BHI WHITE BORDER HATAO */
+.header-btn[onclick*="login"], 
+.login-btn,
+#loginBtn {
+  background: #F0FFF0 !important; /* Light Green BG */
+  color: #1B5E20 !important;
+  border: 3px solid #98FB98 !important; /* Light Green Border */
+  outline: 2px solid #90EE90 !important; /* Light Green Outline */
+  box-shadow: 0 4px 0 #90EE90, 0 6px 10px rgba(144,238,144,0.5) !important;
+}
+
+/* 3. WISHLIST KA BHI WHITE HATAO */
+.header-btn[onclick*="wishlist"], 
+.wishlist-btn {
+  background: #F0FFF0 !important;
+  color: #1B5E20 !important;
+  border: 3px solid #98FB98 !important;
+  outline: 2px solid #90EE90 !important;
+  box-shadow: 0 4px 0 #90EE90 !important;
+}
+
+/* 4. HELP DESK KA BHI WHITE HATAO */
+.header-btn[onclick*="help"], 
+.help-btn {
+  background: #F0FFF0 !important;
+  color: #1B5E20 !important;
+  border: 3px solid #98FB98 !important;
+  outline: 2px solid #90EE90 !important;
+  box-shadow: 0 4px 0 #90EE90 !important;
+}
+/* ===== LEFT SIDEBAR - FINAL FORMAT ===== */
+
+/* 1. SAB BUTTONS KA BASE STYLE */
+.header-btn,
 #loginBtn,.login-btn,
-.wishlist-btn,
-.help-btn,
-header button,
-.header button {
-  position: absolute!important;
-  left: 12px!important;
-  width: 76px!important;
-  height: 76px!important;
-  font-size: 10px!important;
-  font-weight: bold!important;
-  display: flex!important;
-  flex-direction: column!important;
-  align-items: center!important;
-  justify-content: center!important;
-  z-index: 20!important;
-  margin: 0!important;
-  cursor: pointer!important;
+#logoutBtn,.logout-btn,
+.wishlist-btn,.help-btn {
+  position:absolute!important;
+  left:12px!important; /* Center me */
+  width:90px!important;
+  height:76px!important;
+  font-size:10px!important;
+  font-weight:bold!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-decoration:none!important;
+  margin:0!important;
+  padding:5px!important;
+
+  /* LIGHT GREEN THEME */
+  background:#F0FFF0!important; /* Honeydew Light Green */
+  color:#1B5E20!important; /* Dark Green Text */
+  border:3px solid #98FB98!important; /* Pale Green Border */
+  outline:2px solid #90EE90!important; /* Light Green Outline */
+  outline-offset:-6px!important;
+  box-shadow:0 4px 0 #90EE90, 0 6px 10px rgba(144,238,144,0.4)!important;
 }
 
-/* 5. LOGIN - TOP ME - SQUARE SKY BLUE */
+/* 2. LOGIN - 🛍️ SHOPPING BAG + PILL SHAPE */
 #loginBtn,.login-btn {
-  top: 20px!important;
-  background: linear-gradient(145deg, #E1F5FE, #B3E5FC)!important;
-  color: #01579B!important;
-  border-radius: 12px!important;
-  border: 3px solid #0277BD!important;
-  outline: 2px solid #BBDEFB!important;
-  outline-offset: -6px!important;
-  box-shadow: 0 5px 0 #01579B, 0 7px 10px rgba(0,0,0,0.3)!important;
+  top:20px!important;
+  border-radius:50px!important; /* Pill */
+}
+#loginBtn::before,.login-btn::before {
+  content:'🛍️'!important;
+  font-size:20px!important;
+  display:block!important;
+  margin-bottom:2px!important;
 }
 
-/* 6. WISHLIST - MIDDLE ME - HEART Yellow Light - SQUARE NAHI */
+/* 3. LOGOUT -  DOOR + SQUARE SHAPE */
+#logoutBtn,.logout-btn, button[class*="logout"] {
+  top:200px!important; /* 30+100+30 */
+  border-radius:20px!important; /* Square */
+}
+#logoutBtn::before,.logout-btn::before {
+  content:''!important;
+  font-size:20px!important;
+  display:block!important;
+  margin-bottom:2px!important;
+}
+
+/* 4. WISHLIST - ♥️ HEART + HEART SHAPE */
 .wishlist-btn, button[class*="wishlist"] {
-  top: 115px!important;
-  background: linear-gradient(145deg, #FFF176, #FFF176)!important;
-  color: #FFF176!important;
-  /* HEART SHAPE */
-  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%!important;
-  border: 3px solid #FFF176!important;
-  outline: 2px solid #FFF176!important;
-  outline-offset: -6px!important;
-  box-shadow: 0 5px 0 #FFF176, 0 7px 10px rgba(200,0,0,0.2)!important;
+  top:212px!important; /* 116+76+20 */
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%!important; /* Heart */
+  position:center!important;
+}
+.wishlist-btn::before {
+  content:'♥️'!important;
+  font-size:20px!important;
+  display:block!important;
+  margin-bottom:2px!important;
 }
 
-/* 7. HELP DESK - BOTTOM ME - PILL SKY BLUE */
+/* 5. HELP DESK - 👋 HAND + PILL SHAPE LAMBA */
 .help-btn, button[class*="help"] {
-  top: 210px!important;
-  background: linear-gradient(145deg, #E3F2FD, #90CAF9)!important;
-  color: #0D47A1!important;
-  border-radius: 50px!important;
-  height: 86px!important;
-  border: 3px solid #1976D2!important;
-  outline: 2px solid #BBDEFB!important;
-  outline-offset: -6px!important;
-  box-shadow: 0 5px 0 #0D47A1, 0 7px 10px rgba(0,0,0,0.3)!important;
+  top:308px!important; /* 212+76+20 */
+  border-radius:50px!important; /* Pill */
+  height:86px!important; /* Lamba */
+}
+.help-btn::before {
+  content:'👋'!important;
+  font-size:20px!important;
+  display:block!important;
+  margin-bottom:2px!important;
 }
 
-/* 8. HOVER + CLICK */
-#loginBtn:hover,.wishlist-btn:hover,.help-btn:hover {
-  transform: translateX(5px) scale(1.05)!important;
-}
-#loginBtn:active,.wishlist-btn:active,.help-btn:active {
-  transform: translateX(8px) scale(0.95)!important;
-  box-shadow: 0 1px 0 #01579B!important;
+/* WISHLIST COUNT BADGE */
+.wishlist-btn.count,.wishlist-count {
+  background:#FF0000!important;
+  color:white!important;
+  border-radius:50%!important;
+  padding:2px 6px!important;
+  font-size:9px!important;
+  position:center!important;
+  top:-3px!important;
+  right:-3px!important;
+  border:2px solid white!important;
+  font-weight:bold!important;
 }
 
-/* 9. WISHLIST COUNT */
-.wishlist-btn.count {
-  background: #FFF176!important;
-  color: Yellow Light!important;
-  border-radius: 50%!important;
-  padding: 2px 6px!important;
-  font-size: 10px!important;
-  position: absolute!important;
-  top: -5px!important;
-  right: -5px!important;
-  border: 2px solid Yellow Light!important;
+/* HOVER EFFECT */
+.header-btn:hover {
+  transform:translateX(4px) scale(1.05)!important;
+  background:#E8F5E9!important;
+  border-color:#32CD32!important;
+  box-shadow:0 5px 0 #32CD32, 0 8px 12px rgba(50,205,50,0.6)!important;
 }  
-/* =====================================================
-   ===== SANTRA MALL - EXACT SIDEBAR LAYOUT =====
-   ===== LOGIN + WISHLIST + HELP VERTICAL LEFT =====
-   ===================================================== */
 
-/* 1. HEADER RESET + BASE SETUP */
-header, .header, .top-header, .navbar {
-  all: unset !important;
-  display: flex !important;
-  flex-direction: row !important;
-  width: 100% !important;
-  min-height: 280px !important;
-  background: linear-gradient(90deg, #FFF176 0%, #FFB74D 100%) !important;
-  position: relative !important;
-  box-shadow: 0 5px 0 #E65100, 0 8px 15px rgba(0,0,0,0.3) !important;
-  border-bottom: 4px solid #E65100 !important;
+cky
+
+/* ===== SIDEBAR BUTTONS - FINAL FIX - NO OVERLAP ===== */
+
+/* 1. SIDEBAR CONTAINER - GRID LAYOUT */
+.header-btns{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:100px!important;
+  height:auto!important;
+  padding:10px 5px!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important; /* 2 Column */
+  grid-template-rows:auto auto auto!important; /* 3 Rows */
+  gap:10px!important; /* Button gap */
+  z-index:20!important;
 }
 
-/* 2. LEFT ORANGE SIDEBAR 100px - BUTTONS KE LIYE */
-header::before, .header::before {
-  content: '' !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  width: 100px !important;
-  height: 100% !important;
-  background: linear-gradient(180deg, #FB8C00 0%, #FFF176 100%) !important;
-  box-shadow: 5px 0 0 #BF360C, inset -2px 0 0 rgba(255,255,255,0.3) !important;
-  z-index: 1 !important;
+/* 2. SAB BUTTONS KA BASE - CHOTA SIZE + BRIGHT ORANGE */
+.header-btn,
+#loginBtn,.login-btn,
+#logoutBtn,.logout-btn,
+.wishlist-btn,.help-btn {
+  position:static!important; /* OVERLAP KHATAM */
+  width:70%!important;
+  height:40px!important; /* 40px se 40px - Chota */
+  font-size:8px!important;
+  font-weight:700!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:6px!important;
+  line-height:1.1!important;
+
+  /* BRIGHT ORANGE MIX - WHITE HATAYA */
+  background:#FFCC80!important; /* Bright Orange - Halka White Mix */
+  color:#BF360C!important; /* Dark Orange Text */
+  border:2px solid #FF9800!important; /* Bright Orange Border */
+  border-radius:6px!important;
+  box-shadow:0 2px 0 #E65100!important;
 }
 
-/* 3. SANTRA MALL LOGO + TAGLINE - RIGHT SIDE CENTER */
-header .logo,
-header h1,
-header h2,
-.header .brand-name,
-.header > div:first-child,
-header > div:first-child {
-  position: absolute !important;
-  left: 120px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  color: #BF360C !important;
-  font-size: 28px !important;
-  font-weight: bold !important;
-  text-shadow: 2px 2px 0 rgba(255,255,255,0.7) !important;
-  z-index: 5 !important;
-  margin: 0 !important;
-  line-height: 1.3 !important;
+/* 3. LOGIN - ROW 1 LEFT 🛍️ */
+#loginBtn,.login-btn {
+  grid-column:1/2!important; /* Left */
+  grid-row:1/2!important;
+}
+#loginBtn::before,.login-btn::before {
+  content:'🛍️'!important;
+  font-size:10px!important;
+  line-height:1!important;
 }
 
-/* 4. SAB BUTTONS KO LEFT SIDEBAR ME FORCE KARO */
-#loginBtn, .login-btn,
-.wishlist-btn, button[class*="wishlist"],
-.help-btn, button[class*="help"],
-header button, .header button {
-  position: absolute !important;
-  left: 12px !important;
-  width: 76px !important;
-  height: 76px !important;
-  font-size: 11px !important;
-  font-weight: bold !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 20 !important;
-  margin: 0 !important;
-  cursor: pointer !important;
-  transition: all 0.15s ease !important;
-  text-decoration: none !important;
-  padding: 5px !important;
+/* 4. LOGOUT - ROW 1 RIGHT 🚪*/
+#logoutBtn,.logout-btn, button[class*="logout"] {
+  grid-column:2/3!important; /* Right */
+  grid-row:1/2!important;
+}
+#logoutBtn::before,.logout-btn::before {
+  content:''!important;
+  font-size:20px!important;
+  line-height:1!important;
 }
 
-/* 5. LOGIN BUTTON - TOP ME - SQUARE 3D SKY BLUE */
-#loginBtn, .login-btn, button[class*="login"] { 
-  top: 20px !important; 
-  background: linear-gradient(145deg, #E1F5FE, #B3E5FC) !important;
-  color: #01579B !important;
-  border-radius: 12px !important;
-  border: 3px solid #0277BD !important;
-  outline: 2px solid #BBDEFB !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 5px 0 #01579B, 0 7px 12px rgba(0,0,0,0.3),
-              inset 0 2px 0 rgba(255,255,255,0.9) !important;
+/* 5. WISHLIST - ROW 2 FULL WIDTH ♥️ */
+.wishlist-btn, button[class*="wishlist"] {
+  grid-column:1/3!important; /* Full Width */
+  grid-row:2/3!important;
+  position:center!important;
+}
+.wishlist-btn::before {
+  content:'♥️'!important;
+  font-size:14px!important;
+  line-height:1!important;
 }
 
-/* 6. WISHLIST BUTTON - MIDDLE ME - HEART 3D Yellow Light - HEART SHAPE */
-.wishlist-btn, button[class*="wishlist"] { 
-  top: 110px !important;
-  background: linear-gradient(145deg, #FFF176, #FFF176) !important;
-  color: #FFF176 !important;
-  /* HEART SHAPE - NOT SQUARE */
-  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35% !important;
-  border: 3px solid #FFF176 !important;
-  outline: 2px solid #FFF176 !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 5px 0 #FFF176, 0 7px 12px rgba(200,0,0,0.1),
-              inset 0 2px 0 rgba(255,255,255,0.9) !important;
+/* 6. HELP DESK - ROW 3 FULL WIDTH 👋 */
+.help-btn, button[class*="help"] {
+  grid-column:1/3!important; /* Full Width */
+  grid-row:3/4!important;
+}
+.help-btn::before {
+  content:'👋'!important;
+  font-size:14px!important;
+  line-height:1!important;
 }
 
-/* 7. HELP DESK BUTTON - BOTTOM ME - PILL 3D SKY BLUE */
-.help-btn, button[class*="help"] { 
-  top: 200px !important;
-  background: linear-gradient(145deg, #E3F2FD, #90CAF9) !important;
-  color: #0D47A1 !important;
-  border-radius: 50px !important;
-  height: 86px !important;
-  border: 3px solid #1976D2 !important;
-  outline: 2px solid #BBDEFB !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 5px 0 #0D47A1, 0 7px 12px rgba(0,0,0,0.3),
-              inset 0 2px 0 rgba(255,255,255,0.9) !important;
+/* WISHLIST COUNT BADGE */
+.wishlist-btn .count,.wishlist-count {
+  background:#FF0000!important;
+  color:white!important;
+  border-radius:50%!important;
+  padding:1px 4px!important;
+  font-size:7px!important;
+  position:center!important;
+  top:0px!important;
+  right:0px!important;
+  border:1px solid white!important;
+  line-height:1!important;
 }
 
-/* 8. 3D HOVER + CLICK EFFECT */
-#loginBtn:hover, .wishlist-btn:hover, .help-btn:hover {
-  transform: translateX(5px) scale(1.05) !important;
+/* HOVER EFFECT */
+.header-btn:hover {
+  transform:scale(1.05)!important;
+  background:#FFB74D!important; /* Thoda dark orange */
+  box-shadow:0 3px 0 #E65100!important;
 }
-#loginBtn:active, .wishlist-btn:active, .help-btn:active {
-  transform: translateX(8px) scale(0.95) !important;
-  box-shadow: 0 1px 0 #01579B !important;
+cky
+
+/* ===== SIDEBAR BUTTONS - FINAL FIX - NO OVERLAP ===== */
+
+/* 1. SIDEBAR CONTAINER - GRID LAYOUT */
+.header-btns{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:100px!important;
+  height:auto!important;
+  padding:10px 5px!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important; /* 2 Column */
+  grid-template-rows:auto auto auto!important; /* 3 Rows */
+  gap:10px!important; /* Button gap */
+  z-index:20!important;
 }
 
-/* 9. ICONS + TEXT */
-#loginBtn i, .wishlist-btn i, .help-btn i {
-  font-size: 18px !important;
-  margin-bottom: 3px !important;
-  display: block !important;
+/* 2. SAB BUTTONS KA BASE - CHOTA SIZE + BRIGHT ORANGE */
+.header-btn,
+#loginBtn,.login-btn,
+#logoutBtn,.logout-btn,
+.wishlist-btn,.help-btn {
+  position:static!important; /* OVERLAP KHATAM */
+  width:100%!important;
+  height:40px!important; /* 45px se 40px - Chota */
+  font-size:8px!important;
+  font-weight:700!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:2px!important;
+  line-height:1.1!important;
+
+  /* BRIGHT ORANGE MIX - WHITE HATAYA */
+  background:#FFCC80!important; /* Bright Orange - Halka White Mix */
+  color:#BF360C!important; /* Dark Orange Text */
+  border:2px solid #FF9800!important; /* Bright Orange Border */
+  border-radius:6px!important;
+  box-shadow:0 2px 0 #E65100!important;
 }
 
-/* 10. WISHLIST COUNT BADGE */
-.wishlist-btn .count, .wishlist-count {
-  background: #FFF176 !important;
-  color: Yellow Light !important;
-  border-radius: 50% !important;
-  padding: 2px 6px !important;
-  font-size: 10px !important;
-  position: absolute !important;
-  top: -5px !important;
-  right: -5px !important;
-  border: 2px solid Yellow Light !important;
-  font-weight: bold !important;
+/* 3. LOGIN - ROW 1 LEFT 🛍️ */
+#loginBtn,.login-btn {
+  grid-column:1/2!important; /* Left */
+  grid-row:1/2!important;
 }
-/* =====================================================
-   ===== HELP DESK - PILL SHAPE FORCED FIX =====
-   ===================================================== */
-
-/* 1. HELP BUTTON KO FORCE PILL SHAPE DO */
-.help-btn, 
-button[class*="help"], 
-button[class*="Help"],
-button[class*="HELP"],
-#helpBtn,
-a[class*="help"] {
-  position: absolute !important;
-  left: 12px !important;
-  top: 200px !important;
-  width: 76px !important;
-  height: 86px !important; /* Lamba tubelight jesa */
-  font-size: 11px !important;
-  font-weight: bold !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 20 !important;
-  
-  /* PILL SHAPE - YE IMPORTANT HAI */
-  border-radius: 50px !important; /* Full gol corners */
-  
-  background: linear-gradient(145deg, #E3F2FD, #90CAF9) !important;
-  color: #0D47A1 !important;
-  border: 3px solid #1976D2 !important;
-  outline: 2px solid #BBDEFB !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 5px 0 #0D47A1, 0 7px 12px rgba(0,0,0,0.3),
-              inset 0 2px 0 rgba(255,255,255,0.9) !important;
-  cursor: pointer !important;
+#loginBtn::before,.login-btn::before {
+  content:'🛍️'!important;
+  font-size:14px!important;
+  line-height:1!important;
 }
 
-/* 2. HELP BUTTON HOVER + CLICK */
-.help-btn:hover, 
-button[class*="help"]:hover {
-  transform: translateX(5px) scale(1.05) !important;
-  border-radius: 50px !important; /* Hover pe bhi pill rahe */
+/* 4. LOGOUT - ROW 1 RIGHT 🚪 */
+#logoutBtn,.logout-btn, button[class*="logout"] {
+  grid-column:2/3!important; /* Right */
+  grid-row:1/2!important;
+}
+#logoutBtn::before,.logout-btn::before {
+  content:'🚪'!important;
+  font-size:14px!important;
+  line-height:1!important;
 }
 
-.help-btn:active,
-button[class*="help"]:active {
-  transform: translateX(8px) scale(0.95) !important;
-  box-shadow: 0 1px 0 #0D47A1 !important;
-  border-radius: 50px !important;
+/* 5. WISHLIST - ROW 2 FULL WIDTH ♥️ */
+.wishlist-btn, button[class*="wishlist"] {
+  grid-column:1/3!important; /* Full Width */
+  grid-row:2/3!important;
+  position:relative!important;
+}
+.wishlist-btn::before {
+  content:'♥️'!important;
+  font-size:14px!important;
+  line-height:1!important;
 }
 
-/* 3. HELP ICON */
-.help-btn i, 
-button[class*="help"] i {
-  font-size: 18px !important;
-  margin-bottom: 3px !important;
-  display: block !important;
-  color: #0D47A1 !important;
+/* 6. HELP DESK - ROW 3 FULL WIDTH 👋 */
+.help-btn, button[class*="help"] {
+  grid-column:1/3!important; /* Full Width */
+  grid-row:3/4!important;
+}
+.help-btn::before {
+  content:'👋'!important;
+  font-size:14px!important;
+  line-height:1!important;
 }
 
-/* 4. HELP TEXT */
-.help-btn span,
-button[class*="help"] span {
-  font-size: 11px !important;
-  color: #0D47A1 !important;
+/* WISHLIST COUNT BADGE */
+.wishlist-btn .count,.wishlist-count {
+  background:#FF0000!important;
+  color:white!important;
+  border-radius:50%!important;
+  padding:1px 4px!important;
+  font-size:7px!important;
+  position:absolute!important;
+  top:0px!important;
+  right:0px!important;
+  border:1px solid white!important;
+  line-height:1!important;
+}
+
+/* HOVER EFFECT */
+.header-btn:hover {
+  transform:scale(1.05)!important;
+  background:#FFB74D!important; /* Thoda dark orange */
+  box-shadow:0 3px 0 #E65100!important;
 }
