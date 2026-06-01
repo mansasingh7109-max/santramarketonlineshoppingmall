@@ -3,7 +3,7 @@
 body{padding-bottom:70px;background:#E8F5E9!important}
 
 /* ===== HEADER - LEMON YELLOW SIDEBAR + ORANGE ===== */
-.header:not(.admin-header){padding:0;position:sticky;top:0;z-index:100;display:flex;min-height:240px!important;background:#FFB74D!important;border-bottom:4px solid #E65100!important;width:100%!important;position:relative!important;box-shadow:0 5px 0 #FFF176!important;}
+.header:not(.admin-header){padding:0;position:sticky;top:0;z-index:100;display:flex;min-height:240px!important;background:#FF7A00!important;border-bottom:4px solid #FFF176!important;width:100%!important;position:relative!important;box-shadow:0 5px 0 #FFF176!important;}
 
 /* LEFT YELLOW LEMON SIDEBAR 100px */
 .header::before{
@@ -22,12 +22,12 @@ body{padding-bottom:70px;background:#E8F5E9!important}
 .header h1, .header .brand-name, .header .logo,
 header h1, header .logo {
   position:absolute !important;
-  right:20px !important;
+  right:10px !important;
   left:auto !important;
   top:50% !important;
   transform:translateY(-50%) !important;
   color:#FF0000 !important; /* RED Text */
-  background:none !important;
+  background:#FFF176 !important;
   -webkit-text-fill-color:#FF0000 !important;
   font-family:'Poppins', sans-serif !important;
   font-size:200px !important;
@@ -140,7 +140,7 @@ header h1, header .logo {
 .banner video, .banner img, .mall-video-banner video, .mall-video-banner img{
   width:100%!important;
   max-width:100%!important;
-  height:140px!important;
+  height:60px!important;
   object-fit:cover!important;
   display:block!important;
   margin:0!important;
