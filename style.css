@@ -1,425 +1,60 @@
-/* =====================================================
-   ===== SANTRA MALL - FINAL SIDE DRAWER LAYOUT =====
-   ===== PURANA SAB DELETE KARKE SIRF YE RAKHO =====
-   ===================================================== */
+/* ===== SANTRA MALL - FINAL CLEAN CODE ===== */
+/* PURANA SAB DELETE KARKE SIRF YE RAKHO */
 
-/* RESET - Purane conflicts hatao */
-header *, .header * {
-  position: static !important;
-  transform: none !important;
+/* 1. HEADER BACKGROUND - WISHLIST WALA ORANGE */
+header, .header, .main-header, .logo-container, .top-bar {
+  background:#FFA726!important; /* Wishlist button wala orange */
+  padding:15px 20px 15px 110px!important; /* Left me sidebar ke liye jagah */
+  text-align:right!important; /* Text right me */
+  position:relative!important;
+  min-height:80px!important;
+  border-bottom:3px solid #F57C00!important;
+  display:block!important;
 }
 
-/* 1. HEADER = LEFT SIDEBAR + RIGHT CONTENT */
-header, .header {
-  background: #FFB74D !important;
-  display: flex !important;
-  flex-direction: row !important;
-  padding: 0 !important;
-  min-height: 290px !important;
-  border-bottom: 4px solid #E65100 !important;
-  position: relative !important;
-  box-shadow: 0 5px 0 #E65100, 0 8px 15px rgba(230,81,0,0.3) !important;
-}
-
-/* 2. LEFT LIGHT YELLOW SIDEBAR - FAKE DIV */
-header::before {
-  content: '' !important;
-  display: block !important;
-  width: 95px !important;
-  min-width: 95px !important;
-  background: linear-gradient(180deg, #FFF176 0%, #FFF176 100%) !important;
-  box-shadow: 4px 0 0 #FBC02D !important;
-  z-index: 1 !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  height: 100% !important;
-}
-
-/* 3. BUTTONS KO LEFT SIDEBAR ME FORCE KARO */
-#loginBtn, .login-btn, .wishlist-btn, .help-btn {
-  position: absolute !important;
-  left: 5px !important;
-  width: 60px !important;
-  height: 20px !important;
-  font-size: 5px !important;
-  font-weight: bold !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 20 !important;
-  cursor: pointer !important;
-  transition: all 0.15s ease !important;
-  text-decoration: none !important;
-  padding: 2px !important;
-}
-
-/* 4. LOGIN - SQUARE SKY BLUE */
-#loginBtn, .login-btn { 
-  top: 5px !important; 
-  background: linear-gradient(30deg, #E1F5FE, #B3E5FC) !important;
-  color: #81C784 !important;
-  border-radius: 12px !important;
-  border: 3px solid #0277BD !important;
-  outline: 2px solid #BBDEFB !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 4px 0 #81C784 !important;
-}
-
-/* 5. WISHLIST - HEART SHAPE YELLOW */
-.wishlist-btn { 
-  top: 105px !important;
-  background: linear-gradient(145deg, #81C784, #81C784) !important;
-  color: #F57F17 !important;
-  /* HEART SHAPE CSS */
-  border-radius: 50% 50% 50% 50% / 65% 65% 35% !important;
-  border: 3px solid #FBC02D !important;
-  outline: 2px solid #81C784 !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 4px 0 #F57F17 !important;
-}
-
-/* 6. HELP DESK - PILL SHAPE SKY BLUE */
-.help-btn { 
-  top: 195px !important;
-  background: linear-gradient(50deg, #E3F2FD, #90CAF9) !important;
-  color: #0D47A1 !important;
-  border-radius: 5px !important;
-  height: 40px !important;
-  border: 3px solid #1976D2 !important;
-  outline: 2px solid #BBDEFB !important;
-  outline-offset: -6px !important;
-  box-shadow: 0 4px 0 #0D47A1 !important;
-}
-
-/* 7. HOVER + CLICK EFFECT */
-#loginBtn:hover, .wishlist-btn:hover, .help-btn:hover {
-  transform: translateX(2px) scale(1.05) !important;
-}
-#loginBtn:active, .wishlist-btn:active, .help-btn:active {
-  transform: translateX(3px) scale(0.95) !important;
-  box-shadow: 0 0 0 transparent !important;
-}
-
-/* 8. WISHLIST COUNT BADGE */
-.wishlist-btn .count {
-  background: #F44336 !important;
-  color: white !important;
-  border-radius: 50% !important;
-  padding: 1px 5px !important;
-  font-size: 9px !important;
-  position: center !important;
-  top: -3px !important;
-  right: -3px !important;
-  border: 2px solid white !important;
-  font-weight: bold !important;
-}
-
-/* 9. ICONS */
-#loginBtn i, .wishlist-btn i, .help-btn i {
-  font-size: 2px !important;
-  margin-bottom: 1px !important;
-  display: block !important;
-}
-/* ===== LOGOUT + LOGIN BUTTON - LIGHT GREEN THEME ===== */
-
-/* 1. LOGOUT BUTTON - WHITE HATAO, LIGHT GREEN LAGAO */
-.header-btn[onclick*="logout"], 
-.logout-btn, 
-button[class*="logout"], 
-#logoutBtn,
-.logout,
-button.logout {
-  background: #F0FFF0 !important; /* Very Light Green BG */
-  color: #1B5E20 !important; /* Dark Green Text */
-  border: 1px solid #98FB98 !important; /* Pale Green Border */
-  border-radius: 1px !important;
-  box-shadow: 0 1px 0 #90EE90, 0 1px 1px rgba(144,238,144,0.5) !important; /* Light Green 3D Shadow */
-  outline: 1px solid #98FB98 !important; /* Light Green Outline */
-  outline-offset: -3px !important;
-  padding: 1px 1px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-}
-
-.header-btn[onclick*="logout"]:hover {
-  background: #E8F5E9 !important;
-  transform: translateX(2px) !important;
-  box-shadow: 0 2px 0 #32CD32, 0 4px 6px rgba(50,205,50,0.6) !important;
-  border-color: #32CD32 !important;
-}
-
-/* 2. LOGIN BUTTON KA BHI WHITE BORDER HATAO */
-.header-btn[onclick*="login"], 
-.login-btn,
-#loginBtn {
-  background: #F0FFF0 !important; /* Light Green BG */
-  color: #1B5E20 !important;
-  border: 3px solid #98FB98 !important; /* Light Green Border */
-  outline: 2px solid #90EE90 !important; /* Light Green Outline */
-  box-shadow: 0 4px 0 #90EE90, 0 6px 10px rgba(144,238,144,0.5) !important;
-}
-
-/* 3. WISHLIST KA BHI WHITE HATAO */
-.header-btn[onclick*="wishlist"], 
-.wishlist-btn {
-  background: #F0FFF0 !important;
-  color: #1B5E20 !important;
-  border: 3px solid #98FB98 !important;
-  outline: 2px solid #90EE90 !important;
-  box-shadow: 0 4px 0 #90EE90 !important;
-}
-
-/* 4. HELP DESK KA BHI WHITE HATAO */
-.header-btn[onclick*="help"], 
-.help-btn {
-  background: #F0FFF0 !important;
-  color: #1B5E20 !important;
-  border: 3px solid #98FB98 !important;
-  outline: 2px solid #90EE90 !important;
-  box-shadow: 0 4px 0 #90EE90 !important;
-}
-/* ===== LEFT SIDEBAR - FINAL FORMAT ===== */
-
-/* 1. SAB BUTTONS KA BASE STYLE */
-.header-btn,
-#loginBtn,.login-btn,
-#logoutBtn,.logout-btn,
-.wishlist-btn,.help-btn {
-  position:absolute!important;
-  left:12px!important; /* Center me */
-  width:90px!important;
-  height:76px!important;
-  font-size:10px!important;
-  font-weight:bold!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  text-decoration:none!important;
+/* 2. SANTRA MALL TEXT - RED BOLD + 3D GREEN YELLOW SHADOW */
+.logo-text, .santra-text, h1.logo, .logo h1, .brand-name, 
+.header h1, .header .logo, #logo, .mall-text, h1.mall {
+  font-size:36px!important;
+  font-weight:900!important; 
+  color:#D50000!important; /* Santra Red */
+  text-align:right!important;
   margin:0!important;
-  padding:5px!important;
-
-  /* LIGHT GREEN THEME */
-  background:#F0FFF0!important; /* Honeydew Light Green */
-  color:#1B5E20!important; /* Dark Green Text */
-  border:3px solid #98FB98!important; /* Pale Green Border */
-  outline:2px solid #90EE90!important; /* Light Green Outline */
-  outline-offset:-6px!important;
-  box-shadow:0 4px 0 #90EE90, 0 6px 10px rgba(144,238,144,0.4)!important;
-}
-
-/* 2. LOGIN - 🛍️ SHOPPING BAG + PILL SHAPE */
-#loginBtn,.login-btn {
-  top:20px!important;
-  border-radius:50px!important; /* Pill */
-}
-#loginBtn::before,.login-btn::before {
-  content:'🛍️'!important;
-  font-size:20px!important;
-  display:block!important;
-  margin-bottom:2px!important;
-}
-
-/* 3. LOGOUT -  DOOR + SQUARE SHAPE */
-#logoutBtn,.logout-btn, button[class*="logout"] {
-  top:200px!important; /* 30+100+30 */
-  border-radius:20px!important; /* Square */
-}
-#logoutBtn::before,.logout-btn::before {
-  content:''!important;
-  font-size:20px!important;
-  display:block!important;
-  margin-bottom:2px!important;
-}
-
-/* 4. WISHLIST - ♥️ HEART + HEART SHAPE */
-.wishlist-btn, button[class*="wishlist"] {
-  top:212px!important; /* 116+76+20 */
-  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%!important; /* Heart */
-  position:center!important;
-}
-.wishlist-btn::before {
-  content:'♥️'!important;
-  font-size:20px!important;
-  display:block!important;
-  margin-bottom:2px!important;
-}
-
-/* 5. HELP DESK - 👋 HAND + PILL SHAPE LAMBA */
-.help-btn, button[class*="help"] {
-  top:308px!important; /* 212+76+20 */
-  border-radius:50px!important; /* Pill */
-  height:86px!important; /* Lamba */
-}
-.help-btn::before {
-  content:'👋'!important;
-  font-size:20px!important;
-  display:block!important;
-  margin-bottom:2px!important;
-}
-
-/* WISHLIST COUNT BADGE */
-.wishlist-btn.count,.wishlist-count {
-  background:#FF0000!important;
-  color:white!important;
-  border-radius:50%!important;
-  padding:2px 6px!important;
-  font-size:9px!important;
-  position:center!important;
-  top:-3px!important;
-  right:-3px!important;
-  border:2px solid white!important;
-  font-weight:bold!important;
-}
-
-/* HOVER EFFECT */
-.header-btn:hover {
-  transform:translateX(4px) scale(1.05)!important;
-  background:#E8F5E9!important;
-  border-color:#32CD32!important;
-  box-shadow:0 5px 0 #32CD32, 0 8px 12px rgba(50,205,50,0.6)!important;
-}  
-
-cky
-
-/* ===== SIDEBAR BUTTONS - FINAL FIX - NO OVERLAP ===== */
-
-/* 1. SIDEBAR CONTAINER - GRID LAYOUT */
-.header-btns{
-  position:absolute!important;
-  left:0!important;
-  top:0!important;
-  width:100px!important;
-  height:auto!important;
-  padding:10px 5px!important;
-  display:grid!important;
-  grid-template-columns:1fr 1fr!important; /* 2 Column */
-  grid-template-rows:auto auto auto!important; /* 3 Rows */
-  gap:10px!important; /* Button gap */
-  z-index:20!important;
-}
-
-/* 2. SAB BUTTONS KA BASE - CHOTA SIZE + BRIGHT ORANGE */
-.header-btn,
-#loginBtn,.login-btn,
-#logoutBtn,.logout-btn,
-.wishlist-btn,.help-btn {
-  position:static!important; /* OVERLAP KHATAM */
-  width:70%!important;
-  height:40px!important; /* 40px se 40px - Chota */
-  font-size:8px!important;
-  font-weight:700!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  margin:0!important;
-  padding:6px!important;
+  padding:0!important;
+  letter-spacing:2px!important;
   line-height:1.1!important;
-
-  /* BRIGHT ORANGE MIX - WHITE HATAYA */
-  background:#FFCC80!important; /* Bright Orange - Halka White Mix */
-  color:#BF360C!important; /* Dark Orange Text */
-  border:2px solid #FF9800!important; /* Bright Orange Border */
-  border-radius:6px!important;
-  box-shadow:0 2px 0 #E65100!important;
+  /* 3D Green + Yellow Shadow */
+  text-shadow:
+    2px 2px 0px #4CAF50,  /* Green layer */
+    4px 4px 0px #FFEB3B,  /* Yellow layer */
+    6px 6px 10px rgba(0,0,0,0.4)!important; /* Depth */
 }
 
-/* 3. LOGIN - ROW 1 LEFT 🛍️ */
-#loginBtn,.login-btn {
-  grid-column:1/2!important; /* Left */
-  grid-row:1/2!important;
-}
-#loginBtn::before,.login-btn::before {
-  content:'🛍️'!important;
-  font-size:10px!important;
-  line-height:1!important;
+/* 3. MALL text ko SANTRA ke niche chipkao */
+.mall-text, h1.mall, .logo .mall {
+  font-size:30px!important;
+  margin-top:-8px!important;
+  display:block!important;
 }
 
-/* 4. LOGOUT - ROW 1 RIGHT 🚪*/
-#logoutBtn,.logout-btn, button[class*="logout"] {
-  grid-column:2/3!important; /* Right */
-  grid-row:1/2!important;
-}
-#logoutBtn::before,.logout-btn::before {
-  content:''!important;
-  font-size:20px!important;
-  line-height:1!important;
-}
-
-/* 5. WISHLIST - ROW 2 FULL WIDTH ♥️ */
-.wishlist-btn, button[class*="wishlist"] {
-  grid-column:1/3!important; /* Full Width */
-  grid-row:2/3!important;
-  position:center!important;
-}
-.wishlist-btn::before {
-  content:'♥️'!important;
-  font-size:14px!important;
-  line-height:1!important;
-}
-
-/* 6. HELP DESK - ROW 3 FULL WIDTH 👋 */
-.help-btn, button[class*="help"] {
-  grid-column:1/3!important; /* Full Width */
-  grid-row:3/4!important;
-}
-.help-btn::before {
-  content:'👋'!important;
-  font-size:14px!important;
-  line-height:1!important;
-}
-
-/* WISHLIST COUNT BADGE */
-.wishlist-btn .count,.wishlist-count {
-  background:#FF0000!important;
-  color:white!important;
-  border-radius:50%!important;
-  padding:1px 4px!important;
-  font-size:7px!important;
-  position:center!important;
-  top:0px!important;
-  right:0px!important;
-  border:1px solid white!important;
-  line-height:1!important;
-}
-
-/* HOVER EFFECT */
-.header-btn:hover {
-  transform:scale(1.05)!important;
-  background:#FFB74D!important; /* Thoda dark orange */
-  box-shadow:0 3px 0 #E65100!important;
-}
-cky
-
-/* ===== SIDEBAR BUTTONS - FINAL FIX - NO OVERLAP ===== */
-
-/* 1. SIDEBAR CONTAINER - GRID LAYOUT */
-.header-btns{
+/* 4. LEFT SIDEBAR - BUTTONS CHOTE AUR SET */
+.header-btns {
   position:absolute!important;
-  left:0!important;
-  top:0!important;
-  width:100px!important;
-  height:auto!important;
-  padding:10px 5px!important;
+  left:5px!important;
+  top:5px!important;
+  width:90px!important;
   display:grid!important;
-  grid-template-columns:1fr 1fr!important; /* 2 Column */
-  grid-template-rows:auto auto auto!important; /* 3 Rows */
-  gap:10px!important; /* Button gap */
-  z-index:20!important;
+  grid-template-columns:40px 40px!important;
+  gap:5px!important;
+  z-index:100!important;
 }
 
-/* 2. SAB BUTTONS KA BASE - CHOTA SIZE + BRIGHT ORANGE */
-.header-btn,
-#loginBtn,.login-btn,
-#logoutBtn,.logout-btn,
-.wishlist-btn,.help-btn {
-  position:static!important; /* OVERLAP KHATAM */
+.header-btn, #loginBtn, .login-btn, #logoutBtn, .logout-btn, 
+.wishlist-btn, .help-btn {
+  position:static!important;
   width:100%!important;
-  height:40px!important; /* 45px se 40px - Chota */
-  font-size:8px!important;
+  height:38px!important;
+  font-size:7px!important;
   font-weight:700!important;
   display:flex!important;
   flex-direction:column!important;
@@ -427,78 +62,38 @@ cky
   justify-content:center!important;
   margin:0!important;
   padding:2px!important;
-  line-height:1.1!important;
-
-  /* BRIGHT ORANGE MIX - WHITE HATAYA */
-  background:#FFCC80!important; /* Bright Orange - Halka White Mix */
-  color:#BF360C!important; /* Dark Orange Text */
-  border:2px solid #FF9800!important; /* Bright Orange Border */
+  background:#FFCC80!important;
+  color:#BF360C!important;
+  border:2px solid #FF9800!important;
   border-radius:6px!important;
   box-shadow:0 2px 0 #E65100!important;
 }
 
-/* 3. LOGIN - ROW 1 LEFT 🛍️ */
-#loginBtn,.login-btn {
-  grid-column:1/2!important; /* Left */
-  grid-row:1/2!important;
-}
-#loginBtn::before,.login-btn::before {
-  content:'🛍️'!important;
-  font-size:14px!important;
-  line-height:1!important;
-}
+/* LOGIN - Row 1 Left */
+#loginBtn, .login-btn { grid-column:1/2!important; grid-row:1/2!important; }
+#loginBtn::before { content:'🛍️'!important; font-size:14px!important; }
 
-/* 4. LOGOUT - ROW 1 RIGHT 🚪 */
-#logoutBtn,.logout-btn, button[class*="logout"] {
-  grid-column:2/3!important; /* Right */
-  grid-row:1/2!important;
-}
-#logoutBtn::before,.logout-btn::before {
-  content:'🚪'!important;
-  font-size:14px!important;
-  line-height:1!important;
-}
+/* LOGOUT - Row 1 Right */
+#logoutBtn, .logout-btn { grid-column:2/3!important; grid-row:1/2!important; }
+#logoutBtn::before { content:'🚪'!important; font-size:14px!important; }
 
-/* 5. WISHLIST - ROW 2 FULL WIDTH ♥️ */
-.wishlist-btn, button[class*="wishlist"] {
-  grid-column:1/3!important; /* Full Width */
-  grid-row:2/3!important;
-  position:relative!important;
-}
-.wishlist-btn::before {
-  content:'♥️'!important;
-  font-size:14px!important;
-  line-height:1!important;
-}
+/* WISHLIST - Row 2 Full */
+.wishlist-btn { grid-column:1/3!important; grid-row:2/3!important; position:relative!important; }
+.wishlist-btn::before { content:'♥️'!important; font-size:14px!important; }
 
-/* 6. HELP DESK - ROW 3 FULL WIDTH 👋 */
-.help-btn, button[class*="help"] {
-  grid-column:1/3!important; /* Full Width */
-  grid-row:3/4!important;
-}
-.help-btn::before {
-  content:'👋'!important;
-  font-size:14px!important;
-  line-height:1!important;
-}
+/* HELP DESK - Row 3 Full */
+.help-btn { grid-column:1/3!important; grid-row:3/4!important; }
+.help-btn::before { content:'👋'!important; font-size:14px!important; }
 
-/* WISHLIST COUNT BADGE */
-.wishlist-btn .count,.wishlist-count {
+/* WISHLIST COUNT */
+.wishlist-count, .wishlist-btn .count {
   background:#FF0000!important;
   color:white!important;
   border-radius:50%!important;
-  padding:1px 4px!important;
-  font-size:7px!important;
+  padding:1px 5px!important;
+  font-size:8px!important;
   position:absolute!important;
-  top:0px!important;
-  right:0px!important;
-  border:1px solid white!important;
-  line-height:1!important;
-}
-
-/* HOVER EFFECT */
-.header-btn:hover {
-  transform:scale(1.05)!important;
-  background:#FFB74D!important; /* Thoda dark orange */
-  box-shadow:0 3px 0 #E65100!important;
+  top:-3px!important;
+  right:-3px!important;
+  border:2px solid white!important;
 }
