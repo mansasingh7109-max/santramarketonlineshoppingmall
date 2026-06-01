@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🛒 SANTRA MALL - Online Shopping</title>
-
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="layout.css">
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -18,7 +18,7 @@
     <div id="userInfo" class="user-name hide"></div>
     <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">👤 Login</button>
     <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">🚪 Logout</button>
-   <a href="cart.html#wishlist" class="header-btn">
+   <a href="wishlist.html" class="header-btn">
       ❤️ Wishlist
       <span class="wishlist-count" id="wishlist-count">0</span>
     </a>
@@ -26,13 +26,11 @@
   </div>
 </div>
 
- <!-- Mall Video Banner Start -->
  <div class="mall-video-banner">
    <video autoplay muted loop playsinline preload="auto">
      <source src="banner.mp4" type="video/mp4">
    </video>
  </div>
- <!-- Mall Video Banner End -->
 
 <div id="homePage">
   <div class="search-bar">
@@ -47,6 +45,8 @@
         <h3>🔍 Filter Products</h3>
         <button class="close-filter" onclick="closeFilterPopup()">×</button>
       </div>
+      <div class="filter-group
+
       <div class="filter-group">
         <label>Size</label>
         <select id="filterSize">
@@ -55,8 +55,7 @@
           <option value="M">M</option>
           <option value="L">L</option>
           <option value="XL">XL</option>
-          <option value="XXL">XXL</option>
-        </select>
+          <option value="XXL">XXL</option      </select>
       </div>
       <div class="filter-group">
         <label>Color</label>
@@ -112,7 +111,7 @@
 
   <div class="section-title">
     <span>🔥 Hot Deals</span>
-    <span style="font-size:12px;color:var(--accent);cursor:pointer" onclick="viewAllProducts()">View All →</span>
+    <span style="font-size:12px;color:var(--accent);cursor:pointer" onclick="window.location.href='category.html'">View All →</span>
   </div>
 
   <div class="products" id="productGrid">
@@ -179,13 +178,11 @@
   </div>
 </div>
 
-<!-- ✅ Firebase SDK - SAB INCLUDE HAI -->
+<!-- ✅ FIREBASE SDK - SIRF RTDB + AUTH -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
-<!-- ✅ Firebase Config - YAHAN APNA CONFIG DAALNA ZARURI HAI -->
 <script>
      const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
@@ -197,114 +194,76 @@
   measurementId: "G-ZW1ZR8HETY"
 };
 
-  window.FIREBASE_CONFIG = firebaseConfig;
-  window.BUSINESS_CONFIG = {
-    EMAIL: "mansasingh7109@gmail.com",
-    NAME: "Manisha Tak",
-    WHATSAPP_NUMBER: "+918769171078"
-  };
-
-  // Firebase Init
   firebase.initializeApp(firebaseConfig);
-  var firestore = firebase.firestore();
   var rtdb = firebase.database();
   var auth = firebase.auth();
 </script>
 
-<!-- ✅ Theme Manager -->
 <script src="theme.js"></script>
 
-<!-- ✅ MAIN SCRIPT -->
 <script>
-  function loginCustomerWithoutOTP() {
-    const name = document.getElementById('custName').value.trim();
-    const mobile = document.getElementById('custMobile').value.trim();
-    if (!name || mobile.length!== 10) {
-      alert('❌ Name aur 10 digit mobile daalo');
-      return;
-    }
-    localStorage.setItem('santra_customer', JSON.stringify({name: name, mobile: mobile}));
-    alert('✅ Login Successful!');
-    closeCustomerLogin();
-    location.reload();
-  }
-
 let currentModalProduct = null;
 let allProducts = [];
 let allCategories = [];
 let currentSlideIndex = {};
+let currentUser = null;
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
-const ADMIN_WHATSAPP = '918769171078';
 
-window.onload = function() {
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+  checkCustomerLogin();
   updateCartCount();
   updateWishlistCount();
+  if(user) loadWishlistStatus();
+});
+
+window.onload = function() {
   loadProducts();
   loadCategories();
-  checkCustomerLogin();
-  loadCompanyDetails();
 }
 
-async function loadCompanyDetails() {
-  try {
-    const docRef = firestore.collection("settings").doc("company");
-    const docSnap = await docRef.get();
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const aboutEl = document.getElementById("aboutText");
-      if (aboutEl && data.about) {
-        aboutEl.innerHTML = data.about;
-      }
-    }
-  } catch (error) {
-    console.log("Error:", error);
-  }
+function getProductImage(p) {
+  if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
+  if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
+  if(p.image) return p.image;
+  if(p.imageUrl) return p.imageUrl;
+  if(p.img) return p.img;
+  if(p.photo) return p.photo;
+  if(p.thumbnail) return p.thumbnail;
+  if(p.mediaUrl) return p.mediaUrl;
+  if(p.categoryImage) return p.categoryImage;
+  return 'https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image';
 }
 
-// ===== FIX 1: CATEGORY FIRESTORE + REALTIME DB DONO SE LOAD =====
-function loadCategories() {
-  const catList = document.getElementById('categoryList');
+function getCategoryImage(c) {
+  return c.image || c.categoryImage || c.img || c.photo || 'https://via.placeholder.com/50/cccccc/ffffff?text=No+Image';
+}
+
+// ✅ CATEGORIES - SIRF RTDB
+async function loadCategories() {
   allCategories = [];
-
-  // 1. FIRESTORE SE PURANI CATEGORY - Necklace set, Soap, Dress
-  firestore.collection("categories").onSnapshot((snapshot) => {
-    allCategories = allCategories.filter(c => c.source!== 'firestore');
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      allCategories.push({
-        id: doc.id,
-        name: data.name || data.categoryName || data.category,
-        image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/50',
-        source: 'firestore'
-      });
-    });
-    renderHomeCategories();
-  });
-
-  // 2. REALTIME DB SE NAYI CATEGORY - Jeans jo admin_categories.html se add ki
-  rtdb.ref("categories").on('value', (snapshot) => {
-    allCategories = allCategories.filter(c => c.source!== 'rtdb');
-    if(snapshot.exists()){
-      snapshot.forEach((child) => {
+  try {
+    const rtdbSnap = await rtdb.ref("categories").once('value');
+    if(rtdbSnap.exists()){
+      rtdbSnap.forEach((child) => {
         const data = child.val();
         allCategories.push({
           id: child.key,
           name: data.name,
-          image: data.image || 'https://via.placeholder.com/50',
-          source: 'rtdb'
+          image: getCategoryImage(data)
         });
       });
     }
     renderHomeCategories();
-  });
+  } catch(e) {
+    console.log('Category load error:', e);
+    document.getElementById('categoryList').innerHTML = '<div class="loading">Error loading categories</div>';
+  }
 }
 
-// ===== FIX 2: HOMEPAGE PE CATEGORY DIKHANE KA FUNCTION =====
 function renderHomeCategories() {
   const catList = document.getElementById('categoryList');
-
-  // Duplicate hatao - agar same naam dono me hai to Realtime wala rakh
   const unique = [];
   const seen = new Set();
   allCategories.forEach(c => {
@@ -331,100 +290,64 @@ function renderHomeCategories() {
   catList.innerHTML = html;
 }
 
-// ===== FIX 3: PRODUCTS BHI DONO SE LOAD =====
-function loadProducts() {
+// ✅ PRODUCTS - SIRF RTDB
+async function loadProducts() {
   allProducts = [];
-
-  // Firestore se products
-  firestore.collection('products').onSnapshot((snapshot) => {
-    allProducts = allProducts.filter(p => p.source!== 'firestore');
-    snapshot.forEach((doc) => {
-      let p = doc.data();
-      p.id = doc.id;
-      p.source = 'firestore';
-
-      if(!p.images ||!Array.isArray(p.images) || p.images.length === 0){
-        if(p.image && p.image.trim()!== ''){
-          p.images = [p.image];
-        } else {
-          p.images = ['https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image'];
-        }
-      }
-      allProducts.push(p);
-    });
-    renderProducts(allProducts);
-    localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
-  });
-
-  // Realtime DB se products - admin-product.html se add kiye hue
-  rtdb.ref('products').on('value', (snapshot) => {
-    allProducts = allProducts.filter(p => p.source!== 'rtdb');
-    if(snapshot.exists()){
-      snapshot.forEach((child) => {
+  document.getElementById('productGrid').innerHTML = '<div class="loading">Loading products...</div>';
+  
+  try {
+    const rtdbSnap = await rtdb.ref('products').once('value');
+    if(rtdbSnap.exists()){
+      rtdbSnap.forEach((child) => {
         let p = child.val();
         p.id = child.key;
-        p.source = 'rtdb';
-
-        if(!p.images ||!Array.isArray(p.images) || p.images.length === 0){
-          if(p.image && p.image.trim()!== ''){
-            p.images = [p.image];
-          } else {
-            p.images = ['https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image'];
-          }
-        }
+        p.price = parseFloat(p.price) || 0;
+        p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+        p.mrp = parseFloat(p.mrp) || p.price;
         allProducts.push(p);
       });
     }
     renderProducts(allProducts);
     localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
-  });
+  } catch(e) {
+    console.log('Product load error:', e);
+    document.getElementById('productGrid').innerHTML = '<div class="loading">Error loading products</div>';
+  }
 }
 
 function renderProducts(products){
   let html = '';
   products.forEach((p) => {
-  currentSlideIndex[p.id] = 0;
-  let images = [];
-  
-  // 1. Pehle p.media check karo - ImgBB wale products
-  if(p.media && Array.isArray(p.media) && p.media.length > 0){
-    images = p.media.map(m => m.url).filter(url => url && url.startsWith('http'));
-  }
-  
-  // 2. Agar media khali hai to purane p.images check karo
-  if(images.length === 0 && p.images && Array.isArray(p.images) && p.images.length > 0){
-    images = p.images.filter(url => url && url.startsWith('http'));
-  }
-  
-  // 3. Ab bhi khali hai to placeholder
-  if(images.length === 0){
-    images = ['https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image'];
-  }
-  
-  let isWishlisted = isInWishlist(p.id);
-    
+    currentSlideIndex[p.id] = 0;
+    let images = [];
+    if(p.media && Array.isArray(p.media) && p.media.length > 0){
+      images = p.media.map(m => m.url).filter(url => url);
+    }
+    if(images.length === 0 && p.images && Array.isArray(p.images) && p.images.length > 0){
+      images = p.images.filter(url => url);
+    }
+    if(images.length === 0){
+      images = [getProductImage(p)];
+    }
+
     html += `
       <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-        ${p.stock < 5? '<div class="new-badge">Low Stock</div>' : ''}
+        ${p.stock < 5 && p.stock > 0? '<div class="new-badge">Low Stock</div>' : ''}
+        ${p.stock === 0? '<div class="new-badge" style="background:#999">Out of Stock</div>' : ''}
         ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ''}
-        <div class="wish-icon ${isWishlisted? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)">
-          ${isWishlisted? '❤️' : '💗'}
-        </div>
+        <div class="wish-icon" id="heart-${p.id}" onclick="toggleWishlist('${p.id}', event)">💗</div>
         <div class="image-slider">
           ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? 'active' : ''}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x300/ff0000/ffffff?text=Image+Error'">`).join('')}
           ${images.length > 1? `
             <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
             <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
-            <div class="dots">
-              ${images.map((_, idx) => `<span class="dot ${idx === 0? 'active' : ''}" onclick="goToSlide('${p.id}', ${idx}, event)"></span>`).join('')}
-            </div>
           ` : ''}
         </div>
         <div class="product-info">
-          <h3>${p.name}</h3>
+          <h3>${p.name || 'Product'}</h3>
           <div>
             <span class="price">₹${p.price}</span>
-            ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
+            ${p.mrp && p.mrp > p.price? `<span class="mrp">₹${p.mrp}</span>` : ''}
           </div>
           <p class="stock">Stock: ${p.stock}</p>
         </div>
@@ -436,21 +359,99 @@ function renderProducts(products){
     `;
   });
   document.getElementById('productGrid').innerHTML = html || '<div class="loading">No products found</div>';
+  if(currentUser) loadWishlistStatus();
 }
 
-// Baaki saare functions same rahenge...
+// ✅ WISHLIST - AB REALTIME DB USE HOGA
+window.toggleWishlist = async (productId, event) => {
+  if (event) event.stopPropagation();
+
+  if (!currentUser) {
+    showToast('Please login first');
+    openCustomerLogin();
+    return;
+  }
+
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+  const product = allProducts.find(p => p.id === productId);
+  if(!product) return;
+
+  try {
+    const wishSnap = await wishRef.once('value');
+    
+    if (wishSnap.exists()) {
+      await wishRef.remove();
+      document.getElementById(`heart-${productId}`).innerText = '💗';
+      showToast('Removed from Wishlist');
+    } else {
+      await wishRef.set({
+        id: productId,
+        name: product.name,
+        price: product.price || 0,
+        mrp: product.mrp || product.price || 0,
+        code: product.code || productId,
+        stock: product.stock || 0,
+        image: getProductImage(product),
+        addedAt: new Date().toISOString()
+      });
+      document.getElementById(`heart-${productId}`).innerText = '❤️';
+      showToast('Added to Wishlist ❤️');
+    }
+    updateWishlistCount();
+  } catch (e) {
+    console.log('Wishlist error:', e);
+    showToast('Error: ' + e.message);
+  }
+}
+
+function loadWishlistStatus() {
+  if (!currentUser) return;
+  rtdb.ref('wishlist/' + currentUser.uid).on('value', (snapshot) => {
+    document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
+    if (snapshot.exists()) {
+      const wishData = snapshot.val();
+      Object.keys(wishData).forEach(productId => {
+        const heartBtn = document.getElementById(`heart-${productId}`);
+        if (heartBtn) heartBtn.innerText = '❤️';
+      });
+    }
+    updateWishlistCount();
+  });
+}
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+function updateWishlistCount() {
+  if (!currentUser) {
+    document.getElementById('wishlist-count').innerText = '0';
+    return;
+  }
+  rtdb.ref('wishlist/' + currentUser.uid).once('value', (snapshot) => {
+    if (snapshot.exists()) {
+      const count = Object.keys(snapshot.val()).length;
+      document.getElementById('wishlist-count').innerText = count;
+    } else {
+      document.getElementById('wishlist-count').innerText = '0';
+    }
+  });
+}
+
 function changeSlide(productId, direction, event) {
   event.stopPropagation();
   let product = allProducts.find(p => p.id === productId);
   if(!product) return;
-  let images = product.images && Array.isArray(product.images) && product.images.length > 0? product.images : ['https://via.placeholder.com/150'];
-  currentSlideIndex[productId] = (currentSlideIndex[productId] + direction + images.length) % images.length;
-  updateSlider(productId);
-}
+  let images = [];
+  if(product.media && product.media.length > 0) images = product.media.map(m => m.url);
+  else if(product.images && product.images.length > 0) images = product.images;
+  else images = [getProductImage(product)];
 
-function goToSlide(productId, index, event) {
-  event.stopPropagation();
-  currentSlideIndex[productId] = index;
+  currentSlideIndex[productId] = (currentSlideIndex[productId] + direction + images.length) % images.length;
   updateSlider(productId);
 }
 
@@ -458,101 +459,66 @@ function updateSlider(productId) {
   let sliderCard = document.querySelector(`[onclick*="product.html?id=${productId}"]`);
   if(!sliderCard) return;
   let slides = sliderCard.querySelectorAll('.slide-img');
-  let dots = sliderCard.querySelectorAll('.dot');
-  if(!slides || slides.length === 0) return;
   slides.forEach((slide, idx) => {
     slide.classList.toggle('active', idx === currentSlideIndex[productId]);
   });
-  dots.forEach((dot, idx) => {
-    dot.classList.toggle('active', idx === currentSlideIndex[productId]);
-  });
 }
 
-function showProduct(productId) {
-  window.location.href = `product.html?id=${productId}`;
-}
-
-function toggleWishlist(productId, event) {
-  event.stopPropagation();
-  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
-  let index = wishlist.findIndex(item => item.id === productId);
-  if (index >= 0) {
-    wishlist.splice(index, 1);
-  } else {
-    let product = allProducts.find(p => p.id === productId);
-    if(product){
-      let imgUrl = product.images && Array.isArray(product.images) && product.images.length > 0? product.images[0] : 'https://via.placeholder.com/150';
-      wishlist.push({
-        id: product.id,
-        name: product.name,
-        price: parseFloat(product.price) || 0,
-        image: imgUrl,
-        code: product.code || product.sku || 'N/A',
-        mrp: product.mrp || 0,
-        stock: product.stock || 0
-      });
-    }
-  }
-  localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
-  updateWishlistCount();
-  renderProducts(allProducts);
-}
-
-function isInWishlist(productId) {
-  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
-  return wishlist.some(item => item.id === productId);
-}
-
-function updateWishlistCount() {
-  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
-  document.getElementById('wishlist-count').innerText = wishlist.length;
-}
-
+// ✅ CART - AB RTDB ME SAVE HOGA
 function addToCart(productId, event) {
   event.stopPropagation();
+  if (!currentUser) {
+    showToast('Please login first');
+    openCustomerLogin();
+    return;
+  }
+  
   let product = allProducts.find(p => p.id === productId);
   if(!product) return;
 
-  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-  let existingIndex = cart.findIndex(item => item.id === productId);
-  if (existingIndex >= 0) {
-    cart[existingIndex].qty += 1;
-  } else {
-    let imgUrl = '';
-if(product.media && Array.isArray(product.media) && product.media.length > 0){
-  imgUrl = product.media[0].url || '';
-}
-else if(product.images && Array.isArray(product.images) && product.images.length > 0){
-  imgUrl = product.images[0];
-}
-if(!imgUrl) imgUrl = 'https://via.placeholder.com/150';
-    cart.push({
+  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+  cartRef.once('value', (snap) => {
+    let qty = 1;
+    if(snap.exists()) qty = snap.val().qty + 1;
+    
+    cartRef.set({
       id: product.id,
       name: product.name,
       price: parseFloat(product.price) || 0,
-      image: imgUrl,
-      media: product.media || [],
+      image: getProductImage(product),
       code: product.code || product.sku || 'SM' + product.id,
       mrp: product.mrp || 0,
       stock: product.stock || 0,
-      qty: 1
+      qty: qty,
+      addedAt: new Date().toISOString()
     });
-  }
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  alert('Added to cart!');
-  updateCartCount();
+    showToast('Added to cart!');
+    updateCartCount();
+  });
 }
 
 function buyNow(productId, event) {
   event.stopPropagation();
   addToCart(productId, event);
-  window.location.href = 'cart.html';
+  setTimeout(() => { window.location.href = 'cart.html'; }, 500);
 }
 
 function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-  let totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-  document.getElementById('cartCount').innerText = totalQty;
+  if (!currentUser) {
+    document.getElementById('cartCount').innerText = '0';
+    return;
+  }
+  rtdb.ref('carts/' + currentUser.uid).on('value', (snapshot) => {
+    if (snapshot.exists()) {
+      let totalQty = 0;
+      snapshot.forEach(child => {
+        totalQty += child.val().qty || 0;
+      });
+      document.getElementById('cartCount').innerText = totalQty;
+    } else {
+      document.getElementById('cartCount').innerText = '0';
+    }
+  });
 }
 
 function searchProducts() {
@@ -604,10 +570,6 @@ function filterByCategory(catName) {
   document.getElementById('productGrid').scrollIntoView({behavior: 'smooth'});
 }
 
-function viewAllProducts() {
-  renderProducts(allProducts);
-}
-
 function goHome() {
   window.scrollTo(0, 0);
 }
@@ -633,27 +595,72 @@ function closeCustomerLogin() {
 }
 
 function customerLogout() {
-  localStorage.removeItem('santra_customer');
-  alert('Logged out successfully');
-  location.reload();
+  auth.signOut().then(() => {
+    localStorage.removeItem('santra_customer');
+    showToast('Logged out successfully');
+    location.reload();
+  });
+}
+
+function loginCustomerWithoutOTP() {
+  const name = document.getElementById('custName').value.trim();
+  const mobile = document.getElementById('custMobile').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
+
+  if (!name || mobile.length!== 10) {
+    showToast('❌ Name aur 10 digit mobile daalo');
+    return;
+  }
+
+  auth.signInAnonymously().then((result) => {
+    localStorage.setItem('santra_customer', JSON.stringify({name: name, mobile: mobile, email: email, uid: result.user.uid}));
+    showToast('✅ Login Successful!');
+    closeCustomerLogin();
+    location.reload();
+  }).catch((error) => {
+    showToast('Login error: ' + error.message);
+  });
 }
 
 function checkCustomerLogin() {
   const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
-  if (customer.name) {
+  if (customer.name && currentUser) {
     document.getElementById('loginBtn').classList.add('hide');
     document.getElementById('logoutBtn').classList.remove('hide');
     document.getElementById('userInfo').innerText = '👤 ' + customer.name;
     document.getElementById('userInfo').classList.remove('hide');
   }
 }
-</script>
 
-<script src="admin-index.html"></script>
-<script src="add-new-code-1.js"></script>
-<script>
-function viewAllProducts() {
-  window.location.href = 'all-products.html';
+function closeProductModal() {
+  document.getElementById('productModal').classList.add('hide');
+}
+
+function changeModalQty(val) {
+  let qty = parseInt(document.getElementById('modalQty').innerText);
+  qty += val;
+  if(qty < 1) qty = 1;
+  document.getElementById('modalQty').innerText = qty;
+}
+
+function ToCartFromModal() {
+  if(currentModalProduct) {
+    for(let i=0; i<parseInt(document.getElementById('modalQty').innerText); i++) {
+      addToCart(currentModalProduct.id, event);
+    }
+  }
+}
+
+function buyNowFromModal() {
+  if(currentModalProduct) {
+    buyNow(currentModalProduct.id, event);
+  }
+}
+
+function ToWishlistFromModal() {
+  if(currentModalProduct) {
+    toggleWishlist(currentModalProduct.id, event);
+  }
 }
 </script>
 </body>
