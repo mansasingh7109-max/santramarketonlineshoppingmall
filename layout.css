@@ -2,10 +2,10 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{padding-bottom:70px;background:#E8F5E9!important}
 
-/* ===== HEADER - ORANGE SIDEBAR + LEMON YELLOW ===== */
-.header:not(.admin-header){padding:0;position:sticky;top:0;z-index:100;display:flex;min-height:240px!important;background:linear-gradient(90deg, #FFF176 0%, #FFB74D 100%)!important;border-bottom:4px solid #E65100!important;width:100%!important;position:relative!important;box-shadow:0 5px 0 #E65100!important;}
+/* ===== HEADER - LEMON YELLOW SIDEBAR + ORANGE ===== */
+.header:not(.admin-header){padding:0;position:sticky;top:0;z-index:100;display:flex;min-height:240px!important;background:#FFB74D!important;border-bottom:4px solid #E65100!important;width:100%!important;position:relative!important;box-shadow:0 5px 0 #FFF176!important;}
 
-/* LEFT ORANGE SIDEBAR 100px */
+/* LEFT YELLOW LEMON SIDEBAR 100px */
 .header::before{
   content:''!important;
   position:absolute!important;
@@ -13,27 +13,52 @@ body{padding-bottom:70px;background:#E8F5E9!important}
   top:0!important;
   width:100px!important;
   height:100%!important;
-  background:linear-gradient(180deg, #FB8C00 0%, #E65100 100%)!important;
-  box-shadow:5px 0 0 #BF360C!important;
+  background:linear-gradient(180deg, #FFF176 0%, #FFF176 100%)!important;
+  box-shadow:5px 0 0 #FFF176!important;
   z-index:1!important;
 }
 
-/* SANTRA MALL LOGO - RIGHT ALIGN */
-.header h1{
-  position:absolute!important;
-  right:20px!important;
-  left:auto!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-  color:#BF360C!important;
-  font-size:28px!important;
-  font-weight:bold!important;
-  text-shadow:2px 2px 0 rgba(255,255,255,0.7)!important;
-  z-index:5!important;
-  text-align:right!important;
-  display:flex;
-  align-items:center;
-  gap:20px;
+/* SANTRA MALL LOGO - RED TEXT + LIGHT GREEN 3D SHADOW - RIGHT ALIGN */
+.header h1, .header .brand-name, .header .logo,
+header h1, header .logo {
+  position:absolute !important;
+  right:20px !important;
+  left:auto !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  color:#FF0000 !important; /* RED Text */
+  background:none !important;
+  -webkit-text-fill-color:#FF0000 !important;
+  font-family:'Poppins', sans-serif !important;
+  font-size:200px !important;
+  font-weight:900 !important;
+  letter-spacing:4px !important;
+  text-transform:uppercase !important;
+  text-shadow:
+    1px 1px 0 #98FB98,  /* Pale Green */
+    2px 2px 0 #98FB98,  /* Pale Green */
+    3px 3px 0 #90EE90,  /* Light Green */
+    4px 4px 0 #90EE90,  /* Light Green */
+    5px 5px 0 #32CD32,  /* Lime Green */
+    6px 6px 8px rgba(144,238,144,0.5) !important; /* Light Green Glow */
+  z-index:5 !important;
+  margin:0 !important;
+}
+
+/* MOBILE PE CHOTA KARO + RIGHT ALIGN */
+@media (max-width: 580px){
+  .header h1, .header .brand-name, .header .logo,
+  header h1, header .logo {
+    font-size:25px !important;
+    right:50px !important;
+    left:auto !important;
+    letter-spacing:2px !important;
+    text-shadow:
+      1px 1px 0 #98FB98,
+      2px 2px 0 #98FB98,
+      3px 3px 0 #90EE90,
+      4px 4px 6px rgba(144,238,144,0.4) !important;
+  }
 }
 
 /* HEADER BUTTONS - LEFT SIDEBAR ME VERTICAL */
@@ -79,10 +104,10 @@ body{padding-bottom:70px;background:#E8F5E9!important}
   box-shadow:0 5px 0 #01579B!important;
 }
 
-/* WISHLIST - HEART Yellow Light */
+/* WISHLIST - HEART YELLOW */
 .header-btn[onclick*="wishlist"], .header-btn.wishlist-btn{
   background:linear-gradient(145deg, #FFF176, #FFF176)!important;
-  color:#FFF176!important;
+  color:#B71C1C!important;
   border-radius:50% 50% 50% 50% / 65% 65% 35% 35%!important;
   border:3px solid #FFF176!important;
   outline:2px solid #FFF176!important;
@@ -110,7 +135,7 @@ body{padding-bottom:70px;background:#E8F5E9!important}
 .wishlist-count{border-radius:50%;width:18px;height:18px;font-size:10px;position:absolute;top:-5px;right:-5px;display:flex;align-items:center;justify-content:center;background:#D32F2F!important;color:white!important;border:2px solid white!important}
 .back-btn{background:none;border:none;font-size:20px;cursor:pointer}
 
-/* ===== VIDEO BANNER - FULL WIDTH NO LEFT GAP ===== */
+/* ===== VIDEO BANNER - FULL WIDTH ===== */
 .banner{margin:0!important;border-radius:0!important;padding:0!important;width:100%!important}
 .banner video, .banner img, .mall-video-banner video, .mall-video-banner img{
   width:100%!important;
@@ -250,7 +275,7 @@ label{display:block;margin-top:12px;font-size:14px}
 .image-slider,.slide-img {height: 180px!important}
 }
 
-/* ===== SANTRA MALL - HOME PAGE SLIDER BAND ===== */
+/* SANTRA MALL - HOME PAGE SLIDER BAND */
 .home .slick-slider, .home .slick-track { 
   display: grid !important; 
   grid-template-columns: repeat(4, 1fr) !important; 
@@ -258,188 +283,3 @@ label{display:block;margin-top:12px;font-size:14px}
   gap: 8px !important;
 }
 .home .slick-arrow, .home .slick-prev, .home .slick-next { display: none !important; }
-/* =====================================================
-   ===== BUTTON GAP FIX - VERTICAL SPACING =====
-   ===================================================== */
-
-/* 1. BUTTONS KE BEECH GAP ADD KARO */
-#loginBtn, .login-btn,
-.wishlist-btn, button[class*="wishlist"],
-.help-btn, button[class*="help"] {
-  margin-bottom: 15px !important; /* ← Upar-niche gap */
-}
-
-/* 2. LOGIN - TOP POSITION */
-#loginBtn, .login-btn, button[class*="login"] { 
-  top: 20px !important; 
-}
-
-/* 3. WISHLIST - MIDDLE POSITION - GAP KE SAATH */
-.wishlist-btn, button[class*="wishlist"] { 
-  top: 115px !important; /* 30px + 30px + 30px gap */
-}
-
-/* 4. HELP DESK - BOTTOM POSITION - GAP KE SAATH */
-.help-btn, button[class*="help"], #helpBtn { 
-  top: 210px !important; /* 30px + 30px + 30px gap */
-}
-
-/* 5. WISHLIST BUTTON KA TEXT THIK KARO */
-.wishlist-btn span, button[class*="wishlist"] span {
-  display: block !important;
-  font-size: 11px !important;
-  color: #FFF176 !important;
-}
-
-/* 6. HELP DESK BUTTON KA TEXT THIK KARO */
-.help-btn span, button[class*="help"] span {
-  display: block !important;
-  font-size: 11px !important;
-  color: #0D47A1 !important;
-}
-/* =====================================================
-   ===== FINAL FIX - BUTTON SIZE + VIDEO HEIGHT =====
-   ===================================================== */
-
-/* 1. HEADER HEIGHT KAM KARO - 100px se 60px */
-.header, header, .top-header {
-  min-height: 60px !important; /* Pehle 300px tha */
-}
-
-/* 2. BUTTONS SIZE CHOTA KARO - 76px se 60px */
-.header-btn, #loginBtn, .login-btn,
-.wishlist-btn, button[class*="wishlist"],
-.help-btn, button[class*="help"] {
-  width: 60px !important;  /* 76px se 60px */
-  height: 60px !important; /* 76px se 60px */
-  font-size: 10px !important;
-  left: 20px !important; /* Center me lane ke liye 12px se 20px */
-}
-
-/* 3. BUTTONS KI POSITION - 40px GAP KE SAATH */
-#loginBtn, .login-btn, button[class*="login"] { 
-  top: 90px !important; 
-}
-
-.wishlist-btn, button[class*="wishlist"] { 
-  top: 100px !important; /* 90 + 90 + 90 gap */
-}
-
-.help-btn, button[class*="help"], #helpBtn { 
-  top: 180px !important; /* 30 + 30 + 30 gap */
-  height: 70px !important; /* Pill ke liye thoda lamba */
-  border-radius: 50px !important;
-}
-
-/* 4. SANTRA MALL TEXT - UPAR UTHAO TAKE VIDEO PE NA AAYE */
-.header h1 {
-  top: 35% !important; /* 50% se 35% - upar ho jayega */
-  right: 15px !important;
-  font-size: 24px !important; /* Thoda chota */
-  transform: translateY(-50%) !important;
-}
-
-/* 5. VIDEO HEIGHT BADHAO - 140px se 180px */
-.banner video, .banner img, 
-.mall-video-banner video, .mall-video-banner img,
-.video-banner video, .video-banner img {
-  width: 90% !important;
-  height: 180px !important; /* Pehle 140px tha */
-  object-fit: cover !important;
-  display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.banner, .mall-video-banner, .video-banner {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 90% !important;
-}
-
-/* 6. SIDEBAR KE TEXT SAAF DIKHE */
-.header-btn i, .wishlist-btn i, .help-btn i {
-  font-size: 16px !important;
-  margin-bottom: 2px !important;
-  display: block !important;
-}
-
-.header-btn span {
-  font-size: 9px !important;
-  line-height: 1 !important;
-}
-/* ===== ADMIN SAFE + SIDEBAR FIX ===== */
-.header::before{content:''!important;position:absolute!important;left:0!important;top:0!important;width:100px!important;height:100%!important;background:linear-gradient(180deg,#FB8C00 0%,#E65100 100%)!important;box-shadow:5px 0 0 #BF360C!important;z-index:1!important;}
-.header h1{position:absolute!important;right:15px!important;top:30%!important;transform:translateY(-50%)!important;color:#BF360C!important;font-size:24px!important;font-weight:bold!important;text-shadow:2px 2px 0 rgba(255,255,255,0.7)!important;z-index:5!important;}
-.header-btn[onclick*="logout"], .header-btn.logout-btn, button[class*="logout"], #logoutBtn{display:none!important;}
-.header-btns{position:absolute!important;left:0!important;top:0!important;width:100px!important;height:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:20px!important;padding:15px 0!important;z-index:20!important;}
-.header-btn{width:60px!important;height:60px!important;font-size:9px!important;font-weight:bold!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:4px!important;}
-.header-btn[onclick*="login"], .login-btn{background:linear-gradient(145deg,#E1F5FE,#B3E5FC)!important;color:#01579B!important;border-radius:12px!important;border:3px solid #0277BD!important;outline:2px solid #BBDEFB!important;outline-offset:-6px!important;box-shadow:0 4px 0 #01579B!important;}
-.header-btn[onclick*="wishlist"], .wishlist-btn{background:linear-gradient(145deg,#FFF176,#FFF176)!important;color:#FFF176!important;border-radius:50% 50% / 65% 65% 35%!important;border:3px solid #FFF176!important;outline:2px solid #FFF176!important;outline-offset:-6px!important;box-shadow:0 4px 0 #FFF176!important;}
-.header-btn[onclick*="help"], .help-btn, #helpBtn{background:linear-gradient(145deg,#E3F2FD,#90CAF9)!important;color:#0D47A1!important;border-radius:50px!important;height:70px!important;border:3px solid #1976D2!important;outline:2px solid #BBDEFB!important;outline-offset:-6px!important;box-shadow:0 4px 0 #0D47A1!important;}
-.banner video, .banner img{width:80%!important;height:100px!important;object-fit:cover!important;display:block!important;margin:0!important;}
-/* PRODUCT SLIDER BAND */
-.image-slider{height:150px!important}
-.slide-img{display:none!important}
-.slide-img:first-child{display:block!important;width:100%!important;height:150px!important;object-fit:contain!important}
-.prev-btn,.next-btn,.dots{display:none!important}
-
-/* ===== 1. VIDEO BANNER - FULL WIDTH LEFT TO RIGHT FIX ===== */
-.banner, .mall-video-banner{
-  margin:0!important;padding:0!important;width:100%!important;
-  border-radius:0!important;max-width:100%!important;
-}
-.banner video, .banner img, .mall-video-banner video, .mall-video-banner img{
-  width:100%!important;max-width:100%!important;height:70px!important;
-  object-fit:cover!important;display:block!important;
-  margin:0!important;padding:0!important;border:none!important;
-}
-
-/* ===== 2. HEADER SIDEBAR - 3 BUTTON 80px GAP FIX ===== */
-.header-btns{
-  position:absolute!important;left:0!important;top:0!important;
-  width:80px!important;height:100%!important;display:flex!important;
-  flex-direction:column!important;align-items:center!important;
-  justify-content:flex-start!important;gap:80px!important;
-  padding:15px 0!important;z-index:20!important;
-}
-
-.header-btn{
-  width:80px!important;height:80px!important;font-size:9px!important;
-  font-weight:bold!important;display:flex!important;flex-direction:column!important;
-  align-items:center!important;justify-content:center!important;
-  margin:0!important;padding:4px!important;
-}
-
-/* LOGIN - ROW 1 - SQUARE */
-.header-btn[onclick*="login"], .login-btn, button[class*="login"], #loginBtn{
-  background:linear-gradient(20deg,#E1F5FE,#B3E5FC)!important;
-  color:#01579B!important;border-radius:12px!important;
-  border:3px solid #0277BD!important;outline:2px solid #BBDEFB!important;
-  outline-offset:-6px!important;box-shadow:0 4px 0 #01579B!important;
-  order:1!important;
-}
-
-/* WISHLIST - ROW 2 - HEART SHAPE */
-.header-btn[onclick*="wishlist"], .wishlist-btn, button[class*="wishlist"], #wishlistBtn{
-  background:linear-gradient(200deg,#FFF176,#FFF176)!important;
-  color:#FFF176!important;
-  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%!important;
-  border:3px solid #FFF176!important;outline:2px solid #FFF176!important;
-  outline-offset:-6px!important;box-shadow:0 4px 0 #FFF176!important;
-  order:2!important;
-}
-
-/* HELP DESK - ROW 3 - PILL SHAPE */
-.header-btn[onclick*="help"], .help-btn, button[class*="help"], #helpBtn, #helpDeskBtn{
-  background:linear-gradient(145deg,#E3F2FD,#90CAF9)!important;
-  color:#0D47A1!important;border-radius:50px!important;height:70px!important;
-  border:3px solid #1976D2!important;outline:2px solid #BBDEFB!important;
-  outline-offset:-6px!important;box-shadow:0 4px 0 #0D47A1!important;
-  order:3!important;
-}
-
-/* LOGOUT BUTTON HIDE - ADMIN SAFE */
-.header-btn[onclick*="logout"], .header-btn.logout-btn, button[class*="logout"], #logoutBtn{
-  display:none!important;
-}
