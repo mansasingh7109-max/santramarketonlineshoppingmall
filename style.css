@@ -181,3 +181,56 @@ h1, .header .title, .navbar-brand, .site-name {
 header * {
   max-width:100%!important;
 }
+/* ===== FILTER KE NICHE WALE SABHI TEXT DARK GREEN ===== */
+
+/* Welcome to SANTRA MALL */
+html body h1,
+html body .welcome-title,
+html body div[class*="welcome"] h1,
+html body h1[class*="welcome"] {
+  color: #0D4F14 !important; /* Extra Dark Green */
+}
+
+/* Best Products, Best Prices! */
+html body p,
+html body .subtitle,
+html body .welcome-subtitle,
+html body div[class*="welcome"] p {
+  color: #1B5E20 !important; /* Dark Green */
+}
+
+/* Hot Deals, Jeans, View All text */
+html body h2,
+html body h3,
+html body .section-title,
+html body .category-name,
+html body .product-title,
+html body .hot-deals,
+html body div[class*="category"],
+html body div[class*="product"],
+html body a[class*="view"] {
+  color: #1B5E20 !important; /* Dark Green */
+}
+
+/* Search box ke andar ka text */
+html body input[type="text"],
+html body input[type="search"],
+html body .search-input {
+  color: #0D4F14 !important; /* Dark Green */
+}
+
+/* Bottom Nav - Home, Categories, Cart, Orders */
+html body .bottom-nav,
+html body .footer-nav,
+html body nav[class*="bottom"] a,
+html body div[class*="nav-item"] {
+  color: #1B5E20 !important; /* Dark Green */
+}
+
+/* Filter/Search button ke text white hi rahenge - red bg pe */
+html body .filter-btn,
+html body .search-btn,
+html body button[class*="filter"],
+html body button[class*="search"] {
+  color: #FFFFFF !important; /* White text red button pe */
+}
