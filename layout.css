@@ -22,7 +22,7 @@ body{padding-bottom:70px;background:#E8F5E9!important}
 .header h1, .header .brand-name, .header .logo,
 header h1, header .logo {
   position:absolute !important;
-  right:10px !important;
+  right:20px !important;
   left:auto !important;
   top:50% !important;
   transform:translateY(-50%) !important;
