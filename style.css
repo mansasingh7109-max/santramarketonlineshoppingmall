@@ -348,3 +348,87 @@ html body .nav-item img {
   height: 24px !important;
   margin-bottom: 2px !important;
 }
+/* ===== CUSTOMER NAME - HAMESHA DARK GREEN ===== */
+
+/* Sabhi possible classes cover kar di */
+html body .user-name,
+html body #userName,
+html body .username,
+html body .user,
+html body .profile-name,
+html body .customer-name,
+html body .user-profile,
+html body .logged-user,
+html body .account-name,
+html body .header-user {
+  color: #0D4F14 !important; /* Extra Dark Green */
+  font-weight: 700 !important;
+}
+
+/* Header ke left side me jo bhi first text ho - Fity wala */
+html body header div:first-child,
+html body .header div:first-child,
+html body header span:first-child,
+html body .header span:first-child,
+html body header p:first-child,
+html body .header p:first-child {
+  color: #0D4F14 !important; /* Extra Dark Green */
+}
+
+/* Icon ke saath wala text -  fity */
+html body header div[class*="user"],
+html body .header div[class*="user"],
+html body header div[class*="profile"],
+html body .header div[class*="profile"],
+html body header span[class*="user"],
+html body .header span[class*="user"] {
+  color: #0D4F14 !important; /* Extra Dark Green */
+}
+end line
+/* ===== SANTRA MALL - BLUE 3D ICON - CUSTOMER LOGIN TEXT ===== */
+
+/* 1. LOGIN BUTTON - CUSTOMER LOGIN TEXT */
+#loginBtn {
+  font-size: 0 !important; /* Purana "👤 Login" hide */
+}
+
+#loginBtn::before {
+  content: "" !important;
+  background: url('images/user-icon-blue.png') no-repeat center center !important;
+  background-size: contain !important;
+  width: 5px !important;
+  height: 3px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin-right: 3px !important;
+}
+
+#loginBtn::after {
+  content: "Customer Login" !important; /* Yaha change kiya */
+  font-size: 8px !important;
+  color: #B71C1C !important; /* Red text */
+  font-weight: bold !important;
+}
+
+/* 2. USER NAME - CUSTOMER */
+#userInfo {
+  position: relative !important;
+  color: #0D4F14 !important; /* Naam green rahega */
+  font-size: 8px !important;
+  font-weight: bold !important;
+  padding-left: 20px !important; /* Blue icon ke liye space */
+}
+
+/* Naya blue 3D icon lagao */
+#userInfo::before {
+  content: "" !important;
+  background: url('images/user-icon-blue.png') no-repeat center center !important;
+  background-size: 22px 22px !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
