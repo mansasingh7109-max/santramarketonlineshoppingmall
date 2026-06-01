@@ -3,40 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>❤️ My Wishlist - SANTRA MALL</title>
+  <title>😍 My Wishlist - SANTRA MALL</title>
   <style>
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px}
-  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .wishlist-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .wishlist-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;cursor:pointer}
-  .item-info{flex:1}
-  .item-info h3{font-size:16px;margin-bottom:5px;height:40px;overflow:hidden}
-  .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
-  .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
-  .btn-group{display:flex;gap:8px;margin-top:10px}
-  .btn-remove{background:#ef4444;color:white;border:none;padding:8px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px}
-  .btn-cart{background:var(--accent);color:white;border:none;padding:8px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-  .loading{text-align:center;padding:60px 20px;color:#999}
-  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
-  .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
-  .nav-item.active{color:var(--accent)}
-  .nav-item div{font-size:22px}
-  .nav-item span{font-size:11px;display:block;margin-top:2px}
-  .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+ .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+ .header h1{font-size:18px;flex:1}
+ .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+ .clear-btn{background:white;color:var(--accent);border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:12px;cursor:pointer}
+ .wishlist-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .wishlist-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;cursor:pointer;border:1px solid #eee}
+ .item-info{flex:1}
+ .item-info h3{font-size:16px;margin-bottom:5px;height:40px;overflow:hidden;cursor:pointer}
+ .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
+ .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
+ .btn-group{display:flex;gap:8px;margin-top:10px}
+ .btn-cart{background:var(--accent);color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
+ .btn-remove{background:#ef4444;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
+ .empty{text-align:center;padding:60px 20px;color:#999}
+ .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+ .loading{text-align:center;padding:60px 20px;color:#999}
+ .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;display:none}
+ .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+ .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+ .nav-item.active{color:var(--accent)}
+ .nav-item div{font-size:22px}
+ .nav-item span{font-size:11px;display:block;margin-top:2px}
+ .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+ .code-text{font-size:12px;color:#666;margin-top:4px}
   </style>
 </head>
 <body>
 
 <div class="header">
   <button class="back-btn" onclick="window.location.href='index.html'">←</button>
-  <h1>❤️ My Wishlist (<span id="wishCount">0</span>)</h1>
+  <h1>😍 My Wishlist (<span id="wishCount">0</span>)</h1>
+  <button class="clear-btn" id="clearBtn" onclick="clearWishlist()" style="display:none">Clear All</button>
 </div>
+
+<div id="toast" class="toast"></div>
 
 <div id="wishlist-items">
   <div class="loading">Loading wishlist...</div>
@@ -51,20 +57,20 @@
   </a>
   <a href="cart.html" class="nav-item">
     <div>🛒</div><span>Cart</span>
-    <span class="cart-badge" id="navCartCount">0</span>
+    <span class="cart-badge" id="navCartCount" style="display:none">0</span>
   </a>
   <a href="customer-account.html" class="nav-item">
     <div>👤</div><span>Account</span>
   </a>
 </div>
 
-<!-- FIREBASE LIBRARIES -->
+<!-- ✅ FIREBASE COMPAT SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
 <script>
-// ✅ FIREBASE CONFIG - APNI API KEY YAHAN DAAL
-window.FIREBASE_CONFIG = {
+  const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -74,145 +80,157 @@ window.FIREBASE_CONFIG = {
   measurementId: "G-ZW1ZR8HETY"
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(window.FIREBASE_CONFIG);
-}
-const db = firebase.firestore();
+  firebase.initializeApp(firebaseConfig);
+  var rtdb = firebase.database();
+  var auth = firebase.auth();
+  let currentUser = null;
 
-const WISHLIST_KEY = 'SANTRA_WISHLIST';
-const CART_KEY = 'SANTRA_CART';
-
-let wishlistIds = [];
-let wishlistProducts = [];
-
-// ✅ Image URL nikalne ka helper
-function getImageUrl(product) {
-  let img = '';
-  if(product.images && product.images.length > 0) img = product.images[0];
-  else if(product.image) img = product.image;
-  else if(product.img) img = product.img;
-  else if(product.photo) img = product.photo;
-  else if(product.thumbnail) img = product.thumbnail;
-  else if(product.src) img = product.src;
-
-  img = String(img).trim();
-  if(img.startsWith('data:image') && img.length > 50000) return '';
-  if(img && !img.startsWith('http') && !img.startsWith('data:') && !img.startsWith('/')) {
-  img = '/' + img;
-}
-  if(img.length > 5) return img;
-
-  return 'https://via.placeholder.com/100x100/e40046/ffffff?text=NO+IMAGE';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  loadWishlist();
-  updateCartCount();
-});
-
-function loadWishlist() {
-  wishlistIds = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
-  document.getElementById('wishCount').innerText = wishlistIds.length;
-
-  let container = document.getElementById('wishlist-items');
-
-  if (wishlistIds.length === 0) {
-    container.innerHTML = `
-      <div class="empty">
-        😍 Your wishlist is empty<br>
-        <button onclick="window.location.href='index.html'">Browse Products</button>
-      </div>
-    `;
-    return;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2000);
   }
 
-  let promises = wishlistIds.map(id => db.collection('products').doc(id).get());
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      currentUser = user;
+      loadWishlistFromRTDB();
+      updateCartBadge();
+    } else {
+      document.getElementById('wishlist-items').innerHTML = '<div class="empty">Please login to see wishlist<br><button onclick="window.location.href=\'index.html\'">Go to Home</button></div>';
+    }
+  });
 
-  Promise.all(promises).then(docs => {
-    wishlistProducts = [];
-    let html = '';
+  // ✅ UPDATED - RTDB ka 'image' field pehle check hoga
+  function getProductImage(p) {
+    // Priority: RTDB ka naya 'image' field sabse pehle
+    if(p.image) return p.image;
+    if(p.imageUrl) return p.imageUrl;
+    if(p.img) return p.img;
+    if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
+    if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
+    if(p.photo) return p.photo;
+    if(p.thumbnail) return p.thumbnail;
+    return 'https://via.placeholder.com/100x100/4CAF50/ffffff?text=NO+IMAGE';
+  }
 
-    docs.forEach(doc => {
-      if (doc.exists) {
-        let p = doc.data();
-        p.id = doc.id;
-        wishlistProducts.push(p);
+  function loadWishlistFromRTDB() {
+    const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
+    wishRef.on('value', (snapshot) => {
+      const container = document.getElementById('wishlist-items');
+      const clearBtn = document.getElementById('clearBtn');
 
-        let imgSrc = getImageUrl(p);
+      if (!snapshot.exists() || Object.keys(snapshot.val()).length === 0) {
+        container.innerHTML = `
+          <div class="empty">
+            😍 Your wishlist is empty<br>
+            <button onclick="window.location.href='index.html'">Browse Products</button>
+          </div>
+        `;
+        document.getElementById('wishCount').innerText = '0';
+        clearBtn.style.display = 'none';
+        return;
+      }
+
+      const items = snapshot.val();
+      const itemKeys = Object.keys(items);
+      document.getElementById('wishCount').innerText = itemKeys.length;
+      clearBtn.style.display = 'block';
+
+      let html = '';
+      itemKeys.forEach(key => {
+        const p = items[key];
+        const imgSrc = getProductImage(p);
+        const price = p.discountedPrice || p.price || 0;
+        const mrp = p.mrp || p.price || price;
+        const displayCode = p.code && p.code!== 'N/A'? p.code : p.id || key;
 
         html += `
           <div class="wishlist-card">
-            <img src="${imgSrc}" onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100/e40046/ffffff?text=NO+IMAGE'" onclick="viewProduct('${p.id}')">
+            <img src="${imgSrc}"
+                 onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100/4CAF50/ffffff?text=NO+IMAGE'"
+                 onclick="viewProduct('${p.id || key}')">
             <div class="item-info">
-              <h3>${p.name || 'Product'}</h3>
+              <h3 onclick="viewProduct('${p.id || key}')">${p.name || 'Product'}</h3>
               <div class="item-price">
-                ₹${p.price || 0}
-                ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
+                ₹${price}
+                ${mrp > price? `<span class="mrp">₹${mrp}</span>` : ''}
               </div>
+              <div class="code-text">Code: ${displayCode}</div>
               <div class="btn-group">
-                <button class="btn-cart" onclick="moveToCart('${p.id}')">🛒 Move to Cart</button>
-                <button class="btn-remove" onclick="removeFromWishlist('${p.id}')">🗑️ Remove</button>
+                <button class="btn-cart" onclick='moveToCart("${key}", ${JSON.stringify(p).replace(/"/g, "&quot;")})'>🛒 Move to Cart</button>
+                <button class="btn-remove" onclick="removeFromWish('${key}')">🗑️ Remove</button>
               </div>
             </div>
           </div>
         `;
+      });
+      container.innerHTML = html;
+    });
+  }
+
+  window.clearWishlist = async () => {
+    if (!currentUser) return;
+    if(!confirm('Poori wishlist delete karni hai?')) return;
+    const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
+    try {
+      await wishRef.remove();
+      showToast('Wishlist cleared ✅');
+    } catch (e) {
+      console.log('Error:', e);
+      showToast('Error clearing wishlist');
+    }
+  }
+
+  window.moveToCart = async (productId, productData) => {
+    if (!currentUser) return;
+    const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+    const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+    try {
+      await cartRef.set({
+      ...productData,
+        qty: 1,
+        addedAt: new Date().toISOString()
+      });
+      await wishRef.remove();
+      showToast('Moved to Cart 🛒');
+    } catch (e) {
+      console.log('Move to cart error:', e);
+      showToast('Error moving to cart');
+    }
+  }
+
+  window.removeFromWish = async (productId) => {
+    if (!currentUser) return;
+    if(!confirm('Remove from wishlist?')) return;
+    const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+    try {
+      await wishRef.remove();
+      showToast('Removed from Wishlist');
+    } catch (e) {
+      console.log('Remove error:', e);
+    }
+  }
+
+  window.viewProduct = (id) => {
+    window.location.href = `product.html?id=${id}`;
+  }
+
+  function updateCartBadge() {
+    if (!currentUser) return;
+    const cartRef = rtdb.ref('carts/' + currentUser.uid);
+    cartRef.on('value', (snapshot) => {
+      const badge = document.getElementById('navCartCount');
+      if (snapshot.exists()) {
+        const count = Object.keys(snapshot.val()).length;
+        badge.textContent = count;
+        badge.style.display = count > 0? 'block' : 'none';
+      } else {
+        badge.style.display = 'none';
       }
     });
-
-    container.innerHTML = html || '<div class="empty">No products found</div>';
-  }).catch(error => {
-    console.log("Error: ", error);
-    container.innerHTML = '<div class="empty">Error loading wishlist. Check Firebase Config.</div>';
-  });
-}
-
-function removeFromWishlist(productId) {
-  if(confirm('Remove from wishlist?')) {
-    wishlistIds = wishlistIds.filter(id => id!== productId);
-    localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlistIds));
-    loadWishlist();
   }
-}
-
-function moveToCart(productId) {
-  let product = wishlistProducts.find(p => p.id === productId);
-  if(!product) return;
-
-  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-  let existingIndex = cart.findIndex(c => c.id === productId);
-
-  if(existingIndex >= 0){
-    cart[existingIndex].qty += 1;
-  } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: getImageUrl(product),
-      code: product.code || product.sku || 'N/A',
-      qty: 1
-    });
-  }
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-
-  wishlistIds = wishlistIds.filter(id => id!== productId);
-  localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlistIds));
-
-  loadWishlist();
-  updateCartCount();
-  alert('Moved to Cart 🛒');
-}
-
-function viewProduct(id) {
-  window.location.href = `index.html#${id}`;
-}
-
-function updateCartCount(){
-  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-  let cartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-  document.getElementById('navCartCount').innerText = cartCount;
-}
 </script>
-<script src="theme.js"></script>
 </body>
 </html>
