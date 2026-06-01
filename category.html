@@ -79,22 +79,23 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script> -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
 <script>
-      const firebaseConfig = {
+  const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-
+  
   if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   
-  const firestore = firebase.firestore();
+  // const firestore = firebase.firestore(); // ❌ OLD FIRESTORE - COMMENT KAR DIYA
   const rtdb = firebase.database();
 
   let allProducts = [];
@@ -102,62 +103,55 @@
   let currentCategory = '';
   let showAll = false;
 
-  // FIRESTORE SE PURANI CATEGORY
-  firestore.collection("categories").onSnapshot((snapshot) => {
-    allCategories = allCategories.filter(c => c.source !== 'firestore');
-    snapshot.forEach((doc) => {
-      const d = doc.data();
-      allCategories.push({ 
-        id: doc.id, 
-        name: d.name || d.categoryName,
-        image: d.image || d.categoryImage || d.img || 'https://via.placeholder.com/80?text=' + (d.name || 'Cat'),
-        source: 'firestore'
-      });
-    });
-    loadCategories();
-  });
-
-  // REALTIME DB SE NAYI CATEGORY - admin_categories.html se aayegi
-  rtdb.ref("categories").on('value', (snapshot) => {
-    allCategories = allCategories.filter(c => c.source !== 'rtdb');
-    if(snapshot.exists()){
-      snapshot.forEach((child) => {
-        const d = child.val();
-        allCategories.push({ 
-          id: child.key, 
-          name: d.name,
-          image: d.image || 'https://via.placeholder.com/80?text=' + d.name,
-          source: 'rtdb'
+  // ✅ NAYA CODE - SIRF REALTIME DATABASE
+  async function loadProducts() {
+    allProducts = [];
+    try {
+      const rtdbSnap = await rtdb.ref('products').once('value');
+      if(rtdbSnap.exists()){
+        rtdbSnap.forEach((child) => {
+          let p = child.val();
+          p.id = child.key;
+          p.price = parseFloat(p.price) || 0;
+          p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+          p.mrp = parseFloat(p.mrp) || p.price;
+          p.source = 'rtdb';
+          allProducts.push(p);
         });
-      });
+      }
+      renderProducts();
+      loadCategories();
+      updateCartCount();
+    } catch(e) {
+      console.log('Product load error:', e);
+      document.getElementById('productList').innerHTML = '<div class="loader">Error loading products</div>';
     }
-    loadCategories();
-  });
+  }
 
-  // PRODUCTS DONO SE LOAD KAR
-  firestore.collection("products").onSnapshot((snapshot) => {
-    allProducts = allProducts.filter(p => p.source !== 'firestore');
-    snapshot.forEach((doc) => {
-      allProducts.push({ id: doc.id, ...doc.data(), source: 'firestore' });
-    });
-    if (showAll || currentCategory) renderProducts();
-    loadCategories();
-    updateCartCount();
-  });
-
-  rtdb.ref("products").on('value', (snapshot) => {
-    allProducts = allProducts.filter(p => p.source !== 'rtdb');
-    if(snapshot.exists()){
-      snapshot.forEach((child) => {
-        allProducts.push({ id: child.key, ...child.val(), source: 'rtdb' });
-      });
+  // ✅ NAYA CODE - SIRF REALTIME DATABASE SE LOAD KARO
+  async function loadCategories() {
+    allCategories = [];
+    try {
+      const rtdbSnap = await rtdb.ref("categories").once('value');
+      if(rtdbSnap.exists()){
+        rtdbSnap.forEach((child) => {
+          const data = child.val();
+          allCategories.push({
+            id: child.key,
+            name: data.name,
+            image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat',
+            source: 'rtdb'
+          });
+        });
+      }
+      renderCategories();
+    } catch(e) {
+      console.log('Category load error:', e);
+      document.getElementById('catList').innerHTML = '<p class="loader">Error loading categories</p>';
     }
-    if (showAll || currentCategory) renderProducts();
-    loadCategories();
-    updateCartCount();
-  });
+  }
 
-  function loadCategories(){
+  function renderCategories() {
     const catList = document.getElementById('catList');
     const unique = [];
     const seen = new Set();
@@ -167,7 +161,7 @@
         unique.push(c);
       }
     });
-    
+
     if(unique.length === 0){
       catList.innerHTML = '<p class="loader">No categories yet. Add from Admin Panel</p>';
       return;
@@ -233,25 +227,25 @@
             ${p.mrp > p.price? `<span class="mrp">₹${p.mrp}</span>` : ''}
           </div>
           <p style="font-size:11px;color:#666;margin:4px 0;">Stock: ${p.stock}</p>
-          <button onclick="addToCart('${p.id}','${p.source}')">Add to Cart</button>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
         </div>
       `;
     });
   }
 
-  window.addToCart = function(pid, source){
+  window.addToCart = function(pid){
     let userId = localStorage.getItem('currentUserId');
     if(!userId){ alert('Please login first!'); window.location.href = 'customer-account.html'; return; }
-    const product = allProducts.find(p => p.id == pid && p.source == source);
+    const product = allProducts.find(p => p.id == pid);
     if(!product || product.stock <= 0) { alert('Product out of stock!'); return; }
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let cartItem = cart.find(c => c.pid == pid && c.uid == userId && c.source == source);
+    let cartItem = cart.find(c => c.pid == pid && c.uid == userId);
     if(cartItem){
       if(cartItem.qty >= product.stock){ alert('No more stock available!'); return; }
       cartItem.qty += 1;
     } else {
-      cart.push({ id: Date.now(), uid: userId, pid: pid, source: source, name: product.name, price: product.price, img: product.imageUrl || product.image, qty: 1 });
+      cart.push({ id: Date.now(), uid: userId, pid: pid, name: product.name, price: product.price, img: product.imageUrl || product.image, qty: 1 });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
@@ -268,6 +262,7 @@
   }
 
   window.onload = function(){
+    loadProducts(); // Products load honge, uske baad categories bhi
     updateCartCount();
     let urlParams = new URLSearchParams(window.location.search);
     let catName = urlParams.get('cat');
@@ -275,6 +270,35 @@
       setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 500);
     }
   }
+
+  /*
+  ===== PURANA FIRESTORE CODE - BACKUP KE LIYE COMMENT KIYA HAI =====
+  
+  firestore.collection("categories").onSnapshot((snapshot) => {
+    allCategories = allCategories.filter(c => c.source !== 'firestore');
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      allCategories.push({ 
+        id: doc.id, 
+        name: d.name || d.categoryName,
+        image: d.image || d.categoryImage || d.img || 'https://via.placeholder.com/80?text=' + (d.name || 'Cat'),
+        source: 'firestore'
+      });
+    });
+    loadCategories();
+  });
+
+  firestore.collection("products").onSnapshot((snapshot) => {
+    allProducts = allProducts.filter(p => p.source !== 'firestore');
+    snapshot.forEach((doc) => {
+      allProducts.push({ id: doc.id, ...doc.data(), source: 'firestore' });
+    });
+    if (showAll || currentCategory) renderProducts();
+    loadCategories();
+    updateCartCount();
+  });
+  ===== BACKUP END =====
+  */
 </script>
 </body>
 </html>
