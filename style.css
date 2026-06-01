@@ -1,15 +1,13 @@
 /* =====================================================
    SANTRA MALL - FINAL HEADER + SIDEBAR CSS
    Date: 01-June-2026
-   UPDATE: Only BG + 3D Shadow as per requirement
+   Backup: Purana code Notes me save kar lena
    ===================================================== */
 
-/* ===== 1. HEADER CONTAINER - FRUIT NARANGI PEEL ORANGE ===== */
+/* ===== 1. HEADER CONTAINER - WISHLIST ORANGE BG + RIGHT ALIGN ===== */
 header, .header, .main-header, .top-bar, .navbar, .logo-container, 
 .site-header, #header, .header-wrapper {
-  background:#FF7A00!important; /* Fruit ke chilke jaisa Bright Narangi */
-  background-color:#FF7A00!important;
-  background-image:none!important;
+  background:#FFA726!important; /* Wishlist button wala exact orange */
   padding:15px 20px 15px 125px!important; /* Left=125px sidebar ke liye space */
   text-align:right!important;
   position:relative!important;
@@ -18,18 +16,18 @@ header, .header, .main-header, .top-bar, .navbar, .logo-container,
   flex-direction:column!important;
   justify-content:center!important;
   align-items:flex-end!important; /* Text poora right me */
-  border-bottom:4px solid #E65100!important;
-  box-shadow:0 5px 15px rgba(250,8,0,0.2)!important;
+  border-bottom:4px solid #F57C00!important;
+  box-shadow:0 5px 15px rgba(245,124,0,0.4)!important;
   overflow:visible!important;
 }
 
-/* ===== 2. SANTRA MALL TEXT - RED BOLD + 3D GREEN LIGHT YELLOW SHADOW ===== */
+/* ===== 2. SANTRA MALL TEXT - RED BOLD + 3D GREEN YELLOW SHADOW ===== */
 .logo-text, .santra-text, h1.logo, .logo h1, .brand-name, 
 .header h1, .header .logo, #logo, .site-title, .logo, 
 h1, .header .title, .navbar-brand, .site-name {
   font-size:40px!important; 
   font-weight:900!important; 
-  color:#C62828!important; /* Bold Santra Red */
+  color:#B71C1C!important; /* Dark Santra Red - Bold */
   text-align:right!important;
   margin:0!important;
   padding:0!important;
@@ -38,12 +36,11 @@ h1, .header .title, .navbar-brand, .site-name {
   width:100%!important;
   text-transform:uppercase!important;
   font-family:Arial Black, Impact, sans-serif!important;
-  /* 3D Green + Light Yellow + Black Shadow Layers */
+  /* 3D Green + Yellow + Black Shadow Layers */
   text-shadow:
-    3px 3px 0px #1B5E20,  /* Dark Green layer */
-    6px 6px 0px #FFEE58,  /* Light Yellow layer */
-    9px 9px 18px rgba(0,0,0,0.6)!important; /* Deep shadow */
-  -webkit-text-stroke:1px #B71C1C!important; /* Red outline */
+    3px 3px 0px #2E7D32,  /* Dark Green layer */
+    6px 6px 0px #F9A825,  /* Dark Yellow/Orange layer */
+    9px 9px 18px rgba(0,0,0,0.5)!important; /* Deep shadow */
 }
 
 /* MALL ko SANTRA ke saath ek line me lao */
@@ -122,19 +119,20 @@ h1, .header .title, .navbar-brand, .site-name {
   content:'👋'!important; font-size:16px!important; display:block!important;
 }
 
-WISHLIST COUNT BADGE */
-.wishlist-btn .count {
-  background: #FFF176 !important;
-  color: white !important;
-  border-radius: 50% !important;
-  padding: 1px 5px !important;
-  font-size: 9px !important;
-  position: absolute !important;
-  top: -3px !important;
-  right: -3px !important;
-  border: 2px solid white !important;
+/* WISHLIST COUNT BADGE */
+.wishlist-count, .wishlist-btn .count, .count, .badge {
+  background:#C62828!important;
+  color:white!important;
+  border-radius:50%!important;
+  padding:2px 6px!important;
+  font-size:9px!important;
+  position:absolute!important;
+  top:-5px!important;
+  right:-5px!important;
+  border:2px solid white!important;
+  font-weight:900!important;
+  line-height:1!important;
 }
-
 
 /* HOVER EFFECT */
 .header-btn:hover, #loginBtn:hover, .wishlist-btn:hover, .help-btn:hover {
@@ -162,8 +160,8 @@ WISHLIST COUNT BADGE */
     font-size:30px!important;
     letter-spacing:1px!important;
     text-shadow:
-      2px 2px 0px #1B5E20,
-      4px 4px 0px #FFEE58,
+      2px 2px 0px #2E7D32,
+      4px 4px 0px #F9A825,
       6px 6px 12px rgba(0,0,0,0.5)!important;
   }
   .header-btns {
