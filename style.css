@@ -234,3 +234,117 @@ html body button[class*="filter"],
 html body button[class*="search"] {
   color: #FFFFFF !important; /* White text red button pe */
 }
+/* ===== BOTTOM FOOTER NAV - NARANGI #FF7A00 ===== */
+
+html body .bottom-nav,
+html body .footer-nav,
+html body .bottom-navigation,
+html body .mobile-footer,
+html body nav[class*="bottom"],
+html body div[class*="bottom-nav"],
+html body div[class*="footer-nav"],
+html body footer {
+  background: #FF7A00 !important;
+  background-color: #FF7A00 !important;
+  background-image: none !important;
+  border-top: 3px solid #E65100 !important;
+  box-shadow: 0 -3px 10px rgba(255,122,0,0.4) !important;
+}
+
+/* Footer ke icons aur text White rakho taaki narangi pe dikhe */
+html body .bottom-nav a,
+html body .footer-nav a,
+html body .bottom-navigation a,
+html body nav[class*="bottom"] a,
+html body div[class*="nav-item"],
+html body .nav-item,
+html body .footer-item {
+  color: #FFFFFF !important; /* White text */
+  font-weight: 700 !important;
+}
+
+/* Cart ka red badge same rahega */
+html body .cart-badge,
+html body .cart-count,
+html body .bottom-nav .badge {
+  background: #D32F2F !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+/* Active tab pe halka white glow */
+html body .bottom-nav .active,
+html body .footer-nav .active,
+html body .nav-item.active {
+  background: rgba(255,255,255,0.2) !important;
+  border-radius: 8px !important;
+}
+/* ===== FOOTER NAV - SABHI TABS TRANSPARENT LIGHT ORANGE BOX ME ===== */
+
+html body .bottom-nav,
+html body .footer-nav,
+html body .bottom-navigation,
+html body nav[class*="bottom"],
+html body footer {
+  background: #FF7A00 !important; /* Footer narangi BG */
+  background-color: #FF7A00 !important;
+  padding: 8px 0px !important;
+}
+
+/* SABHI TABS - Home, Categories, Cart, Orders */
+html body .bottom-nav a,
+html body .footer-nav a,
+html body .bottom-navigation a,
+html body nav[class*="bottom"] a,
+html body .nav-item,
+html body .footer-item,
+html body div[class*="nav-item"] {
+  background: rgba(255,224,178,0.4) !important; /* Light orange transparent */
+  border-radius: 12px !important;
+  padding: 6px 8px !important;
+  margin: 0px 4px !important;
+  color: #FFFFFF !important; /* White text */
+  font-weight: 700 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 70px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Active/Selected tab pe thoda aur dark */
+html body .bottom-nav .active,
+html body .footer-nav .active,
+html body .nav-item.active,
+html body .bottom-nav a.active {
+  background: rgba(255,204,128,0.6) !important; /* Thoda dark light orange */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+}
+
+/* Hover effect */
+html body .bottom-nav a:hover,
+html body .footer-nav a:hover,
+html body .nav-item:hover {
+  background: rgba(255,224,178,0.6) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Cart ka red badge same rahega */
+html body .cart-badge,
+html body .cart-count,
+html body .bottom-nav .badge {
+  background: #D32F2F !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+  font-weight: 900 !important;
+}
+
+/* Icons ka size fix */
+html body .bottom-nav img,
+html body .footer-nav img,
+html body .nav-item img {
+  width: 24px !important;
+  height: 24px !important;
+  margin-bottom: 2px !important;
+}
