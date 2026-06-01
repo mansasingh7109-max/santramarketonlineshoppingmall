@@ -140,7 +140,7 @@ header h1, header .logo {
 .banner video, .banner img, .mall-video-banner video, .mall-video-banner img{
   width:100%!important;
   max-width:100%!important;
-  height:60px!important;
+  height:70px!important;
   object-fit:cover!important;
   display:block!important;
   margin:0!important;
