@@ -7,7 +7,7 @@
 /* ===== 1. HEADER CONTAINER - WISHLIST ORANGE BG + RIGHT ALIGN ===== */
 header, .header, .main-header, .top-bar, .navbar, .logo-container, 
 .site-header, #header, .header-wrapper {
-  background:#FFA726!important; /* Wishlist button wala exact orange */
+  background:#FF7A00!important; /* Wishlist button wala exact orange */
   padding:15px 20px 15px 125px!important; /* Left=125px sidebar ke liye space */
   text-align:right!important;
   position:relative!important;
@@ -39,7 +39,7 @@ h1, .header .title, .navbar-brand, .site-name {
   /* 3D Green + Yellow + Black Shadow Layers */
   text-shadow:
     3px 3px 0px #2E7D32,  /* Dark Green layer */
-    6px 6px 0px #F9A825,  /* Dark Yellow/Orange layer */
+    6px 6px 0px #FFF176,  /* Dark Yellow/Orange layer */
     9px 9px 18px rgba(0,0,0,0.5)!important; /* Deep shadow */
 }
 
@@ -161,7 +161,7 @@ h1, .header .title, .navbar-brand, .site-name {
     letter-spacing:1px!important;
     text-shadow:
       2px 2px 0px #2E7D32,
-      4px 4px 0px #F9A825,
+      4px 4px 0px #FF7A00,
       6px 6px 12px rgba(0,0,0,0.5)!important;
   }
   .header-btns {
