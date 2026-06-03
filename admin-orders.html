@@ -3,50 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin Orders - Santra Market</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
     body{background:#f0f2f5;padding:20px}
-   .box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px}
-   .box h3{color:#e94560;margin-bottom:15px}
-    input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;margin:5px 0;font-size:16px}
-   .btn{background:#22c55e;color:white;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:bold;width:100%;font-size:16px}
-   .btn:hover{background:#16a34a}
-   .order-card{background:#fff;border:2px solid #eee;padding:15px;border-radius:10px;margin:10px 0}
-   .green{color:#22c55e;font-weight:bold}
-   .red{color:#ef4444;font-weight:bold}
-    select{padding:8px 15px;border:2px solid #ddd;border-radius:8px;font-size:16px}
+  .box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px}
+  .box h3{color:#e94560;margin-bottom:15px}
+    input,select{padding:10px;border:2px solid #ddd;border-radius:8px;margin:5px 5px 5px 0;font-size:15px}
+  .search-input{width:300px}
+  .btn{background:#22c55e;color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;margin:5px 5px 5px 0}
+  .btn:hover{background:#16a34a}
+  .btn-blue{background:#3b82f6}
+  .btn-blue:hover{background:#2563eb}
+  .btn-orange{background:#f97316}
+  .btn-orange:hover{background:#ea580c}
+  .btn-red{background:#ef4444}
+  .btn-red:hover{background:#dc2626}
+  .btn-purple{background:#a855f7}
+  .btn-purple:hover{background:#9333ea}
+  .order-card{background:#fff;border:2px solid #eee;padding:15px;border-radius:10px;margin:10px 0}
+  .order-card:hover{border-color:#e94560;box-shadow:0 2px 8px rgba(233,69,96,0.2)}
+  .green{color:#22c55e;font-weight:bold}
+  .red{color:#ef4444;font-weight:bold}
+  .orange{color:#f97316;font-weight:bold}
+  .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
+  .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000}
+  .modal-content{background:white;margin:50px auto;padding:20px;border-radius:12px;max-width:500px}
+  .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold}
+  .date-text{color:#6b7280;font-size:14px}
+  .msg-box{background:#fff3cd;padding:8px;border-radius:5px;margin:5px 0;border-left:4px solid #f59e0b}
   </style>
 </head>
 <body>
 
   <div class="box">
-    <h3>🔐 Verify OTP & Confirm Order</h3>
-    <input type="text" id="orderId" placeholder="Order ID daalo - Document ID copy karo" onblur="getOrderData()">
-    <input type="text" id="otp" placeholder="Customer ka OTP daalo">
-    <button class="btn" onclick="confirmOrder()">✅ Verify & Confirm Order</button>
-    <p style="margin-top:10px;color:#666;font-size:14px">Firebase se Document ID copy karke yaha paste karo</p>
+    <h3>📋 All Orders - Live</h3>
+    <div class="flex">
+      <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search: Name, Mobile, Order ID, Item, Message..." onkeyup="filterOrders()">
+      <select id="filterStatus" onchange="loadOrders()">
+        <option value="All">All Orders</option>
+        <option value="Pending">Pending - OTP Baki</option>
+        <option value="Confirmed" selected>Confirmed - Pack Karna Hai</option>
+        <option value="Shipped">Shipped - Raste Me</option>
+        <option value="Delivered">Delivered - Complete</option>
+      </select>
+      <select id="monthFilter" onchange="loadOrders()">
+        <option value="All">All Months</option>
+        <option value="01">January</option>
+        <option value="02">February</option>
+        <option value="03">March</option>
+        <option value="04">April</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">August</option>
+        <option value="09">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+      <select id="yearFilter" onchange="loadOrders()">
+        <option value="All">All Years</option>
+        <option value="2026">2026</option>
+        <option value="2025">2025</option>
+        <option value="2024">2024</option>
+      </select>
+      <button onclick="loadOrders()" class="btn btn-blue">🔄 Refresh</button>
+      <button onclick="exportToExcel()" class="btn btn-purple">📊 Export Excel</button>
+      <span id="totalCount" style="font-weight:bold"></span>
+    </div>
+    <div id="ordersList" style="margin-top:15px"></div>
   </div>
 
-  <div class="box" id="orderDetails" style="display:none">
-    <h3>📦 Order Details</h3>
-    <div id="customerInfo"></div>
-  </div>
-
-  <div class="box">
-    <h3>📋 All Orders</h3>
-    <select id="filterStatus" onchange="loadOrders()">
-      <option value="Pending">Pending</option>
-      <option value="Confirmed" selected>Confirmed</option>
-      <option value="Delivered">Delivered</option>
-    </select>
-    <button onclick="loadOrders()" style="margin:10px 0;padding:8px 15px">🔄 Refresh</button>
-    <div id="ordersList"></div>
+  <!-- OTP Verify Modal -->
+  <div id="otpModal" class="modal">
+    <div class="modal-content">
+      <h3>🔐 Verify OTP & Confirm Order</h3>
+      <div id="modalCustomerInfo"></div>
+      <input type="hidden" id="modalOrderId">
+      <input type="text" id="modalOtp" placeholder="Customer ka OTP daalo">
+      <div class="flex">
+        <button class="btn" onclick="confirmOrderFromModal()">✅ Verify & Confirm</button>
+        <button class="btn btn-red" onclick="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
   </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
-  // FIREBASE CONFIG DAAL DE YAHAN
+  // FIREBASE CONFIG YAHAN PASTE KAR
     const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -59,109 +106,211 @@
   
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+  let allOrdersData = [];
 
-  // STEP 1: Order ID daalte hi details dikha de - TERE FIELDS KE HISAB SE
-  async function getOrderData() {
-    let id = document.getElementById('orderId').value.trim();
-    if(!id) return;
-    
-    let doc = await db.collection('orders').doc(id).get();
-    if(doc.exists) {
-      let data = doc.data();
-      let itemName = data.items && data.items[0]? data.items[0].name : 'No Item';
-      let itemPrice = data.items && data.items[0]? data.items[0].price : 0;
-      
-      document.getElementById('orderDetails').style.display = 'block';
-      document.getElementById('customerInfo').innerHTML = `
-        <p><b>Customer:</b> ${data.customerName || 'N/A'}</p>
-        <p><b>Mobile:</b> ${data.mobile || 'N/A'}</p>
-        <p><b>Email:</b> ${data.email || 'N/A'}</p>
-        <p><b>Address:</b> ${data.address || 'N/A'}</p>
-        <p><b>Item:</b> ${itemName} - ₹${itemPrice}</p>
-        <p><b>Payment:</b> ${data.paymentMode || 'COD'}</p>
-        <p><b>Status:</b> <span class="${data.status === 'Confirmed'? 'green' : 'red'}">${data.status}</span></p>
-        <p><b>OTP:</b> ${data.otp}</p>
-        <p><b>OTP Verified:</b> ${data.otpVerified? 'Yes ✅' : 'No ❌'}</p>
-      `;
-    } else {
-      alert('Order ID galat hai! Firebase se sahi Document ID copy karo');
-      document.getElementById('orderDetails').style.display = 'none';
-    }
-  }
-
-  // STEP 2: OTP verify karke Confirm kar
-  async function confirmOrder() {
-    let id = document.getElementById('orderId').value.trim();
-    let otp = document.getElementById('otp').value.trim();
-    
-    if(!id ||!otp) {
-      alert('Order ID aur OTP dono daalo');
-      return;
-    }
-
-    let doc = await db.collection('orders').doc(id).get();
-    if(!doc.exists) {
-      alert('Order nahi mila');
-      return;
-    }
-
-    let data = doc.data();
-    if(data.otp!= otp) {
-      alert('❌ OTP Galat hai! Sahi OTP: ' + data.otp);
-      return;
-    }
-
-    if(data.status === 'Confirmed') {
-      alert('Ye order already Confirmed hai!');
-      return;
-    }
-
-    // OTP sahi hai to Confirm kar de
-    await db.collection('orders').doc(id).update({
-      status: 'Confirmed',
-      otpVerified: true,
-      confirmedAt: new Date()
-    });
-
-    alert('✅ Order Confirm ho gaya!');
-    
-    // Customer ko kya message jayega
-    let itemName = data.items && data.items[0]? data.items[0].name : 'Product';
-    let itemPrice = data.items && data.items[0]? data.items[0].price : 0;
-    let msg = `Hi ${data.customerName}, Aapka Order #${id} Confirm ho gaya hai ✅\nItem: ${itemName}\nTotal: ₹${itemPrice}\nPayment: ${data.paymentMode}\nJaldi deliver karenge. Thank you!`;
-    console.log('WhatsApp Message:', msg);
-    
-    loadOrders();
-    document.getElementById('orderId').value = '';
-    document.getElementById('otp').value = '';
-    document.getElementById('orderDetails').style.display = 'none';
-  }
-
-  // STEP 3: Saare orders load kar
   async function loadOrders() {
     let status = document.getElementById('filterStatus').value;
-    let snap = await db.collection('orders').where('status', '==', status).get();
+    let month = document.getElementById('monthFilter').value;
+    let year = document.getElementById('yearFilter').value;
     
-    let html = '';
-    snap.forEach(doc => {
-      let d = doc.data();
-      let itemName = d.items && d.items[0]? d.items[0].name : 'No Item';
-      let itemPrice = d.items && d.items[0]? d.items[0].price : 0;
+    try {
+      let query = db.collection('orders');
+      if(status!== 'All') {
+        query = query.where('status', '==', status);
+      }
       
-      html += `
-        <div class="order-card">
-          <p><b>Order ID:</b> ${doc.id}</p>
-          <p><b>Customer:</b> ${d.customerName} | ${d.mobile}</p>
-          <p><b>Item:</b> ${itemName} - ₹${itemPrice}</p>
-          <p><b>Status:</b> <span class="green">${d.status}</span></p>
-          <p><b>OTP Verified:</b> ${d.otpVerified? 'Yes ✅' : 'No ❌'}</p>
-        </div>
-      `;
-    });
-    
-    document.getElementById('ordersList').innerHTML = html || '<p>Koi order nahi hai</p>';
+      let snap = await query.get();
+      allOrdersData = [];
+      let html = '';
+      let count = 0;
+      
+      snap.forEach((doc, index) => {
+        let d = doc.data();
+        
+        // Date filter - createdAt nahi hai to current date le lo
+        let orderDate = d.createdAt? d.createdAt.toDate() : new Date();
+        let orderMonth = ('0' + (orderDate.getMonth() + 1)).slice(-2);
+        let orderYear = orderDate.getFullYear().toString();
+        
+        if(month!== 'All' && orderMonth!== month) return;
+        if(year!== 'All' && orderYear!== year) return;
+        
+        count++;
+        let itemName = d.items && d.items[0]? d.items[0].name : 'No Item';
+        let itemPrice = d.items && d.items[0]? d.items[0].price : 0;
+        let itemQty = d.items && d.items[0]? d.items[0].qty : 1;
+        let statusColor = d.status === 'Confirmed'? 'green' : d.status === 'Pending'? 'orange' : d.status === 'Shipped'? 'orange' : 'green';
+        
+        let dateStr = orderDate.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
+        // Order number Firestore se lo, nahi hai to auto generate karo
+        let orderNum = d.orderNumber || 'SM' + orderYear + orderMonth + ('000' + count).slice(-4);
+        
+        // Excel data store kar
+        allOrdersData.push({
+          'Order No': orderNum,
+          'Order ID': doc.id,
+          'Date Time': dateStr,
+          'Customer': d.customerName || 'N/A',
+          'Mobile': d.mobile || 'N/A',
+          'Email': d.email || '',
+          'Address': d.address || 'N/A',
+          'Item': itemName,
+          'Qty': itemQty,
+          'Price': itemPrice,
+          'Total': d.total || itemPrice,
+          'Payment': d.paymentMode || 'COD',
+          'Status': d.status,
+          'OTP': d.otp,
+          'OTP Verified': d.otpVerified? 'Yes' : 'No',
+          'Customer Message': d.customerMessage || '',
+          'Source': d.source || 'Website',
+          'Reference Link': d.referenceLink || ''
+        });
+        
+        html += `
+          <div class="order-card" data-search="${(d.customerName + d.mobile + doc.id + itemName + (d.customerMessage || '')).toLowerCase()}">
+            <div class="flex" style="justify-content:space-between;margin-bottom:10px">
+              <div>
+                <span class="order-num">#${orderNum}</span>
+                <p style="font-size:18px;margin-top:5px"><b>${d.customerName || 'N/A'}</b></p>
+                <p style="color:#666">${d.mobile || 'N/A'} | ${d.email || ''}</p>
+                <p class="date-text">📅 ${dateStr}</p>
+              </div>
+              <span class="${statusColor}" style="font-size:16px">${d.status}</span>
+            </div>
+            
+            <p><b>Order ID:</b> <span class="id-badge">${doc.id}</span></p>
+            <p><b>Address:</b> ${d.address || 'N/A'}</p>
+            <p><b>Item:</b> ${itemName} x ${itemQty} - ₹${itemPrice}</p>
+            <p><b>Total:</b> ₹${d.total || itemPrice} | <b>Payment:</b> ${d.paymentMode || 'COD'}</p>
+            <p><b>OTP:</b> ${d.otp} | <b>OTP Verified:</b> ${d.otpVerified? 'Yes ✅' : 'No ❌'}</p>
+            
+            ${d.customerMessage? `<div class="msg-box"><b>💬 Customer Message:</b><br>${d.customerMessage}</div>` : ''}
+            <p class="date-text">🔗 Source: ${d.source || 'Website'} ${d.referenceLink? `| <a href="${d.referenceLink}" target="_blank">View Page</a>` : ''}</p>
+            
+            <div class="flex" style="margin-top:10px">
+              ${d.status === 'Pending'? `<button class="btn" onclick="openOtpModal('${doc.id}')">🔐 Verify OTP</button>` : ''}
+              ${d.status === 'Confirmed'? `<button class="btn btn-blue" onclick="updateStatus('${doc.id}', 'Shipped')">📦 Mark Shipped</button>` : ''}
+              ${d.status === 'Shipped'? `<button class="btn btn-orange" onclick="updateStatus('${doc.id}', 'Delivered')">✅ Mark Delivered</button>` : ''}
+              <a href="https://wa.me/91${d.mobile}?text=Hi ${d.customerName}, Order: ${orderNum}%0AStatus: ${d.status}%0A- SANTRA MALL" target="_blank">
+                <button class="btn btn-blue">💬 WhatsApp</button>
+              </a>
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('totalCount').innerText = `Total: ${count}`;
+      document.getElementById('ordersList').innerHTML = html || '<p>Koi order nahi hai</p>';
+      filterOrders();
+    } catch(e) {
+      document.getElementById('ordersList').innerHTML = '<p style="color:red">Error: ' + e.message + '</p>';
+      console.log(e);
+    }
   }
 
+  function filterOrders() {
+    let search = document.getElementById('searchBox').value.toLowerCase();
+    let cards = document.querySelectorAll('.order-card');
+    let visible = 0;
+    
+    cards.forEach(card => {
+      let searchData = card.getAttribute('data-search');
+      if(searchData.includes(search)) {
+        card.style.display = 'block';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    document.getElementById('totalCount').innerText = `Total: ${visible}`;
+  }
+
+  function exportToExcel() {
+    if(allOrdersData.length === 0) {
+      alert('No data to export');
+      return;
+    }
+    let ws = XLSX.utils.json_to_sheet(allOrdersData);
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Orders");
+    let date = new Date().toISOString().slice(0,10);
+    XLSX.writeFile(wb, `SantraMall_Orders_${date}.xlsx`);
+  }
+
+  async function openOtpModal(orderId) {
+    let doc = await db.collection('orders').doc(orderId).get();
+    let d = doc.data();
+    document.getElementById('modalOrderId').value = orderId;
+    document.getElementById('modalCustomerInfo').innerHTML = `
+      <p><b>Customer:</b> ${d.customerName}</p>
+      <p><b>Mobile:</b> ${d.mobile}</p>
+      <p><b>Item:</b> ${d.items[0].name}</p>
+      <p><b>Expected OTP:</b> <span style="color:red;font-size:20px">${d.otp}</span></p>
+      ${d.customerMessage? `<p><b>Message:</b> ${d.customerMessage}</p>` : ''}
+    `;
+    document.getElementById('otpModal').style.display = 'block';
+    document.getElementById('modalOtp').value = '';
+  }
+
+  function closeModal() {
+    document.getElementById('otpModal').style.display = 'none';
+  }
+
+  async function confirmOrderFromModal() {
+    let id = document.getElementById('modalOrderId').value;
+    let otp = document.getElementById('modalOtp').value.trim();
+    
+    if(!otp) {
+      alert('OTP daalo');
+      return;
+    }
+
+    try {
+      let doc = await db.collection('orders').doc(id).get();
+      let data = doc.data();
+      
+      if(data.otp!= otp) {
+        alert('❌ OTP Galat hai! Sahi OTP: ' + data.otp);
+        return;
+      }
+
+      await db.collection('orders').doc(id).update({
+        status: 'Confirmed',
+        otpVerified: true,
+        confirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      alert('✅ Order Confirm ho gaya!');
+      closeModal();
+      loadOrders();
+      
+      let itemName = data.items[0].name;
+      let msg = `Hi ${data.customerName}, Aapka Order Confirm ho gaya hai ✅%0AOrder ID: ${id}%0AItem: ${itemName}%0AJaldi deliver karenge. Thank you! - SANTRA MALL`;
+      window.open(`https://wa.me/91${data.mobile}?text=${msg}`, '_blank');
+      
+    } catch(e) {
+      alert('Error: ' + e.message);
+    }
+  }
+
+  async function updateStatus(orderId, newStatus) {
+    if(!confirm(`Status ko ${newStatus} karna hai?`)) return;
+    
+    try {
+      await db.collection('orders').doc(orderId).update({
+        status: newStatus,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      alert(`Status updated to ${newStatus}`);
+      loadOrders();
+    } catch(e) {
+      alert('Error: ' + e.message);
+    }
+  }
+
+  document.getElementById('monthFilter').value = ('0' + (new Date().getMonth() + 1)).slice(-2);
+  document.getElementById('yearFilter').value = new Date().getFullYear();
   loadOrders();
 </script>
 </body>

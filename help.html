@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Help Desk - SANTRA MALL</title>
+  <title>Help Desk - SANTRAJET MALL</title>
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -79,22 +79,22 @@
       if (docSnap.exists) {
         const data = docSnap.data();
         
-        document.getElementById("phone").innerHTML = data.phone || "9829508335";
-        document.getElementById("email").innerHTML = data.email || "mansasingh7109@gmail.com";
-        document.getElementById("whatsapp").innerHTML = data.whatsapp || data.phone || "9829508335";
+        document.getElementById("phone").innerHTML = data.phone || "8769171078";
+        document.getElementById("email").innerHTML = data.email || "santramarketshoppingmall@gmail.com";
+        document.getElementById("whatsapp").innerHTML = data.whatsapp || data.phone || "8769171078";
         
       } else {
         // Firebase me data nahi mila to default dikha de
-        document.getElementById("phone").innerHTML = "9829508335";
+        document.getElementById("phone").innerHTML = "8769171078";
         document.getElementById("email").innerHTML = "mansasingh7109@gmail.com";
-        document.getElementById("whatsapp").innerHTML = "9829508335";
+        document.getElementById("whatsapp").innerHTML = "8769171078";
       }
     } catch (error) {
       console.log("Firebase Error:", error);
       // Error aaye to bhi default data dikha de
-      document.getElementById("phone").innerHTML = "9829508335";
-      document.getElementById("email").innerHTML = "mansasingh7109@gmail.com";
-      document.getElementById("whatsapp").innerHTML = "9829508335";
+      document.getElementById("phone").innerHTML = "8769171078";
+      document.getElementById("email").innerHTML = "santramarketshoppingmall@gmail.com";
+      document.getElementById("whatsapp").innerHTML = "8769171078";
     }
   }
   loadCompanyDetails();
