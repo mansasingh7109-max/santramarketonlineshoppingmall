@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Orders - Santra Market</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+    body{background:#f0f2f5;padding:20px}
+   .box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px}
+   .box h3{color:#e94560;margin-bottom:15px}
+    input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;margin:5px 0;font-size:16px}
+   .btn{background:#22c55e;color:white;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:bold;width:100%;font-size:16px}
+   .btn:hover{background:#16a34a}
+   .order-card{background:#fff;border:2px solid #eee;padding:15px;border-radius:10px;margin:10px 0}
+   .green{color:#22c55e;font-weight:bold}
+   .red{color:#ef4444;font-weight:bold}
+    select{padding:8px 15px;border:2px solid #ddd;border-radius:8px;font-size:16px}
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h3>🔐 Verify OTP & Confirm Order</h3>
+    <input type="text" id="orderId" placeholder="Order ID daalo - Document ID copy karo" onblur="getOrderData()">
+    <input type="text" id="otp" placeholder="Customer ka OTP daalo">
+    <button class="btn" onclick="confirmOrder()">✅ Verify & Confirm Order</button>
+    <p style="margin-top:10px;color:#666;font-size:14px">Firebase se Document ID copy karke yaha paste karo</p>
+  </div>
+
+  <div class="box" id="orderDetails" style="display:none">
+    <h3>📦 Order Details</h3>
+    <div id="customerInfo"></div>
+  </div>
+
+  <div class="box">
+    <h3>📋 All Orders</h3>
+    <select id="filterStatus" onchange="loadOrders()">
+      <option value="Pending">Pending</option>
+      <option value="Confirmed" selected>Confirmed</option>
+      <option value="Delivered">Delivered</option>
+    </select>
+    <button onclick="loadOrders()" style="margin:10px 0;padding:8px 15px">🔄 Refresh</button>
+    <div id="ordersList"></div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script>
+  // FIREBASE CONFIG DAAL DE YAHAN
+    const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+  
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // STEP 1: Order ID daalte hi details dikha de - TERE FIELDS KE HISAB SE
+  async function getOrderData() {
+    let id = document.getElementById('orderId').value.trim();
+    if(!id) return;
+    
+    let doc = await db.collection('orders').doc(id).get();
+    if(doc.exists) {
+      let data = doc.data();
+      let itemName = data.items && data.items[0]? data.items[0].name : 'No Item';
+      let itemPrice = data.items && data.items[0]? data.items[0].price : 0;
+      
+      document.getElementById('orderDetails').style.display = 'block';
+      document.getElementById('customerInfo').innerHTML = `
+        <p><b>Customer:</b> ${data.customerName || 'N/A'}</p>
+        <p><b>Mobile:</b> ${data.mobile || 'N/A'}</p>
+        <p><b>Email:</b> ${data.email || 'N/A'}</p>
+        <p><b>Address:</b> ${data.address || 'N/A'}</p>
+        <p><b>Item:</b> ${itemName} - ₹${itemPrice}</p>
+        <p><b>Payment:</b> ${data.paymentMode || 'COD'}</p>
+        <p><b>Status:</b> <span class="${data.status === 'Confirmed'? 'green' : 'red'}">${data.status}</span></p>
+        <p><b>OTP:</b> ${data.otp}</p>
+        <p><b>OTP Verified:</b> ${data.otpVerified? 'Yes ✅' : 'No ❌'}</p>
+      `;
+    } else {
+      alert('Order ID galat hai! Firebase se sahi Document ID copy karo');
+      document.getElementById('orderDetails').style.display = 'none';
+    }
+  }
+
+  // STEP 2: OTP verify karke Confirm kar
+  async function confirmOrder() {
+    let id = document.getElementById('orderId').value.trim();
+    let otp = document.getElementById('otp').value.trim();
+    
+    if(!id ||!otp) {
+      alert('Order ID aur OTP dono daalo');
+      return;
+    }
+
+    let doc = await db.collection('orders').doc(id).get();
+    if(!doc.exists) {
+      alert('Order nahi mila');
+      return;
+    }
+
+    let data = doc.data();
+    if(data.otp!= otp) {
+      alert('❌ OTP Galat hai! Sahi OTP: ' + data.otp);
+      return;
+    }
+
+    if(data.status === 'Confirmed') {
+      alert('Ye order already Confirmed hai!');
+      return;
+    }
+
+    // OTP sahi hai to Confirm kar de
+    await db.collection('orders').doc(id).update({
+      status: 'Confirmed',
+      otpVerified: true,
+      confirmedAt: new Date()
+    });
+
+    alert('✅ Order Confirm ho gaya!');
+    
+    // Customer ko kya message jayega
+    let itemName = data.items && data.items[0]? data.items[0].name : 'Product';
+    let itemPrice = data.items && data.items[0]? data.items[0].price : 0;
+    let msg = `Hi ${data.customerName}, Aapka Order #${id} Confirm ho gaya hai ✅\nItem: ${itemName}\nTotal: ₹${itemPrice}\nPayment: ${data.paymentMode}\nJaldi deliver karenge. Thank you!`;
+    console.log('WhatsApp Message:', msg);
+    
+    loadOrders();
+    document.getElementById('orderId').value = '';
+    document.getElementById('otp').value = '';
+    document.getElementById('orderDetails').style.display = 'none';
+  }
+
+  // STEP 3: Saare orders load kar
+  async function loadOrders() {
+    let status = document.getElementById('filterStatus').value;
+    let snap = await db.collection('orders').where('status', '==', status).get();
+    
+    let html = '';
+    snap.forEach(doc => {
+      let d = doc.data();
+      let itemName = d.items && d.items[0]? d.items[0].name : 'No Item';
+      let itemPrice = d.items && d.items[0]? d.items[0].price : 0;
+      
+      html += `
+        <div class="order-card">
+          <p><b>Order ID:</b> ${doc.id}</p>
+          <p><b>Customer:</b> ${d.customerName} | ${d.mobile}</p>
+          <p><b>Item:</b> ${itemName} - ₹${itemPrice}</p>
+          <p><b>Status:</b> <span class="green">${d.status}</span></p>
+          <p><b>OTP Verified:</b> ${d.otpVerified? 'Yes ✅' : 'No ❌'}</p>
+        </div>
+      `;
+    });
+    
+    document.getElementById('ordersList').innerHTML = html || '<p>Koi order nahi hai</p>';
+  }
+
+  loadOrders();
+</script>
+</body>
+</html>
