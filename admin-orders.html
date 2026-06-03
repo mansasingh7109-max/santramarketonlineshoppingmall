@@ -7,35 +7,46 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
     body{background:#f0f2f5;padding:20px}
-  .box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px}
-  .box h3{color:#e94560;margin-bottom:15px}
+   .header{background:white;padding:15px 20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+   .header h1{color:#e94560;font-size:22px}
+   .header-actions{display:flex;gap:10px;flex-wrap:wrap}
+   .box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px}
+   .box h3{color:#e94560;margin-bottom:15px}
     input,select{padding:10px;border:2px solid #ddd;border-radius:8px;margin:5px 5px 5px 0;font-size:15px}
-  .search-input{width:300px}
-  .btn{background:#22c55e;color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;margin:5px 5px 5px 0}
-  .btn:hover{background:#16a34a}
-  .btn-blue{background:#3b82f6}
-  .btn-blue:hover{background:#2563eb}
-  .btn-orange{background:#f97316}
-  .btn-orange:hover{background:#ea580c}
-  .btn-red{background:#ef4444}
-  .btn-red:hover{background:#dc2626}
-  .btn-purple{background:#a855f7}
-  .btn-purple:hover{background:#9333ea}
-  .order-card{background:#fff;border:2px solid #eee;padding:15px;border-radius:10px;margin:10px 0}
-  .order-card:hover{border-color:#e94560;box-shadow:0 2px 8px rgba(233,69,96,0.2)}
-  .green{color:#22c55e;font-weight:bold}
-  .red{color:#ef4444;font-weight:bold}
-  .orange{color:#f97316;font-weight:bold}
-  .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
-  .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000}
-  .modal-content{background:white;margin:50px auto;padding:20px;border-radius:12px;max-width:500px}
-  .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold}
-  .date-text{color:#6b7280;font-size:14px}
-  .msg-box{background:#fff3cd;padding:8px;border-radius:5px;margin:5px 0;border-left:4px solid #f59e0b}
+   .search-input{width:300px}
+   .btn{background:#22c55e;color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;margin:5px 5px 5px 0}
+   .btn:hover{background:#16a34a}
+   .btn-blue{background:#3b82f6}
+   .btn-blue:hover{background:#2563eb}
+   .btn-orange{background:#f97316}
+   .btn-orange:hover{background:#ea580c}
+   .btn-red{background:#ef4444}
+   .btn-red:hover{background:#dc2626}
+   .btn-purple{background:#a855f7}
+   .btn-purple:hover{background:#9333ea}
+   .order-card{background:#fff;border:2px solid #eee;padding:15px;border-radius:10px;margin:10px 0}
+   .order-card:hover{border-color:#e94560;box-shadow:0 2px 8px rgba(233,69,96,0.2)}
+   .green{color:#22c55e;font-weight:bold}
+   .red{color:#ef4444;font-weight:bold}
+   .orange{color:#f97316;font-weight:bold}
+   .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
+   .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+   .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000}
+   .modal-content{background:white;margin:50px auto;padding:20px;border-radius:12px;max-width:500px}
+   .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold}
+   .date-text{color:#6b7280;font-size:14px}
+   .msg-box{background:#fff3cd;padding:8px;border-radius:5px;margin:5px 0;border-left:4px solid #f59e0b}
   </style>
 </head>
 <body>
+
+  <div class="header">
+    <h1>📦 SANTRA Admin - Orders</h1>
+    <div class="header-actions">
+      <button class="btn" onclick="exportToExcel()">📊 Export Excel</button>
+      <button class="btn" style="background:#f59e0b" onclick="fixOldOrders()">🔧 Fix Old Orders Date</button>
+    </div>
+  </div>
 
   <div class="box">
     <h3>📋 All Orders - Live</h3>
@@ -70,7 +81,6 @@
         <option value="2024">2024</option>
       </select>
       <button onclick="loadOrders()" class="btn btn-blue">🔄 Refresh</button>
-      <button onclick="exportToExcel()" class="btn btn-purple">📊 Export Excel</button>
       <span id="totalCount" style="font-weight:bold"></span>
     </div>
     <div id="ordersList" style="margin-top:15px"></div>
@@ -94,7 +104,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
   // FIREBASE CONFIG YAHAN PASTE KAR
-    const firebaseConfig = {
+     const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -306,6 +316,42 @@
       loadOrders();
     } catch(e) {
       alert('Error: ' + e.message);
+    }
+  }
+
+  // NEW FUNCTION: Purane orders me date/time add karo
+  async function fixOldOrders() {
+    if(!confirm('Purane orders me Date/Time add karni hai? Ye sirf ek baar chalana hai.')) return;
+    
+    document.getElementById('totalCount').innerText = 'Updating... Please wait';
+    
+    try {
+      const snapshot = await db.collection('orders').get();
+      let count = 0;
+      let batch = db.batch();
+      
+      snapshot.forEach(doc => {
+        if(!doc.data().createdAt) {
+          batch.update(doc.ref, {
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          count++;
+        }
+      });
+      
+      if(count === 0) {
+        alert('✅ Sabhi orders me pehle se Date/Time hai. Kuch karne ki zarurat nahi.');
+        loadOrders();
+        return;
+      }
+      
+      await batch.commit();
+      alert(`✅ Ho gaya! ${count} purane orders me Date/Time add ho gayi. Page refresh ho raha hai.`);
+      location.reload();
+      
+    } catch(e) {
+      alert('❌ Error: ' + e.message);
+      loadOrders();
     }
   }
 
