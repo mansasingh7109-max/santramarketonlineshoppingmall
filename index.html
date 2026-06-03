@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🛒 SANTRAJET MALL - Online Shopping Mall</title>
+  <title>🛒 SANTRAJET MALL - Online Shopping</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="layout.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
 </head>
 
 <body>
  <div class="header">
   <h1 id="logoText">🛒 SANTRAJET MALL</h1>
-   <div class="header-btns">
+  <div class="header-btns">
     <div id="userInfo" class="user-name hide"></div>
     <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">👤 Login</button>
     <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">🚪 Logout</button>
@@ -45,8 +44,6 @@
         <h3>🔍 Filter Products</h3>
         <button class="close-filter" onclick="closeFilterPopup()">×</button>
       </div>
-      <div class="filter-group
-
       <div class="filter-group">
         <label>Size</label>
         <select id="filterSize">
@@ -55,7 +52,8 @@
           <option value="M">M</option>
           <option value="L">L</option>
           <option value="XL">XL</option>
-          <option value="XXL">XXL</option      </select>
+          <option value="XXL">XXL</option>
+        </select>
       </div>
       <div class="filter-group">
         <label>Color</label>
@@ -135,6 +133,36 @@
   </div>
 </div>
 
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal hide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📦 Checkout</h3>
+      <button class="close-btn" onclick="closeCheckout()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" id="customerName" placeholder="Full Name *" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px">
+      <input type="tel" id="mobile" placeholder="Mobile Number *" maxlength="10" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px">
+      <input type="email" id="email" placeholder="Email (Optional)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px">
+      <textarea id="address" placeholder="Full Address *" rows="3" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px"></textarea>
+      
+      <!-- NAYA: Customer Message Box -->
+      <div>
+        <label style="font-weight:bold;color:#333">Additional Message / Note:</label>
+        <textarea id="customerMessage" rows="3" placeholder="Koi special instruction? Gift wrap chahiye? etc..." style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px"></textarea>
+      </div>
+      
+      <div style="margin:10px 0">
+        <label><input type="radio" name="payment" value="COD" checked> Cash on Delivery</label>
+        <label style="margin-left:15px"><input type="radio" name="payment" value="Online"> Online Payment</label>
+      </div>
+      
+      <div id="cartSummary" style="background:#f9f9;padding:10px;border-radius:5px;margin:10px 0"></div>
+      <button class="btn" style="width:100%;background:#e94560" onclick="placeOrder()">🛒 Place Order</button>
+    </div>
+  </div>
+</div>
+
 <div id="productModal" class="modal hide">
   <div class="modal-content">
     <div class="modal-header">
@@ -178,13 +206,14 @@
   </div>
 </div>
 
-<!-- ✅ FIREBASE SDK - SIRF RTDB + AUTH -->
+<!-- ✅ FIREBASE SDK - RTDB + AUTH + FIRESTORE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
-     const firebaseConfig = {
+    const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -193,10 +222,11 @@
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-
+  
   firebase.initializeApp(firebaseConfig);
   var rtdb = firebase.database();
   var auth = firebase.auth();
+  var db = firebase.firestore(); // NAYA: Firestore add kiya
 </script>
 
 <script src="theme.js"></script>
@@ -240,7 +270,6 @@ function getCategoryImage(c) {
   return c.image || c.categoryImage || c.img || c.photo || 'https://via.placeholder.com/50/cccccc/ffffff?text=No+Image';
 }
 
-// ✅ CATEGORIES - SIRF RTDB
 async function loadCategories() {
   allCategories = [];
   try {
@@ -290,7 +319,6 @@ function renderHomeCategories() {
   catList.innerHTML = html;
 }
 
-// ✅ PRODUCTS - SIRF RTDB
 async function loadProducts() {
   allProducts = [];
   document.getElementById('productGrid').innerHTML = '<div class="loading">Loading products...</div>';
@@ -362,7 +390,6 @@ function renderProducts(products){
   if(currentUser) loadWishlistStatus();
 }
 
-// ✅ WISHLIST - AB REALTIME DB USE HOGA
 window.toggleWishlist = async (productId, event) => {
   if (event) event.stopPropagation();
 
@@ -464,7 +491,6 @@ function updateSlider(productId) {
   });
 }
 
-// ✅ CART - AB RTDB ME SAVE HOGA
 function addToCart(productId, event) {
   event.stopPropagation();
   if (!currentUser) {
@@ -519,6 +545,107 @@ function updateCartCount() {
       document.getElementById('cartCount').innerText = '0';
     }
   });
+}
+
+// ✅ NAYA ORDER PLACE FUNCTION
+async function placeOrder() {
+  const customerName = document.getElementById('customerName').value.trim();
+  const mobile = document.getElementById('mobile').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const customerMessage = document.getElementById('customerMessage').value.trim();
+  
+  if(!customerName ||!mobile ||!address) {
+    alert('Name, Mobile, Address required hai');
+    return;
+  }
+  
+  if(mobile.length!== 10) {
+    alert('Mobile number 10 digit ka hona chahiye');
+    return;
+  }
+  
+  const cartItems = getCartItems();
+  if(cartItems.length === 0) {
+    alert('Cart empty hai');
+    return;
+  }
+  
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = ('0' + (now.getMonth() + 1)).slice(-2);
+  const orderNum = 'SM' + year + month + Math.floor(1000 + Math.random() * 9000);
+  
+  const orderData = {
+    orderNumber: orderNum,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    status: 'Pending',
+    otp: otp.toString(),
+    otpVerified: false,
+    customerName: customerName,
+    mobile: mobile,
+    email: email,
+    address: address,
+    customerMessage: customerMessage || '',
+    customerNote: '',
+    items: cartItems,
+    total: calculateTotal(),
+    paymentMode: document.querySelector('input[name="payment"]:checked').value,
+    source: 'Website',
+    whatsappNumber: mobile,
+    referenceLink: window.location.href,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  
+  try {
+    const docRef = await db.collection('orders').add(orderData);
+    alert('✅ Order Placed!\nOrder No: ' + orderNum + '\nOTP: ' + otp + '\n\nAdmin ko WhatsApp karein');
+    
+    let adminMsg = `🛒 New Order: ${orderNum}%0A👤 Name: ${customerName}%0A📱 Mobile: ${mobile}%0A📍 Address: ${address}%0A📦 Item: ${cartItems[0].name}%0A💰 Total: ₹${calculateTotal()}%0A🔐 OTP: ${otp}%0A💬 Message: ${customerMessage || 'No message'}`;
+    window.open(`https://wa.me/917725960293?text=${adminMsg}`, '_blank');
+    
+    clearCart();
+    closeCheckout();
+    window.location.href = 'orders.html';
+    
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+}
+
+function getCartItems() {
+  // Tera cart logic yahan aayega
+  return JSON.parse(localStorage.getItem('cart') || '[]');
+}
+
+function calculateTotal() {
+  let cart = getCartItems();
+  return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+}
+
+function clearCart() {
+  localStorage.removeItem('cart');
+  updateCartCount();
+}
+
+function openCheckout() {
+  if(!currentUser) {
+    openCustomerLogin();
+    return;
+  }
+  document.getElementById('checkoutModal').classList.remove('hide');
+  let cart = getCartItems();
+  let html = '';
+  cart.forEach(item => {
+    html += `<p>${item.name} x ${item.qty} = ₹${item.price * item.qty}</p>`;
+  });
+  html += `<hr><b>Total: ₹${calculateTotal()}</b>`;
+  document.getElementById('cartSummary').innerHTML = html;
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.add('hide');
 }
 
 function searchProducts() {

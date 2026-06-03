@@ -21,43 +21,45 @@ body{padding-bottom:70px;background:#E8F5E9!important}
 /* SANTRA MALL LOGO - RED TEXT + LIGHT GREEN 3D SHADOW - RIGHT ALIGN */
 .header h1, .header .brand-name, .header .logo,
 header h1, header .logo {
-  position:absolute !important;
-  right:20px !important;
-  left:auto !important;
+  position:center !important;
+  right:50px !important;
+  left:20% !important;
   top:50% !important;
   transform:translateY(-50%) !important;
-  color:#FF0000 !important; /* RED Text */
-  background:#FFF176 !important;
+  color:#D32F2F !important; /* RED Text */
+  background:#81C784 !important;
   -webkit-text-fill-color:#FF0000 !important;
   font-family:'Poppins', sans-serif !important;
   font-size:200px !important;
-  font-weight:900 !important;
+  font-weight:800 !important;
   letter-spacing:4px !important;
   text-transform:uppercase !important;
   text-shadow:
-    1px 1px 0 #98FB98,  /* Pale Green */
-    2px 2px 0 #98FB98,  /* Pale Green */
-    3px 3px 0 #90EE90,  /* Light Green */
-    4px 4px 0 #90EE90,  /* Light Green */
-    5px 5px 0 #32CD32,  /* Lime Green */
-    6px 6px 8px rgba(144,238,144,0.5) !important; /* Light Green Glow */
-  z-index:5 !important;
+    1px 1px 0 #FFF176,  /* Lemon Yellow */
+    2px 2px 0 #FFF176,  /* Lemon Yellow */
+    3px 3px 0 #FFF176,  /* Lemon Yellow */
+    4px 4px 0 #FFF176,  /* Lemon Yellow */
+    5px 5px 0 #FFF176,  /* Lemon Yellow */
+    6px 6px 0 #FFF176,  /* Lemon Yellow */
+    20px 20px 18px rgba(200,150,2,0.2) !important; /* Light Yellow Glow */
+  z-index:0!important;
   margin:0 !important;
 }
+
 
 /* MOBILE PE CHOTA KARO + RIGHT ALIGN */
 @media (max-width: 580px){
   .header h1, .header .brand-name, .header .logo,
   header h1, header .logo {
-    font-size:25px !important;
+    font-size:20px !important;
     right:50px !important;
-    left:auto !important;
+    left:10%!important;
     letter-spacing:2px !important;
     text-shadow:
       1px 1px 0 #98FB98,
-      2px 2px 0 #98FB98,
-      3px 3px 0 #90EE90,
-      4px 4px 6px rgba(144,238,144,0.4) !important;
+      2px 2px 0 #FFF176,
+      4px 4px 0 #FFF176,
+      50px 50px 50px rgba(144,238,144,0.4) !important;
   }
 }
 
