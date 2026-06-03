@@ -1,110 +1,137 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Admin Orders - Santra Market</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📦 Admin Orders - SANTRA MALL</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-    body{background:#f0f2f5;padding:20px}
-   .header{background:white;padding:15px 20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-   .header h1{color:#e94560;font-size:22px}
-   .header-actions{display:flex;gap:10px;flex-wrap:wrap}
-   .box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:20px}
-   .box h3{color:#e94560;margin-bottom:15px}
-    input,select{padding:10px;border:2px solid #ddd;border-radius:8px;margin:5px 5px 5px 0;font-size:15px}
-   .search-input{width:300px}
-   .btn{background:#22c55e;color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;margin:5px 5px 5px 0}
-   .btn:hover{background:#16a34a}
-   .btn-blue{background:#3b82f6}
-   .btn-blue:hover{background:#2563eb}
-   .btn-orange{background:#f97316}
-   .btn-orange:hover{background:#ea580c}
-   .btn-red{background:#ef4444}
-   .btn-red:hover{background:#dc2626}
-   .btn-purple{background:#a855f7}
-   .btn-purple:hover{background:#9333ea}
-   .order-card{background:#fff;border:2px solid #eee;padding:15px;border-radius:10px;margin:10px 0}
-   .order-card:hover{border-color:#e94560;box-shadow:0 2px 8px rgba(233,69,96,0.2)}
-   .green{color:#22c55e;font-weight:bold}
-   .red{color:#ef4444;font-weight:bold}
-   .orange{color:#f97316;font-weight:bold}
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);color:var(--text);padding-bottom:70px}
+   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+   .header h1{font-size:18px}
+   .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+   .container{max-width:900px;margin:15px auto;padding:0 15px}
+   .top-card{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+   .filter-btn{padding:8px 14px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+   .filter-btn.active{background:var(--accent);color:white}
+   .filter-btn:not(.active){background:#e0e0e0;color:#333}
+   .search-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin:10px 0}
+   .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+   .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
+   .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+   .status-pending{background:#fef3c7;color:#92400e}
+   .status-confirmed{background:#d1fae5;color:#065f46}
+   .status-shipped{background:#dbeafe;color:#1e40af}
+   .status-delivered{background:#d1fae5;color:#065f46}
+   .status-cancelled{background:#fee2e2;color:#991b1b}
+   .btn{padding:10px 16px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:14px;margin:5px;cursor:pointer}
+   .btn-blue{background:var(--blue)}
+   .btn-green{background:var(--green)}
+   .btn-orange{background:var(--orange)}
+   .btn:disabled{background:#ccc;cursor:not-allowed}
+   .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
+   .date-text{color:#6b7280;font-size:13px;margin:5px 0}
    .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
    .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-   .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000}
-   .modal-content{background:white;margin:50px auto;padding:20px;border-radius:12px;max-width:500px}
-   .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold}
-   .date-text{color:#6b7280;font-size:14px}
-   .msg-box{background:#fff3cd;padding:8px;border-radius:5px;margin:5px 0;border-left:4px solid #f59e0b}
+   .empty{text-align:center;padding:60px 20px;color:#999}
+   .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+   select{padding:8px 12px;border:2px solid #e94560;border-radius:8px;font-weight:bold;background:white;cursor:pointer}
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>📦 SANTRA Admin - Orders</h1>
-    <div class="header-actions">
-      <button class="btn" onclick="exportToExcel()">📊 Export Excel</button>
-      <button class="btn" style="background:#f59e0b" onclick="fixOldOrders()">🔧 Fix Old Orders Date</button>
-    </div>
-  </div>
+<div class="header">
+  <button class="back-btn" onclick="window.location.href='admin.html'">←</button>
+  <h1>📦 All Orders - Admin</h1>
+</div>
 
-  <div class="box">
-    <h3>📋 All Orders - Live</h3>
-    <div class="flex">
-      <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search: Name, Mobile, Order ID, Item, Message..." onkeyup="filterOrders()">
-      <select id="filterStatus" onchange="loadOrders()">
-        <option value="All">All Orders</option>
+<div class="container">
+
+  <div class="top-card">
+    <h3>📋 SANTRA Admin - Orders</h3>
+    
+    <div class="flex" style="margin:15px 0">
+      <button class="btn btn-green" onclick="exportToExcel()">📊 Export Excel</button>
+      <button class="btn btn-orange" onclick="fixOldOrdersDate()">🔧 Fix Old Orders Date</button>
+    </div>
+
+    <h4 style="margin:15px 0 10px">📋 All Orders - Live</h4>
+    
+    <div class="filter-row">
+      <button class="filter-btn active" id="btnLatest" onclick="filterOrders('latest')">🔥 Latest</button>
+      <button class="filter-btn" id="btnPrevious" onclick="filterOrders('previous')">📜 Previous</button>
+      <button class="filter-btn" onclick="sortByDateTime()">🕐 Date-Time Sort</button>
+    </div>
+
+    <input type="text" class="search-input" id="searchOrder" placeholder="🔍 Search: Name, Mobile, Date..." oninput="searchOrders()">
+
+    <div class="filter-row" style="margin-top:10px">
+      <select id="statusFilter" onchange="filterByStatus(this.value)" style="flex:1">
+        <option value="">All Orders</option>
         <option value="Pending">Pending - OTP Baki</option>
-        <option value="Confirmed" selected>Confirmed - Pack Karna Hai</option>
+        <option value="Confirmed">Confirmed - Pack Karna Hai</option>
         <option value="Shipped">Shipped - Raste Me</option>
         <option value="Delivered">Delivered - Complete</option>
+        <option value="Cancelled">Cancelled</option>
       </select>
-      <select id="monthFilter" onchange="loadOrders()">
-        <option value="All">All Months</option>
-        <option value="01">January</option>
-        <option value="02">February</option>
-        <option value="03">March</option>
-        <option value="04">April</option>
+      
+      <select id="dateDay" onchange="filterByDate()" style="width:80px">
+        <option value="">Day</option>
+      </select>
+      
+      <select id="dateMonth" onchange="filterByDate()" style="width:100px">
+        <option value="">Month</option>
+        <option value="01">Jan</option>
+        <option value="02">Feb</option>
+        <option value="03">Mar</option>
+        <option value="04">Apr</option>
         <option value="05">May</option>
         <option value="06">June</option>
         <option value="07">July</option>
-        <option value="08">August</option>
-        <option value="09">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
+        <option value="08">Aug</option>
+        <option value="09">Sep</option>
+        <option value="10">Oct</option>
+        <option value="11">Nov</option>
+        <option value="12">Dec</option>
       </select>
-      <select id="yearFilter" onchange="loadOrders()">
-        <option value="All">All Years</option>
+      
+      <select id="dateYear" onchange="filterByDate()" style="width:90px">
+        <option value="">Year</option>
         <option value="2026">2026</option>
         <option value="2025">2025</option>
-        <option value="2024">2024</option>
       </select>
-      <button onclick="loadOrders()" class="btn btn-blue">🔄 Refresh</button>
-      <span id="totalCount" style="font-weight:bold"></span>
+      
+      <select id="timeFilter" onchange="filterByTime(this.value)" style="width:120px">
+        <option value="">All Time</option>
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+      </select>
     </div>
-    <div id="ordersList" style="margin-top:15px"></div>
+
+    <div class="flex" style="margin-top:10px">
+      <button class="btn btn-blue" onclick="loadAllOrders()">🔄 Refresh</button>
+      <span id="orderCount" style="font-weight:bold;color:#666">Total: 0</span>
+    </div>
   </div>
 
-  <!-- OTP Verify Modal -->
-  <div id="otpModal" class="modal">
-    <div class="modal-content">
-      <h3>🔐 Verify OTP & Confirm Order</h3>
-      <div id="modalCustomerInfo"></div>
-      <input type="hidden" id="modalOrderId">
-      <input type="text" id="modalOtp" placeholder="Customer ka OTP daalo">
-      <div class="flex">
-        <button class="btn" onclick="confirmOrderFromModal()">✅ Verify & Confirm</button>
-        <button class="btn btn-red" onclick="closeModal()">❌ Cancel</button>
-      </div>
-    </div>
+  <div id="ordersList">
+    <div class="loader">⏳ Loading all orders...</div>
   </div>
+
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="order-card.js"></script>
+
 <script>
-  // FIREBASE CONFIG YAHAN PASTE KAR
-     const firebaseConfig = {
+    const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -113,251 +140,224 @@
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-  
+    // Tera config
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
-  let allOrdersData = [];
+  const auth = firebase.auth();
 
-  async function loadOrders() {
-    let status = document.getElementById('filterStatus').value;
-    let month = document.getElementById('monthFilter').value;
-    let year = document.getElementById('yearFilter').value;
-    
+  let allOrders = [];
+  let currentFilter = 'latest';
+
+  // ✅ Day Dropdown Populate - 01 to 31
+  document.addEventListener('DOMContentLoaded', function() {
+    let daySelect = document.getElementById('dateDay');
+    for(let i = 1; i <= 31; i++) {
+      let day = String(i).padStart(2, '0');
+      let option = document.createElement('option');
+      option.value = day;
+      option.text = day;
+      daySelect.appendChild(option);
+    }
+  });
+
+  auth.onAuthStateChanged(user => {
+    if(!user || user.email!== "mansasingh7109@gmail.com") {
+      window.location.href = 'admin-login.html';
+    } else {
+      loadAllOrders();
+    }
+  });
+
+  async function loadAllOrders() {
     try {
-      let query = db.collection('orders');
-      if(status!== 'All') {
-        query = query.where('status', '==', status);
-      }
-      
-      let snap = await query.get();
-      allOrdersData = [];
-      let html = '';
-      let count = 0;
-      
-      snap.forEach((doc, index) => {
-        let d = doc.data();
-        
-        // Date filter - createdAt nahi hai to current date le lo
-        let orderDate = d.createdAt? d.createdAt.toDate() : new Date();
-        let orderMonth = ('0' + (orderDate.getMonth() + 1)).slice(-2);
-        let orderYear = orderDate.getFullYear().toString();
-        
-        if(month!== 'All' && orderMonth!== month) return;
-        if(year!== 'All' && orderYear!== year) return;
-        
-        count++;
-        let itemName = d.items && d.items[0]? d.items[0].name : 'No Item';
-        let itemPrice = d.items && d.items[0]? d.items[0].price : 0;
-        let itemQty = d.items && d.items[0]? d.items[0].qty : 1;
-        let statusColor = d.status === 'Confirmed'? 'green' : d.status === 'Pending'? 'orange' : d.status === 'Shipped'? 'orange' : 'green';
-        
-        let dateStr = orderDate.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
-        // Order number Firestore se lo, nahi hai to auto generate karo
-        let orderNum = d.orderNumber || 'SM' + orderYear + orderMonth + ('000' + count).slice(-4);
-        
-        // Excel data store kar
-        allOrdersData.push({
-          'Order No': orderNum,
-          'Order ID': doc.id,
-          'Date Time': dateStr,
-          'Customer': d.customerName || 'N/A',
-          'Mobile': d.mobile || 'N/A',
-          'Email': d.email || '',
-          'Address': d.address || 'N/A',
-          'Item': itemName,
-          'Qty': itemQty,
-          'Price': itemPrice,
-          'Total': d.total || itemPrice,
-          'Payment': d.paymentMode || 'COD',
-          'Status': d.status,
-          'OTP': d.otp,
-          'OTP Verified': d.otpVerified? 'Yes' : 'No',
-          'Customer Message': d.customerMessage || '',
-          'Source': d.source || 'Website',
-          'Reference Link': d.referenceLink || ''
-        });
-        
-        html += `
-          <div class="order-card" data-search="${(d.customerName + d.mobile + doc.id + itemName + (d.customerMessage || '')).toLowerCase()}">
-            <div class="flex" style="justify-content:space-between;margin-bottom:10px">
-              <div>
-                <span class="order-num">#${orderNum}</span>
-                <p style="font-size:18px;margin-top:5px"><b>${d.customerName || 'N/A'}</b></p>
-                <p style="color:#666">${d.mobile || 'N/A'} | ${d.email || ''}</p>
-                <p class="date-text">📅 ${dateStr}</p>
-              </div>
-              <span class="${statusColor}" style="font-size:16px">${d.status}</span>
-            </div>
-            
-            <p><b>Order ID:</b> <span class="id-badge">${doc.id}</span></p>
-            <p><b>Address:</b> ${d.address || 'N/A'}</p>
-            <p><b>Item:</b> ${itemName} x ${itemQty} - ₹${itemPrice}</p>
-            <p><b>Total:</b> ₹${d.total || itemPrice} | <b>Payment:</b> ${d.paymentMode || 'COD'}</p>
-            <p><b>OTP:</b> ${d.otp} | <b>OTP Verified:</b> ${d.otpVerified? 'Yes ✅' : 'No ❌'}</p>
-            
-            ${d.customerMessage? `<div class="msg-box"><b>💬 Customer Message:</b><br>${d.customerMessage}</div>` : ''}
-            <p class="date-text">🔗 Source: ${d.source || 'Website'} ${d.referenceLink? `| <a href="${d.referenceLink}" target="_blank">View Page</a>` : ''}</p>
-            
-            <div class="flex" style="margin-top:10px">
-              ${d.status === 'Pending'? `<button class="btn" onclick="openOtpModal('${doc.id}')">🔐 Verify OTP</button>` : ''}
-              ${d.status === 'Confirmed'? `<button class="btn btn-blue" onclick="updateStatus('${doc.id}', 'Shipped')">📦 Mark Shipped</button>` : ''}
-              ${d.status === 'Shipped'? `<button class="btn btn-orange" onclick="updateStatus('${doc.id}', 'Delivered')">✅ Mark Delivered</button>` : ''}
-              <a href="https://wa.me/91${d.mobile}?text=Hi ${d.customerName}, Order: ${orderNum}%0AStatus: ${d.status}%0A- SANTRA MALL" target="_blank">
-                <button class="btn btn-blue">💬 WhatsApp</button>
-              </a>
-            </div>
-          </div>
-        `;
+      const snapshot = await db.collection('orders').orderBy('createdAt', 'desc').get();
+      allOrders = [];
+      snapshot.forEach(doc => {
+        allOrders.push({id: doc.id,...doc.data()});
       });
-      
-      document.getElementById('totalCount').innerText = `Total: ${count}`;
-      document.getElementById('ordersList').innerHTML = html || '<p>Koi order nahi hai</p>';
-      filterOrders();
-    } catch(e) {
-      document.getElementById('ordersList').innerHTML = '<p style="color:red">Error: ' + e.message + '</p>';
-      console.log(e);
+      filterOrders(currentFilter);
+    } catch(error) {
+      console.error('Error:', error);
+      document.getElementById('ordersList').innerHTML = `<div class="empty">❌ Error: ${error.message}</div>`;
     }
   }
 
-  function filterOrders() {
-    let search = document.getElementById('searchBox').value.toLowerCase();
-    let cards = document.querySelectorAll('.order-card');
-    let visible = 0;
+  function filterOrders(type) {
+    currentFilter = type;
+    document.getElementById('btnLatest').classList.toggle('active', type === 'latest');
+    document.getElementById('btnPrevious').classList.toggle('active', type === 'previous');
     
-    cards.forEach(card => {
-      let searchData = card.getAttribute('data-search');
-      if(searchData.includes(search)) {
-        card.style.display = 'block';
-        visible++;
-      } else {
-        card.style.display = 'none';
-      }
+    let filtered = [];
+    if(type === 'latest') {
+      filtered = allOrders.slice(0, 50);
+    } else if(type === 'previous') {
+      filtered = allOrders.slice(50);
+    } else {
+      filtered = allOrders;
+    }
+    renderOrders(filtered);
+  }
+
+  function renderOrders(orders) {
+    let container = document.getElementById('ordersList');
+    if(orders.length === 0) {
+      container.innerHTML = `<div class="empty">📦 No orders found</div>`;
+      document.getElementById('orderCount').innerText = `Total: 0`;
+      return;
+    }
+
+    document.getElementById('orderCount').innerText = `Total: ${orders.length}`;
+
+    container.innerHTML = orders.map((order, index) => {
+      let orderDate = order.createdAt? order.createdAt.toDate() : new Date();
+      let dateStr = orderDate.toLocaleDateString('en-IN', {dateStyle:'medium'});
+      let timeStr = orderDate.toLocaleTimeString('en-IN', {timeStyle:'short'});
+      let orderNum = order.orderNumber || 'SM0001';
+      let serialNo = index + 1; // ✅ FIX: Latest me #1, Previous me bhi #1 se start
+      let statusColor = 'status-' + order.status.toLowerCase().replace(' ', '_');
+
+      return renderAdminOrderCard({id: order.id}, order, orderNum, serialNo, dateStr, timeStr, statusColor);
+    }).join('');
+  }
+
+  function searchOrders() {
+    const searchTerm = document.getElementById('searchOrder').value.toLowerCase().trim();
+    if(!searchTerm) {
+      renderOrders(allOrders);
+      return;
+    }
+    const filtered = allOrders.filter(order =>
+      (order.orderNumber && order.orderNumber.toLowerCase().includes(searchTerm)) ||
+      (order.mobile && order.mobile.includes(searchTerm)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(searchTerm)) ||
+      (order.id && order.id.toLowerCase().includes(searchTerm))
+    );
+    renderOrders(filtered);
+  }
+
+  function filterByStatus(status) {
+    if(!status) {
+      renderOrders(allOrders);
+      return;
+    }
+    const filtered = allOrders.filter(order => order.status === status);
+    renderOrders(filtered);
+  }
+
+  function sortByDateTime() {
+    const sorted = [...allOrders].sort((a,b) => {
+      let dateA = a.createdAt? a.createdAt.toDate() : new Date(0);
+      let dateB = b.createdAt? b.createdAt.toDate() : new Date(0);
+      return dateB - dateA;
     });
-    document.getElementById('totalCount').innerText = `Total: ${visible}`;
+    renderOrders(sorted);
   }
 
-  function exportToExcel() {
-    if(allOrdersData.length === 0) {
-      alert('No data to export');
-      return;
-    }
-    let ws = XLSX.utils.json_to_sheet(allOrdersData);
-    let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    let date = new Date().toISOString().slice(0,10);
-    XLSX.writeFile(wb, `SantraMall_Orders_${date}.xlsx`);
-  }
-
-  async function openOtpModal(orderId) {
-    let doc = await db.collection('orders').doc(orderId).get();
-    let d = doc.data();
-    document.getElementById('modalOrderId').value = orderId;
-    document.getElementById('modalCustomerInfo').innerHTML = `
-      <p><b>Customer:</b> ${d.customerName}</p>
-      <p><b>Mobile:</b> ${d.mobile}</p>
-      <p><b>Item:</b> ${d.items[0].name}</p>
-      <p><b>Expected OTP:</b> <span style="color:red;font-size:20px">${d.otp}</span></p>
-      ${d.customerMessage? `<p><b>Message:</b> ${d.customerMessage}</p>` : ''}
-    `;
-    document.getElementById('otpModal').style.display = 'block';
-    document.getElementById('modalOtp').value = '';
-  }
-
-  function closeModal() {
-    document.getElementById('otpModal').style.display = 'none';
-  }
-
-  async function confirmOrderFromModal() {
-    let id = document.getElementById('modalOrderId').value;
-    let otp = document.getElementById('modalOtp').value.trim();
+  function filterByDate() {
+    let day = document.getElementById('dateDay').value;
+    let month = document.getElementById('dateMonth').value;
+    let year = document.getElementById('dateYear').value;
     
-    if(!otp) {
-      alert('OTP daalo');
+    if(!day && !month && !year) {
+      renderOrders(allOrders);
       return;
     }
+    
+    const filtered = allOrders.filter(order => {
+      if(!order.createdAt) return false;
+      let d = order.createdAt.toDate();
+      let match = true;
+      if(day && String(d.getDate()).padStart(2,'0') !== day) match = false;
+      if(month && String(d.getMonth()+1).padStart(2,'0') !== month) match = false;
+      if(year && d.getFullYear() != year) match = false;
+      return match;
+    });
+    renderOrders(filtered);
+  }
 
-    try {
-      let doc = await db.collection('orders').doc(id).get();
-      let data = doc.data();
-      
-      if(data.otp!= otp) {
-        alert('❌ OTP Galat hai! Sahi OTP: ' + data.otp);
-        return;
+  function filterByTime(range) {
+    if(!range) {
+      renderOrders(allOrders);
+      return;
+    }
+    let now = new Date();
+    let filtered = allOrders.filter(order => {
+      if(!order.createdAt) return false;
+      let d = order.createdAt.toDate();
+      if(range === 'today') return d.toDateString() === now.toDateString();
+      if(range === 'yesterday') {
+        let y = new Date(now); y.setDate(y.getDate()-1);
+        return d.toDateString() === y.toDateString();
       }
-
-      await db.collection('orders').doc(id).update({
-        status: 'Confirmed',
-        otpVerified: true,
-        confirmedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      alert('✅ Order Confirm ho gaya!');
-      closeModal();
-      loadOrders();
-      
-      let itemName = data.items[0].name;
-      let msg = `Hi ${data.customerName}, Aapka Order Confirm ho gaya hai ✅%0AOrder ID: ${id}%0AItem: ${itemName}%0AJaldi deliver karenge. Thank you! - SANTRA MALL`;
-      window.open(`https://wa.me/91${data.mobile}?text=${msg}`, '_blank');
-      
-    } catch(e) {
-      alert('Error: ' + e.message);
-    }
+      if(range === 'week') {
+        let w = new Date(now); w.setDate(w.getDate()-7);
+        return d >= w;
+      }
+      if(range === 'month') {
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      }
+      return true;
+    });
+    renderOrders(filtered);
   }
 
-  async function updateStatus(orderId, newStatus) {
-    if(!confirm(`Status ko ${newStatus} karna hai?`)) return;
-    
+  // ✅ STATUS UPDATE - Dropdown se
+  async function updateStatus(docId, newStatus) {
+    if(!newStatus) return;
+    if(!confirm(`Change status to ${newStatus}?`)) return;
+
     try {
-      await db.collection('orders').doc(orderId).update({
+      await db.collection('orders').doc(docId).update({
         status: newStatus,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      alert(`Status updated to ${newStatus}`);
-      loadOrders();
-    } catch(e) {
-      alert('Error: ' + e.message);
-    }
-  }
-
-  // NEW FUNCTION: Purane orders me date/time add karo
-  async function fixOldOrders() {
-    if(!confirm('Purane orders me Date/Time add karni hai? Ye sirf ek baar chalana hai.')) return;
-    
-    document.getElementById('totalCount').innerText = 'Updating... Please wait';
-    
-    try {
-      const snapshot = await db.collection('orders').get();
-      let count = 0;
-      let batch = db.batch();
-      
-      snapshot.forEach(doc => {
-        if(!doc.data().createdAt) {
-          batch.update(doc.ref, {
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          count++;
-        }
-      });
-      
-      if(count === 0) {
-        alert('✅ Sabhi orders me pehle se Date/Time hai. Kuch karne ki zarurat nahi.');
-        loadOrders();
-        return;
-      }
-      
-      await batch.commit();
-      alert(`✅ Ho gaya! ${count} purane orders me Date/Time add ho gayi. Page refresh ho raha hai.`);
-      location.reload();
-      
+      alert('✅ Status updated to ' + newStatus);
+      loadAllOrders();
     } catch(e) {
       alert('❌ Error: ' + e.message);
-      loadOrders();
     }
   }
 
-  document.getElementById('monthFilter').value = ('0' + (new Date().getMonth() + 1)).slice(-2);
-  document.getElementById('yearFilter').value = new Date().getFullYear();
-  loadOrders();
+  // ✅ OTP VERIFY
+  function openOtpModal(docId) {
+    let otp = prompt('Enter Customer OTP:');
+    if(!otp) return;
+    verifyOTPAndConfirm(docId, otp);
+  }
+
+  async function verifyOTPAndConfirm(docId, otp) {
+    try {
+      let doc = await db.collection('orders').doc(docId).get();
+      if(!doc.exists) {
+        alert('❌ Order not found');
+        return;
+      }
+
+      let d = doc.data();
+      if(d.otp === otp) {
+        await db.collection('orders').doc(docId).update({
+          status: 'Confirmed',
+          otpVerified: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert('✅ OTP Verified! Order Confirmed');
+        loadAllOrders();
+      } else {
+        alert('❌ Invalid OTP');
+      }
+    } catch(e) {
+      alert('❌ Error: ' + e.message);
+    }
+  }
+
+  function exportToExcel() {
+    alert('Export feature - Add your code here');
+  }
+
+  function fixOldOrdersDate() {
+    alert('Fix dates feature - Add your code here');
+  }
 </script>
+
 </body>
 </html>
