@@ -588,13 +588,13 @@ async function placeOrder() {
     email: email,
     address: address,
     customerMessage: customerMessage || '',
+    source: 'Website',
+referenceLink: window.location.href,
     customerNote: '',
     items: cartItems,
     total: calculateTotal(),
     paymentMode: document.querySelector('input[name="payment"]:checked').value,
-    source: 'Website',
-    whatsappNumber: mobile,
-    referenceLink: window.location.href,
+    
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
   
