@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body{font-family:Arial;padding:20px;background:#f8f9fa}
+    h2{color:#e40046;margin-bottom:15px}
+    input{padding:10px;border:1px solid #dee2e6;border-radius:4px;width:300px}
+    table{width:100%;border-collapse:collapse;background:#fff;margin-top:15px}
+    th,td{padding:12px;text-align:left;border-bottom:1px solid #dee2e6}
+    th{background:#f8f9fa;color:#e40046}
+   .badge-success{background:#10b981;color:white;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold}
+   .badge-blue{background:#3b82f6;color:white;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold}
+   .btn-small{background:#e94560;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px}
+  </style>
+</head>
+<body>
+  <h2>👥 Customers - Live Data</h2>
+  <input type="text" id="custSearch" placeholder="Search by name/mobile..." oninput="debounceCustomerSearch()">
+  <span id="customerCount" class="badge-success" style="margin-left:10px">Total: 0</span>
+  <div id="customersList" style="margin-top:15px">Loading customers...</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script>
+      const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+  window.allCustomers = [];
+  window.filterTimeout = null;
+
+  auth.onAuthStateChanged(user => {
+    if(!user || user.email!== "mansasingh7109@gmail.com") {
+      window.top.location.href = '../admin-login.html';
+    } else {
+      loadCustomers();
+    }
+  });
+
+  // ===== OLD CODE BACKUP - Purana function =====
+  /*
+  window.loadCustomers = async function() {
+    const custSnap = await db.collection("customers").orderBy("loginTime", "desc").get();
+    window.allCustomers = [];
+    let html = '<table><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Orders</th><th>Joined</th><th>Last Login</th></tr></thead><tbody>';
+    custSnap.forEach(doc => {
+      const c = doc.data();
+      window.allCustomers.push({id: doc.id,...c});
+      html += `<tr>
+        <td><b>${c.name||'N/A'}</b></td>
+        <td>${c.mobile||'N/A'}</td>
+        <td>${c.email||'N/A'}</td>
+        <td><span class="badge-success">${c.orders||0}</span></td>
+        <td>${c.createdAt? new Date(c.createdAt.seconds*1000).toLocaleDateString() : 'N/A'}</td>
+        <td>${c.loginTime? new Date(c.loginTime.seconds*1000).toLocaleString() : 'N/A'}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('customersList').innerHTML = html || '<p>No customers found</p>';
+    document.getElementById('customerCount').innerText = `Total: ${custSnap.size}`;
+  }
+  */
+
+  // ✅ NEW CODE - Orders count bhi live calculate karega
+  window.loadCustomers = async function() {
+    const custSnap = await db.collection("customers").orderBy("loginTime", "desc").get();
+    window.allCustomers = [];
+    
+    // Har customer ke orders count karo
+    for(const doc of custSnap.docs) {
+      const c = doc.data();
+      let orderCount = 0;
+      
+      // Orders collection me is mobile ke kitne orders hain
+      const orderSnap = await db.collection("orders").where("mobile", "==", c.mobile).get();
+      orderCount = orderSnap.size;
+      
+      window.allCustomers.push({
+        id: doc.id,
+        ...c,
+        orders: orderCount
+      });
+    }
+    
+    renderCustomersTable(window.allCustomers);
+    document.getElementById('customerCount').innerText = `Total: ${window.allCustomers.length}`;
+  }
+
+  function renderCustomersTable(customers) {
+    let html = '<table><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Orders</th><th>Total Spent</th><th>Joined</th><th>Last Login</th><th>Action</th></tr></thead><tbody>';
+    
+    customers.forEach(c => {
+      html += `<tr>
+        <td><b>${c.name||'N/A'}</b></td>
+        <td>${c.mobile||'N/A'}</td>
+        <td>${c.email||'N/A'}</td>
+        <td><span class="badge-success">${c.orders||0}</span></td>
+        <td><span class="badge-blue">₹${c.totalSpent||0}</span></td>
+        <td>${c.createdAt? new Date(c.createdAt.seconds*1000).toLocaleDateString() : 'N/A'}</td>
+        <td>${c.loginTime? new Date(c.loginTime.seconds*1000).toLocaleString() : 'N/A'}</td>
+        <td><button class="btn-small" onclick="viewCustomerOrders('${c.mobile}')">View Orders</button></td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('customersList').innerHTML = html || '<p>No customers found</p>';
+  }
+
+  window.viewCustomerOrders = function(mobile) {
+    window.location.href = `admin-orders.html?mobile=${mobile}`;
+  }
+
+  window.debounceCustomerSearch = function() {
+    clearTimeout(window.filterTimeout);
+    window.filterTimeout = setTimeout(() => searchCustomers(), 300);
+  }
+
+  window.searchCustomers = function() {
+    const query = document.getElementById('custSearch').value.toLowerCase();
+    if(!query) {
+      renderCustomersTable(window.allCustomers);
+      document.getElementById('customerCount').innerText = `Total: ${window.allCustomers.length}`;
+      return;
+    }
+    const filtered = window.allCustomers.filter(c => 
+      (c.name||'').toLowerCase().includes(query) || 
+      (c.mobile||'').includes(query) ||
+      (c.email||'').toLowerCase().includes(query)
+    );
+    renderCustomersTable(filtered);
+    document.getElementById('customerCount').innerText = `Total: ${filtered.length}`;
+  }
+</script>
+</body>
+</html>
