@@ -12,16 +12,32 @@
 
 <body>
  <div class="header">
-  <h1 id="logoText">🛒 SANTRAJET MALL</h1>
+<h1 id="logoText">
+    <span class="lang-hi">🛒 SANTRAJET MALL</span>
+    <span class="lang-en">🛒 SANTRAJET MALL</span>
+</h1>
   <div class="header-btns">
     <div id="userInfo" class="user-name hide"></div>
-    <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">👤 Login</button>
-    <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">🚪 Logout</button>
+  <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">
+    <span class="lang-hi">👤 लॉगिन</span>
+    <span class="lang-en">👤 Login</span>
+</button>
+    <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">
+    <span class="lang-hi">🚪 लॉगआउट</span>
+    <span class="lang-en">🚪 Logout</span>
+</button>
    <a href="wishlist.html" class="header-btn">
-      ❤️ Wishlist
-      <span class="wishlist-count" id="wishlist-count">0</span>
-    </a>
-    <a href="help.html" class="header-btn">💬 HELP DESK</a>
+    <span class="lang-hi">❤️ पसंदीदा</span>
+    <span class="lang-en">❤️ Wishlist</span>
+    <span class="wishlist-count" id="wishlist-count">0</span>
+</a>
+    <a href="help.html" class="header-btn">
+    <span class="lang-hi">💬 सहायता केंद्र</span>
+    <span class="lang-en">💬 HELP DESK</span>
+</a>
+<button class="header-btn" id="langBtn" onclick="toggleLang()">
+    <span id="langBtnText">EN</span>
+</button>
   </div>
 </div>
 
@@ -943,5 +959,38 @@ console.log('santraBackup.restore() - Restore backup');
 console.log('santraBackup.viewBackups() - View all order backups');
 console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
+<script>
+// LANGUAGE SWITCHER - FINAL WORKING
+function toggleLang() {
+  document.body.classList.toggle('english');
+  let btn = document.getElementById('langBtnText');
+  if(document.body.classList.contains('english')) {
+    localStorage.setItem('siteLang', 'en');
+    btn.innerHTML = 'हिं';
+  } else {
+    localStorage.setItem('siteLang', 'hi');
+    btn.innerHTML = 'EN';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // CSS add karo
+  document.head.insertAdjacentHTML('beforeend', `
+    <style>
+      .lang-hi, .lang-en { display: none; }
+      body:not(.english) .lang-hi { display: inline-block !important; }
+      body.english .lang-en { display: inline-block !important; }
+    </style>
+  `);
+  
+  // Language check karo
+  if(localStorage.getItem('siteLang') === 'en') {
+    document.body.classList.add('english');
+    document.getElementById('langBtnText').innerHTML = 'हिं';
+  }
+});
+</script>
+
 </body>
+
 </html>
