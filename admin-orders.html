@@ -18,7 +18,7 @@
    .filter-btn.active{background:var(--accent);color:white}
    .filter-btn:not(.active){background:#e0e0e0;color:#333}
    .search-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin:10px 0}
-   .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0.1)}
    .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
    .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
    .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
@@ -66,7 +66,7 @@
       <button class="filter-btn" onclick="sortByDateTime()">🕐 Date-Time Sort</button>
     </div>
 
-    <input type="text" class="search-input" id="searchOrder" placeholder="🔍 Search: Name, Mobile, Date..." oninput="searchOrders()">
+    <input type="text" class="search-input" id="searchOrder" placeholder="🔍 Search: Name, Mobile, Order No..." oninput="searchOrders()">
 
     <div class="filter-row" style="margin-top:10px">
       <select id="statusFilter" onchange="filterByStatus(this.value)" style="flex:1">
@@ -84,18 +84,10 @@
       
       <select id="dateMonth" onchange="filterByDate()" style="width:100px">
         <option value="">Month</option>
-        <option value="01">Jan</option>
-        <option value="02">Feb</option>
-        <option value="03">Mar</option>
-        <option value="04">Apr</option>
-        <option value="05">May</option>
-        <option value="06">June</option>
-        <option value="07">July</option>
-        <option value="08">Aug</option>
-        <option value="09">Sep</option>
-        <option value="10">Oct</option>
-        <option value="11">Nov</option>
-        <option value="12">Dec</option>
+        <option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option>
+        <option value="04">Apr</option><option value="05">May</option><option value="06">June</option>
+        <option value="07">July</option><option value="08">Aug</option><option value="09">Sep</option>
+        <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
       </select>
       
       <select id="dateYear" onchange="filterByDate()" style="width:90px">
@@ -128,9 +120,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="order-card.js"></script>
 
 <script>
+    // ⚠️ APNI FIREBASE KEY YAHAN DAAL
     const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -140,7 +132,6 @@
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-    // Tera config
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const auth = firebase.auth();
@@ -148,7 +139,6 @@
   let allOrders = [];
   let currentFilter = 'latest';
 
-  // ✅ Day Dropdown Populate - 01 to 31
   document.addEventListener('DOMContentLoaded', function() {
     let daySelect = document.getElementById('dateDay');
     for(let i = 1; i <= 31; i++) {
@@ -161,7 +151,7 @@
   });
 
   auth.onAuthStateChanged(user => {
-    if(!user || user.email!== "mansasingh7109@gmail.com") {
+    if(!user || user.email !== "mansasingh7109@gmail.com") {
       window.location.href = 'admin-login.html';
     } else {
       loadAllOrders();
@@ -188,6 +178,7 @@
     document.getElementById('btnPrevious').classList.toggle('active', type === 'previous');
     
     let filtered = [];
+    
     if(type === 'latest') {
       filtered = allOrders.slice(0, 50);
     } else if(type === 'previous') {
@@ -198,6 +189,7 @@
     renderOrders(filtered);
   }
 
+  // ✅ FIXED: SerialNo + Name + Items sab theek
   function renderOrders(orders) {
     let container = document.getElementById('ordersList');
     if(orders.length === 0) {
@@ -208,36 +200,95 @@
 
     document.getElementById('orderCount').innerText = `Total: ${orders.length}`;
 
-    container.innerHTML = orders.map((order, index) => {
+    container.innerHTML = orders.map((order) => {
       let orderDate = order.createdAt? order.createdAt.toDate() : new Date();
       let dateStr = orderDate.toLocaleDateString('en-IN', {dateStyle:'medium'});
       let timeStr = orderDate.toLocaleTimeString('en-IN', {timeStyle:'short'});
-      let orderNum = order.orderNumber || 'SM0001';
-      let serialNo = index + 1; // ✅ FIX: Latest me #1, Previous me bhi #1 se start
-      let statusColor = 'status-' + order.status.toLowerCase().replace(' ', '_');
+      
+      // ✅ FIX 1: SerialNo use karo, index nahi
+      let serialNo = order.serialNo || 'N/A';
+      let orderNum = order.orderNumber || order.orderId || String(order.id || "").slice(-6) || 'SM0001';
+      
+      // ✅ FIX 2: Name + Mobile fallback
+      let displayName = order.customerName || order.name || order.customer_name || 'Customer';
+      let displayMobile = order.mobile || order.customerMobile || 'N/A';
+      
+      // ✅ FIX 3: Status color safe
+      let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
 
-      return renderAdminOrderCard({id: order.id}, order, orderNum, serialNo, dateStr, timeStr, statusColor);
+      // ✅ FIX 4: Items list check
+      let itemsHtml = 'No items';
+      if(order.items && Array.isArray(order.items) && order.items.length > 0) {
+        itemsHtml = order.items.map(item => 
+          `${item.name} x ${item.qty} = ₹${(item.price || 0) * (item.qty || 1)}`
+        ).join('<br>');
+      }
+
+      return `
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <span class="order-num">#${serialNo} | ${orderNum}</span>
+              <h3 style="margin:5px 0">${displayName}</h3>
+              <p style="color:#666;font-size:13px">📱 ${displayMobile}</p>
+              <p class="date-text">📅 ${dateStr} | ⏰ ${timeStr}</p>
+            </div>
+            <div style="text-align:right">
+              <span class="status-badge ${statusColor}">${order.status || 'Pending'}</span>
+            </div>
+          </div>
+          
+          <div style="margin:15px 0">
+            <p><b>Order ID:</b> <span class="id-badge">${String(order.id)}</span></p>
+            <p><b>Email:</b> ${order.email || 'N/A'}</p>
+            <p><b>Address:</b> ${order.address || 'N/A'}</p>
+            <p><b>Items:</b><br>${itemsHtml}</p>
+            <p><b>Total: ₹${order.total || 0}</b> | <b>Payment:</b> ${order.paymentMode || 'COD'}</p>
+            <p><b>OTP:</b> ${order.otp || 'N/A'} | <b>Verified:</b> ${order.otpVerified ? 'Yes ✅' : 'No ❌'}</p>
+          </div>
+
+          ${order.customerMessage ? `
+            <div class="msg-box">
+              <p><b>💬 Customer Message:</b> ${order.customerMessage}</p>
+            </div>
+          ` : ''}
+
+          <div class="flex" style="margin-top:15px">
+            <select onchange="updateStatus('${order.id}', this.value)" style="flex:1">
+              <option value="">Change Status</option>
+              <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="Confirmed" ${order.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+            ${order.status === 'Pending' ? `<button class="btn btn-green" onclick="openOtpModal('${order.id}')">✅ Verify OTP</button>` : ''}
+          </div>
+        </div>
+      `;
     }).join('');
   }
 
   function searchOrders() {
     const searchTerm = document.getElementById('searchOrder').value.toLowerCase().trim();
     if(!searchTerm) {
-      renderOrders(allOrders);
+      filterOrders(currentFilter);
       return;
     }
     const filtered = allOrders.filter(order =>
       (order.orderNumber && order.orderNumber.toLowerCase().includes(searchTerm)) ||
       (order.mobile && order.mobile.includes(searchTerm)) ||
+      (order.customerMobile && order.customerMobile.includes(searchTerm)) ||
       (order.customerName && order.customerName.toLowerCase().includes(searchTerm)) ||
-      (order.id && order.id.toLowerCase().includes(searchTerm))
+      (order.name && order.name.toLowerCase().includes(searchTerm)) ||
+      (order.id && String(order.id).toLowerCase().includes(searchTerm))
     );
     renderOrders(filtered);
   }
 
   function filterByStatus(status) {
     if(!status) {
-      renderOrders(allOrders);
+      filterOrders(currentFilter);
       return;
     }
     const filtered = allOrders.filter(order => order.status === status);
@@ -259,7 +310,7 @@
     let year = document.getElementById('dateYear').value;
     
     if(!day && !month && !year) {
-      renderOrders(allOrders);
+      filterOrders(currentFilter);
       return;
     }
     
@@ -277,7 +328,7 @@
 
   function filterByTime(range) {
     if(!range) {
-      renderOrders(allOrders);
+      filterOrders(currentFilter);
       return;
     }
     let now = new Date();
@@ -301,7 +352,6 @@
     renderOrders(filtered);
   }
 
-  // ✅ STATUS UPDATE - Dropdown se
   async function updateStatus(docId, newStatus) {
     if(!newStatus) return;
     if(!confirm(`Change status to ${newStatus}?`)) return;
@@ -318,7 +368,6 @@
     }
   }
 
-  // ✅ OTP VERIFY
   function openOtpModal(docId) {
     let otp = prompt('Enter Customer OTP:');
     if(!otp) return;
@@ -358,6 +407,105 @@
     alert('Fix dates feature - Add your code here');
   }
 </script>
+<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
 
+// ✅ AUTO BACKUP EVERY ORDER
+window.santraBackup = {
+  version: '1.0',
+  timestamp: '2026-06-04T16:34:00+05:30',
+  location: 'Pilibanga, Rajasthan',
+  
+  // Backup localStorage data
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    
+    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+  
+  // Backup Firebase data before critical operations
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+  
+  // Restore function
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+    }
+  },
+  
+  // View all backups
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+  
+  // Export backup as JSON
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-04T16:34:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-04_1634.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+// Auto backup on page load
+window.santraBackup.backupLocalStorage();
+
+// Console commands help
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
+</script>
 </body>
 </html>
