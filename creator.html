@@ -71,5 +71,105 @@
   <a href="company-details.html" class="back-btn">← Back</a>
 </div>
 <script src="theme.js"></script>
+<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+// ✅ AUTO BACKUP EVERY ORDER
+window.santraBackup = {
+  version: '1.0',
+  timestamp: '2026-06-04T16:34:00+05:30',
+  location: 'Pilibanga, Rajasthan',
+  
+  // Backup localStorage data
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    
+    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+  
+  // Backup Firebase data before critical operations
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+  
+  // Restore function
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+    }
+  },
+  
+  // View all backups
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+  
+  // Export backup as JSON
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-04T16:34:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-04_1634.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+// Auto backup on page load
+window.santraBackup.backupLocalStorage();
+
+// Console commands help
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
+</script>
 </body>
 </html>

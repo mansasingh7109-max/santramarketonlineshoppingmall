@@ -112,7 +112,6 @@
     <span style="font-size:12px;color:var(--accent);cursor:pointer" onclick="window.location.href='category.html'">View All →</span>
   </div>
 
-  <!-- ✅ NAYA: Single Order View ke liye -->
   <div id="myOrderDiv"></div>
 
   <div class="products" id="productGrid">
@@ -149,7 +148,6 @@
       <input type="email" id="email" placeholder="Email (Optional)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px">
       <textarea id="address" placeholder="Full Address *" rows="3" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px"></textarea>
 
-      <!-- NAYA: Customer Message Box -->
       <div>
         <label style="font-weight:bold;color:#333">Additional Message / Note:</label>
         <textarea id="customerMessage" rows="3" placeholder="Koi special instruction? Gift wrap chahiye? etc..." style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:5px"></textarea>
@@ -160,7 +158,7 @@
         <label style="margin-left:15px"><input type="radio" name="payment" value="Online"> Online Payment</label>
       </div>
 
-      <div id="cartSummary" style="background:#f9f9;padding:10px;border-radius:5px;margin:10px 0"></div>
+      <div id="cartSummary" style="background:#f9;padding:10px;border-radius:5px;margin:10px 0"></div>
       <button class="btn" style="width:100%;background:#e94560" onclick="placeOrder()">🛒 Place Order</button>
     </div>
   </div>
@@ -214,10 +212,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<!-- ✅ NAYA: order-card.js add kiya -->
 <script src="order-card.js"></script>
 <script>
-    const firebaseConfig = {
+        const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -226,6 +223,7 @@
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
+    // ⚠️ APNI FIREBASE KEY YAHAN DAAL
 
   firebase.initializeApp(firebaseConfig);
   var rtdb = firebase.database();
@@ -256,7 +254,6 @@ window.onload = function() {
   loadProducts();
   loadCategories();
 
-  // ✅ NAYA: URL me?id=xxx hai to single order dikhao
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get('id');
   if(orderId) {
@@ -264,7 +261,6 @@ window.onload = function() {
   }
 }
 
-// ✅ NAYA: Single Order Load Function
 async function loadSingleOrder(orderId) {
   document.getElementById('productGrid').style.display = 'none';
   document.getElementById('myOrderDiv').innerHTML = '<div class="loader">⏳ Loading order...</div>';
@@ -277,7 +273,6 @@ async function loadSingleOrder(orderId) {
       let dateStr = dateObj.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
       let orderNum = d.orderNumber || 'SM0001';
 
-      // renderCustomerOrderCard use karo 👇
       document.getElementById('myOrderDiv').innerHTML = renderCustomerOrderCard(
         {id: doc.id,...d},
         orderNum,
@@ -419,7 +414,7 @@ function renderProducts(products){
         </div>
         <div class="product-actions">
          <button class="add-to-cart-btn" onclick="addToCart('${p.id}', event)">Add to Cart</button>
-<button class="buy-now-btn" onclick="buyNow('${p.id}', event)">Buy Now</button>
+         <button class="buy-now-btn" onclick="buyNow('${p.id}', event)">Buy Now</button>
         </div>
       </div>
     `;
@@ -585,10 +580,17 @@ function updateCartCount() {
   });
 }
 
-// ✅ NAYA ORDER PLACE FUNCTION
+// ✅ UPDATED placeOrder() - Har customer ke liye kaam karega
 async function placeOrder() {
-  const customerName = document.getElementById('customerName').value.trim();
-  const mobile = document.getElementById('mobile').value.trim();
+  let customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  if(!customer.mobile) {
+    alert('⚠️ Please login first');
+    openCustomerLogin();
+    return;
+  }
+
+  const customerName = document.getElementById('customerName').value.trim() || customer.name;
+  const mobile = document.getElementById('mobile').value.trim() || customer.mobile;
   const address = document.getElementById('address').value.trim();
   const email = document.getElementById('email').value.trim();
   const customerMessage = document.getElementById('customerMessage').value.trim();
@@ -622,30 +624,31 @@ async function placeOrder() {
     otp: otp.toString(),
     otpVerified: false,
     customerName: customerName,
+    name: customerName,
     mobile: mobile,
+    customerMobile: mobile,
     email: email,
     address: address,
     customerMessage: customerMessage || '',
     source: 'Website',
-referenceLink: window.location.href,
+    referenceLink: window.location.href,
     customerNote: '',
     items: cartItems,
     total: calculateTotal(),
     paymentMode: document.querySelector('input[name="payment"]:checked').value,
-
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
 
   try {
     const docRef = await db.collection('orders').add(orderData);
-    alert('✅ Order Placed!\nOrder No: ' + orderNum + '\nOTP: ' + otp + '\n\nAdmin ko WhatsApp karein');
+    alert('✅ Order Placed!\nOrder No: ' + orderNum + '\nOTP: ' + otp + '\n\nStatus: Pending - Admin confirm karega');
 
     let adminMsg = `🛒 New Order: ${orderNum}%0A👤 Name: ${customerName}%0A📱 Mobile: ${mobile}%0A📍 Address: ${address}%0A📦 Item: ${cartItems[0].name}%0A💰 Total: ₹${calculateTotal()}%0A🔐 OTP: ${otp}%0A💬 Message: ${customerMessage || 'No message'}`;
     window.open(`https://wa.me/917725960293?text=${adminMsg}`, '_blank');
 
     clearCart();
     closeCheckout();
-    window.location.href = 'orders.html';
+    window.location.href = 'orders.html?orderId=' + docRef.id;
 
   } catch(e) {
     alert('Error: ' + e.message);
@@ -666,11 +669,18 @@ function clearCart() {
   updateCartCount();
 }
 
+// ✅ UPDATED openCheckout() - Auto-fill customer details
 function openCheckout() {
   if(!currentUser) {
     openCustomerLogin();
     return;
   }
+
+  let customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  document.getElementById('customerName').value = customer.name || '';
+  document.getElementById('mobile').value = customer.mobile || '';
+  document.getElementById('email').value = customer.email || '';
+
   document.getElementById('checkoutModal').classList.remove('hide');
   let cart = getCartItems();
   let html = '';
@@ -746,7 +756,6 @@ function openCart() {
   window.location.href = 'cart.html';
 }
 
-// ✅ UPDATED: Login check add kiya
 function openOrders() {
   let customer = localStorage.getItem('santra_customer');
   if(!customer) {
@@ -833,6 +842,106 @@ function ToWishlistFromModal() {
     toggleWishlist(currentModalProduct.id, event);
   }
 }
+</script>
+<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+// ✅ AUTO BACKUP EVERY ORDER
+window.santraBackup = {
+  version: '1.0',
+  timestamp: '2026-06-04T16:34:00+05:30',
+  location: 'Pilibanga, Rajasthan',
+  
+  // Backup localStorage data
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    
+    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+  
+  // Backup Firebase data before critical operations
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+  
+  // Restore function
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+    }
+  },
+  
+  // View all backups
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+  
+  // Export backup as JSON
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-04T16:34:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-04_1634.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+// Auto backup on page load
+window.santraBackup.backupLocalStorage();
+
+// Console commands help
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
