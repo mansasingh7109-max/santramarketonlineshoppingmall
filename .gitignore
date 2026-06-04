@@ -44,4 +44,21 @@ Thumbs.db
 .bash_history
 .gitconfig
 config.js
+# Firebase Config Files - Ye bhi risky hain
+firebase.json
+.firebaserc
 
+# Database files
+db.js
+database.js
+
+# Node modules
+node_modules/
+package-lock.json
+
+# Ye bhi add kar de
+*.pem
+*.key
+*credentials*
+*password*
+*secret*
