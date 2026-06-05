@@ -6,7 +6,7 @@
     <title>Complete Order - SANTRA MALL</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-        body{background:#f5f5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+        body{background:#f5f5f5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
        .container{max-width:500px;width:100%;background:white;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.1);overflow:hidden}
        .header{background:#e40046;color:white;padding:20px;text-align:center}
        .header h1{font-size:24px;margin-bottom:5px}
@@ -31,10 +31,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
        // ⚠️ APNA FIREBASE CONFIG YAHA PASTE KAR ⚠️
-             const firebaseConfig = {
+            const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -42,12 +41,15 @@
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-}; 
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-      
-      // ✅ EMAILJS INIT - APNI KEYS DAALNA
-      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // EmailJS se milegi
+};
+       
+       // ✅ FIREBASE INIT WITH ERROR CHECK
+       try {
+         firebase.initializeApp(firebaseConfig);
+       } catch(e) {
+         console.error('Firebase init error:', e);
+       }
+       const db = firebase.firestore();
     </script>
 </head>
 <body>
@@ -126,20 +128,20 @@
                     <div id="paymentError" class="error hidden">Please select payment mode</div>
                 </div>
 
-                <div class="loader" id="loader">📲 Saving order & Sending notifications...</div>
+                <div class="loader" id="loader">📲 Saving order & Opening WhatsApp...</div>
 
                 <button class="btn btn-whatsapp" id="submitBtn" onclick="submitFinalOrder()">
-                    📲 Send OTP Request on WhatsApp + Email
+                    📲 Send OTP Request on WhatsApp
                 </button>
             </div>
 
-            <!-- ✅ Continue Shopping Button Hataya - Auto redirect hoga -->
+            <!-- ✅ CONTINUE SHOPPING BILKUL HATA DIYA - SIRF SUCCESS MESSAGE -->
             <div id="successSection" class="hidden">
                 <div class="success">
                     <div class="success-icon">✅</div>
-                    <h2>Order Placed Successfully!</h2>
-                    <p>WhatsApp & Email sent to admin.<br>Redirecting to My Orders...</p>
-                    <div class="loader" style="display:block">⏳ Redirecting...</div>
+                    <h2>Sent for OTP Request</h2>
+                    <p>Your order details sent to admin on WhatsApp.<br>We will call you for OTP verification.</p>
+                    <p style="margin-top:20px;font-size:14px;color:#666;">Redirecting to My Orders in <span id="countdown">3</span> seconds...</p>
                 </div>
             </div>
         </div>
@@ -150,25 +152,32 @@ let urlParams = new URLSearchParams(window.location.search);
 let productId = urlParams.get('product');
 let pendingOrders = [];
 
-if(productId){
-    let data = localStorage.getItem('pending_whatsapp_order_' + productId);
-    if(data){
-        pendingOrders = [JSON.parse(data)];
-        showProductSummary();
-    } else {
-        alert('Order data missing. Please start again.');
-        window.location.href = 'index.html';
-    }
-} else {
-    let cartData = localStorage.getItem('santra_cart');
-    if(cartData){
-        let cartObj = JSON.parse(cartData);
-        pendingOrders = Object.values(cartObj);
-        showProductSummary();
-    } else {
-        alert('No product selected. Please start again.');
-        window.location.href = 'index.html';
-    }
+// ✅ ERROR HANDLING - Agar localStorage me data nahi hai
+try {
+  if(productId){
+      let data = localStorage.getItem('pending_whatsapp_order_' + productId);
+      if(data){
+          pendingOrders = [JSON.parse(data)];
+          showProductSummary();
+      } else {
+          alert('Order data missing. Please add product again.');
+          window.location.href = 'index.html';
+      }
+  } else {
+      let cartData = localStorage.getItem('santra_cart');
+      if(cartData){
+          let cartObj = JSON.parse(cartData);
+          pendingOrders = Object.values(cartObj);
+          showProductSummary();
+      } else {
+          alert('No product selected. Please start again.');
+          window.location.href = 'index.html';
+      }
+  }
+} catch(e) {
+  console.error('LocalStorage error:', e);
+  alert('Error loading order data. Please try again.');
+  window.location.href = 'index.html';
 }
 
 const customer = localStorage.getItem('santra_customer');
@@ -237,6 +246,7 @@ async function submitFinalOrder(){
 
     document.getElementById('loader').style.display = 'block';
     document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').innerText = '⏳ Processing...';
 
     try {
         const counterRef = db.collection('counters').doc('orders');
@@ -259,7 +269,6 @@ async function submitFinalOrder(){
         let totalAmount = 0;
         let itemsArray = [];
         let itemsText = '';
-        let itemsHTML = '';
 
         pendingOrders.forEach((order, index) => {
             let productCode = order.productCode || order.productId || order.id;
@@ -292,16 +301,6 @@ async function submitFinalOrder(){
             itemsText += `Category: ${order.category || 'General'}\n`;
             itemsText += `Series: ${seriesCode}\n`;
             itemsText += `🔗 ${productLink}\n\n`;
-
-            itemsHTML += `
-              <tr>
-                <td style="padding:10px;border:1px solid #ddd">${index + 1}. ${itemName}</td>
-                <td style="padding:10px;border:1px solid #ddd">${productCode}</td>
-                <td style="padding:10px;border:1px solid #ddd;text-align:center">${qty}</td>
-                <td style="padding:10px;border:1px solid #ddd;text-align:right">₹${price}</td>
-                <td style="padding:10px;border:1px solid #ddd;text-align:right">₹${price*qty}</td>
-              </tr>
-            `;
         });
 
         const orderData = {
@@ -341,45 +340,36 @@ async function submitFinalOrder(){
         whatsappMsg += `⚡ *ACTION: Call customer & share OTP for confirmation*\n`;
         whatsappMsg += `📲 SANTRA MALL`;
 
-        // ✅ EMAIL BHEJO ADMIN KO
-        const emailParams = {
-          to_email: "santraadmin@gmail.com", // ⚠️ Yaha admin ka email daal
-          order_id: orderId,
-          customer_name: name,
-          customer_mobile: mobile,
-          customer_email: email,
-          customer_address: `${addr1}, ${addr2}, ${landmark}, ${city}, ${state} - ${pincode}`,
-          order_date: orderDate,
-          payment_mode: paymentMode,
-          items_html: itemsHTML,
-          total_amount: totalAmount,
-          otp: otp
-        };
-
-        try {
-          await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams);
-          console.log("✅ Email sent to admin");
-        } catch(emailErr) {
-          console.log("⚠️ Email failed:", emailErr);
-        }
-
-        window.open(`https://wa.me/918769171078?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-
+        // ✅ PEHLE SUCCESS DIKHAO PHIR WHATSAPP KHOLO
         document.getElementById('detailsSection').classList.add('hidden');
         document.getElementById('successSection').classList.remove('hidden');
+        document.getElementById('loader').style.display = 'none';
+        
         localStorage.removeItem('pending_whatsapp_order_' + productId);
         localStorage.removeItem('santra_cart');
 
-        // ✅ 3 Second baad My Orders pe auto redirect
+        // 1 second baad WhatsApp kholo
         setTimeout(() => {
-          window.location.href = 'my-orders.html';
-        }, 3000);
+          window.open(`https://wa.me/918769171078?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+        }, 1000);
+
+        // ✅ 3 SECOND COUNTDOWN KE BAAD MY-ORDERS PE REDIRECT
+        let count = 3;
+        const countdownInterval = setInterval(() => {
+          count--;
+          document.getElementById('countdown').innerText = count;
+          if(count <= 0) {
+            clearInterval(countdownInterval);
+            window.location.href = 'my-orders.html';
+          }
+        }, 1000);
 
     } catch (error) {
       console.error('Order Error:', error);
-      alert('❌ Error saving order: ' + error.message);
+      alert('❌ Error: ' + error.message);
       document.getElementById('loader').style.display = 'none';
       document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').innerText = '📲 Send OTP Request on WhatsApp';
     }
 }
 </script>
