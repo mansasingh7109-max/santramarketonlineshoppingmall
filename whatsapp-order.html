@@ -6,7 +6,7 @@
     <title>Complete Order - SANTRA MALL</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-        body{background:#f5f5f5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+        body{background:#f5f5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
        .container{max-width:500px;width:100%;background:white;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.1);overflow:hidden}
        .header{background:#e40046;color:white;padding:20px;text-align:center}
        .header h1{font-size:24px;margin-bottom:5px}
@@ -16,8 +16,6 @@
        .btn:disabled{background:#ccc;cursor:not-allowed}
        .btn-whatsapp{background:#25D366}
        .btn-whatsapp:hover{background:#1ea952}
-       .btn-pdf{background:#f59e0b}
-       .btn-pdf:hover{background:#d97706}
        .form-group{margin-bottom:15px}
        .form-group label{display:block;margin-bottom:6px;font-weight:500;color:#333}
        .form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:15px}
@@ -29,15 +27,14 @@
        .success{text-align:center;padding:30px}
        .success-icon{font-size:60px;color:#25D366;margin-bottom:15px}
        .loader{display:none;text-align:center;padding:10px;color:#e40046;font-weight:bold}
-       .alert{background:#fff3cd;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid #f59e0b;font-size:13px}
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
        // ⚠️ APNA FIREBASE CONFIG YAHA PASTE KAR ⚠️
-       const firebaseConfig = {
+             const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -45,9 +42,12 @@
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-};
+}; 
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
+      
+      // ✅ EMAILJS INIT - APNI KEYS DAALNA
+      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // EmailJS se milegi
     </script>
 </head>
 <body>
@@ -126,24 +126,20 @@
                     <div id="paymentError" class="error hidden">Please select payment mode</div>
                 </div>
 
-                <div class="alert">
-                    ⚠️ <b>Note:</b> PDF automatically download hoga. WhatsApp khulne ke baad PDF manually attach kar dena.
-                </div>
-
-                <div class="loader" id="loader">📲 Saving order & Generating PDF...</div>
+                <div class="loader" id="loader">📲 Saving order & Sending notifications...</div>
 
                 <button class="btn btn-whatsapp" id="submitBtn" onclick="submitFinalOrder()">
-                    📲 Send OTP Request on WhatsApp
+                    📲 Send OTP Request on WhatsApp + Email
                 </button>
             </div>
 
+            <!-- ✅ Continue Shopping Button Hataya - Auto redirect hoga -->
             <div id="successSection" class="hidden">
                 <div class="success">
                     <div class="success-icon">✅</div>
                     <h2>Order Placed Successfully!</h2>
-                    <p>PDF download ho gaya hai.<br>WhatsApp me PDF attach karke bhejo.</p>
-                    <button class="btn btn-pdf" onclick="downloadPDF()" id="downloadBtn">📄 Download PDF Again</button>
-                    <button class="btn" onclick="window.location.href='index.html'">Continue Shopping</button>
+                    <p>WhatsApp & Email sent to admin.<br>Redirecting to My Orders...</p>
+                    <div class="loader" style="display:block">⏳ Redirecting...</div>
                 </div>
             </div>
         </div>
@@ -153,8 +149,6 @@
 let urlParams = new URLSearchParams(window.location.search);
 let productId = urlParams.get('product');
 let pendingOrders = [];
-let generatedPDF = null;
-let currentOrderId = '';
 
 if(productId){
     let data = localStorage.getItem('pending_whatsapp_order_' + productId);
@@ -210,152 +204,6 @@ function showProductSummary(){
     document.getElementById('productSummary').innerHTML = html;
 }
 
-function generatePDF(orderData) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    // Header
-    doc.setFillColor(228, 0, 70);
-    doc.rect(0, 0, 210, 35, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(20);
-    doc.text('SANTRA MALL', 105, 15, { align: 'center' });
-    doc.setFontSize(12);
-    doc.text('ORDER INVOICE', 105, 23, { align: 'center' });
-    doc.setFontSize(10);
-    doc.text(`Order #${orderData.orderId}`, 105, 30, { align: 'center' });
-    
-    // Order Info
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(10);
-    doc.text(`Date: ${orderData.orderDateString}`, 14, 45);
-    doc.text(`Serial No: ${orderData.serialNo}`, 14, 51);
-    doc.text(`Status: ${orderData.status}`, 14, 57);
-    
-    // Customer Details Box
-    doc.setFillColor(240, 249, 255);
-    doc.rect(14, 65, 182, 45, 'F');
-    doc.setFontSize(11);
-    doc.setTextColor(228, 0, 70);
-    doc.text('CUSTOMER DETAILS', 16, 72);
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Name: ${orderData.customerName}`, 16, 79);
-    doc.text(`Mobile: ${orderData.mobile}`, 16, 85);
-    if(orderData.email) doc.text(`Email: ${orderData.email}`, 16, 91);
-    doc.text(`Address: ${orderData.customerAddress}`, 16, 97);
-    doc.text(`Landmark: ${orderData.customerLandmark}`, 16, 103);
-    doc.text(`${orderData.customerCity}, ${orderData.customerState} - ${orderData.customerPincode}`, 16, 109);
-    doc.text(`Payment: ${orderData.paymentMode}`, 16, 115);
-    
-    // Items Table Header
-    let yPos = 125;
-    doc.setFillColor(228, 0, 70);
-    doc.rect(14, yPos, 182, 8, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(9);
-    doc.text('S.No', 16, yPos + 5.5);
-    doc.text('Product Details', 30, yPos + 5.5);
-    doc.text('Code', 110, yPos + 5.5);
-    doc.text('Qty', 145, yPos + 5.5);
-    doc.text('Price', 160, yPos + 5.5);
-    doc.text('Total', 180, yPos + 5.5);
-    
-    yPos += 10;
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(8);
-    
-    orderData.items.forEach((item, index) => {
-        if(yPos > 265) {
-            doc.addPage();
-            yPos = 20;
-        }
-        
-        // Product name
-        doc.setFont(undefined, 'bold');
-        doc.text(`${index + 1}.`, 16, yPos);
-        doc.text(item.name.substring(0, 40), 25, yPos);
-        
-        // Code
-        doc.setFont(undefined, 'normal');
-        doc.text(item.product_code || item.id, 110, yPos);
-        
-        // Qty
-        doc.text(String(item.qty), 147, yPos);
-        
-        // Price
-        doc.text(`Rs.${item.price}`, 160, yPos);
-        
-        // Total
-        doc.setFont(undefined, 'bold');
-        doc.text(`Rs.${item.price * item.qty}`, 180, yPos);
-        
-        yPos += 5;
-        
-        // Category & Link
-        doc.setFont(undefined, 'normal');
-        doc.setFontSize(7);
-        doc.setTextColor(100, 100, 100);
-        doc.text(`Category: ${item.category} | Series: ${item.serial_no}`, 25, yPos);
-        yPos += 4;
-        
-        // Clickable Product Link
-        doc.setTextColor(0, 0, 255);
-        doc.textWithLink('🔗 View Product Online', 25, yPos, { url: item.product_link });
-        doc.setTextColor(0, 0, 0);
-        yPos += 6;
-        
-        doc.setFontSize(8);
-    });
-    
-    // Total Section
-    yPos += 3;
-    doc.setDrawColor(200, 200);
-    doc.line(14, yPos, 196, yPos);
-    yPos += 7;
-    
-    doc.setFontSize(10);
-    doc.setFont(undefined, 'normal');
-    doc.text('Subtotal:', 150, yPos);
-    doc.text(`Rs.${orderData.subtotal}`, 180, yPos);
-    yPos += 6;
-    doc.text('Delivery:', 150, yPos);
-    doc.text(orderData.delivery === 0 ? 'FREE' : `Rs.${orderData.delivery}`, 180, yPos);
-    yPos += 8;
-    
-    doc.setFontSize(12);
-    doc.setFont(undefined, 'bold');
-    doc.setTextColor(228, 0, 70);
-    doc.text('Total Amount:', 150, yPos);
-    doc.text(`Rs.${orderData.totalAmount}`, 180, yPos);
-    
-    // OTP Box
-    yPos += 15;
-    doc.setFillColor(255, 243, 205);
-    doc.rect(14, yPos, 182, 20, 'F');
-    doc.setTextColor(146, 64, 14);
-    doc.setFontSize(11);
-    doc.setFont(undefined, 'bold');
-    doc.text('⚡ OTP VERIFICATION REQUIRED', 105, yPos + 7, { align: 'center' });
-    doc.setFontSize(9);
-    doc.setFont(undefined, 'normal');
-    doc.text(`OTP: ${orderData.otp} | Admin will call for verification`, 105, yPos + 14, { align: 'center' });
-    
-    // Footer
-    doc.setFontSize(8);
-    doc.setTextColor(100, 100, 100);
-    doc.text('Thank you for shopping with SANTRA MALL!', 105, 285, { align: 'center' });
-    doc.text('For support: +91 87691 71078', 105, 290, { align: 'center' });
-    
-    return doc;
-}
-
-function downloadPDF() {
-    if(generatedPDF) {
-        generatedPDF.save(`SANTRA-Order-${currentOrderId}.pdf`);
-    }
-}
-
 async function submitFinalOrder(){
     if(!pendingOrders || pendingOrders.length === 0){
         alert('Order data missing. Please start again.');
@@ -402,7 +250,6 @@ async function submitFinalOrder(){
         }
 
         const orderId = 'SM' + Date.now();
-        currentOrderId = orderId;
         const orderDate = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -411,6 +258,8 @@ async function submitFinalOrder(){
 
         let totalAmount = 0;
         let itemsArray = [];
+        let itemsText = '';
+        let itemsHTML = '';
 
         pendingOrders.forEach((order, index) => {
             let productCode = order.productCode || order.productId || order.id;
@@ -422,7 +271,6 @@ async function submitFinalOrder(){
             
             const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(order.productId || order.id)}`;
 
-            // ✅ IMAGE 4 FIELDS ME SAVE KARO
             itemsArray.push({
                 id: order.productId || order.id,
                 name: itemName,
@@ -437,6 +285,23 @@ async function submitFinalOrder(){
                 category: order.category || 'General',
                 serial_no: order.serial_no || 'N/A'
             });
+
+            itemsText += `${index + 1}. ${itemName}\n`;
+            itemsText += `Code: ${productCode}\n`;
+            itemsText += `Price: Rs.${price} x ${qty} = Rs.${price*qty}\n`;
+            itemsText += `Category: ${order.category || 'General'}\n`;
+            itemsText += `Series: ${seriesCode}\n`;
+            itemsText += `🔗 ${productLink}\n\n`;
+
+            itemsHTML += `
+              <tr>
+                <td style="padding:10px;border:1px solid #ddd">${index + 1}. ${itemName}</td>
+                <td style="padding:10px;border:1px solid #ddd">${productCode}</td>
+                <td style="padding:10px;border:1px solid #ddd;text-align:center">${qty}</td>
+                <td style="padding:10px;border:1px solid #ddd;text-align:right">₹${price}</td>
+                <td style="padding:10px;border:1px solid #ddd;text-align:right">₹${price*qty}</td>
+              </tr>
+            `;
         });
 
         const orderData = {
@@ -456,37 +321,59 @@ async function submitFinalOrder(){
 
         await db.collection("orders").add(orderData);
 
-        // ✅ PDF GENERATE KARO
-        generatedPDF = generatePDF(orderData);
-        
-        // ✅ PDF DOWNLOAD KARO
-        generatedPDF.save(`SANTRA-Order-${orderId}.pdf`);
-        
-        // WhatsApp me short message
-        let whatsappMsg = `🔐 *NEW OTP REQUEST* #${orderId}\n\n`;
-        whatsappMsg += `👤 *Customer:* ${name}\n`;
-        whatsappMsg += `📱 *Mobile:* ${mobile}\n`;
-        whatsappMsg += `💰 *Total Amount:* Rs.${totalAmount}\n`;
-        whatsappMsg += `💳 *Payment:* ${paymentMode}\n\n`;
-        whatsappMsg += `*📦 PRODUCTS:*\n`;
-        itemsArray.forEach((item, i) => {
-            whatsappMsg += `${i+1}. ${item.name}\n`;
-            whatsappMsg += `   🔗 ${item.product_link}\n`;
-        });
-        whatsappMsg += `\n📍 *Address:* ${addr1}, ${addr2}, ${landmark}\n`;
-        whatsappMsg += `${city}, ${state} - ${pincode}\n\n`;
-        whatsappMsg += `⚡ *ACTION:* Call customer & share OTP for confirmation\n`;
-        whatsappMsg += `📲 SANTRA MALL\n\n`;
-        whatsappMsg += `_Full order details attached in PDF_`;
+        // ✅ WHATSAPP MESSAGE
+        let whatsappMsg = `🔐 *NEW OTP REQUEST* #${orderId}\n`;
+        whatsappMsg += `📅 *Date:* ${orderDate}\n`;
+        whatsappMsg += `📋 *Serial No:* ${serialNo}\n\n`;
+        whatsappMsg += `*👤 CUSTOMER DETAILS:*\n`;
+        whatsappMsg += `Name: ${name}\n`;
+        whatsappMsg += `Phone: ${mobile}\n`;
+        whatsappMsg += `Email: ${email || 'Not provided'}\n`;
+        whatsappMsg += `Address: ${addr1}, ${addr2}\n`;
+        whatsappMsg += `Landmark: ${landmark}\n`;
+        whatsappMsg += `${city}, ${state} - ${pincode}\n`;
+        whatsappMsg += `Payment: ${paymentMode}\n\n`;
+        whatsappMsg += `*📦 ORDER ITEMS:*\n`;
+        whatsappMsg += itemsText;
+        whatsappMsg += `💰 Subtotal: Rs.${totalAmount}\n`;
+        whatsappMsg += `🚚 Delivery: FREE\n`;
+        whatsappMsg += `💵 *Total: Rs.${totalAmount}*\n\n`;
+        whatsappMsg += `⚡ *ACTION: Call customer & share OTP for confirmation*\n`;
+        whatsappMsg += `📲 SANTRA MALL`;
 
-        setTimeout(() => {
-            window.open(`https://wa.me/918769171078?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-        }, 800);
+        // ✅ EMAIL BHEJO ADMIN KO
+        const emailParams = {
+          to_email: "santraadmin@gmail.com", // ⚠️ Yaha admin ka email daal
+          order_id: orderId,
+          customer_name: name,
+          customer_mobile: mobile,
+          customer_email: email,
+          customer_address: `${addr1}, ${addr2}, ${landmark}, ${city}, ${state} - ${pincode}`,
+          order_date: orderDate,
+          payment_mode: paymentMode,
+          items_html: itemsHTML,
+          total_amount: totalAmount,
+          otp: otp
+        };
+
+        try {
+          await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams);
+          console.log("✅ Email sent to admin");
+        } catch(emailErr) {
+          console.log("⚠️ Email failed:", emailErr);
+        }
+
+        window.open(`https://wa.me/918769171078?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
 
         document.getElementById('detailsSection').classList.add('hidden');
         document.getElementById('successSection').classList.remove('hidden');
         localStorage.removeItem('pending_whatsapp_order_' + productId);
         localStorage.removeItem('santra_cart');
+
+        // ✅ 3 Second baad My Orders pe auto redirect
+        setTimeout(() => {
+          window.location.href = 'my-orders.html';
+        }, 3000);
 
     } catch (error) {
       console.error('Order Error:', error);

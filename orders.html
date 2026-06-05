@@ -8,53 +8,57 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.header h1{font-size:18px}
-.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-.container{max-width:700px;margin:15px auto;padding:0 15px}
-.search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
-.order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
-.order-id{font-size:14px;color:#666}
-.order-id b{color:var(--text);font-size:16px}
-.order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
-.status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
-.status-pending{background:#fef3c7;color:#92400e}
-.status-confirmed{background:#d1fae5;color:#065f46}
-.status-shipped{background:#dbeafe;color:#1e40af}
-.status-delivered{background:#d1fae5;color:#065f46}
-.status-cancelled{background:#fee2e2;color:#991b1b}
-.order-info{margin:15px 0}
-.info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-.info-row span:first-child{color:#666}
-.info-row span:last-child{font-weight:bold;color:var(--text)}
-.items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
-.item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9;border-radius:8px}
-.item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer}
-.item-details{flex:1}
-.item-details h4{font-size:13px;margin-bottom:4px}
-.item-details p{font-size:12px;color:#666;margin:2px 0}
-.total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
-.total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
-.grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
-.btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-.empty{text-align:center;padding:60px 20px;color:#999}
-.loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
-.address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
-.address-box p{font-size:13px;margin:4px 0;color:#1e40af}
-.msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
-.date-text{color:#6b7280;font-size:13px;margin:5px 0}
-.id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
-.otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
-.otp-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;text-align:center;letter-spacing:8px}
-.timeline{margin:20px 0}
-.timeline-item{display:flex;gap:10px;margin:10px 0}
-.timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
-.timeline-dot.done{background:#10b981;color:white}
-.timeline-dot.current{background:#e40046;color:white}
-.timeline-content h4{margin:0;font-size:13px}
-.timeline-content p{margin:2px 0;font-size:11px;color:#666}
+   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+   .header h1{font-size:18px}
+   .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+   .container{max-width:700px;margin:15px auto;padding:0 15px}
+   .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+   .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+   .order-id{font-size:14px;color:#666}
+   .order-id b{color:var(--text);font-size:16px}
+   .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
+   .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+   .status-pending{background:#fef3c7;color:#92400e}
+   .status-confirmed{background:#d1fae5;color:#065f46}
+   .status-shipped{background:#dbeafe;color:#1e40af}
+   .status-delivered{background:#d1fae5;color:#065f46}
+   .status-cancelled{background:#fee2e2;color:#991b1b}
+   .order-info{margin:15px 0}
+   .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+   .info-row span:first-child{color:#666}
+   .info-row span:last-child{font-weight:bold;color:var(--text)}
+   .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
+   .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
+   .item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
+   .item-details{flex:1}
+   .item-details h4{font-size:13px;margin-bottom:4px}
+   .item-details p{font-size:12px;color:#666;margin:2px 0}
+   .item-link{font-size:11px;color:#3b82f6;text-decoration:none;font-weight:bold}
+   .item-link:hover{text-decoration:underline}
+   .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
+   .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+   .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
+   .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+   .empty{text-align:center;padding:60px 20px;color:#999}
+   .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+   .address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
+   .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
+   .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
+   .date-text{color:#6b7280;font-size:13px;margin:5px 0}
+   .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
+   .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
+   .otp-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;text-align:center;letter-spacing:8px}
+   .timeline{margin:20px 0}
+   .timeline-item{display:flex;gap:10px;margin:10px 0}
+   .timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+   .timeline-dot.done{background:#10b981;color:white}
+   .timeline-dot.current{background:#e40046;color:white}
+   .timeline-content h4{margin:0;font-size:13px}
+   .timeline-content p{margin:2px 0;font-size:11px;color:#666}
+   .hidden-content{filter:blur(8px);pointer-events:none;user-select:none}
+   .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
   </style>
 </head>
 <body>
@@ -86,9 +90,8 @@
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-};
+}; 
   // Tera config yahan daal de
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -135,7 +138,7 @@ async function loadSingleOrder(orderId) {
       let dateStr = dateObj.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
       let docId = String(doc.id);
       let orderNum = d.orderNumber || 'SM' + docId.slice(-6);
-      document.getElementById('myOrderDiv').innerHTML = renderSingleOrderCard({id: docId,...d}, orderNum, dateStr);
+      document.getElementById('myOrderDiv').innerHTML = await renderSingleOrderCard({id: docId,...d}, orderNum, dateStr);
     } else {
       document.getElementById('myOrderDiv').innerHTML = '<div class="empty">❌ Order not found</div>';
     }
@@ -156,63 +159,45 @@ async function loadOrders() {
       let dateB = b.createdAt? b.createdAt.toDate() : new Date(0);
       return dateB - dateA;
     });
-    renderOrders(allOrders);
+    await renderOrders(allOrders);
   } catch(error) {
     console.error('Error:', error);
     document.getElementById('ordersList').innerHTML = `<div class="empty">❌ Error loading orders: ${error.message}</div>`;
   }
 }
 
-// ✅ FIX 1: Product Exist Check Karne Wala Function
-async function checkProductExists(productId) {
-  if(!productId) return false;
-  try {
-    const doc = await db.collection('products').doc(productId).get();
-    return doc.exists;
-  } catch(e) {
-    return false;
-  }
-}
-
-// ✅ FIX 2: Items HTML Banane Wala Function
-async function buildItemsHTML(items) {
-  if(!items || !Array.isArray(items) || items.length === 0) {
+// ✅ Items HTML with Clickable Image + Link
+function buildItemsHTML(items) {
+  if(!items ||!Array.isArray(items) || items.length === 0) {
     return '<p style="color:#999">No items found in this order</p>';
   }
 
-  let htmlArray = await Promise.all(items.map(async (item) => {
-    // Image ke 5 fallback
+  return items.map(item => {
+    // 5 jagah image check karo
     let imgSrc = item.imageUrl || item.image || item.img || item.photo || '';
     if(!imgSrc && item.id) {
       imgSrc = `https://firebasestorage.googleapis.com/v0/b/santramarketshoppingmall.appspot.com/o/products%2F${item.id}.jpg?alt=media`;
     }
     if(!imgSrc) imgSrc = 'https://via.placeholder.com/60x60?text=No+Image';
 
-    // Product exist karta hai ya nahi check karo
-    let productExists = await checkProductExists(item.id);
-    let productLink = item.product_link || item.url || item.link || '';
-    
-    if(!productLink && item.id) {
-      productLink = `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${item.id}`;
-    }
+    // Product link hamesha banao
+    let productLink = item.product_link || item.url || item.link || `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${item.id}`;
 
     return `
       <div class="item-row">
-        ${productExists && productLink? `<a href="${productLink}" target="_blank">` : '<div>'}
-          <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'">
-        ${productExists && productLink? '</a>' : '</div>'}
+        <a href="${productLink}" target="_blank">
+          <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'" alt="${item.name}">
+        </a>
         <div class="item-details">
           <h4>${item.name}</h4>
           <p>Qty: ${item.qty} × ₹${item.price} = ₹${item.price * item.qty}</p>
           <p>Code: ${item.product_code || item.id} | Category: ${item.category || 'General'}</p>
           <p>Series: ${item.serial_no || 'N/A'}</p>
-          ${productExists && productLink? `<a href="${productLink}" target="_blank" style="font-size:11px;color:#3b82f6">🔗 View Product</a>` : '<span style="font-size:11px;color:#999">Product unavailable</span>'}
+          <a href="${productLink}" target="_blank" class="item-link">🔗 View Product</a>
         </div>
       </div>
     `;
-  }));
-  
-  return htmlArray.join('');
+  }).join('');
 }
 
 async function renderOrders(orders) {
@@ -227,9 +212,7 @@ async function renderOrders(orders) {
     return;
   }
 
-  container.innerHTML = '<div class="loader">⏳ Loading order items...</div>';
-  
-  let ordersHTML = await Promise.all(orders.map(async (order) => {
+  container.innerHTML = orders.map(order => {
     let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderDate || Date.now());
     let dateStr = orderDate.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
     let orderIdStr = String(order.id);
@@ -238,9 +221,11 @@ async function renderOrders(orders) {
     let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
     let statusText = getStatusText(order.status);
 
-    // ✅ OTP Section - SAB STATUS CHECK
+    let isOTPpending = ['Pending', 'PENDING', 'pending_otp', 'OTP Pending'].includes(order.status);
+
+    // ✅ OTP Section - Agar OTP pending hai to dikhega
     let otpSection = '';
-    if(order.status === 'Pending' || order.status === 'PENDING' || order.status === 'pending_otp' || order.status === 'OTP Pending') {
+    if(isOTPpending) {
       otpSection = `
         <div class="otp-box">
           <h3>🔐 OTP Verification Required</h3>
@@ -252,31 +237,23 @@ async function renderOrders(orders) {
       `;
     }
 
-    let itemsHTML = await buildItemsHTML(order.items);
-
-    let addressBox = '';
-    if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
-      addressBox = `
-        <div class="address-box">
-          ${order.customerLandmark? `<p><b>📍 Landmark:</b> ${order.customerLandmark}</p>` : ''}
-          ${order.customerPincode? `<p><b>📮 Pincode:</b> ${order.customerPincode}</p>` : ''}
-          ${order.customerCity? `<p><b>🏙️ City:</b> ${order.customerCity}</p>` : ''}
-          ${order.customerState? `<p><b>🗺️ State:</b> ${order.customerState}</p>` : ''}
-        </div>
-      `;
-    }
-
-    return `
-      <div class="order-card" id="order_${order.id}">
-        <div class="order-header">
-          <div>
-            <span class="order-num">#${orderNum}</span>
-            <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
-            <p class="date-text">📅 ${dateStr}</p>
+    // ✅ ORDER DETAILS - OTP pending hai to hide karo
+    let orderDetails = '';
+    if(!isOTPpending) {
+      let itemsHTML = buildItemsHTML(order.items);
+      let addressBox = '';
+      if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
+        addressBox = `
+          <div class="address-box">
+            ${order.customerLandmark? `<p><b>📍 Landmark:</b> ${order.customerLandmark}</p>` : ''}
+            ${order.customerPincode? `<p><b>📮 Pincode:</b> ${order.customerPincode}</p>` : ''}
+            ${order.customerCity? `<p><b>🏙️ City:</b> ${order.customerCity}</p>` : ''}
+            ${order.customerState? `<p><b>🗺️ State:</b> ${order.customerState}</p>` : ''}
           </div>
-          <span class="status-badge ${statusColor}">${statusText}</span>
-        </div>
-        ${otpSection}
+        `;
+      }
+
+      orderDetails = `
         <div class="order-info">
           <div class="info-row"><span>Order Date:</span><span>${order.orderDateString || dateStr}</span></div>
           <div class="info-row"><span>Customer:</span><span>${displayName}</span></div>
@@ -298,23 +275,37 @@ async function renderOrders(orders) {
           <div class="total-row grand-total"><span>Total Amount:</span><span>₹${order.totalAmount || order.total}</span></div>
         </div>
         ${getTimeline(order.status)}
-        ${order.status!== 'Pending' && order.status!== 'pending_otp' && order.status!== 'PENDING' && order.status!== 'OTP Pending'? `
-          <button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>
-        ` : ''}
+        ${!isOTPpending? `<button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>` : ''}
+      `;
+    } else {
+      orderDetails = `<div class="otp-required-msg">🔒 Complete OTP verification to view order details</div>`;
+    }
+
+    return `
+      <div class="order-card" id="order_${order.id}">
+        <div class="order-header">
+          <div>
+            <span class="order-num">#${orderNum}</span>
+            <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
+            <p class="date-text">📅 ${dateStr}</p>
+          </div>
+          <span class="status-badge ${statusColor}">${statusText}</span>
+        </div>
+        ${otpSection}
+        ${orderDetails}
       </div>
     `;
-  }));
-
-  container.innerHTML = ordersHTML.join('');
+  }).join('');
 }
 
 async function renderSingleOrderCard(order, orderNum, dateStr) {
   let displayName = order.customerName || order.name || order.customer_name || 'Customer';
   let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
   let statusText = getStatusText(order.status);
+  let isOTPpending = ['Pending', 'PENDING', 'pending_otp', 'OTP Pending'].includes(order.status);
 
   let otpSection = '';
-  if(order.status === 'Pending' || order.status === 'PENDING' || order.status === 'pending_otp' || order.status === 'OTP Pending') {
+  if(isOTPpending) {
     otpSection = `
       <div class="otp-box">
         <h3>🔐 OTP Verification Required</h3>
@@ -326,31 +317,22 @@ async function renderSingleOrderCard(order, orderNum, dateStr) {
     `;
   }
 
-  let itemsHTML = await buildItemsHTML(order.items);
-
-  let addressBox = '';
-  if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
-    addressBox = `
-      <div class="address-box">
-        ${order.customerLandmark? `<p><b>📍 Landmark:</b> ${order.customerLandmark}</p>` : ''}
-        ${order.customerPincode? `<p><b>📮 Pincode:</b> ${order.customerPincode}</p>` : ''}
-        ${order.customerCity? `<p><b>🏙️ City:</b> ${order.customerCity}</p>` : ''}
-        ${order.customerState? `<p><b>🗺️ State:</b> ${order.customerState}</p>` : ''}
-      </div>
-    `;
-  }
-
-  return `
-    <div class="order-card" id="order_${order.id}">
-      <div class="order-header">
-        <div>
-          <span class="order-num">#${orderNum}</span>
-          <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
-          <p class="date-text">📅 ${dateStr}</p>
+  let orderDetails = '';
+  if(!isOTPpending) {
+    let itemsHTML = buildItemsHTML(order.items);
+    let addressBox = '';
+    if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
+      addressBox = `
+        <div class="address-box">
+          ${order.customerLandmark? `<p><b>📍 Landmark:</b> ${order.customerLandmark}</p>` : ''}
+          ${order.customerPincode? `<p><b>📮 Pincode:</b> ${order.customerPincode}</p>` : ''}
+          ${order.customerCity? `<p><b>🏙️ City:</b> ${order.customerCity}</p>` : ''}
+          ${order.customerState? `<p><b>🗺️ State:</b> ${order.customerState}</p>` : ''}
         </div>
-        <span class="status-badge ${statusColor}">${statusText}</span>
-      </div>
-      ${otpSection}
+      `;
+    }
+
+    orderDetails = `
       <div class="order-info">
         <div class="info-row"><span>Order Date:</span><span>${order.orderDateString || dateStr}</span></div>
         <div class="info-row"><span>Customer:</span><span>${displayName}</span></div>
@@ -372,9 +354,24 @@ async function renderSingleOrderCard(order, orderNum, dateStr) {
         <div class="total-row grand-total"><span>Total Amount:</span><span>₹${order.totalAmount || order.total}</span></div>
       </div>
       ${getTimeline(order.status)}
-      ${order.status!== 'Pending' && order.status!== 'pending_otp' && order.status!== 'PENDING' && order.status!== 'OTP Pending'? `
-        <button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>
-      ` : ''}
+      ${!isOTPpending? `<button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>` : ''}
+    `;
+  } else {
+    orderDetails = `<div class="otp-required-msg">🔒 Complete OTP verification to view order details</div>`;
+  }
+
+  return `
+    <div class="order-card" id="order_${order.id}">
+      <div class="order-header">
+        <div>
+          <span class="order-num">#${orderNum}</span>
+          <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
+          <p class="date-text">📅 ${dateStr}</p>
+        </div>
+        <span class="status-badge ${statusColor}">${statusText}</span>
+      </div>
+      ${otpSection}
+      ${orderDetails}
     </div>
   `;
 }
@@ -479,6 +476,96 @@ function filterOrders() {
   );
   renderOrders(filtered);
 }
+</script>
+
+<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+window.santraBackup = {
+  version: '1.0',
+  timestamp: '2026-06-04T16:34:00+05:30',
+  location: 'Pilibanga, Rajasthan',
+
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100);
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+    }
+  },
+
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-04T16:34:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-04_1634.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+window.santraBackup.backupLocalStorage();
+
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
