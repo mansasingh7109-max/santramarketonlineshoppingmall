@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,30 +8,54 @@
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
-    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-    .header h1{color:var(--accent);font-size:20px;}
-    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
-    .container{padding:15px;}
-    .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-    .cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
-    .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
-    .cat-card h4{font-size:14px;color:#333;}
-    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;}
-    .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-    .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
-    .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;min-height:36px;}
-    .price{color:var(--accent);font-weight:bold;font-size:16px;}
-    .mrp{color:#999;font-size:13px;text-decoration:line-through;margin-left:6px;}
-    .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
-    .nav-item.active{color:var(--accent);}
-    .nav-item div{font-size:22px;}
-    .nav-item span{font-size:11px;display:block;margin-top:2px;}
-    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-    .hide{display:none!important;}
-    .loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
-    .all-prod-btn{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-right:8px;}
+  .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+  .header h1{color:var(--accent);font-size:20px;}
+  .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+  .filter-toggle{background:var(--accent);color:white;border:none;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer}
+  .container{padding:15px;display:flex;gap:15px;max-width:1400px;margin:auto}
+
+    /* SIDEBAR FILTERS */
+  .filters-sidebar{width:280px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto}
+  .filters-sidebar h3{color:var(--accent);font-size:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f3f6}
+  .filter-group{margin-bottom:18px;padding-bottom:15px;border-bottom:1px solid #f1f3f6}
+  .filter-group h4{font-size:14px;color:#333;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .filter-group img{width:24px;height:24px;object-fit:cover;border-radius:4px}
+  .filter-group label{display:flex;align-items:center;padding:5px 0;font-size:13px;cursor:pointer;color:#555;gap:6px}
+  .filter-group input{margin-right:0;accent-color:var(--accent)}
+  .clear-filter{background:#64748b;color:white;border:none;padding:8px;width:100%;border-radius:6px;margin-top:10px;cursor:pointer;font-size:13px}
+  .filter-count{background:var(--accent);color:white;padding:2px 6px;border-radius:10px;font-size:11px;margin-left:5px}
+
+    /* MAIN CONTENT */
+  .main-content{flex:1}
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
+  .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
+  .cat-card h4{font-size:14px;color:#333;}
+  .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:15px;}
+  .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+  .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
+  .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;min-height:36px;}
+  .price{color:var(--accent);font-weight:bold;font-size:16px;}
+  .mrp{color:#999;font-size:13px;text-decoration:line-through;margin-left:6px;}
+  .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+  .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
+  .nav-item.active{color:var(--accent);}
+  .nav-item div{font-size:22px;}
+  .nav-item span{font-size:11px;display:block;margin-top:2px;}
+  .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+  .hide{display:none!important;}
+  .loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
+  .all-prod-btn{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-right:8px;}
+  .active-chip{display:inline-block;background:#e40046;color:white;padding:4px 10px;border-radius:15px;font-size:12px;margin:3px;cursor:pointer}
+  .mobile-filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none}
+  .mobile-filter-overlay.show{display:block}
+    @media(max-width:768px){
+    .container{flex-direction:column}
+    .filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}
+    .filters-sidebar.show{left:0}
+    .close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px}
+    }
   </style>
 </head>
 <body>
@@ -39,26 +63,40 @@
 <div class="header">
   <a href="index.html" class="back-btn">←</a>
   <h1 id="pageTitle">📱 Categories</h1>
-  <div style="width:24px;"></div>
+  <button class="filter-toggle" id="filterToggle" onclick="toggleMobileFilter()" style="display:none">🔍 Filters</button>
 </div>
 
+<div class="mobile-filter-overlay" id="filterOverlay" onclick="toggleMobileFilter()"></div>
+
 <div class="container">
-  <div id="catView">
-    <button class="all-prod-btn" onclick="showAllProducts()">🛍️ All Products</button>
-    <h3 style="margin:15px 0;">Shop by Category</h3>
-    <div id="catList" class="cat-grid">
-      <div class="loader">Loading...</div>
-    </div>
+  <!-- FILTER SIDEBAR -->
+  <div class="filters-sidebar" id="filtersSidebar">
+    <button class="close-filter" onclick="toggleMobileFilter()" style="display:none">×</button>
+    <h3>🔍 Filters <span class="filter-count" id="filterCount">0</span></h3>
+    <button class="clear-filter" onclick="clearAllFilters()">Clear All</button>
+    <div id="dynamicFilters"></div>
   </div>
 
-  <div id="productView" class="hide">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
-      <h3 id="catTitle"></h3>
-      <div>
-        <button class="all-prod-btn" onclick="backToCategories()">← Categories</button>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div id="catView">
+      <button class="all-prod-btn" onclick="showAllProducts()">🛍️ All Products</button>
+      <h3 style="margin:15px 0;">Shop by Category</h3>
+      <div id="catList" class="cat-grid">
+        <div class="loader">Loading...</div>
       </div>
     </div>
-    <div id="productList" class="product-grid"></div>
+
+    <div id="productView" class="hide">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
+        <h3 id="catTitle"></h3>
+        <div>
+          <button class="all-prod-btn" onclick="backToCategories()">← Categories</button>
+        </div>
+      </div>
+      <div id="activeFiltersChips" style="margin-bottom:10px"></div>
+      <div id="productList" class="product-grid"></div>
+    </div>
   </div>
 </div>
 
@@ -78,77 +116,56 @@
   </a>
 </div>
 
+<script src="secrets.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<!-- <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script> -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-  
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  
-  // const firestore = firebase.firestore(); // ❌ OLD FIRESTORE - COMMENT KAR DIYA
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
   const rtdb = firebase.database();
 
   let allProducts = [];
   let allCategories = [];
   let currentCategory = '';
   let showAll = false;
+  let categoryStructure = { types: [], variants: [], activeFilters: [], typeImages: {} };
+  let appliedFilters = { type: [], variants: {} };
 
-  // ✅ NAYA CODE - SIRF REALTIME DATABASE
-  async function loadProducts() {
-    allProducts = [];
-    try {
-      const rtdbSnap = await rtdb.ref('products').once('value');
-      if(rtdbSnap.exists()){
-        rtdbSnap.forEach((child) => {
+  // ✅ LOAD PRODUCTS - REALTIME
+  function loadProducts() {
+    rtdb.ref('products').on('value', snap => {
+      allProducts = [];
+      if(snap.exists()){
+        snap.forEach((child) => {
           let p = child.val();
           p.id = child.key;
           p.price = parseFloat(p.price) || 0;
           p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
           p.mrp = parseFloat(p.mrp) || p.price;
-          p.source = 'rtdb';
           allProducts.push(p);
         });
       }
-      renderProducts();
-      loadCategories();
+      if(currentCategory || showAll) renderProducts();
       updateCartCount();
-    } catch(e) {
-      console.log('Product load error:', e);
-      document.getElementById('productList').innerHTML = '<div class="loader">Error loading products</div>';
-    }
+    });
   }
 
-  // ✅ NAYA CODE - SIRF REALTIME DATABASE SE LOAD KARO
-  async function loadCategories() {
-    allCategories = [];
-    try {
-      const rtdbSnap = await rtdb.ref("categories").once('value');
-      if(rtdbSnap.exists()){
-        rtdbSnap.forEach((child) => {
+  // ✅ LOAD CATEGORIES - REALTIME
+  function loadCategories() {
+    rtdb.ref("categories").on('value', snap => {
+      allCategories = [];
+      if(snap.exists()){
+        snap.forEach((child) => {
           const data = child.val();
           allCategories.push({
             id: child.key,
             name: data.name,
-            image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat',
-            source: 'rtdb'
+            image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat'
           });
         });
       }
       renderCategories();
-    } catch(e) {
-      console.log('Category load error:', e);
-      document.getElementById('catList').innerHTML = '<p class="loader">Error loading categories</p>';
-    }
+    });
   }
 
   function renderCategories() {
@@ -169,7 +186,7 @@
 
     catList.innerHTML = '';
     unique.forEach(cat => {
-      const count = allProducts.filter(p => p.category === cat.name && p.stock > 0).length;
+      const count = allProducts.filter(p => p.category && p.category.toLowerCase() === cat.name.toLowerCase() && p.stock > 0).length;
       catList.innerHTML += `
         <div class="cat-card" onclick="showCategoryProducts('${cat.name}')">
           <img src="${cat.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}">
@@ -186,30 +203,169 @@
     document.getElementById('productView').classList.remove('hide');
     document.getElementById('catTitle').innerText = 'All Products';
     document.getElementById('pageTitle').innerText = 'All Products';
+    document.getElementById('filtersSidebar').style.display = 'none';
+    document.getElementById('filterToggle').style.display = 'none';
     renderProducts();
   }
 
   window.showCategoryProducts = function(catName){
-    showAll = false; currentCategory = catName;
+    showAll = false; 
+    currentCategory = catName;
+    appliedFilters = { type: [], variants: {} };
     document.getElementById('catView').classList.add('hide');
     document.getElementById('productView').classList.remove('hide');
     document.getElementById('catTitle').innerText = catName;
     document.getElementById('pageTitle').innerText = catName;
-    renderProducts();
+    document.getElementById('filtersSidebar').style.display = 'block';
+    document.getElementById('filterToggle').style.display = 'block';
+
+    // ✅ Load category_structure from Admin - Real-time listener
+    rtdb.ref(`category_structure/${catName}`).on('value', snap => {
+      if(snap.exists()) {
+        categoryStructure = snap.val();
+        categoryStructure.types = categoryStructure.types || [];
+        categoryStructure.variants = categoryStructure.variants || [];
+        categoryStructure.activeFilters = categoryStructure.activeFilters || [];
+        categoryStructure.typeImages = categoryStructure.typeImages || {};
+      } else {
+        categoryStructure = { types: [], variants: ['Brand', 'Price Range'], activeFilters: ['Brand'], typeImages: {} };
+      }
+      renderFilters();
+      renderProducts();
+    });
   }
 
-  window.backToCategories = function(){
-    showAll = false; currentCategory = '';
-    document.getElementById('productView').classList.add('hide');
-    document.getElementById('catView').classList.remove('hide');
-    document.getElementById('pageTitle').innerText = '📱 Categories';
-    loadCategories();
+  // ✅ RENDER DYNAMIC FILTERS - WITH IMGBB IMAGES FROM ADMIN
+  function renderFilters() {
+    const container = document.getElementById('dynamicFilters');
+    let html = '';
+
+    // 1. Type Filter with Images from Admin
+    if(categoryStructure.types && categoryStructure.types.length > 0) {
+      html += `<div class="filter-group"><h4>Type</h4>`;
+      categoryStructure.types.forEach(t => {
+        const imgUrl = categoryStructure.typeImages?.[t] || '';
+        html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t}')">
+          ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''}
+          ${t}</label>`;
+      });
+      html += `</div>`;
+    }
+
+    // 2. Variant Filters - Only Active ones from Admin
+    categoryStructure.activeFilters.forEach(filterName => {
+      const values = getFilterValues(filterName);
+      if(values.length > 0) {
+        html += `<div class="filter-group"><h4>${filterName}</h4>`;
+        values.forEach(v => {
+          html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName}','${v}')"> ${v}</label>`;
+        });
+        html += `</div>`;
+      }
+    });
+
+    container.innerHTML = html || '<p style="color:#999;font-size:13px">No filters set by admin</p>';
+    updateFilterCount();
+  }
+
+  function getFilterValues(filterName) {
+    const products = allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase() && p.stock > 0);
+    const values = new Set();
+
+    products.forEach(p => {
+      if(p.variants && p.variants[filterName]) {
+        values.add(p.variants[filterName]);
+      }
+      else if(p[filterName.toLowerCase()]) {
+        values.add(p[filterName.toLowerCase()]);
+      }
+    });
+
+    return Array.from(values).sort();
+  }
+
+  function toggleTypeFilter(type) {
+    if(appliedFilters.type.includes(type)) {
+      appliedFilters.type = appliedFilters.type.filter(t => t!== type);
+    } else {
+      appliedFilters.type.push(type);
+    }
+    renderProducts();
+    updateFilterChips();
+  }
+
+  function toggleVariantFilter(key, value) {
+    if(!appliedFilters.variants[key]) appliedFilters.variants[key] = [];
+    if(appliedFilters.variants[key].includes(value)) {
+      appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
+    } else {
+      appliedFilters.variants[key].push(value);
+    }
+    renderProducts();
+    updateFilterChips();
+  }
+
+  function updateFilterChips() {
+    let chips = [];
+    appliedFilters.type.forEach(t => {
+      chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t}')">${t} ×</span>`);
+    });
+    Object.keys(appliedFilters.variants).forEach(k => {
+      appliedFilters.variants[k].forEach(v => {
+        chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k}','${v}')">${k}: ${v} ×</span>`);
+      });
+    });
+    document.getElementById('activeFiltersChips').innerHTML = chips.join('');
+    updateFilterCount();
+  }
+
+  window.removeTypeFilter = function(type) {
+    appliedFilters.type = appliedFilters.type.filter(t => t!== type);
+    document.querySelector(`#dynamicFilters input[value="${type}"]`).checked = false;
+    renderProducts();
+    updateFilterChips();
+  }
+
+  window.removeVariantFilter = function(key, value) {
+    appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
+    document.querySelector(`#dynamicFilters input[value="${value}"]`).checked = false;
+    renderProducts();
+    updateFilterChips();
+  }
+
+  function updateFilterCount() {
+    let count = appliedFilters.type.length;
+    Object.keys(appliedFilters.variants).forEach(k => count += appliedFilters.variants[k].length);
+    document.getElementById('filterCount').innerText = count;
+  }
+
+  window.clearAllFilters = function() {
+    appliedFilters = { type: [], variants: {} };
+    document.querySelectorAll('#dynamicFilters input[type="checkbox"]').forEach(cb => cb.checked = false);
+    renderProducts();
+    updateFilterChips();
   }
 
   function renderProducts(){
     const container = document.getElementById('productList');
-    let products = showAll ? [...allProducts] : allProducts.filter(p => p.category === currentCategory);
+    // ✅ Case-insensitive match karo category ka
+    let products = showAll? [...allProducts] : allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
     products = products.filter(p => p.stock > 0);
+
+    // Apply Type Filter
+    if(appliedFilters.type.length > 0) {
+      products = products.filter(p => appliedFilters.type.includes(p.type || p.subCategory));
+    }
+
+    // Apply Variant Filters
+    Object.keys(appliedFilters.variants).forEach(key => {
+      if(appliedFilters.variants[key].length > 0) {
+        products = products.filter(p => {
+          const val = p.variants?.[key] || p[key.toLowerCase()];
+          return appliedFilters.variants[key].includes(val);
+        });
+      }
+    });
 
     if(products.length === 0){
       container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found</p>';
@@ -218,9 +374,13 @@
 
     container.innerHTML = '';
     products.forEach(p => {
+      // ✅ IMAGE PRIORITY: 1. Type Image from Admin, 2. Product Image, 3. Placeholder
+      const typeImg = categoryStructure.typeImages?.[p.type || p.subCategory];
+      const finalImg = typeImg || p.imageUrl || p.image || 'https://via.placeholder.com/140?text=No+Image';
+
       container.innerHTML += `
         <div class="product-card">
-          <img src="${p.imageUrl || p.image || 'https://via.placeholder.com/140?text=No+Image'}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
+          <img src="${finalImg}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
           <h4>${p.name}</h4>
           <div>
             <span class="price">₹${p.price}</span>
@@ -231,6 +391,21 @@
         </div>
       `;
     });
+  }
+
+  window.backToCategories = function(){
+    showAll = false; currentCategory = '';
+    appliedFilters = { type: [], variants: {} };
+    document.getElementById('productView').classList.add('hide');
+    document.getElementById('catView').classList.remove('hide');
+    document.getElementById('pageTitle').innerText = '📱 Categories';
+    document.getElementById('filtersSidebar').style.display = 'none';
+    document.getElementById('filterToggle').style.display = 'none';
+  }
+
+  window.toggleMobileFilter = function() {
+    document.getElementById('filtersSidebar').classList.toggle('show');
+    document.getElementById('filterOverlay').classList.toggle('show');
   }
 
   window.addToCart = function(pid){
@@ -261,144 +436,17 @@
     document.getElementById('cartCount').innerText = total;
   }
 
+  // ✅ INIT
   window.onload = function(){
-    loadProducts(); // Products load honge, uske baad categories bhi
+    loadProducts();
+    loadCategories();
     updateCartCount();
     let urlParams = new URLSearchParams(window.location.search);
-    let catName = urlParams.get('cat');
+    let catName = urlParams.get('name'); // ✅ index.html se name aayega
     if(catName) {
       setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 500);
     }
   }
-
-  /*
-  ===== PURANA FIRESTORE CODE - BACKUP KE LIYE COMMENT KIYA HAI =====
-  
-  firestore.collection("categories").onSnapshot((snapshot) => {
-    allCategories = allCategories.filter(c => c.source !== 'firestore');
-    snapshot.forEach((doc) => {
-      const d = doc.data();
-      allCategories.push({ 
-        id: doc.id, 
-        name: d.name || d.categoryName,
-        image: d.image || d.categoryImage || d.img || 'https://via.placeholder.com/80?text=' + (d.name || 'Cat'),
-        source: 'firestore'
-      });
-    });
-    loadCategories();
-  });
-
-  firestore.collection("products").onSnapshot((snapshot) => {
-    allProducts = allProducts.filter(p => p.source !== 'firestore');
-    snapshot.forEach((doc) => {
-      allProducts.push({ id: doc.id, ...doc.data(), source: 'firestore' });
-    });
-    if (showAll || currentCategory) renderProducts();
-    loadCategories();
-    updateCartCount();
-  });
-  ===== BACKUP END =====
-  */
-</script>
-<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
-<script>
-console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
-
-// ✅ AUTO BACKUP EVERY ORDER
-window.santraBackup = {
-  version: '1.0',
-  timestamp: '2026-06-04T16:34:00+05:30',
-  location: 'Pilibanga, Rajasthan',
-  
-  // Backup localStorage data
-  backupLocalStorage: function() {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orders: localStorage.getItem('santra_orders'),
-      customer: localStorage.getItem('santra_customer'),
-      cart: localStorage.getItem('santra_cart'),
-      wishlist: localStorage.getItem('santra_wishlist')
-    };
-    
-    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
-    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
-    return backup;
-  },
-  
-  // Backup Firebase data before critical operations
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-  
-  // Restore function
-  restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
-    if(backup) {
-      const data = JSON.parse(backup);
-      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.orders) localStorage.setItem('santra_orders', data.orders);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
-        if(data.cart) localStorage.setItem('santra_cart', data.cart);
-        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
-        alert('✅ Backup Restored! Reloading...');
-        location.reload();
-      }
-    } else {
-      alert('❌ No backup found for 4 June 2026, 4:34 PM');
-    }
-  },
-  
-  // View all backups
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-  
-  // Export backup as JSON
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-04T16:34:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
-    
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-04_1634.json`;
-    link.click();
-    console.log('✅ Backup Exported');
-  }
-};
-
-// Auto backup on page load
-window.santraBackup.backupLocalStorage();
-
-// Console commands help
-console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
-console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
