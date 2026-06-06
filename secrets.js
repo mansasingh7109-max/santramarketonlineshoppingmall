@@ -7,7 +7,7 @@
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
-  databaseURL: "https://console.firebase.google.com/u/2/project/santramarketshoppingmall/database/santramarketshoppingmall-default-rtdb/data/~2F",
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
@@ -23,4 +23,3 @@ const BUSINESS_CONFIG = {
   EMAIL: "mansasingh7109@gmail.com",
   EMAIL_2: "santramarketshoppingmall@gmail.com"
   };
-
