@@ -1,5 +1,10 @@
-// secrets.js - Firebase + ImgBB + Admin Details
-const firebase_config = {
+// Google wali 2 line delete kar de
+// const GOOGLE_API_KEY = '...'; DELETE THIS
+// const GOOGLE_SEARCH_ENGINE_ID = '...'; DELETE THIS
+
+// secrets.js - 100% Free Version, No Billing Needed
+
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -9,11 +14,12 @@ const firebase_config = {
   measurementId: "G-ZW1ZR8HETY"
 };
 
-// Dono naam se export - Capital + Small
-export const FIREBASE_CONFIG = firebase_config;
-export const firebaseConfig = firebase_config; 
+// Backup ke liye chote wala bhi
+const firebaseConfig = FIREBASE_CONFIG;
 
-// Admin Details
-export const ADMIN_EMAIL = "mansasingh7109@gmail.com";
-export const ADMIN_NAME = "Manisha Singh";
-export const ADMIN_MOBILE = "9829508335";
+const BUSINESS_CONFIG = {
+  WHATSAPP_NUMBER: "918769171078",
+  EMAIL: "mansasingh7109@gmail.com",
+  EMAIL_2: "santramarketshoppingmall@gmail.com"
+  };
+
