@@ -7,6 +7,7 @@
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
+  https://console.firebase.google.com/u/2/project/santramarketshoppingmall/database/santramarketshoppingmall-default-rtdb/data/~2F
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
