@@ -140,15 +140,13 @@
   </div>
 </div>
 
-<!-- ✅ CUSTOMER LOGIN WITH WHATSAPP OTP -->
+<!-- Customer Login Modal -->
 <div id="customerLoginModal" class="modal hide">
   <div class="modal-content">
     <div class="modal-header">
       <h3>👤 Customer Login with OTP</h3>
       <button class="close-btn" onclick="closeCustomerLogin()">×</button>
     </div>
-
-    <!-- Step 1: Mobile Daalo -->
     <div class="modal-body" id="loginStep1">
       <p style="margin-bottom:15px;color:#666;">Login ke liye WhatsApp par OTP bhejenge</p>
       <input type="text" id="custName" placeholder="Full Name *">
@@ -156,8 +154,6 @@
       <input type="email" id="custEmail" placeholder="Email (Optional)">
       <button onclick="sendLoginOTP()" style="width:100%;background:#25D366;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;margin-top:10px;">📱 Send OTP on WhatsApp</button>
     </div>
-
-    <!-- Step 2: OTP Daalo -->
     <div class="modal-body hide" id="loginStep2">
       <p style="margin-bottom:15px;color:#666;">WhatsApp check karo, OTP daalo</p>
       <p><b>Mobile:</b> <span id="otpMobileShow"></span></p>
@@ -169,17 +165,31 @@
 </div>
 
 <!-- FIREBASE SDK -->
-<script src="secrets.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="order-card.js"></script>
+
 <script>
-  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-  var rtdb = firebase.database();
-  var auth = firebase.auth();
-  var db = firebase.firestore();
+  // ✅ FIREBASE CONFIG - YAHAN APNI KEYS DAAL DE
+      const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+
+  // ✅ FIREBASE INIT
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  var rtdb = firebase.database(); // Realtime Database
+  var auth = firebase.auth(); // Authentication
+  var db = firebase.firestore(); // Firestore
+
+  console.log("🔥 Firebase Connected: RTDB + Firestore dono ready");
 </script>
 
 <script src="theme.js"></script>
@@ -196,6 +206,9 @@ let tempCustomerData = null;
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
 
+// ✅ DATABASE SELECT KAR - RTDB ya Firestore
+const USE_DATABASE = 'rtdb'; // 'rtdb' ya 'firestore' likh de
+
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   checkCustomerLogin();
@@ -208,33 +221,58 @@ window.onload = function() {
   loadProducts();
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get('id');
-  if(orderId) {
-    loadSingleOrder(orderId);
-  }
+  if(orderId) loadSingleOrder(orderId);
 }
 
-// ✅ AUTOMATIC CATEGORY + FILTER
+// ✅ AUTOMATIC PRODUCT LOAD - RTDB + Firestore Dono Support
 function loadProducts() {
-  rtdb.ref('products').on('value', snap => {
-    allProducts = [];
-    if(snap.exists()){
-      snap.forEach((child) => {
-        let p = child.val();
-        p.id = child.key;
+  if (USE_DATABASE === 'rtdb') {
+    // REALTIME DATABASE SE LOAD
+    console.log("📦 Loading from Realtime Database...");
+    rtdb.ref('products').on('value', snap => {
+      allProducts = [];
+      if(snap.exists()){
+        snap.forEach((child) => {
+          let p = child.val();
+          p.id = child.key;
+          p.price = parseFloat(p.price) || 0;
+          p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+          p.mrp = parseFloat(p.mrp) || p.price;
+          allProducts.push(p);
+        });
+      }
+      console.log("✅ RTDB Products Loaded:", allProducts.length);
+      renderProducts(allProducts);
+      generateAutoCategories();
+      generateAutoFilters();
+      localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
+    }, e => {
+      console.log('❌ RTDB Product load error:', e);
+      document.getElementById('productGrid').innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
+    });
+  } else {
+    // FIRESTORE SE LOAD
+    console.log("📦 Loading from Firestore...");
+    db.collection('products').onSnapshot(snap => {
+      allProducts = [];
+      snap.forEach((doc) => {
+        let p = doc.data();
+        p.id = doc.id;
         p.price = parseFloat(p.price) || 0;
         p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
         p.mrp = parseFloat(p.mrp) || p.price;
         allProducts.push(p);
       });
-    }
-    renderProducts(allProducts);
-    generateAutoCategories();
-    generateAutoFilters();
-    localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
-  }, e => {
-    console.log('Product load error:', e);
-    document.getElementById('productGrid').innerHTML = '<div class="loading">Error loading products</div>';
-  });
+      console.log("✅ Firestore Products Loaded:", allProducts.length);
+      renderProducts(allProducts);
+      generateAutoCategories();
+      generateAutoFilters();
+      localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
+    }, e => {
+      console.log('❌ Firestore Product load error:', e);
+      document.getElementById('productGrid').innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
+    });
+  }
 }
 
 function generateAutoCategories() {
@@ -259,9 +297,7 @@ function generateAutoCategories() {
 
 function generateAutoFilters() {
   autoFilters = {};
-  // ✅ Time, UpdatedBy, SizePrice jese faltu field skip kar diye
   const skipFields = ['id', 'name', 'image', 'images', 'media', 'description', 'stock', 'mrp', 'price', 'code', 'sku', 'imageUrl', 'img', 'photo', 'thumbnail', 'mediaUrl', 'categoryImage', 'time', 'Time', 'timestamp', 'updatedAt', 'updatedBy', 'UpdatedBy', 'createdAt', 'sizePrice', 'SizePrice'];
-
   allProducts.forEach(product => {
     Object.keys(product).forEach(key => {
       if (!skipFields.includes(key) && product[key]!== null && product[key]!== undefined && product[key]!== '') {
@@ -270,7 +306,6 @@ function generateAutoFilters() {
       }
     });
   });
-
   Object.keys(autoFilters).forEach(field => {
     autoFilters[field] = [...autoFilters[field]].sort();
   });
@@ -297,24 +332,18 @@ function renderAutoFilterPopup() {
   container.innerHTML = html || '<p style="text-align:center;color:#999">No filters available</p>';
 }
 
-// ✅ WHATSAPP OTP LOGIN FUNCTIONS
 function sendLoginOTP() {
   const name = document.getElementById('custName').value.trim();
   const mobile = document.getElementById('custMobile').value.trim();
   const email = document.getElementById('custEmail').value.trim();
-
   if (!name || mobile.length!== 10) {
     showToast('❌ Name and 10 digit mobile required');
     return;
   }
-
   loginOTP = Math.floor(100000 + Math.random() * 900000);
   tempCustomerData = { name, mobile, email, otp: loginOTP, time: Date.now() };
-
   let msg = `🛒 SANTRAJET MALL Login OTP%0A%0AName: ${name}%0AOTP: *${loginOTP}*%0A%0AYe OTP 5 minute tak valid hai.%0AWebsite par daal kar login karein.`;
   window.open(`https://wa.me/91${mobile}?text=${msg}`, '_blank');
-
-  // ✅ Firebase me OTP save - order tab jesa
   rtdb.ref('login_otps/' + mobile).set({
     otp: loginOTP,
     name: name,
@@ -323,7 +352,6 @@ function sendLoginOTP() {
     createdAt: firebase.database.ServerValue.TIMESTAMP,
     verified: false
   });
-
   document.getElementById('loginStep1').classList.add('hide');
   document.getElementById('loginStep2').classList.remove('hide');
   document.getElementById('otpMobileShow').innerText = mobile;
@@ -333,27 +361,22 @@ function sendLoginOTP() {
 function verifyLoginOTP() {
   const enteredOTP = document.getElementById('custOTP').value.trim();
   const mobile = tempCustomerData.mobile;
-
   if (!enteredOTP || enteredOTP.length!== 6) {
     showToast('❌ Enter 6-digit OTP');
     return;
   }
-
   rtdb.ref('login_otps/' + mobile).once('value', (snap) => {
     if (!snap.exists()) {
       showToast('❌ OTP expired. Send again');
       return;
     }
-
     const data = snap.val();
     const timeDiff = Date.now() - data.createdAt;
-
     if (timeDiff > 300000) {
       showToast('❌ OTP expired. Send again');
       rtdb.ref('login_otps/' + mobile).remove();
       return;
     }
-
     if (data.otp == enteredOTP) {
       auth.signInAnonymously().then((result) => {
         const customerData = {
@@ -364,11 +387,9 @@ function verifyLoginOTP() {
           lastLogin: new Date().toISOString(),
           loginOTP: data.otp
         };
-
         localStorage.setItem('santra_customer', JSON.stringify(customerData));
         rtdb.ref('customers/' + result.user.uid).set(customerData);
         rtdb.ref('login_otps/' + mobile).update({ verified: true });
-
         showToast('✅ Login Successful!');
         closeCustomerLogin();
         checkCustomerLogin();
@@ -402,7 +423,6 @@ function closeCustomerLogin() {
   tempCustomerData = null;
 }
 
-// Baaki saare function same...
 function getProductImage(p) {
   if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
   if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
