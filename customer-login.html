@@ -2,15 +2,21 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Login - SANTRA MALL</title>
   <style>
     body{background:#f1f3f6;font-family:Arial;padding:20px}
     .login-box{max-width:400px;margin:50px auto;background:white;padding:30px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
     .login-box h2{color:#e40046;text-align:center;margin-bottom:20px}
-    .login-box input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
-    .btn{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px;cursor:pointer}
-    .btn-green{background:#10b981}
+    .login-box input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;font-size:15px}
+    .btn{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:16px}
+    .btn:hover{background:#c2003d}
+    .btn-gray{background:#666}
+    .btn-wa{background:#25D366}
+    .btn-wa:hover{background:#1da851}
     .otp-box{display:none}
+    .help-text{font-size:12px;color:#666;text-align:center;margin-top:10px}
+    .otp-note{font-size:13px;color:#e40046;text-align:center;margin:10px 0}
   </style>
 </head>
 <body>
@@ -20,189 +26,107 @@
   
   <div id="loginForm">
     <input type="text" id="custName" placeholder="Full Name *" required>
-    <input type="tel" id="custMobile" placeholder="Mobile Number *" maxlength="10" required>
+    <input type="tel" id="custMobile" placeholder="WhatsApp Mobile Number *" maxlength="10" required>
     <input type="email" id="custEmail" placeholder="Email (Optional)">
     
-    <button class="btn" onclick="sendLoginOTP()">📱 Send OTP on WhatsApp</button>
-    <button class="btn btn-green" onclick="sendEmailOTP()">📧 Send OTP on Email</button>
+    <button class="btn" onclick="sendManualOTP()">📱 Request OTP on WhatsApp</button>
+    <p class="help-text">Ask OTP from Santrajet WhatsApp</p>
   </div>
 
   <div id="otpForm" class="otp-box">
     <p>OTP sent to <b id="otpSentTo"></b></p>
+    <p class="otp-note">Get OTP from Santrajet WhatsApp and enter here</p>
+    
     <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align:center;font-size:20px;letter-spacing:10px">
-    <button class="btn" onclick="verifyLoginOTP()">✅ Verify & Login</button>
-    <button class="btn" style="background:#666" onclick="backToLogin()">← Back</button>
+    
+    <button class="btn" onclick="verifyManualOTP()">✅ Verify & Login</button>
+    
+    <!-- Direct WhatsApp Button -->
+    <a id="waLink" href="#" target="_blank" style="text-decoration:none">
+      <button class="btn btn-wa">💬 Get OTP on Santrajet WhatsApp</button>
+    </a>
+    
+    <button class="btn btn-gray" onclick="backToLogin()">← Change Number</button>
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="secrets.js"></script>
 <script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-  // Tera config yahan
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const database = firebase.database();
+  
+  // ⚠️ YAHAN SANTRAJET KA WHATSAPP NUMBER DAAL: 91 ke sath
+  const SANTRAJET_WHATSAPP = "918769171078"; 
 
-let generatedOTP = '';
-let loginData = {};
+  let currentCustomer = {};
 
-function sendLoginOTP() {
-  let name = document.getElementById('custName').value.trim();
-  let mobile = document.getElementById('custMobile').value.trim();
-  let email = document.getElementById('custEmail').value.trim();
-  
-  if(!name || mobile.length !== 10) {
-    alert('Name aur 10 digit mobile daalo');
-    return;
-  }
-  
-  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-  loginData = {name, mobile, email};
-  
-  // WhatsApp pe bhejo
-  let msg = `SANTRA MALL Login OTP: ${generatedOTP}%0ADo not share with anyone.`;
-  window.open(`https://wa.me/91${mobile}?text=${msg}`, '_blank');
-  
-  document.getElementById('otpSentTo').innerText = 'WhatsApp: ' + mobile;
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('otpForm').style.display = 'block';
-}
-
-function sendEmailOTP() {
-  alert('Email OTP feature coming soon! Abhi WhatsApp use karo');
-}
-
-function verifyLoginOTP() {
-  let enteredOTP = document.getElementById('otpInput').value.trim();
-  
-  if(enteredOTP === generatedOTP || enteredOTP === '123456') {
-    // Login success - localStorage me save karo
-    localStorage.setItem('santra_customer', JSON.stringify(loginData));
+  function sendManualOTP() {
+    let name = document.getElementById('custName').value.trim();
+    let mobile = document.getElementById('custMobile').value.trim();
+    let email = document.getElementById('custEmail').value.trim();
     
-    // Firebase me anonymous login
-    auth.signInAnonymously().then(() => {
-      alert('✅ Login Successful!');
-      window.location.href = 'index.html';
-    });
-  } else {
-    alert('❌ Invalid OTP');
-  }
-}
-
-function backToLogin() {
-  document.getElementById('loginForm').style.display = 'block';
-  document.getElementById('otpForm').style.display = 'none';
-}
-</script>
-<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
-<script>
-console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
-
-// ✅ AUTO BACKUP EVERY ORDER
-window.santraBackup = {
-  version: '1.0',
-  timestamp: '2026-06-04T16:34:00+05:30',
-  location: 'Pilibanga, Rajasthan',
-  
-  // Backup localStorage data
-  backupLocalStorage: function() {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orders: localStorage.getItem('santra_orders'),
-      customer: localStorage.getItem('santra_customer'),
-      cart: localStorage.getItem('santra_cart'),
-      wishlist: localStorage.getItem('santra_wishlist')
-    };
-    
-    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
-    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
-    return backup;
-  },
-  
-  // Backup Firebase data before critical operations
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-  
-  // Restore function
-  restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
-    if(backup) {
-      const data = JSON.parse(backup);
-      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.orders) localStorage.setItem('santra_orders', data.orders);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
-        if(data.cart) localStorage.setItem('santra_cart', data.cart);
-        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
-        alert('✅ Backup Restored! Reloading...');
-        location.reload();
-      }
-    } else {
-      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+    if(!name || mobile.length !== 10) {
+      alert('Please enter Name and 10 digit mobile number');
+      return;
     }
-  },
-  
-  // View all backups
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-  
-  // Export backup as JSON
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-04T16:34:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
     
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-04_1634.json`;
-    link.click();
-    console.log('✅ Backup Exported');
+    let otp = Math.floor(100000 + Math.random() * 900000).toString();
+    currentCustomer = {name, mobile, email, otp};
+    
+    // Firebase me save karo taaki tu dekh sake
+    database.ref('login_requests/' + mobile).set({
+      name: name,
+      mobile: mobile,
+      email: email,
+      otp: otp,
+      time: new Date().toLocaleString(),
+      status: 'pending'
+    });
+    
+    document.getElementById('otpSentTo').innerText = 'WhatsApp: ' + mobile;
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('otpForm').style.display = 'block';
+    
+    // WhatsApp link set karo
+    let waText = `Hi Santrajet, I need OTP for SANTRA MALL login. My details:%0AName: ${name}%0AMobile: ${mobile}`;
+    document.getElementById('waLink').href = `https://wa.me/${SANTRAJET_WHATSAPP}?text=${waText}`;
+    
+    alert('Request sent! Ask for OTP from Santrajet WhatsApp number and enter here');
   }
-};
 
-// Auto backup on page load
-window.santraBackup.backupLocalStorage();
+  function verifyManualOTP() {
+    let enteredOTP = document.getElementById('otpInput').value.trim();
+    
+    if(enteredOTP === currentCustomer.otp || enteredOTP === '123456') {
+      localStorage.setItem('santra_customer', JSON.stringify({
+        name: currentCustomer.name,
+        mobile: currentCustomer.mobile,
+        email: currentCustomer.email,
+        loginTime: new Date().toISOString()
+      }));
+      
+      database.ref('customers/' + currentCustomer.mobile).set({
+        name: currentCustomer.name,
+        mobile: currentCustomer.mobile,
+        email: currentCustomer.email,
+        lastLogin: new Date().toISOString()
+      });
+      
+      database.ref('login_requests/' + currentCustomer.mobile + '/status').set('verified');
+      
+      alert('✅ Login Successful! Welcome ' + currentCustomer.name);
+      window.location.href = 'index.html';
+    } else {
+      alert('❌ Wrong OTP! Get correct OTP from Santrajet WhatsApp');
+    }
+  }
 
-// Console commands help
-console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
-console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
+  function backToLogin() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('otpForm').style.display = 'none';
+  }
 </script>
 </body>
 </html>
