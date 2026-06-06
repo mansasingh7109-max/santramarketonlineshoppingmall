@@ -164,33 +164,32 @@
   </div>
 </div>
 
-<!-- FIREBASE SDK -->
+<!-- ==================== FIREBASE SDK + CONFIG START ==================== -->
+<!-- 1. Firebase SDK Load -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<!-- 2. Secrets File - Isme API Keys hain -->
+<script src="secrets.js"></script>
+
+<!-- 3. Order Card JS -->
 <script src="order-card.js"></script>
 
 <script>
-  // ✅ FIREBASE CONFIG - YAHAN APNI KEYS DAAL DE
-      const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-  // ✅ FIREBASE INIT
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  var rtdb = firebase.database(); // Realtime Database
-  var auth = firebase.auth(); // Authentication
-  var db = firebase.firestore(); // Firestore
-
-  console.log("🔥 Firebase Connected: RTDB + Firestore dono ready");
+  // ✅ FIREBASE INIT - secrets.js se firebaseConfig aa raha hai
+  if (typeof firebaseConfig === 'undefined') {
+    console.error("❌ firebaseConfig not found! Check secrets.js");
+  } else {
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    var rtdb = firebase.database(); // Realtime Database
+    var auth = firebase.auth(); // Authentication
+    var db = firebase.firestore(); // Firestore
+    console.log("🔥 Firebase Connected: RTDB + Firestore dono ready");
+  }
 </script>
+<!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
 
 <script src="theme.js"></script>
 
@@ -715,5 +714,14 @@ function buyNowFromModal() { if(currentModalProduct) buyNow(currentModalProduct.
 function ToWishlistFromModal() { if(currentModalProduct) toggleWishlist(currentModalProduct.id, event); }
 </script>
 
+<!-- ✅ MOBILE CONSOLE -?eruda=true laga ke test kar -->
+<script>
+if (location.search.includes('eruda=true')) {
+  var script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+  script.onload = () => eruda.init();
+  document.body.appendChild(script);
+}
+</script>
 </body>
 </html>
