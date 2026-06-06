@@ -7,15 +7,17 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="layout.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
  <div class="header">
   <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
   <div class="header-btns">
-    <div id="userInfo" class="user-name hide"></div>
-    <button class="header-btn" id="loginBtn" onclick="openCustomerLogin()">👤 Login</button>
-    <button class="header-btn hide" id="logoutBtn" onclick="customerLogout()">🚪 Logout</button>
+      <div id="userInfo" class="hide"></div>
+  <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
+  <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+    
     <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
@@ -192,6 +194,8 @@
 <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
 
 <script src="theme.js"></script>
+
+<script src="login.js"></script>     
 
 <script>
 let currentModalProduct = null;
@@ -465,8 +469,8 @@ function renderProducts(products){
           <p class="stock">Stock: ${p.stock}</p>
         </div>
         <div class="product-actions">
-         <button class="add-to-cart-btn" onclick="addToCart('${p.id}', event)">Add to Cart</button>
-         <button class="buy-now-btn" onclick="buyNow('${p.id}', event)">Buy Now</button>
+         <button class="add-to-cart-btn" onclick="if(checkLoginBeforeCart()) { addToCart('${p.id}', event) }">Add to Cart</button>
+         <button class="buy-now-btn" onclick="if(checkLoginBeforeCart()) { buyNow('${p.id}', event) }">Buy Now</button>
         </div>
       </div>
     `;
@@ -723,5 +727,28 @@ if (location.search.includes('eruda=true')) {
   document.body.appendChild(script);
 }
 </script>
+<!-- Customer Login Popup -->
+<div id="loginPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+  <div class="popup-box" style="background:white; padding:20px; border-radius:10px; width:90%; max-width:400px; margin:100px auto;">
+    <h3>👤 Customer Login with OTP</h3>
+    
+    <!-- Step 1: Mobile Number -->
+    <div id="step1_mobile">
+      <p>Mobile number daalo, WhatsApp pe OTP bhejenge</p>
+      <input type="tel" id="custMobile" placeholder="Enter 10-digit Mobile" maxlength="10" style="width:100%; padding:10px; margin:10px 0;">
+      <button onclick="requestOTP()" style="width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:5px;">📲 Get OTP on WhatsApp</button>
+      <button onclick="closeLogin()" style="width:100%; padding:12px; background:#6c757d; color:white; border:none; border-radius:5px; margin-top:5px;">Close</button>
+    </div>
+
+    <!-- Step 2: OTP Enter -->
+    <div id="step2_otp" style="display:none;">
+      <p>WhatsApp check karo, OTP daalo</p>
+      <p>Mobile: <b id="showMobile"></b></p>
+      <input type="text" id="custOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="width:100%; padding:10px; margin:10px 0;">
+      <button onclick="verifyOTP()" style="width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:5px;">✅ Verify & Login</button>
+      <button onclick="changeNumber()" style="width:100%; padding:12px; background:#6c757d; color:white; border:none; border-radius:5px; margin-top:5px;">← Change Number</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
