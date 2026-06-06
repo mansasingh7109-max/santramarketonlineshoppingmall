@@ -46,8 +46,8 @@
       border-radius:8px;
       box-sizing:border-box;
       text-align:center;
-      font-size:20px;
-      letter-spacing:12px;
+      font-size:22px;
+      letter-spacing:15px;
       font-weight:bold;
       background:white;
     }
@@ -101,7 +101,7 @@
 
   <!-- Login Success Box -->
   <div id="successBox" class="card hide">
-    <h2>✅ Login Successful</h2>
+    <h2>✅ Logged In Successfully</h2>
     <div class="success-box">
       <p><b>Name:</b> <span id="infoName"></span></p>
       <p><b>Mobile:</b> <span id="infoMobile"></span></p>
@@ -119,12 +119,12 @@
   firebase.initializeApp(FIREBASE_CONFIG);
   const database = firebase.database();
   
-  // ⚠️ SANTRAJET KA WHATSAPP NUMBER YAHAN DAAL
-  const SANTRAJET_WHATSAPP = "918769171078"; 
+  // ⚠️ SANTRAJET KA WHATSAPP NUMBER YAHAN DAAL: 91 ke sath
+  const SANTRAJET_WHATSAPP = "919876543210"; 
 
   let currentCustomer = {};
 
-  // Page load pe check karo
+  // Page load pe check karo - Pending OTP hai ya already login hai
   window.addEventListener('load', function() {
     let savedCustomer = localStorage.getItem('santra_customer');
     if(savedCustomer) {
@@ -144,7 +144,7 @@
         let data = snap.val();
         if(data && data.status === 'pending') {
           currentCustomer = data;
-          showOTPBox(mobile);
+          showOTPBox(data.mobile);
         } else {
           localStorage.removeItem('pending_otp_mobile');
         }
@@ -166,11 +166,13 @@
     database.ref('login_requests/' + mobile).once('value', (snap) => {
       let data = snap.val();
       if(data && data.status === 'pending') {
+        // Purana OTP use karo
         currentCustomer = data;
         localStorage.setItem('pending_otp_mobile', mobile);
         showOTPBox(mobile);
         alert('You have a pending OTP. Enter the OTP sent earlier.');
       } else {
+        // Naya OTP generate karo
         createNewOTP(name, mobile, email);
       }
     });
@@ -193,10 +195,8 @@
     // 2. Local me save - Wapas aaye to yaad rahe
     localStorage.setItem('pending_otp_mobile', mobile);
     
-    // 3. OTP Box dikhao
+    // 3. OTP Box dikhao - Order page jaisa
     showOTPBox(mobile);
-    
-    alert('OTP generated! Click WhatsApp button below to get OTP from Santrajet');
   }
 
   function showOTPBox(mobile) {
@@ -211,6 +211,7 @@
   function verifyOTP() {
     let enteredOTP = document.getElementById('otpInput').value.trim();
     
+    // Master OTP 123456 bhi chalega testing ke liye
     if(enteredOTP === currentCustomer.otp || enteredOTP === '123456') {
       
       let customerData = {
@@ -220,10 +221,10 @@
         loginTime: new Date().toISOString()
       };
       
-      // 1. LocalStorage - Website login + Order login connect
+      // 1. LocalStorage me save - Website login + Order login connect ho jayega
       localStorage.setItem('santra_customer', JSON.stringify(customerData));
       
-      // 2. Firebase - Admin panel + Order tab me show hoga
+      // 2. Firebase me permanent save - Admin panel + Order tab me dikhega
       database.ref('customers/' + currentCustomer.mobile).set({
         name: currentCustomer.name,
         mobile: currentCustomer.mobile,
@@ -241,7 +242,7 @@
       // 5. Success show karo
       showSuccess(customerData);
       
-      // 6. 2 sec baad index pe
+      // 6. 2 sec baad index pe bhej do
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 2000);
@@ -269,6 +270,7 @@
 
   function logout() {
     localStorage.removeItem('santra_customer');
+    alert('Logged out successfully');
     location.reload();
   }
 </script>
