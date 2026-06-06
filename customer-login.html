@@ -24,6 +24,7 @@
 <div class="login-box">
   <h2>👤 Customer Login</h2>
   
+  <!-- Step 1: Details Form -->
   <div id="loginForm">
     <input type="text" id="custName" placeholder="Full Name *" required>
     <input type="tel" id="custMobile" placeholder="WhatsApp Mobile Number *" maxlength="10" required>
@@ -33,6 +34,7 @@
     <p class="help-text">Ask OTP from Santrajet WhatsApp</p>
   </div>
 
+  <!-- Step 2: OTP Form - Ab ye same page pe khulega -->
   <div id="otpForm" class="otp-box">
     <p>OTP sent to <b id="otpSentTo"></b></p>
     <p class="otp-note">Get OTP from Santrajet WhatsApp and enter here</p>
@@ -58,7 +60,7 @@
   const database = firebase.database();
   
   // ⚠️ YAHAN SANTRAJET KA WHATSAPP NUMBER DAAL: 91 ke sath
-  const SANTRAJET_WHATSAPP = "918769171078"; 
+  const SANTRAJET_WHATSAPP = "919876543210"; 
 
   let currentCustomer = {};
 
@@ -75,7 +77,7 @@
     let otp = Math.floor(100000 + Math.random() * 900000).toString();
     currentCustomer = {name, mobile, email, otp};
     
-    // Firebase me save karo taaki tu dekh sake
+    // 1. Firebase me save karo - Admin panel ke liye
     database.ref('login_requests/' + mobile).set({
       name: name,
       mobile: mobile,
@@ -85,21 +87,25 @@
       status: 'pending'
     });
     
+    // 2. OTP box dikhao, form hide karo - WhatsApp pe nahi jayega
     document.getElementById('otpSentTo').innerText = 'WhatsApp: ' + mobile;
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('otpForm').style.display = 'block';
     
-    // WhatsApp link set karo
-    let waText = `Hi Santrajet, I need OTP for SANTRA MALL login. My details:%0AName: ${name}%0AMobile: ${mobile}`;
+    // 3. WhatsApp button ka link set karo
+    let waText = `Hi Santrajet, I need OTP for SANTRA MALL login.%0AName: ${name}%0AMobile: ${mobile}`;
     document.getElementById('waLink').href = `https://wa.me/${SANTRAJET_WHATSAPP}?text=${waText}`;
     
-    alert('Request sent! Ask for OTP from Santrajet WhatsApp number and enter here');
+    alert('OTP generated! Click "Get OTP on Santrajet WhatsApp" button below or check Firebase for OTP');
   }
 
   function verifyManualOTP() {
     let enteredOTP = document.getElementById('otpInput').value.trim();
     
+    // Master OTP 123456 bhi chalega testing ke liye
     if(enteredOTP === currentCustomer.otp || enteredOTP === '123456') {
+      
+      // 1. LocalStorage me save - Order tab me show karne ke liye
       localStorage.setItem('santra_customer', JSON.stringify({
         name: currentCustomer.name,
         mobile: currentCustomer.mobile,
@@ -107,17 +113,20 @@
         loginTime: new Date().toISOString()
       }));
       
+      // 2. Firebase me permanent save - Admin panel me dikhega
       database.ref('customers/' + currentCustomer.mobile).set({
         name: currentCustomer.name,
         mobile: currentCustomer.mobile,
         email: currentCustomer.email,
-        lastLogin: new Date().toISOString()
+        lastLogin: new Date().toISOString(),
+        totalOrders: 0
       });
       
+      // 3. Request status update karo
       database.ref('login_requests/' + currentCustomer.mobile + '/status').set('verified');
       
       alert('✅ Login Successful! Welcome ' + currentCustomer.name);
-      window.location.href = 'index.html';
+      window.location.href = 'index.html'; // Wapas main page pe
     } else {
       alert('❌ Wrong OTP! Get correct OTP from Santrajet WhatsApp');
     }
