@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📦 My Orders - SANTRA MALL</title>
   <style>
-    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
@@ -47,7 +47,6 @@
  .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
  .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
  .date-text{color:#6b7280;font-size:13px;margin:5px 0}
- .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
  .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
  .otp-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;text-align:center;letter-spacing:8px}
  .timeline{margin:20px 0}
@@ -57,10 +56,10 @@
  .timeline-dot.current{background:#e40046;color:white}
  .timeline-content h4{margin:0;font-size:13px}
  .timeline-content p{margin:2px 0;font-size:11px;color:#666}
- .hidden-content{filter:blur(8px);pointer-events:none;user-select:none}
  .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
  .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
  .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
+ .whatsapp-otp-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
   </style>
 </head>
 <body>
@@ -85,21 +84,41 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 <script>
-// ===== FIREBASE CONFIG - secrets.js me hona chahiye =====
 firebase.initializeApp(FIREBASE_CONFIG);
 const db = firebase.firestore();
 
 let allOrders = [];
 let currentCustomerMobile = null;
 let currentCustomerData = null;
+const ADMIN_WHATSAPP = "917725960293";
 
 document.addEventListener('DOMContentLoaded', function() {
+  checkLoginAndLoad();
+});
+
+// ✅ 1. Login + OTP Check - SABSE PEHLE
+function checkLoginAndLoad() {
+  // 1. Pehle pendingOTP check karo - Agar OTP process chal raha hai
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  
+  if(pendingOTP) {
+    pendingOTP = JSON.parse(pendingOTP);
+    // 30 min se purana nahi hai to OTP popup dikhao
+    if(Date.now() - pendingOTP.time < 30 * 60 * 1000) {
+      showWhatsAppOTPPopup(pendingOTP.mobile, pendingOTP.name);
+      return; // Orders load mat karo, OTP popup dikhao
+    } else {
+      localStorage.removeItem('pendingOTP');
+    }
+  }
+  
+  // 2. Agar OTP nahi to santra_customer check karo
   let customer = localStorage.getItem('santra_customer');
   if(customer){
     currentCustomerData = JSON.parse(customer);
     currentCustomerMobile = currentCustomerData.mobile;
     showCustomerInfo();
-
+    
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get('id');
     if(orderId) {
@@ -108,13 +127,15 @@ document.addEventListener('DOMContentLoaded', function() {
       loadOrders();
     }
   } else {
+    // 3. Login nahi hai to customer-login.html pe bhejo
     document.getElementById('ordersList').innerHTML = `
       <div class="empty">
         😔 Please login first to see your orders<br><br>
-        <button class="btn" onclick="window.location.href='customer-login.html'">Login Now</button>
+        <button class="btn" onclick="window.location.href='customer-login.html'">🔐 Login with WhatsApp OTP</button>
       </div>
     `;
   }
+  
   const urlParams = new URLSearchParams(window.location.search);
   const orderIdParam = urlParams.get('orderId');
   if(orderIdParam) {
@@ -123,7 +144,111 @@ document.addEventListener('DOMContentLoaded', function() {
       filterOrders();
     }, 1000);
   }
-});
+}
+
+// ✅ 2. WhatsApp OTP Popup - Auto khulega agar pendingOTP hai
+function showWhatsAppOTPPopup(mobile, name) {
+  document.getElementById('ordersList').innerHTML = `
+    <div class="whatsapp-otp-popup">
+      <div style="background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)">
+        <h3 style="color:#e40046;text-align:center;margin-bottom:18px;font-size:22px">🔐 WhatsApp OTP Verify</h3>
+        <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);padding:15px;border-radius:12px;margin-bottom:18px;border-left:5px solid #4caf50">
+          <b style="color:#1b5e20;font-size:16px">✅ Request Active!</b><br>
+          <span style="font-size:13px;color:#2e7d32">Hi ${name}, Admin OTP bhejega:<br><b style="font-size:15px">+91 ${mobile}</b></span>
+        </div>
+        <p style="text-align:center;color:#333;font-weight:600;margin-bottom:12px;font-size:15px">WhatsApp se OTP copy karke yahan daalo 👇</p>
+        <input type="tel" id="orderOtpInput" maxlength="6" placeholder="000000" style="width:100%;padding:20px;text-align:center;font-size:32px;letter-spacing:12px;border:3px solid #e40046;border-radius:12px;margin:12px 0;font-weight:bold;color:#e40046;background:#fff5f7">
+        <button onclick="verifyWhatsAppOTP('${mobile}')" style="width:100%;padding:16px;background:linear-gradient(135deg,#e40046,#ff1744);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer;margin-bottom:12px;box-shadow:0 5px 20px rgba(228,0,70,0.4)">✅ Verify & See Orders</button>
+        <button onclick="resendWhatsAppOTP('${mobile}','${name}')" style="width:100%;padding:14px;background:#ff9800;color:white;border:none;border-radius:12px;cursor:pointer;margin-bottom:10px;font-weight:bold">🔄 OTP Nahi Mila? Wapas Bhejo</button>
+        <button onclick="cancelOTPAndLogin()" style="width:100%;padding:13px;background:#757575;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:bold">❌ Cancel</button>
+        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 2-5 min me OTP bhejega</p>
+      </div>
+    </div>
+  `;
+  
+  setTimeout(() => document.getElementById('orderOtpInput')?.focus(), 300);
+  
+  // Back button handle
+  history.pushState(null, null, location.href);
+  window.onpopstate = function() {
+    window.location.href = 'customer-login.html';
+  };
+  
+  // Real-time auto-fill if admin enters OTP
+  db.collection('login_requests').doc(mobile).onSnapshot((doc) => {
+    if(doc.exists && doc.data().otp && doc.data().otp!== '') {
+      let input = document.getElementById('orderOtpInput');
+      if(input &&!input.value) {
+        input.value = doc.data().otp;
+        input.style.background = '#e8f5e9';
+        input.style.borderColor = '#4caf50';
+      }
+    }
+  });
+}
+
+// ✅ 3. OTP Verify + Login Save
+async function verifyWhatsAppOTP(mobile) {
+  let enteredOTP = document.getElementById('orderOtpInput').value.trim();
+  if(enteredOTP.length!== 6) {
+    alert('❌ 6 digit OTP daalo!');
+    return;
+  }
+  
+  try {
+    const doc = await db.collection('login_requests').doc(mobile).get();
+    if(!doc.exists) {
+      alert('❌ Session expire! Wapas login karo');
+      localStorage.removeItem('pendingOTP');
+      window.location.href = 'customer-login.html';
+      return;
+    }
+    
+    let data = doc.data();
+    
+    if(data.otp === enteredOTP && data.otp!== '') {
+      // ✅ 1. santra_customer me save karo - Login complete
+      localStorage.setItem('santra_customer', JSON.stringify({
+        name: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        loginTime: new Date().toISOString()
+      }));
+      
+      // 2. Firebase update
+      await db.collection('login_requests').doc(mobile).update({
+        status: 'verified',
+        verifiedTime: new Date().toLocaleString('en-IN')
+      });
+      
+      // 3. pendingOTP hatao
+      localStorage.removeItem('pendingOTP');
+      
+      alert('✅ Login Successful! Welcome ' + data.name);
+      location.reload(); // Orders load honge
+      
+    } else if(data.otp === '') {
+      alert('⏳ Admin ne abhi OTP nahi bheja!\nWhatsApp check karo ya 2 min wait karo');
+    } else {
+      alert('❌ Galat OTP! WhatsApp me sahi OTP check karo');
+      document.getElementById('orderOtpInput').value = '';
+    }
+  } catch(error) {
+    console.error('OTP Error:', error);
+    alert('❌ Error: ' + error.message);
+  }
+}
+
+function resendWhatsAppOTP(mobile, name) {
+  let msg = `Hello Admin,\n🔐 OTP wapas bhejo\nName: ${name}\nMobile: ${mobile}`;
+  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  alert('✅ WhatsApp me message bhej diya!\nAdmin jaldi OTP bhejega');
+}
+
+function cancelOTPAndLogin() {
+  localStorage.removeItem('pendingOTP');
+  window.location.href = 'customer-login.html';
+}
 
 function showCustomerInfo() {
   if(currentCustomerData) {
@@ -180,16 +305,13 @@ function buildItemsHTML(items) {
   if(!items ||!Array.isArray(items) || items.length === 0) {
     return '<p style="color:#999">No items found in this order</p>';
   }
-
   return items.map(item => {
     let imgSrc = item.imageUrl || item.image || item.img || item.photo || '';
     if(!imgSrc && item.id) {
       imgSrc = `https://firebasestorage.googleapis.com/v0/b/santramarketshoppingmall.appspot.com/o/products%2F${item.id}.jpg?alt=media`;
     }
     if(!imgSrc) imgSrc = 'https://via.placeholder.com/60x60?text=No+Image';
-
     let productLink = item.product_link || item.url || item.link || `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${item.id}`;
-
     return `
       <div class="item-row">
         <a href="${productLink}" target="_blank">
@@ -218,7 +340,6 @@ async function renderOrders(orders) {
     `;
     return;
   }
-
   container.innerHTML = orders.map(order => {
     let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderDate || Date.now());
     let dateStr = orderDate.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
@@ -227,22 +348,19 @@ async function renderOrders(orders) {
     let displayName = order.customerName || order.name || order.customer_name || 'Customer';
     let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
     let statusText = getStatusText(order.status);
-
     let isOTPpending = ['Pending', 'PENDING', 'pending_otp', 'OTP Pending'].includes(order.status);
-
     let otpSection = '';
     if(isOTPpending) {
       otpSection = `
         <div class="otp-box">
           <h3>🔐 OTP Verification Required</h3>
-          <p>Admin ne aapke WhatsApp pe OTP bheja hai. <b>WhatsApp OTP add kare</b> yahan enter karein:</p>
+          <p>Admin ne aapke WhatsApp pe OTP bheja hai. WhatsApp OTP add kare yahan enter karein:</p>
           <input type="text" class="otp-input" id="otp_${order.id}" maxlength="6" placeholder="WhatsApp OTP add kare">
           <button class="btn" onclick="verifyOTP('${order.id}')" style="background:var(--green)">✅ Verify OTP</button>
           <p style="font-size:11px;margin-top:10px;color:#999">OTP nahi mila? Admin se WhatsApp pe contact karein</p>
         </div>
       `;
     }
-
     let orderDetails = '';
     if(!isOTPpending) {
       let itemsHTML = buildItemsHTML(order.items);
@@ -257,7 +375,6 @@ async function renderOrders(orders) {
           </div>
         `;
       }
-
       orderDetails = `
         <div class="order-info">
           <div class="info-row"><span>Order Date:</span><span>${order.orderDateString || dateStr}</span></div>
@@ -285,7 +402,6 @@ async function renderOrders(orders) {
     } else {
       orderDetails = `<div class="otp-required-msg">🔒 Complete OTP verification to view order details</div>`;
     }
-
     return `
       <div class="order-card" id="order_${order.id}">
         <div class="order-header">
@@ -308,20 +424,18 @@ async function renderSingleOrderCard(order, orderNum, dateStr) {
   let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
   let statusText = getStatusText(order.status);
   let isOTPpending = ['Pending', 'PENDING', 'pending_otp', 'OTP Pending'].includes(order.status);
-
   let otpSection = '';
   if(isOTPpending) {
     otpSection = `
       <div class="otp-box">
         <h3>🔐 OTP Verification Required</h3>
-        <p>Admin ne aapke WhatsApp pe OTP bheja hai. <b>WhatsApp OTP add kare</b> yahan enter karein:</p>
+        <p>Admin ne aapke WhatsApp pe OTP bheja hai. WhatsApp OTP add kare yahan enter karein:</p>
         <input type="text" class="otp-input" id="otp_${order.id}" maxlength="6" placeholder="WhatsApp OTP add kare">
         <button class="btn" onclick="verifyOTP('${order.id}')" style="background:var(--green)">✅ Verify OTP</button>
         <p style="font-size:11px;margin-top:10px;color:#999">OTP nahi mila? Admin se WhatsApp pe contact karein</p>
       </div>
     `;
   }
-
   let orderDetails = '';
   if(!isOTPpending) {
     let itemsHTML = buildItemsHTML(order.items);
@@ -336,7 +450,6 @@ async function renderSingleOrderCard(order, orderNum, dateStr) {
         </div>
       `;
     }
-
     orderDetails = `
       <div class="order-info">
         <div class="info-row"><span>Order Date:</span><span>${order.orderDateString || dateStr}</span></div>
@@ -364,7 +477,6 @@ async function renderSingleOrderCard(order, orderNum, dateStr) {
   } else {
     orderDetails = `<div class="otp-required-msg">🔒 Complete OTP verification to view order details</div>`;
   }
-
   return `
     <div class="order-card" id="order_${order.id}">
       <div class="order-header">
@@ -432,7 +544,7 @@ function getTimeline(status) {
   `;
 }
 
-// ✅ UPDATED: OTP Verify + Customer Login Save
+// ✅ UPDATED: OTP Verify + Customer Login Save - Order ke liye
 async function verifyOTP(orderId) {
   const otpInput = document.getElementById(`otp_${orderId}`);
   const enteredOTP = otpInput.value.trim();
@@ -444,38 +556,36 @@ async function verifyOTP(orderId) {
     const orderDoc = await db.collection('orders').doc(orderId).get();
     const orderData = orderDoc.data();
     if(orderData.otp === enteredOTP || enteredOTP === '123456') {
-
-      // 1. Order Status Update
       await db.collection('orders').doc(orderId).update({
         status: 'Confirmed',
         otpVerified: true,
         otpVerifiedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-
-      // 2. ✅ Customer ki detail nikaalo order se
+      
+      // ✅ Customer ki detail nikaalo order se aur login save karo
       let customerData = {
         name: orderData.customerName || orderData.name || 'Customer',
         mobile: orderData.mobile || orderData.customerMobile,
         email: orderData.email || '',
         loginTime: new Date().toISOString()
       };
+      
+      localStorage.set
 
-      // 3. ✅ IMPORTANT: santra_customer me save karo - Login ho jayega
+Cky
+
       localStorage.setItem('santra_customer', JSON.stringify(customerData));
-
-      // 4. ✅ Firebase customers me bhi save/update karo
+      
       await db.collection('customers').doc(customerData.mobile).set({
         name: customerData.name,
         mobile: customerData.mobile,
         email: customerData.email,
         lastLogin: new Date().toISOString()
       }, { merge: true });
-
+      
       alert('✅ OTP Verified! Login Successful\nWelcome ' + customerData.name);
-
-      // 5. Page reload karo - Ab order details dikhegi + Login bhi ho gaya
       location.reload();
-
+      
     } else {
       alert('❌ Invalid OTP! Please check and try again');
       otpInput.value = '';
