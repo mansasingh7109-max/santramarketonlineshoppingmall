@@ -13,11 +13,20 @@
 <body>
  <div class="header">
   <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
+  
+  <!-- ✅ FIXED: Sirf 1 baar header-btns -->
   <div class="header-btns">
-      <div id="userInfo" class="hide"></div>
-  <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
-  <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+    <!-- User Info Box - Login ke baad dikhega -->
+    <div id="userInfo" class="hide">
+      <span>Hi, <b id="userName"></b></span>
+    </div>
+
+    <!-- Login Button - Login nahi hai to dikhega -->
+    <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
     
+    <!-- Logout Button - Login ke baad dikhega -->
+    <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+
     <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
@@ -167,35 +176,28 @@
 </div>
 
 <!-- ==================== FIREBASE SDK + CONFIG START ==================== -->
-<!-- 1. Firebase SDK Load -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
-<!-- 2. Secrets File - Isme API Keys hain -->
 <script src="secrets.js"></script>
-
-<!-- 3. Order Card JS -->
 <script src="order-card.js"></script>
 
 <script>
-  // ✅ FIREBASE INIT - secrets.js se firebaseConfig aa raha hai
   if (typeof firebaseConfig === 'undefined') {
     console.error("❌ firebaseConfig not found! Check secrets.js");
   } else {
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    var rtdb = firebase.database(); // Realtime Database
-    var auth = firebase.auth(); // Authentication
-    var db = firebase.firestore(); // Firestore
+    var rtdb = firebase.database();
+    var auth = firebase.auth();
+    var db = firebase.firestore();
     console.log("🔥 Firebase Connected: RTDB + Firestore dono ready");
   }
 </script>
 <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
 
 <script src="theme.js"></script>
-
-<script src="login.js"></script>     
+<script src="login.js"></script> 
 
 <script>
 let currentModalProduct = null;
@@ -209,8 +211,7 @@ let tempCustomerData = null;
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
 
-// ✅ DATABASE SELECT KAR - RTDB ya Firestore
-const USE_DATABASE = 'rtdb'; // 'rtdb' ya 'firestore' likh de
+const USE_DATABASE = 'rtdb'; 
 
 auth.onAuthStateChanged((user) => {
   currentUser = user;
@@ -227,10 +228,9 @@ window.onload = function() {
   if(orderId) loadSingleOrder(orderId);
 }
 
-// ✅ AUTOMATIC PRODUCT LOAD - RTDB + Firestore Dono Support
+// ✅ AUTOMATIC PRODUCT LOAD
 function loadProducts() {
   if (USE_DATABASE === 'rtdb') {
-    // REALTIME DATABASE SE LOAD
     console.log("📦 Loading from Realtime Database...");
     rtdb.ref('products').on('value', snap => {
       allProducts = [];
@@ -254,7 +254,6 @@ function loadProducts() {
       document.getElementById('productGrid').innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
     });
   } else {
-    // FIRESTORE SE LOAD
     console.log("📦 Loading from Firestore...");
     db.collection('products').onSnapshot(snap => {
       allProducts = [];
@@ -716,39 +715,153 @@ function ToCartFromModal() {
 }
 function buyNowFromModal() { if(currentModalProduct) buyNow(currentModalProduct.id, event); }
 function ToWishlistFromModal() { if(currentModalProduct) toggleWishlist(currentModalProduct.id, event); }
-</script>
 
-<!-- ✅ MOBILE CONSOLE -?eruda=true laga ke test kar -->
-<script>
+// ✅ MOBILE CONSOLE -?eruda=true laga ke test kar
 if (location.search.includes('eruda=true')) {
   var script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/eruda';
   script.onload = () => eruda.init();
   document.body.appendChild(script);
 }
-</script>
-<!-- Customer Login Popup -->
-<div id="loginPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
-  <div class="popup-box" style="background:white; padding:20px; border-radius:10px; width:90%; max-width:400px; margin:100px auto;">
-    <h3>👤 Customer Login with OTP</h3>
-    
-    <!-- Step 1: Mobile Number -->
-    <div id="step1_mobile">
-      <p>Mobile number daalo, WhatsApp pe OTP bhejenge</p>
-      <input type="tel" id="custMobile" placeholder="Enter 10-digit Mobile" maxlength="10" style="width:100%; padding:10px; margin:10px 0;">
-      <button onclick="requestOTP()" style="width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:5px;">📲 Get OTP on WhatsApp</button>
-      <button onclick="closeLogin()" style="width:100%; padding:12px; background:#6c757d; color:white; border:none; border-radius:5px; margin-top:5px;">Close</button>
-    </div>
 
-    <!-- Step 2: OTP Enter -->
-    <div id="step2_otp" style="display:none;">
-      <p>WhatsApp check karo, OTP daalo</p>
-      <p>Mobile: <b id="showMobile"></b></p>
-      <input type="text" id="custOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="width:100%; padding:10px; margin:10px 0;">
-      <button onclick="verifyOTP()" style="width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:5px;">✅ Verify & Login</button>
-      <button onclick="changeNumber()" style="width:100%; padding:12px; background:#6c757d; color:white; border:none; border-radius:5px; margin-top:5px;">← Change Number</button>
-    </div>
+// Page load pe check karo login hai ya nahi
+window.addEventListener('load', function() {
+  let customer = localStorage.getItem('santra_customer');
+  if(customer) {
+    let data = JSON.parse(customer);
+    document.getElementById('loginBtn').classList.add('hide');
+    document.getElementById
+
+Cky
+
+    document.getElementById('logoutBtn').classList.remove('hide');
+    document.getElementById('userInfo').classList.remove('hide');
+    document.getElementById('userName').innerText = data.name;
+  } else {
+    document.getElementById('loginBtn').classList.remove('hide');
+    document.getElementById('logoutBtn').classList.add('hide');
+    document.getElementById('userInfo').classList.add('hide');
+  }
+});
+
+function customerLogout() {
+  if(confirm('Logout karna hai?')) {
+    localStorage.removeItem('santra_customer');
+    location.reload();
+  }
+}
+</script>
+
+<!-- ==================== OLD CODE BACKUP - 4 June 2026 ==================== -->
+<!--
+OLD HEADER CODE WITH DOUBLE BUTTONS:
+ <div class="header">
+  <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
+  <div class="header-btns">
+      <div class="header-btns">
+  <div id="userInfo" class="hide">
+    <span>Hi, <b id="userName"></b></span>
+  </div>
+  <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
+  <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+  <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
+  <a href="help.html" class="header-btn">💬 HELP DESK</a>
+</div>
+    
+    <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
+    <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
 </div>
+-->
+
+<!-- ==================== BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM ==================== -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+window.santraBackup = {
+  version: '1.0',
+  timestamp: '2026-06-04T16:34:00+05:30',
+  location: 'Pilibanga, Rajasthan',
+
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100);
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+    }
+  },
+
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-04T16:34:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-04_1634.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+window.santraBackup.backupLocalStorage();
+
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
+</script>
 </body>
 </html>
