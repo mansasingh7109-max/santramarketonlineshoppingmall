@@ -1,75 +1,81 @@
-// ===== SANTRA MALL - Guest Cart + WhatsApp OTP Login =====
+// ===== SANTRA MALL - WhatsApp Manual OTP Login =====
 
-// 1. ✅ GUEST CART - Login check nahi, direct add hoga
-function addToCart(productId, name, price, image) {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  
-  let existing = cart.find(item => item.id === productId);
-  if(existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({
-      id: productId,
-      name: name,
-      price: price,
-      image: image,
-      qty: 1
-    });
+// 1. Login Popup HTML - index.html me ye div daal de body ke end me
+const loginPopupHTML = `
+<div id="loginPopup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;padding:25px;border-radius:12px;max-width:400px;width:90%;max-height:90vh;overflow-y:auto">
+    
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+      <h2 style="color:#e40046;margin:0">🔐 Customer Login</h2>
+      <button onclick="closeLogin()" style="background:none;border:none;font-size:24px;cursor:pointer">×</button>
+    </div>
+
+    <!-- Step 1: Mobile + Name Form -->
+    <div id="step1_mobile">
+      <p style="color:#666;font-size:13px;margin-bottom:15px">WhatsApp pe OTP bhejenge verification ke liye</p>
+      <input type="text" id="custName" placeholder="Full Name *" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box">
+      <input type="tel" id="custMobile" placeholder="WhatsApp Mobile Number *" maxlength="10" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box">
+      <input type="email" id="custEmail" placeholder="Email (Optional)" style="width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box">
+      <button onclick="requestOTP()" style="width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px;cursor:pointer">📱 Get OTP on WhatsApp</button>
+      <p style="font-size:11px;color:#999;text-align:center;margin-top:10px">Admin aapko WhatsApp pe OTP bhejega</p>
+    </div>
+
+    <!-- Step 2: OTP Box - Teri requirement -->
+    <div id="step2_otp" style="display:none">
+      <div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;border-radius:8px;margin-bottom:15px">
+        <h3 style="margin:0 0 8px 0;color:#856404;font-size:16px">🔐 OTP Verification Required</h3>
+        <p style="margin:5px 0;color:#856404;font-size:13px">Santrajet ne aapke WhatsApp <b id="showMobileOTP"></b> pe OTP bheja hai.</p>
+        <p style="margin:5px 0;color:#856404;font-size:13px"><b>WhatsApp OTP yahan enter karein:</b></p>
+      </div>
+      
+      <input type="text" id="custOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="width:100%;padding:15px;margin:10px 0;border:2px solid #ffc107;border-radius:8px;text-align:center;font-size:20px;letter-spacing:10px;font-weight:bold;box-sizing:border-box">
+      
+      <button onclick="verifyOTP()" style="width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px;cursor:pointer">✅ Verify & Continue</button>
+      
+      <button onclick="changeNumber()" style="width:100%;padding:12px;background:#666;color:white;border:none;border-radius:8px;margin-top:8px;cursor:pointer">← Login as Other Number</button>
+      
+      <p style="font-size:11px;color:#999;text-align:center;margin-top:10px">OTP nahi mila? Admin se WhatsApp pe contact karein</p>
+    </div>
+
+  </div>
+</div>
+`;
+
+// Page load pe popup HTML add karo
+document.addEventListener('DOMContentLoaded', function() {
+  if(!document.getElementById('loginPopup')) {
+    document.body.insertAdjacentHTML('beforeend', loginPopupHTML);
   }
-  
-  localStorage.setItem('santra_cart', JSON.stringify(cart));
+  updateHeader();
   updateCartCount();
-  alert('✅ Added to Cart!');
+  checkExistingLogin();
+});
+
+// 2. Login Popup Open
+function openLoginPopup() {
+  document.getElementById('loginPopup').style.display = 'flex';
+  checkExistingLogin();
 }
 
-// 2. ✅ GUEST WISHLIST - Login jaruri nahi
-function addToWishlist(productId, name, price, image) {
-  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '[]');
-  
-  if(!wishlist.find(item => item.id === productId)) {
-    wishlist.push({
-      id: productId,
-      name: name,
-      price: price,
-      image: image
-    });
-    localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
-    alert('❤️ Added to Wishlist!');
-  } else {
-    alert('Already in Wishlist');
+function closeLogin() {
+  document.getElementById('loginPopup').style.display = 'none';
+}
+
+// 3. Check karo pehle se pending OTP hai kya
+function checkExistingLogin() {
+  let tempData = localStorage.getItem('temp_login_data');
+  if(tempData) {
+    let data = JSON.parse(tempData);
+    document.getElementById('custName').value = data.name;
+    document.getElementById('custMobile').value = data.mobile;
+    document.getElementById('custEmail').value = data.email || '';
+    document.getElementById('showMobileOTP').innerText = data.mobile;
+    document.getElementById('step1_mobile').style.display = 'none';
+    document.getElementById('step2_otp').style.display = 'block';
   }
 }
 
-// 3. Cart count update
-function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let count = cart.reduce((sum, item) => sum + item.qty, 0);
-  let cartBadge = document.getElementById('cartCount');
-  if(cartBadge) cartBadge.innerText = count;
-}
-
-// 4. ✅ CHECKOUT PE LOGIN CHECK - Yahan OTP maangega
-function proceedToCheckout() {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  if(cart.length === 0) {
-    alert('Cart is empty!');
-    return;
-  }
-  
-  let customer = localStorage.getItem('santra_customer');
-  if(!customer) {
-    // Login nahi hai - Login popup kholo
-    alert('Please login with OTP to place order');
-    localStorage.setItem('redirect_after_login', 'checkout.html');
-    document.getElementById('loginPopup').style.display = 'block';
-    return;
-  }
-  
-  // Login hai - Direct checkout pe
-  window.location.href = 'checkout.html';
-}
-
-// 5. ✅ Customer Login with Manual WhatsApp OTP
+// 4. OTP Request - Firebase me save
 function requestOTP() {
   let name = document.getElementById('custName').value.trim();
   let mobile = document.getElementById('custMobile').value.trim();
@@ -83,34 +89,31 @@ function requestOTP() {
     alert('10 digit mobile number daalo');
     return;
   }
-  
-  // Random 6 digit OTP generate karo
-  let otp = Math.floor(100000 + Math.random() * 900000).toString();
-  
-  // Firebase me save karo - Admin ko dikhega
+
+  // Firebase me request save - Admin dekhega
   firebase.database().ref('login_requests/' + mobile).set({
     name: name,
     mobile: mobile,
     email: email,
-    otp: otp,
     time: new Date().toLocaleString(),
-    status: 'pending'
+    status: 'pending',
+    otp: '' // Admin yahan OTP daalega
   });
   
-  // Temp data save karo
-  localStorage.setItem('temp_login_data', JSON.stringify({name, mobile, email, otp}));
+  // Temp save karo
+  localStorage.setItem('temp_login_data', JSON.stringify({name, mobile, email}));
   
-  // Customer ko Step 2 dikhao
-  document.getElementById('showMobile').innerText = mobile;
+  // Step 2 dikhao - OTP Box
+  document.getElementById('showMobileOTP').innerText = mobile;
   document.getElementById('step1_mobile').style.display = 'none';
   document.getElementById('step2_otp').style.display = 'block';
   
-  alert('Admin ko WhatsApp request bhej di hai. Admin se OTP maang ke yahan daalo');
+  alert('Request sent to Admin ✅\nAdmin aapko WhatsApp pe OTP bhejega');
 }
 
-// 6. ✅ OTP Verify - Customer Object Save Hoga
+// 5. OTP Verify - Admin ne jo OTP daala wo check karo
 function verifyOTP() {
-  let mobile = document.getElementById('custMobile').value;
+  let mobile = document.getElementById('custMobile').value.trim();
   let enteredOTP = document.getElementById('custOTP').value.trim();
   
   if(!enteredOTP || enteredOTP.length !== 6) {
@@ -118,11 +121,24 @@ function verifyOTP() {
     return;
   }
   
+  // Firebase se OTP check karo
   firebase.database().ref('login_requests/' + mobile).once('value', (snap) => {
     let data = snap.val();
-    if(data && (data.otp == enteredOTP || enteredOTP === '123456')) {
+    
+    if(!data) {
+      alert('❌ Request nahi mili. Dubara try karo');
+      changeNumber();
+      return;
+    }
+    
+    if(!data.otp) {
+      alert('⏳ Admin ne abhi OTP nahi bheja. Thoda wait karo');
+      return;
+    }
+    
+    if(data.otp == enteredOTP || enteredOTP === '123456') { // Master OTP for testing
       
-      // ✅ IMPORTANT: Object save karo, sirf mobile nahi
+      // ✅ LOGIN SUCCESS - Object save karo
       let customerData = {
         name: data.name,
         mobile: data.mobile,
@@ -132,7 +148,7 @@ function verifyOTP() {
       
       localStorage.setItem('santra_customer', JSON.stringify(customerData));
       
-      // Firebase customers me save/update karo
+      // Firebase customers me save
       firebase.database().ref('customers/' + mobile).set({
         name: data.name,
         mobile: mobile,
@@ -140,131 +156,34 @@ function verifyOTP() {
         lastLogin: new Date().toISOString()
       });
       
-      // Request verified mark karo
-      firebase.database().ref('login_requests/' + mobile + '/status').set('verified');
+      // Request delete karo
+      firebase.database().ref('login_requests/' + mobile).remove();
       localStorage.removeItem('temp_login_data');
       
-      alert('Login Successful ✅ Welcome ' + data.name);
-      document.getElementById('loginPopup').style.display = 'none';
-      
-      // Redirect agar checkout ke liye login kiya tha
-      let redirect = localStorage.getItem('redirect_after_login');
-      if(redirect) {
-        localStorage.removeItem('redirect_after_login');
-        window.location.href = redirect;
-      } else {
-        showCustomerData();
-        loadCustomerOrders(mobile);
-        updateHeader();
-      }
+      alert('✅ Login Successful! Welcome ' + data.name);
+      closeLogin();
+      updateHeader();
+      location.reload(); // Page refresh taki sab jagah dikhe
       
     } else {
-      alert('Galat OTP ❌ Admin se sahi OTP pucho');
+      alert('❌ Galat OTP! Sahi OTP daalo');
+      document.getElementById('custOTP').value = '';
     }
   });
 }
 
+// 6. Login as Other Number
 function changeNumber() {
+  localStorage.removeItem('temp_login_data');
   document.getElementById('step1_mobile').style.display = 'block';
   document.getElementById('step2_otp').style.display = 'none';
+  document.getElementById('custName').value = '';
+  document.getElementById('custMobile').value = '';
+  document.getElementById('custEmail').value = '';
+  document.getElementById('custOTP').value = '';
 }
 
-function closeLogin() {
-  document.getElementById('loginPopup').style.display = 'none';
-}
-
-// 7. ✅ Login tab me customer data dikhao - Object se
-function showCustomerData() {
-  let customerStr = localStorage.getItem('santra_customer');
-  if(customerStr) {
-    let customer = JSON.parse(customerStr);
-    let loginTab = document.getElementById('loginTab');
-    if(loginTab) {
-      loginTab.innerHTML = `
-        <h3>Welcome ${customer.name}</h3>
-        <p><b>Mobile:</b> ${customer.mobile}</p>
-        <p><b>Email:</b> ${customer.email || 'Not provided'}</p>
-        <button onclick="logout()">Logout</button>
-      `;
-    }
-  }
-}
-
-// 8. ✅ Order tab me customer ke orders dikhao
-function loadCustomerOrders(mobile) {
-  let customerStr = localStorage.getItem('santra_customer');
-  if(!mobile && customerStr) {
-    mobile = JSON.parse(customerStr).mobile;
-  }
-  if(!mobile) return;
-  
-  let orderTab = document.getElementById('orderTab');
-  if(orderTab) {
-    orderTab.innerHTML = `
-      <h3>📦 My Orders</h3>
-      <p><b>Logged in as:</b> ${mobile}</p>
-      <div id="orderList">Loading orders...</div>
-    `;
-    
-    firebase.database().ref('orders').orderByChild('mobile').equalTo(mobile).once('value', (snap) => {
-      let orders = snap.val();
-      let html = '';
-      if(orders) {
-        Object.entries(orders).forEach(([id, order]) => {
-          html += `<p>Order: ${order.time} | Status: ${order.status}</p>`;
-        });
-      } else {
-        html = '<p>No orders yet</p>';
-      }
-      document.getElementById('orderList').innerHTML = html;
-    });
-  }
-}
-
-// 9. ✅ Order karte time customer detail auto fill ho
-function placeOrder() {
-  let customerStr = localStorage.getItem('santra_customer');
-  if(!customerStr) {
-    alert('Pehle login karo');
-    localStorage.setItem('redirect_after_login', 'checkout.html');
-    document.getElementById('loginPopup').style.display = 'block';
-    return;
-  }
-  
-  let customer = JSON.parse(customerStr);
-  let cartItems = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  
-  if(cartItems.length === 0) {
-    alert('Cart is empty!');
-    return;
-  }
-  
-  // Order me customer details add karo
-  let orderData = {
-    customerName: customer.name,
-    mobile: customer.mobile,
-    email: customer.email,
-    items: cartItems,
-    time: new Date().toLocaleString(),
-    status: 'Pending',
-    total: cartItems.reduce((sum, item) => sum + (item.price * item.qty), 0)
-  };
-  
-  firebase.database().ref('orders').push(orderData);
-  alert('Order placed ✅');
-  localStorage.removeItem('santra_cart');
-  updateCartCount();
-  loadCustomerOrders(customer.mobile);
-  window.location.href = 'orders.html';
-}
-
-function logout() {
-  localStorage.removeItem('santra_customer');
-  alert('Logged out successfully');
-  location.reload();
-}
-
-// 10. Header update - Welcome Name dikhao
+// 7. Header Update - Welcome Name
 function updateHeader() {
   let customerStr = localStorage.getItem('santra_customer');
   let welcomeEl = document.getElementById('welcomeUser');
@@ -283,54 +202,29 @@ function updateHeader() {
   }
 }
 
-// 11. ✅ Customer Login popup/box me details dikhao
-function showCustomerLoginBox() {
-  let customerStr = localStorage.getItem('santra_customer');
-  
-  if(customerStr) {
-    let data = JSON.parse(customerStr);
-    
-    let nameField = document.getElementById('custName');
-    let mobileField = document.getElementById('custMobile');
-    let emailField = document.getElementById('custEmail');
-    
-    if(nameField) nameField.value = data.name || '';
-    if(mobileField) mobileField.value = data.mobile || '';
-    if(emailField) emailField.value = data.email || '';
-    
-    let infoName = document.getElementById('infoName');
-    let infoMobile = document.getElementById('infoMobile');
-    let infoEmail = document.getElementById('infoEmail');
-    
-    if(infoName) infoName.innerText = data.name || '';
-    if(infoMobile) infoMobile.innerText = data.mobile || '';
-    if(infoEmail) infoEmail.innerText = data.email || 'Not provided';
-    
-    console.log('✅ Customer details loaded:', data.name);
+function logout() {
+  localStorage.removeItem('santra_customer');
+  alert('Logged out successfully');
+  location.reload();
+}
+
+// Guest Cart - Login jaruri nahi
+function addToCart(productId, name, price, image) {
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
+  let existing = cart.find(item => item.id === productId);
+  if(existing) {
+    existing.qty += 1;
   } else {
-    console.log('❌ No customer logged in');
+    cart.push({id: productId, name, price, image, qty: 1});
   }
-}
-
-// 12. Login Popup Open
-function openLoginPopup() {
-  document.getElementById('loginPopup').style.display = 'block';
-  showCustomerLoginBox();
-}
-
-// 13. Page Load Pe Check Karo
-document.addEventListener('DOMContentLoaded', function() {
-  if(document.getElementById('custName')) {
-    showCustomerLoginBox();
-  }
-  updateHeader();
+  localStorage.setItem('santra_cart', JSON.stringify(cart));
   updateCartCount();
-  showCustomerData();
-  loadCustomerOrders();
-});
+  alert('✅ Added to Cart!');
+}
 
-// Window load backup
-window.onload = function() {
-  showCustomerData();
-  loadCustomerOrders();
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
+  let count = cart.reduce((sum, item) => sum + item.qty, 0);
+  let cartBadge = document.getElementById('cartCount');
+  if(cartBadge) cartBadge.innerText = count;
 }
