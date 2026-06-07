@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,59 +8,59 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
-  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px}
-  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .container{max-width:700px;margin:15px auto;padding:0 15px}
-  .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
-  .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
-  .order-id{font-size:14px;color:#666}
-  .order-id b{color:var(--text);font-size:16px}
-  .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
-  .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
-  .status-pending{background:#fef3c7;color:#92400e}
-  .status-confirmed{background:#d1fae5;color:#065f46}
-  .status-shipped{background:#dbeafe;color:#1e40af}
-  .status-delivered{background:#d1fae5;color:#065f46}
-  .status-cancelled{background:#fee2e2;color:#991b1b}
-  .order-info{margin:15px 0}
-  .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-  .info-row span:first-child{color:#666}
-  .info-row span:last-child{font-weight:bold;color:var(--text)}
-  .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
-  .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
-  .item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
-  .item-details{flex:1}
-  .item-details h4{font-size:13px;margin-bottom:4px}
-  .item-details p{font-size:12px;color:#666;margin:2px 0}
-  .item-link{font-size:11px;color:#3b82f6;text-decoration:none;font-weight:bold}
-  .item-link:hover{text-decoration:underline}
-  .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
-  .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
-  .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
-  .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
-  .address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
-  .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
-  .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
-  .date-text{color:#6b7280;font-size:13px;margin:5px 0}
-  .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
-  .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
-  .otp-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;text-align:center;letter-spacing:8px}
-  .timeline{margin:20px 0}
-  .timeline-item{display:flex;gap:10px;margin:10px 0}
-  .timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
-  .timeline-dot.done{background:#10b981;color:white}
-  .timeline-dot.current{background:#e40046;color:white}
-  .timeline-content h4{margin:0;font-size:13px}
-  .timeline-content p{margin:2px 0;font-size:11px;color:#666}
-  .hidden-content{filter:blur(8px);pointer-events:none;user-select:none}
-  .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
-  .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
-  .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
+ .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+ .header h1{font-size:18px}
+ .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+ .container{max-width:700px;margin:15px auto;padding:0 15px}
+ .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+ .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+ .order-id{font-size:14px;color:#666}
+ .order-id b{color:var(--text);font-size:16px}
+ .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
+ .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+ .status-pending{background:#fef3c7;color:#92400e}
+ .status-confirmed{background:#d1fae5;color:#065f46}
+ .status-shipped{background:#dbeafe;color:#1e40af}
+ .status-delivered{background:#d1fae5;color:#065f46}
+ .status-cancelled{background:#fee2e2;color:#991b1b}
+ .order-info{margin:15px 0}
+ .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+ .info-row span:first-child{color:#666}
+ .info-row span:last-child{font-weight:bold;color:var(--text)}
+ .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
+ .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
+ .item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
+ .item-details{flex:1}
+ .item-details h4{font-size:13px;margin-bottom:4px}
+ .item-details p{font-size:12px;color:#666;margin:2px 0}
+ .item-link{font-size:11px;color:#3b82f6;text-decoration:none;font-weight:bold}
+ .item-link:hover{text-decoration:underline}
+ .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
+ .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+ .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
+ .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+ .empty{text-align:center;padding:60px 20px;color:#999}
+ .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+ .address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
+ .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
+ .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
+ .date-text{color:#6b7280;font-size:13px;margin:5px 0}
+ .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
+ .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
+ .otp-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;text-align:center;letter-spacing:8px}
+ .timeline{margin:20px 0}
+ .timeline-item{display:flex;gap:10px;margin:10px 0}
+ .timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+ .timeline-dot.done{background:#10b981;color:white}
+ .timeline-dot.current{background:#e40046;color:white}
+ .timeline-content h4{margin:0;font-size:13px}
+ .timeline-content p{margin:2px 0;font-size:11px;color:#666}
+ .hidden-content{filter:blur(8px);pointer-events:none;user-select:none}
+ .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
+ .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
+ .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
   </style>
 </head>
 <body>
@@ -83,22 +83,10 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="secrets.js"></script>
 <script>
-// ===== FIREBASE CONFIG - APNI KEY DAAL ⚠️ =====
- 
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-  // Tera config yahan daal de
-firebase.initializeApp(firebaseConfig);
+// ===== FIREBASE CONFIG - secrets.js me hona chahiye =====
+firebase.initializeApp(FIREBASE_CONFIG);
 const db = firebase.firestore();
 
 let allOrders = [];
@@ -137,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// ✅ Customer Info Box Dikhao
 function showCustomerInfo() {
   if(currentCustomerData) {
     document.getElementById('customerInfoBox').innerHTML = `
@@ -189,7 +176,6 @@ async function loadOrders() {
   }
 }
 
-// ✅ Items HTML with Clickable Image + Link
 function buildItemsHTML(items) {
   if(!items ||!Array.isArray(items) || items.length === 0) {
     return '<p style="color:#999">No items found in this order</p>';
