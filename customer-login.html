@@ -85,7 +85,11 @@
       
       <input type="text" id="otpInput" class="otp-input" placeholder="Enter 6-digit OTP" maxlength="6">
       
-      <button class="btn btn-green" onclick="verifyOTP()">✅ Verify OTP</button>
+      <button class="btn btn-green" onclick="verifyOTP()">
+
+Cky
+
+verifyOTP()">✅ Verify OTP</button>
       
       <a id="waLink" href="#" target="_blank" style="text-decoration:none">
         <button class="btn btn-green" style="margin-top:8px">💬 Get OTP on Santrajet WhatsApp</button>
@@ -124,7 +128,7 @@
 
   let currentCustomer = {};
 
-  // 1. Page load pe sabse pehle check karo
+  // 1. Page load pe sabse pehle check karo - Order tab jaisa
   window.addEventListener('load', function() {
     let savedCustomer = localStorage.getItem('santra_customer');
     if(savedCustomer) {
@@ -133,13 +137,12 @@
       return;
     }
     
-    // Pending OTP check karo - Order tab jaisa
+    // Pending OTP check karo - Back aane pe OTP box dikhe
     let pendingMobile = localStorage.getItem('pending_otp_mobile');
     if(pendingMobile) {
       database.ref('login_requests/' + pendingMobile).once('value', (snap) => {
         let data = snap.val();
         if(data && data.status === 'pending') {
-          // Pending OTP mila - Direct OTP box dikhao
           currentCustomer = data;
           document.getElementById('custName').value = data.name;
           document.getElementById('custMobile').value = data.mobile;
@@ -182,7 +185,7 @@
     let otp = Math.floor(100000 + Math.random() * 900000).toString();
     currentCustomer = {name, mobile, email, otp};
     
-    // 1. Firebase me save - Admin panel + Order tab ke liye
+    // 1. Firebase me save - Admin panel ke liye
     database.ref('login_requests/' + mobile).set({
       name: name,
       mobile: mobile,
@@ -192,10 +195,10 @@
       status: 'pending'
     });
     
-    // 2. Local me save - Page reload pe yaad rahe
+    // 2. Local me save - Wapas aaye to yaad rahe
     localStorage.setItem('pending_otp_mobile', mobile);
     
-    // 3. OTP Box dikhao - Form hide karo
+    // 3. OTP Box dikhao - Order page jaisa
     showOTPBox();
   }
 
@@ -221,7 +224,7 @@
         loginTime: new Date().toISOString()
       };
       
-      // 1. LocalStorage me save - Website login + Order login SAME ho jayega
+      // 1. LocalStorage me save - YE KEY orders.html + login.js use karta hai
       localStorage.setItem('santra_customer', JSON.stringify(customerData));
       
       // 2. Firebase me permanent save - Admin panel + Order tab me dikhega
