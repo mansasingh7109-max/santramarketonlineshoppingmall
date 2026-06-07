@@ -432,3 +432,24 @@ end line
   top: 50% !important;
   transform: translateY(-50%) !important;
 }
+.hide { display: none !important; }
+#userInfo { 
+  background: #fff; 
+  padding: 8px 15px; 
+  border-radius: 8px; 
+  color: #e40046; 
+  font-weight: bold;
+  margin-right: 10px;
+}
+#loginBtn, #logoutBtn {
+  background: #e40046;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#logoutBtn { background: #666; }
+
+
