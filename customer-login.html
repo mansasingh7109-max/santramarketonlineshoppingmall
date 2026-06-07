@@ -1,76 +1,212 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login to Checkout - SANTRA MALL</title>
   <style>
-    body{background:#f1f3f6;font-family:Arial;padding:20px;margin:0}
-    .container{max-width:500px;margin:20px auto}
-    .card{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-    .card h2{color:#e40046;text-align:center;margin:0 0 20px 0}
-    .card input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-    .btn{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px;cursor:pointer}
-    .btn-green{background:#25D366}
-    .info-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:15px;border-left:4px solid #2196f3}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+   .login-box{background:white;padding:30px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);max-width:400px;width:100%}
+   .login-box h2{color:#e40046;margin-bottom:15px;text-align:center}
+   .info-box{background:#e3f2fd;border-left:4px solid #2196f3;padding:12px;border-radius:8px;margin-bottom:20px}
+   .info-box h4{margin:0 0 5px 0;font-size:15px}
+   .info-box p{margin:0;font-size:13px;color:#555}
+   .success-box{background:#e8f5e9;border-left:4px solid #4caf50;padding:12px;border-radius:8px;margin-bottom:20px;display:none}
+   .success-box h4{margin:0 0 5px 0;font-size:15px;color:#2e7d32}
+   .success-box p{margin:0;font-size:13px;color:#555}
+    input{width:100%;padding:12px;margin:10px 0;border:2px solid #ddd;border-radius:8px;font-size:16px}
+    input:focus{border-color:#e40046;outline:none}
+    input:disabled{background:#f5f5f5;color:#999}
+   .btn-green{width:100%;padding:14px;background:#25d366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px}
+   .btn-green:disabled{background:#ccc;cursor:not-allowed}
+   .btn-red{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px}
+   .btn-orange{width:100%;padding:12px;background:#ff9800;color:white;border:none;border-radius:8px;font-weight:bold;font-size:14px;cursor:pointer;margin-top:8px}
+   .btn-gray{background:#999;margin-top:8px}
+   .otp-section{display:none;margin-top:20px;padding-top:20px;border-top:2px dashed #ddd}
+   .otp-input{width:100%;padding:15px;border:2px solid #ffc107;border-radius:8px;font-size:24px;text-align:center;letter-spacing:15px;font-weight:bold;margin:15px 0}
   </style>
 </head>
 <body>
-
-<div class="container">
-  <div class="card">
+  <div class="login-box">
     <h2>🔐 Login to Place Order</h2>
     
-    <div class="info-box">
-      <p><b>📦 Checkout ke liye login jaruri hai</b></p>
-      <p style="font-size:13px;margin-top:5px">WhatsApp pe OTP bhejenge verification ke liye</p>
+    <div class="info-box" id="infoBox">
+      <h4>📦 Checkout ke liye login jaruri hai</h4>
+      <p>WhatsApp pe OTP bhejenge verification ke liye</p>
     </div>
-    
-    <input type="text" id="custName" placeholder="Full Name *" required>
-    <input type="tel" id="custMobile" placeholder="WhatsApp Mobile Number *" maxlength="10" required>
-    <input type="email" id="custEmail" placeholder="Email (Optional)">
-    
-    <button class="btn btn-green" onclick="requestOTP()">📱 Get OTP on WhatsApp</button>
-  </div>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <div class="success-box" id="successBox">
+      <h4>✅ OTP Request Sent!</h4>
+      <p>Admin aapko WhatsApp pe OTP bhejega: <b>+91 <span id="sentMobile"></span></b></p>
+    </div>
+
+    <div id="detailsForm">
+      <input type="text" id="custName" placeholder="Full Name *" required>
+      <input type="tel" id="custMobile" placeholder="WhatsApp Mobile Number *" maxlength="10" required>
+      <input type="email" id="custEmail" placeholder="Email (Optional)">
+      
+      <button type="button" onclick="sendOTPRequest()" class="btn-green" id="getOtpBtn">📱 Get OTP on WhatsApp</button>
+    </div>
+
+    <div class="otp-section" id="otpSection">
+      <p style="text-align:center;color:#666;font-size:14px;margin-bottom:10px">
+        WhatsApp se OTP copy karke yahan daalo
+      </p>
+      
+      <input type="text" id="enterOTP" class="otp-input" placeholder="000000" maxlength="6">
+      
+      <button type="button" onclick="verifyOTP()" class="btn-red">✅ Verify & Login</button>
+      
+      <button type="button" onclick="resendOTP()" class="btn-orange">🔄 OTP Nahi Mila? Wapas Request Karo</button>
+      
+      <button type="button" onclick="changeDetails()" class="btn-gray btn-red">✏️ Details Badlo</button>
+      
+      <p style="font-size:11px;color:#999;text-align:center;margin-top:15px" id="timerText">
+        Admin OTP bhejne ka wait karo...
+      </p>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 <script>
-  firebase.initializeApp(FIREBASE_CONFIG);
-  const database = firebase.database();
-  const SANTRAJET_WHATSAPP = "919876543210"; 
+  // ✅ FIREBASE INIT - secrets.js se FIREBASE_CONFIG aa raha hai
+  if (typeof FIREBASE_CONFIG === 'undefined') {
+    alert("❌ FIREBASE_CONFIG nahi mila! secrets.js file check karo");
+  } else {
+    firebase.initializeApp(FIREBASE_CONFIG);
+  }
+  
+  const db = firebase.firestore();
 
-  function requestOTP() {
+  let currentMobile = '';
+  let currentName = '';
+  let currentEmail = '';
+
+  function sendOTPRequest() {
     let name = document.getElementById('custName').value.trim();
     let mobile = document.getElementById('custMobile').value.trim();
     let email = document.getElementById('custEmail').value.trim();
-    
-    if(!name || mobile.length !== 10) {
-      alert('Please enter Name and 10 digit mobile number');
+
+    if(name === '' || mobile.length !== 10) {
+      alert('Naam aur 10 digit mobile number jaruri hai');
       return;
     }
 
-    let otp = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    // Firebase me save
-    database.ref('login_requests/' + mobile).set({
+    document.getElementById('getOtpBtn').disabled = true;
+    document.getElementById('getOtpBtn').innerText = 'Sending Request...';
+
+    currentMobile = mobile;
+    currentName = name;
+    currentEmail = email;
+
+    db.collection('login_requests').doc(mobile).set({
       name: name,
       mobile: mobile,
-      email: email,
-      otp: otp,
+      email: email || 'Not provided',
+      status: 'pending',
+      otp: '',
       time: new Date().toLocaleString(),
-      status: 'pending'
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      document.getElementById('infoBox').style.display = 'none';
+      document.getElementById('detailsForm').style.display = 'none';
+      document.getElementById('successBox').style.display = 'block';
+      document.getElementById('sentMobile').innerText = mobile;
+      document.getElementById('otpSection').style.display = 'block';
+      document.getElementById('enterOTP').focus();
+    }).catch((error) => {
+      alert('❌ Error: ' + error.message);
+      document.getElementById('getOtpBtn').disabled = false;
+      document.getElementById('getOtpBtn').innerText = '📱 Get OTP on WhatsApp';
     });
+  }
+
+  function verifyOTP() {
+    let enteredOTP = document.getElementById('enterOTP').value.trim();
     
-    // WhatsApp open karo
-    let waText = `Hi Santrajet, OTP for SANTRA MALL%0AName: ${name}%0AMobile: ${mobile}`;
-    window.open(`https://wa.me/${SANTRAJET_WHATSAPP}?text=${waText}`, '_blank');
-    
-    // OTP input page pe bhejo
-    localStorage.setItem('temp_login_data', JSON.stringify({name, mobile, email, otp}));
-    window.location.href = 'verify-otp.html';
+    if(enteredOTP.length !== 6) {
+      alert('6 digit OTP daalo');
+      return;
+    }
+
+    db.collection('login_requests').doc(currentMobile).get().then((doc) => {
+      if(!doc.exists) {
+        alert('❌ Request nahi mili. Wapas request karo');
+        return;
+      }
+
+      let data = doc.data();
+      
+      if(data.otp === '' || data.otp.length !== 6) {
+        alert('⏳ Admin ne abhi OTP nahi bheja. WhatsApp check karo');
+        return;
+      }
+
+      if(data.otp === enteredOTP) {
+        localStorage.setItem('santra_customer', JSON.stringify({
+          name: data.name,
+          mobile: currentMobile,
+          email: data.email,
+          loginTime: new Date().toISOString()
+        }));
+        
+        db.collection('login_requests').doc(currentMobile).update({
+          status: 'verified',
+          verifiedTime: new Date().toLocaleString()
+        });
+
+        alert('✅ Login Success! Welcome ' + data.name);
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect');
+        if(redirect) {
+          window.location.href = redirect;
+        } else {
+          window.location.href = 'index.html';
+        }
+      } else {
+        alert('❌ Galat OTP! WhatsApp pe sahi OTP check karo');
+        document.getElementById('enterOTP').value = '';
+        document.getElementById('enterOTP').focus();
+      }
+    });
+  }
+
+  function resendOTP() {
+    if(confirm('Wapas OTP request karna hai? Admin ko naya request jayega.')) {
+      db.collection('login_requests').doc(currentMobile).update({
+        otp: '',
+        status: 'pending',
+        time: new Date().toLocaleString(),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        document.getElementById('enterOTP').value = '';
+        alert('✅ Wapas request bhej di! Admin WhatsApp pe naya OTP bhejega');
+      }).catch((error) => {
+        alert('❌ Error: ' + error.message);
+      });
+    }
+  }
+
+  function changeDetails() {
+    if(confirm('Details change karni hai? Purana request cancel ho jayega.')) {
+      db.collection('login_requests').doc(currentMobile).delete().then(() => {
+        document.getElementById('infoBox').style.display = 'block';
+        document.getElementById('detailsForm').style.display = 'block';
+        document.getElementById('successBox').style.display = 'none';
+        document.getElementById('otpSection').style.display = 'none';
+        document.getElementById('enterOTP').value = '';
+        document.getElementById('custMobile').value = '';
+        document.getElementById('getOtpBtn').disabled = false;
+        document.getElementById('getOtpBtn').innerText = '📱 Get OTP on WhatsApp';
+        currentMobile = '';
+      }).catch((error) => {
+        alert('❌ Error: ' + error.message);
+      });
+    }
   }
 </script>
 </body>
