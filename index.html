@@ -7,26 +7,19 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="layout.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
  <div class="header">
   <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
   
-  <!-- ✅ FIXED: Sirf 1 baar header-btns -->
   <div class="header-btns">
-    <!-- User Info Box - Login ke baad dikhega -->
     <div id="userInfo" class="hide">
       <span>Hi, <b id="userName"></b></span>
     </div>
-
-    <!-- Login Button - Login nahi hai to dikhega -->
     <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
-    
-    <!-- Logout Button - Login ke baad dikhega -->
+    <button id="verifyOtpBtn" class="hide" onclick="openVerifyOtpPopup()">🔐 Verify OTP</button>
     <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
-
     <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
@@ -210,8 +203,8 @@ let loginOTP = null;
 let tempCustomerData = null;
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
-
 const USE_DATABASE = 'rtdb'; 
+const ADMIN_WHATSAPP = "917725960293"; // ✅ Tera number
 
 auth.onAuthStateChanged((user) => {
   currentUser = user;
@@ -223,15 +216,146 @@ auth.onAuthStateChanged((user) => {
 
 window.onload = function() {
   loadProducts();
+  // checkPendingOTP(); // ✅ Comment kar diya - Auto popup band
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get('id');
   if(orderId) loadSingleOrder(orderId);
 }
 
-// ✅ AUTOMATIC PRODUCT LOAD
+// ✅ OTP POPUP FUNCTIONS - NAYA CODE
+function openVerifyOtpPopup() {
+  let pending = localStorage.getItem('pendingOTP');
+  if(!pending) {
+    alert('❌ Koi OTP request nahi mili!\nPehle customer-login.html se WhatsApp bhejo');
+    return;
+  }
+  
+  pending = JSON.parse(pending);
+  if(Date.now() - pending.time > 30 * 60 * 1000) {
+    localStorage.removeItem('pendingOTP');
+    alert('❌ OTP expire ho gaya! Wapas bhejo');
+    document.getElementById('verifyOtpBtn').classList.add('hide');
+    return;
+  }
+  
+  showAutoOTPPopup(pending.mobile, pending.name);
+}
+
+function showAutoOTPPopup(mobile, name) {
+  if(document.getElementById('autoOtpModal')) return;
+  
+  let popupHTML = `
+    <div id="autoOtpModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px;animation:fadeIn 0.3s">
+      <div style="background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)">
+        <h3 style="color:#e40046;text-align:center;margin-bottom:18px;font-size:22px">🔐 WhatsApp OTP Verify</h3>
+        <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);padding:15px;border-radius:12px;margin-bottom:18px;border-left:5px solid #4caf50">
+          <b style="color:#1b5e20;font-size:16px">✅ Request Sent Successfully!</b><br>
+          <span style="font-size:13px;color:#2e7d32">Hi ${name}, Admin OTP bhejega:<br><b style="font-size:15px">+91 ${mobile}</b></span>
+        </div>
+        <p style="text-align:center;color:#333;font-weight:600;margin-bottom:12px;font-size:15px">WhatsApp se OTP copy karke yahan daalo 👇</p>
+        <input type="tel" id="autoOtpInput" maxlength="6" placeholder="000000" style="width:100%;padding:20px;text-align:center;font-size:32px;letter-spacing:12px;border:3px solid #e40046;border-radius:12px;margin:12px 0;font-weight:bold;color:#e40046;background:#fff5f7">
+        <button onclick="verifyAutoOTP('${mobile}')" style="width:100%;padding:16px;background:linear-gradient(135deg,#e40046,#ff1744);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer;margin-bottom:12px;box-shadow:0 5px 20px rgba(228,0,70,0.4)">✅ Verify & Login</button>
+        <button onclick="resendWhatsAppOTP('${mobile}','${name}')" style="width:100%;padding:14px;background:#ff9800;color:white;border:none;border-radius:12px;cursor:pointer;margin-bottom:10px;font-weight:bold">🔄 OTP Nahi Mila? Wapas Bhejo</button>
+        <button onclick="closeAutoOTPPopup()" style="width:100%;padding:13px;background:#757575;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:bold">❌ Cancel</button>
+        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 2-5 min me OTP bhejega<br>🔄 Refresh karne pe bhi popup rahega</p>
+      </div>
+    </div>
+    <style>
+      @keyframes fadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+      #autoOtpInput:focus{border-color:#ff1744;box-shadow:0 0 4px rgba(228,0,70,0.15);outline:none}
+    </style>`;
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+  setTimeout(() => document.getElementById('autoOtpInput')?.focus(), 400);
+  
+  // ✅ Back button pe popup band
+  history.pushState(null, null, location.href);
+  window.onpopstate = function() {
+    document.getElementById('autoOtpModal')?.remove();
+  };
+  
+  // Real-time check - Admin ne OTP dala ya nahi
+  db.collection('login_requests').doc(mobile).onSnapshot((doc) => {
+    if(doc.exists && doc.data().otp && doc.data().otp!== '') {
+      let input = document.getElementById('autoOtpInput');
+      if(input &&!input.value) {
+        input.value = doc.data().otp;
+        input.style.background = '#e8f5e9';
+        input.style.borderColor = '#4caf50';
+      }
+    }
+  });
+}
+
+function verifyAutoOTP(mobile) {
+  let enteredOTP = document.getElementById('autoOtpInput').value.trim();
+  if(enteredOTP.length!== 6) {
+    alert('❌ 6 digit OTP daalo!');
+    return;
+  }
+  
+  db.collection('login_requests').doc(mobile).get().then((doc) => {
+    if(!doc.exists) {
+      alert('❌ Session expire! Wapas login karo');
+      closeAutoOTPPopup();
+      return;
+    }
+    
+    let data = doc.data();
+    
+    if(data.otp === enteredOTP && data.otp!== '') {
+      localStorage.setItem('santra_customer', JSON.stringify({
+        name: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        loginTime: new Date().toISOString()
+      }));
+      
+      db.collection('login_requests').doc(mobile).update({
+        status: 'verified',
+        verifiedTime: new Date().toLocaleString('en-IN')
+      });
+      
+      localStorage.removeItem('pendingOTP');
+      
+      document.getElementById('autoOtpModal').innerHTML = `
+        <div style="background:white;padding:50px;border-radius:18px;text-align:center">
+          <div style="font-size:80px;animation:bounce 0.6s">✅</div>
+          <h2 style="color:#4caf50;margin:20px 0;font-size:28px">Login Successful!</h2>
+          <p style="color:#666;font-size:18px">Welcome ${data.name}</p>
+        </div>
+        <style>@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}</style>
+      `;
+      
+      setTimeout(() => location.reload(), 1800);
+      
+    } else if(data.otp === '') {
+      alert('⏳ Admin ne abhi OTP nahi bheja!\nWhatsApp check karo ya 2 min wait karo');
+    } else {
+      alert('❌ Galat OTP! WhatsApp me sahi OTP check karo');
+      document.getElementById('autoOtpInput').value = '';
+      document.getElementById('autoOtpInput').focus();
+    }
+  });
+}
+
+function resendWhatsAppOTP(mobile, name) {
+  let msg = `Hello Admin,\n🔐 OTP wapas bhejo\nName: ${name}\nMobile: ${mobile}`;
+  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  alert('✅ WhatsApp me message bhej diya!\nAdmin jaldi OTP bhejega');
+}
+
+function closeAutoOTPPopup() {
+  // ✅ Direct band karo, confirm mat pucho
+  localStorage.removeItem('pendingOTP');
+  document.getElementById('autoOtpModal')?.remove();
+  document.getElementById('verifyOtpBtn')?.classList.add('hide');
+  // Page reload taaki header update ho jaye
+  location.reload();
+}
+
+//... baaki sab functions same rahenge...
 function loadProducts() {
   if (USE_DATABASE === 'rtdb') {
-    console.log("📦 Loading from Realtime Database...");
     rtdb.ref('products').on('value', snap => {
       allProducts = [];
       if(snap.exists()){
@@ -244,39 +368,15 @@ function loadProducts() {
           allProducts.push(p);
         });
       }
-      console.log("✅ RTDB Products Loaded:", allProducts.length);
       renderProducts(allProducts);
       generateAutoCategories();
       generateAutoFilters();
       localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
-    }, e => {
-      console.log('❌ RTDB Product load error:', e);
-      document.getElementById('productGrid').innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
-    });
-  } else {
-    console.log("📦 Loading from Firestore...");
-    db.collection('products').onSnapshot(snap => {
-      allProducts = [];
-      snap.forEach((doc) => {
-        let p = doc.data();
-        p.id = doc.id;
-        p.price = parseFloat(p.price) || 0;
-        p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
-        p.mrp = parseFloat(p.mrp) || p.price;
-        allProducts.push(p);
-      });
-      console.log("✅ Firestore Products Loaded:", allProducts.length);
-      renderProducts(allProducts);
-      generateAutoCategories();
-      generateAutoFilters();
-      localStorage.setItem('ALL_PRODUCTS', JSON.stringify(allProducts));
-    }, e => {
-      console.log('❌ Firestore Product load error:', e);
-      document.getElementById('productGrid').innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
     });
   }
 }
 
+//... baaki functions same as before...
 function generateAutoCategories() {
   const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
   if(categories.length === 0){
@@ -287,12 +387,7 @@ function generateAutoCategories() {
   categories.forEach(catName => {
     const firstProduct = allProducts.find(p => p.category === catName);
     const catImage = getProductImage(firstProduct) || 'https://via.placeholder.com/50';
-    html += `
-      <div class="cat-item" onclick="filterByCategory('${catName}')">
-        <img src="${catImage}" alt="${catName}" onerror="this.src='https://via.placeholder.com/50'">
-        <p>${catName}</p>
-      </div>
-    `;
+    html += `<div class="cat-item" onclick="filterByCategory('${catName}')"><img src="${catImage}" alt="${catName}"><p>${catName}</p></div>`;
   });
   document.getElementById('categoryList').innerHTML = html;
 }
@@ -321,15 +416,7 @@ function renderAutoFilterPopup() {
   Object.keys(autoFilters).forEach(field => {
     const values = autoFilters[field];
     if (values.length === 0) return;
-    html += `
-      <div class="filter-group">
-        <label>${field.charAt(0).toUpperCase() + field.slice(1)}</label>
-        <select id="filter_${field}" data-field="${field}">
-          <option value="">All ${field}</option>
-          ${values.map(val => `<option value="${val}">${val}</option>`).join('')}
-        </select>
-      </div>
-    `;
+    html += `<div class="filter-group"><label>${field.charAt(0).toUpperCase() + field.slice(1)}</label><select id="filter_${field}" data-field="${field}"><option value="">All ${field}</option>${values.map(val => `<option value="${val}">${val}</option>`).join('')}</select></div>`;
   });
   container.innerHTML = html || '<p style="text-align:center;color:#999">No filters available</p>';
 }
@@ -565,7 +652,7 @@ function loadWishlistStatus() {
 
 function showToast(msg) {
   const toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;';
+     toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)';
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
@@ -667,34 +754,65 @@ function searchProducts() {
 }
 
 function goHome() { window.scrollTo(0, 0); }
-function openCategories() { window.location.href = 'category.html'; }
-function openCart() { window.location.href = 'cart.html'; }
 
+// ✅ UPDATED: OTP check add kiya
+function openCategories() { 
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return;
+  }
+  window.location.href = 'category.html'; 
+}
+
+// ✅ UPDATED: OTP check add kiya
+function openCart() { 
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return;
+  }
+  window.location.href = 'cart.html'; 
+}
+
+// ✅ UPDATED: OTP check add kiya + Alert hataya
 function openOrders() {
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return;
+  }
   let customer = localStorage.getItem('santra_customer');
   if(!customer) {
-    alert('⚠️ Please login first to see your orders');
-    openCustomerLogin();
+    window.location.href = 'customer-login.html';
   } else {
     window.location.href = 'orders.html';
   }
 }
 
 function customerLogout() {
-  auth.signOut().then(() => {
-    localStorage.removeItem('santra_customer');
-    showToast('Logged out successfully');
-    location.reload();
-  });
+  if(confirm('Logout karna hai?')) {
+    auth.signOut().then(() => {
+      localStorage.removeItem('santra_customer');
+      showToast('Logged out successfully');
+      location.reload();
+    });
+  }
 }
 
 function checkCustomerLogin() {
   const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
   if (customer.name && currentUser) {
     document.getElementById('loginBtn').classList.add('hide');
+    document.getElementById('verifyOtpBtn').classList.add('hide');
     document.getElementById('logoutBtn').classList.remove('hide');
-    document.getElementById('userInfo').innerText = '👤 ' + customer.name + ' | ' + customer.mobile;
     document.getElementById('userInfo').classList.remove('hide');
+    document.getElementById('userName').innerText = customer.name;
+  } else {
+    let pendingOTP = localStorage.getItem('pendingOTP');
+    if(pendingOTP) {
+      document.getElementById('verifyOtpBtn').classList.remove('hide');
+    }
   }
 }
 
@@ -716,6 +834,15 @@ function ToCartFromModal() {
 function buyNowFromModal() { if(currentModalProduct) buyNow(currentModalProduct.id, event); }
 function ToWishlistFromModal() { if(currentModalProduct) toggleWishlist(currentModalProduct.id, event); }
 
+function checkLoginBeforeCart() {
+  if (!currentUser) {
+    showToast('⚠️ Please login first');
+    openCustomerLogin();
+    return false;
+  }
+  return true;
+}
+
 // ✅ MOBILE CONSOLE -?eruda=true laga ke test kar
 if (location.search.includes('eruda=true')) {
   var script = document.createElement('script');
@@ -723,37 +850,31 @@ if (location.search.includes('eruda=true')) {
   script.onload = () => eruda.init();
   document.body.appendChild(script);
 }
-
-// Page load pe check karo login hai ya nahi
-window.addEventListener('load', function() {
-  let customer = localStorage.getItem('santra_customer');
-  if(customer) {
-    let data = JSON.parse(customer);
-    document.getElementById('loginBtn').classList.add('hide');
-    document.getElementById
-
-Cky
-
-    document.getElementById('logoutBtn').classList.remove('hide');
-    document.getElementById('userInfo').classList.remove('hide');
-    document.getElementById('userName').innerText = data.name;
-  } else {
-    document.getElementById('loginBtn').classList.remove('hide');
-    document.getElementById('logoutBtn').classList.add('hide');
-    document.getElementById('userInfo').classList.add('hide');
-  }
-});
-
-function customerLogout() {
-  if(confirm('Logout karna hai?')) {
-    localStorage.removeItem('santra_customer');
-    location.reload();
-  }
-}
 </script>
 
 <!-- ==================== OLD CODE BACKUP - 4 June 2026 ==================== -->
 <!--
+OLD openOrders() FUNCTION WITH ALERT:
+function openOrders() {
+  let customer = localStorage.getItem('santra_customer');
+  if(!customer) {
+    alert('⚠️ Please login first to see your orders');
+    openCustomerLogin();
+  } else {
+    window.location.href = 'orders.html';
+  }
+}
+
+OLD openCart() WITHOUT OTP CHECK:
+function openCart() { 
+  window.location.href = 'cart.html'; 
+}
+
+OLD openCategories() WITHOUT OTP CHECK:
+function openCategories() { 
+  window.location.href = 'category.html'; 
+}
+
 OLD HEADER CODE WITH DOUBLE BUTTONS:
  <div class="header">
   <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
@@ -772,6 +893,19 @@ OLD HEADER CODE WITH DOUBLE BUTTONS:
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
 </div>
+
+OLD LOGIN FLOW:
+- OTP box isi login page pe khulta tha
+- Refresh pe gayab ho jata tha
+- Ab naya: WhatsApp ke baad home page pe auto popup
+
+OLD closeAutoOTPPopup() WITH CONFIRM:
+function closeAutoOTPPopup() {
+  if(confirm('OTP verification cancel karna hai?')) {
+    localStorage.removeItem('pendingOTP');
+    document.getElementById('autoOtpModal').remove();
+  }
+}
 -->
 
 <!-- ==================== BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM ==================== -->
