@@ -15,7 +15,7 @@
     .btn-gray{background:#666}
     .btn-green{background:#25D366}
     
-    /* Order Page Jaisa OTP Box */
+    /* Order Tab Jaisa Yellow OTP Box */
     .otp-verification-box{
       background:#fff3cd;
       border-left:4px solid #ffc107;
@@ -124,33 +124,33 @@
 
   let currentCustomer = {};
 
-  // Page load pe check karo - Pending OTP hai ya already login hai
+  // 1. Page load pe sabse pehle check karo
   window.addEventListener('load', function() {
     let savedCustomer = localStorage.getItem('santra_customer');
     if(savedCustomer) {
-      // Already logged in - Info dikhao
+      // Already logged in hai
       showSuccess(JSON.parse(savedCustomer));
-    } else {
-      // Check pending OTP
-      checkPendingOTP();
+      return;
     }
-  });
-
-  // Agar pending OTP hai to direct OTP box dikhao
-  function checkPendingOTP() {
-    let mobile = localStorage.getItem('pending_otp_mobile');
-    if(mobile) {
-      database.ref('login_requests/' + mobile).once('value', (snap) => {
+    
+    // Pending OTP check karo - Order tab jaisa
+    let pendingMobile = localStorage.getItem('pending_otp_mobile');
+    if(pendingMobile) {
+      database.ref('login_requests/' + pendingMobile).once('value', (snap) => {
         let data = snap.val();
         if(data && data.status === 'pending') {
+          // Pending OTP mila - Direct OTP box dikhao
           currentCustomer = data;
-          showOTPBox(data.mobile);
+          document.getElementById('custName').value = data.name;
+          document.getElementById('custMobile').value = data.mobile;
+          document.getElementById('custEmail').value = data.email || '';
+          showOTPBox();
         } else {
           localStorage.removeItem('pending_otp_mobile');
         }
       });
     }
-  }
+  });
 
   function requestOTP() {
     let name = document.getElementById('custName').value.trim();
@@ -169,7 +169,7 @@
         // Purana OTP use karo
         currentCustomer = data;
         localStorage.setItem('pending_otp_mobile', mobile);
-        showOTPBox(mobile);
+        showOTPBox();
         alert('You have a pending OTP. Enter the OTP sent earlier.');
       } else {
         // Naya OTP generate karo
@@ -182,7 +182,7 @@
     let otp = Math.floor(100000 + Math.random() * 900000).toString();
     currentCustomer = {name, mobile, email, otp};
     
-    // 1. Firebase me save - Admin panel ke liye
+    // 1. Firebase me save - Admin panel + Order tab ke liye
     database.ref('login_requests/' + mobile).set({
       name: name,
       mobile: mobile,
@@ -192,19 +192,19 @@
       status: 'pending'
     });
     
-    // 2. Local me save - Wapas aaye to yaad rahe
+    // 2. Local me save - Page reload pe yaad rahe
     localStorage.setItem('pending_otp_mobile', mobile);
     
-    // 3. OTP Box dikhao - Order page jaisa
-    showOTPBox(mobile);
+    // 3. OTP Box dikhao - Form hide karo
+    showOTPBox();
   }
 
-  function showOTPBox(mobile) {
+  function showOTPBox() {
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('otpSection').style.display = 'block';
     
     // WhatsApp link set karo
-    let waText = `Hi Santrajet, I need OTP for SANTRA MALL login.%0AName: ${currentCustomer.name}%0AMobile: ${mobile}`;
+    let waText = `Hi Santrajet, I need OTP for SANTRA MALL login.%0AName: ${currentCustomer.name}%0AMobile: ${currentCustomer.mobile}`;
     document.getElementById('waLink').href = `https://wa.me/${SANTRAJET_WHATSAPP}?text=${waText}`;
   }
 
@@ -221,7 +221,7 @@
         loginTime: new Date().toISOString()
       };
       
-      // 1. LocalStorage me save - Website login + Order login connect ho jayega
+      // 1. LocalStorage me save - Website login + Order login SAME ho jayega
       localStorage.setItem('santra_customer', JSON.stringify(customerData));
       
       // 2. Firebase me permanent save - Admin panel + Order tab me dikhega
@@ -233,7 +233,7 @@
         totalOrders: 0
       });
       
-      // 3. Request verified
+      // 3. Request verified mark karo
       database.ref('login_requests/' + currentCustomer.mobile + '/status').set('verified');
       
       // 4. Pending hatao
