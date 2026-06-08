@@ -45,6 +45,38 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 <script>
+/* 
+=================================
+OLD CODE BACKUP - 08/06/2026
+=================================
+// Purana code me sirf localStorage use hota tha
+// Firebase me save nahi hota tha isliye admin panel me nahi dikhta tha
+// function sendOTPRequest() {
+//   const name = document.getElementById('custName').value.trim();
+//   const mobile = document.getElementById('custMobile').value.trim();
+//   const email = document.getElementById('custEmail').value.trim();
+//   if (!name || mobile.length !== 10) {
+//     alert('❌ Name aur 10 digit mobile required hai!');
+//     return;
+//   }
+//   db.collection('login_requests').doc(mobile).set({
+//     name: name,
+//     mobile: mobile,
+//     email: email,
+//     otp: '',
+//     status: 'pending',
+//     requestedAt: new Date().toLocaleString('en-IN'),
+//     requestedTime: Date.now()
+//   });
+//   localStorage.setItem('pendingOTP', JSON.stringify({name, mobile, email, time: Date.now()}));
+//   let msg = `🔐 *LOGIN OTP REQUEST - SANTRA MALL*...`;
+//   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+//   window.location.href = 'index.html';
+// }
+=================================
+*/
+
+// ✅ NEW UPDATED CODE - Permanent History Save + Backup
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const ADMIN_WHATSAPP = "917725960293"; // ✅ Tera number
@@ -59,7 +91,7 @@ function sendOTPRequest() {
     return;
   }
   
-  // ✅ 1. Firebase me request save karo
+  // ✅ 1. Login request save karo - OTP ke liye
   db.collection('login_requests').doc(mobile).set({
     name: name,
     mobile: mobile,
@@ -68,9 +100,27 @@ function sendOTPRequest() {
     status: 'pending',
     requestedAt: new Date().toLocaleString('en-IN'),
     requestedTime: Date.now()
+  }).then(() => {
+    // ✅ 2. Customers collection me permanent save - History hamesha rahegi
+    db.collection('customers').doc(mobile).set({
+      name: name,
+      mobile: mobile,
+      email: email,
+      createdAt: new Date().toLocaleString('en-IN'),
+      createdTime: Date.now(),
+      status: 'pending_otp',
+      totalOrders: 0,
+      lastLogin: Date.now()
+    }, { merge: true }); // merge: true se purana data delete nahi hoga, update hoga
+    
+    console.log('✅ Customer permanent save ho gaya - admin-customer.html me dikhega');
+    console.log('✅ History backup: customers + login_requests dono me save');
+  }).catch(err => {
+    alert('❌ Error: ' + err.message);
+    return;
   });
   
-  // ✅ 2. LocalStorage me save karo
+  // ✅ 3. LocalStorage me save karo - browser backup
   localStorage.setItem('pendingOTP', JSON.stringify({
     name: name,
     mobile: mobile,
@@ -78,13 +128,13 @@ function sendOTPRequest() {
     time: Date.now()
   }));
   
-  // ✅ 3. Customer ke WhatsApp se Admin ko message
+  // ✅ 4. Customer ke WhatsApp se Admin ko message
   let msg = `🔐 *LOGIN OTP REQUEST - SANTRA MALL*\n\n👤 Name: ${name}\n📱 My Number: ${mobile}\n${email ? '📧 Email: ' + email : ''}\n\n⚡ *Admin:* Please reply with 6-digit OTP on this WhatsApp number.\n\nMain index.html pe "Verify OTP" button dabake wait kar raha hun.`;
   
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
   
-  // ✅ 4. Home page pe bhejo
-  alert('✅ WhatsApp khul gaya!\n\nAdmin ko message send karo.\n\nAdmin 2-5 min me isi WhatsApp pe OTP bhejega.\nFir Home page pe "🔐 Verify OTP" dabake OTP daalna.');
+  // ✅ 5. Home page pe bhejo
+  alert('✅ WhatsApp khul gaya!\n\nAdmin ko message send karo.\n\nAdmin 2-5 min me isi WhatsApp pe OTP bhejega.\nFir Home page pe "🔐 Verify OTP" dabake OTP daalna.\n\n✅ Aapka data permanent save ho gaya hai.');
   window.location.href = 'index.html';
 }
 
