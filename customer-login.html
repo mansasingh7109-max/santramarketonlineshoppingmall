@@ -13,9 +13,18 @@
     .login-box input:focus{border-color:#e40046;outline:none}
     .btn{width:100%;padding:15px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
     .btn:active{transform:scale(0.98)}
+    .btn-otp{background:#ff6b00}
     .info{background:#e8f5e9;padding:12px;border-radius:8px;margin:15px 0;font-size:13px;color:#2e7d32;border-left:4px solid #4caf50}
+    .info.old{background:#fff3cd;color:#856404;border-left:4px solid #ff9800}
     .back{text-align:center;margin-top:15px}
     .back a{color:#666;text-decoration:none}
+    .popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center}
+    .popup-box{background:white;padding:25px;border-radius:15px;max-width:350px;text-align:center}
+    .popup-box h3{color:#e40046;margin-bottom:15px}
+    .popup-btn{padding:12px 25px;border:none;border-radius:8px;font-weight:bold;margin:5px;cursor:pointer}
+    .btn-yes{background:#4caf50;color:white}
+    .btn-no{background:#f44336;color:white}
+    .otp-section{display:none;margin-top:15px;padding:15px;background:#f9f9f9;border-radius:8px}
   </style>
 </head>
 <body>
@@ -23,21 +32,37 @@
 <div class="login-box">
   <h2>🛒 SANTRA MALL Login</h2>
   
-  <div class="info">
+  <div class="info" id="infoBox">
     <b>📱 WhatsApp OTP Login</b><br>
-    Step 1: Apne WhatsApp se Admin ko message bhejo<br>
-    Step 2: Admin OTP WhatsApp pe bhejega<br>
-    Step 3: OTP website pe daalo
+    Step 1: Name + Mobile dalo<br>
+    Step 2: Admin WhatsApp pe OTP bhejega<br>
+    Step 3: OTP yaha daalo
   </div>
 
   <input type="text" id="custName" placeholder="Full Name *" required>
-  <input type="tel" id="custMobile" placeholder="Apna WhatsApp Number *" maxlength="10" required>
+  <input type="tel" id="custMobile" placeholder="WhatsApp Number *" maxlength="10" required>
   <input type="email" id="custEmail" placeholder="Email (Optional)">
   
-  <button class="btn" onclick="sendOTPRequest()">📲 Admin Ko WhatsApp Karo</button>
+  <button class="btn" id="loginBtn" onclick="checkAndLogin()">📲 Login / Request OTP</button>
+  
+  <div class="otp-section" id="otpSection">
+    <p style="font-size:13px;color:#666;margin-bottom:10px">Admin ne WhatsApp pe OTP bhej diya? Yaha dalo:</p>
+    <input type="text" id="otpInput" placeholder="6 Digit OTP" maxlength="6">
+    <button class="btn btn-otp" onclick="verifyOTP()">✅ Verify & Login</button>
+  </div>
   
   <div class="back">
     <a href="index.html">← Back to Home</a>
+  </div>
+</div>
+
+<!-- Security Popup -->
+<div class="popup" id="securityPopup">
+  <div class="popup-box">
+    <h3>⚠️ Security Check</h3>
+    <p id="securityMsg" style="margin:15px 0;font-size:14px"></p>
+    <button class="popup-btn btn-yes" onclick="confirmNewUser()">Yes, I'm New User</button>
+    <button class="popup-btn btn-no" onclick="closePopup()">No, Cancel</button>
   </div>
 </div>
 
@@ -45,43 +70,13 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 <script>
-/* 
-=================================
-OLD CODE BACKUP - 08/06/2026
-=================================
-// Purana code me sirf localStorage use hota tha
-// Firebase me save nahi hota tha isliye admin panel me nahi dikhta tha
-// function sendOTPRequest() {
-//   const name = document.getElementById('custName').value.trim();
-//   const mobile = document.getElementById('custMobile').value.trim();
-//   const email = document.getElementById('custEmail').value.trim();
-//   if (!name || mobile.length !== 10) {
-//     alert('❌ Name aur 10 digit mobile required hai!');
-//     return;
-//   }
-//   db.collection('login_requests').doc(mobile).set({
-//     name: name,
-//     mobile: mobile,
-//     email: email,
-//     otp: '',
-//     status: 'pending',
-//     requestedAt: new Date().toLocaleString('en-IN'),
-//     requestedTime: Date.now()
-//   });
-//   localStorage.setItem('pendingOTP', JSON.stringify({name, mobile, email, time: Date.now()}));
-//   let msg = `🔐 *LOGIN OTP REQUEST - SANTRA MALL*...`;
-//   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-//   window.location.href = 'index.html';
-// }
-=================================
-*/
-
-// ✅ NEW UPDATED CODE - Permanent History Save + Backup
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const ADMIN_WHATSAPP = "917725960293"; // ✅ Tera number
+const ADMIN_WHATSAPP = "917725960293";
+let currentUserData = null;
 
-function sendOTPRequest() {
+// ✅ Step 1: Check karo Old Customer hai ya New
+function checkAndLogin() {
   const name = document.getElementById('custName').value.trim();
   const mobile = document.getElementById('custMobile').value.trim();
   const email = document.getElementById('custEmail').value.trim();
@@ -91,120 +86,208 @@ function sendOTPRequest() {
     return;
   }
   
-  // ✅ 1. Login request save karo - OTP ke liye
+  currentUserData = {name, mobile, email};
+  
+  // Pehle check karo ye number customers me hai kya
+  db.collection('customers').doc(mobile).get().then(doc => {
+    if(doc.exists) {
+      const data = doc.data();
+      
+      // ✅ OLD CUSTOMER DETECT HUA
+      if(data.verified === true) {
+        // ✅ SIM CHANGE SECURITY CHECK
+        if(data.name && data.name !== name) {
+          document.getElementById('securityMsg').innerHTML = 
+            `Ye mobile number <b>${data.name}</b> naam se registered tha.<br><br>Ab aap <b>${name}</b> naam se login kar rahe ho.<br><br>Kya aap naya user ho?`;
+          document.getElementById('securityPopup').style.display = 'flex';
+          return;
+        }
+        
+        // ✅ DIRECT LOGIN - OTP SKIP
+        directLogin(mobile, data);
+      } else {
+        // Verified nahi hai to OTP mangao
+        requestOTP(name, mobile, email, true);
+      }
+    } else {
+      // ✅ NEW CUSTOMER - OTP Request
+      requestOTP(name, mobile, email, false);
+    }
+  });
+}
+
+// ✅ Direct Login for Old Verified Customer
+function directLogin(mobile, data) {
+  localStorage.setItem('santra_customer', JSON.stringify({
+    name: data.name,
+    mobile: mobile,
+    email: data.email || '',
+    loginTime: Date.now(),
+    isOldCustomer: true,
+    totalOrders: data.totalOrders || 0
+  }));
+  
+  // Update last login
+  db.collection('customers').doc(mobile).update({
+    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  
+  document.getElementById('infoBox').className = 'info old';
+  document.getElementById('infoBox').innerHTML = 
+    `🔥 <b>Welcome Back ${data.name}!</b><br>You have ${data.totalOrders || 0} past orders.<br>Direct login successful!`;
+  
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 2000);
+}
+
+// ✅ OTP Request for New Customer or Unverified
+function requestOTP(name, mobile, email, isOldButUnverified) {
+  // 1. Firebase me request save
   db.collection('login_requests').doc(mobile).set({
     name: name,
     mobile: mobile,
     email: email,
-    otp: '', // Admin bharenga
+    otp: '',
     status: 'pending',
-    requestedAt: new Date().toLocaleString('en-IN'),
-    requestedTime: Date.now()
+    requestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    requestedTime: Date.now(),
+    isOldCustomer: isOldButUnverified
   }).then(() => {
-    // ✅ 2. Customers collection me permanent save - History hamesha rahegi
+    // 2. Customers me bhi save - permanent history
     db.collection('customers').doc(mobile).set({
       name: name,
       mobile: mobile,
       email: email,
-      createdAt: new Date().toLocaleString('en-IN'),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdTime: Date.now(),
-      status: 'pending_otp',
+      verified: false,
       totalOrders: 0,
       lastLogin: Date.now()
-    }, { merge: true }); // merge: true se purana data delete nahi hoga, update hoga
+    }, { merge: true });
     
-    console.log('✅ Customer permanent save ho gaya - admin-customer.html me dikhega');
-    console.log('✅ History backup: customers + login_requests dono me save');
-  }).catch(err => {
-    alert('❌ Error: ' + err.message);
-    return;
+    // 3. LocalStorage backup
+    localStorage.setItem('pendingOTP', JSON.stringify({name, mobile, email, time: Date.now()}));
+    
+    // 4. Admin ko WhatsApp
+    let msg = `🔐 *NEW LOGIN OTP REQUEST*\n\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n📧 Email: ${email || 'N/A'}\n\n${isOldButUnverified ? '⚠️ OLD CUSTOMER - Unverified' : '🆕 NEW CUSTOMER'}\n\nAdmin panel se OTP generate karke customer ko bhejo.`;
+    
+    window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+    
+    // 5. OTP Section show karo
+    document.getElementById('otpSection').style.display = 'block';
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('infoBox').innerHTML = 
+      `<b>✅ Request Sent!</b><br>Admin ko WhatsApp gaya.<br>2-5 min me OTP aayega. Yaha dalo.`;
+    
+    // 6. Real-time OTP listener start karo
+    listenForOTP(mobile);
   });
-  
-  // ✅ 3. LocalStorage me save karo - browser backup
-  localStorage.setItem('pendingOTP', JSON.stringify({
-    name: name,
-    mobile: mobile,
-    email: email,
-    time: Date.now()
-  }));
-  
-  // ✅ 4. Customer ke WhatsApp se Admin ko message
-  let msg = `🔐 *LOGIN OTP REQUEST - SANTRA MALL*\n\n👤 Name: ${name}\n📱 My Number: ${mobile}\n${email ? '📧 Email: ' + email : ''}\n\n⚡ *Admin:* Please reply with 6-digit OTP on this WhatsApp number.\n\nMain index.html pe "Verify OTP" button dabake wait kar raha hun.`;
-  
-  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-  
-  // ✅ 5. Home page pe bhejo
-  alert('✅ WhatsApp khul gaya!\n\nAdmin ko message send karo.\n\nAdmin 2-5 min me isi WhatsApp pe OTP bhejega.\nFir Home page pe "🔐 Verify OTP" dabake OTP daalna.\n\n✅ Aapka data permanent save ho gaya hai.');
-  window.location.href = 'index.html';
 }
 
-// Agar pehle se pendingOTP hai to direct home bhej do
+// ✅ Real-time OTP Listener
+function listenForOTP(mobile) {
+  db.collection('login_requests').doc(mobile).onSnapshot(doc => {
+    if(doc.exists && doc.data().otp && doc.data().otp.length === 6) {
+      document.getElementById('otpInput').value = doc.data().otp;
+      document.getElementById('infoBox').className = 'info';
+      document.getElementById('infoBox').innerHTML = 
+        `<b>🎉 OTP Received!</b><br>Auto-filled: ${doc.data().otp}<br>Verify button dabao.`;
+    }
+  });
+}
+
+// ✅ OTP Verify Karo
+function verifyOTP() {
+  const otp = document.getElementById('otpInput').value.trim();
+  const mobile = currentUserData.mobile;
+  
+  if(otp.length !== 6) {
+    alert('❌ 6 digit OTP daalo!');
+    return;
+  }
+  
+  db.collection('login_requests').doc(mobile).get().then(doc => {
+    if(!doc.exists) {
+      alert('❌ Request not found! Pehle login request bhejo.');
+      return;
+    }
+    
+    const data = doc.data();
+    
+    // ✅ Expiry Check - 1 Hour
+    const now = Date.now();
+    const sent = data.sentTime?.seconds ? data.sentTime.seconds * 1000 : data.requestedTime;
+    if(now - sent > 3600000) {
+      alert('❌ OTP Expired! 1 hour ho gaya. Naya OTP mango.');
+      return;
+    }
+    
+    if(data.otp !== otp) {
+      alert('❌ Wrong OTP! Check karo.');
+      return;
+    }
+    
+    // ✅ OTP CORRECT - Login Success
+    db.collection('customers').doc(mobile).update({
+      verified: true,
+      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    // Delete login request
+    db.collection('login_requests').doc(mobile).delete();
+    
+    // LocalStorage me save
+    localStorage.setItem('santra_customer', JSON.stringify({
+      name: data.name,
+      mobile: mobile,
+      email: data.email || '',
+      loginTime: Date.now(),
+      isOldCustomer: data.isOldCustomer || false
+    }));
+    
+    localStorage.removeItem('pendingOTP');
+    
+    alert('✅ Login Successful! Welcome ' + data.name);
+    window.location.href = 'index.html';
+  });
+}
+
+// ✅ Security Popup Functions
+function confirmNewUser() {
+  // Naya user hai - purana data hide kar do
+  db.collection('customers').doc(currentUserData.mobile).update({
+    name: currentUserData.name,
+    email: currentUserData.email,
+    nameChanged: true,
+    nameChangedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  closePopup();
+  requestOTP(currentUserData.name, currentUserData.mobile, currentUserData.email, false);
+}
+
+function closePopup() {
+  document.getElementById('securityPopup').style.display = 'none';
+}
+
+// ✅ Page Load - Check Pending OTP
 window.onload = function() {
   let pending = localStorage.getItem('pendingOTP');
   if(pending) {
     pending = JSON.parse(pending);
-    if(Date.now() - pending.time < 60 * 60 * 1000) { // ✅ 60 min
-      if(confirm('✅ Aapki OTP request active hai!\n\nAdmin ne WhatsApp pe OTP bhej diya?\n\nHome page pe "Verify OTP" se daalo.\n\nHome page pe jana hai?')) {
-        window.location.href = 'index.html';
-      }
+    if(Date.now() - pending.time < 3600000) { // 1 hour
+      document.getElementById('custName').value = pending.name;
+      document.getElementById('custMobile').value = pending.mobile;
+      document.getElementById('custEmail').value = pending.email || '';
+      document.getElementById('otpSection').style.display = 'block';
+      document.getElementById('loginBtn').style.display = 'none';
+      currentUserData = pending;
+      listenForOTP(pending.mobile);
     } else {
       localStorage.removeItem('pendingOTP');
     }
   }
 }
 </script>
-  <!-- ==================== WHATSAPP OTP REQUEST FIX - </body> se pehle daal ==================== -->
-<script>
-// ✅ WhatsApp OTP Request - Ye function call karo button pe
-function sendLoginOTP() {
-  const name = document.getElementById('custName').value.trim();
-  const mobile = document.getElementById('custMobile').value.trim();
-  const email = document.getElementById('custEmail').value.trim();
-  
-  if (!name || mobile.length !== 10) {
-    alert('❌ Name and 10 digit mobile required');
-    return;
-  }
-  
-  // ✅ 1. LocalStorage me save karo - Home page pe popup ke liye
-  localStorage.setItem('pendingOTP', JSON.stringify({
-    name: name,
-    mobile: mobile,
-    email: email,
-    time: Date.now()
-  }));
-  
-  // ✅ 2. Firebase me request save karo
-  db.collection('login_requests').doc(mobile).set({
-    name: name,
-    mobile: mobile,
-    email: email,
-    otp: '', // Abhi khali - Admin dalega
-    status: 'pending',
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(() => {
-    // ✅ 3. Admin ko WhatsApp pe request bhejo
-    let msg = `Hello Admin,\n\n🔐 *NEW LOGIN REQUEST*\n\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\n\nOTP bhejo jaldi!`;
-    let adminNumber = "917725960293"; // Tera admin number
-    let waLink = `https://wa.me/${adminNumber}?text=${encodeURIComponent(msg)}`;
-    
-    // ✅ WhatsApp open karo
-    window.open(waLink, '_blank');
-    
-    alert('✅ Request bhej di! Admin WhatsApp pe OTP bhejega.\n\nHome page pe jaake Verify OTP dabana');
-    
-    // ✅ Home page pe redirect
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 2000);
-    
-  }).catch(err => {
-    alert('❌ Error: ' + err.message);
-    console.log('Firebase Error:', err);
-  });
-}
-</script>
-</body>
-</html>
 </body>
 </html>
