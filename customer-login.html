@@ -153,5 +153,58 @@ window.onload = function() {
   }
 }
 </script>
+  <!-- ==================== WHATSAPP OTP REQUEST FIX - </body> se pehle daal ==================== -->
+<script>
+// ✅ WhatsApp OTP Request - Ye function call karo button pe
+function sendLoginOTP() {
+  const name = document.getElementById('custName').value.trim();
+  const mobile = document.getElementById('custMobile').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
+  
+  if (!name || mobile.length !== 10) {
+    alert('❌ Name and 10 digit mobile required');
+    return;
+  }
+  
+  // ✅ 1. LocalStorage me save karo - Home page pe popup ke liye
+  localStorage.setItem('pendingOTP', JSON.stringify({
+    name: name,
+    mobile: mobile,
+    email: email,
+    time: Date.now()
+  }));
+  
+  // ✅ 2. Firebase me request save karo
+  db.collection('login_requests').doc(mobile).set({
+    name: name,
+    mobile: mobile,
+    email: email,
+    otp: '', // Abhi khali - Admin dalega
+    status: 'pending',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    // ✅ 3. Admin ko WhatsApp pe request bhejo
+    let msg = `Hello Admin,\n\n🔐 *NEW LOGIN REQUEST*\n\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\n\nOTP bhejo jaldi!`;
+    let adminNumber = "917725960293"; // Tera admin number
+    let waLink = `https://wa.me/${adminNumber}?text=${encodeURIComponent(msg)}`;
+    
+    // ✅ WhatsApp open karo
+    window.open(waLink, '_blank');
+    
+    alert('✅ Request bhej di! Admin WhatsApp pe OTP bhejega.\n\nHome page pe jaake Verify OTP dabana');
+    
+    // ✅ Home page pe redirect
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 2000);
+    
+  }).catch(err => {
+    alert('❌ Error: ' + err.message);
+    console.log('Firebase Error:', err);
+  });
+}
+</script>
+</body>
+</html>
 </body>
 </html>
