@@ -231,7 +231,7 @@ function openVerifyOtpPopup() {
   }
   
   pending = JSON.parse(pending);
-  if(Date.now() - pending.time > 30 * 60 * 1000) {
+  if(Date.now() - pending.time > 60 * 60 * 1000) { // ✅ 60 min
     localStorage.removeItem('pendingOTP');
     alert('❌ OTP expire ho gaya! Wapas bhejo');
     document.getElementById('verifyOtpBtn').classList.add('hide');
@@ -257,7 +257,7 @@ function showAutoOTPPopup(mobile, name) {
         <button onclick="verifyAutoOTP('${mobile}')" style="width:100%;padding:16px;background:linear-gradient(135deg,#e40046,#ff1744);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer;margin-bottom:12px;box-shadow:0 5px 20px rgba(228,0,70,0.4)">✅ Verify & Login</button>
         <button onclick="resendWhatsAppOTP('${mobile}','${name}')" style="width:100%;padding:14px;background:#ff9800;color:white;border:none;border-radius:12px;cursor:pointer;margin-bottom:10px;font-weight:bold">🔄 OTP Nahi Mila? Wapas Bhejo</button>
         <button onclick="closeAutoOTPPopup()" style="width:100%;padding:13px;background:#757575;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:bold">❌ Cancel</button>
-        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 2-5 min me OTP bhejega<br>🔄 Refresh karne pe bhi popup rahega</p>
+        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 5-60 min me WhatsApp pe OTP bhejega<br>🔄 1 ghante tak valid rahega</p>
       </div>
     </div>
     <style>
