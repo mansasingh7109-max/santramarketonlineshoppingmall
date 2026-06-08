@@ -14,7 +14,7 @@
  .container{max-width:700px;margin:15px auto;padding:0 15px}
  .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
  .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
- .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0.1)}
  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
  .order-id{font-size:14px;color:#666}
  .order-id b{color:var(--text);font-size:16px}
@@ -25,6 +25,7 @@
  .status-shipped{background:#dbeafe;color:#1e40af}
  .status-delivered{background:#d1fae5;color:#065f46}
  .status-cancelled{background:#fee2e2;color:#991b1b}
+ .status-buying{background:#2196F3;color:white}
  .order-info{margin:15px 0}
  .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
  .info-row span:first-child{color:#666}
@@ -59,7 +60,9 @@
  .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
  .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
  .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
- .whatsapp-otp-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
+ .whatsapp-otp-popup{position:fixed;inset:0;background:rgba(0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
+ .badge-old{background:#ff6b00;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
+ .badge-new{background:#00bcd4;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
   </style>
 </head>
 <body>
@@ -103,8 +106,8 @@ function checkLoginAndLoad() {
   
   if(pendingOTP) {
     pendingOTP = JSON.parse(pendingOTP);
-    // 30 min se purana nahi hai to OTP popup dikhao
-    if(Date.now() - pendingOTP.time < 60 * 60 * 1000) { // ✅ 60 min
+    // 60 min se purana nahi hai to OTP popup dikhao
+    if(Date.now() - pendingOTP.time < 60 * 1000) {
       showWhatsAppOTPPopup(pendingOTP.mobile, pendingOTP.name);
       return; // Orders load mat karo, OTP popup dikhao
     } else {
@@ -340,6 +343,11 @@ async function renderOrders(orders) {
     `;
     return;
   }
+  
+  // ✅ Check Old Customer - Total Orders count
+  let totalOrdersCount = orders.length;
+  let isOldCustomer = totalOrdersCount > 0;
+  
   container.innerHTML = orders.map(order => {
     let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderDate || Date.now());
     let dateStr = orderDate.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
@@ -407,6 +415,7 @@ async function renderOrders(orders) {
         <div class="order-header">
           <div>
             <span class="order-num">#${orderNum}</span>
+            ${isOldCustomer? '<span class="badge-old">🔥 OLD CUSTOMER</span>' : '<span class="badge-new">🆕 NEW</span>'}
             <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
             <p class="date-text">📅 ${dateStr}</p>
           </div>
@@ -507,7 +516,8 @@ function getStatusText(status) {
     'delivered': '📦 Delivered',
     'Delivered': '📦 Delivered',
     'cancelled': '❌ Cancelled',
-    'Cancelled': '❌ Cancelled'
+    'Cancelled': '❌ Cancelled',
+    'buying': '🛒 Buying'
   };
   return statusMap[status] || status;
 }
@@ -521,6 +531,7 @@ function getTimeline(status) {
   ];
   let checkStatus = status.toLowerCase();
   if(checkStatus === 'pending' || checkStatus === 'otp pending') checkStatus = 'pending_otp';
+  if(checkStatus === 'buying') checkStatus = 'confirmed';
   const currentIndex = steps.findIndex(s => s.key === checkStatus);
   return `
     <div class="timeline">
@@ -539,7 +550,7 @@ function getTimeline(status) {
             </div>
           </div>
         `;
-      }).join('')}
+}).join('')}
     </div>
   `;
 }
@@ -570,10 +581,6 @@ async function verifyOTP(orderId) {
         loginTime: new Date().toISOString()
       };
       
-      localStorage.set
-
-Cky
-
       localStorage.setItem('santra_customer', JSON.stringify(customerData));
       
       await db.collection('customers').doc(customerData.mobile).set({
@@ -742,3 +749,5 @@ console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
+  
+  
