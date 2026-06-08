@@ -90,7 +90,6 @@
     <i>📦</i>Orders
   </div>
 </div>
-
 <!-- Checkout Modal -->
 <div id="checkoutModal" class="modal hide">
   <div class="modal-content">
@@ -188,11 +187,43 @@
   }
 </script>
 <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
-
 <script src="theme.js"></script>
 <script src="login.js"></script> 
 
 <script>
+/* 
+=================================
+OLD CODE BACKUP - 08/06/2026
+=================================
+// Purana code - OTP popup auto nahi khulta tha
+// function checkPendingOTP() {
+//   let pending = localStorage.getItem('pendingOTP');
+//   if(pending) {
+//     pending = JSON.parse(pending);
+//     if(Date.now() - pending.time < 10 * 60 * 1000) {
+//       showAutoOTPPopup(pending.mobile, pending.name);
+//     }
+//   }
+// }
+
+// OLD openOrders() WITH ALERT:
+// function openOrders() {
+//   let customer = localStorage.getItem('santra_customer');
+//   if(!customer) {
+//     alert('⚠️ Please login first to see your orders');
+//     openCustomerLogin();
+//   } else {
+//     window.location.href = 'orders.html';
+//   }
+// }
+
+// OLD openCart() WITHOUT OTP CHECK:
+// function openCart() { 
+//   window.location.href = 'cart.html'; 
+// }
+=================================
+*/
+
 let currentModalProduct = null;
 let allProducts = [];
 let autoFilters = {};
@@ -216,13 +247,13 @@ auth.onAuthStateChanged((user) => {
 
 window.onload = function() {
   loadProducts();
-  // checkPendingOTP(); // ✅ Comment kar diya - Auto popup band
+  // ✅ checkPendingOTP(); - Comment kar diya - Auto popup band
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get('id');
   if(orderId) loadSingleOrder(orderId);
 }
 
-// ✅ OTP POPUP FUNCTIONS - NAYA CODE
+// ✅ NEW: OTP POPUP FUNCTIONS - Button se open hoga
 function openVerifyOtpPopup() {
   let pending = localStorage.getItem('pendingOTP');
   if(!pending) {
@@ -275,9 +306,9 @@ function showAutoOTPPopup(mobile, name) {
   
   // Real-time check - Admin ne OTP dala ya nahi
   db.collection('login_requests').doc(mobile).onSnapshot((doc) => {
-    if(doc.exists && doc.data().otp && doc.data().otp!== '') {
+    if(doc.exists && doc.data().otp && doc.data().otp !== '') {
       let input = document.getElementById('autoOtpInput');
-      if(input &&!input.value) {
+      if(input && !input.value) {
         input.value = doc.data().otp;
         input.style.background = '#e8f5e9';
         input.style.borderColor = '#4caf50';
@@ -288,7 +319,7 @@ function showAutoOTPPopup(mobile, name) {
 
 function verifyAutoOTP(mobile) {
   let enteredOTP = document.getElementById('autoOtpInput').value.trim();
-  if(enteredOTP.length!== 6) {
+  if(enteredOTP.length !== 6) {
     alert('❌ 6 digit OTP daalo!');
     return;
   }
@@ -302,13 +333,24 @@ function verifyAutoOTP(mobile) {
     
     let data = doc.data();
     
-    if(data.otp === enteredOTP && data.otp!== '') {
+    if(data.otp === enteredOTP && data.otp !== '') {
       localStorage.setItem('santra_customer', JSON.stringify({
         name: data.name,
         mobile: data.mobile,
         email: data.email,
         loginTime: new Date().toISOString()
       }));
+      
+      // ✅ Customer permanent save karo
+      db.collection('customers').doc(mobile).set({
+        name: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        createdAt: new Date().toLocaleString('en-IN'),
+        createdTime: Date.now(),
+        status: 'verified',
+        lastLogin: Date.now()
+      }, { merge: true });
       
       db.collection('login_requests').doc(mobile).update({
         status: 'verified',
@@ -349,11 +391,9 @@ function closeAutoOTPPopup() {
   localStorage.removeItem('pendingOTP');
   document.getElementById('autoOtpModal')?.remove();
   document.getElementById('verifyOtpBtn')?.classList.add('hide');
-  // Page reload taaki header update ho jaye
   location.reload();
 }
 
-//... baaki sab functions same rahenge...
 function loadProducts() {
   if (USE_DATABASE === 'rtdb') {
     rtdb.ref('products').on('value', snap => {
@@ -363,7 +403,7 @@ function loadProducts() {
           let p = child.val();
           p.id = child.key;
           p.price = parseFloat(p.price) || 0;
-          p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+          p.stock = p.stock !== undefined && p.stock !== null ? parseInt(p.stock) : 0;
           p.mrp = parseFloat(p.mrp) || p.price;
           allProducts.push(p);
         });
@@ -375,21 +415,39 @@ function loadProducts() {
     });
   }
 }
-
-//... baaki functions same as before...
 function generateAutoCategories() {
-  const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
-  if(categories.length === 0){
-    document.getElementById('categoryList').innerHTML = '<div class="loading">No categories found</div>';
-    return;
-  }
-  let html = '';
-  categories.forEach(catName => {
-    const firstProduct = allProducts.find(p => p.category === catName);
-    const catImage = getProductImage(firstProduct) || 'https://via.placeholder.com/50';
-    html += `<div class="cat-item" onclick="filterByCategory('${catName}')"><img src="${catImage}" alt="${catName}"><p>${catName}</p></div>`;
+  // ✅ Firestore se categories load karo
+  db.collection('categories').get().then(catSnap => {
+    let categories = [];
+    let catImages = {};
+
+    catSnap.forEach(doc => {
+      const data = doc.data();
+      categories.push(data.name);
+      catImages[data.name] = data.image || '';
+    });
+
+    // ✅ RTDB se bhi extra categories le lo agar Firestore me nahi hai
+    const catsFromProducts = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+    catsFromProducts.forEach(c => {
+      if(!categories.includes(c)) categories.push(c);
+    });
+
+    if(categories.length === 0){
+      document.getElementById('categoryList').innerHTML = '<div class="loading">No categories found</div>';
+      return;
+    }
+
+    let html = '';
+    categories.forEach(catName => {
+      const catImage = catImages[catName] || 'https://via.placeholder.com/50?text=' + encodeURIComponent(catName);
+      html += `<div class="cat-item" onclick="filterByCategory('${catName}')"><img src="${catImage}" alt="${catName}"><p>${catName}</p></div>`;
+    });
+    document.getElementById('categoryList').innerHTML = html;
+  }).catch(err => {
+    console.error('Category load error:', err);
+    document.getElementById('categoryList').innerHTML = '<div class="loading">Error loading categories</div>';
   });
-  document.getElementById('categoryList').innerHTML = html;
 }
 
 function generateAutoFilters() {
@@ -419,6 +477,24 @@ function renderAutoFilterPopup() {
     html += `<div class="filter-group"><label>${field.charAt(0).toUpperCase() + field.slice(1)}</label><select id="filter_${field}" data-field="${field}"><option value="">All ${field}</option>${values.map(val => `<option value="${val}">${val}</option>`).join('')}</select></div>`;
   });
   container.innerHTML = html || '<p style="text-align:center;color:#999">No filters available</p>';
+}
+
+// ✅ NEW: OTP Check function - Login + OTP dono check
+function checkLoginBeforeCart() {
+  let customer = localStorage.getItem('santra_customer');
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return false;
+  }
+  
+  if (!customer) {
+    showToast('⚠️ Please login first');
+    window.location.href = 'customer-login.html';
+    return false;
+  }
+  return true;
 }
 
 function sendLoginOTP() {
@@ -694,6 +770,30 @@ function updateSlider(productId) {
   });
 }
 
+// ✅ NEW: Order save function - Buy Now pe call karo
+function saveOrderToFirebase(productName, amount, productLink) {
+  let customer = JSON.parse(localStorage.getItem('santra_customer'));
+  if(!customer ||!customer.mobile) {
+    showToast('❌ Pehle login karo!');
+    return;
+  }
+  
+  db.collection('orders').add({
+    customerMobile: customer.mobile,
+    customerName: customer.name,
+    customerEmail: customer.email || '',
+    productName: productName,
+    productLink: productLink,
+    amount: parseInt(amount),
+    status: 'buying', // ya 'pending', 'delivered'
+    orderDate: new Date().toLocaleString('en-IN'),
+    orderTime: Date.now()
+  }).then(() => {
+    console.log('✅ Order saved in Firebase');
+    showToast('✅ Order placed! History me save ho gaya');
+  });
+}
+
 function addToCart(productId, event) {
   event.stopPropagation();
   if (!currentUser) {
@@ -834,15 +934,6 @@ function ToCartFromModal() {
 function buyNowFromModal() { if(currentModalProduct) buyNow(currentModalProduct.id, event); }
 function ToWishlistFromModal() { if(currentModalProduct) toggleWishlist(currentModalProduct.id, event); }
 
-function checkLoginBeforeCart() {
-  if (!currentUser) {
-    showToast('⚠️ Please login first');
-    openCustomerLogin();
-    return false;
-  }
-  return true;
-}
-
 // ✅ MOBILE CONSOLE -?eruda=true laga ke test kar
 if (location.search.includes('eruda=true')) {
   var script = document.createElement('script');
@@ -852,7 +943,7 @@ if (location.search.includes('eruda=true')) {
 }
 </script>
 
-<!-- ==================== OLD CODE BACKUP - 4 June 2026 ==================== -->
+<!-- ==================== OLD CODE BACKUP - 08/06/2026 ==================== -->
 <!--
 OLD openOrders() FUNCTION WITH ALERT:
 function openOrders() {
@@ -906,17 +997,25 @@ function closeAutoOTPPopup() {
     document.getElementById('autoOtpModal').remove();
   }
 }
+
+OLD placeOrder() WITHOUT FIREBASE SAVE:
+function placeOrder() {
+  // Sirf WhatsApp pe bhejata tha
+  // Firebase me save nahi hota tha
+  let msg = `Order details...`;
+  window.open(`https://wa.me/91${ADMIN_WHATSAPP}?text=${msg}`);
+}
 -->
 
-<!-- ==================== BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM ==================== -->
+<!-- ==================== BACKUP PROTECTION TERMINAL - 08/06/2026, 4:34 PM ==================== -->
 <script>
 console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cBackup Time: 08 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
 console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
 
 window.santraBackup = {
   version: '1.0',
-  timestamp: '2026-06-04T16:34:00+05:30',
+  timestamp: '2026-06-08T16:34:00+05:30',
   location: 'Pilibanga, Rajasthan',
 
   backupLocalStorage: function() {
@@ -927,7 +1026,7 @@ window.santraBackup = {
       cart: localStorage.getItem('santra_cart'),
       wishlist: localStorage.getItem('santra_wishlist')
     };
-    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    localStorage.setItem('santra_backup_2026_06_08_1634', JSON.stringify(backup));
     console.log('✅ LocalStorage Backup Created:', backup.timestamp);
     return backup;
   },
@@ -951,7 +1050,7 @@ window.santraBackup = {
   },
 
   restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    const backup = localStorage.getItem('santra_backup_2026_06_08_1634');
     if(backup) {
       const data = JSON.parse(backup);
       if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
@@ -963,7 +1062,7 @@ window.santraBackup = {
         location.reload();
       }
     } else {
-      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+      alert('❌ No backup found for 08 June 2026, 4:34 PM');
     }
   },
 
@@ -975,7 +1074,7 @@ window.santraBackup = {
 
   exportBackup: function() {
     const backup = {
-      timestamp: '2026-06-04T16:34:00+05:30',
+      timestamp: '2026-06-08T16:34:00+05:30',
       localStorage: this.backupLocalStorage(),
       firebase: this.viewBackups()
     };
@@ -984,7 +1083,7 @@ window.santraBackup = {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `santra_mall_backup_2026-06-04_1634.json`;
+    link.download = `santra_mall_backup_2026-06-08_1634.json`;
     link.click();
     console.log('✅ Backup Exported');
   }
@@ -999,3 +1098,4 @@ console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
+
