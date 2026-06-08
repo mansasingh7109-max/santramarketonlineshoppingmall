@@ -16,6 +16,7 @@
   <div class="header-btns">
     <div id="userInfo" class="hide">
       <span>Hi, <b id="userName"></b></span>
+      <span id="oldCustomerBadge" class="hide" style="background:#ff6b00;color:white;padding:4px 8px;border-radius:5px;font-size:11px;margin-left:5px"></span>
     </div>
     <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
     <button id="verifyOtpBtn" class="hide" onclick="openVerifyOtpPopup()">🔐 Verify OTP</button>
@@ -90,6 +91,7 @@
     <i>📦</i>Orders
   </div>
 </div>
+
 <!-- Checkout Modal -->
 <div id="checkoutModal" class="modal hide">
   <div class="modal-content">
@@ -197,30 +199,69 @@ OLD CODE BACKUP - 08/06/2026
 =================================
 // Purana code - OTP popup auto nahi khulta tha
 // function checkPendingOTP() {
-//   let pending = localStorage.getItem('pendingOTP');
-//   if(pending) {
-//     pending = JSON.parse(pending);
-//     if(Date.now() - pending.time < 10 * 60 * 1000) {
-//       showAutoOTPPopup(pending.mobile, pending.name);
-//     }
-//   }
+// let pending = localStorage.getItem('pendingOTP');
+// if(pending) {
+// pending = JSON.parse(pending);
+// if(Date.now() - pending.time < 10 * 60 * 1000) {
+// showAutoOTPPopup(pending.mobile, pending.name);
+// }
+// }
 // }
 
 // OLD openOrders() WITH ALERT:
-// function openOrders() {
-//   let customer = localStorage.getItem('santra_customer');
-//   if(!customer) {
-//     alert('⚠️ Please login first to see your orders');
-//     openCustomerLogin();
-//   } else {
-//     window.location.href = 'orders.html';
-//   }
-// }
+function openOrders() {
+  let customer = localStorage.getItem('santra_customer');
+  if(!customer) {
+    alert('⚠️ Please login first to see your orders');
+    openCustomerLogin();
+  } else {
+    window.location.href = 'orders.html';
+  }
+}
 
 // OLD openCart() WITHOUT OTP CHECK:
-// function openCart() { 
-//   window.location.href = 'cart.html'; 
-// }
+function openCart() { 
+  window.location.href = 'cart.html'; 
+}
+
+// OLD openCategories() WITHOUT OTP CHECK:
+function openCategories() { 
+  window.location.href = 'category.html'; 
+}
+
+// OLD HEADER CODE WITH DOUBLE BUTTONS:
+<div class="header-btns">
+  <div class="header-btns">
+    <div id="userInfo" class="hide">
+      <span>Hi, <b id="userName"></b></span>
+    </div>
+    <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
+    <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+    <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
+    <a href="help.html" class="header-btn">💬 HELP DESK</a>
+  </div>
+</div>
+
+// OLD LOGIN FLOW:
+// - OTP box isi login page pe khulta tha
+// - Refresh pe gayab ho jata tha
+// - Ab naya: WhatsApp ke baad home page pe auto popup
+
+// OLD closeAutoOTPPopup() WITH CONFIRM:
+function closeAutoOTPPopup() {
+  if(confirm('OTP verification cancel karna hai?')) {
+    localStorage.removeItem('pendingOTP');
+    document.getElementById('autoOtpModal').remove();
+  }
+}
+
+// OLD placeOrder() WITHOUT FIREBASE SAVE:
+function placeOrder() {
+  // Sirf WhatsApp pe bhejata tha
+  // Firebase me save nahi hota tha
+  let msg = `Order details...`;
+  window.open(`https://wa.me/91${ADMIN_WHATSAPP}?text=${msg}`);
+}
 =================================
 */
 
@@ -235,7 +276,7 @@ let tempCustomerData = null;
 const WISHLIST_KEY = 'SANTRA_WISHLIST';
 const CART_KEY = 'SANTRA_CART';
 const USE_DATABASE = 'rtdb'; 
-const ADMIN_WHATSAPP = "917725960293"; // ✅ Tera number
+const ADMIN_WHATSAPP = "917725960293";
 
 auth.onAuthStateChanged((user) => {
   currentUser = user;
@@ -306,9 +347,9 @@ function showAutoOTPPopup(mobile, name) {
   
   // Real-time check - Admin ne OTP dala ya nahi
   db.collection('login_requests').doc(mobile).onSnapshot((doc) => {
-    if(doc.exists && doc.data().otp && doc.data().otp !== '') {
+    if(doc.exists && doc.data().otp && doc.data().otp!== '') {
       let input = document.getElementById('autoOtpInput');
-      if(input && !input.value) {
+      if(input &&!input.value) {
         input.value = doc.data().otp;
         input.style.background = '#e8f5e9';
         input.style.borderColor = '#4caf50';
@@ -319,7 +360,7 @@ function showAutoOTPPopup(mobile, name) {
 
 function verifyAutoOTP(mobile) {
   let enteredOTP = document.getElementById('autoOtpInput').value.trim();
-  if(enteredOTP.length !== 6) {
+  if(enteredOTP.length!== 6) {
     alert('❌ 6 digit OTP daalo!');
     return;
   }
@@ -333,12 +374,14 @@ function verifyAutoOTP(mobile) {
     
     let data = doc.data();
     
-    if(data.otp === enteredOTP && data.otp !== '') {
+    if(data.otp === enteredOTP && data.otp!== '') {
       localStorage.setItem('santra_customer', JSON.stringify({
         name: data.name,
         mobile: data.mobile,
         email: data.email,
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
+        isOldCustomer: data.isOldCustomer || false,
+        totalOrders: data.totalPastOrders || 0
       }));
       
       // ✅ Customer permanent save karo
@@ -349,7 +392,8 @@ function verifyAutoOTP(mobile) {
         createdAt: new Date().toLocaleString('en-IN'),
         createdTime: Date.now(),
         status: 'verified',
-        lastLogin: Date.now()
+        lastLogin: Date.now(),
+        verified: true
       }, { merge: true });
       
       db.collection('login_requests').doc(mobile).update({
@@ -403,7 +447,7 @@ function loadProducts() {
           let p = child.val();
           p.id = child.key;
           p.price = parseFloat(p.price) || 0;
-          p.stock = p.stock !== undefined && p.stock !== null ? parseInt(p.stock) : 0;
+          p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
           p.mrp = parseFloat(p.mrp) || p.price;
           allProducts.push(p);
         });
@@ -415,6 +459,7 @@ function loadProducts() {
     });
   }
 }
+
 function generateAutoCategories() {
   // ✅ Firestore se categories load karo
   db.collection('categories').get().then(catSnap => {
@@ -616,7 +661,9 @@ function renderProducts(products){
         ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ''}
         <div class="wish-icon" id="heart-${p.id}" onclick="toggleWishlist('${p.id}', event)">💗</div>
         <div class="image-slider">
-          ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? 'active' : ''}" alt="${p.name}">`).join('')}
+         ${images.map((img, idx) => `
+         <img src="${img}" class="slide-img ${idx === 0? 'active' : ''}" alt="${p.name}">
+          `).join('')}
           ${images.length > 1? `
             <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
             <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
@@ -728,7 +775,7 @@ function loadWishlistStatus() {
 
 function showToast(msg) {
   const toast = document.createElement('div');
-     toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)';
+  toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)';
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
@@ -785,7 +832,7 @@ function saveOrderToFirebase(productName, amount, productLink) {
     productName: productName,
     productLink: productLink,
     amount: parseInt(amount),
-    status: 'buying', // ya 'pending', 'delivered'
+    status: 'buying',
     orderDate: new Date().toLocaleString('en-IN'),
     orderTime: Date.now()
   }).then(() => {
@@ -908,6 +955,12 @@ function checkCustomerLogin() {
     document.getElementById('logoutBtn').classList.remove('hide');
     document.getElementById('userInfo').classList.remove('hide');
     document.getElementById('userName').innerText = customer.name;
+    
+    // ✅ Old Customer Badge dikhao
+    if(customer.isOldCustomer && customer.totalOrders > 0) {
+      document.getElementById('oldCustomerBadge').classList.remove('hide');
+      document.getElementById('oldCustomerBadge').innerText = `🔥 Old - ${customer.totalOrders} Orders`;
+    }
   } else {
     let pendingOTP = localStorage.getItem('pendingOTP');
     if(pendingOTP) {
@@ -967,19 +1020,13 @@ function openCategories() {
 }
 
 OLD HEADER CODE WITH DOUBLE BUTTONS:
- <div class="header">
-  <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
+<div class="header-btns">
   <div class="header-btns">
-      <div class="header-btns">
-  <div id="userInfo" class="hide">
-    <span>Hi, <b id="userName"></b></span>
-  </div>
-  <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
-  <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
-  <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
-  <a href="help.html" class="header-btn">💬 HELP DESK</a>
-</div>
-    
+    <div id="userInfo" class="hide">
+      <span>Hi, <b id="userName"></b></span>
+    </div>
+    <button id="loginBtn" onclick="window.location.href='customer-login.html'">👤 Login</button>
+    <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
     <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
@@ -1098,4 +1145,6 @@ console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
-
+          
+          
+          
