@@ -8,39 +8,41 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0}
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:140px}
-  .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header h1{font-size:18px;flex:1}
-  .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden}
-  .tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent}
-  .tab.active{background:var(--accent);color:white}
-  .cart-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .cart-card img{width:100px;height:100px;object-fit:contain;background:#f9f9;border-radius:6px;border:1px solid #eee}
-  .item-info{flex:1}
-  .item-info h3{font-size:16px;margin-bottom:5px}
-  .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
-  .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
-  .item-code{font-size:12px;color:#666;margin-top:4px}
-  .qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
-  .qty-btn{background:#eee;border:none;width:30px;height:30px;border-radius:6px;cursor:pointer;font-weight:bold}
-  .qty-display{padding:0 10px;font-weight:bold}
-  .btn-remove{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
-  .btn-wish{background:#ff9800;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-  .summary{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px}
-  .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-  .total-row{font-weight:bold;font-size:18px;border-top:2px solid var(--border);padding-top:10px;margin-top:10px}
-  .checkout-btn{position:fixed;bottom:60px;left:15px;right:15px;background:var(--accent);color:white;border:none;padding:15px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(228,0,70,0.3);z-index:50}
-  .checkout-btn:disabled{background:#ccc;cursor:not-allowed}
-  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
-  .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
-  .nav-item.active{color:var(--accent)}
-  .nav-item div{font-size:22px}
-  .nav-item span{font-size:11px;display:block;margin-top:2px}
-  .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
-  .hide{display:none}
-  .loader{display:none;text-align:center;padding:10px;color:#b71c1c;font-weight:bold}
+ .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+ .header h1{font-size:18px;flex:1}
+ .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+ .tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden}
+ .tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent}
+ .tab.active{background:var(--accent);color:white}
+ .cart-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+ .cart-card img{width:100px;height:100px;object-fit:contain;background:#f9f9;border-radius:6px;border:1px solid #eee}
+ .item-info{flex:1}
+ .item-info h3{font-size:16px;margin-bottom:5px}
+ .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
+ .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
+ .item-code{font-size:12px;color:#666;margin-top:4px}
+ .qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+ .qty-btn{background:#eee;border:none;width:30px;height:30px;border-radius:6px;cursor:pointer;font-weight:bold}
+ .qty-display{padding:0 10px;font-weight:bold}
+ .btn-remove{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+ .btn-wish{background:#ff9800;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+ .empty{text-align:center;padding:60px 20px;color:#999}
+ .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+ .summary{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px}
+ .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+ .total-row{font-weight:bold;font-size:18px;border-top:2px solid var(--border);padding-top:10px;margin-top:10px}
+ .checkout-btn{position:fixed;bottom:60px;left:15px;right:15px;background:var(--accent);color:white;border:none;padding:15px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(228,0,70,0.3);z-index:50}
+ .checkout-btn:disabled{background:#ccc;cursor:not-allowed}
+ .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+ .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+ .nav-item.active{color:var(--accent)}
+ .nav-item div{font-size:22px}
+ .nav-item span{font-size:11px;display:block;margin-top:2px}
+ .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+ .hide{display:none}
+ .loader{display:none;text-align:center;padding:10px;color:#b71c1c;font-weight:bold}
+ .otp-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
+ .otp-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)}
   </style>
 </head>
 <body>
@@ -65,10 +67,10 @@
     <div class="summary-row total-row"><span>Total:</span><span id="grandTotal">₹0</span></div>
   </div>
 
-  <div class="loader" id="loader">📲 Redirecting to checkout...</div>
+  <div class="loader" id="loader">📲 Requesting Order OTP...</div>
 
   <button id="checkoutBtn" class="checkout-btn" onclick="goToCheckout()">
-    ➡️ Proceed to Checkout
+    ➡️ Place Order with OTP
   </button>
 </div>
 
@@ -112,11 +114,12 @@ OLD CODE BACKUP - 08/06/2026
 =================================
 */
 
-// ✅ NEW UPDATED CODE - Order Firebase me save hoga
+// ✅ NEW UPDATED CODE - Order OTP System + Firebase Save
 firebase.initializeApp(firebaseConfig);
 const rtdb = firebase.database();
 const db = firebase.firestore();
 const auth = firebase.auth();
+const ADMIN_WHATSAPP = "917725960293";
 
 let currentUser = null;
 let currentTab = 'cart';
@@ -168,7 +171,7 @@ function renderCart() {
   }
 
   checkoutBtn.disabled = false;
-  checkoutBtn.innerText = '➡️ Proceed to Checkout';
+  checkoutBtn.innerText = '➡️ Place Order with OTP';
 
   container.innerHTML = cartKeys.map((key) => {
     let item = cart[key];
@@ -350,7 +353,7 @@ function getProductLink(productId) {
   return `${baseUrl}${productPath}?id=${encodeURIComponent(productId)}`;
 }
 
-// ✅ NEW UPDATED: Order Firebase me save karega + WhatsApp pe bhejega
+// ✅ NEW: ORDER OTP SYSTEM - Main Function
 function goToCheckout(){
     let cartKeys = Object.keys(cart);
     if(cartKeys.length === 0){
@@ -366,53 +369,188 @@ function goToCheckout(){
         return;
     }
 
-    // ✅ Firebase me order save karo - Har product ke liye
-    let subtotal = Object.values(cart).reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
-    let delivery = subtotal >= 500? 0 : 49;
-    let total = subtotal + delivery;
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('checkoutBtn').disabled = true;
 
-    let orderPromises = cartKeys.map(key => {
-        let item = cart[key];
-        return db.collection('orders').add({
+    // ✅ Check karo customer old hai ya new
+    db.collection('customers').doc(customer.mobile).get().then(doc => {
+        let isOldCustomer = false;
+        let totalOrders = 0;
+        
+        if(doc.exists) {
+            const data = doc.data();
+            totalOrders = data.totalOrders || 0;
+            isOldCustomer = totalOrders > 0;
+        }
+
+        // ✅ Order OTP Request banao
+        let subtotal = Object.values(cart).reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
+        let delivery = subtotal >= 500? 0 : 49;
+        let total = subtotal + delivery;
+        
+        let firstProduct = cart[cartKeys[0]];
+        let productList = cartKeys.map(key => `${cart[key].name} x${cart[key].qty || 1}`).join(', ');
+
+        // Firebase me order_otp request save karo
+        db.collection('order_otp').add({
             customerMobile: customer.mobile,
             customerName: customer.name,
             customerEmail: customer.email || '',
-            productId: key,
-            productName: item.name,
-            productLink: getProductLink(key),
-            productImage: getImageUrl(item),
-            amount: (item.price || 0) * (item.qty || 1),
-            quantity: item.qty || 1,
-            unitPrice: item.price || 0,
-            status: 'pending', // buying, delivered, cancelled
-            orderDate: new Date().toLocaleString('en-IN'),
-            orderTime: Date.now(),
-            totalOrderAmount: total,
-            deliveryCharge: delivery
+            products: productList,
+            productCount: cartKeys.length,
+            totalAmount: total,
+            subtotal: subtotal,
+            deliveryCharge: delivery,
+            cartData: cart,
+            otp: '', // Admin dalega
+            status: 'pending',
+            isOldCustomer: isOldCustomer,
+            totalPastOrders: totalOrders,
+            requestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            requestedTime: Date.now()
+        }).then((docRef) => {
+            // ✅ Admin ko WhatsApp bhejo
+            let msg = '';
+            if(isOldCustomer) {
+                msg = `🔥 *OLD CUSTOMER ORDER* 🔥\n\n👤 Name: ${customer.name}\n📱 Mobile: ${customer.mobile}\n📊 Total Past Orders: ${totalOrders}\n\n🛒 Current Order:\n${productList}\n\n💰 Amount: ₹${total}\n\n*OTP Generate karke customer ko bhejo*\nOrder ID: ${docRef.id}`;
+            } else {
+                msg = `🆕 *NEW CUSTOMER ORDER*\n\n👤 Name: ${customer.name}\n📱 Mobile: ${customer.mobile}\n\n🛒 Order:\n${productList}\n\n💰 Amount: ₹${total}\n\n*OTP Generate karke customer ko bhejo*\nOrder ID: ${docRef.id}`;
+            }
+            
+            window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+            
+            // ✅ Customer ko OTP popup dikhao
+            showOrderOTPPopup(docRef.id, customer.mobile, customer.name);
+            
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('checkoutBtn').disabled = false;
+        }).catch(err => {
+            alert('❌ Order request error: ' + err.message);
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('checkoutBtn').disabled = false;
         });
     });
+}
 
-    Promise.all(orderPromises).then(() => {
-        console.log('✅ All orders saved in Firebase');
-        
-        // Cart data localStorage me save kar
-        localStorage.setItem('santra_cart', JSON.stringify(cart));
-        localStorage.setItem('santra_cart_total', total);
-        localStorage.setItem('santra_cart_delivery', delivery);
-
-        document.getElementById('loader').style.display = 'block';
-
-        // whatsapp-order.html pe redirect - WAHI FORM HAI
-        setTimeout(() => {
-            if(cartKeys.length === 1){
-                window.location.href = 'whatsapp-order.html?product=' + cartKeys[0];
-            } else {
-                window.location.href = 'whatsapp-order.html';
+// ✅ Order OTP Popup
+function showOrderOTPPopup(orderId, mobile, name) {
+    let popupHTML = `
+    <div id="orderOtpModal" class="otp-popup">
+      <div class="otp-box">
+        <h3 style="color:#e40046;text-align:center;margin-bottom:18px;font-size:22px">🔐 Order OTP Verification</h3>
+        <div style="background:linear-gradient(135deg,#fff3cd,#ffe69c);padding:15px;border-radius:12px;margin-bottom:18px;border-left:5px solid #ff9800">
+          <b style="color:#856404;font-size:16px">⏳ Waiting for Admin OTP</b><br>
+          <span style="font-size:13px;color:#856404">Hi ${name}, Admin WhatsApp pe OTP bhejega:<br><b style="font-size:15px">+91 ${mobile}</b></span>
+        </div>
+        <p style="text-align:center;color:#333;font-weight:600;margin-bottom:12px;font-size:15px">WhatsApp se OTP copy karke yahan daalo 👇</p>
+        <input type="tel" id="orderOtpInput" maxlength="6" placeholder="000000" style="width:100%;padding:20px;text-align:center;font-size:32px;letter-spacing:12px;border:3px solid #e40046;border-radius:12px;margin:12px 0;font-weight:bold;color:#e40046;background:#fff5f7">
+        <button onclick="verifyOrderOTP('${orderId}')" style="width:100%;padding:16px;background:linear-gradient(135deg,#e40046,#ff1744);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer;margin-bottom:12px;box-shadow:0 5px 20px rgba(228,0,70,0.4)">✅ Verify & Place Order</button>
+        <button onclick="closeOrderOTPPopup()" style="width:100%;padding:13px;background:#757575;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:bold">❌ Cancel</button>
+        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 2-5 min me OTP bhejega<br>🔄 1 ghante tak valid rahega</p>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+    setTimeout(() => document.getElementById('orderOtpInput')?.focus(), 400);
+    
+    // Real-time OTP check
+    db.collection('order_otp').doc(orderId).onSnapshot((doc) => {
+        if(doc.exists && doc.data().otp && doc.data().otp!== '') {
+            let input = document.getElementById('orderOtpInput');
+            if(input &&!input.value) {
+                input.value = doc.data().otp;
+                input.style.background = '#e8f5e9';
+                input.style.borderColor = '#4caf50';
             }
-        }, 500);
-    }).catch(err => {
-        alert('❌ Order save error: ' + err.message);
+        }
     });
+}
+
+function verifyOrderOTP(orderId) {
+    let enteredOTP = document.getElementById('orderOtpInput').value.trim();
+    if(enteredOTP.length!== 6) {
+        alert('❌ 6 digit OTP daalo!');
+        return;
+    }
+    
+    db.collection('order_otp').doc(orderId).get().then((doc) => {
+        if(!doc.exists) {
+            alert('❌ Order request not found!');
+            return;
+        }
+        
+        let data = doc.data();
+        
+        // Expiry check - 1 Hour
+        const now = Date.now();
+        const sent = data.sentTime?.seconds? data.sentTime.seconds * 1000 : data.requestedTime;
+        if(now - sent > 3600000) {
+            alert('❌ OTP Expired! 1 hour ho gaya. Naya order karo.');
+            closeOrderOTPPopup();
+            return;
+        }
+        
+        if(data.otp === enteredOTP && data.otp!== '') {
+            // ✅ OTP CORRECT - Order confirm karo
+            let promises = Object.keys(data.cartData).map(key => {
+                let item = data.cartData[key];
+                return db.collection('orders').add({
+                    customerMobile: data.customerMobile,
+                    customerName: data.customerName,
+                    customerEmail: data.customerEmail || '',
+                    productId: key,
+                    productName: item.name,
+                    productLink: getProductLink(key),
+                    productImage: getImageUrl(item),
+                    amount: (item.price || 0) * (item.qty || 1),
+                    quantity: item.qty || 1,
+                    unitPrice: item.price || 0,
+                    status: 'buying',
+                    orderDate: new Date().toLocaleString('en-IN'),
+                    orderTime: Date.now(),
+                    totalOrderAmount: data.totalAmount,
+                    deliveryCharge: data.deliveryCharge,
+                    otp: enteredOTP
+                });
+            });
+            
+            Promise.all(promises).then(() => {
+                // Update customer totalOrders
+                db.collection('customers').doc(data.customerMobile).update({
+                    totalOrders: firebase.firestore.FieldValue.increment(1),
+                    lastOrderTime: Date.now()
+                });
+                
+                // Delete order_otp request
+                db.collection('order_otp').doc(orderId).delete();
+                
+                // Clear cart
+                rtdb.ref('carts/' + currentUser.uid).remove();
+                
+                document.getElementById('orderOtpModal').innerHTML = `
+                    <div style="background:white;padding:50px;border-radius:18px;text-align:center">
+                      <div style="font-size:80px">✅</div>
+                      <h2 style="color:#4caf50;margin:20px 0;font-size:28px">Order Placed!</h2>
+                      <p style="color:#666;font-size:18px">Thank you ${data.customerName}</p>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    window.location.href = 'orders.html';
+                }, 2000);
+            });
+            
+        } else if(data.otp === '') {
+            alert('⏳ Admin ne abhi OTP nahi bheja!\nWhatsApp check karo ya 2 min wait karo');
+        } else {
+            alert('❌ Galat OTP! WhatsApp me sahi OTP check karo');
+            document.getElementById('orderOtpInput').value = '';
+            document.getElementById('orderOtpInput').focus();
+        }
+    });
+}
+
+function closeOrderOTPPopup() {
+    document.getElementById('orderOtpModal')?.remove();
 }
 </script>
 </body>
