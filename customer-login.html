@@ -7,29 +7,33 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:#f1f3f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-    .login-box{background:white;padding:30px;border-radius:15px;box-shadow:0 5px 30px rgba(0,0,0,0.2);width:100%;max-width:400px}
-    .login-box h2{color:#e40046;text-align:center;margin-bottom:25px}
-    .login-box input{width:100%;padding:14px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:16px}
-    .login-box input:focus{border-color:#e40046;outline:none}
-    .btn{width:100%;padding:15px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-    .btn:active{transform:scale(0.98)}
-    .btn-otp{background:#ff6b00}
-    .info{background:#e8f5e9;padding:12px;border-radius:8px;margin:15px 0;font-size:13px;color:#2e7d32;border-left:4px solid #4caf50}
-    .info.old{background:#fff3cd;color:#856404;border-left:4px solid #ff9800}
-    .back{text-align:center;margin-top:15px}
-    .back a{color:#666;text-decoration:none}
-    .popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center}
-    .popup-box{background:white;padding:25px;border-radius:15px;max-width:350px;text-align:center}
-    .popup-box h3{color:#e40046;margin-bottom:15px}
-    .popup-btn{padding:12px 25px;border:none;border-radius:8px;font-weight:bold;margin:5px;cursor:pointer}
-    .btn-yes{background:#4caf50;color:white}
-    .btn-no{background:#f44336;color:white}
-    .otp-section{display:none;margin-top:15px;padding:15px;background:#f9f9f9;border-radius:8px}
+   .login-box{background:white;padding:30px;border-radius:15px;box-shadow:0 5px 30px rgba(0,0,0,0.2);width:100%;max-width:400px}
+   .login-box h2{color:#e40046;text-align:center;margin-bottom:25px}
+   .login-box input,.login-box textarea{width:100%;padding:14px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:16px}
+   .login-box input:focus,.login-box textarea:focus{border-color:#e40046;outline:none}
+   .btn{width:100%;padding:15px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+   .btn:active{transform:scale(0.98)}
+   .btn-otp{background:#ff6b00}
+   .info{background:#e8f5e9;padding:12px;border-radius:8px;margin:15px 0;font-size:13px;color:#2e7d32;border-left:4px solid #4caf50}
+   .info.old{background:#fff3cd;color:#856404;border-left:4px solid #ff9800}
+   .back{text-align:center;margin-top:15px}
+   .back a{color:#666;text-decoration:none}
+   .popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center}
+   .popup-box{background:white;padding:25px;border-radius:15px;max-width:350px;text-align:center}
+   .popup-box h3{color:#e40046;margin-bottom:15px}
+   .popup-btn{padding:12px 25px;border:none;border-radius:8px;font-weight:bold;margin:5px;cursor:pointer}
+   .btn-yes{background:#4caf50;color:white}
+   .btn-no{background:#f44336;color:white}
+   .otp-section{display:none;margin-top:15px;padding:15px;background:#f9f9f9;border-radius:8px}
+   .profile-section{display:none}
+   .profile-photo{width:100px;height:100px;border-radius:50%;margin:0 auto 15px;display:block;object-fit:cover;border:3px solid #e40046}
+   .upload-btn{background:#3b82f6;color:white;padding:8px 15px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:10px 0}
   </style>
 </head>
 <body>
 
-<div class="login-box">
+<!-- LOGIN FORM -->
+<div class="login-box" id="loginForm">
   <h2>🛒 SANTRA MALL Login</h2>
   
   <div class="info" id="infoBox">
@@ -56,6 +60,32 @@
   </div>
 </div>
 
+<!-- PROFILE FORM - OTP VERIFY KE BAAD DIKHEGA -->
+<div class="login-box profile-section" id="profileForm">
+  <h2>👤 My Profile</h2>
+  
+  <div class="info">
+    <b>✅ Login Successful!</b><br>
+    Profile complete karo - Ye detail order me auto-fill hogi
+  </div>
+
+  <img id="profilePhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo">
+  <input type="file" id="photoUpload" accept="image/*" style="display:none" onchange="uploadPhoto()">
+  <button class="upload-btn" onclick="document.getElementById('photoUpload').click()">📷 Upload Photo</button>
+
+  <input type="text" id="profileName" placeholder="Full Name *" required>
+  <input type="tel" id="profileMobile" placeholder="Mobile Number *" maxlength="10" readonly style="background:#f5f5f5">
+  <input type="email" id="profileEmail" placeholder="Email (Optional)">
+  <textarea id="profileLocation" placeholder="Full Address / Location *" rows="3" required></textarea>
+  
+  <button class="btn" style="background:#4caf50" onclick="saveProfile()">💾 Save Profile</button>
+  <button class="btn" style="background:#f44336" onclick="customerLogout()">🚪 Logout</button>
+  
+  <div class="back">
+    <a href="index.html">← Back to Home</a>
+  </div>
+</div>
+
 <!-- Security Popup -->
 <div class="popup" id="securityPopup">
   <div class="popup-box">
@@ -70,9 +100,35 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 <script>
+/*
+=================================
+OLD CODE BACKUP - 09/06/2026 - PURANA CODE
+=================================
+
+// ❌ OLD: Login ke baad profile nahi banta tha
+// localStorage.setItem('santra_customer', JSON.stringify({
+// name: data.name,
+// mobile: mobile,
+// email: data.email || '',
+// loginTime: Date.now()
+// }));
+// window.location.href = 'index.html'; // Direct home pe bhej deta tha
+
+// ❌ OLD: isLoggedIn flag nahi tha
+// localStorage me sirf name, mobile save hota tha
+
+// ❌ OLD: Photo upload nahi tha
+// ❌ OLD: Location/Address field nahi tha
+// ❌ OLD: Tab name change nahi hota tha
+
+=================================
+*/
+
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const ADMIN_WHATSAPP = "917725960293";
+const IMGBB_API_KEY = localStorage.getItem('imgbb_key') || 'YOUR_IMGBB_KEY'; // ImgBB key daalo
+
 let currentUserData = null;
 
 // ✅ Step 1: Check karo Old Customer hai ya New
@@ -81,7 +137,7 @@ function checkAndLogin() {
   const mobile = document.getElementById('custMobile').value.trim();
   const email = document.getElementById('custEmail').value.trim();
   
-  if (!name || mobile.length !== 10) {
+  if (!name || mobile.length!== 10) {
     alert('❌ Name aur 10 digit mobile required hai!');
     return;
   }
@@ -96,14 +152,14 @@ function checkAndLogin() {
       // ✅ OLD CUSTOMER DETECT HUA
       if(data.verified === true) {
         // ✅ SIM CHANGE SECURITY CHECK
-        if(data.name && data.name !== name) {
+        if(data.name && data.name!== name) {
           document.getElementById('securityMsg').innerHTML = 
             `Ye mobile number <b>${data.name}</b> naam se registered tha.<br><br>Ab aap <b>${name}</b> naam se login kar rahe ho.<br><br>Kya aap naya user ho?`;
           document.getElementById('securityPopup').style.display = 'flex';
           return;
         }
         
-        // ✅ DIRECT LOGIN - OTP SKIP
+        // ✅ DIRECT LOGIN - OTP SKIP + PROFILE LOAD
         directLogin(mobile, data);
       } else {
         // Verified nahi hai to OTP mangao
@@ -118,14 +174,19 @@ function checkAndLogin() {
 
 // ✅ Direct Login for Old Verified Customer
 function directLogin(mobile, data) {
-  localStorage.setItem('santra_customer', JSON.stringify({
+  const customerData = {
     name: data.name,
     mobile: mobile,
     email: data.email || '',
+    photo: data.photo || '',
+    location: data.location || '',
     loginTime: Date.now(),
+    isLoggedIn: true, // ✅ IMPORTANT: Persist ke liye
     isOldCustomer: true,
     totalOrders: data.totalOrders || 0
-  }));
+  };
+  
+  localStorage.setItem('santra_customer', JSON.stringify(customerData));
   
   // Update last login
   db.collection('customers').doc(mobile).update({
@@ -136,9 +197,12 @@ function directLogin(mobile, data) {
   document.getElementById('infoBox').innerHTML = 
     `🔥 <b>Welcome Back ${data.name}!</b><br>You have ${data.totalOrders || 0} past orders.<br>Direct login successful!`;
   
+  // ✅ TAB NAME CHANGE
+  document.title = `👤 My Profile - ${data.name} - SANTRA MALL`;
+  
   setTimeout(() => {
-    window.location.href = 'index.html';
-  }, 2000);
+    showProfileForm(customerData);
+  }, 1500);
 }
 
 // ✅ OTP Request for New Customer or Unverified
@@ -170,7 +234,7 @@ function requestOTP(name, mobile, email, isOldButUnverified) {
     localStorage.setItem('pendingOTP', JSON.stringify({name, mobile, email, time: Date.now()}));
     
     // 4. Admin ko WhatsApp
-    let msg = `🔐 *NEW LOGIN OTP REQUEST*\n\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n📧 Email: ${email || 'N/A'}\n\n${isOldButUnverified ? '⚠️ OLD CUSTOMER - Unverified' : '🆕 NEW CUSTOMER'}\n\nAdmin panel se OTP generate karke customer ko bhejo.`;
+    let msg = `🔐 *NEW LOGIN OTP REQUEST*\n\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n📧 Email: ${email || 'N/A'}\n\n${isOldButUnverified? '⚠️ OLD CUSTOMER - Unverified' : '🆕 NEW CUSTOMER'}\n\nAdmin panel se OTP generate karke customer ko bhejo.`;
     
     window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
     
@@ -197,12 +261,12 @@ function listenForOTP(mobile) {
   });
 }
 
-// ✅ OTP Verify Karo
+// ✅ OTP Verify Karo + Profile Form Open
 function verifyOTP() {
   const otp = document.getElementById('otpInput').value.trim();
   const mobile = currentUserData.mobile;
   
-  if(otp.length !== 6) {
+  if(otp.length!== 6) {
     alert('❌ 6 digit OTP daalo!');
     return;
   }
@@ -217,18 +281,30 @@ function verifyOTP() {
     
     // ✅ Expiry Check - 1 Hour
     const now = Date.now();
-    const sent = data.sentTime?.seconds ? data.sentTime.seconds * 1000 : data.requestedTime;
+    const sent = data.sentTime?.seconds? data.sentTime.seconds * 1000 : data.requestedTime;
     if(now - sent > 3600000) {
       alert('❌ OTP Expired! 1 hour ho gaya. Naya OTP mango.');
       return;
     }
     
-    if(data.otp !== otp) {
+    if(data.otp!== otp) {
       alert('❌ Wrong OTP! Check karo.');
       return;
     }
     
-    // ✅ OTP CORRECT - Login Success
+    // ✅ OTP CORRECT - Login Success + Profile Form
+    const customerData = {
+      name: data.name,
+      mobile: mobile,
+      email: data.email || '',
+      photo: '',
+      location: '',
+      loginTime: Date.now(),
+      isLoggedIn: true, // ✅ IMPORTANT: Persist ke liye
+      isOldCustomer: data.isOldCustomer || false
+    };
+    
+    // Firebase update
     db.collection('customers').doc(mobile).update({
       verified: true,
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
@@ -238,19 +314,104 @@ function verifyOTP() {
     db.collection('login_requests').doc(mobile).delete();
     
     // LocalStorage me save
-    localStorage.setItem('santra_customer', JSON.stringify({
-      name: data.name,
-      mobile: mobile,
-      email: data.email || '',
-      loginTime: Date.now(),
-      isOldCustomer: data.isOldCustomer || false
-    }));
-    
+    localStorage.setItem('santra_customer', JSON.stringify(customerData));
     localStorage.removeItem('pendingOTP');
     
+    // ✅ TAB NAME CHANGE
+    document.title = `👤 My Profile - ${data.name} - SANTRA MALL`;
+    
     alert('✅ Login Successful! Welcome ' + data.name);
-    window.location.href = 'index.html';
+    
+    // ✅ PROFILE FORM SHOW KARO
+    showProfileForm(customerData);
   });
+}
+
+// ✅ Profile Form Show Karo
+function showProfileForm(customerData) {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('profileForm').style.display = 'block';
+  
+  document.getElementById('profileName').value = customerData.name || '';
+  document.getElementById('profileMobile').value = customerData.mobile || '';
+  document.getElementById('profileEmail').value = customerData.email || '';
+  document.getElementById('profileLocation').value = customerData.location || '';
+  
+  if(customerData.photo) {
+    document.getElementById('profilePhoto').src = customerData.photo;
+  }
+}
+
+// ✅ Photo Upload to ImgBB
+function uploadPhoto() {
+  const file = document.getElementById('photoUpload').files[0];
+  if(!file) return;
+  
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('key', IMGBB_API_KEY);
+  
+  fetch('https://api.imgbb.com/1/upload', {
+    method: 'POST',
+    body: formData
+  })
+ .then(res => res.json())
+ .then(data => {
+    if(data.success) {
+      document.getElementById('profilePhoto').src = data.data.url;
+      alert('✅ Photo uploaded!');
+    } else {
+      alert('❌ Upload failed!');
+    }
+  })
+ .catch(err => alert('❌ Error: ' + err));
+}
+
+// ✅ Save Profile - Firebase + LocalStorage Sync
+function saveProfile() {
+  const name = document.getElementById('profileName').value.trim();
+  const mobile = document.getElementById('profileMobile').value.trim();
+  const email = document.getElementById('profileEmail').value.trim();
+  const location = document.getElementById('profileLocation').value.trim();
+  const photo = document.getElementById('profilePhoto').src;
+  
+  if(!name ||!location) {
+    alert('❌ Name aur Location required hai!');
+    return;
+  }
+  
+  const customerData = {
+    name: name,
+    mobile: mobile,
+    email: email,
+    photo: photo,
+    location: location,
+    loginTime: Date.now(),
+    isLoggedIn: true,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  
+  // Firebase update
+  db.collection('customers').doc(mobile).set(customerData, { merge: true })
+ .then(() => {
+    // LocalStorage update - SAB FILES SE CONNECT
+    localStorage.setItem('santra_customer', JSON.stringify(customerData));
+    
+    alert('✅ Profile Saved Successfully!\n\nAb orders me ye detail auto-fill hogi.');
+    window.location.href = 'index.html';
+  })
+ .catch(err => alert('❌ Error: ' + err));
+}
+
+// ✅ Logout - Sab clear karo
+function customerLogout() {
+  if(confirm('Logout karna hai?')) {
+    localStorage.removeItem('santra_customer');
+    localStorage.removeItem('santra_cart');
+    localStorage.removeItem('santra_wishlist');
+    alert('✅ Logged out successfully');
+    window.location.href = 'index.html';
+  }
 }
 
 // ✅ Security Popup Functions
@@ -270,8 +431,20 @@ function closePopup() {
   document.getElementById('securityPopup').style.display = 'none';
 }
 
-// ✅ Page Load - Check Pending OTP
+// ✅ Page Load - Check Pending OTP + Check Already Logged In
 window.onload = function() {
+  // Already logged in hai to profile form dikhao
+  let customer = localStorage.getItem('santra_customer');
+  if(customer) {
+    customer = JSON.parse(customer);
+    if(customer.isLoggedIn === true) {
+      document.title = `👤 My Profile - ${customer.name} - SANTRA MALL`;
+      showProfileForm(customer);
+      return;
+    }
+  }
+  
+  // Pending OTP check
   let pending = localStorage.getItem('pendingOTP');
   if(pending) {
     pending = JSON.parse(pending);
@@ -288,6 +461,96 @@ window.onload = function() {
     }
   }
 }
+</script>
+
+<!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 11:40 PM ==================== -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 09 June 2026, 11:40 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+window.santraBackup = {
+  version: '2.1',
+  timestamp: '2026-06-09T23:40:00+05:30',
+  location: 'Nawai, Rajasthan',
+
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    localStorage.setItem('santra_backup_2026_06_09_2340', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100);
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_09_2340');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 09 June 2026, 11:40 PM');
+    }
+  },
+
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-09T23:40:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-09_2340.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+window.santraBackup.backupLocalStorage();
+
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>

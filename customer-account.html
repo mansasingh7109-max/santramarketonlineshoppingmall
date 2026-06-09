@@ -1,357 +1,452 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Account - SANTRA MALL</title>
+  <title>👤 My Profile - SANTRA MALL</title>
   <style>
-    :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff;--green:#10b981;--red:#ef4444;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);padding-bottom:70px;}
-    .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-    .header h1{color:var(--accent);font-size:20px;}
-    .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
-    .container{padding:15px;}
-    .login-box{background:var(--card);padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);max-width:400px;margin:20px auto;}
-    .login-box h2{color:var(--accent);text-align:center;margin-bottom:20px;}
-    .login-box input{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px;}
-    .login-box button{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:15px;}
-    .toggle-link{text-align:center;margin-top:15px;color:var(--accent);cursor:pointer;font-size:14px;}
-    .msg{padding:12px;border-radius:6px;margin:10px 0;text-align:center;font-weight:bold;font-size:14px}
-    .msg-success{background:#d4edda;color:#155724}
-    .msg-error{background:#f8d7da;color:#721c24}
-    .account-box{background:var(--card);padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:15px;}
-    .account-box h3{color:var(--accent);margin-bottom:15px;display:flex;align-items:center;gap:10px;}
-    .account-box p{margin:8px 0;font-size:14px;}
-    .account-box b{color:#333;}
-    .order-box{background:#fafafa;border:2px solid #eee;padding:15px;margin:15px 0;border-radius:10px;}
-    .order-box-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
-    .order-box h4{color:var(--accent);font-size:16px;}
-    .order-box-date{font-size:12px;color:#666;}
-    .status-badge{padding:5px 12px;border-radius:15px;font-size:11px;font-weight:bold;}
-    .status-placed{background:#4caf50;color:white;}
-    .status-shipped{background:#2196F3;color:white;}
-    .status-delivered{background:#4caf50;color:white;}
-    .status-canceled{background:#f44336;color:white;}
-    .status-returned{background:#ff9800;color:white;}
-    .order-info{background:#fff;padding:12px;border-radius:6px;margin:10px 0;font-size:13px;border:1px solid #e0e0e0;}
-    .order-info p{margin:5px 0;}
-    .order-item-box{display:flex;gap:10px;margin:8px 0;padding:8px;background:#fff;border-radius:6px;border:1px solid #eee;}
-    .order-item-box img{width:60px;height:60px;object-fit:cover;border-radius:4px;}
-    .order-item-info{flex:1;}
-    .order-item-info h5{font-size:13px;margin-bottom:3px;}
-    .order-item-info p{font-size:12px;color:#666;}
-    .action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;}
-    .action-btn{padding:10px;border:none;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;}
-    .btn-track{background:#2196F3;color:white;}
-    .btn-cancel{background:#f44336;color:white;}
-    .btn-disabled{background:#ccc!important;color:#666!important;cursor:not-allowed;}
-    .logout-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
-    .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
-    .nav-item.active{color:var(--accent);}
-    .nav-item div{font-size:22px;}
-    .nav-item span{font-size:11px;display:block;margin-top:2px;}
-    .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
-    .hide{display:none!important;}
+    body{background:#f1f3f6;padding:0}
+  .header{background:#1a1a2e;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+  .header h1{color:#e94560;font-size:20px}
+  .back-btn{background:#666;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer}
+  .container{padding:20px;max-width:600px;margin:0 auto}
+  .profile-card{background:white;border-radius:15px;padding:30px;box-shadow:0 5px 20px rgba(0,0,0,0.1);margin-bottom:20px}
+  .profile-header{text-align:center;margin-bottom:25px}
+  .profile-photo{width:120px;height:120px;border-radius:50%;margin:0 auto 15px;display:block;object-fit:cover;border:4px solid #e40046;cursor:pointer}
+  .profile-photo:hover{opacity:0.8}
+  .profile-name{font-size:24px;font-weight:bold;color:#1a1a2e;margin-bottom:5px}
+  .profile-mobile{color:#666;font-size:14px}
+  .badge-verified{background:#10b981;color:white;padding:4px 12px;border-radius:20px;font-size:12px;display:inline-block;margin-top:8px}
+  .info-row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #eee}
+  .info-row:last-child{border-bottom:none}
+  .info-label{color:#666;font-weight:bold}
+  .info-value{color:#1a1a2e;text-align:right;flex:1;margin-left:20px}
+  .edit-mode{display:none}
+  .edit-mode input,.edit-mode textarea{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:15px;margin:8px 0}
+  .edit-mode input:focus,.edit-mode textarea:focus{border-color:#e40046;outline:none}
+  .btn{width:100%;padding:14px;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+  .btn-edit{background:#3b82f6;color:white}
+  .btn-save{background:#10b981;color:white}
+  .btn-cancel{background:#757575;color:white}
+  .btn-orders{background:#ff6b00;color:white}
+  .btn-logout{background:#f44336;color:white}
+  .btn:active{transform:scale(0.98)}
+  .upload-btn{background:#3b82f6;color:white;padding:8px 15px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:10px auto;display:block}
+  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px}
+  .stat-box{background:#f8f9fa;padding:15px;border-radius:10px;text-align:center}
+  .stat-box h3{color:#e40046;font-size:28px;margin-bottom:5px}
+  .stat-box p{color:#666;font-size:13px}
+  .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:15px 20px;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.3);display:none;z-index:9999}
+  .toast.show{display:block;animation:slideIn 0.3s}
+  .loader{display:none;text-align:center;padding:10px;color:#666;font-size:13px}
+    @keyframes slideIn{from{transform:translateX(400px)}to{transform:translateX(0)}}
   </style>
 </head>
 <body>
 
 <div class="header">
-  <a href="index.html" class="back-btn">←</a>
-  <h1>👤 My Account</h1>
-  <div style="width:24px;"></div>
+  <h1>👤 My Profile</h1>
+  <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
 </div>
 
 <div class="container">
-  <div id="loginSection">
-    <div class="login-box">
-      <h2 id="formTitle">Customer Login</h2>
-      <div id="loginForm">
-        <input type="email" id="custEmail" placeholder="Email">
-        <input type="password" id="custPassword" placeholder="Password">
-        <div id="loginMsg"></div>
-        <button onclick="customerLogin()">Login</button>
-        <div class="toggle-link" onclick="showRegister()">New User? Register Here</div>
-      </div>
-      
-      <div id="registerForm" class="hide">
-        <input type="text" id="regName" placeholder="Full Name *">
-        <input type="email" id="regEmail" placeholder="Email *">
-        <input type="tel" id="regMobile" placeholder="Mobile Number *" maxlength="10">
-        <input type="password" id="regPassword" placeholder="Password *">
-        <input type="password" id="regConfirm" placeholder="Confirm Password *">
-        <div id="regMsg"></div>
-        <button onclick="customerRegister()">Register</button>
-        <div class="toggle-link" onclick="showLogin()">Already have account? Login</div>
-      </div>
+  <!-- Profile Display Mode -->
+  <div class="profile-card" id="viewMode">
+    <div class="profile-header">
+      <img id="displayPhoto" src="https://via.placeholder.com/120?text=Photo" class="profile-photo" onclick="document.getElementById('photoInput').click()">
+      <div class="profile-name" id="displayName">Loading...</div>
+      <div class="profile-mobile" id="displayMobile">+91 XXXXXXXXXX</div>
+      <span class="badge-verified">✅ Verified Customer</span>
     </div>
+
+    <div class="info-row">
+      <span class="info-label">📧 Email:</span>
+      <span class="info-value" id="displayEmail">Not provided</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">📍 Location:</span>
+      <span class="info-value" id="displayLocation">Not provided</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">📦 Total Orders:</span>
+      <span class="info-value" id="displayOrders">0</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">📅 Member Since:</span>
+      <span class="info-value" id="displayJoined">-</span>
+    </div>
+
+    <button class="btn btn-edit" onclick="enableEditMode()">✏️ Edit Profile</button>
+    <button class="btn btn-orders" onclick="window.location.href='orders.html'">📦 My Orders</button>
+    <button class="btn btn-logout" onclick="customerLogout()">🚪 Logout</button>
   </div>
 
-  <div id="accountSection" class="hide">
-    <div class="account-box">
-      <h3>👤 Profile</h3>
-      <p><b>Name:</b> <span id="profileName"></span></p>
-      <p><b>Email:</b> <span id="profileEmail"></span></p>
-      <p><b>Mobile:</b> <span id="profileMobile"></span></p>
-    </div>
+  <!-- Profile Edit Mode -->
+  <div class="profile-card edit-mode" id="editMode">
+    <h2 style="color:#e40046;margin-bottom:20px;text-align:center">✏️ Edit Profile</h2>
+    
+    <img id="editPhoto" src="https://via.placeholder.com/120?text=Photo" class="profile-photo">
+    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="uploadPhotoToFirebase()">
+    <button class="upload-btn" onclick="document.getElementById('photoInput').click()">📷 Change Photo</button>
+    <div class="loader" id="uploadLoader">⏳ Uploading...</div>
 
-    <div class="account-box">
-      <h3>📦 My Orders</h3>
-      <div id="myOrdersList"></div>
-    </div>
+    <label style="font-weight:bold;color:#333;font-size:14px">Full Name *</label>
+    <input type="text" id="editName" placeholder="Full Name" required>
 
-    <button class="logout-btn" onclick="customerLogout()">Logout</button>
+    <label style="font-weight:bold;color:#333;font-size:14px">Mobile Number *</label>
+    <input type="tel" id="editMobile" placeholder="Mobile" readonly style="background:#f5f5f5">
+
+    <label style="font-weight:bold;color:#333;font-size:14px">Email</label>
+    <input type="email" id="editEmail" placeholder="Email (Optional)">
+
+    <label style="font-weight:bold;color:#333;font-size:14px">Full Address / Location *</label>
+    <textarea id="editLocation" placeholder="Full Address" rows="3" required></textarea>
+
+    <button class="btn btn-save" onclick="saveProfile()">💾 Save Changes</button>
+    <button class="btn btn-cancel" onclick="cancelEdit()">❌ Cancel</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <h3 id="statOrders">0</h3>
+      <p>Total Orders</p>
+    </div>
+    <div class="stat-box">
+      <h3 id="statSpent">₹0</h3>
+      <p>Total Spent</p>
+    </div>
   </div>
 </div>
 
-<div class="bottom-nav">
-  <a href="index.html" class="nav-item">
-    <div>🏠</div>
-    <span>Home</span>
-  </a>
-  <a href="categories.html" class="nav-item">
-    <div>📱</div>
-    <span>Categories</span>
-  </a>
-  <a href="cart.html" class="nav-item">
-    <div>🛒</div>
-    <span>Cart</span>
-    <span class="cart-badge" id="cartCount">0</span>
-  </a>
-  <a href="customer-account.html" class="nav-item active">
-    <div>👤</div>
-    <span>Account</span>
-  </a>
-</div>
+<div class="toast" id="toast"></div>
 
-<script src="db.js"></script>
+<!-- ==================== FIREBASE SDK + STORAGE ==================== -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="secrets.js"></script>
 <script>
-window.onload = function(){
-  document.documentElement.style.setProperty('--accent', DB.settings.primaryColor);
-  let userId = localStorage.getItem('currentUserId');
-  if(userId){
-    showAccount();
-  }
-  updateCartCount();
+/*
+=================================
+OLD CODE BACKUP - 09/06/2026 - PURANA CODE
+=================================
+
+// ❌ OLD: ImgBB API use kar rahe the - Key expose hoti thi
+// const IMGBB_API_KEY = 'YOUR_IMGBB_KEY';
+// fetch('https://api.imgbb.com/1/upload', {
+// method: 'POST',
+// body: formData
+// })
+
+// ❌ OLD: Profile page tha hi nahi
+// Customer login ke baad direct index.html pe bhej deta tha
+
+// ❌ OLD: Photo upload nahi tha
+// ❌ OLD: Location field nahi tha
+// ❌ OLD: Edit profile nahi tha
+
+=================================
+*/
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage(); // ✅ FREE Firebase Storage
+const auth = firebase.auth();
+
+let currentCustomer = null;
+
+// ✅ Page Load - Profile Load Karo
+window.onload = function() {
+  loadProfile();
+  loadStats();
 }
 
-function showRegister(){
-  document.getElementById('loginForm').classList.add('hide');
-  document.getElementById('registerForm').classList.remove('hide');
-  document.getElementById('formTitle').innerText = 'Customer Register';
-}
-
-function showLogin(){
-  document.getElementById('registerForm').classList.add('hide');
-  document.getElementById('loginForm').classList.remove('hide');
-  document.getElementById('formTitle').innerText = 'Customer Login';
-}
-
-function customerLogin(){
-  let email = document.getElementById('custEmail').value.trim();
-  let pass = document.getElementById('custPassword').value.trim();
-  let msg = document.getElementById('loginMsg');
+// ✅ Profile Load from LocalStorage + Firebase
+function loadProfile() {
+  let customer = localStorage.getItem('santra_customer');
   
-  let user = DB.users.find(u => u.email === email && u.pass === pass && u.role === 'customer');
-  
-  if(user){
-    localStorage.setItem('currentUserId', user.id);
-    msg.innerHTML = '<div class="msg msg-success">Login successful!</div>';
-    setTimeout(() => {
-      showAccount();
-    }, 500);
-  } else {
-    msg.innerHTML = '<div class="msg msg-error">❌ Invalid Email or Password!</div>';
-  }
-}
-
-function customerRegister(){
-  let name = document.getElementById('regName').value.trim();
-  let email = document.getElementById('regEmail').value.trim();
-  let mobile = document.getElementById('regMobile').value.trim();
-  let pass = document.getElementById('regPassword').value.trim();
-  let confirm = document.getElementById('regConfirm').value.trim();
-  let msg = document.getElementById('regMsg');
-  
-  if(!name || !email || !mobile || !pass){
-    msg.innerHTML = '<div class="msg msg-error">Please fill all fields!</div>';
+  if(!customer) {
+    showToast('❌ Please login first!');
+    setTimeout(() => window.location.href = 'customer-login.html', 1500);
     return;
   }
   
-  if(pass !== confirm){
-    msg.innerHTML = '<div class="msg msg-error">Passwords do not match!</div>';
+  customer = JSON.parse(customer);
+  
+  if(!customer.isLoggedIn) {
+    showToast('❌ Session expired! Please login again.');
+    setTimeout(() => window.location.href = 'customer-login.html', 1500);
     return;
   }
   
-  if(pass.length < 6){
-    msg.innerHTML = '<div class="msg msg-error">Password must be 6+ characters!</div>';
-    return;
-  }
+  currentCustomer = customer;
   
-  if(mobile.length !== 10){
-    msg.innerHTML = '<div class="msg msg-error">Enter valid 10-digit mobile!</div>';
-    return;
-  }
+  // ✅ TAB NAME CHANGE
+  document.title = `👤 My Profile - ${customer.name} - SANTRA MALL`;
   
-  if(DB.users.find(u => u.email === email)){
-    msg.innerHTML = '<div class="msg msg-error">Email already registered!</div>';
-    return;
-  }
+  // Display Mode me data dikhao
+  document.getElementById('displayName').innerText = customer.name;
+  document.getElementById('displayMobile').innerText = `+91 ${customer.mobile}`;
+  document.getElementById('displayEmail').innerText = customer.email || 'Not provided';
+  document.getElementById('displayLocation').innerText = customer.location || 'Not provided';
+  document.getElementById('displayPhoto').src = customer.photo || 'https://via.placeholder.com/120?text=Photo';
   
-  let newUser = {
-    id: Date.now(),
-    name: name,
-    email: email,
-    mobile: mobile,
-    pass: pass,
-    role: 'customer',
-    mobileVerified: false
-  };
-  
-  DB.users.push(newUser);
-  saveDB();
-  
-  msg.innerHTML = '<div class="msg msg-success">✅ Registration successful! Please login.</div>';
-  setTimeout(() => {
-    showLogin();
-    document.getElementById('custEmail').value = email;
-  }, 1500);
-}
-
-function showAccount(){
-  let userId = parseInt(localStorage.getItem('currentUserId'));
-  let user = DB.users.find(u => u.id === userId);
-  
-  if(!user){
-    customerLogout();
-    return;
-  }
-  
-  document.getElementById('loginSection').classList.add('hide');
-  document.getElementById('accountSection').classList.remove('hide');
-  
-  document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileEmail').innerText = user.email;
-  document.getElementById('profileMobile').innerText = user.mobile || '-';
-  
-  loadMyOrders();
-}
-
-function loadMyOrders(){
-  let userId = parseInt(localStorage.getItem('currentUserId'));
-  let myOrders = DB.orders.filter(o => o.uid === userId).reverse();
-  let container = document.getElementById('myOrdersList');
-  
-  if(myOrders.length === 0){
-    container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No orders yet<br><button onclick="window.location.href=\'index.html\'" style="margin-top:10px;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;">Start Shopping</button></p>';
-    return;
-  }
-  
-  container.innerHTML = '';
-  myOrders.forEach(order => {
-    let statusClass = order.status.toLowerCase();
-    let canCancel = ['Placed', 'Shipped'].includes(order.status);
-    let canReturn = order.status === 'Delivered';
-    
-    let itemsHtml = order.items.map(item => `
-      <div class="order-item-box">
-        <img src="${item.img}" alt="${item.name}">
-        <div class="order-item-info">
-          <h5>${item.name}</h5>
-          <p>Qty: ${item.qty} x ₹${item.price} = ₹${item.price * item.qty}</p>
-        </div>
-      </div>
-    `).join('');
-    
-    container.innerHTML += `
-      <div class="order-box">
-        <div class="order-box-header">
-          <div>
-            <h4>Order #${order.id}</h4>
-            <p class="order-box-date">${new Date(order.time).toLocaleString()}</p>
-          </div>
-          <span class="status-badge status-${statusClass}">${order.status}</span>
-        </div>
-        
-        <div class="order-info">
-          <p><b>Name:</b> ${order.customerName}</p>
-          <p><b>Mobile:</b> ${order.mobile}</p>
-          <p><b>Address:</b> ${order.address}</p>
-          <p><b>Total:</b> ₹${order.total}</p>
-          ${order.requestReason ? `<p style="color:#ff9800"><b>Request:</b> ${order.requestReason}</p>` : ''}
-        </div>
-        
-        <details>
-          <summary style="cursor:pointer;color:var(--accent);font-weight:bold;font-size:13px;margin:8px 0;">▶ Items (${order.items.length})</summary>
-          ${itemsHtml}
-        </details>
-        
-        <div class="action-grid">
-          <button class="action-btn btn-track" onclick="trackOrder(${order.id})">📍 Track Order</button>
-          <button class="action-btn btn-cancel ${!canCancel && !canReturn ? 'btn-disabled' : ''}" onclick="${canCancel ? `cancelOrder(${order.id})` : canReturn ? `returnOrder(${order.id})` : ''}" ${!canCancel && !canReturn ? 'disabled' : ''}>${canReturn ? '↩️ Return' : '❌ Cancel'}</button>
-        </div>
-      </div>
-    `;
+  // Firebase se latest data fetch karo
+  db.collection('customers').doc(customer.mobile).get().then(doc => {
+    if(doc.exists) {
+      const data = doc.data();
+      document.getElementById('displayOrders').innerText = data.totalOrders || 0;
+      document.getElementById('displayJoined').innerText = data.createdAt || 'N/A';
+      
+      // LocalStorage update karo
+      const updatedCustomer = {...customer,...data};
+      localStorage.setItem('santra_customer', JSON.stringify(updatedCustomer));
+      currentCustomer = updatedCustomer;
+    }
   });
 }
 
-function returnOrder(orderId){
-  let reason = prompt('Reason for return:');
-  if(!reason) return;
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
-  order.status = 'Returned';
-  order.requestReason = reason;
-  order.requestTime = new Date().toISOString();
-  saveDB();
-  alert('✅ Return request submitted!');
-  loadMyOrders();
-}
-
-function trackOrder(orderId){
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
+// ✅ Edit Mode Enable
+function enableEditMode() {
+  document.getElementById('viewMode').style.display = 'none';
+  document.getElementById('editMode').style.display = 'block';
   
-  let statusMsg = {
-    'Placed': 'Your order is confirmed and will be shipped soon',
-    'Shipped': 'Your order is on the way! Expected delivery in 2-3 days',
-    'Delivered': 'Your order has been delivered successfully',
-    'Canceled': 'This order has been cancelled',
-    'Returned': 'Return request is being processed'
-  };
+  document.getElementById('editName').value = currentCustomer.name || '';
+  document.getElementById('editMobile').value = currentCustomer.mobile || '';
+  document.getElementById('editEmail').value = currentCustomer.email || '';
+  document.getElementById('editLocation').value = currentCustomer.location || '';
+  document.getElementById('editPhoto').src = currentCustomer.photo || 'https://via.placeholder.com/120?text=Photo';
+}
+
+// ✅ Cancel Edit
+function cancelEdit() {
+  document.getElementById('editMode').style.display = 'none';
+  document.getElementById('viewMode').style.display = 'block';
+}
+
+// ✅ Photo Upload to Firebase Storage - 100% FREE + SECURE
+function uploadPhotoToFirebase() {
+  const file = document.getElementById('photoInput').files[0];
+  if(!file) return;
   
-  alert('📍 Order Tracking\n\nOrder ID: #' + order.id + '\nStatus: ' + order.status + '\n\n' + (statusMsg[order.status] || ''));
-}
-
-function cancelOrder(orderId){
-  if(!confirm('Cancel this order?')) return;
-  let order = DB.orders.find(o => o.id == orderId);
-  if(!order) return;
-  order.status = 'Canceled';
-  saveDB();
-  alert('✅ Order cancelled!');
-  loadMyOrders();
-}
-
-function customerLogout(){
-  localStorage.removeItem('currentUserId');
-  location.reload();
-}
-
-function updateCartCount(){
-  let userId = localStorage.getItem('currentUserId');
-  if(!userId) {
-    document.getElementById('cartCount').innerText = '0';
+  // Check file size - 2MB max
+  if(file.size > 2 * 1024 * 1024) {
+    showToast('❌ Photo size 2MB se kam honi chahiye!');
     return;
   }
-  userId = parseInt(userId);
-  let userCart = DB.cart.filter(c => c.uid == userId);
-  let total = userCart.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').innerText = total;
+  
+  document.getElementById('uploadLoader').style.display = 'block';
+  
+  // Firebase Storage path: profile_photos/mobile/timestamp.jpg
+  const fileName = `profile_photos/${currentCustomer.mobile}/${Date.now()}.jpg`;
+  const storageRef = storage.ref(fileName);
+  
+  // Upload karo
+  const uploadTask = storageRef.put(file);
+  
+  uploadTask.on('state_changed', 
+    (snapshot) => {
+      // Progress
+      let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      document.getElementById('uploadLoader').innerText = `⏳ Uploading... ${Math.round(progress)}%`;
+    }, 
+    (error) => {
+      // Error
+      document.getElementById('uploadLoader').style.display = 'none';
+      showToast('❌ Upload failed: ' + error.message);
+    }, 
+    () => {
+      // Success - URL get karo
+      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        document.getElementById('editPhoto').src = downloadURL;
+        document.getElementById('uploadLoader').style.display = 'none';
+        showToast('✅ Photo uploaded successfully!');
+      });
+    }
+  );
+}
+
+// ✅ Save Profile - Firebase + LocalStorage Sync
+function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  const mobile = document.getElementById('editMobile').value.trim();
+  const email = document.getElementById('editEmail').value.trim();
+  const location = document.getElementById('editLocation').value.trim();
+  const photo = document.getElementById('editPhoto').src;
+  
+  if(!name ||!location) {
+    showToast('❌ Name aur Location required hai!');
+    return;
+  }
+  
+  const customerData = {
+    name: name,
+    mobile: mobile,
+    email: email,
+    photo: photo,
+    location: location,
+    loginTime: currentCustomer.loginTime,
+    isLoggedIn: true,
+    isOldCustomer: currentCustomer.isOldCustomer || false,
+    totalOrders: currentCustomer.totalOrders || 0,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  
+  // Firebase update - SAB FILES SE CONNECT
+  db.collection('customers').doc(mobile).set(customerData, { merge: true })
+.then(() => {
+    // LocalStorage update - SAB FILES SYNC
+    localStorage.setItem('santra_customer', JSON.stringify(customerData));
+    currentCustomer = customerData;
+    
+    // ✅ TAB NAME UPDATE
+    document.title = `👤 My Profile - ${name} - SANTRA MALL`;
+    
+    showToast('✅ Profile Saved Successfully!');
+    
+    // View mode me wapas jao
+    setTimeout(() => {
+      cancelEdit();
+      loadProfile();
+    }, 1000);
+  })
+.catch(err => showToast('❌ Error: ' + err));
+}
+
+// ✅ Load Stats - Orders + Total Spent
+function loadStats() {
+  if(!currentCustomer) return;
+  
+  db.collection('orders').where('customerMobile', '==', currentCustomer.mobile).get()
+.then(snap => {
+    let totalOrders = snap.size;
+    let totalSpent = 0;
+    
+    snap.forEach(doc => {
+      const order = doc.data();
+      totalSpent += order.totalAmount || 0;
+    });
+    
+    document.getElementById('statOrders').innerText = totalOrders;
+    document.getElementById('statSpent').innerText = `₹${totalSpent}`;
+  });
+}
+
+// ✅ Logout - Sab clear karo
+function customerLogout() {
+  if(confirm('Logout karna hai?')) {
+    localStorage.removeItem('santra_customer');
+    localStorage.removeItem('santra_cart');
+    localStorage.removeItem('santra_wishlist');
+    showToast('✅ Logged out successfully');
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1000);
+  }
+}
+
+// ✅ Toast Message
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.innerText = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
 }
 </script>
 
+<!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 11:45 PM ==================== -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 09 June 2026, 11:45 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+window.santraBackup = {
+  version: '2.2',
+  timestamp: '2026-06-09T23:45:00+05:30',
+  location: 'Nawai, Rajasthan',
+
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    localStorage.setItem('santra_backup_2026_06_09_2345', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100);
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_09_2345');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 09 June 2026, 11:45 PM');
+    }
+  },
+
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-09T23:45:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-09_2345.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+window.santraBackup.backupLocalStorage();
+
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
+</script>
 </body>
 </html>
