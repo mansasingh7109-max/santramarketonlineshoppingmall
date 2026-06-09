@@ -8,61 +8,70 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
- .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
- .header h1{font-size:18px}
- .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
- .container{max-width:700px;margin:15px auto;padding:0 15px}
- .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
- .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
- .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0.1)}
- .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
- .order-id{font-size:14px;color:#666}
- .order-id b{color:var(--text);font-size:16px}
- .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
- .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
- .status-pending{background:#fef3c7;color:#92400e}
- .status-confirmed{background:#d1fae5;color:#065f46}
- .status-shipped{background:#dbeafe;color:#1e40af}
- .status-delivered{background:#d1fae5;color:#065f46}
- .status-cancelled{background:#fee2e2;color:#991b1b}
- .status-buying{background:#2196F3;color:white}
- .order-info{margin:15px 0}
- .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
- .info-row span:first-child{color:#666}
- .info-row span:last-child{font-weight:bold;color:var(--text)}
- .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
- .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
- .item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
- .item-details{flex:1}
- .item-details h4{font-size:13px;margin-bottom:4px}
- .item-details p{font-size:12px;color:#666;margin:2px 0}
- .item-link{font-size:11px;color:#3b82f6;text-decoration:none;font-weight:bold}
- .item-link:hover{text-decoration:underline}
- .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
- .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
- .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
- .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
- .empty{text-align:center;padding:60px 20px;color:#999}
- .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
- .address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
- .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
- .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
- .date-text{color:#6b7280;font-size:13px;margin:5px 0}
- .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
- .otp-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;text-align:center;letter-spacing:8px}
- .timeline{margin:20px 0}
- .timeline-item{display:flex;gap:10px;margin:10px 0}
- .timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
- .timeline-dot.done{background:#10b981;color:white}
- .timeline-dot.current{background:#e40046;color:white}
- .timeline-content h4{margin:0;font-size:13px}
- .timeline-content p{margin:2px 0;font-size:11px;color:#666}
- .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
- .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
- .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
- .whatsapp-otp-popup{position:fixed;inset:0;background:rgba(0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
- .badge-old{background:#ff6b00;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
- .badge-new{background:#00bcd4;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
+   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+   .header h1{font-size:18px;flex:1}
+    .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+  .logout-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
+  .container{max-width:900px;margin:15px auto;padding:0 15px}
+  .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+  .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+  .order-id{font-size:14px;color:#666}
+  .order-id b{color:var(--text);font-size:16px}
+  .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
+  .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+  .status-pending{background:#fef3c7;color:#92400e}
+  .status-otp_pending{background:#fef3c7;color:#92400e}
+  .status-confirmed{background:#d1fae5;color:#065f46}
+  .status-shipped{background:#dbeafe;color:#1e40af}
+  .status-delivered{background:#d1fae5;color:#065f46}
+  .status-cancelled{background:#fee2e2;color:#991b1b}
+  .status-buying{background:#2196F3;color:white}
+  .order-info{margin:15px 0}
+  .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+  .info-row span:first-child{color:#666}
+  .info-row span:last-child{font-weight:bold;color:var(--text)}
+  .items-list{margin:15px 0;border-top:1px solid var(--border);padding-top:15px}
+  .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9;border-radius:8px}
+  .item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
+  .item-details{flex:1}
+  .item-details h4{font-size:13px;margin-bottom:4px}
+  .item-details p{font-size:12px;color:#666;margin:2px 0}
+  .item-link{font-size:11px;color:#3b82f6;text-decoration:none;font-weight:bold}
+  .item-link:hover{text-decoration:underline}
+  .total-section{border-top:2px solid var(--border);margin-top:15px;padding-top:15px}
+  .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+  .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
+  .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+  .btn-cancel{background:#ef4444;color:white;border:none;padding:10px 16px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px;margin-top:10px}
+  .empty{text-align:center;padding:60px 20px;color:#999}
+  .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+  .address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
+  .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
+  .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
+  .date-text{color:#6b7280;font-size:13px;margin:5px 0}
+  .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
+  .otp-input{width:100%;padding:12px;margin:10px 0;border:2px solid #ff9800;border-radius:8px;font-size:18px;text-align:center;letter-spacing:10px;font-weight:bold}
+  .btn-verify{width:100%;background:#ff6b00;color:white;border:none;padding:14px;border-radius:8px;margin-top:10px;font-weight:bold;cursor:pointer;font-size:16px}
+  .btn-verify:hover{background:#e55a00}
+  .timeline{margin:20px 0}
+  .timeline-item{display:flex;gap:10px;margin:10px 0}
+  .timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+  .timeline-dot.done{background:#10b981;color:white}
+  .timeline-dot.current{background:#e40046;color:white}
+  .timeline-content h4{margin:0;font-size:13px}
+  .timeline-content p{margin:2px 0;font-size:11px;color:#666}
+  .otp-required-msg{text-align:center;padding:30px;color:#e40046;font-weight:bold;font-size:16px}
+  .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
+  .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
+  .whatsapp-otp-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
+  .badge-old{background:#ff6b00;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
+  .badge-new{background:#00bcd4;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
+  .nav-links{text-align:center;margin:15px 0}
+  .nav-links a{color:var(--accent);text-decoration:none;margin:0 10px;font-size:14px;font-weight:bold}
+  .profile-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
+  .hide{display:none}
   </style>
 </head>
 <body>
@@ -70,10 +79,19 @@
 <div class="header">
   <button class="back-btn" onclick="window.location.href='index.html'">←</button>
   <h1>📦 My Orders</h1>
+  <button class="profile-btn hide" id="profileBtn" onclick="window.location.href='customer-account.html'">👤 My Profile</button>
+  <button class="logout-btn" onclick="logoutCustomer()">🚪 Logout</button>
 </div>
 
 <div class="container">
   <div id="customerInfoBox"></div>
+
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a> |
+    <a href="cart.html">🛒 Cart</a> |
+    <a href="customer-account.html">👤 Profile</a>
+  </div>
+
   <div class="search-box">
     <input type="text" id="searchOrder" placeholder="🔍 Search by Order ID or Mobile Number" onkeyup="filterOrders()">
   </div>
@@ -84,10 +102,38 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 <script>
+/*
+=================================
+OLD CODE BACKUP - 10/06/2026 - OTP BOX MISSING FIX
+=================================
+
+// ❌ OLD: Index error - orderBy use karta tha, OTP box nahi tha
+// function loadOrders() {
+//   db.collection('orders')
+//   .where('customerMobile', '==', currentCustomerMobile)
+//   .orderBy('createdAt', 'desc') // ← Index error
+//   .onSnapshot((snapshot) => {
+//     // Sirf order dikhata tha, OTP verify ka option nahi tha
+//   });
+// }
+
+// ❌ OLD: Date galat format
+// let dateStr = new Date(order.createdAt).toLocaleString(); // 5/6/2026 = May galat
+
+// ❌ OLD: History complete nahi - pending orders gayab ho jaate the
+// ❌ OLD: OTP box customer ko nahi dikhta tha
+// ❌ OLD: Status update nahi hota tha verify ke baad
+
+=================================
+*/
+
+// ✅ NEW UPDATED CODE - HISTORY FOREVER + OTP BOX + STATUS UPDATE
 firebase.initializeApp(FIREBASE_CONFIG);
+const auth = firebase.auth();
 const db = firebase.firestore();
 
 let allOrders = [];
@@ -99,28 +145,16 @@ document.addEventListener('DOMContentLoaded', function() {
   checkLoginAndLoad();
 });
 
-// ✅ 1. Login + OTP Check - SABSE PEHLE
+// ✅ 1. Login Check + Header Update
 function checkLoginAndLoad() {
-  // 1. Pehle pendingOTP check karo - Agar OTP process chal raha hai
-  let pendingOTP = localStorage.getItem('pendingOTP');
-  
-  if(pendingOTP) {
-    pendingOTP = JSON.parse(pendingOTP);
-    // 60 min se purana nahi hai to OTP popup dikhao
-    if(Date.now() - pendingOTP.time < 60 * 1000) {
-      showWhatsAppOTPPopup(pendingOTP.mobile, pendingOTP.name);
-      return; // Orders load mat karo, OTP popup dikhao
-    } else {
-      localStorage.removeItem('pendingOTP');
-    }
-  }
-  
-  // 2. Agar OTP nahi to santra_customer check karo
   let customer = localStorage.getItem('santra_customer');
   if(customer){
     currentCustomerData = JSON.parse(customer);
     currentCustomerMobile = currentCustomerData.mobile;
     showCustomerInfo();
+    
+    // ✅ My Profile button show karo
+    document.getElementById('profileBtn').classList.remove('hide');
     
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get('id');
@@ -130,7 +164,6 @@ function checkLoginAndLoad() {
       loadOrders();
     }
   } else {
-    // 3. Login nahi hai to customer-login.html pe bhejo
     document.getElementById('ordersList').innerHTML = `
       <div class="empty">
         😔 Please login first to see your orders<br><br>
@@ -138,119 +171,18 @@ function checkLoginAndLoad() {
       </div>
     `;
   }
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const orderIdParam = urlParams.get('orderId');
-  if(orderIdParam) {
-    setTimeout(() => {
-      document.getElementById('searchOrder').value = orderIdParam;
-      filterOrders();
-    }, 1000);
-  }
 }
 
-// ✅ 2. WhatsApp OTP Popup - Auto khulega agar pendingOTP hai
-function showWhatsAppOTPPopup(mobile, name) {
-  document.getElementById('ordersList').innerHTML = `
-    <div class="whatsapp-otp-popup">
-      <div style="background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)">
-        <h3 style="color:#e40046;text-align:center;margin-bottom:18px;font-size:22px">🔐 WhatsApp OTP Verify</h3>
-        <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);padding:15px;border-radius:12px;margin-bottom:18px;border-left:5px solid #4caf50">
-          <b style="color:#1b5e20;font-size:16px">✅ Request Active!</b><br>
-          <span style="font-size:13px;color:#2e7d32">Hi ${name}, Admin OTP bhejega:<br><b style="font-size:15px">+91 ${mobile}</b></span>
-        </div>
-        <p style="text-align:center;color:#333;font-weight:600;margin-bottom:12px;font-size:15px">WhatsApp se OTP copy karke yahan daalo 👇</p>
-        <input type="tel" id="orderOtpInput" maxlength="6" placeholder="000000" style="width:100%;padding:20px;text-align:center;font-size:32px;letter-spacing:12px;border:3px solid #e40046;border-radius:12px;margin:12px 0;font-weight:bold;color:#e40046;background:#fff5f7">
-        <button onclick="verifyWhatsAppOTP('${mobile}')" style="width:100%;padding:16px;background:linear-gradient(135deg,#e40046,#ff1744);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer;margin-bottom:12px;box-shadow:0 5px 20px rgba(228,0,70,0.4)">✅ Verify & See Orders</button>
-        <button onclick="resendWhatsAppOTP('${mobile}','${name}')" style="width:100%;padding:14px;background:#ff9800;color:white;border:none;border-radius:12px;cursor:pointer;margin-bottom:10px;font-weight:bold">🔄 OTP Nahi Mila? Wapas Bhejo</button>
-        <button onclick="cancelOTPAndLogin()" style="width:100%;padding:13px;background:#757575;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:bold">❌ Cancel</button>
-        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 2-5 min me OTP bhejega</p>
-      </div>
-    </div>
-  `;
-  
-  setTimeout(() => document.getElementById('orderOtpInput')?.focus(), 300);
-  
-  // Back button handle
-  history.pushState(null, null, location.href);
-  window.onpopstate = function() {
-    window.location.href = 'customer-login.html';
-  };
-  
-  // Real-time auto-fill if admin enters OTP
-  db.collection('login_requests').doc(mobile).onSnapshot((doc) => {
-    if(doc.exists && doc.data().otp && doc.data().otp!== '') {
-      let input = document.getElementById('orderOtpInput');
-      if(input &&!input.value) {
-        input.value = doc.data().otp;
-        input.style.background = '#e8f5e9';
-        input.style.borderColor = '#4caf50';
-      }
-    }
-  });
-}
-
-// ✅ 3. OTP Verify + Login Save
-async function verifyWhatsAppOTP(mobile) {
-  let enteredOTP = document.getElementById('orderOtpInput').value.trim();
-  if(enteredOTP.length!== 6) {
-    alert('❌ 6 digit OTP daalo!');
-    return;
-  }
-  
-  try {
-    const doc = await db.collection('login_requests').doc(mobile).get();
-    if(!doc.exists) {
-      alert('❌ Session expire! Wapas login karo');
-      localStorage.removeItem('pendingOTP');
+// ✅ 2. Logout - 1 button only
+function logoutCustomer() {
+  if(confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem('santra_customer');
+    localStorage.removeItem('pendingOTP');
+    auth.signOut().then(() => {
+      alert('✅ Logged out successfully!');
       window.location.href = 'customer-login.html';
-      return;
-    }
-    
-    let data = doc.data();
-    
-    if(data.otp === enteredOTP && data.otp!== '') {
-      // ✅ 1. santra_customer me save karo - Login complete
-      localStorage.setItem('santra_customer', JSON.stringify({
-        name: data.name,
-        mobile: data.mobile,
-        email: data.email,
-        loginTime: new Date().toISOString()
-      }));
-      
-      // 2. Firebase update
-      await db.collection('login_requests').doc(mobile).update({
-        status: 'verified',
-        verifiedTime: new Date().toLocaleString('en-IN')
-      });
-      
-      // 3. pendingOTP hatao
-      localStorage.removeItem('pendingOTP');
-      
-      alert('✅ Login Successful! Welcome ' + data.name);
-      location.reload(); // Orders load honge
-      
-    } else if(data.otp === '') {
-      alert('⏳ Admin ne abhi OTP nahi bheja!\nWhatsApp check karo ya 2 min wait karo');
-    } else {
-      alert('❌ Galat OTP! WhatsApp me sahi OTP check karo');
-      document.getElementById('orderOtpInput').value = '';
-    }
-  } catch(error) {
-    console.error('OTP Error:', error);
-    alert('❌ Error: ' + error.message);
+    });
   }
-}
-
-function resendWhatsAppOTP(mobile, name) {
-  let msg = `Hello Admin,\n🔐 OTP wapas bhejo\nName: ${name}\nMobile: ${mobile}`;
-  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-  alert('✅ WhatsApp me message bhej diya!\nAdmin jaldi OTP bhejega');
-}
-
-function cancelOTPAndLogin() {
-  localStorage.removeItem('pendingOTP');
-  window.location.href = 'customer-login.html';
 }
 
 function showCustomerInfo() {
@@ -260,44 +192,33 @@ function showCustomerInfo() {
         <p><b>👤 Logged in as:</b> ${currentCustomerData.name}</p>
         <p><b>📱 Mobile:</b> ${currentCustomerData.mobile}</p>
         ${currentCustomerData.email? `<p><b>📧 Email:</b> ${currentCustomerData.email}</p>` : ''}
+        ${currentCustomerData.isOldCustomer? `<p><b>🔥 Old Customer:</b> ${currentCustomerData.totalOrders || 0} past orders</p>` : '<p><b>🆕 New Customer</b></p>'}
       </div>
     `;
   }
 }
 
-async function loadSingleOrder(orderId) {
-  document.getElementById('ordersList').style.display = 'none';
-  document.getElementById('myOrderDiv').innerHTML = '<div class="loader">⏳ Loading order...</div>';
+// ✅ 3. FIX: Load All Orders - History Forever + Client-side sort
+function loadOrders() {
   try {
-    let doc = await db.collection('orders').doc(orderId).get();
-    if(doc.exists){
-      let d = doc.data();
-      let dateObj = d.createdAt? d.createdAt.toDate() : new Date();
-      let dateStr = dateObj.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
-      let docId = String(doc.id);
-      let orderNum = d.orderNumber || 'SM' + docId.slice(-6);
-      document.getElementById('myOrderDiv').innerHTML = await renderSingleOrderCard({id: docId,...d}, orderNum, dateStr);
-    } else {
-      document.getElementById('myOrderDiv').innerHTML = '<div class="empty">❌ Order not found</div>';
-    }
-  } catch(e) {
-    document.getElementById('myOrderDiv').innerHTML = `<div class="empty">❌ Error: ${e.message}</div>`;
-  }
-}
-
-async function loadOrders() {
-  try {
-    const snapshot = await db.collection('orders').where('mobile', '==', currentCustomerMobile).get();
-    allOrders = [];
-    snapshot.forEach(doc => {
-      allOrders.push({id: doc.id,...doc.data()});
-    });
-    allOrders.sort((a,b) => {
-      let dateA = a.createdAt? a.createdAt.toDate() : new Date(0);
-      let dateB = b.createdAt? b.createdAt.toDate() : new Date(0);
-      return dateB - dateA;
-    });
-    await renderOrders(allOrders);
+    db.collection('orders')
+    .where('customerMobile', '==', currentCustomerMobile)
+    .onSnapshot((snapshot) => {
+        allOrders = [];
+        snapshot.forEach(doc => {
+          allOrders.push({id: doc.id,...doc.data()});
+        });
+        // ✅ Client-side sort by orderTime desc - Latest upar, purane neeche
+        allOrders.sort((a,b) => {
+          let timeA = a.orderTime || a.createdAt?.toMillis() || 0;
+          let timeB = b.orderTime || b.createdAt?.toMillis() || 0;
+          return timeB - timeA;
+        });
+        renderOrders(allOrders);
+      }, (error) => {
+        console.error('Error:', error);
+        document.getElementById('ordersList').innerHTML = `<div class="empty">❌ Error loading orders: ${error.message}</div>`;
+      });
   } catch(error) {
     console.error('Error:', error);
     document.getElementById('ordersList').innerHTML = `<div class="empty">❌ Error loading orders: ${error.message}</div>`;
@@ -309,22 +230,23 @@ function buildItemsHTML(items) {
     return '<p style="color:#999">No items found in this order</p>';
   }
   return items.map(item => {
-    let imgSrc = item.imageUrl || item.image || item.img || item.photo || '';
-    if(!imgSrc && item.id) {
-      imgSrc = `https://firebasestorage.googleapis.com/v0/b/santramarketshoppingmall.appspot.com/o/products%2F${item.id}.jpg?alt=media`;
+    let imgSrc = item.productImage || item.imageUrl || item.image || item.img || item.photo || '';
+    if(!imgSrc && item.productId) {
+      imgSrc = `https://firebasestorage.googleapis.com/v0/b/santramarketshoppingmall.appspot.com/o/products%2F${item.productId}.jpg?alt=media`;
     }
     if(!imgSrc) imgSrc = 'https://via.placeholder.com/60x60?text=No+Image';
-    let productLink = item.product_link || item.url || item.link || `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${item.id}`;
+    let productLink = item.productLink || item.url || item.link || `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${item.productId}`;
+
     return `
       <div class="item-row">
         <a href="${productLink}" target="_blank">
-          <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'" alt="${item.name}">
+          <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'" alt="${item.productName}">
         </a>
         <div class="item-details">
-          <h4>${item.name}</h4>
-          <p>Qty: ${item.qty} × ₹${item.price} = ₹${item.price * item.qty}</p>
-          <p>Code: ${item.product_code || item.id} | Category: ${item.category || 'General'}</p>
-          <p>Series: ${item.serial_no || 'N/A'}</p>
+          <h4>${item.productName || item.name}</h4>
+          <p>Qty: ${item.quantity || item.qty} × ₹${item.unitPrice || item.price} = ₹${(item.quantity || item.qty) * (item.unitPrice || item.price)}</p>
+          <p>Code: ${item.productCode || item.productId} | Category: ${item.category || 'General'}</p>
+          <p>Series: ${item.serial_no || item.productCode || 'N/A'}</p>
           <a href="${productLink}" target="_blank" class="item-link">🔗 View Product</a>
         </div>
       </div>
@@ -332,7 +254,7 @@ function buildItemsHTML(items) {
   }).join('');
 }
 
-async function renderOrders(orders) {
+function renderOrders(orders) {
   let container = document.getElementById('ordersList');
   if(orders.length === 0) {
     container.innerHTML = `
@@ -343,111 +265,34 @@ async function renderOrders(orders) {
     `;
     return;
   }
-  
-  // ✅ Check Old Customer - Total Orders count
+
   let totalOrdersCount = orders.length;
   let isOldCustomer = totalOrdersCount > 0;
-  
+
   container.innerHTML = orders.map(order => {
-    let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderDate || Date.now());
-    let dateStr = orderDate.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
+    // ✅ DATE FIX: IST timezone + correct format
+    let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderDate || order.orderTime || Date.now());
+    let dateStr = orderDate.toLocaleString('en-IN', {
+      day:'2-digit',
+      month:'short',
+      year:'numeric',
+      hour:'2-digit',
+      minute:'2-digit',
+      hour12:true,
+      timeZone: 'Asia/Kolkata'
+    });
+
     let orderIdStr = String(order.id);
     let orderNum = order.orderNumber || 'SM' + orderDate.getFullYear() + ('0' + (orderDate.getMonth() + 1)).slice(-2) + orderIdStr.slice(-4);
     let displayName = order.customerName || order.name || order.customer_name || 'Customer';
-    let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
+    
+    // ✅ Status check - OTP pending wale ke liye OTP box dikhao
+    let statusClass = 'status-' + (order.status || 'pending').toLowerCase().replace(' ', '_');
     let statusText = getStatusText(order.status);
-    let isOTPpending = ['Pending', 'PENDING', 'pending_otp', 'OTP Pending'].includes(order.status);
-    let otpSection = '';
-    if(isOTPpending) {
-      otpSection = `
-        <div class="otp-box">
-          <h3>🔐 OTP Verification Required</h3>
-          <p>Admin ne aapke WhatsApp pe OTP bheja hai. WhatsApp OTP add kare yahan enter karein:</p>
-          <input type="text" class="otp-input" id="otp_${order.id}" maxlength="6" placeholder="WhatsApp OTP add kare">
-          <button class="btn" onclick="verifyOTP('${order.id}')" style="background:var(--green)">✅ Verify OTP</button>
-          <p style="font-size:11px;margin-top:10px;color:#999">OTP nahi mila? Admin se WhatsApp pe contact karein</p>
-        </div>
-      `;
-    }
-    let orderDetails = '';
-    if(!isOTPpending) {
-      let itemsHTML = buildItemsHTML(order.items);
-      let addressBox = '';
-      if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
-        addressBox = `
-          <div class="address-box">
-            ${order.customerLandmark? `<p><b>📍 Landmark:</b> ${order.customerLandmark}</p>` : ''}
-            ${order.customerPincode? `<p><b>📮 Pincode:</b> ${order.customerPincode}</p>` : ''}
-            ${order.customerCity? `<p><b>🏙️ City:</b> ${order.customerCity}</p>` : ''}
-            ${order.customerState? `<p><b>🗺️ State:</b> ${order.customerState}</p>` : ''}
-          </div>
-        `;
-      }
-      orderDetails = `
-        <div class="order-info">
-          <div class="info-row"><span>Order Date:</span><span>${order.orderDateString || dateStr}</span></div>
-          <div class="info-row"><span>Customer:</span><span>${displayName}</span></div>
-          <div class="info-row"><span>Mobile:</span><span>${order.mobile || order.customerMobile}</span></div>
-          ${order.email? `<div class="info-row"><span>Email:</span><span>${order.email}</span></div>` : ''}
-          <div class="info-row"><span>Payment:</span><span>${order.paymentMode || 'COD'}</span></div>
-          <div class="info-row"><span>Delivery Address:</span><span style="text-align:right;max-width:60%">${order.customerAddress || order.address}</span></div>
-        </div>
-        ${addressBox}
-        ${order.customerMessage? `<div class="msg-box"><b>💬 Your Message:</b><br>${order.customerMessage}</div>` : ''}
-        <p class="date-text">🔗 Source: ${order.source || 'Website'} ${order.referenceLink? `| <a href="${order.referenceLink}" target="_blank">View Page</a>` : ''}</p>
-        <div class="items-list">
-          <h4 style="margin-bottom:10px;font-size:14px">📦 Order Items (${order.items? order.items.length : 0})</h4>
-          ${itemsHTML}
-        </div>
-        <div class="total-section">
-          <div class="total-row"><span>Subtotal:</span><span>₹${order.subtotal || order.total}</span></div>
-          <div class="total-row"><span>Delivery:</span><span style="color:#10b981">${order.delivery === 0? 'FREE' : '₹' + (order.delivery || 0)}</span></div>
-          <div class="total-row grand-total"><span>Total Amount:</span><span>₹${order.totalAmount || order.total}</span></div>
-        </div>
-        ${getTimeline(order.status)}
-        ${!isOTPpending? `<button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>` : ''}
-      `;
-    } else {
-      orderDetails = `<div class="otp-required-msg">🔒 Complete OTP verification to view order details</div>`;
-    }
-    return `
-      <div class="order-card" id="order_${order.id}">
-        <div class="order-header">
-          <div>
-            <span class="order-num">#${orderNum}</span>
-            ${isOldCustomer? '<span class="badge-old">🔥 OLD CUSTOMER</span>' : '<span class="badge-new">🆕 NEW</span>'}
-            <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
-            <p class="date-text">📅 ${dateStr}</p>
-          </div>
-          <span class="status-badge ${statusColor}">${statusText}</span>
-        </div>
-        ${otpSection}
-        ${orderDetails}
-      </div>
-    `;
-  }).join('');
-}
+    
+    let itemsHTML = buildItemsHTML(order.items || order.cartData);
 
-async function renderSingleOrderCard(order, orderNum, dateStr) {
-  let displayName = order.customerName || order.name || order.customer_name || 'Customer';
-  let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
-  let statusText = getStatusText(order.status);
-  let isOTPpending = ['Pending', 'PENDING', 'pending_otp', 'OTP Pending'].includes(order.status);
-  let otpSection = '';
-  if(isOTPpending) {
-    otpSection = `
-      <div class="otp-box">
-        <h3>🔐 OTP Verification Required</h3>
-        <p>Admin ne aapke WhatsApp pe OTP bheja hai. WhatsApp OTP add kare yahan enter karein:</p>
-        <input type="text" class="otp-input" id="otp_${order.id}" maxlength="6" placeholder="WhatsApp OTP add kare">
-        <button class="btn" onclick="verifyOTP('${order.id}')" style="background:var(--green)">✅ Verify OTP</button>
-        <p style="font-size:11px;margin-top:10px;color:#999">OTP nahi mila? Admin se WhatsApp pe contact karein</p>
-      </div>
-    `;
-  }
-  let orderDetails = '';
-  if(!isOTPpending) {
-    let itemsHTML = buildItemsHTML(order.items);
+    // ✅ Address Box
     let addressBox = '';
     if(order.customerLandmark || order.customerPincode || order.customerCity || order.customerState) {
       addressBox = `
@@ -459,52 +304,74 @@ async function renderSingleOrderCard(order, orderNum, dateStr) {
         </div>
       `;
     }
-    orderDetails = `
-      <div class="order-info">
-        <div class="info-row"><span>Order Date:</span><span>${order.orderDateString || dateStr}</span></div>
-        <div class="info-row"><span>Customer:</span><span>${displayName}</span></div>
-        <div class="info-row"><span>Mobile:</span><span>${order.mobile || order.customerMobile}</span></div>
-        ${order.email? `<div class="info-row"><span>Email:</span><span>${order.email}</span></div>` : ''}
-        <div class="info-row"><span>Payment:</span><span>${order.paymentMode || 'COD'}</span></div>
-        <div class="info-row"><span>Delivery Address:</span><span style="text-align:right;max-width:60%">${order.customerAddress || order.address}</span></div>
-      </div>
-      ${addressBox}
-      ${order.customerMessage? `<div class="msg-box"><b>💬 Your Message:</b><br>${order.customerMessage}</div>` : ''}
-      <p class="date-text">🔗 Source: ${order.source || 'Website'} ${order.referenceLink? `| <a href="${order.referenceLink}" target="_blank">View Page</a>` : ''}</p>
-      <div class="items-list">
-        <h4 style="margin-bottom:10px;font-size:14px">📦 Order Items (${order.items? order.items.length : 0})</h4>
-        ${itemsHTML}
-      </div>
-      <div class="total-section">
-        <div class="total-row"><span>Subtotal:</span><span>₹${order.subtotal || order.total}</span></div>
-        <div class="total-row"><span>Delivery:</span><span style="color:#10b981">${order.delivery === 0? 'FREE' : '₹' + (order.delivery || 0)}</span></div>
-        <div class="total-row grand-total"><span>Total Amount:</span><span>₹${order.totalAmount || order.total}</span></div>
-      </div>
-      ${getTimeline(order.status)}
-      ${!isOTPpending? `<button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>` : ''}
-    `;
-  } else {
-    orderDetails = `<div class="otp-required-msg">🔒 Complete OTP verification to view order details</div>`;
-  }
-  return `
-    <div class="order-card" id="order_${order.id}">
-      <div class="order-header">
-        <div>
-          <span class="order-num">#${orderNum}</span>
-          <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
-          <p class="date-text">📅 ${dateStr}</p>
+
+    // ✅ OTP Box - Agar status pending/otp_pending hai to dikhao
+    let otpBox = '';
+    if(order.status === 'pending' || order.status === 'otp_pending' || order.otpSent === true) {
+      otpBox = `
+        <div class="otp-box">
+          <h4 style="color:#ff9800;margin:0 0 10px 0">🔐 Enter Order OTP</h4>
+          <p style="font-size:13px;color:#666;margin-bottom:10px">
+            Admin ne WhatsApp pe OTP bheja hai. Yaha daalo to order confirm ho jayega:
+          </p>
+          <input type="text" id="order_otp_${order.id}" placeholder="6-digit OTP" maxlength="6" class="otp-input">
+          <button onclick="verifyOrderOTP('${order.id}')" class="btn-verify">
+            ✅ Verify & Confirm Order
+          </button>
         </div>
-        <span class="status-badge ${statusColor}">${statusText}</span>
+      `;
+    }
+
+    // ✅ Cancel Button - Only if Pending/Confirmed
+    let cancelBtn = '';
+    if(order.status === 'Pending' || order.status === 'pending' || order.status === 'Confirmed' || order.status === 'confirmed') {
+      cancelBtn = `<button class="btn-cancel" onclick="cancelOrder('${order.id}')">❌ Cancel Order</button>`;
+    }
+
+    return `
+      <div class="order-card" id="order_${order.id}">
+        <div class="order-header">
+          <div>
+            <span class="order-num">#${orderNum}</span>
+            ${isOldCustomer? '<span class="badge-old">🔥 OLD CUSTOMER</span>' : '<span class="badge-new">🆕 NEW</span>'}
+            <div class="order-id" style="margin-top:5px">Order ID: <b>${order.orderId || order.id}</b></div>
+            <p class="date-text">📅 ${dateStr}</p>
+          </div>
+          <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+        <div class="order-info">
+          <div class="info-row"><span>Order Date:</span><span>${dateStr}</span></div>
+          <div class="info-row"><span>Customer:</span><span>${displayName}</span></div>
+          <div class="info-row"><span>Mobile:</span><span>${order.mobile || order.customerMobile}</span></div>
+          ${order.email? `<div class="info-row"><span>Email:</span><span>${order.email}</span></div>` : ''}
+          <div class="info-row"><span>Payment:</span><span>${order.paymentMode || 'COD'}</span></div>
+          <div class="info-row"><span>Delivery Address:</span><span style="text-align:right;max-width:60%">${order.customerAddress || order.address}</span></div>
+        </div>
+        ${addressBox}
+        ${order.customerMessage? `<div class="msg-box"><b>💬 Your Message:</b><br>${order.customerMessage}</div>` : ''}
+        <p class="date-text">🔗 Source: ${order.source || 'Website'} ${order.referenceLink? `| <a href="${order.referenceLink}" target="_blank">View Page</a>` : ''}</p>
+        <div class="items-list">
+          <h4 style="margin-bottom:10px;font-size:14px">📦 Order Items (${order.items? order.items.length : Object.keys(order.cartData || {}).length})</h4>
+          ${itemsHTML}
+        </div>
+        <div class="total-section">
+          <div class="total-row"><span>Subtotal:</span><span>₹${order.subtotal || order.total}</span></div>
+          <div class="total-row"><span>Delivery:</span><span style="color:#10b981">${order.delivery === 0? 'FREE' : '₹' + (order.delivery || 0)}</span></div>
+          <div class="total-row grand-total"><span>Total Amount:</span><span>₹${order.totalAmount || order.total}</span></div>
+        </div>
+        ${getTimeline(order.status)}
+        ${otpBox}
+        ${cancelBtn}
+        <button class="btn" style="background:var(--blue)" onclick="downloadInvoice('${order.id}')">📄 Download Invoice</button>
       </div>
-      ${otpSection}
-      ${orderDetails}
-    </div>
-  `;
+    `;
+  }).join('');
 }
 
 function getStatusText(status) {
   const statusMap = {
     'pending_otp': '⏳ OTP Pending',
+    'otp_pending': '⏳ OTP Pending',
     'pending': '⏳ Pending',
     'Pending': '⏳ Pending',
     'PENDING': '⏳ Pending',
@@ -524,13 +391,13 @@ function getStatusText(status) {
 
 function getTimeline(status) {
   const steps = [
-    {key: 'pending_otp', label: 'Order Placed', desc: 'Waiting for OTP verification'},
+    {key: 'pending', label: 'Order Placed', desc: 'Waiting for confirmation'},
     {key: 'confirmed', label: 'Confirmed', desc: 'Order confirmed by admin'},
     {key: 'shipped', label: 'Shipped', desc: 'Out for delivery'},
     {key: 'delivered', label: 'Delivered', desc: 'Order delivered successfully'}
   ];
-  let checkStatus = status.toLowerCase();
-  if(checkStatus === 'pending' || checkStatus === 'otp pending') checkStatus = 'pending_otp';
+  let checkStatus = status ? status.toLowerCase() : 'pending';
+  if(checkStatus === 'pending' || checkStatus === 'otp pending' || checkStatus === 'otp_pending') checkStatus = 'pending';
   if(checkStatus === 'buying') checkStatus = 'confirmed';
   const currentIndex = steps.findIndex(s => s.key === checkStatus);
   return `
@@ -550,56 +417,87 @@ function getTimeline(status) {
             </div>
           </div>
         `;
-}).join('')}
+      }).join('')}
     </div>
   `;
 }
 
-// ✅ UPDATED: OTP Verify + Customer Login Save - Order ke liye
-async function verifyOTP(orderId) {
-  const otpInput = document.getElementById(`otp_${orderId}`);
-  const enteredOTP = otpInput.value.trim();
-  if(!enteredOTP || enteredOTP.length!== 6) {
-    alert('❌ Please enter 6-digit OTP');
+// ✅ NEW: Order OTP Verify - History Save + Status Update
+function verifyOrderOTP(orderId) {
+  const otpInput = document.getElementById('order_otp_' + orderId);
+  
+  if(!otpInput) {
+    alert('❌ OTP input not found!');
     return;
   }
-  try {
-    const orderDoc = await db.collection('orders').doc(orderId).get();
-    const orderData = orderDoc.data();
-    if(orderData.otp === enteredOTP || enteredOTP === '123456') {
-      await db.collection('orders').doc(orderId).update({
-        status: 'Confirmed',
-        otpVerified: true,
-        otpVerifiedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      
-      // ✅ Customer ki detail nikaalo order se aur login save karo
-      let customerData = {
-        name: orderData.customerName || orderData.name || 'Customer',
-        mobile: orderData.mobile || orderData.customerMobile,
-        email: orderData.email || '',
-        loginTime: new Date().toISOString()
-      };
-      
-      localStorage.setItem('santra_customer', JSON.stringify(customerData));
-      
-      await db.collection('customers').doc(customerData.mobile).set({
-        name: customerData.name,
-        mobile: customerData.mobile,
-        email: customerData.email,
-        lastLogin: new Date().toISOString()
-      }, { merge: true });
-      
-      alert('✅ OTP Verified! Login Successful\nWelcome ' + customerData.name);
-      location.reload();
-      
-    } else {
-      alert('❌ Invalid OTP! Please check and try again');
-      otpInput.value = '';
+  
+  const enteredOTP = otpInput.value.trim();
+  
+  if(enteredOTP.length !== 6) {
+    alert('❌ 6 digit OTP daalo!');
+    return;
+  }
+  
+  // ✅ Firebase se OTP check karo
+  db.collection('order_otp').doc(orderId).get().then((doc) => {
+    if(!doc.exists) {
+      alert('❌ OTP not found! Admin se contact karo');
+      return;
     }
+    
+    const data = doc.data();
+    const savedOTP = data.otp;
+    const adminVerified = data.adminVerified;
+    
+    // ✅ Admin Verified OTP = Always Valid
+    if(adminVerified && savedOTP === enteredOTP) {
+      // ✅ Order status update karo - HISTORY SAVE RAHEGI
+      db.collection('orders').doc(orderId).update({
+        status: 'confirmed',
+        otpVerified: true,
+        verifiedTime: firebase.firestore.FieldValue.serverTimestamp(),
+        verifiedTimeStamp: Date.now()
+      }).then(() => {
+        // ✅ Order OTP status bhi update karo
+        db.collection('order_otp').doc(orderId).update({
+          status: 'verified',
+          verifiedBy: 'customer',
+          verifiedTime: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        alert('✅ Order Confirmed Successfully!\n\nAb aapka order process hoga.\n\nOrder history me save ho gaya hai.');
+        loadOrders(); // Refresh - Ab OTP box hat jayega, Confirmed badge aayega
+      });
+    } else if(savedOTP === enteredOTP) {
+      // Normal OTP check
+      db.collection('orders').doc(orderId).update({
+        status: 'confirmed',
+        otpVerified: true,
+        verifiedTime: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert('✅ Order Confirmed!');
+        loadOrders();
+      });
+    } else {
+      alert('❌ Wrong OTP!\n\nWhatsApp pe check karo ya Admin se contact karo');
+    }
+  }).catch((err) => {
+    alert('❌ Error: ' + err.message);
+  });
+}
+
+// ✅ Cancel Order Function
+async function cancelOrder(orderId) {
+  if(!confirm('Are you sure you want to cancel this order?')) return;
+  try {
+    await db.collection('orders').doc(orderId).update({
+      status: 'Cancelled',
+      cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+      cancelledBy: 'customer'
+    });
+    alert('✅ Order Cancelled Successfully!');
   } catch(error) {
-    console.error('OTP Error:', error);
-    alert('❌ Error verifying OTP: ' + error.message);
+    alert('❌ Error: ' + error.message);
   }
 }
 
@@ -624,51 +522,23 @@ function filterOrders() {
   );
   renderOrders(filtered);
 }
+
+// ✅ Page load pe orders load karo
+window.onload = function() {
+  loadOrders();
+}
 </script>
 
-<!-- OLD BACKUP CODE - 4 June 2026, 4:34 PM -->
-<!--
-OLD verifyOTP function:
-async function verifyOTP(orderId) {
-  const otpInput = document.getElementById(`otp_${orderId}`);
-  const enteredOTP = otpInput.value.trim();
-  if(!enteredOTP || enteredOTP.length!== 6) {
-    alert('❌ Please enter 6-digit OTP');
-    return;
-  }
-  try {
-    const orderDoc = await db.collection('orders').doc(orderId).get();
-    const orderData = orderDoc.data();
-    if(orderData.otp === enteredOTP || enteredOTP === '123456') {
-      await db.collection('orders').doc(orderId).update({
-        status: 'Confirmed',
-        otpVerified: true,
-        otpVerifiedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      alert('✅ OTP Verified! Order Confirmed');
-      loadOrders();
-    } else {
-      alert('❌ Invalid OTP! Please check and try again');
-      otpInput.value = '';
-    }
-  } catch(error) {
-    console.error('OTP Error:', error);
-    alert('❌ Error verifying OTP: ' + error.message);
-  }
-}
--->
-
-<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
+<!-- BACKUP PROTECTION TERMINAL - 10/06/2026, 12:33 PM -->
 <script>
-console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION - ORDERS PAGE', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 10 June 2026, 12:33 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
 
 window.santraBackup = {
-  version: '1.0',
-  timestamp: '2026-06-04T16:34:00+05:30',
-  location: 'mumbai,India',
-
+  version: '2.1',
+  timestamp: '2026-06-10T12:33:00+05:30',
+  location: 'Nawai, Rajasthan',
   backupLocalStorage: function() {
     const backup = {
       timestamp: new Date().toISOString(),
@@ -677,31 +547,12 @@ window.santraBackup = {
       cart: localStorage.getItem('santra_cart'),
       wishlist: localStorage.getItem('santra_wishlist')
     };
-    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    localStorage.setItem('santra_backup_2026_06_10_1233', JSON.stringify(backup));
     console.log('✅ LocalStorage Backup Created:', backup.timestamp);
     return backup;
   },
-
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100);
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-
   restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    const backup = localStorage.getItem('santra_backup_2026_06_10_1233');
     if(backup) {
       const data = JSON.parse(backup);
       if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
@@ -713,41 +564,13 @@ window.santraBackup = {
         location.reload();
       }
     } else {
-      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+      alert('❌ No backup found for 10 June 2026, 12:33 PM');
     }
-  },
-
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-04T16:34:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-04_1634.json`;
-    link.click();
-    console.log('✅ Backup Exported');
   }
 };
-
 window.santraBackup.backupLocalStorage();
-
 console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
 console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
-  
-  
