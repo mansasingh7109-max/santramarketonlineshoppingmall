@@ -47,7 +47,7 @@
 .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
 .hide{display:none}
 .loader{display:none;text-align:center;padding:10px;color:#b71c1c;font-weight:bold}
-.otp-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
+.otp-popup{position:fixed;inset:0;background:rgba(0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
 .otp-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)}
 .customer-form{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99998;padding:20px;overflow-y:auto}
 .customer-form-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4);margin:20px 0}
@@ -107,76 +107,53 @@
   <a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<!-- ✅ FIREBASE COMPAT SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
 
 <script>
 /*
-=================================
-OLD CODE BACKUP - 09/06/2026 - PURANA CODE
-=================================
 
-// ❌ OLD: Sirf login user ke liye kaam karta tha - Guest ko "Please login" dikhata tha
+OLD CODE BACKUP - 10/06/2026 - PURANA CODE
+
+
+// ❌ OLD: Sirf RTDB se load karta tha - Guest ke liye "Please login" dikhata tha
 // auth.onAuthStateChanged((user) => {
 // if (user) {
 // currentUser = user;
 // loadCart();
-// loadWishlist();
 // } else {
-// document.getElementById('cartList').innerHTML = '<div class="empty">Please login to see cart<br><br><button class="checkout-btn" onclick="window.location.href=\'index.html\'">Go to Home</button></div>';
-// document.getElementById('checkoutBtn').style.display = 'none';
+// document.getElementById('cartList').innerHTML = '<div class="empty">Please login to see cart</div>';
 // }
 // });
 
-// ❌ OLD: goToCheckout() - Order save nahi hota tha Firebase me, direct WhatsApp pe bhejta tha
-// function goToCheckout(){
-// let cartKeys = Object.keys(cart);
-// if(cartKeys.length === 0){
-// alert('Cart khali hai! Pehle product add karo.');
-// return;
-// }
-// localStorage.setItem('santra_cart', JSON.stringify(cart));
-// document.getElementById('loader').style.display = 'block';
-// setTimeout(() => {
-// if(cartKeys.length === 1){
-// window.location.href = 'whatsapp-order.html?product=' + cartKeys[0];
-// } else {
-// window.location.href = 'whatsapp-order.html';
-// }
-// }, 300);
+// ❌ OLD: loadCart() - Sirf RTDB use karta tha
+// function loadCart() {
+// const cartRef = rtdb.ref('carts/' + currentUser.uid);
+// cartRef.on('value', (snapshot) => {
+// //...
+// });
 // }
 
-// ❌ OLD: Date galat format me save hota tha
-// orderDate: new Date().toLocaleString('en-IN'), // ❌ 9/6/2026 = Sept ban jaata tha
+// ❌ OLD: updateQty() - Sirf RTDB update karta tha
+// window.updateQty = async (productId, change) => {
+// const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+// cartRef.update({qty: newQty});
+// }
 
-// ❌ OLD: cart array tha, reduce error aata tha
-// let cartCount = cart.reduce((sum, item) => sum + (item.qty || 0), 0); // ❌ cart object hai
-
-// ❌ OLD: verifyOrderOTP me cart clear nahi hota tha
+// ❌ OLD: Cart clear nahi hota tha OTP ke baad
 // function verifyOrderOTP(orderId) {
-// let enteredOTP = document.getElementById('orderOtpInput').value.trim();
-// if(enteredOTP.length!== 6) {
-// alert('❌ 6 digit OTP daalo!');
-// return;
+// //... order save hota tha
+// // ❌ localStorage.removeItem('santra_cart') missing tha
+// // ❌ rtdb.ref('carts/' + currentUser.uid).remove() missing tha
 // }
-// db.collection('order_otp').doc(orderId).get().then((doc) => {
-// if(!doc.exists) {
-// alert('❌ Order request not found!');
-// return;
-// }
-// let data = doc.data();
-// if(data.otp === enteredOTP) {
-// // ❌ CART CLEAR NAHI HO RAHA THA
-// let promises = Object.keys(data.cartData).map(key => {
-// let item = data.cartData[key];
-// return db.collection('orders').add({
-// customer
+
 */
 
-// ✅ NEW FIXED CODE - GITHUB PAGES COMPATIBLE
+// ✅ NEW FIXED CODE - FIRESTORE + GUEST COMPATIBLE
 firebase.initializeApp(firebaseConfig);
 const rtdb = firebase.database();
 const db = firebase.firestore();
@@ -191,7 +168,6 @@ let currentTab = 'cart';
 let cart = {};
 let wishlist = {};
 
-// ✅ FIX: Github Pages pe Firebase Auth + Guest dono chalega
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   updateUserDisplay();
@@ -220,12 +196,12 @@ function switchTab(tab){
   document.getElementById('pageTitle').innerText = tab === 'cart'? '🛒 My Cart' : '😍 My Wishlist';
 }
 
-// ✅ FIX: localStorage + Firebase dono se load karo
+// ✅ FIX: FIRESTORE + localStorage dono se load karo
 function loadCart() {
   if(currentUser) {
-    // Logged in - Firebase se load karo
+    // ✅ Logged in - Firestore se load karo
     db.collection('users').doc(currentUser.uid).collection('cart')
-     .onSnapshot(snap => {
+    .onSnapshot(snap => {
         cart = {};
         snap.forEach(doc => {
           cart[doc.id] = {id: doc.id,...doc.data()};
@@ -235,7 +211,7 @@ function loadCart() {
         updateCounts();
       });
   } else {
-    // Guest - localStorage se load karo
+    // ✅ Guest - localStorage se load karo
     loadCartFromLocal();
   }
 }
@@ -260,7 +236,7 @@ function loadCartFromLocal() {
 function loadWishlist() {
   if(currentUser) {
     db.collection('users').doc(currentUser.uid).collection('wishlist')
-     .onSnapshot(snap => {
+    .onSnapshot(snap => {
         wishlist = {};
         snap.forEach(doc => {
           wishlist[doc.id] = {id: doc.id,...doc.data()};
@@ -361,7 +337,7 @@ window.updateQty = async (productId, change) => {
       delete cart[productId];
     }
     localStorage.setItem('santra_cart', JSON.stringify(cart));
-    
+
     if(currentUser) {
       const cartRef = db.collection('users').doc(currentUser.uid).collection('cart').doc(productId);
       if(cart[productId]) {
@@ -531,7 +507,20 @@ function getProductLink(productId) {
   return `${baseUrl}${productPath}?id=${encodeURIComponent(productId)}`;
 }
 
-// ✅ Baki functions same rahenge - showCustomerForm, saveCustomerAndProceed, goToCheckout, proceedToOTP, showOrderOTPPopup, verifyOrderOTP, resendOrderOTP, closeOrderOTPPopup
+// ✅ Baki functions same rahenge - goToCheckout, proceedToOTP, verifyOrderOTP etc
+function goToCheckout(){
+    let cartKeys = Object.keys(cart);
+    if(cartKeys.length === 0){
+        alert('Cart khali hai! Pehle product add karo.');
+        return;
+    }
+    let customer = JSON.parse(localStorage.getItem('santra_customer'));
+    if(!customer ||!customer.mobile ||!customer.address) {
+        showCustomerForm();
+        return;
+    }
+    proceedToOTP(customer);
+}
 
 function showCustomerForm() {
   let savedCustomer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
@@ -603,20 +592,6 @@ function saveCustomerAndProceed() {
 
 function closeCustomerForm() {
   document.getElementById('customerFormModal')?.remove();
-}
-
-function goToCheckout(){
-    let cartKeys = Object.keys(cart);
-    if(cartKeys.length === 0){
-        alert('Cart khali hai! Pehle product add karo.');
-        return;
-    }
-    let customer = JSON.parse(localStorage.getItem('santra_customer'));
-    if(!customer ||!customer.mobile ||!customer.address) {
-        showCustomerForm();
-        return;
-    }
-    proceedToOTP(customer);
 }
 
 function proceedToOTP(customer) {
@@ -795,7 +770,7 @@ function verifyOrderOTP(orderId) {
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     orderDate: new Date().toISOString(), // ✅ Present ISO date
                     orderTime: Date.now(), // ✅ Timestamp
-                    orderDateLocal: new Date().toLocaleString('en-IN', { 
+                    orderDateLocal: new Date().toLocaleString('en-IN', {
                         day:'2-digit',month:'short',year:'numeric',
                         hour:'2-digit',minute:'2-digit',hour12:true,
                         timeZone: 'Asia/Kolkata' // ✅ IST time
@@ -830,7 +805,11 @@ function verifyOrderOTP(orderId) {
 
                 // ✅ FIX: Clear cart - localStorage + Firebase
                 if(currentUser) {
-                    rtdb.ref('carts/' + currentUser.uid).remove();
+                    db.collection('users').doc(currentUser.uid).collection('cart').get().then(snap => {
+                      const batch = db.batch();
+                      snap.forEach(doc => batch.delete(doc.ref));
+                      batch.commit();
+                    });
                 }
                 localStorage.removeItem('santra_cart');
                 cart = {};
@@ -908,7 +887,7 @@ function verifyOrderOTP(orderId) {
                 return db.collection('orders').add({
                     customer
             // ❌ localStorage.removeItem('santra_cart') missing tha
-            // ❌ rtdb.ref('carts/' + currentUser.uid).remove() missing tha
+            // ❌ db.collection('users').doc(currentUser.uid).collection('cart') delete missing tha
 -->
 
 <!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 4:34 PM ==================== -->
@@ -948,4 +927,5 @@ window.santraBackup.backupLocalStorage();
 </script>
 </body>
 </html>
-      
+            
+            
