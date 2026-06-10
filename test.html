@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Firebase Test</title>
+</head>
+<body>
+  <h2>Firebase Rule Check</h2>
+  <button onclick="checkCategories()">1. Check Categories</button>
+  <button onclick="checkOrders()">2. Check Orders</button>
+  <button onclick="checkProducts()">3. Check Products</button>
+  <h3 id="result">Result yaha aayega...</h3>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="secrets.js"></script>
+  <script>
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    function checkCategories() {
+      document.getElementById('result').innerText = 'Checking...';
+      db.collection('categories').get()
+        .then(s => document.getElementById('result').innerText = '✅ Categories OK: ' + s.size + ' found')
+        .catch(e => document.getElementById('result').innerText = '❌ Cat Error: ' + e.message);
+    }
+    
+    function checkOrders() {
+      document.getElementById('result').innerText = 'Checking...';
+      db.collection('orders').get()
+        .then(s => document.getElementById('result').innerText = '✅ Orders OK: ' + s.size + ' found')
+        .catch(e => document.getElementById('result').innerText = '❌ Order Error: ' + e.message);
+    }
+    
+    function checkProducts() {
+      document.getElementById('result').innerText = 'Checking...';
+      db.collection('products').get()
+        .then(s => document.getElementById('result').innerText = '✅ Products OK: ' + s.size + ' found')
+        .catch(e => document.getElementById('result').innerText = '❌ Product Error: ' + e.message);
+    }
+  </script>
+</body>
+</html>
