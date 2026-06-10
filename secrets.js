@@ -8,12 +8,9 @@ const firebaseConfig = {
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-
 // const firebaseConfig = FIREBASE_CONFIG;
-// Backup ke liye bada wala bhi
 // Backup ke liye chote wala bhi
 const firebaseConfig = FIREBASE_CONFIG;
-
 const BUSINESS_CONFIG = {
   WHATSAPP_NUMBER: "918769171078",
   EMAIL: "mansasingh7109@gmail.com",
