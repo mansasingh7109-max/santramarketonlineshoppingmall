@@ -74,14 +74,13 @@
 <script>
 /*
 =================================
-OLD CODE BACKUP - 10/06/2026 - CLEAR BUG FIX
+OLD CODE BACKUP - 10/06/2026 - SAVE TO WISHLIST FIX
 =================================
 
-// ❌ OLD BUG: moveToCart me qty increment galat tha
-// qty: firebase.firestore.FieldValue.increment(1) // Ye purana qty + 1 kar raha tha
-// Agar wishlist me qty nahi tha to undefined + 1 = NaN
+// ❌ OLD: moveToCart me item delete ho jata tha
+// await wishRef.delete(); // Ye line hata di
 
-// ✅ NEW FIX: Pehle cart se existing qty nikalo, fir + 1 karo
+// ✅ NEW: Ab item wishlist me save rahega, sirf cart me add hoga
 
 */
 
@@ -162,7 +161,7 @@ OLD CODE BACKUP - 10/06/2026 - CLEAR BUG FIX
               </div>
               <div class="code-text">Code: ${displayCode}</div>
               <div class="btn-group">
-                <button class="btn-cart" onclick='moveToCart("${key}", ${JSON.stringify(p).replace(/"/g, "&quot;")})'>🛒 Move to Cart</button>
+                <button class="btn-cart" onclick='moveToCart("${key}", ${JSON.stringify(p).replace(/"/g, "&quot;")})'>🛒 Add to Cart</button>
                 <button class="btn-remove" onclick="removeFromWish('${key}')">🗑️ Remove</button>
               </div>
             </div>
@@ -191,33 +190,33 @@ OLD CODE BACKUP - 10/06/2026 - CLEAR BUG FIX
     }
   }
 
-  // ✅ FIXED: moveToCart - Ab clear nahi hoga
+  // ✅ FIXED: Ab wishlist se delete nahi hoga, sirf cart me add hoga
   window.moveToCart = async (productId, productData) => {
     if (!currentUser) return;
     const cartRef = db.collection('users').doc(currentUser.uid).collection('cart').doc(productId);
-    const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist').doc(productId);
 
     try {
-      // ✅ FIX: Pehle cart me check karo ki item hai ya nahi
       const cartDoc = await cartRef.get();
       let newQty = 1;
       
       if(cartDoc.exists) {
-        // Agar cart me pehle se hai to +1 karo
         newQty = (cartDoc.data().qty || 0) + 1;
       }
 
       await cartRef.set({
-      ...productData,
-        qty: newQty, // ✅ Ab sahi qty jayega
-        addedAt: firebase.firestore.FieldValue.serverTimestamp()
+     ...productData,
+        qty: newQty,
+        addedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        addedAtIST: window.SantraDateTime? SantraDateTime.now() : new Date().toLocaleString('en-IN')
       }, { merge: true });
       
-      await wishRef.delete();
-      showToast('Moved to Cart 🛒');
+      // ❌ DELETE HATA DIYA - Ab wishlist me save rahega
+      // await wishRef.delete();
+      
+      showToast('Added to Cart 🛒');
     } catch (e) {
-      console.log('Move to cart error:', e);
-      showToast('Error moving to cart');
+      console.log('Add to cart error:', e);
+      showToast('Error adding to cart');
     }
   }
 
