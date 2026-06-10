@@ -9,51 +9,51 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:140px}
-.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.header h1{font-size:18px;flex:1}
-.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-.user-name{font-size:12px;opacity:0.9}
-.tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden}
-.tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;transition:0.3s}
-.tab.active{background:var(--accent);color:white}
-.cart-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.cart-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;border:1px solid #eee;cursor:pointer}
-.item-info{flex:1;cursor:pointer}
-.item-info h3{font-size:16px;margin-bottom:5px}
-.item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
-.mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
-.item-code{font-size:12px;color:#666;margin-top:4px}
-.item-actions{display:flex;flex-direction:column;gap:8px}
-.qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
-.qty-btn{background:#eee;border:none;width:30px;height:30px;border-radius:6px;cursor:pointer;font-weight:bold}
-.qty-btn:active{transform:scale(0.95)}
-.qty-display{padding:0 10px;font-weight:bold;min-width:30px;text-align:center}
-.btn-remove{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
-.btn-wish{background:#ff9800;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
-.empty{text-align:center;padding:60px 20px;color:#999}
-.empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.summary{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px}
-.summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-.total-row{font-weight:bold;font-size:18px;border-top:2px solid var(--border);padding-top:10px;margin-top:10px}
-.action-btns{display:flex;gap:10px;margin:10px 15px}
-.clear-btn{flex:1;padding:12px;background:#757575;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.checkout-btn{position:fixed;bottom:60px;left:15px;right:15px;background:var(--accent);color:white;border:none;padding:15px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(228,0,70,0.3);z-index:50}
-.checkout-btn:disabled{background:#ccc;cursor:not-allowed}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
-.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
-.nav-item.active{color:var(--accent)}
-.nav-item div{font-size:22px}
-.nav-item span{font-size:11px;display:block;margin-top:2px}
-.cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
-.hide{display:none}
-.loader{display:none;text-align:center;padding:10px;color:#b71c1c;font-weight:bold}
-.otp-popup{position:fixed;inset:0;background:rgba(0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
-.otp-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)}
-.customer-form{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99998;padding:20px;overflow-y:auto}
-.customer-form-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4);margin:20px 0}
-.form-input{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px}
-.form-input:focus{outline:none;border-color:var(--accent)}
-.form-textarea{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px;resize:vertical;min-height:80px;font-family:Arial,sans-serif}
+   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+   .header h1{font-size:18px;flex:1}
+   .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+   .user-name{font-size:12px;opacity:0.9}
+   .tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:8px;overflow:hidden}
+   .tab{flex:1;padding:12px;text-align:center;font-weight:bold;cursor:pointer;border:none;background:transparent;transition:0.3s}
+   .tab.active{background:var(--accent);color:white}
+   .cart-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .cart-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;border:1px solid #eee;cursor:pointer}
+   .item-info{flex:1;cursor:pointer}
+   .item-info h3{font-size:16px;margin-bottom:5px}
+   .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
+   .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
+   .item-code{font-size:12px;color:#666;margin-top:4px}
+   .item-actions{display:flex;flex-direction:column;gap:8px}
+   .qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+   .qty-btn{background:#eee;border:none;width:30px;height:30px;border-radius:6px;cursor:pointer;font-weight:bold}
+   .qty-btn:active{transform:scale(0.95)}
+   .qty-display{padding:0 10px;font-weight:bold;min-width:30px;text-align:center}
+   .btn-remove{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+   .btn-wish{background:#ff9800;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+   .empty{text-align:center;padding:60px 20px;color:#999}
+   .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+   .summary{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px}
+   .summary-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+   .total-row{font-weight:bold;font-size:18px;border-top:2px solid var(--border);padding-top:10px;margin-top:10px}
+   .action-btns{display:flex;gap:10px;margin:10px 15px}
+   .clear-btn{flex:1;padding:12px;background:#757575;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+   .checkout-btn{position:fixed;bottom:60px;left:15px;right:15px;background:var(--accent);color:white;border:none;padding:15px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;box-shadow:0 4px 12px rgba(228,0,70,0.3);z-index:50}
+   .checkout-btn:disabled{background:#ccc;cursor:not-allowed}
+   .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+   .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+   .nav-item.active{color:var(--accent)}
+   .nav-item div{font-size:22px}
+   .nav-item span{font-size:11px;display:block;margin-top:2px}
+   .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+   .hide{display:none}
+   .loader{display:none;text-align:center;padding:10px;color:#b71c1c;font-weight:bold}
+   .otp-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px}
+   .otp-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)}
+   .customer-form{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99998;padding:20px;overflow-y:auto}
+   .customer-form-box{background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4);margin:20px 0}
+   .form-input{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px}
+   .form-input:focus{outline:none;border-color:var(--accent)}
+   .form-textarea{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:15px;resize:vertical;min-height:80px;font-family:Arial,sans-serif}
   </style>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -86,9 +86,9 @@
     <div class="summary-row total-row"><span>Total:</span><span id="grandTotal">₹0</span></div>
   </div>
 
-  <div class="loader" id="loader">📲 Requesting Order OTP...</div>
+  <div class="loader" id="loader">📲 Placing Order...</div>
 
-  <button id="checkoutBtn" class="checkout-btn" onclick="goToCheckout()">
+  <button id="checkoutBtn" class="checkout-btn" onclick="placeOrderWithOTP()">
     ➡️ Place Order with OTP
   </button>
 </div>
@@ -103,7 +103,7 @@
 <div class="bottom-nav">
   <a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a>
   <a href="category.html" class="nav-item"><div>📱</div><span>Categories</span></a>
-  <a href="cart.html" class="nav-item active"><div>🛒</div><span>Cart</span><span class="cart-badge" id="navCartCount" style="display:none">0</span></a>
+  <a href="my-cart.html" class="nav-item active"><div>🛒</div><span>Cart</span><span class="cart-badge" id="navCartCount" style="display:none">0</span></a>
   <a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a>
 </div>
 
@@ -115,45 +115,38 @@
 <script src="secrets.js"></script>
 
 <script>
-/*
+/* ==================== OLD CODE BACKUP - 10/06/2026 ====================
+PURANA CODE - RTDB ONLY - GUEST KE LIYE KAAM NAHI KARTA THA
 
-OLD CODE BACKUP - 10/06/2026 - PURANA CODE
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    currentUser = user;
+    loadCart();
+  } else {
+    document.getElementById('cartList').innerHTML = '<div class="empty">Please login to see cart</div>';
+  }
+});
 
+function loadCart() {
+  const cartRef = rtdb.ref('carts/' + currentUser.uid);
+  cartRef.on('value', (snapshot) => {
+    //...
+  });
+}
 
-// ❌ OLD: Sirf RTDB se load karta tha - Guest ke liye "Please login" dikhata tha
-// auth.onAuthStateChanged((user) => {
-// if (user) {
-// currentUser = user;
-// loadCart();
-// } else {
-// document.getElementById('cartList').innerHTML = '<div class="empty">Please login to see cart</div>';
-// }
-// });
+window.updateQty = async (productId, change) => {
+  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+  cartRef.update({qty: newQty});
+}
 
-// ❌ OLD: loadCart() - Sirf RTDB use karta tha
-// function loadCart() {
-// const cartRef = rtdb.ref('carts/' + currentUser.uid);
-// cartRef.on('value', (snapshot) => {
-// //...
-// });
-// }
+function verifyOrderOTP(orderId) {
+  //... order save hota tha
+  // ❌ localStorage.removeItem('santra_cart') missing tha
+  // ❌ rtdb.ref('carts/' + currentUser.uid).remove() missing tha
+}
+================== OLD CODE END ================== */
 
-// ❌ OLD: updateQty() - Sirf RTDB update karta tha
-// window.updateQty = async (productId, change) => {
-// const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
-// cartRef.update({qty: newQty});
-// }
-
-// ❌ OLD: Cart clear nahi hota tha OTP ke baad
-// function verifyOrderOTP(orderId) {
-// //... order save hota tha
-// // ❌ localStorage.removeItem('santra_cart') missing tha
-// // ❌ rtdb.ref('carts/' + currentUser.uid).remove() missing tha
-// }
-
-*/
-
-// ✅ NEW FIXED CODE - FIRESTORE + GUEST COMPATIBLE
+// ✅ NEW FIXED CODE - FIRESTORE + GUEST COMPATIBLE + CART EMPTY FIX
 firebase.initializeApp(firebaseConfig);
 const rtdb = firebase.database();
 const db = firebase.firestore();
@@ -196,22 +189,19 @@ function switchTab(tab){
   document.getElementById('pageTitle').innerText = tab === 'cart'? '🛒 My Cart' : '😍 My Wishlist';
 }
 
-// ✅ FIX: FIRESTORE + localStorage dono se load karo
 function loadCart() {
   if(currentUser) {
-    // ✅ Logged in - Firestore se load karo
     db.collection('users').doc(currentUser.uid).collection('cart')
-    .onSnapshot(snap => {
+   .onSnapshot(snap => {
         cart = {};
         snap.forEach(doc => {
           cart[doc.id] = {id: doc.id,...doc.data()};
         });
-        localStorage.setItem('santra_cart', JSON.stringify(cart)); // Backup
+        localStorage.setItem('santra_cart', JSON.stringify(cart));
         renderCart();
         updateCounts();
       });
   } else {
-    // ✅ Guest - localStorage se load karo
     loadCartFromLocal();
   }
 }
@@ -236,7 +226,7 @@ function loadCartFromLocal() {
 function loadWishlist() {
   if(currentUser) {
     db.collection('users').doc(currentUser.uid).collection('wishlist')
-    .onSnapshot(snap => {
+   .onSnapshot(snap => {
         wishlist = {};
         snap.forEach(doc => {
           wishlist[doc.id] = {id: doc.id,...doc.data()};
@@ -286,7 +276,7 @@ function renderCart() {
   checkoutBtn.disabled = false;
   checkoutBtn.innerText = '➡️ Place Order with OTP';
   cartActions.classList.remove('hide');
- container.innerHTML = cartKeys.map((key) => {
+  container.innerHTML = cartKeys.map((key) => {
     let item = cart[key];
     if(!item) return '';
     let imgSrc = getImageUrl(item);
@@ -329,7 +319,6 @@ function renderCart() {
   summary.classList.remove('hide');
 }
 
-// ✅ FIX: Firebase + localStorage dono update karo
 window.updateQty = async (productId, change) => {
   if(cart[productId]) {
     cart[productId].qty = (cart[productId].qty || 1) + change;
@@ -507,7 +496,85 @@ function getProductLink(productId) {
   return `${baseUrl}${productPath}?id=${encodeURIComponent(productId)}`;
 }
 
-// ✅ Baki functions same rahenge - goToCheckout, proceedToOTP, verifyOrderOTP etc
+// ✅ NEW FUNCTION - TERA DIYA HUA + CART EMPTY FIX
+async function placeOrderWithOTP() {
+  let customer = JSON.parse(localStorage.getItem('santra_customer'));
+  if(!customer ||!customer.isLoggedIn) {
+    alert('❌ Pehle Login karo!');
+    window.location.href = 'customer-login.html';
+    return;
+  }
+
+  let cartItems = Object.values(cart);
+  if(cartItems.length === 0) {
+    alert('❌ Cart khali hai!');
+    return;
+  }
+
+  document.getElementById('loader').style.display = 'block';
+  document.getElementById('checkoutBtn').disabled = true;
+
+  // 1. Order ID banao
+  let orderId = 'ORD' + Date.now();
+  let total = cartItems.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
+
+  // 2. Firebase me Order Save karo
+  try {
+    await db.collection('orders').doc(orderId).set({
+      orderId: orderId,
+      customerName: customer.name,
+      mobile: customer.mobile,
+      email: customer.email || '',
+      address: customer.address || customer.location || 'Not Provided',
+      items: cartItems,
+      itemsCount: cartItems.length,
+      totalAmount: total,
+      subtotal: total,
+      deliveryCharge: total >= 500? 0 : 49,
+      status: 'pending',
+      paymentMode: customer.payment || 'Cash on Delivery',
+      otp: '', // Admin daalega
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      orderDate: new Date().toISOString(),
+      orderTime: Date.now(),
+      orderDateLocal: new Date().toLocaleString('en-IN', {
+        day:'2-digit',month:'short',year:'numeric',
+        hour:'2-digit',minute:'2-digit',hour12:true,
+        timeZone: 'Asia/Kolkata'
+      })
+    });
+
+    // 3. WhatsApp Message bhejo
+    let itemList = cartItems.map((item, i) =>
+      `${i+1}. ${item.name} x ${item.qty || 1} = ₹${(item.price || 0) * (item.qty || 1)}`
+    ).join('%0A');
+
+    let msg = `🛒 *NEW ORDER - SANTRA MALL*%0A%0A📋 Order ID: ${orderId}%0A👤 Name: ${customer.name}%0A📱 Mobile: ${customer.mobile}%0A📍 Address: ${customer.address || 'N/A'}%0A%0A📦 Items:%0A${itemList}%0A%0A💰 Total: ₹${total}%0A%0A*Admin OTP daal ke confirm kare*`;
+    window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`, '_blank');
+
+    // 4. ✅ CART KHALI KARO - FIRESTORE + LOCALSTORAGE
+    if(currentUser) {
+      const batch = db.batch();
+      const snap = await db.collection('users').doc(currentUser.uid).collection('cart').get();
+      snap.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+    }
+    localStorage.removeItem('santra_cart');
+    cart = {};
+
+    document.getElementById('loader').style.display = 'none';
+    alert('✅ Order Placed! WhatsApp pe bheja. Cart khali ho gaya.');
+    window.location.href = 'my-orders.html';
+
+  } catch (err) {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('checkoutBtn').disabled = false;
+    alert('❌ Order Error: ' + err.message);
+    console.error(err);
+  }
+}
+
+// ✅ BAKI PURANE FUNCTIONS - OTP WALE
 function goToCheckout(){
     let cartKeys = Object.keys(cart);
     if(cartKeys.length === 0){
@@ -601,7 +668,7 @@ function proceedToOTP(customer) {
         let isOldCustomer = false;
         let totalOrders = 0;
         if(doc.exists) {
-            const data = doc.data();
+             const data = doc.data();
             totalOrders = data.totalOrders || 0;
             isOldCustomer = totalOrders > 0;
         }
@@ -709,7 +776,7 @@ function showOrderOTPPopup(orderId, mobile, name) {
     });
 }
 
-// ✅ FIX: OTP verify ke baad cart clear + orders me save
+// ✅ FIX: OTP verify ke baad cart clear + orders me save + my-orders.html redirect
 function verifyOrderOTP(orderId) {
     let enteredOTP = document.getElementById('orderOtpInput').value.trim();
     if(enteredOTP.length!== 6) {
@@ -768,12 +835,12 @@ function verifyOrderOTP(orderId) {
                     status: 'Pending',
                     paymentMode: data.paymentMode,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    orderDate: new Date().toISOString(), // ✅ Present ISO date
-                    orderTime: Date.now(), // ✅ Timestamp
+                    orderDate: new Date().toISOString(),
+                    orderTime: Date.now(),
                     orderDateLocal: new Date().toLocaleString('en-IN', {
                         day:'2-digit',month:'short',year:'numeric',
                         hour:'2-digit',minute:'2-digit',hour12:true,
-                        timeZone: 'Asia/Kolkata' // ✅ IST time
+                        timeZone: 'Asia/Kolkata'
                     }),
                     totalOrderAmount: data.totalAmount,
                     deliveryCharge: data.deliveryCharge,
@@ -825,7 +892,7 @@ function verifyOrderOTP(orderId) {
                 `;
 
                 setTimeout(() => {
-                    window.location.href = 'orders.html';
+                    window.location.href = 'my-orders.html';
                 }, 2000);
             });
 
@@ -846,58 +913,17 @@ function resendOrderOTP(orderId, mobile, name) {
 function closeOrderOTPPopup() {
     document.getElementById('orderOtpModal')?.remove();
 }
-
-function getProductLink(productId) {
-  const baseUrl = 'https://santramarketshoppingmall.com';
-  const productPath = '/product.html';
-  return `${baseUrl}${productPath}?id=${encodeURIComponent(productId)}`;
-}
-
-function getImageUrl(item) {
-  let img = item.image || item.imageUrl || item.img || item.mediaUrl || item.photo || item.thumbnail || item.src || '';
-  img = String(img).trim();
-  if(img.startsWith('data:image') && img.length > 50000) return '';
-  if(img &&!img.startsWith('http') &&!img.startsWith('data:') &&!img.startsWith('/')) {
-    img = '/' + img;
-  }
-  if(img.length > 5) return img;
-  return 'https://via.placeholder.com/80x80/4CAF50/ffffff?text=NO+IMAGE';
-}
 </script>
 
-<!-- ==================== OLD CODE BACKUP - 09/06/2026 ==================== -->
-<!--
-OLD verifyOrderOTP() - Cart clear nahi hota tha
-function verifyOrderOTP(orderId) {
-    let enteredOTP = document.getElementById('orderOtpInput').value.trim();
-    if(enteredOTP.length!== 6) {
-        alert('❌ 6 digit OTP daalo!');
-        return;
-    }
-    db.collection('order_otp').doc(orderId).get().then((doc) => {
-        if(!doc.exists) {
-            alert('❌ Order request not found!');
-            return;
-        }
-        let data = doc.data();
-        if(data.otp === enteredOTP) {
-            // ❌ CART CLEAR NAHI HO RAHA THA
-            let promises = Object.keys(data.cartData).map(key => {
-                let item = data.cartData[key];
-                return db.collection('orders').add({
-                    customer
-            // ❌ localStorage.removeItem('santra_cart') missing tha
-            // ❌ db.collection('users').doc(currentUser.uid).collection('cart') delete missing tha
--->
-
-<!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 4:34 PM ==================== -->
+<!-- ==================== BACKUP PROTECTION TERMINAL - 10/06/2026, 12:10 PM ==================== -->
 <script>
 console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 09 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cBackup Time: 10 June 2026, 12:10 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%c✅ Cart Empty Fix + Order Save Fix Applied', 'color:#3b82f6;font-weight:bold');
 
 window.santraBackup = {
-  version: '2.0',
-  timestamp: '2026-06-09T16:34:00+05:30',
+  version: '3.0',
+  timestamp: '2026-06-10T12:10:00+05:30',
   backupLocalStorage: function() {
     const backup = {
       timestamp: new Date().toISOString(),
@@ -905,12 +931,12 @@ window.santraBackup = {
       wishlist: localStorage.getItem('santra_wishlist'),
       customer: localStorage.getItem('santra_customer')
     };
-    localStorage.setItem('santra_backup_2026_06_09_1634', JSON.stringify(backup));
+    localStorage.setItem('santra_backup_2026_06_10_1210', JSON.stringify(backup));
     console.log('✅ Backup Created');
     return backup;
   },
   restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_09_1634');
+    const backup = localStorage.getItem('santra_backup_2026_06_10_1210');
     if(backup) {
       const data = JSON.parse(backup);
       if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
@@ -927,5 +953,3 @@ window.santraBackup.backupLocalStorage();
 </script>
 </body>
 </html>
-            
-            
