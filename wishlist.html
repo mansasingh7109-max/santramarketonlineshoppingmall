@@ -8,30 +8,30 @@
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
     body{background:var(--bg);color:var(--text);padding-bottom:70px}
- .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
- .header h1{font-size:18px;flex:1}
- .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
- .clear-btn{background:white;color:var(--accent);border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:12px;cursor:pointer}
- .wishlist-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
- .wishlist-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;cursor:pointer;border:1px solid #eee}
- .item-info{flex:1}
- .item-info h3{font-size:16px;margin-bottom:5px;height:40px;overflow:hidden;cursor:pointer}
- .item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
- .mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
- .btn-group{display:flex;gap:8px;margin-top:10px}
- .btn-cart{background:var(--accent);color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
- .btn-remove{background:#ef4444;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
- .empty{text-align:center;padding:60px 20px;color:#999}
- .empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
- .loading{text-align:center;padding:60px 20px;color:#999}
- .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;display:none}
- .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
- .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
- .nav-item.active{color:var(--accent)}
- .nav-item div{font-size:22px}
- .nav-item span{font-size:11px;display:block;margin-top:2px}
- .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
- .code-text{font-size:12px;color:#666;margin-top:4px}
+.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.header h1{font-size:18px;flex:1}
+.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+.clear-btn{background:white;color:var(--accent);border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:12px;cursor:pointer}
+.wishlist-card{background:var(--card);margin:10px 15px;border-radius:8px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.wishlist-card img{width:100px;height:100px;object-fit:contain;background:#f9f9f9;border-radius:6px;cursor:pointer;border:1px solid #eee}
+.item-info{flex:1}
+.item-info h3{font-size:16px;margin-bottom:5px;height:40px;overflow:hidden;cursor:pointer}
+.item-price{color:var(--accent);font-weight:bold;font-size:18px;margin:5px 0}
+.mrp{color:#999;text-decoration:line-through;font-size:14px;margin-left:5px}
+.btn-group{display:flex;gap:8px;margin-top:10px}
+.btn-cart{background:var(--accent);color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
+.btn-remove{background:#ef4444;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;flex:1}
+.empty{text-align:center;padding:60px 20px;color:#999}
+.empty button{margin-top:15px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.loading{text-align:center;padding:60px 20px;color:#999}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:999;display:none}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}
+.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative}
+.nav-item.active{color:var(--accent)}
+.nav-item div{font-size:22px}
+.nav-item span{font-size:11px;display:block;margin-top:2px}
+.cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%}
+.code-text{font-size:12px;color:#666;margin-top:4px}
   </style>
 </head>
 <body>
@@ -68,11 +68,31 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="secrets.js"></script>
 
 <script>
-  const firebaseConfig = {
+/*
+
+OLD CODE BACKUP - 10/06/2026 - PURANA CODE
+
+
+// ❌ OLD: RTDB use kar raha tha - index.html Firestore use kar raha
+// const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
+// wishRef.on('value', (snapshot) => {
+// const items = snapshot.val();
+//...
+// });
+
+// ❌ OLD: getProductImage priority galat thi
+// if(p.imageUrl) return p.imageUrl; // RTDB ka naya field last me tha
+
+*/
+
+    const FIREBASE_CONFIG = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
@@ -80,9 +100,12 @@
   measurementId: "G-ZW1ZR8HETY"
 };
 
-  firebase.initializeApp(firebaseConfig);
+    // Tera config yaha daal de secrets.js se
+
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   var rtdb = firebase.database();
   var auth = firebase.auth();
+  var db = firebase.firestore(); // ✅ NEW: Firestore add kiya
   let currentUser = null;
 
   function showToast(msg) {
@@ -95,16 +118,15 @@
   auth.onAuthStateChanged((user) => {
     if (user) {
       currentUser = user;
-      loadWishlistFromRTDB();
+      loadWishlistFromFirestore(); // ✅ NEW: Firestore se load
       updateCartBadge();
     } else {
       document.getElementById('wishlist-items').innerHTML = '<div class="empty">Please login to see wishlist<br><button onclick="window.location.href=\'index.html\'">Go to Home</button></div>';
     }
   });
 
-  // ✅ UPDATED - RTDB ka 'image' field pehle check hoga
+  // ✅ NEW: getProductImage - Firestore compatible
   function getProductImage(p) {
-    // Priority: RTDB ka naya 'image' field sabse pehle
     if(p.image) return p.image;
     if(p.imageUrl) return p.imageUrl;
     if(p.img) return p.img;
@@ -115,13 +137,14 @@
     return 'https://via.placeholder.com/100x100/4CAF50/ffffff?text=NO+IMAGE';
   }
 
-  function loadWishlistFromRTDB() {
-    const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
-    wishRef.on('value', (snapshot) => {
+  // ✅ NEW: Firestore se load karo
+  function loadWishlistFromFirestore() {
+    const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist');
+    wishRef.onSnapshot((snapshot) => {
       const container = document.getElementById('wishlist-items');
       const clearBtn = document.getElementById('clearBtn');
 
-      if (!snapshot.exists() || Object.keys(snapshot.val()).length === 0) {
+      if (snapshot.empty) {
         container.innerHTML = `
           <div class="empty">
             😍 Your wishlist is empty<br>
@@ -133,18 +156,17 @@
         return;
       }
 
-      const items = snapshot.val();
-      const itemKeys = Object.keys(items);
-      document.getElementById('wishCount').innerText = itemKeys.length;
+      document.getElementById('wishCount').innerText = snapshot.size;
       clearBtn.style.display = 'block';
 
       let html = '';
-      itemKeys.forEach(key => {
-        const p = items[key];
+      snapshot.forEach(doc => {
+        const p = doc.data();
+        const key = doc.id;
         const imgSrc = getProductImage(p);
         const price = p.discountedPrice || p.price || 0;
         const mrp = p.mrp || p.price || price;
-        const displayCode = p.code && p.code!== 'N/A'? p.code : p.id || key;
+        const displayCode = p.code && p.code!== 'N/A'? p.code : key;
 
         html += `
           <div class="wishlist-card">
@@ -173,9 +195,14 @@
   window.clearWishlist = async () => {
     if (!currentUser) return;
     if(!confirm('Poori wishlist delete karni hai?')) return;
-    const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
+
+    const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist');
+    const snapshot = await wishRef.get();
+    const batch = db.batch();
+    snapshot.forEach(doc => batch.delete(doc.ref));
+
     try {
-      await wishRef.remove();
+      await batch.commit();
       showToast('Wishlist cleared ✅');
     } catch (e) {
       console.log('Error:', e);
@@ -185,15 +212,16 @@
 
   window.moveToCart = async (productId, productData) => {
     if (!currentUser) return;
-    const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
-    const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+    const cartRef = db.collection('users').doc(currentUser.uid).collection('cart').doc(productId);
+    const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist').doc(productId);
+
     try {
       await cartRef.set({
-      ...productData,
-        qty: 1,
-        addedAt: new Date().toISOString()
-      });
-      await wishRef.remove();
+       ...productData,
+        qty: firebase.firestore.FieldValue.increment(1),
+        addedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      await wishRef.delete();
       showToast('Moved to Cart 🛒');
     } catch (e) {
       console.log('Move to cart error:', e);
@@ -204,9 +232,9 @@
   window.removeFromWish = async (productId) => {
     if (!currentUser) return;
     if(!confirm('Remove from wishlist?')) return;
-    const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+    const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist').doc(productId);
     try {
-      await wishRef.remove();
+      await wishRef.delete();
       showToast('Removed from Wishlist');
     } catch (e) {
       console.log('Remove error:', e);
@@ -219,11 +247,11 @@
 
   function updateCartBadge() {
     if (!currentUser) return;
-    const cartRef = rtdb.ref('carts/' + currentUser.uid);
-    cartRef.on('value', (snapshot) => {
+    const cartRef = db.collection('users').doc(currentUser.uid).collection('cart');
+    cartRef.onSnapshot((snapshot) => {
       const badge = document.getElementById('navCartCount');
-      if (snapshot.exists()) {
-        const count = Object.keys(snapshot.val()).length;
+      if (!snapshot.empty) {
+        const count = snapshot.size;
         badge.textContent = count;
         badge.style.display = count > 0? 'block' : 'none';
       } else {
@@ -232,19 +260,16 @@
     });
   }
 </script>
-<!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
+
+<!-- BACKUP PROTECTION TERMINAL - 10/06/2026 -->
 <script>
 console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+console.log('%cBackup Time: 10 June 2026', 'color:#10b981;font-weight:bold');
 
-// ✅ AUTO BACKUP EVERY ORDER
 window.santraBackup = {
-  version: '1.0',
-  timestamp: '2026-06-04T16:34:00+05:30',
-  location: 'Pilibanga, Rajasthan',
-  
-  // Backup localStorage data
+  version: '2.0',
+  timestamp: '2026-06-10T00:00:00+05:30',
+
   backupLocalStorage: function() {
     const backup = {
       timestamp: new Date().toISOString(),
@@ -253,35 +278,13 @@ window.santraBackup = {
       cart: localStorage.getItem('santra_cart'),
       wishlist: localStorage.getItem('santra_wishlist')
     };
-    
-    localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
+    localStorage.setItem('santra_backup_2026_06_10', JSON.stringify(backup));
     console.log('✅ LocalStorage Backup Created:', backup.timestamp);
     return backup;
   },
-  
-  // Backup Firebase data before critical operations
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-  
-  // Restore function
+
   restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
+    const backup = localStorage.getItem('santra_backup_2026_06_10');
     if(backup) {
       const data = JSON.parse(backup);
       if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
@@ -293,44 +296,14 @@ window.santraBackup = {
         location.reload();
       }
     } else {
-      alert('❌ No backup found for 4 June 2026, 4:34 PM');
+      alert('❌ No backup found');
     }
-  },
-  
-  // View all backups
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-  
-  // Export backup as JSON
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-04T16:34:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
-    
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-04_1634.json`;
-    link.click();
-    console.log('✅ Backup Exported');
   }
 };
 
-// Auto backup on page load
 window.santraBackup.backupLocalStorage();
-
-// Console commands help
 console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
 console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
