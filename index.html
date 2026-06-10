@@ -752,7 +752,7 @@ if (currentUser) {
 // ✅ FIX 2: loadWishlistStatus - Null Check + Object/Array handle
 function loadWishlistStatus() {
   let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
-  
+
   // Array to Object convert
   if(Array.isArray(wishlist)) {
     let obj = {};
@@ -764,7 +764,7 @@ function loadWishlistStatus() {
   if(!allProducts ||!Array.isArray(allProducts) || allProducts.length === 0) return;
 
   document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
-  
+
   // ✅ FIX: Object.keys() use karo
   Object.keys(wishlist).forEach(productId => {
     if(!wishlist[productId]) return;
@@ -848,9 +848,6 @@ function addToCart(productId, event) {
         name: product.name,
         price: parseFloat(product.price) || 0,
         image: getProductImage(product),
-        code: product.code || product.sku || '',
-        serial_no: product.serial_no || '',
-        category: product.category || 'General',
         qty: qty,
         addedAt: new Date().toISOString()
       });
@@ -915,7 +912,8 @@ function openOrders() {
   }
   let customer = localStorage.getItem('santra_customer');
   if(!customer) {
-    window.location.href = 'customer-login.html';
+    alert('⚠️ Please login first to see your orders');
+    openCustomerLogin();
   } else {
     window.location.href = 'orders.html';
   }
@@ -953,14 +951,14 @@ function checkCustomerLogin() {
     document.getElementById('customerInfoBar').classList.remove('hide');
     document.getElementById('customerNameDisplay').innerText = customer.name;
     document.getElementById('customerMobileDisplay').innerText = customer.mobile;
-    
+
     // Login button ko "My Profile" me change karo
     document.getElementById('loginBtn').innerText = '👤 My Profile';
     document.getElementById('loginBtn').onclick = () => window.location.href='customer-account.html';
     document.getElementById('logoutBtn').classList.add('hide');
     document.getElementById('userInfo').classList.remove('hide');
     document.getElementById('userName').innerText = customer.name;
-    
+
     if(customer.isOldCustomer && customer.totalOrders > 0) {
       document.getElementById('oldCustomerBadge').classList.remove('hide');
       document.getElementById('oldCustomerBadge').innerText = `🔥 Old - ${customer.totalOrders} Orders`;
@@ -1241,3 +1239,5 @@ console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
+          
+          
