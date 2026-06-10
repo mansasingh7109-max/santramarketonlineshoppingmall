@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>😍 My Wishlist - SANTRA MALL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0}
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
@@ -64,7 +65,6 @@
   </a>
 </div>
 
-<!-- ✅ FIREBASE COMPAT SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -73,39 +73,22 @@
 
 <script>
 /*
+=================================
+OLD CODE BACKUP - 10/06/2026 - CLEAR BUG FIX
+=================================
 
-OLD CODE BACKUP - 10/06/2026 - PURANA CODE
+// ❌ OLD BUG: moveToCart me qty increment galat tha
+// qty: firebase.firestore.FieldValue.increment(1) // Ye purana qty + 1 kar raha tha
+// Agar wishlist me qty nahi tha to undefined + 1 = NaN
 
-
-// ❌ OLD: RTDB use kar raha tha - index.html Firestore use kar raha
-// const wishRef = rtdb.ref('wishlist/' + currentUser.uid);
-// wishRef.on('value', (snapshot) => {
-// const items = snapshot.val();
-//...
-// });
-
-// ❌ OLD: getProductImage priority galat thi
-// if(p.imageUrl) return p.imageUrl; // RTDB ka naya field last me tha
+// ✅ NEW FIX: Pehle cart se existing qty nikalo, fir + 1 karo
 
 */
-
-    const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-    // Tera config yaha daal de secrets.js se
 
   if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   var rtdb = firebase.database();
   var auth = firebase.auth();
-  var db = firebase.firestore(); // ✅ NEW: Firestore add kiya
+  var db = firebase.firestore();
   let currentUser = null;
 
   function showToast(msg) {
@@ -118,14 +101,13 @@ OLD CODE BACKUP - 10/06/2026 - PURANA CODE
   auth.onAuthStateChanged((user) => {
     if (user) {
       currentUser = user;
-      loadWishlistFromFirestore(); // ✅ NEW: Firestore se load
+      loadWishlistFromFirestore();
       updateCartBadge();
     } else {
       document.getElementById('wishlist-items').innerHTML = '<div class="empty">Please login to see wishlist<br><button onclick="window.location.href=\'index.html\'">Go to Home</button></div>';
     }
   });
 
-  // ✅ NEW: getProductImage - Firestore compatible
   function getProductImage(p) {
     if(p.image) return p.image;
     if(p.imageUrl) return p.imageUrl;
@@ -137,7 +119,6 @@ OLD CODE BACKUP - 10/06/2026 - PURANA CODE
     return 'https://via.placeholder.com/100x100/4CAF50/ffffff?text=NO+IMAGE';
   }
 
-  // ✅ NEW: Firestore se load karo
   function loadWishlistFromFirestore() {
     const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist');
     wishRef.onSnapshot((snapshot) => {
@@ -210,17 +191,28 @@ OLD CODE BACKUP - 10/06/2026 - PURANA CODE
     }
   }
 
+  // ✅ FIXED: moveToCart - Ab clear nahi hoga
   window.moveToCart = async (productId, productData) => {
     if (!currentUser) return;
     const cartRef = db.collection('users').doc(currentUser.uid).collection('cart').doc(productId);
     const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist').doc(productId);
 
     try {
+      // ✅ FIX: Pehle cart me check karo ki item hai ya nahi
+      const cartDoc = await cartRef.get();
+      let newQty = 1;
+      
+      if(cartDoc.exists) {
+        // Agar cart me pehle se hai to +1 karo
+        newQty = (cartDoc.data().qty || 0) + 1;
+      }
+
       await cartRef.set({
-       ...productData,
-        qty: firebase.firestore.FieldValue.increment(1),
+      ...productData,
+        qty: newQty, // ✅ Ab sahi qty jayega
         addedAt: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true });
+      
       await wishRef.delete();
       showToast('Moved to Cart 🛒');
     } catch (e) {
@@ -269,28 +261,20 @@ console.log('%cBackup Time: 10 June 2026', 'color:#10b981;font-weight:bold');
 window.santraBackup = {
   version: '2.0',
   timestamp: '2026-06-10T00:00:00+05:30',
-
   backupLocalStorage: function() {
     const backup = {
       timestamp: new Date().toISOString(),
-      orders: localStorage.getItem('santra_orders'),
-      customer: localStorage.getItem('santra_customer'),
-      cart: localStorage.getItem('santra_cart'),
       wishlist: localStorage.getItem('santra_wishlist')
     };
-    localStorage.setItem('santra_backup_2026_06_10', JSON.stringify(backup));
-    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    localStorage.setItem('santra_backup_wishlist_2026_06_10', JSON.stringify(backup));
+    console.log('✅ Wishlist Backup Created:', backup.timestamp);
     return backup;
   },
-
   restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_10');
+    const backup = localStorage.getItem('santra_backup_wishlist_2026_06_10');
     if(backup) {
       const data = JSON.parse(backup);
       if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.orders) localStorage.setItem('santra_orders', data.orders);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
-        if(data.cart) localStorage.setItem('santra_cart', data.cart);
         if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
         alert('✅ Backup Restored! Reloading...');
         location.reload();
@@ -300,10 +284,7 @@ window.santraBackup = {
     }
   }
 };
-
 window.santraBackup.backupLocalStorage();
-console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
-console.log('santraBackup.restore() - Restore backup');
 </script>
 </body>
 </html>
