@@ -16,6 +16,7 @@
 .add-to-cart-btn{flex:1;background:var(--accent);color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
 .buy-now-btn{flex:1;background:#ff9800;color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
 .profile-btn{background:#4caf50;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
+.wish-icon.active{color:#e40046!important}
   </style>
 </head>
 
@@ -259,6 +260,9 @@ OLD CODE BACKUP - 09/06/2026 - PURANA CODE
 
 // ❌ OLD: Login button change nahi hota tha
 // document.getElementById('loginBtn').innerText = '👤 Customer Login'; // Always same
+
+// ❌ OLD: Product card click nahi hota tha
+// <div class="product-card"> // ❌ onclick missing
 
 =================================
 */
@@ -633,6 +637,7 @@ function renderProducts(products){
     if(images.length === 0){
       images = [getProductImage(p)];
     }
+    // ✅ FIX: Product card click karne pe product.html khule
     html += `
       <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
         ${p.stock < 5 && p.stock > 0? '<div class="new-badge">Low Stock</div>' : ''}
@@ -680,73 +685,73 @@ function applyHomeFilters() {
   });
   let filtered = allProducts.filter(p => {
     let match = true;
-     Object.keys(selectedFilters).forEach(field => {
-if (p[field]!= selectedFilters[field]) match = false;
-});
-return match;
-});
-renderProducts(filtered);
-closeFilterPopup();
+    Object.keys(selectedFilters).forEach(field => {
+      if (p[field]!= selectedFilters[field]) match = false;
+    });
+    return match;
+  });
+  renderProducts(filtered);
+  closeFilterPopup();
 }
 
 function clearHomeFilters() {
-selectedFilters = {};
-document.querySelectorAll('#autoFiltersContainer select').forEach(select => {
-select.value = '';
-});
-renderProducts(allProducts);
-closeFilterPopup();
+  selectedFilters = {};
+  document.querySelectorAll('#autoFiltersContainer select').forEach(select => {
+    select.value = '';
+  });
+  renderProducts(allProducts);
+  closeFilterPopup();
 }
 
 function filterByCategory(catName) {
-let filtered = allProducts.filter(p => p.category === catName);
-renderProducts(filtered);
-document.getElementById('productGrid').scrollIntoView({behavior: 'smooth'});
+  let filtered = allProducts.filter(p => p.category === catName);
+  renderProducts(filtered);
+  document.getElementById('productGrid').scrollIntoView({behavior: 'smooth'});
 }
 
 // ✅ FIX 1: toggleWishlist - Login check hata diya + Object/Array dono handle + Null check
 window.toggleWishlist = async (productId, event) => {
-if (event) event.stopPropagation();
-let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
-
-// Array to Object convert
-if(Array.isArray(wishlist)) {
-  let obj = {};
-  wishlist.forEach(item => { if(item && item.id) obj[item.id] = item; });
-  wishlist = obj;
-}
-
-let product = allProducts.find(p => p.id === productId);
-if(!product) return;
-
-if (wishlist[productId]) {
-  delete wishlist[productId];
-  let heartBtn = document.getElementById(`heart-${productId}`);
-  if(heartBtn) heartBtn.innerText = '💗';
-  showToast('Removed from Wishlist');
-} else {
-  wishlist[productId] = {
-    id: productId,
-    name: product.name,
-    price: product.price || 0,
-    image: getProductImage(product),
-    addedAt: new Date().toISOString()
-  };
-  let heartBtn = document.getElementById(`heart-${productId}`);
-  if(heartBtn) heartBtn.innerText = '❤️';
-  showToast('Added to Wishlist ❤️');
-}
-localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
-updateWishlistCount();
-
-if (currentUser) {
-  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
-  if (wishlist[productId]) {
-    await wishRef.set(wishlist[productId]);
-  } else {
-    await wishRef.remove();
+  if (event) event.stopPropagation();
+  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
+  
+  // Array to Object convert
+  if(Array.isArray(wishlist)) {
+    let obj = {};
+    wishlist.forEach(item => { if(item && item.id) obj[item.id] = item; });
+    wishlist = obj;
   }
-}
+  
+  let product = allProducts.find(p => p.id === productId);
+  if(!product) return;
+  
+  if (wishlist[productId]) {
+    delete wishlist[productId];
+    let heartBtn = document.getElementById(`heart-${productId}`);
+    if(heartBtn) heartBtn.innerText = '💗';
+    showToast('Removed from Wishlist');
+  } else {
+    wishlist[productId] = {
+      id: productId,
+      name: product.name,
+      price: product.price || 0,
+      image: getProductImage(product),
+      addedAt: new Date().toISOString()
+    };
+    let heartBtn = document.getElementById(`heart-${productId}`);
+    if(heartBtn) heartBtn.innerText = '❤️';
+    showToast('Added to Wishlist ❤️');
+  }
+  localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
+  updateWishlistCount();
+  
+  if (currentUser) {
+    const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+    if (wishlist[productId]) {
+      await wishRef.set(wishlist[productId]);
+    } else {
+      await wishRef.remove();
+    }
+  }
 }
 
 // ✅ FIX 2: loadWishlistStatus - Null Check + Object/Array handle
@@ -760,9 +765,9 @@ function loadWishlistStatus() {
     wishlist = obj;
     localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
   }
-
+  
   if(!allProducts ||!Array.isArray(allProducts) || allProducts.length === 0) return;
-
+  
   document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
   
   // ✅ FIX: Object.keys() use karo
@@ -814,10 +819,10 @@ function addToCart(productId, event) {
     showToast('Product not found');
     return;
   }
-
+  
   // ✅ FIX: Cart Object format - Array nahi
   let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
-
+  
   if(cart[productId]) {
     cart[productId].qty += 1;
   } else {
@@ -828,16 +833,18 @@ function addToCart(productId, event) {
       image: getProductImage(product),
       code: product.code || product.sku || '',
       serial_no: product.serial_no || '',
+      seriesNo: product.seriesNo || product.code || '',
       category: product.category || 'General',
       qty: 1,
+      productLink: window.location.origin + '/product.html?id=' + productId,
       addedAt: new Date().toISOString()
     };
   }
-
+  
   localStorage.setItem('santra_cart', JSON.stringify(cart));
   showToast('Added to cart!');
   updateCartCount();
-
+  
   if (currentUser) {
     const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
     cartRef.once('value', (snap) => {
@@ -868,13 +875,13 @@ function buyNow(productId, event) {
 function updateCartCount() {
   let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
   let totalQty = 0;
-
+  
   if(Array.isArray(cart)) {
     totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
   } else if(cart && typeof cart === 'object') {
     totalQty = Object.values(cart).reduce((sum, item) => sum + (item?.qty || 0), 0);
   }
-
+  
   document.getElementById('cartCount').innerText = totalQty;
 }
 
@@ -999,6 +1006,7 @@ function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast show';
   toast.innerText = message;
+  toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:8px;z-index:9999';
   document.body.appendChild(toast);
   setTimeout(() => {
     toast.classList.remove('show');
@@ -1015,229 +1023,41 @@ if (location.search.includes('eruda=true')) {
 }
 </script>
 
-<!-- ==================== OLD CODE BACKUP - 09/06/2026 ==================== -->
-<!--
-OLD addToCart() WITH LOGIN CHECK:
-function addToCart(productId, event) {
-  event.stopPropagation();
-  if (!currentUser) {
-    showToast('Please login first');
-    openCustomerLogin();
-    return;
-  }
-  let product = allProducts.find(p => p.id === productId);
-  if(!product) return;
-  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
-  cartRef.once('value', (snap) => {
-    let qty = 1;
-    if(snap.exists()) qty = snap.val().qty + 1;
-    cartRef.set({
-      id: product.id,
-      name: product.name,
-      price: parseFloat(product.price) || 0,
-      image: getProductImage(product),
-      qty: qty,
-      addedAt: new Date().toISOString()
-    });
-    showToast('Added to cart!');
-    updateCartCount();
-  });
-}
-
-OLD toggleWishlist() WITH LOGIN CHECK:
-window.toggleWishlist = async (productId, event) => {
-  if (event) event.stopPropagation();
-  if (!currentUser) {
-    showToast('Please login first');
-    openCustomerLogin();
-    return;
-  }
-  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
-  const product = allProducts.find(p => p.id === productId);
-  if(!product) return;
-  try {
-    const wishSnap = await wishRef.once('value');
-    if (wishSnap.exists()) {
-      await wishRef.remove();
-      document.getElementById(`heart-${productId}`).innerText = '💗';
-      showToast('Removed from Wishlist');
-    } else {
-      await wishRef.set({
-        id: productId,
-        name: product.name,
-        price: product.price || 0,
-        image: getProductImage(product),
-        addedAt: new Date().toISOString()
-      });
-      document.getElementById(`heart-${productId}`).innerText = '❤️';
-      showToast('Added to Wishlist ❤️');
-    }
-    updateWishlistCount();
-  } catch (e) {
-    showToast('Error: ' + e.message);
-  }
-}
-
-OLD openOrders() WITH ALERT:
-function openOrders() {
-  let customer = localStorage.getItem('santra_customer');
-  if(!customer) {
-    alert('⚠️ Please login first to see your orders');
-    openCustomerLogin();
-  } else {
-    window.location.href = 'orders.html';
-  }
-}
-
-OLD openCart() WITHOUT OTP CHECK:
-function openCart() {
-  window.location.href = 'cart.html';
-}
-
-OLD openCategories() WITHOUT OTP CHECK:
-function openCategories() {
-  window.location.href = 'category.html';
-}
-
-OLD loadWishlistStatus() - Null check nahi tha:
-function loadWishlistStatus() {
-  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '[]');
-  document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
-  wishlist.forEach(item => {
-    const heartBtn = document.getElementById(`heart-${item.id}`); // ❌ null ho sakta tha
-    heartBtn.innerText = '❤️'; // ❌ Error: Cannot read properties of null
-  });
-  updateWishlistCount();
-}
-
-OLD updateCartCount() - cart.reduce error:
-function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
-  let totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0); // ❌ cart object hai, array nahi
-  document.getElementById('cartCount').innerText = totalQty;
-}
-
-OLD CART ARRAY FORMAT:
-let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]'); // ❌ Array
-
-NEW CART OBJECT FORMAT:
-let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}'); // ✅ Object
-cart[productId] = {id: productId, name: name, price: price, qty: 1, image: img};
-
-OLD checkCustomerLogin() - Button change nahi hota tha:
-function checkCustomerLogin() {
-  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
-  if (customer.name) {
-    document.getElementById('loginBtn').innerText = '👤 Customer Login'; // ❌ Always same
-    document.getElementById('logoutBtn').classList.remove('hide');
-  }
-}
-
-NEW checkCustomerLogin() - My Profile button:
-function checkCustomerLogin() {
-  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
-  if (customer.name && customer.isLoggedIn === true) {
-    document.getElementById('loginBtn').innerText = '👤 My Profile'; // ✅ Change hota hai
-    document.getElementById('loginBtn').onclick = () => window.location.href='customer-account.html';
-  }
-}
-
-OLD 2 LOGOUT BUTTON:
-<button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
-<div id="userInfo" class="hide">... <button onclick="customerLogout()">Logout</button> </div> // ❌ 2 baar
-
-NEW 1 LOGOUT BUTTON:
-<button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button> // ✅ Sirf 1
--->
-
-<!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 11:15 PM ==================== -->
+<!-- ==================== BACKUP PROTECTION TERMINAL - 10/06/2026, 3:45 PM ==================== -->
 <script>
 console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 09 June 2026, 11:15 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
+console.log('%cBackup Time: 10 June 2026, 3:45 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%c✅ Cart/Wishlist Gyab Fix + Product Click Fix + Login/My Profile Fix', 'color:#3b82f6;font-weight:bold');
 
 window.santraBackup = {
-  version: '2.0',
-  timestamp: '2026-06-09T23:15:00+05:30',
-  location: 'Nawai, Rajasthan',
-
+  version: '3.3',
+  timestamp: '2026-06-10T15:45:00+05:30',
   backupLocalStorage: function() {
     const backup = {
       timestamp: new Date().toISOString(),
-      orders: localStorage.getItem('santra_orders'),
-      customer: localStorage.getItem('santra_customer'),
       cart: localStorage.getItem('santra_cart'),
-      wishlist: localStorage.getItem('santra_wishlist')
+      wishlist: localStorage.getItem('santra_wishlist'),
+      customer: localStorage.getItem('santra_customer')
     };
-    localStorage.setItem('santra_backup_2026_06_09_2315', JSON.stringify(backup));
-    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    localStorage.setItem('santra_backup_2026_06_10_1545', JSON.stringify(backup));
+    console.log('✅ Backup Created');
     return backup;
   },
-
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100);
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-
   restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_09_2315');
+    const backup = localStorage.getItem('santra_backup_2026_06_10_1545');
     if(backup) {
       const data = JSON.parse(backup);
       if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.orders) localStorage.setItem('santra_orders', data.orders);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
         if(data.cart) localStorage.setItem('santra_cart', data.cart);
         if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
         alert('✅ Backup Restored! Reloading...');
         location.reload();
       }
-    } else {
-      alert('❌ No backup found for 09 June 2026, 11:15 PM');
     }
-  },
-
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-09T23:15:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-09_2315.json`;
-    link.click();
-    console.log('✅ Backup Exported');
   }
 };
-
 window.santraBackup.backupLocalStorage();
-
-console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
-console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
 </script>
 </body>
 </html>
