@@ -16,8 +16,6 @@
 .add-to-cart-btn{flex:1;background:var(--accent);color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
 .buy-now-btn{flex:1;background:#ff9800;color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
 .profile-btn{background:#4caf50;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-weight:bold}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:99999;opacity:0;transition:opacity 0.3s}
-.toast.show{opacity:1}
   </style>
 </head>
 
@@ -30,14 +28,17 @@
       <span style="color:#1b5e20;font-weight:bold">Hi, <b id="userName"></b></span>
       <span id="oldCustomerBadge" class="hide" style="background:#ff6b00;color:white;padding:4px 8px;border-radius:5px;font-size:11px;margin-left:5px"></span>
     </div>
+    <!-- ✅ FIX: Login button → My Profile me change hoga -->
     <button id="loginBtn" onclick="handleLoginClick()">👤 Customer Login</button>
     <button id="verifyOtpBtn" class="hide" onclick="openVerifyOtpPopup()">🔐 Verify OTP</button>
+    <!-- ✅ FIX: Sirf 1 Logout button -->
     <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
     <a href="wishlist.html" class="header-btn">❤️ Wishlist <span class="wishlist-count" id="wishlist-count">0</span></a>
     <a href="help.html" class="header-btn">💬 HELP DESK</a>
   </div>
 </div>
 
+<!-- ✅ NEW: Customer Info Bar - OTP Verify ke baad dikhega -->
 <div id="customerInfoBar" class="customer-info-bar hide">
   <div>
     <p>👤 <span id="customerNameDisplay"></span> | 📱 <span id="customerMobileDisplay"></span></p>
@@ -213,25 +214,27 @@
 
 <script>
 /*
-
-OLD CODE BACKUP - 10/06/2026 - PURANA CODE
-
+=================================
+OLD CODE BACKUP - 09/06/2026 - PURANA CODE
+=================================
 
 // ❌ OLD: addToCart me login check tha - Har baar login maangta tha
-// window.addToCart = async (productId, event) => {
+// function addToCart(productId, event) {
+// event.stopPropagation();
 // if (!currentUser) {
 // showToast('Please login first');
 // openCustomerLogin();
 // return;
 // }
-// const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
-// cartRef.set({...})
+//...
 // }
 
 // ❌ OLD: toggleWishlist me bhi login check tha
 // window.toggleWishlist = async (productId, event) => {
+// if (event) event.stopPropagation();
 // if (!currentUser) {
 // showToast('Please login first');
+// openCustomerLogin();
 // return;
 // }
 //...
@@ -240,8 +243,24 @@ OLD CODE BACKUP - 10/06/2026 - PURANA CODE
 // ❌ OLD: Cart Array format tha - reduce error aata tha
 // let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
 
-// ❌ OLD: getProductImage function missing tha
+// ❌ OLD: loadWishlistStatus me null check nahi tha
+// function loadWishlistStatus() {
+// products.forEach(product => {
+// let heart = document.querySelector(`[data-id="${product.id}"].wishlist-heart`);
+// if(wishlist[product.id]) { // ❌ product null ho sakta hai
+// heart.classList.add('active');
+// }
+// });
+// }
 
+// ❌ OLD: 2 Logout button dikhte the
+// <button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+// <div id="userInfo" class="hide">... <button onclick="customerLogout()">Logout</button> </div>
+
+// ❌ OLD: Login button change nahi hota tha
+// document.getElementById('loginBtn').innerText = '👤 Customer Login'; // Always same
+
+=================================
 */
 
 let currentModalProduct = null;
@@ -275,324 +294,147 @@ window.onload = function() {
   if(orderId) loadSingleOrder(orderId);
 }
 
-// ✅ NEW: Ye function add karna zaruri hai - IMAGE KE LIYE
-function getProductImage(p) {
-  if(!p) return 'https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image';
-  if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
-  if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
-  if(p.image) return p.image;
-  if(p.imageUrl) return p.imageUrl;
-  if(p.img) return p.img;
-  return 'https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image';
+// ✅ NEW: OTP POPUP FUNCTIONS - Button se open hoga
+function openVerifyOtpPopup() {
+  let pending = localStorage.getItem('pendingOTP');
+  if(!pending) {
+    alert('❌ Koi OTP request nahi mili!\nPehle customer-login.html se WhatsApp bhejo');
+    return;
+  }
+
+  pending = JSON.parse(pending);
+  if(Date.now() - pending.time > 60 * 1000) {
+    localStorage.removeItem('pendingOTP');
+    alert('❌ OTP expire ho gaya! Wapas bhejo');
+    document.getElementById('verifyOtpBtn').classList.add('hide');
+    return;
+  }
+
+  showAutoOTPPopup(pending.mobile, pending.name);
 }
 
-// ✅ NEW - Firebase Firestore + Guest dono ke liye - GITHUB PE CHALEGA
-window.addToCart = async (productId, event) => {
-  if (event) event.stopPropagation();
+function showAutoOTPPopup(mobile, name) {
+  if(document.getElementById('autoOtpModal')) return;
 
-  // ✅ FIX: Products load hue ya nahi check karo
-  if(!allProducts || allProducts.length === 0) {
-    showToast('⏳ Products loading... 2 sec wait karo');
+  let popupHTML = `
+    <div id="autoOtpModal" style="position:fixed;inset:0;background:rgba(0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px;animation:fadeIn 0.3s">
+      <div style="background:white;padding:28px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 15px 50px rgba(0,0,0,0.4)">
+        <h3 style="color:#e40046;text-align:center;margin-bottom:18px;font-size:22px">🔐 WhatsApp OTP Verify</h3>
+        <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);padding:15px;border-radius:12px;margin-bottom:18px;border-left:5px solid #4caf50">
+          <b style="color:#1b5e20;font-size:16px">✅ Request Sent Successfully!</b><br>
+          <span style="font-size:13px;color:#2e7d32">Hi ${name}, Admin OTP bhejega:<br><b style="font-size:15px">+91 ${mobile}</b></span>
+        </div>
+        <p style="text-align:center;color:#333;font-weight:600;margin-bottom:12px;font-size:15px">WhatsApp se OTP copy karke yahan daalo 👇</p>
+        <input type="tel" id="autoOtpInput" maxlength="6" placeholder="000000" style="width:100%;padding:20px;text-align:center;font-size:32px;letter-spacing:12px;border:3px solid #e40046;border-radius:12px;margin:12px 0;font-weight:bold;color:#e40046;background:#fff5f7">
+        <button onclick="verifyAutoOTP('${mobile}')" style="width:100%;padding:16px;background:linear-gradient(135deg,#e40046,#ff1744);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer;margin-bottom:12px;box-shadow:0 5px 20px rgba(228,0,70,0.4)">✅ Verify & Login</button>
+        <button onclick="resendWhatsAppOTP('${mobile}','${name}')" style="width:100%;padding:14px;background:#ff9800;color:white;border:none;border-radius:12px;cursor:pointer;margin-bottom:10px;font-weight:bold">🔄 OTP Nahi Mila? Wapas Bhejo</button>
+        <button onclick="closeAutoOTPPopup()" style="width:100%;padding:13px;background:#757575;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:bold">❌ Cancel</button>
+        <p style="text-align:center;color:#999;font-size:12px;margin-top:15px">⏰ Admin 5-60 min me WhatsApp pe OTP bhejega<br>🔄 1 ghante tak valid rahega</p>
+      </div>
+    </div>
+    <style>
+      @keyframes fadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+      #autoOtpInput:focus{border-color:#ff1744;box-shadow:0 0 4px rgba(228,0,70,0.15);outline:none}
+    </style>`;
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+  setTimeout(() => document.getElementById('autoOtpInput')?.focus(), 400);
+
+  history.pushState(null, null, location.href);
+  window.onpopstate = function() {
+    document.getElementById('autoOtpModal')?.remove();
+  };
+
+  db.collection('login_requests').doc(mobile).onSnapshot((doc) => {
+    if(doc.exists && doc.data().otp && doc.data().otp!== '') {
+      let input = document.getElementById('autoOtpInput');
+      if(input &&!input.value) {
+        input.value = doc.data().otp;
+        input.style.background = '#e8f5e9';
+        input.style.borderColor = '#4caf50';
+      }
+    }
+  });
+}
+
+function verifyAutoOTP(mobile) {
+  let enteredOTP = document.getElementById('autoOtpInput').value.trim();
+  if(enteredOTP.length!== 6) {
+    alert('❌ 6 digit OTP daalo!');
     return;
   }
 
-  let product = allProducts.find(p => p.id === productId);
-  if(!product) {
-    showToast('❌ Product not found! Page refresh karo');
-    console.error('Product ID not found:', productId, 'Available:', allProducts.map(p=>p.id));
-    return;
-  }
+  db.collection('login_requests').doc(mobile).get().then((doc) => {
+    if(!doc.exists) {
+      alert('❌ Session expire! Wapas login karo');
+      closeAutoOTPPopup();
+      return;
+    }
 
-  if(currentUser) {
-    // ✅ Logged in user - Firestore me save hoga - Github pe chalega
-    try {
-      await db.collection('users').doc(currentUser.uid).collection('cart').doc(productId).set({
-        name: product.name,
-        price: product.price || 0,
-        image: getProductImage(product),
-        qty: firebase.firestore.FieldValue.increment(1),
-        code: product.code || '',
-        category: product.category || 'General',
-        addedAt: firebase.firestore.FieldValue.serverTimestamp()
+    let data = doc.data();
+
+    if(data.otp === enteredOTP && data.otp!== '') {
+      localStorage.setItem('santra_customer', JSON.stringify({
+        name: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        loginTime: new Date().toISOString(),
+        isOldCustomer: data.isOldCustomer || false,
+        totalOrders: data.totalPastOrders || 0,
+        isLoggedIn: true
+      }));
+
+      db.collection('customers').doc(mobile).set({
+        name: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        createdAt: new Date().toLocaleString('en-IN'),
+        createdTime: Date.now(),
+        status: 'verified',
+        lastLogin: Date.now(),
+        verified: true
       }, { merge: true });
-      showToast('✅ Added to Cart!');
-    } catch(e) {
-      console.error('Firebase Error:', e);
-      showToast('❌ Firebase Error: ' + e.message);
-    }
-  } else {
-    // ✅ Guest user - localStorage me save hoga
-    let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
-    if(cart[productId]) {
-      cart[productId].qty = (cart[productId].qty || 1) + 1;
-    } else {
-      cart[productId] = {
-        id: productId,
-        name: product.name,
-        price: product.price || 0,
-        image: getProductImage(product),
-        code: product.code || '',
-        qty: 1
-      };
-    }
-    localStorage.setItem('santra_cart', JSON.stringify(cart));
-    showToast('✅ Added to Cart!');
-    updateCartCount();
-  }
-}
 
-// ✅ NEW - Wishlist Fix - Github Compatible
-window.toggleWishlist = async (productId, event) => {
-  if (event) event.stopPropagation();
-
-  if(!allProducts || allProducts.length === 0) {
-    showToast('⏳ Products loading... 2 sec wait karo');
-    return;
-  }
-
-  let product = allProducts.find(p => p.id === productId);
-  if(!product) {
-    showToast('❌ Product not found!');
-    return;
-  }
-
-  if(currentUser) {
-    // Logged in - Firestore
-    const wishRef = db.collection('users').doc(currentUser.uid).collection('wishlist').doc(productId);
-    const doc = await wishRef.get();
-    if (doc.exists) {
-      await wishRef.delete();
-      document.getElementById(`heart-${productId}`).innerText = '💗';
-      showToast('Removed from Wishlist');
-    } else {
-      await wishRef.set({
-        name: product.name,
-        price: product.price || 0,
-        image: getProductImage(product),
-        addedAt: firebase.firestore.FieldValue.serverTimestamp()
+      db.collection('login_requests').doc(mobile).update({
+        status: 'verified',
+        verifiedTime: new Date().toLocaleString('en-IN')
       });
-      document.getElementById(`heart-${productId}`).innerText = '❤️';
-      showToast('❤️ Added to Wishlist');
-    }
-  } else {
-    // Guest - localStorage
-    let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
-    if (wishlist[productId]) {
-      delete wishlist[productId];
-      document.getElementById(`heart-${productId}`).innerText = '💗';
-      showToast('Removed from Wishlist');
+
+      localStorage.removeItem('pendingOTP');
+
+      document.getElementById('autoOtpModal').innerHTML = `
+        <div style="background:white;padding:50px;border-radius:18px;text-align:center">
+          <div style="font-size:80px;animation:bounce 0.6s">✅</div>
+          <h2 style="color:#4caf50;margin:20px 0;font-size:28px">Login Successful!</h2>
+          <p style="color:#666;font-size:18px">Welcome ${data.name}</p>
+        </div>
+        <style>@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}</style>
+      `;
+
+      setTimeout(() => location.reload(), 1800);
+
+    } else if(data.otp === '') {
+      alert('⏳ Admin ne abhi OTP nahi bheja!\nWhatsApp check karo ya 2 min wait karo');
     } else {
-      wishlist[productId] = {
-        id: productId,
-        name: product.name,
-        price: product.price || 0,
-        image: getProductImage(product)
-      };
-      document.getElementById(`heart-${productId}`).innerText = '❤️';
-      showToast('❤️ Added to Wishlist');
+      alert('❌ Galat OTP! WhatsApp me sahi OTP check karo');
+      document.getElementById('autoOtpInput').value = '';
+      document.getElementById('autoOtpInput').focus();
     }
-    localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
-    updateWishlistCount();
-  }
-}
-
-// ✅ FIX: loadWishlistStatus - Null Check + Object/Array handle
-function loadWishlistStatus() {
-  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
-
-  // Array to Object convert
-  if(Array.isArray(wishlist)) {
-    let obj = {};
-    wishlist.forEach(item => { if(item && item.id) obj[item.id] = item; });
-    wishlist = obj;
-    localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
-  }
-
-  if(!allProducts ||!Array.isArray(allProducts) || allProducts.length === 0) return;
-
-  document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
-
-  Object.keys(wishlist).forEach(productId => {
-    if(!wishlist[productId]) return;
-    const heartBtn = document.getElementById(`heart-${productId}`);
-    if (heartBtn) heartBtn.innerText = '❤️';
-  });
-  updateWishlistCount();
-}
-
-function updateWishlistCount() {
-  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
-  let count = 0;
-  if(Array.isArray(wishlist)) {
-    count = wishlist.length;
-  } else if(wishlist && typeof wishlist === 'object') {
-    count = Object.keys(wishlist).length;
-  }
-  document.getElementById('wishlist-count').innerText = count;
-}
-
-function changeSlide(productId, direction, event) {
-  event.stopPropagation();
-  let product = allProducts.find(p => p.id === productId);
-  if(!product) return;
-  let images = [];
-  if(product.media && product.media.length > 0) images = product.media.map(m => m.url);
-  else if(product.images && product.images.length > 0) images = product.images;
-  else images = [getProductImage(product)];
-  currentSlideIndex[productId] = (currentSlideIndex[productId] + direction + images.length) % images.length;
-  updateSlider(productId);
-}
-
-function updateSlider(productId) {
-  let sliderCard = document.querySelector(`[onclick*="product.html?id=${productId}"]`);
-  if(!sliderCard) return;
-  let slides = sliderCard.querySelectorAll('.slide-img');
-  slides.forEach((slide, idx) => {
-    slide.classList.toggle('active', idx === currentSlideIndex[productId]);
   });
 }
 
-function buyNow(productId, event) {
-  event.stopPropagation();
-  addToCart(productId, event);
-  setTimeout(() => { window.location.href = 'cart.html'; }, 500);
+function resendWhatsAppOTP(mobile, name) {
+  let msg = `Hello Admin,\n🔐 OTP wapas bhejo\nName: ${name}\nMobile: ${mobile}`;
+  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  alert('✅ WhatsApp me message bhej diya!\nAdmin jaldi OTP bhejega');
 }
 
-// ✅ FIX: updateCartCount - Object/Array dono handle
-function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
-  let totalQty = 0;
-
-  if(Array.isArray(cart)) {
-    totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-  } else if(cart && typeof cart === 'object') {
-    totalQty = Object.values(cart).reduce((sum, item) => sum + (item?.qty || 0), 0);
-  }
-
-  document.getElementById('cartCount').innerText = totalQty;
+function closeAutoOTPPopup() {
+  localStorage.removeItem('pendingOTP');
+  document.getElementById('autoOtpModal')?.remove();
+  document.getElementById('verifyOtpBtn')?.classList.add('hide');
+  location.reload();
 }
 
-function searchProducts() {
-  let query = document.getElementById('searchInput').value.toLowerCase();
-  let filtered = allProducts.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.category && p.category.toLowerCase().includes(query))
-  );
-  renderProducts(filtered);
-}
-
-function goHome() { window.scrollTo(0, 0); }
-
-function openCategories() {
-  let pendingOTP = localStorage.getItem('pendingOTP');
-  if(pendingOTP) {
-    openVerifyOtpPopup();
-    return;
-  }
-  window.location.href = 'category.html';
-}
-
-function openCart() {
-  let pendingOTP = localStorage.getItem('pendingOTP');
-  if(pendingOTP) {
-    openVerifyOtpPopup();
-    return;
-  }
-  window.location.href = 'cart.html';
-}
-
-function openOrders() {
-  let pendingOTP = localStorage.getItem('pendingOTP');
-  if(pendingOTP) {
-    openVerifyOtpPopup();
-    return;
-  }
-  let customer = localStorage.getItem('santra_customer');
-  if(!customer) {
-    alert('⚠️ Please login first to see your orders');
-    openCustomerLogin();
-  } else {
-    window.location.href = 'orders.html';
-  }
-}
-
-function customerLogout() {
-  if(confirm('Logout karna hai?')) {
-    auth.signOut().then(() => {
-      localStorage.removeItem('santra_customer');
-      localStorage.removeItem('santra_cart');
-      localStorage.removeItem('santra_wishlist');
-      showToast('Logged out successfully');
-      location.reload();
-    });
-  }
-}
-
-function handleLoginClick() {
-  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
-  if(customer.name && customer.isLoggedIn === true) {
-    window.location.href = 'customer-account.html';
-  } else {
-    window.location.href = 'customer-login.html';
-  }
-}
-
-function checkCustomerLogin() {
-  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
-  if (customer.name && customer.isLoggedIn === true) {
-    document.getElementById('customerInfoBar').classList.remove('hide');
-    document.getElementById('customerNameDisplay').innerText = customer.name;
-    document.getElementById('customerMobileDisplay').innerText = customer.mobile;
-    document.getElementById('loginBtn').innerText = '👤 My Profile';
-    document.getElementById('loginBtn').onclick = () => window.location.href='customer-account.html';
-    document.getElementById('logoutBtn').classList.add('hide');
-    document.getElementById('userInfo').classList.remove('hide');
-    document.getElementById('userName').innerText = customer.name;
-    if(customer.isOldCustomer && customer.totalOrders > 0) {
-      document.getElementById('oldCustomerBadge').classList.remove('hide');
-      document.getElementById('oldCustomerBadge').innerText = `🔥 Old - ${customer.totalOrders} Orders`;
-    }
-  } else {
-    let pendingOTP = localStorage.getItem('pendingOTP');
-    if(pendingOTP) {
-      document.getElementById('verifyOtpBtn').classList.remove('hide');
-    }
-    document.getElementById('customerInfoBar').classList.add('hide');
-    document.getElementById('loginBtn').innerText = '👤 Customer Login';
-    document.getElementById('loginBtn').onclick = () => window.location.href='customer-login.html';
-  }
-}
-
-function closeCheckout() { document.getElementById('checkoutModal').classList.add('hide'); }
-function closeProductModal() { document.getElementById('productModal').classList.add('hide'); }
-function changeModalQty(val) {
-  let qty = parseInt(document.getElementById('modalQty').innerText);
-  qty += val;
-  if(qty < 1) qty = 1;
-  document.getElementById('modalQty').innerText = qty;
-}
-function ToCartFromModal() {
-  if(currentModalProduct) {
-    for(let i=0; i<parseInt(document.getElementById('modalQty').innerText); i++) {
-      addToCart(currentModalProduct.id, event);
-    }
-  }
-}
-function buyNowFromModal() { if(currentModalProduct) buyNow(currentModalProduct.id, event); }
-function ToWishlistFromModal() { if(currentModalProduct) toggleWishlist(currentModalProduct.id, event); }
-
-function showToast(message) {
-  const toast = document.createElement('div');
-  toast.className = 'toast show';
-  toast.innerText = message;
-  document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => document.body.removeChild(toast), 300);
-  }, 3000);
-}
-
-// Baaki saare functions... loadProducts(), renderProducts(), etc
 function loadProducts() {
   if (USE_DATABASE === 'rtdb') {
     rtdb.ref('products').on('value', snap => {
@@ -614,6 +456,167 @@ function loadProducts() {
       loadWishlistStatus();
     });
   }
+}
+
+function generateAutoCategories() {
+  db.collection('categories').get().then(catSnap => {
+    let categories = [];
+    let catImages = {};
+
+    catSnap.forEach(doc => {
+      const data = doc.data();
+      categories.push(data.name);
+      catImages[data.name] = data.image || '';
+    });
+
+    const catsFromProducts = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+    catsFromProducts.forEach(c => {
+      if(!categories.includes(c)) categories.push(c);
+    });
+
+    if(categories.length === 0){
+      document.getElementById('categoryList').innerHTML = '<div class="loading">No categories found</div>';
+      return;
+    }
+
+    let html = '';
+    categories.forEach(catName => {
+      const catImage = catImages[catName] || 'https://via.placeholder.com/50?text=' + encodeURIComponent(catName);
+      html += `<div class="cat-item" onclick="filterByCategory('${catName}')"><img src="${catImage}" alt="${catName}"><p>${catName}</p></div>`;
+    });
+    document.getElementById('categoryList').innerHTML = html;
+  }).catch(err => {
+    console.error('Category load error:', err);
+    document.getElementById('categoryList').innerHTML = '<div class="loading">Error loading categories</div>';
+  });
+}
+
+function generateAutoFilters() {
+  autoFilters = {};
+  const skipFields = ['id', 'name', 'image', 'images', 'media', 'description', 'stock', 'mrp', 'price', 'code', 'sku', 'imageUrl', 'img', 'photo', 'thumbnail', 'mediaUrl', 'categoryImage', 'time', 'Time', 'timestamp', 'updatedAt', 'updatedBy', 'UpdatedBy', 'createdAt', 'sizePrice', 'SizePrice'];
+  allProducts.forEach(product => {
+    Object.keys(product).forEach(key => {
+      if (!skipFields.includes(key) && product[key]!== null && product[key]!== undefined && product[key]!== '') {
+        if (!autoFilters[key]) autoFilters[key] = new Set();
+        autoFilters[key].add(product[key]);
+      }
+    });
+  });
+  Object.keys(autoFilters).forEach(field => {
+    autoFilters[field] = [...autoFilters[field]].sort();
+  });
+  renderAutoFilterPopup();
+}
+
+function renderAutoFilterPopup() {
+  const container = document.getElementById('autoFiltersContainer');
+  if (!container) return;
+  let html = '';
+  Object.keys(autoFilters).forEach(field => {
+    const values = autoFilters[field];
+    if (values.length === 0) return;
+    html += `<div class="filter-group"><label>${field.charAt(0).toUpperCase() + field.slice(1)}</label><select id="filter_${field}" data-field="${field}"><option value="">All ${field}</option>${values.map(val => `<option value="${val}">${val}</option>`).join('')}</select></div>`;
+  });
+  container.innerHTML = html || '<p style="text-align:center;color:#999">No filters available</p>';
+}
+
+function sendLoginOTP() {
+  const name = document.getElementById('custName').value.trim();
+  const mobile = document.getElementById('custMobile').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
+  if (!name || mobile.length!== 10) {
+    showToast('❌ Name and 10 digit mobile required');
+    return;
+  }
+  loginOTP = Math.floor(100000 + Math.random() * 900000);
+  tempCustomerData = { name, mobile, email, otp: loginOTP, time: Date.now() };
+  let msg = `🛒 SANTRAJET MALL Login OTP%0A%0AName: ${name}%0AOTP: *${loginOTP}*%0A%0AYe OTP 5 minute tak valid hai.%0AWebsite par daal kar login karein.`;
+  window.open(`https://wa.me/91${mobile}?text=${msg}`, '_blank');
+  rtdb.ref('login_otps/' + mobile).set({
+    otp: loginOTP,
+    name: name,
+    mobile: mobile,
+    email: email,
+    createdAt: firebase.database.ServerValue.TIMESTAMP,
+    verified: false
+  });
+  document.getElementById('loginStep1').classList.add('hide');
+  document.getElementById('loginStep2').classList.remove('hide');
+  document.getElementById('otpMobileShow').innerText = mobile;
+  showToast('✅ OTP sent on WhatsApp!');
+}
+
+function verifyLoginOTP() {
+  const enteredOTP = document.getElementById('custOTP').value.trim();
+  const mobile = tempCustomerData.mobile;
+  if (!enteredOTP || enteredOTP.length!== 6) {
+    showToast('❌ Enter 6-digit OTP');
+    return;
+  }
+  rtdb.ref('login_otps/' + mobile).once('value', (snap) => {
+    if (!snap.exists()) {
+      showToast('❌ OTP expired. Send again');
+      return;
+    }
+    const data = snap.val();
+    const timeDiff = Date.now() - data.createdAt;
+    if (timeDiff > 300000) {
+      showToast('❌ OTP expired. Send again');
+      rtdb.ref('login_otps/' + mobile).remove();
+      return;
+    }
+    if (data.otp == enteredOTP) {
+      auth.signInAnonymously().then((result) => {
+        const customerData = {
+          name: data.name,
+          mobile: data.mobile,
+          email: data.email,
+          uid: result.user.uid,
+          lastLogin: new Date().toISOString(),
+          loginOTP: data.otp,
+          isLoggedIn: true
+        };
+        localStorage.setItem('santra_customer', JSON.stringify(customerData));
+        rtdb.ref('customers/' + result.user.uid).set(customerData);
+        rtdb.ref('login_otps/' + mobile).update({ verified: true });
+        showToast('✅ Login Successful!');
+        closeCustomerLogin();
+        checkCustomerLogin();
+      });
+    } else {
+      showToast('❌ Wrong OTP');
+    }
+  });
+}
+
+function backToStep1() {
+  document.getElementById('loginStep2').classList.add('hide');
+  document.getElementById('loginStep1').classList.remove('hide');
+  document.getElementById('custOTP').value = '';
+}
+
+function openCustomerLogin() {
+  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  document.getElementById('custName').value = customer.name || '';
+  document.getElementById('custMobile').value = customer.mobile || '';
+  document.getElementById('custEmail').value = customer.email || '';
+  document.getElementById('customerLoginModal').classList.remove('hide');
+}
+
+function closeCustomerLogin() {
+  document.getElementById('customerLoginModal').classList.add('hide');
+  document.getElementById('loginStep1').classList.remove('hide');
+  document.getElementById('loginStep2').classList.add('hide');
+  document.getElementById('custOTP').value = '';
+  loginOTP = null;
+  tempCustomerData = null;
+}
+
+function getProductImage(p) {
+  if(p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
+  if(p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
+  if(p.image) return p.image;
+  return 'https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image';
 }
 
 function renderProducts(products){
@@ -664,26 +667,346 @@ function renderProducts(products){
   if(currentUser) loadWishlistStatus();
 }
 
-// Baaki functions same...
 function openFilterPopup() { document.getElementById('filterPopup').classList.add('show'); }
 function closeFilterPopup() { document.getElementById('filterPopup').classList.remove('show'); }
-function applyHomeFilters() { /* same */ }
-function clearHomeFilters() { /* same */ }
-function filterByCategory(catName) { /* same */ }
-function generateAutoCategories() { /* same */ }
-function generateAutoFilters() { /* same */ }
-function renderAutoFilterPopup() { /* same */ }
-function sendLoginOTP() { /* same */ }
-function verifyLoginOTP() { /* same */ }
-function backToStep1() { /* same */ }
-function openCustomerLogin() { /* same */ }
-function closeCustomerLogin() { /* same */ }
-function openVerifyOtpPopup() { /* same */ }
-function showAutoOTPPopup(mobile, name) { /* same */ }
-function verifyAutoOTP(mobile) { /* same */ }
-function resendWhatsAppOTP(mobile, name) { /* same */ }
-function closeAutoOTPPopup() { /* same */ }
 
+function applyHomeFilters() {
+  selectedFilters = {};
+  const selects = document.querySelectorAll('#autoFiltersContainer select');
+  selects.forEach(select => {
+    const field = select.dataset.field;
+    const value = select.value;
+    if (value) selectedFilters[field] = value;
+  });
+  let filtered = allProducts.filter(p => {
+    let match = true;
+     Object.keys(selectedFilters).forEach(field => {
+if (p[field]!= selectedFilters[field]) match = false;
+});
+return match;
+});
+renderProducts(filtered);
+closeFilterPopup();
+}
+
+function clearHomeFilters() {
+selectedFilters = {};
+document.querySelectorAll('#autoFiltersContainer select').forEach(select => {
+select.value = '';
+});
+renderProducts(allProducts);
+closeFilterPopup();
+}
+
+function filterByCategory(catName) {
+let filtered = allProducts.filter(p => p.category === catName);
+renderProducts(filtered);
+document.getElementById('productGrid').scrollIntoView({behavior: 'smooth'});
+}
+
+// ✅ FIX 1: toggleWishlist - Login check hata diya + Object/Array dono handle + Null check
+window.toggleWishlist = async (productId, event) => {
+if (event) event.stopPropagation();
+let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
+
+// Array to Object convert
+if(Array.isArray(wishlist)) {
+  let obj = {};
+  wishlist.forEach(item => { if(item && item.id) obj[item.id] = item; });
+  wishlist = obj;
+}
+
+let product = allProducts.find(p => p.id === productId);
+if(!product) return;
+
+if (wishlist[productId]) {
+  delete wishlist[productId];
+  let heartBtn = document.getElementById(`heart-${productId}`);
+  if(heartBtn) heartBtn.innerText = '💗';
+  showToast('Removed from Wishlist');
+} else {
+  wishlist[productId] = {
+    id: productId,
+    name: product.name,
+    price: product.price || 0,
+    image: getProductImage(product),
+    addedAt: new Date().toISOString()
+  };
+  let heartBtn = document.getElementById(`heart-${productId}`);
+  if(heartBtn) heartBtn.innerText = '❤️';
+  showToast('Added to Wishlist ❤️');
+}
+localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
+updateWishlistCount();
+
+if (currentUser) {
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+  if (wishlist[productId]) {
+    await wishRef.set(wishlist[productId]);
+  } else {
+    await wishRef.remove();
+  }
+}
+}
+
+// ✅ FIX 2: loadWishlistStatus - Null Check + Object/Array handle
+function loadWishlistStatus() {
+  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
+  
+  // Array to Object convert
+  if(Array.isArray(wishlist)) {
+    let obj = {};
+    wishlist.forEach(item => { if(item && item.id) obj[item.id] = item; });
+    wishlist = obj;
+    localStorage.setItem('santra_wishlist', JSON.stringify(wishlist));
+  }
+
+  if(!allProducts ||!Array.isArray(allProducts) || allProducts.length === 0) return;
+
+  document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
+  
+  // ✅ FIX: Object.keys() use karo
+  Object.keys(wishlist).forEach(productId => {
+    if(!wishlist[productId]) return;
+    const heartBtn = document.getElementById(`heart-${productId}`);
+    if (heartBtn) heartBtn.innerText = '❤️';
+  });
+  updateWishlistCount();
+}
+
+function updateWishlistCount() {
+  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '{}');
+  let count = 0;
+  if(Array.isArray(wishlist)) {
+    count = wishlist.length;
+  } else if(wishlist && typeof wishlist === 'object') {
+    count = Object.keys(wishlist).length;
+  }
+  document.getElementById('wishlist-count').innerText = count;
+}
+
+function changeSlide(productId, direction, event) {
+  event.stopPropagation();
+  let product = allProducts.find(p => p.id === productId);
+  if(!product) return;
+  let images = [];
+  if(product.media && product.media.length > 0) images = product.media.map(m => m.url);
+  else if(product.images && product.images.length > 0) images = product.images;
+  else images = [getProductImage(product)];
+  currentSlideIndex[productId] = (currentSlideIndex[productId] + direction + images.length) % images.length;
+  updateSlider(productId);
+}
+
+function updateSlider(productId) {
+  let sliderCard = document.querySelector(`[onclick*="product.html?id=${productId}"]`);
+  if(!sliderCard) return;
+  let slides = sliderCard.querySelectorAll('.slide-img');
+  slides.forEach((slide, idx) => {
+    slide.classList.toggle('active', idx === currentSlideIndex[productId]);
+  });
+}
+
+// ✅ FIX 3: addToCart - Login check hata diya + Object format
+function addToCart(productId, event) {
+  event.stopPropagation();
+  let product = allProducts.find(p => p.id === productId);
+  if(!product) {
+    showToast('Product not found');
+    return;
+  }
+
+  // ✅ FIX: Cart Object format - Array nahi
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
+
+  if(cart[productId]) {
+    cart[productId].qty += 1;
+  } else {
+    cart[productId] = {
+      id: product.id,
+      name: product.name,
+      price: parseFloat(product.price) || 0,
+      image: getProductImage(product),
+      code: product.code || product.sku || '',
+      serial_no: product.serial_no || '',
+      category: product.category || 'General',
+      qty: 1,
+      addedAt: new Date().toISOString()
+    };
+  }
+
+  localStorage.setItem('santra_cart', JSON.stringify(cart));
+  showToast('Added to cart!');
+  updateCartCount();
+
+  if (currentUser) {
+    const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+    cartRef.once('value', (snap) => {
+      let qty = 1;
+      if(snap.exists()) qty = snap.val().qty + 1;
+      cartRef.set({
+        id: product.id,
+        name: product.name,
+        price: parseFloat(product.price) || 0,
+        image: getProductImage(product),
+        code: product.code || product.sku || '',
+        serial_no: product.serial_no || '',
+        category: product.category || 'General',
+        qty: qty,
+        addedAt: new Date().toISOString()
+      });
+    });
+  }
+}
+
+function buyNow(productId, event) {
+  event.stopPropagation();
+  addToCart(productId, event);
+  setTimeout(() => { window.location.href = 'cart.html'; }, 500);
+}
+
+// ✅ FIX 4: updateCartCount - Object/Array dono handle
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
+  let totalQty = 0;
+
+  if(Array.isArray(cart)) {
+    totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
+  } else if(cart && typeof cart === 'object') {
+    totalQty = Object.values(cart).reduce((sum, item) => sum + (item?.qty || 0), 0);
+  }
+
+  document.getElementById('cartCount').innerText = totalQty;
+}
+
+function searchProducts() {
+  let query = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = allProducts.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    (p.category && p.category.toLowerCase().includes(query))
+  );
+  renderProducts(filtered);
+}
+
+function goHome() { window.scrollTo(0, 0); }
+
+function openCategories() {
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return;
+  }
+  window.location.href = 'category.html';
+}
+
+function openCart() {
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return;
+  }
+  window.location.href = 'cart.html';
+}
+
+function openOrders() {
+  let pendingOTP = localStorage.getItem('pendingOTP');
+  if(pendingOTP) {
+    openVerifyOtpPopup();
+    return;
+  }
+  let customer = localStorage.getItem('santra_customer');
+  if(!customer) {
+    window.location.href = 'customer-login.html';
+  } else {
+    window.location.href = 'orders.html';
+  }
+}
+
+function customerLogout() {
+  if(confirm('Logout karna hai?')) {
+    auth.signOut().then(() => {
+      localStorage.removeItem('santra_customer');
+      localStorage.removeItem('santra_cart');
+      localStorage.removeItem('santra_wishlist');
+      showToast('Logged out successfully');
+      location.reload();
+    });
+  }
+}
+
+// ✅ FIX 5: handleLoginClick - Customer Login → My Profile button
+function handleLoginClick() {
+  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  if(customer.name && customer.isLoggedIn === true) {
+    // Logged in hai to My Profile page pe bhejo
+    window.location.href = 'customer-account.html';
+  } else {
+    // Guest hai to login page pe bhejo
+    window.location.href = 'customer-login.html';
+  }
+}
+
+// ✅ FIX 6: checkCustomerLogin - Logout tak detail save + My Profile button
+function checkCustomerLogin() {
+  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  if (customer.name && customer.isLoggedIn === true) {
+    // Green bar me Name + Mobile dikhao
+    document.getElementById('customerInfoBar').classList.remove('hide');
+    document.getElementById('customerNameDisplay').innerText = customer.name;
+    document.getElementById('customerMobileDisplay').innerText = customer.mobile;
+    
+    // Login button ko "My Profile" me change karo
+    document.getElementById('loginBtn').innerText = '👤 My Profile';
+    document.getElementById('loginBtn').onclick = () => window.location.href='customer-account.html';
+    document.getElementById('logoutBtn').classList.add('hide');
+    document.getElementById('userInfo').classList.remove('hide');
+    document.getElementById('userName').innerText = customer.name;
+    
+    if(customer.isOldCustomer && customer.totalOrders > 0) {
+      document.getElementById('oldCustomerBadge').classList.remove('hide');
+      document.getElementById('oldCustomerBadge').innerText = `🔥 Old - ${customer.totalOrders} Orders`;
+    }
+  } else {
+    let pendingOTP = localStorage.getItem('pendingOTP');
+    if(pendingOTP) {
+      document.getElementById('verifyOtpBtn').classList.remove('hide');
+    }
+    // Guest user
+    document.getElementById('customerInfoBar').classList.add('hide');
+    document.getElementById('loginBtn').innerText = '👤 Customer Login';
+    document.getElementById('loginBtn').onclick = () => window.location.href='customer-login.html';
+  }
+}
+
+function closeCheckout() { document.getElementById('checkoutModal').classList.add('hide'); }
+function closeProductModal() { document.getElementById('productModal').classList.add('hide'); }
+function changeModalQty(val) {
+  let qty = parseInt(document.getElementById('modalQty').innerText);
+  qty += val;
+  if(qty < 1) qty = 1;
+  document.getElementById('modalQty').innerText = qty;
+}
+function ToCartFromModal() {
+  if(currentModalProduct) {
+    for(let i=0; i<parseInt(document.getElementById('modalQty').innerText); i++) {
+      addToCart(currentModalProduct.id, event);
+    }
+  }
+}
+function buyNowFromModal() { if(currentModalProduct) buyNow(currentModalProduct.id, event); }
+function ToWishlistFromModal() { if(currentModalProduct) toggleWishlist(currentModalProduct.id, event); }
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast show';
+  toast.innerText = message;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => document.body.removeChild(toast), 300);
+  }, 3000);
+}
+
+// ✅ MOBILE CONSOLE -?eruda=true laga ke test kar
 if (location.search.includes('eruda=true')) {
   var script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/eruda';
@@ -692,5 +1015,229 @@ if (location.search.includes('eruda=true')) {
 }
 </script>
 
+<!-- ==================== OLD CODE BACKUP - 09/06/2026 ==================== -->
+<!--
+OLD addToCart() WITH LOGIN CHECK:
+function addToCart(productId, event) {
+  event.stopPropagation();
+  if (!currentUser) {
+    showToast('Please login first');
+    openCustomerLogin();
+    return;
+  }
+  let product = allProducts.find(p => p.id === productId);
+  if(!product) return;
+  const cartRef = rtdb.ref('carts/' + currentUser.uid + '/' + productId);
+  cartRef.once('value', (snap) => {
+    let qty = 1;
+    if(snap.exists()) qty = snap.val().qty + 1;
+    cartRef.set({
+      id: product.id,
+      name: product.name,
+      price: parseFloat(product.price) || 0,
+      image: getProductImage(product),
+      qty: qty,
+      addedAt: new Date().toISOString()
+    });
+    showToast('Added to cart!');
+    updateCartCount();
+  });
+}
+
+OLD toggleWishlist() WITH LOGIN CHECK:
+window.toggleWishlist = async (productId, event) => {
+  if (event) event.stopPropagation();
+  if (!currentUser) {
+    showToast('Please login first');
+    openCustomerLogin();
+    return;
+  }
+  const wishRef = rtdb.ref('wishlist/' + currentUser.uid + '/' + productId);
+  const product = allProducts.find(p => p.id === productId);
+  if(!product) return;
+  try {
+    const wishSnap = await wishRef.once('value');
+    if (wishSnap.exists()) {
+      await wishRef.remove();
+      document.getElementById(`heart-${productId}`).innerText = '💗';
+      showToast('Removed from Wishlist');
+    } else {
+      await wishRef.set({
+        id: productId,
+        name: product.name,
+        price: product.price || 0,
+        image: getProductImage(product),
+        addedAt: new Date().toISOString()
+      });
+      document.getElementById(`heart-${productId}`).innerText = '❤️';
+      showToast('Added to Wishlist ❤️');
+    }
+    updateWishlistCount();
+  } catch (e) {
+    showToast('Error: ' + e.message);
+  }
+}
+
+OLD openOrders() WITH ALERT:
+function openOrders() {
+  let customer = localStorage.getItem('santra_customer');
+  if(!customer) {
+    alert('⚠️ Please login first to see your orders');
+    openCustomerLogin();
+  } else {
+    window.location.href = 'orders.html';
+  }
+}
+
+OLD openCart() WITHOUT OTP CHECK:
+function openCart() {
+  window.location.href = 'cart.html';
+}
+
+OLD openCategories() WITHOUT OTP CHECK:
+function openCategories() {
+  window.location.href = 'category.html';
+}
+
+OLD loadWishlistStatus() - Null check nahi tha:
+function loadWishlistStatus() {
+  let wishlist = JSON.parse(localStorage.getItem('santra_wishlist') || '[]');
+  document.querySelectorAll('.wish-icon').forEach(btn => btn.innerText = '💗');
+  wishlist.forEach(item => {
+    const heartBtn = document.getElementById(`heart-${item.id}`); // ❌ null ho sakta tha
+    heartBtn.innerText = '❤️'; // ❌ Error: Cannot read properties of null
+  });
+  updateWishlistCount();
+}
+
+OLD updateCartCount() - cart.reduce error:
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]');
+  let totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0); // ❌ cart object hai, array nahi
+  document.getElementById('cartCount').innerText = totalQty;
+}
+
+OLD CART ARRAY FORMAT:
+let cart = JSON.parse(localStorage.getItem('santra_cart') || '[]'); // ❌ Array
+
+NEW CART OBJECT FORMAT:
+let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}'); // ✅ Object
+cart[productId] = {id: productId, name: name, price: price, qty: 1, image: img};
+
+OLD checkCustomerLogin() - Button change nahi hota tha:
+function checkCustomerLogin() {
+  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  if (customer.name) {
+    document.getElementById('loginBtn').innerText = '👤 Customer Login'; // ❌ Always same
+    document.getElementById('logoutBtn').classList.remove('hide');
+  }
+}
+
+NEW checkCustomerLogin() - My Profile button:
+function checkCustomerLogin() {
+  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  if (customer.name && customer.isLoggedIn === true) {
+    document.getElementById('loginBtn').innerText = '👤 My Profile'; // ✅ Change hota hai
+    document.getElementById('loginBtn').onclick = () => window.location.href='customer-account.html';
+  }
+}
+
+OLD 2 LOGOUT BUTTON:
+<button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button>
+<div id="userInfo" class="hide">... <button onclick="customerLogout()">Logout</button> </div> // ❌ 2 baar
+
+NEW 1 LOGOUT BUTTON:
+<button id="logoutBtn" class="hide" onclick="customerLogout()">Logout</button> // ✅ Sirf 1
+-->
+
+<!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 11:15 PM ==================== -->
+<script>
+console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 09 June 2026, 11:15 PM IST', 'color:#10b981;font-weight:bold');
+console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
+
+window.santraBackup = {
+  version: '2.0',
+  timestamp: '2026-06-09T23:15:00+05:30',
+  location: 'Nawai, Rajasthan',
+
+  backupLocalStorage: function() {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orders: localStorage.getItem('santra_orders'),
+      customer: localStorage.getItem('santra_customer'),
+      cart: localStorage.getItem('santra_cart'),
+      wishlist: localStorage.getItem('santra_wishlist')
+    };
+    localStorage.setItem('santra_backup_2026_06_09_2315', JSON.stringify(backup));
+    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
+    return backup;
+  },
+
+  backupFirebaseOrder: function(orderData) {
+    const backup = {
+      timestamp: new Date().toISOString(),
+      orderId: orderData.orderId,
+      customer: orderData.customerName,
+      mobile: orderData.mobile,
+      total: orderData.totalAmount,
+      status: orderData.status,
+      serialNo: orderData.serialNo
+    };
+    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    backups.unshift(backup);
+    if(backups.length > 100) backups = backups.slice(0, 100);
+    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
+    console.log('✅ Firebase Order Backup:', orderData.orderId);
+    return backup;
+  },
+
+  restore: function() {
+    const backup = localStorage.getItem('santra_backup_2026_06_09_2315');
+    if(backup) {
+      const data = JSON.parse(backup);
+      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
+        if(data.orders) localStorage.setItem('santra_orders', data.orders);
+        if(data.customer) localStorage.setItem('santra_customer', data.customer);
+        if(data.cart) localStorage.setItem('santra_cart', data.cart);
+        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
+        alert('✅ Backup Restored! Reloading...');
+        location.reload();
+      }
+    } else {
+      alert('❌ No backup found for 09 June 2026, 11:15 PM');
+    }
+  },
+
+  viewBackups: function() {
+    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
+    console.table(backups);
+    return backups;
+  },
+
+  exportBackup: function() {
+    const backup = {
+      timestamp: '2026-06-09T23:15:00+05:30',
+      localStorage: this.backupLocalStorage(),
+      firebase: this.viewBackups()
+    };
+    const dataStr = JSON.stringify(backup, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `santra_mall_backup_2026-06-09_2315.json`;
+    link.click();
+    console.log('✅ Backup Exported');
+  }
+};
+
+window.santraBackup.backupLocalStorage();
+
+console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
+console.log('santraBackup.restore() - Restore backup');
+console.log('santraBackup.viewBackups() - View all order backups');
+console.log('santraBackup.exportBackup() - Download backup JSON');
+</script>
 </body>
 </html>
