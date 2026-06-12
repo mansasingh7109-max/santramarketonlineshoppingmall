@@ -1,0 +1,22 @@
+{
+  "Dress": {
+    "types": ["Casual", "Party Wear", "Formal", "Ethnic"],
+    "activeFilters": ["Size", "Color", "Fabric", "Price Range"],
+    "typeImages": {
+      "Casual": "https://i.ibb.co/casual-dress.jpg",
+      "Party Wear": "https://i.ibb.co/party-dress.jpg",
+      "Formal": "https://i.ibb.co/formal-dress.jpg",
+      "Ethnic": "https://i.ibb.co/ethnic-dress.jpg"
+    }
+  },
+  "Jewellery": {
+    "types": ["Necklace", "Bracelet", "Earrings", "Rings"],
+    "activeFilters": ["Type", "Color", "Price Range"],
+    "typeImages": {
+      "Necklace": "https://i.ibb.co/necklace.jpg",
+      "Bracelet": "https://i.ibb.co/bracelet.jpg",
+      "Earrings": "https://i.ibb.co/earrings.jpg",
+      "Rings": "https://i.ibb.co/rings.jpg"
+    }
+  }
+}
