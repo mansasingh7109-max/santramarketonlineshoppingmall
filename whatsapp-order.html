@@ -32,17 +32,18 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
-           const FIREBASE_CONFIG = {
+       // ⚠️ APNA FIREBASE CONFIG YAHA PASTE KAR ⚠️
+            const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
   projectId: "santramarketshoppingmall",
   storageBucket: "santramarketshoppingmall.firebasestorage.app",
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
 };
-          // ⚠️ APNA FIREBASE CONFIG YAHA PASTE KAR ⚠️
+       
+       // ✅ FIREBASE INIT WITH ERROR CHECK
        try {
          firebase.initializeApp(firebaseConfig);
        } catch(e) {
@@ -134,6 +135,7 @@
                 </button>
             </div>
 
+            <!-- ✅ CONTINUE SHOPPING BILKUL HATA DIYA - SIRF SUCCESS MESSAGE -->
             <div id="successSection" class="hidden">
                 <div class="success">
                     <div class="success-icon">✅</div>
@@ -150,6 +152,7 @@ let urlParams = new URLSearchParams(window.location.search);
 let productId = urlParams.get('product');
 let pendingOrders = [];
 
+// ✅ ERROR HANDLING - Agar localStorage me data nahi hai
 try {
   if(productId){
       let data = localStorage.getItem('pending_whatsapp_order_' + productId);
@@ -260,19 +263,6 @@ async function submitFinalOrder(){
         const orderDate = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        /* ==================== OLD CODE BACKUP - 10/06/2026 ====================
-        PURANA CODE - itemsText me Series + Link missing tha. Sirf name, price aa raha tha.
-        
-        let itemsText = '';
-        pendingOrders.forEach((order, index) => {
-            let productCode = order.productCode || order.productId || order.id;
-            let price = parseFloat(order.productPrice || order.price || 0);
-            let qty = parseInt(order.qty || order.quantity || 1);
-            itemsText += `${index + 1}. ${order.productName || order.name} x ${qty} = Rs.${price*qty}\n`;
-        });
-        ================== OLD CODE END ================== */
-
-        // ✅ NEW FIXED CODE - Series + Link wapas add kiya
         const baseUrl = 'https://santramarketshoppingmall.firebaseapp.com';
         const productPath = '/product.html';
 
@@ -281,35 +271,30 @@ async function submitFinalOrder(){
         let itemsText = '';
 
         pendingOrders.forEach((order, index) => {
-            let productCode = order.productCode || order.productId || order.id || '';
-            // ✅ FIX 1: Series banao - agar code me - hai to SM- lagao
+            let productCode = order.productCode || order.productId || order.id;
             let seriesCode = productCode.startsWith('-') ? `SM${productCode}` : `SM-${productCode}`;
             let price = parseFloat(order.productPrice || order.price || 0);
             let qty = parseInt(order.qty || order.quantity || 1);
             let itemName = order.productName || order.name;
             totalAmount += price * qty;
             
-            // ✅ FIX 2: Product Link banao - Firebase ID se
-            let cleanId = productCode;
-            if(cleanId.startsWith('SM-')) cleanId = cleanId.replace('SM-', '-');
-            const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(cleanId)}`;
+            const productLink = `${baseUrl}${productPath}?id=${encodeURIComponent(order.productId || order.id)}`;
 
             itemsArray.push({
-                id: productCode,
+                id: order.productId || order.id,
                 name: itemName,
                 price: price,
                 qty: qty,
                 image: order.productImage || order.image || order.imageUrl || '',
                 imageUrl: order.productImage || order.image || order.imageUrl || '',
                 img: order.productImage || order.image || order.imageUrl || '',
-                photo: order.productImage || order.imageUrl || '',
+                photo: order.productImage || order.image || order.imageUrl || '',
                 product_link: productLink,
                 product_code: productCode,
                 category: order.category || 'General',
-                serial_no: order.serial_no || seriesCode
+                serial_no: order.serial_no || 'N/A'
             });
 
-            // ✅ FIX 3: WhatsApp message me Series + Link add karo
             itemsText += `${index + 1}. ${itemName}\n`;
             itemsText += `Code: ${productCode}\n`;
             itemsText += `Price: Rs.${price} x ${qty} = Rs.${price*qty}\n`;
@@ -335,7 +320,7 @@ async function submitFinalOrder(){
 
         await db.collection("orders").add(orderData);
 
-        // ✅ WHATSAPP MESSAGE - Ab Series + Link dono aayega
+        // ✅ WHATSAPP MESSAGE
         let whatsappMsg = `🔐 *NEW OTP REQUEST* #${orderId}\n`;
         whatsappMsg += `📅 *Date:* ${orderDate}\n`;
         whatsappMsg += `📋 *Serial No:* ${serialNo}\n\n`;
@@ -355,6 +340,7 @@ async function submitFinalOrder(){
         whatsappMsg += `⚡ *ACTION: Call customer & share OTP for confirmation*\n`;
         whatsappMsg += `📲 SANTRA MALL`;
 
+        // ✅ PEHLE SUCCESS DIKHAO PHIR WHATSAPP KHOLO
         document.getElementById('detailsSection').classList.add('hidden');
         document.getElementById('successSection').classList.remove('hidden');
         document.getElementById('loader').style.display = 'none';
@@ -362,10 +348,12 @@ async function submitFinalOrder(){
         localStorage.removeItem('pending_whatsapp_order_' + productId);
         localStorage.removeItem('santra_cart');
 
+        // 1 second baad WhatsApp kholo
         setTimeout(() => {
           window.open(`https://wa.me/918769171078?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
         }, 1000);
 
+        // ✅ 3 SECOND COUNTDOWN KE BAAD MY-ORDERS PE REDIRECT
         let count = 3;
         const countdownInterval = setInterval(() => {
           count--;
