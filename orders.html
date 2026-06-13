@@ -12,6 +12,11 @@
    .header h1{font-size:18px;flex:1}
     .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
   .logout-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
+  .container{max-width:900
+
+Cky
+
+
   .container{max-width:900px;margin:15px auto;padding:0 15px}
   .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
   .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
@@ -105,6 +110,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="secrets.js"></script>
+<script src="order-otp-popup.js"></script>
+
 <script>
 /*
 =================================
@@ -246,7 +253,7 @@ function buildItemsHTML(items) {
           <h4>${item.productName || item.name}</h4>
           <p>Qty: ${item.quantity || item.qty} × ₹${item.unitPrice || item.price} = ₹${(item.quantity || item.qty) * (item.unitPrice || item.price)}</p>
           <p>Code: ${item.productCode || item.productId} | Category: ${item.category || 'General'}</p>
-          <p>Series: ${item.serial_no || item.productCode || 'N/A'}</p>
+          <p>Series: ${item.seriesNo || item.productCode || 'N/A'}</p>
           <a href="${productLink}" target="_blank" class="item-link">🔗 View Product</a>
         </div>
       </div>
@@ -305,22 +312,8 @@ function renderOrders(orders) {
       `;
     }
 
-    // ✅ OTP Box - Agar status pending/otp_pending hai to dikhao
-    let otpBox = '';
-    if(order.status === 'pending' || order.status === 'otp_pending' || order.otpSent === true) {
-      otpBox = `
-        <div class="otp-box">
-          <h4 style="color:#ff9800;margin:0 0 10px 0">🔐 Enter Order OTP</h4>
-          <p style="font-size:13px;color:#666;margin-bottom:10px">
-            Admin ne WhatsApp pe OTP bheja hai. Yaha daalo to order confirm ho jayega:
-          </p>
-          <input type="text" id="order_otp_${order.id}" placeholder="6-digit OTP" maxlength="6" class="otp-input">
-          <button onclick="verifyOrderOTP('${order.id}')" class="btn-verify">
-            ✅ Verify & Confirm Order
-          </button>
-        </div>
-      `;
-    }
+    // ✅ OTP Box - order-otp-popup.js se
+    let otpBox = renderOTPBoxForMyOrders(order, order.id);
 
     // ✅ Cancel Button - Only if Pending/Confirmed
     let cancelBtn = '';
