@@ -1,0 +1,656 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Complete Order - SANTRA MALL</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --accent: #e40046;
+                --text: #212121;
+                --border: #e0e0e0;
+                --bg: #f1f3f6;
+                --card: #fff;
+                --green: #10b981;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Poppins", Arial, sans-serif;
+            }
+            body {
+                background: var(--bg);
+                color: var(--text);
+                padding-bottom: 100px;
+            }
+          .header {
+                background: var(--accent);
+                color: white;
+                padding: 20px;
+                text-align: center;
+                position: relative;
+            }
+          .header h1 {
+                font-size: 20px;
+            }
+          .back-btn {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: white;
+                font-size: 22px;
+                cursor: pointer;
+            }
+          .container {
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+          .card {
+                background: var(--card);
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 15px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            }
+          .card h2 {
+                font-size: 18px;
+                margin-bottom: 15px;
+                border-bottom: 2px solid var(--border);
+                padding-bottom: 10px;
+            }
+          .item-row {
+                display: flex;
+                gap: 12px;
+                margin-bottom: 15px;
+                padding-bottom: 15px;
+                border-bottom: 1px dashed var(--border);
+            }
+          .item-row:last-child {
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+          .item-row img {
+                width: 60px;
+                height: 60px;
+                object-fit: contain;
+                background: #f9f9f9;
+                border-radius: 8px;
+            }
+          .item-info {
+                flex: 1;
+            }
+          .item-info h3 {
+                font-size: 14px;
+                margin-bottom: 4px;
+            }
+          .item-info p {
+                font-size: 13px;
+                color: #666;
+                margin: 3px 0;
+            }
+          .item-total {
+                color: var(--accent);
+                font-weight: 700;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+          .product-link {
+                font-size: 11px;
+                color: #0066cc;
+                word-break: break-all;
+                margin-top: 4px;
+            }
+          .total-row {
+                text-align: right;
+                font-weight: 700;
+                font-size: 18px;
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 2px solid var(--border);
+            }
+          .series-no {
+                background: #fff3cd;
+                border: 1px solid #ffc107;
+                padding: 10px;
+                border-radius: 8px;
+                margin: 10px 0;
+                font-size: 13px;
+                color: #856404;
+            }
+            label {
+                display: block;
+                margin: 12px 0 6px;
+                font-weight: 600;
+                font-size: 14px;
+            }
+            input,
+            select,
+            textarea {
+                width: 100%;
+                padding: 12px;
+                border: 2px solid var(--border);
+                border-radius: 8px;
+                font-size: 15px;
+            }
+            input:focus,
+            select:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+          .btn-submit {
+                width: 100%;
+                padding: 16px;
+                background: var(--green);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-weight: 700;
+                font-size: 16px;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+          .btn-submit:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+            }
+          .loading {
+                display: none;
+                text-align: center;
+                padding: 20px;
+                color: var(--accent);
+                font-weight: 600;
+            }
+        </style>
+        <script src="secrets.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    </head>
+    <body>
+        <div class="header">
+            <button
+                class="back-btn"
+                onclick="window.location.href = 'cart.html'"
+            >
+                ←
+            </button>
+            <h1>🛒 Complete Your Order</h1>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h2>Order Summary</h2>
+                <div class="series-no">
+                    Order ID: <b id="seriesNo">Loading...</b>
+                </div>
+                <div id="orderItems"></div>
+                <div class="total-row">
+                    Grand Total: <span id="orderTotal">₹0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📍 Delivery Address</h2>
+                <label>Full Name *</label>
+                <input
+                    type="text"
+                    id="custName"
+                    placeholder="Enter full name"
+                    required
+                />
+
+                <label>Mobile Number *</label>
+                <input
+                    type="tel"
+                    id="custMobile"
+                    placeholder="10 digit mobile"
+                    maxlength="10"
+                    required
+                />
+
+                <label>Email *</label>
+                <input
+                    type="email"
+                    id="custEmail"
+                    placeholder="your@email.com"
+                    required
+                />
+
+                <label>House No. / Building *</label>
+                <input
+                    type="text"
+                    id="custHouse"
+                    placeholder="House/Flat/Building No."
+                    required
+                />
+
+                <label>Area / Street / Colony *</label>
+                <input
+                    type="text"
+                    id="custArea"
+                    placeholder="Area/Street/Colony"
+                    required
+                />
+
+                <label>Landmark *</label>
+                <input
+                    type="text"
+                    id="custLandmark"
+                    placeholder="Near landmark"
+                    required
+                />
+
+                <label>Pincode *</label>
+                <input
+                    type="tel"
+                    id="custPincode"
+                    placeholder="6 digit pincode"
+                    maxlength="6"
+                    required
+                />
+
+                <label>City *</label>
+                <input type="text" id="custCity" placeholder="City" required />
+
+                <label>State *</label>
+                <input
+                    type="text"
+                    id="custState"
+                    placeholder="State"
+                    required
+                />
+
+                <label>Payment Mode *</label>
+                <select id="paymentMode" required>
+                    <option value="">Select Payment</option>
+                    <option value="COD">Cash on Delivery</option>
+                    <option value="Online">Online Payment (UPI/Card)</option>
+                </select>
+
+                <div class="loading" id="loadingText">⏳ Saving order...</div>
+                <button class="btn-submit" id="submitBtn" onclick="sendOrder()">
+                    📲 SEND ORDER
+                </button>
+            </div>
+        </div>
+
+        <script>
+            let cartData = {};
+            let orderId = "";
+            let seriesNo = "";
+            let db;
+
+            // Firebase Init
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                console.log("✅ Firebase connected");
+            } catch (e) {
+                console.log("⚠️ Firebase not configured yet");
+            }
+
+            // EmailJS Init
+            try {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            } catch (e) {
+                console.log("⚠️ EmailJS not configured yet");
+            }
+
+            window.onload = function () {
+                cartData = JSON.parse(
+                    localStorage.getItem("santra_checkout_cart") || "{}"
+                );
+
+                if (Object.keys(cartData).length === 0) {
+                    alert("Cart empty! Redirecting...");
+                    window.location.href = "cart.html";
+                    return;
+                }
+
+                let now = new Date();
+                let dateStr = now.toISOString().slice(0, 10).replace(/-/g, "");
+                let timeStr = now.getTime().toString().slice(-6);
+                orderId = "ORD" + dateStr + timeStr;
+                seriesNo = "SM-" + timeStr;
+                document.getElementById("seriesNo").innerText = seriesNo;
+
+                let itemsHTML = "";
+                let total = 0;
+                let count = 1;
+
+                /* ==================== OLD CODE - 13/06/2026 ====================
+                let baseURL = window.location.origin;
+                ================== OLD CODE END ================== */
+
+                // ✅ NEW FIXED CODE - 13/06/2026 - Live Firebase Link
+                let baseURL = 'https://santramarketshoppingmall.firebaseapp.com';
+                // ✅ NEW CODE END
+
+                Object.keys(cartData).forEach(key => {
+                    let item = cartData[key];
+                    let qty = parseInt(item.qty) || 1;
+                    let price = parseFloat(item.price) || 0;
+                    let itemTotal = price * qty;
+                    total += itemTotal;
+
+                    /* ==================== OLD CODE - 13/06/2026 ====================
+                    let productCode = item.productCode || key;
+                    let productLink = `${baseURL}/index.html?product=${productCode}`;
+                    ================== OLD CODE END ================== */
+
+                    // ✅ NEW FIXED CODE - 13/06/2026 - ID Priority Fix
+                    let firebaseID = item.id || key; // Firebase doc ID pehle check karo
+                    let productCode = item.productCode || item.code || key; // Display ke liye code
+                    let productLink = `${baseURL}/product.html?id=${firebaseID}`; // ID use karo link me
+                    // ✅ NEW CODE END
+
+                    itemsHTML += `
+      <div class="item-row">
+        <img src="${item.image || "https://via.placeholder.com/60"}" onerror="this.src='https://via.placeholder.com/60'">
+        <div class="item-info">
+          <h3>${count}. ${item.name || "Product"}</h3>
+          <p><b>Code:</b> ${productCode}</p>
+          <p><b>Unit Price:</b> ₹${price}</p>
+          <p><b>Quantity:</b> ${qty}</p>
+          <p class="item-total">Item Total: ₹${itemTotal}</p>
+          <p class="product-link"><b>Link:</b> ${productLink}</p>
+        </div>
+      </div>
+    `;
+                    count++;
+                });
+
+                document.getElementById("orderItems").innerHTML = itemsHTML;
+                document.getElementById("orderTotal").innerText = "₹" + total;
+
+                let savedCustomer = JSON.parse(
+                    localStorage.getItem("santra_customer") || "{}"
+                );
+                if (savedCustomer.name)
+                    document.getElementById("custName").value =
+                        savedCustomer.name;
+                if (savedCustomer.mobile)
+                    document.getElementById("custMobile").value =
+                        savedCustomer.mobile;
+                if (savedCustomer.email)
+                    document.getElementById("custEmail").value =
+                        savedCustomer.email;
+                if (savedCustomer.house)
+                    document.getElementById("custHouse").value =
+                        savedCustomer.house;
+                if (savedCustomer.area)
+                    document.getElementById("custArea").value =
+                        savedCustomer.area;
+                if (savedCustomer.landmark)
+                    document.getElementById("custLandmark").value =
+                        savedCustomer.landmark;
+                if (savedCustomer.pincode)
+                    document.getElementById("custPincode").value =
+                        savedCustomer.pincode;
+                if (savedCustomer.city)
+                    document.getElementById("custCity").value =
+                        savedCustomer.city;
+                if (savedCustomer.state)
+                    document.getElementById("custState").value =
+                        savedCustomer.state;
+            };
+
+            async function sendOrder() {
+                let name = document.getElementById("custName").value.trim();
+                let mobile = document.getElementById("custMobile").value.trim();
+                let email = document.getElementById("custEmail").value.trim();
+                let house = document.getElementById("custHouse").value.trim();
+                let area = document.getElementById("custArea").value.trim();
+                let landmark = document
+                  .getElementById("custLandmark")
+                  .value.trim();
+                let pincode = document
+                  .getElementById("custPincode")
+                  .value.trim();
+                let city = document.getElementById("custCity").value.trim();
+                let state = document.getElementById("custState").value.trim();
+                let payment = document.getElementById("paymentMode").value;
+
+                if (
+                  !name ||
+                  !mobile ||
+                  !email ||
+                  !house ||
+                  !area ||
+                  !landmark ||
+                  !pincode ||
+                  !city ||
+                  !state ||
+                  !payment
+                ) {
+                    alert("❌ Please fill all required fields!");
+                    return;
+                }
+
+                if (mobile.length!== 10 ||!/^[0-9]{10}$/.test(mobile)) {
+                    alert("❌ Enter valid 10 digit mobile number!");
+                    return;
+                }
+
+                if (pincode.length!== 6 ||!/^[0-9]{6}$/.test(pincode)) {
+                    alert("❌ Enter valid 6 digit pincode!");
+                    return;
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alert("❌ Enter valid Email ID!");
+                    return;
+                }
+
+                // Disable button + Show loading
+                document.getElementById("submitBtn").disabled = true;
+                document.getElementById("loadingText").style.display = "block";
+
+                let customer = {
+                    name,
+                    mobile,
+                    email,
+                    house,
+                    area,
+                    landmark,
+                    pincode,
+                    city,
+                    state,
+                    payment
+                };
+                localStorage.setItem(
+                    "santra_customer",
+                    JSON.stringify(customer)
+                );
+
+                let total = document.getElementById("orderTotal").innerText;
+                let itemCount = 1;
+
+                /* ==================== OLD CODE - 13/06/2026 ====================
+                let baseURL = window.location.origin;
+                ================== OLD CODE END ================== */
+
+                // ✅ NEW FIXED CODE - 13/06/2026 - Live Firebase Link
+                let baseURL = 'https://santramarketshoppingmall.firebaseapp.com';
+                // ✅ NEW CODE END
+
+                let itemsArray = [];
+
+                let itemsMsg = Object.keys(cartData)
+                  .map(key => {
+                        let item = cartData[key];
+                        let qty = parseInt(item.qty) || 1;
+                        let price = parseFloat(item.price) || 0;
+                        let itemTotal = price * qty;
+
+                        /* ==================== OLD CODE - 13/06/2026 ====================
+                        let productCode = item.productCode || key;
+                        let productLink = `${baseURL}/index.html?product=${productCode}`;
+                        ================== OLD CODE END ================== */
+
+                        // ✅ NEW FIXED CODE - 13/06/2026 - ID Priority Fix
+                        let firebaseID = item.id || key; // Firebase doc ID pehle
+                        let productCode = item.productCode || item.code || key; // Display code
+                        let productLink = `${baseURL}/product.html?id=${firebaseID}`;
+                        // ✅ NEW CODE END
+
+                        itemsArray.push({
+                            name: item.name,
+                            code: productCode,
+                            price: price,
+                            qty: qty,
+                            total: itemTotal,
+                            link: productLink,
+                            image: item.image || ""
+                        });
+
+                        let msg = `${itemCount}. *${item.name}*\n`;
+                        msg += ` Code: ${productCode}\n`;
+                        msg += ` Unit Price: ₹${price}\n`;
+                        msg += ` Qty: ${qty}\n`;
+                        msg += ` ➡️ *Item Total: ₹${itemTotal}*\n`;
+                        msg += ` Link: ${productLink}`;
+                        itemCount++;
+                        return msg;
+                    })
+                  .join("\n\n");
+
+                let orderTime = new Date().toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    dateStyle: "short",
+                    timeStyle: "short"
+                });
+
+                let orderData = {
+                    orderId: orderId,
+                    seriesNo: seriesNo,
+                    customer: customer,
+                    items: itemsArray,
+                    totalAmount: total,
+                    orderTime: orderTime,
+                    status: "OTP_PENDING",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                // ✅ 1. FIREBASE ME SAVE
+                let firebaseSuccess = false;
+                try {
+                    if (db) {
+                        await db
+                          .collection("orders")
+                          .doc(orderId)
+                          .set(orderData);
+                        firebaseSuccess = true;
+                        console.log("✅ Firebase: Order saved");
+                    }
+                } catch (error) {
+                    console.log("❌ Firebase Error:", error);
+                }
+
+                // ✅ 2. GMAIL PE EMAIL
+                let emailSuccess = false;
+                try {
+                    if (typeof emailjs!== "undefined") {
+                        let emailHTML = `
+                            <h2>🛒 NEW ORDER - SANTRA MALL</h2>
+                            <p><b>Order ID:</b> ${orderId}</p>
+                            <p><b>Series No:</b> ${seriesNo}</p>
+                            <p><b>Time:</b> ${orderTime}</p>
+                            <hr>
+                            <h3>Items:</h3>
+                            ${itemsArray
+                              .map(
+                                    (item, i) => `
+                                <div style="border:1px solid #ddd;padding:10px;margin:10px 0;">
+                                    <p><b>${i + 1}. ${item.name}</b></p>
+                                    <p>Code: ${item.code}</p>
+                                    <p>Price: ₹${item.price} x ${item.qty} = ₹${item.total}</p>
+                                    <p>Link: <a href="${item.link}">${item.link}</a></p>
+                                </div>
+                            `
+                                )
+                              .join("")}
+                            <hr>
+                            <h3>Total: ${total}</h3>
+                            <hr>
+                            <h3>Customer:</h3>
+                            <p>Name: ${name}</p>
+                            <p>Mobile: ${mobile}</p>
+                            <p>Email: ${email}</p>
+                            <p>Address: ${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}</p>
+                            <p>Payment: ${payment}</p>
+                        `;
+
+                        await emailjs.send(
+                            EMAILJS_SERVICE_ID,
+                            EMAILJS_TEMPLATE_ID,
+                            {
+                                to_email: ADMIN_EMAIL,
+                                subject: `New Order ${orderId} - ${name}`,
+                                message_html: emailHTML,
+                                order_id: orderId,
+                                customer_name: name,
+                                total: total
+                            }
+                        );
+                        emailSuccess = true;
+                        console.log("✅ Email: Sent to admin");
+                    }
+                } catch (error) {
+                    console.log("❌ Email Error:", error);
+                }
+
+                // ✅ 3. WHATSAPP PE BHEJO
+                let msg = `🛒 *NEW ORDER REQUEST - SANTRA MALL* 🛒\n\n`;
+                msg += `*Order ID:* ${orderId}\n`;
+                msg += `*Series No:* ${seriesNo}\n`;
+                msg += `*Time:* ${orderTime}\n\n`;
+                msg += `*Items Details:*\n${itemsMsg}\n\n`;
+                msg += `━━━━━━━━━━━━━━━━━━\n`;
+                msg += `*🧾 GRAND TOTAL: ${total}*\n`;
+                msg += `━━━━━━━━━━━━━━━━━━\n\n`;
+                msg += `*Customer Details:*\n`;
+                msg += `Name: ${name}\n`;
+                msg += `Mobile: ${mobile}\n`;
+                msg += `Email: ${email}\n\n`;
+                msg += `*Delivery Address:*\n`;
+                msg += `${house}, ${area}\n`;
+                msg += `Landmark: ${landmark}\n`;
+                msg += `${city}, ${state} - ${pincode}\n\n`;
+                msg += `*Payment Mode:* ${payment}\n\n`;
+                msg += `🔐 Please send OTP for verification`;
+
+                window.open(
+                    `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`,
+                    "_blank"
+                );
+
+                localStorage.removeItem("santra_cart");
+                localStorage.removeItem("santra_checkout_cart");
+
+                let statusMsg = "✅ Order Processed!\n\n";
+                statusMsg += `📱 WhatsApp: Sent\n`;
+                statusMsg += `${firebaseSuccess? "🔥" : "❌"} Firebase: ${firebaseSuccess? "Saved" : "Failed"}\n`;
+                statusMsg += `${emailSuccess? "📧" : "❌"} Gmail: ${emailSuccess? "Sent" : "Failed"}\n\n`;
+                statusMsg += `Order ID: ${orderId}`;
+
+                alert(statusMsg);
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000);
+            }
+        </script>
+    </body>
+</html>
