@@ -4,14 +4,14 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>🛒 My Cart - SANTRA MALL</title>
+
         <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
             rel="stylesheet"
         />
+        <!-- ✅ NEW: PDF Library Add Ki -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <style>
-
-
-
             :root {
                 --bg: #f1f3f6;
                 --card: #ffffff;
@@ -19,10 +19,7 @@
                 --text: #212121;
                 --border: #e0e0e0;
                 --green: #10b981;
-                --ora
-
-
-                nge: #f59e0b;
+                --orange: #f59e0b;
             }
             * {
                 margin: 0;
@@ -35,7 +32,7 @@
                 color: var(--text);
                 padding-bottom: 140px;
             }
-            .header {
+           .header {
                 background: var(--accent);
                 color: white;
                 padding: 15px;
@@ -46,18 +43,18 @@
                 top: 0;
                 z-index: 100;
             }
-            .header h1 {
+           .header h1 {
                 font-size: 18px;
                 flex: 1;
             }
-            .back-btn {
+           .back-btn {
                 background: none;
                 border: none;
                 color: white;
                 font-size: 22px;
                 cursor: pointer;
             }
-            .tabs {
+           .tabs {
                 display: flex;
                 background: var(--card);
                 margin: 15px;
@@ -65,7 +62,7 @@
                 overflow: hidden;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             }
-            .tab {
+           .tab {
                 flex: 1;
                 padding: 14px;
                 text-align: center;
@@ -76,11 +73,11 @@
                 transition: 0.3s;
                 font-size: 15px;
             }
-            .tab.active {
+           .tab.active {
                 background: var(--accent);
                 color: white;
             }
-            .cart-card {
+           .cart-card {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
@@ -89,7 +86,7 @@
                 gap: 12px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             }
-            .cart-card img {
+           .cart-card img {
                 width: 90px;
                 height: 90px;
                 object-fit: contain;
@@ -97,32 +94,32 @@
                 border-radius: 8px;
                 border: 1px solid #eee;
             }
-            .item-info {
+           .item-info {
                 flex: 1;
             }
-            .item-info h3 {
+           .item-info h3 {
                 font-size: 15px;
                 margin-bottom: 6px;
                 line-height: 1.3;
             }
-            .item-price {
+           .item-price {
                 color: var(--accent);
                 font-weight: 700;
                 font-size: 16px;
                 margin: 5px 0;
             }
-            .item-code {
+           .item-code {
                 font-size: 11px;
                 color: #666;
                 margin-top: 4px;
             }
-            .qty-controls {
+           .qty-controls {
                 display: flex;
                 gap: 8px;
                 align-items: center;
                 margin-top: 10px;
             }
-            .qty-btn {
+           .qty-btn {
                 background: #eee;
                 border: none;
                 width: 32px;
@@ -132,27 +129,27 @@
                 font-weight: bold;
                 font-size: 18px;
             }
-            .qty-btn:disabled {
+           .qty-btn:disabled {
                 background: #ddd;
                 cursor: not-allowed;
                 opacity: 0.5;
             }
-            .qty-btn:active:not(:disabled) {
+           .qty-btn:active:not(:disabled) {
                 transform: scale(0.9);
             }
-            .qty-display {
+           .qty-display {
                 padding: 0 12px;
                 font-weight: bold;
                 min-width: 30px;
                 text-align: center;
             }
-            .item-actions {
+           .item-actions {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
                 margin-top: 8px;
             }
-            .btn-move-choice {
+           .btn-move-choice {
                 background: var(--orange);
                 color: white;
                 border: none;
@@ -162,7 +159,7 @@
                 font-size: 12px;
                 font-weight: 600;
             }
-            .btn-move-cart {
+           .btn-move-cart {
                 background: var(--green);
                 color: white;
                 border: none;
@@ -172,7 +169,7 @@
                 font-size: 12px;
                 font-weight: 600;
             }
-            .btn-remove {
+           .btn-remove {
                 background: #ef4444;
                 color: white;
                 border: none;
@@ -182,12 +179,12 @@
                 font-size: 12px;
                 font-weight: 600;
             }
-            .empty {
+           .empty {
                 text-align: center;
                 padding: 80px 20px;
                 color: #999;
             }
-            .empty button {
+           .empty button {
                 margin-top: 20px;
                 padding: 14px 32px;
                 background: var(--accent);
@@ -198,26 +195,46 @@
                 cursor: pointer;
                 font-size: 15px;
             }
-            .summary {
+           .summary {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
                 padding: 18px;
             }
-            .summary-row {
+           .summary-row {
                 display: flex;
                 justify-content: space-between;
                 margin: 10px 0;
                 font-size: 14px;
             }
-            .total-row {
+           .total-row {
                 font-weight: 700;
                 font-size: 18px;
                 border-top: 2px solid var(--border);
                 padding-top: 12px;
                 margin-top: 12px;
             }
-            .checkout-btn {
+            /* ✅ NEW: Share Buttons Grid */
+           .share-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+           .share-btn {
+                padding: 12px;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 13px;
+                cursor: pointer;
+            }
+           .btn-whatsapp { background: #25d366; }
+           .btn-email { background: #EA4335; }
+           .btn-pdf { background: #7c3aed; grid-column: 1 / -1; }
+            
+           .checkout-btn {
                 position: fixed;
                 bottom: 70px;
                 left: 15px;
@@ -233,12 +250,12 @@
                 box-shadow: 0 4px 16px rgba(228, 0, 70, 0.4);
                 z-index: 50;
             }
-            .checkout-btn:disabled {
+           .checkout-btn:disabled {
                 background: #ccc;
                 cursor: not-allowed;
                 box-shadow: none;
             }
-            .bottom-nav {
+           .bottom-nav {
                 position: fixed;
                 bottom: 0;
                 left: 0;
@@ -250,39 +267,39 @@
                 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
                 z-index: 100;
             }
-            .nav-item {
+           .nav-item {
                 text-align: center;
                 text-decoration: none;
                 color: #666;
                 flex: 1;
                 padding: 5px;
             }
-            .nav-item.active {
+           .nav-item.active {
                 color: var(--accent);
             }
-            .nav-item div {
+           .nav-item div {
                 font-size: 22px;
             }
-            .nav-item span {
+           .nav-item span {
                 font-size: 11px;
                 display: block;
                 margin-top: 2px;
             }
-            .hide {
+           .hide {
                 display: none;
             }
-            .my-choice-info {
+           .my-choice-info {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
                 padding: 20px;
                 text-align: center;
             }
-            .my-choice-info h3 {
+           .my-choice-info h3 {
                 color: var(--orange);
                 margin-bottom: 10px;
             }
-            .my-choice-info p {
+           .my-choice-info p {
                 color: #666;
                 font-size: 14px;
                 line-height: 1.6;
@@ -312,29 +329,22 @@
         <div id="cartView">
             <div id="cartList"></div>
             <div id="cartSummary" class="summary hide">
-                option code for all product share with amount
                 <div class="cart-total">
                     <h3>Grand Total: ₹<span id="cartTotal">0</span></h3>
                 </div>
 
-                <!-- ✅ NEW LINE - 13/06/2026 - Share My Cart Button -->
-                <button
-                    onclick="shareCart()"
-                    style="
-                        width: 100%;
-                        padding: 14px;
-                        background: #3b82f6;
-                        color: white;
-                        border: none;
-                        border-radius: 8px;
-                        margin-bottom: 10px;
-                        font-weight: bold;
-                        font-size: 15px;
-                    "
-                >
-                    🔗 Share My Cart
-                </button>
-                <!-- ✅ NEW LINE END -->
+                <!-- ✅ NEW: 3 Share Options -->
+                <div class="share-buttons">
+                    <button onclick="shareCartWhatsApp()" class="share-btn btn-whatsapp">
+                        📲 WhatsApp Order
+                    </button>
+                    <button onclick="shareCartEmail()" class="share-btn btn-email">
+                        📧 Email Order
+                    </button>
+                    <button onclick="downloadCartPDF()" class="share-btn btn-pdf">
+                        📄 Download PDF
+                    </button>
+                </div>
 
                 <h3>Price Details</h3>
                 <div class="summary-row">
@@ -354,13 +364,12 @@
                 </div>
             </div>
             <button id="checkoutBtn" class="checkout-btn" onclick="checkout()">
-                ➡️ PLACE ORDER
+                ➡️ PLACE ORDER VIA WEBSITE
             </button>
         </div>
 
         <div id="choiceView" class="hide">
             <div id="myChoiceList"></div>
-            <!-- ✅ NEW LINE - 13/06/2026 - Share My Choice Button -->
             <button
                 onclick="shareWishlist()"
                 style="
@@ -377,7 +386,6 @@
             >
                 🔗 Share My Choice
             </button>
-            <!-- ✅ NEW LINE END -->
         </div>
 
         <div class="bottom-nav">
@@ -402,23 +410,25 @@
 
             const CART_KEY = "santra_cart";
             const CHOICE_KEY = "santra_mychoice";
+            const ADMIN_WHATSAPP = "918769171078"; // 91 + 8769171078
+            const ADMIN_EMAIL = "orders@santramarket.com"; // Apna email daal de
 
             function switchTab(tab) {
                 currentTab = tab;
                 document
-                    .getElementById("cartTab")
-                    .classList.toggle("active", tab === "cart");
+                   .getElementById("cartTab")
+                   .classList.toggle("active", tab === "cart");
                 document
-                    .getElementById("choiceTab")
-                    .classList.toggle("active", tab === "choice");
+                   .getElementById("choiceTab")
+                   .classList.toggle("active", tab === "choice");
                 document
-                    .getElementById("cartView")
-                    .classList.toggle("hide", tab !== "cart");
+                   .getElementById("cartView")
+                   .classList.toggle("hide", tab!== "cart");
                 document
-                    .getElementById("choiceView")
-                    .classList.toggle("hide", tab !== "choice");
+                   .getElementById("choiceView")
+                   .classList.toggle("hide", tab!== "choice");
                 document.getElementById("pageTitle").innerText =
-                    tab === "cart" ? "🛒 My Cart" : "⭐ My Choice";
+                    tab === "cart"? "🛒 My Cart" : "⭐ My Choice";
 
                 if (tab === "choice") {
                     renderMyChoice();
@@ -470,10 +480,10 @@
                 }
 
                 checkoutBtn.disabled = false;
-                checkoutBtn.innerText = "➡️ PLACE ORDER";
+                checkoutBtn.innerText = "➡️ PLACE ORDER VIA WEBSITE";
 
                 container.innerHTML = cartKeys
-                    .map(key => {
+                   .map(key => {
                         let item = cart[key];
                         let imgSrc =
                             item.image ||
@@ -482,27 +492,27 @@
                         let price = parseFloat(item.price) || 0;
 
                         return `
-            <div class="cart-card">
-              <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/4CAF50/ffffff?text=NO+IMAGE'">
-              <div class="item-info">
-                <h3>${item.name || "Product"}</h3>
-                <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
-                <div class="item-code">Code: ${item.productCode || key}</div>
-                <div class="qty-controls">
-                  <button class="qty-btn" onclick="updateQty('${key}', -1)" ${qty <= 1 ? "disabled" : ""}>-</button>
-                  <span class="qty-display">${qty}</span>
-                  <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
-                </div>
-                <div class="item-actions">
-                  <button class="btn-move-choice" onclick="moveToMyChoice('${key}')">⭐ Move to My Choice</button>
-                  <button onclick="shareProduct('${item.id || key}', '${item.name}', '${item.price}')" style="padding:8px 12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:12px;">🔗 Share</button>
-                  <button class="btn-remove" onclick="removeFromCart('${key}')">🗑️ Remove</button>
+              <div class="cart-card">
+                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/4CAF50/ffffff?text=NO+IMAGE'">
+                <div class="item-info">
+                  <h3>${item.name || "Product"}</h3>
+                  <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
+                  <div class="item-code">Code: ${item.productCode || key}</div>
+                  <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('${key}', -1)" ${qty <= 1? "disabled" : ""}>-</button>
+                    <span class="qty-display">${qty}</span>
+                    <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
+                  </div>
+                  <div class="item-actions">
+                    <button class="btn-move-choice" onclick="moveToMyChoice('${key}')">⭐ Move to My Choice</button>
+                    <button onclick="shareProduct('${item.id || key}', '${item.name}', '${item.price}')" style="padding:8px 12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:12px;">🔗 Share</button>
+                    <button class="btn-remove" onclick="removeFromCart('${key}')">🗑️ Remove</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          `;
+            `;
                     })
-                    .join("");
+                   .join("");
 
                 let subtotal = Object.values(cart).reduce((sum, item) => {
                     let qty = parseInt(item.qty) || 1;
@@ -510,7 +520,7 @@
                     return sum + price * qty;
                 }, 0);
 
-                let delivery = subtotal >= 500 ? 0 : 49;
+                let delivery = subtotal >= 500? 0 : 49;
                 let total = subtotal + delivery;
                 let totalItems = Object.values(cart).reduce(
                     (sum, item) => sum + (parseInt(item.qty) || 1),
@@ -519,7 +529,7 @@
 
                 document.getElementById("subTotal").innerText = "₹" + subtotal;
                 document.getElementById("deliveryCharge").innerText =
-                    delivery === 0 ? "FREE" : "₹" + delivery;
+                    delivery === 0? "FREE" : "₹" + delivery;
                 document.getElementById("grandTotal").innerText = "₹" + total;
                 document.getElementById("cartTotal").innerText = total;
                 document.getElementById("itemCount").innerText = totalItems;
@@ -533,19 +543,19 @@
 
                 if (choiceKeys.length === 0) {
                     container.innerHTML = `
-              <div class="my-choice-info">
-                <h3>⭐ My Choice - Your Wishlist</h3>
-                <p>Save your favorite products here and buy them later.</p>
-                <p style="margin-top:15px;color:var(--accent);font-weight:600">No items saved yet</p>
-                <button onclick="window.location.href='index.html'" style="margin-top:20px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer">Browse Products</button>
-              </div>
-            `;
+                <div class="my-choice-info">
+                  <h3>⭐ My Choice - Your Wishlist</h3>
+                  <p>Save your favorite products here and buy them later.</p>
+                  <p style="margin-top:15px;color:var(--accent);font-weight:600">No items saved yet</p>
+                  <button onclick="window.location.href='index.html'" style="margin-top:20px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer">Browse Products</button>
+                </div>
+              `;
                     updateCounts();
                     return;
                 }
 
                 container.innerHTML = choiceKeys
-                    .map(key => {
+                   .map(key => {
                         let item = myChoice[key];
                         let imgSrc =
                             item.image ||
@@ -553,21 +563,21 @@
                         let price = parseFloat(item.price) || 0;
 
                         return `
-            <div class="cart-card">
-              <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/f59e0b/ffffff?text=CHOICE'">
-              <div class="item-info">
-                <h3>${item.name || "Product"}</h3>
-                <div class="item-price">₹${price}</div>
-                <div class="item-code">Code: ${item.productCode || key}</div>
-                <div class="item-actions">
-                  <button class="btn-move-cart" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
-                  <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
+              <div class="cart-card">
+                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/f59e0b/ffffff?text=CHOICE'">
+                <div class="item-info">
+                  <h3>${item.name || "Product"}</h3>
+                  <div class="item-price">₹${price}</div>
+                  <div class="item-code">Code: ${item.productCode || key}</div>
+                  <div class="item-actions">
+                    <button class="btn-move-cart" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
+                    <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          `;
+            `;
                     })
-                    .join("");
+                   .join("");
                 updateCounts();
             }
 
@@ -610,7 +620,7 @@
                 delete cart[productId];
                 saveCart();
 
-                myChoice[productId] = { ...item };
+                myChoice[productId] = {...item };
                 delete myChoice[productId].qty;
                 myChoice[productId].savedAt = new Date().toLocaleString(
                     "en-IN",
@@ -629,7 +639,7 @@
                 delete myChoice[productId];
                 saveChoice();
 
-                cart[productId] = cart[productId] || { ...item };
+                cart[productId] = cart[productId] || {...item };
                 cart[productId].qty = (parseInt(cart[productId].qty) || 0) + 1;
                 cart[productId].addedAtIST = new Date().toLocaleString(
                     "en-IN",
@@ -679,41 +689,98 @@
                 window.location.href = "checkout.html";
             }
 
-            /* ==================== OLD CODE ====================
-            Share function nahi tha
-            ================== OLD CODE END ================== */
-
-            // ✅ NEW CODE - 13/06/2026 - Share Functions
-            function shareCart() {
-                let cart = JSON.parse(
-                    localStorage.getItem("santra_cart") || "{}"
-                );
-                let baseURL =
-                    "https://santramarketshoppingmall.firebaseapp.com";
-
+            // ✅ NEW: Generate Order Text
+            function generateOrderText() {
+                let baseURL = "https://santramarketshoppingmall.firebaseapp.com";
+                
                 if (Object.keys(cart).length === 0) {
-                    alert("❌ Cart is empty!");
-                    return;
+                    return null;
                 }
 
-                let text = "🛒 *My Cart - SANTRA MALL* 🛒\n\n";
+                let subtotal = Object.values(cart).reduce((sum, item) => {
+                    let qty = parseInt(item.qty) || 1;
+                    let price = parseFloat(item.price) || 0;
+                    return sum + price * qty;
+                }, 0);
+                let delivery = subtotal >= 500? 0 : 49;
+                let grandTotal = subtotal + delivery;
+
+                let text = "🛒 *New Order - SANTRA MALL* 🛒\n\n";
                 let count = 1;
 
                 Object.keys(cart).forEach(key => {
                     let item = cart[key];
+                    let qty = parseInt(item.qty) || 1;
+                    let price = parseFloat(item.price) || 0;
+                    let itemTotal = price * qty;
+
                     text += `${count}. *${item.name}*\n`;
-                    text += `${baseURL}/product.html?id=${item.id || key}\n\n`;
+                    text += `Qty: ${qty} x ₹${price} = ₹${itemTotal}\n`;
+                    text += `Code: ${item.productCode || key}\n`;
+                    text += `Link: ${baseURL}/product.html?id=${item.id || key}\n\n`;
                     count++;
                 });
 
-                text += `Shop now at SANTRA MALL 🛒`;
+                text += `━━━━━━━━━━━━━━━━━━\n`;
+                text += `*🧾 GRAND TOTAL: ₹${grandTotal}*\n`;
+                text += `━━━━━━━━━━━━━━━━━━\n\n`;
 
-                if (navigator.share) {
-                    navigator.share({ title: "My Cart", text: text });
-                } else {
-                    navigator.clipboard.writeText(text);
-                    alert("🔗 Cart links copied!");
+                text += `*📝 Customer Details:*\n`;
+                text += `Name: ________________\n`;
+                text += `Mobile: ________________\n`;
+                text += `Address: ________________\n`;
+                text += `Landmark: ________________\n`;
+                text += `Pincode: ________________\n`;
+                text += `City: ________________\n`;
+                text += `State: ________________\n`;
+                text += `Payment: Online / Cash on Delivery\n\n`;
+                text += `Please confirm this order ✅`;
+
+                return { text, grandTotal };
+            }
+
+            // ✅ NEW: WhatsApp Share
+            function shareCartWhatsApp() {
+                const orderData = generateOrderText();
+                if (!orderData) {
+                    alert("❌ Cart is empty!");
+                    return;
                 }
+                let whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(orderData.text)}`;
+                window.open(whatsappURL, "_blank");
+            }
+
+            // ✅ NEW: Email Share
+            function shareCartEmail() {
+                const orderData = generateOrderText();
+                if (!orderData) {
+                    alert("❌ Cart is empty!");
+                    return;
+                }
+                let subject = `New Order - SANTRA MALL - ₹${orderData.grandTotal}`;
+                let mailtoURL = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(orderData.text)}`;
+                window.location.href = mailtoURL;
+            }
+
+            // ✅ NEW: PDF Download
+            function downloadCartPDF() {
+                const orderData = generateOrderText();
+                if (!orderData) {
+                    alert("❌ Cart is empty!");
+                    return;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFontSize(16);
+                doc.text("SANTRA MALL - Order Details", 20, 20);
+                
+                doc.setFontSize(10);
+                let splitText = doc.splitTextToSize(orderData.text, 170);
+                doc.text(splitText, 20, 30);
+                
+                doc.save(`SANTRA_Order_${Date.now()}.pdf`);
             }
 
             function shareWishlist() {
@@ -740,28 +807,15 @@
 
                 text += `Shop now at SANTRA MALL 🛒`;
 
-                if (navigator.share) {
-                    navigator.share({ title: "My Choice", text: text });
-                } else {
-                    navigator.clipboard.writeText(text);
-                    alert("🔗 My Choice links copied!");
-                }
+                let whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(whatsappURL, "_blank");
             }
 
             function shareProduct(productId, productName, price) {
                 const link = `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${productId}`;
-                const text = `Check out ${productName}\n${link}`;
-
-                if (navigator.share) {
-                    navigator.share({
-                        title: productName,
-                        text: text,
-                        url: link
-                    });
-                } else {
-                    navigator.clipboard.writeText(text);
-                    alert("🔗 Link copied!\n\n" + link);
-                }
+                const text = `Check out *${productName}*\nPrice: ₹${price}\n\nBuy here: ${link}`;
+                let whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(whatsappURL, "_blank");
             }
 
             function updateCartDisplay() {
@@ -772,15 +826,14 @@
 
                 if (cartCount > 0) {
                     document
-                        .getElementById("cartSummary")
-                        .classList.remove("hide");
+                       .getElementById("cartSummary")
+                       .classList.remove("hide");
                 } else {
                     document
-                        .getElementById("cartSummary")
-                        .classList.add("hide");
+                       .getElementById("cartSummary")
+                       .classList.add("hide");
                 }
             }
-            // ✅ NEW CODE END
 
             window.onload = loadData;
         </script>
