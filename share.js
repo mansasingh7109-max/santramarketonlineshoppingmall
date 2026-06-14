@@ -1,90 +1,94 @@
-// share.js
-function shareCart() {
-  alert('Button working!'); // Test ke liye
-  let cart = JSON.parse(localStorage.getItem('santra_cart') || '{}');
-  console.log(cart);
-}
-
-function addShareButtons() {
-    const shareHTML = `
-    <div style="margin:10px 0; display:flex; gap:8px; align-items:center;">
-      <span style="font-size:14px; color:#666;">Share:</span>
-      <button onclick="window.open('https://wa.me/?text='+encodeURIComponent(document.title+' - '+location.href),'_blank')" style="background:#25D366;color:white;border:none;padding:6px 10px;border-radius:5px;font-size:13px;">WhatsApp</button>
-      <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'_blank')" style="background:#1877F2;color:white;border:none;padding:6px 10px;border-radius:5px;font-size:13px;">Facebook</button>
-      <button onclick="navigator.share?navigator.share({title:document.title,text:document.title,url:location.href}):navigator.clipboard.writeText(location.href).then(()=>alert('Link Copied!'))" style="background:#333;color:white;border:none;padding:6px 10px;border-radius:5px;font-size:13px;">More</button>
-    </div>
-  `;
-
-    // Current script tag ke baad buttons add kar dega
-    const currentScript = document.currentScript;
-    if (currentScript) {
-        currentScript.insertAdjacentHTML("afterend", shareHTML);
-    }
-}
-
-addShareButtons();
-// share.js - Only for My Cart tab
+// share.js - SANTRA MALL
 
 /**
- * Share My Cart Function
- * Ye function sirf Cart tab ke items ko share karega
- * My Choice tab me iska koi effect nahi hoga
+ * Share My Cart Function - Direct WhatsApp Open
+ * Ye function Cart tab ke items ko WhatsApp pe share karega
  */
-export const shareMyCart = (cartItems) => {
-  if (!cartItems || cartItems.length === 0) {
-    alert("Your cart is empty. Add items to share.");
-    return;
-  }
+function shareCart() {
+    let cart = JSON.parse(localStorage.getItem("santra_cart") || "{}");
+    let baseURL = "https://santramarketshoppingmall.firebaseapp.com";
 
-  let shareText = `🛒 Check out my cart:\n\n`;
-  let totalAmount = 0;
+    if (Object.keys(cart).length === 0) {
+        alert("❌ Cart is empty!");
+        return;
+    }
 
-  cartItems.forEach((item, index) => {
-    const itemTotal = item.price * item.quantity;
-    totalAmount += itemTotal;
-    shareText += `${index + 1}. ${item.name}\n`;
-    shareText += `   Price: ₹${item.price} x ${item.quantity} = ₹${itemTotal}\n`;
-    shareText += `   Code: ${item.code}\n\n`;
-  });
+    // Grand Total Calculate
+    let subtotal = Object.values(cart).reduce((sum, item) => {
+        let qty = parseInt(item.qty) || 1;
+        let price = parseFloat(item.price) || 0;
+        return sum + price * qty;
+    }, 0);
+    let delivery = subtotal >= 500 ? 0 : 49;
+    let grandTotal = subtotal + delivery;
 
-  shareText += `Total Amount: ₹${totalAmount}\n`;
-  shareText += `Delivery: FREE\n\n`;
-  shareText += `Order now: ${window.location.origin}/cart`;
+    // Share Text Banao
+    let text = "🛒 *My Cart - SANTRA MALL* 🛒\n\n";
+    let count = 1;
 
-  if (navigator.share) {
-    navigator.share({
-      title: 'My Shopping Cart',
-      text: shareText,
-      url: window.location.origin + '/cart'
-    })
-    .then(() => console.log('Cart shared successfully'))
-    .catch((error) => console.log('Error sharing:', error));
-  } 
-  else {
-    navigator.clipboard.writeText(shareText).then(() => {
-      alert('Cart details copied to clipboard! You can paste and share it.');
-    }).catch(() => {
-      alert('Sharing not supported. Please copy manually:\n\n' + shareText);
+    Object.keys(cart).forEach(key => {
+        let item = cart[key];
+        let qty = parseInt(item.qty) || 1;
+        let price = parseFloat(item.price) || 0;
+        let itemTotal = price * qty;
+
+        text += `${count}. *${item.name}*\n`;
+        text += `Qty: ${qty} x ₹${price} = ₹${itemTotal}\n`;
+        text += `Link: ${baseURL}/product.html?id=${item.id || key}\n\n`;
+        count++;
     });
-  }
-};
+
+    text += `━━━━━━━━━━━━━━━━━━\n`;
+    text += `*🧾 GRAND TOTAL: ₹${grandTotal}*\n`;
+    text += `━━━━━━━━━━━━━━━━━━\n\n`;
+
+    // Order Details Blank
+    text += `*📝 Order Details:*\n`;
+    text += `Customer Name: ________________\n`;
+    text += `Address: ________________\n`;
+    text += `Payment Mode: Online / Cash on Delivery\n\n`;
+    text += `Shop now at SANTRA MALL 🛒`;
+
+    // Direct WhatsApp App Open
+    let whatsappURL = `whatsapp://send?text=${encodeURIComponent(text)}`;
+    window.location.href = whatsappURL;
+}
+
+/**
+ * Share My Choice Function
+ */
+function shareWishlist() {
+    let wishlist = JSON.parse(localStorage.getItem("santra_mychoice") || "{}");
+    let baseURL = "https://santramarketshoppingmall.firebaseapp.com";
+
+    if (Object.keys(wishlist).length === 0) {
+        alert("❌ My Choice is empty!");
+        return;
+    }
+
+    let text = "💝 *My Choice - SANTRA MALL* 💝\n\n";
+    let count = 1;
+
+    Object.keys(wishlist).forEach(key => {
+        let item = wishlist[key];
+        text += `${count}. *${item.name}*\n`;
+        text += `${baseURL}/product.html?id=${item.id || key}\n\n`;
+        count++;
+    });
+
+    text += `Shop now at SANTRA MALL 🛒`;
+
+    let whatsappURL = `whatsapp://send?text=${encodeURIComponent(text)}`;
+    window.location.href = whatsappURL;
+}
 
 /**
  * Share Single Product Function
- * Ye Cart me har product ke niche wale "Share" button ke liye hai
  */
-export const shareSingleProduct = (product) => {
-  const shareText = `Check this out: ${product.name}\nPrice: ₹${product.price}\nCode: ${product.code}\n\nBuy here: ${window.location.origin}/product/${product.code}`;
+function shareProduct(productId, productName, price) {
+    const link = `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${productId}`;
+    const text = `Check this out: *${productName}*\nPrice: ₹${price}\n\nBuy here: ${link}`;
 
-  if (navigator.share) {
-    navigator.share({
-      title: product.name,
-      text: shareText,
-      url: `${window.location.origin}/product/${product.code}`
-    });
-  } else {
-    navigator.clipboard.writeText(shareText).then(() => {
-      alert('Product link copied to clipboard!');
-    });
-  }
-};
+    let whatsappURL = `whatsapp://send?text=${encodeURIComponent(text)}`;
+    window.location.href = whatsappURL;
+}
