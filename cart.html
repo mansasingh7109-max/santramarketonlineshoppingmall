@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>🛒 My Cart - SANTRA MALL</title>
+
         <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
             rel="stylesheet"
@@ -324,7 +325,7 @@
                         font-size: 15px;
                     "
                 >
-                    📲 Share Direct on WhatsApp
+                    📲 Share Direct on WhatsApp 8769171078
                 </button>
 
                 <h3>Price Details</h3>
@@ -471,25 +472,25 @@
                         let price = parseFloat(item.price) || 0;
 
                         return `
-            <div class="cart-card">
-              <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/4CAF50/ffffff?text=NO+IMAGE'">
-              <div class="item-info">
-                <h3>${item.name || "Product"}</h3>
-                <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
-                <div class="item-code">Code: ${item.productCode || key}</div>
-                <div class="qty-controls">
-                  <button class="qty-btn" onclick="updateQty('${key}', -1)" ${qty <= 1 ? "disabled" : ""}>-</button>
-                  <span class="qty-display">${qty}</span>
-                  <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
-                </div>
-                <div class="item-actions">
-                  <button class="btn-move-choice" onclick="moveToMyChoice('${key}')">⭐ Move to My Choice</button>
-                  <button onclick="shareProduct('${item.id || key}', '${item.name}', '${item.price}')" style="padding:8px 12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:12px;">🔗 Share</button>
-                  <button class="btn-remove" onclick="removeFromCart('${key}')">🗑️ Remove</button>
+              <div class="cart-card">
+                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/4CAF50/ffffff?text=NO+IMAGE'">
+                <div class="item-info">
+                  <h3>${item.name || "Product"}</h3>
+                  <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
+                  <div class="item-code">Code: ${item.productCode || key}</div>
+                  <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('${key}', -1)" ${qty <= 1 ? "disabled" : ""}>-</button>
+                    <span class="qty-display">${qty}</span>
+                    <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
+                  </div>
+                  <div class="item-actions">
+                    <button class="btn-move-choice" onclick="moveToMyChoice('${key}')">⭐ Move to My Choice</button>
+                    <button onclick="shareProduct('${item.id || key}', '${item.name}', '${item.price}')" style="padding:8px 12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:12px;">🔗 Share</button>
+                    <button class="btn-remove" onclick="removeFromCart('${key}')">🗑️ Remove</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          `;
+            `;
                     })
                     .join("");
 
@@ -522,13 +523,13 @@
 
                 if (choiceKeys.length === 0) {
                     container.innerHTML = `
-              <div class="my-choice-info">
-                <h3>⭐ My Choice - Your Wishlist</h3>
-                <p>Save your favorite products here and buy them later.</p>
-                <p style="margin-top:15px;color:var(--accent);font-weight:600">No items saved yet</p>
-                <button onclick="window.location.href='index.html'" style="margin-top:20px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer">Browse Products</button>
-              </div>
-            `;
+                <div class="my-choice-info">
+                  <h3>⭐ My Choice - Your Wishlist</h3>
+                  <p>Save your favorite products here and buy them later.</p>
+                  <p style="margin-top:15px;color:var(--accent);font-weight:600">No items saved yet</p>
+                  <button onclick="window.location.href='index.html'" style="margin-top:20px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer">Browse Products</button>
+                </div>
+              `;
                     updateCounts();
                     return;
                 }
@@ -542,19 +543,19 @@
                         let price = parseFloat(item.price) || 0;
 
                         return `
-            <div class="cart-card">
-              <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/f59e0b/ffffff?text=CHOICE'">
-              <div class="item-info">
-                <h3>${item.name || "Product"}</h3>
-                <div class="item-price">₹${price}</div>
-                <div class="item-code">Code: ${item.productCode || key}</div>
-                <div class="item-actions">
-                  <button class="btn-move-cart" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
-                  <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
+              <div class="cart-card">
+                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/f59e0b/ffffff?text=CHOICE'">
+                <div class="item-info">
+                  <h3>${item.name || "Product"}</h3>
+                  <div class="item-price">₹${price}</div>
+                  <div class="item-code">Code: ${item.productCode || key}</div>
+                  <div class="item-actions">
+                    <button class="btn-move-cart" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
+                    <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          `;
+            `;
                     })
                     .join("");
                 updateCounts();
@@ -691,7 +692,8 @@
                 let grandTotal = subtotal + delivery;
 
                 // Share Text Start
-                let text = "🛒 *My Cart - SANTRA MALL* 🛒\n\n";
+                let text =
+                    "🛒 *My Cart - SANTRA MALL PLEASE GET SANTRAJET'S OTP FOR VERIFICATION , FILL FORM DETAIL* 🛒\n\n";
                 let count = 1;
 
                 Object.keys(cart).forEach(key => {
@@ -713,9 +715,17 @@
                 // Order Details Blank
                 text += `*📝 Order Details:*\n`;
                 text += `Customer Name: ________________\n`;
+                text += `Please send OTP for verification SANTRAJET'S OTP : ________________\n`;
+                text += `ORDER CODE NUMBER: ________________\n`;
+                text += `Customer Mobile Number: ________________\n`;
                 text += `Address: ________________\n`;
-                text += `Payment Mode: Online / Cash on Delivery\n\n`;
-                text += `Shop now at SANTRA MALL 🛒`;
+                text += `Landmark: ________________\n`;
+                text += `Pincode: ________________\n`;
+                text += `City: ________________\n`;
+                text += `State: ________________\n`;
+
+                text += `Payment Mode: Online / Cash on Delivery: ________________\n\n`;
+                text += `FILL FORM AND AGAIN SEND US , Shop now at SANTRA MALL 🛒`;
 
                 // WhatsApp Share
                 let whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
