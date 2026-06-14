@@ -1,4 +1,5 @@
 <!doctype html>
+<!doctype html>
 <html>
     <head>
         <meta charset="UTF-8" />
@@ -662,11 +663,18 @@
                     alert("Cart khali hai!");
                     return;
                 }
+
+                // Pehle Firebase me save karo
                 localStorage.setItem(
                     "santra_checkout_cart",
                     JSON.stringify(cart)
                 );
-                window.location.href = "checkout.html";
+
+                // Fir WhatsApp pe bhej do
+                shareCart(); // Upar wala function call ho jayega
+
+                // Fir checkout page pe bhej do
+                // window.location.href = "checkout.html"; // Is line ko comment kar de agar direct WhatsApp chahiye
             }
 
             // ✅ NEW CODE - 14/06/2026 - Share Cart With Full Details
