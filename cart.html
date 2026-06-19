@@ -4,22 +4,23 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>🛒 My Cart - SANTRA MALL</title>
-
         <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
             rel="stylesheet"
         />
-        <!-- ✅ PDF Library -->
+        <script src="Secrets.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
         <style>
             :root {
                 --bg: #f1f3f6;
                 --card: #ffffff;
                 --accent: #e40046;
                 --text: #212121;
-                --border: #e0e0e0;
                 --green: #10b981;
                 --orange: #f59e0b;
+                --blue: #3b82f6;
             }
             * {
                 margin: 0;
@@ -32,7 +33,7 @@
                 color: var(--text);
                 padding-bottom: 140px;
             }
-          .header {
+            .header {
                 background: var(--accent);
                 color: white;
                 padding: 15px;
@@ -43,18 +44,18 @@
                 top: 0;
                 z-index: 100;
             }
-          .header h1 {
+            .header h1 {
                 font-size: 18px;
                 flex: 1;
             }
-          .back-btn {
+            .back-btn {
                 background: none;
                 border: none;
                 color: white;
                 font-size: 22px;
                 cursor: pointer;
             }
-          .tabs {
+            .tabs {
                 display: flex;
                 background: var(--card);
                 margin: 15px;
@@ -62,7 +63,7 @@
                 overflow: hidden;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             }
-          .tab {
+            .tab {
                 flex: 1;
                 padding: 14px;
                 text-align: center;
@@ -70,14 +71,13 @@
                 cursor: pointer;
                 border: none;
                 background: transparent;
-                transition: 0.3s;
                 font-size: 15px;
             }
-          .tab.active {
+            .tab.active {
                 background: var(--accent);
                 color: white;
             }
-          .cart-card {
+            .cart-card {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
@@ -86,7 +86,7 @@
                 gap: 12px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             }
-          .cart-card img {
+            .cart-card img {
                 width: 90px;
                 height: 90px;
                 object-fit: contain;
@@ -94,32 +94,32 @@
                 border-radius: 8px;
                 border: 1px solid #eee;
             }
-          .item-info {
+            .item-info {
                 flex: 1;
             }
-          .item-info h3 {
+            .item-info h3 {
                 font-size: 15px;
                 margin-bottom: 6px;
                 line-height: 1.3;
             }
-          .item-price {
+            .item-price {
                 color: var(--accent);
                 font-weight: 700;
                 font-size: 16px;
                 margin: 5px 0;
             }
-          .item-code {
+            .item-code {
                 font-size: 11px;
                 color: #666;
                 margin-top: 4px;
             }
-          .qty-controls {
+            .qty-controls {
                 display: flex;
                 gap: 8px;
                 align-items: center;
                 margin-top: 10px;
             }
-          .qty-btn {
+            .qty-btn {
                 background: #eee;
                 border: none;
                 width: 32px;
@@ -129,62 +129,50 @@
                 font-weight: bold;
                 font-size: 18px;
             }
-          .qty-btn:disabled {
+            .qty-btn:disabled {
                 background: #ddd;
                 cursor: not-allowed;
                 opacity: 0.5;
             }
-          .qty-btn:active:not(:disabled) {
-                transform: scale(0.9);
-            }
-          .qty-display {
+            .qty-display {
                 padding: 0 12px;
                 font-weight: bold;
                 min-width: 30px;
                 text-align: center;
             }
-          .item-actions {
+            .item-actions {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
                 margin-top: 8px;
             }
-          .btn-move-choice {
+            .btn-move-choice,
+            .btn-remove,
+            .btn-share {
+                color: white;
+                border: none;
+                padding: 10px 12px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 600;
+                width: 100%;
+            }
+            .btn-move-choice {
                 background: var(--orange);
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: 600;
             }
-          .btn-move-cart {
-                background: var(--green);
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: 600;
-            }
-          .btn-remove {
+            .btn-remove {
                 background: #ef4444;
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: 600;
             }
-          .empty {
+            .btn-share {
+                background: var(--blue);
+            }
+            .empty {
                 text-align: center;
                 padding: 80px 20px;
                 color: #999;
             }
-          .empty button {
+            .empty button {
                 margin-top: 20px;
                 padding: 14px 32px;
                 background: var(--accent);
@@ -195,34 +183,37 @@
                 cursor: pointer;
                 font-size: 15px;
             }
-          .summary {
+            .summary {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
                 padding: 18px;
             }
-          .summary-row {
+            .summary-row {
                 display: flex;
                 justify-content: space-between;
                 margin: 10px 0;
                 font-size: 14px;
             }
-          .total-row {
+            .total-row {
                 font-weight: 700;
                 font-size: 18px;
-                border-top: 2px solid var(--border);
+                border-top: 2px solid #e0e0e0;
                 padding-top: 12px;
                 margin-top: 12px;
             }
-            /* ✅ NEW: Share Buttons */
-          .share-buttons {
+            .cart-total h3 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+            .share-buttons {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
                 margin-bottom: 15px;
             }
-          .btn-send-all {
-                background: linear-gradient(135deg, #25d366, #EA4335);
+            .btn-send-all {
+                background: linear-gradient(135deg, #25d366, #ea4335);
                 padding: 16px;
                 color: white;
                 border: none;
@@ -231,7 +222,11 @@
                 font-size: 15px;
                 cursor: pointer;
             }
-          .btn-pdf {
+            .btn-send-all:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+            }
+            .btn-pdf {
                 background: #7c3aed;
                 padding: 14px;
                 color: white;
@@ -241,8 +236,20 @@
                 font-size: 14px;
                 cursor: pointer;
             }
-            
-          .checkout-btn {
+            .btn-pdf:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+            }
+            #pdfLinkBox {
+                background: #e0f2fe;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                font-size: 13px;
+                word-break: break-all;
+                display: none;
+            }
+            .checkout-btn {
                 position: fixed;
                 bottom: 70px;
                 left: 15px;
@@ -257,13 +264,16 @@
                 cursor: pointer;
                 box-shadow: 0 4px 16px rgba(228, 0, 70, 0.4);
                 z-index: 50;
+                text-decoration: none;
+                text-align: center;
+                display: block;
             }
-          .checkout-btn:disabled {
+            .checkout-btn:disabled {
                 background: #ccc;
                 cursor: not-allowed;
                 box-shadow: none;
             }
-          .bottom-nav {
+            .bottom-nav {
                 position: fixed;
                 bottom: 0;
                 left: 0;
@@ -275,42 +285,26 @@
                 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
                 z-index: 100;
             }
-          .nav-item {
+            .nav-item {
                 text-align: center;
                 text-decoration: none;
                 color: #666;
                 flex: 1;
                 padding: 5px;
             }
-          .nav-item.active {
+            .nav-item.active {
                 color: var(--accent);
             }
-          .nav-item div {
+            .nav-item div {
                 font-size: 22px;
             }
-          .nav-item span {
+            .nav-item span {
                 font-size: 11px;
                 display: block;
                 margin-top: 2px;
             }
-          .hide {
-                display: none;
-            }
-          .my-choice-info {
-                background: var(--card);
-                margin: 15px;
-                border-radius: 12px;
-                padding: 20px;
-                text-align: center;
-            }
-          .my-choice-info h3 {
-                color: var(--orange);
-                margin-bottom: 10px;
-            }
-          .my-choice-info p {
-                color: #666;
-                font-size: 14px;
-                line-height: 1.6;
+            .hide {
+                display: none !important;
             }
         </style>
     </head>
@@ -340,17 +334,43 @@
                 <div class="cart-total">
                     <h3>Grand Total: ₹<span id="cartTotal">0</span></h3>
                 </div>
-
-                <!-- ✅ NEW: Single Button For All + PDF -->
-                <div class="share-buttons">
-                    <button onclick="sendOrderToAll()" class="btn-send-all">
-                        📲 Send Order - WhatsApp: 8769171078 | Email: santramarketshoppingmall@gmail.com
+                <div id="pdfLinkBox">
+                    <strong>📄 PDF Invoice Link:</strong><br /><span
+                        id="pdfLinkText"
+                    ></span
+                    ><br />
+                    <button
+                        onclick="copyPDFLink()"
+                        style="
+                            margin-top: 8px;
+                            padding: 6px 12px;
+                            background: #0ea5e9;
+                            color: white;
+                            border: none;
+                            border-radius: 6px;
+                            font-size: 12px;
+                        "
+                    >
+                        Copy Link
                     </button>
-                    <button onclick="downloadCartPDF()" class="btn-pdf">
+                </div>
+                <div class="share-buttons">
+                    <button
+                        onclick="sendOrderToAll()"
+                        class="btn-send-all"
+                        id="sendOrderBtn"
+                    >
+                        📲 Send Order - WhatsApp: 8769171078 | Email:
+                        santramarketshoppingmall@gmail.com
+                    </button>
+                    <button
+                        onclick="generateAndSharePDF()"
+                        class="btn-pdf"
+                        id="pdfBtn"
+                    >
                         📄 Download Invoice PDF
                     </button>
                 </div>
-
                 <h3>Price Details</h3>
                 <div class="summary-row">
                     <span>Price (<span id="itemCount">0</span> items)</span
@@ -368,29 +388,13 @@
                     <span>Total Amount</span><span id="grandTotal">₹0</span>
                 </div>
             </div>
-            <button id="checkoutBtn" class="checkout-btn" onclick="checkout()">
-                ➡️ PLACE ORDER VIA WEBSITE
-            </button>
+            <a href="checkout.html" id="checkoutBtn" class="checkout-btn">
+                ➡️ PROCEED TO CHECKOUT
+            </a>
         </div>
 
         <div id="choiceView" class="hide">
             <div id="myChoiceList"></div>
-            <button
-                onclick="shareWishlist()"
-                style="
-                    width: calc(100% - 30px);
-                    padding: 14px;
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    margin: 15px;
-                    font-weight: bold;
-                    font-size: 15px;
-                "
-            >
-                🔗 Share My Choice
-            </button>
         </div>
 
         <div class="bottom-nav">
@@ -409,63 +413,78 @@
         </div>
 
         <script>
+            // ✅ Fix: Secrets.js fallback
+            if (typeof ADMIN_WHATSAPP === "undefined") {
+                console.error("Secrets.js not loaded! Using fallback.");
+                var ADMIN_WHATSAPP = "918769171078";
+                var ADMIN_EMAIL = "santramarketshoppingmall@gmail.com";
+                var CLOUDINARY_CLOUD_NAME = "";
+                var CLOUDINARY_UPLOAD_PRESET = "";
+            }
+
+            try {
+                if (
+                    typeof firebaseConfig !== "undefined" &&
+                    !firebase.apps.length
+                )
+                    firebase.initializeApp(firebaseConfig);
+                var rtdb = firebase.database();
+            } catch (e) {
+                console.log("Firebase not configured:", e);
+                var rtdb = null;
+            }
+
             let cart = {};
             let myChoice = {};
             let currentTab = "cart";
-
+            let currentPDFLink = "";
             const CART_KEY = "santra_cart";
             const CHOICE_KEY = "santra_mychoice";
-            const ADMIN_WHATSAPP = "918769171078"; // 91 + 8769171078
-            const ADMIN_EMAIL = "santramarketshoppingmall@gmail.com"; // ✅ Tera email
 
             function switchTab(tab) {
                 currentTab = tab;
                 document
-                  .getElementById("cartTab")
-                  .classList.toggle("active", tab === "cart");
+                    .getElementById("cartTab")
+                    .classList.toggle("active", tab === "cart");
                 document
-                  .getElementById("choiceTab")
-                  .classList.toggle("active", tab === "choice");
+                    .getElementById("choiceTab")
+                    .classList.toggle("active", tab === "choice");
                 document
-                  .getElementById("cartView")
-                  .classList.toggle("hide", tab!== "cart");
+                    .getElementById("cartView")
+                    .classList.toggle("hide", tab !== "cart");
                 document
-                  .getElementById("choiceView")
-                  .classList.toggle("hide", tab!== "choice");
+                    .getElementById("choiceView")
+                    .classList.toggle("hide", tab !== "choice");
                 document.getElementById("pageTitle").innerText =
-                    tab === "cart"? "🛒 My Cart" : "⭐ My Choice";
-
-                if (tab === "choice") {
-                    renderMyChoice();
-                } else {
-                    renderCart();
-                }
+                    tab === "cart" ? "🛒 My Cart" : "⭐ My Choice";
+                if (tab === "choice") renderMyChoice();
+                else renderCart();
             }
 
             function loadData() {
                 try {
-                    cart = JSON.parse(localStorage.getItem(CART_KEY) || "{}");
+                    let rawData = localStorage.getItem(CART_KEY);
+                    if (rawData && rawData !== "{}" && rawData !== "null") {
+                        let cartData = JSON.parse(rawData);
+                        cart = cartData.cart ? cartData.cart : cartData;
+                    } else {
+                        cart = {};
+                    }
                     myChoice = JSON.parse(
                         localStorage.getItem(CHOICE_KEY) || "{}"
                     );
-
                     Object.keys(cart).forEach(key => {
-                        if (!cart[key].qty || cart[key].qty < 1) {
+                        if (!cart[key].qty || cart[key].qty < 1)
                             cart[key].qty = 1;
-                        }
-                        if (!cart[key].price) {
-                            cart[key].price = 0;
-                        }
+                        cart[key].price = parseFloat(cart[key].price) || 0;
                     });
-                    saveCart();
                 } catch (e) {
-                    console.log("Load error:", e);
+                    console.error("Cart load error:", e);
                     cart = {};
                     myChoice = {};
                 }
                 renderCart();
                 updateCounts();
-                updateCartDisplay();
             }
 
             function renderCart() {
@@ -478,54 +497,48 @@
                     container.innerHTML =
                         '<div class="empty">🛒 Your cart is empty<br><button onclick="window.location.href=\'index.html\'">Continue Shopping</button></div>';
                     summary.classList.add("hide");
-                    checkoutBtn.innerText = "Cart is Empty";
-                    checkoutBtn.disabled = true;
+                    checkoutBtn.style.display = "none";
                     updateCounts();
                     return;
                 }
 
-                checkoutBtn.disabled = false;
-                checkoutBtn.innerText = "➡️ PLACE ORDER VIA WEBSITE";
-
+                checkoutBtn.style.display = "block";
                 container.innerHTML = cartKeys
-                  .map(key => {
+                    .map(key => {
                         let item = cart[key];
-                        let imgSrc =
-                            item.image ||
-                            "https://via.placeholder.com/90x90/4CAF50/ffffff?text=NO+IMAGE";
                         let qty = parseInt(item.qty) || 1;
                         let price = parseFloat(item.price) || 0;
-
                         return `
-              <div class="cart-card">
-                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/4CAF50/ffffff?text=NO+IMAGE'">
-                <div class="item-info">
-                  <h3>${item.name || "Product"}</h3>
-                  <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
-                  <div class="item-code">Code: ${item.productCode || key}</div>
-                  <div class="qty-controls">
-                    <button class="qty-btn" onclick="updateQty('${key}', -1)" ${qty <= 1? "disabled" : ""}>-</button>
-                    <span class="qty-display">${qty}</span>
-                    <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
-                  </div>
-                  <div class="item-actions">
-                    <button class="btn-move-choice" onclick="moveToMyChoice('${key}')">⭐ Move to My Choice</button>
-                    <button onclick="shareProduct('${item.id || key}', '${item.name}', '${item.price}')" style="padding:8px 12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:12px;">🔗 Share</button>
-                    <button class="btn-remove" onclick="removeFromCart('${key}')">🗑️ Remove</button>
-                  </div>
-                </div>
-              </div>
-            `;
+                      <div class="cart-card">
+                        <img src="${item.image || "https://via.placeholder.com/90"}">
+                        <div class="item-info">
+                          <h3>${item.name || "Product"}</h3>
+                          <div class="item-price">₹${price} x ${qty} = ₹${price * qty}</div>
+                          <div class="item-code">Code: ${item.productCode || item.code || key}</div>
+                          <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQty('${key}', -1)" ${qty <= 1 ? "disabled" : ""}>-</button>
+                            <span class="qty-display">${qty}</span>
+                            <button class="qty-btn" onclick="updateQty('${key}', 1)">+</button>
+                          </div>
+                          <div class="item-actions">
+                            <button class="btn-move-choice" onclick="moveToMyChoice('${key}')">⭐ Move to My Choice</button>
+                            <button class="btn-share" onclick="shareProduct('${item.id || key}', '${item.name}', '${item.price}')">🔗 Share</button>
+                            <button class="btn-remove" onclick="removeFromCart('${key}')">🗑️ Remove</button>
+                          </div>
+                        </div>
+                      </div>
+                    `;
                     })
-                  .join("");
+                    .join("");
 
-                let subtotal = Object.values(cart).reduce((sum, item) => {
-                    let qty = parseInt(item.qty) || 1;
-                    let price = parseFloat(item.price) || 0;
-                    return sum + price * qty;
-                }, 0);
-
-                let delivery = subtotal >= 500? 0 : 49;
+                let subtotal = Object.values(cart).reduce(
+                    (sum, item) =>
+                        sum +
+                        (parseFloat(item.price) || 0) *
+                            (parseInt(item.qty) || 1),
+                    0
+                );
+                let delivery = subtotal >= 500 ? 0 : 49;
                 let total = subtotal + delivery;
                 let totalItems = Object.values(cart).reduce(
                     (sum, item) => sum + (parseInt(item.qty) || 1),
@@ -534,7 +547,7 @@
 
                 document.getElementById("subTotal").innerText = "₹" + subtotal;
                 document.getElementById("deliveryCharge").innerText =
-                    delivery === 0? "FREE" : "₹" + delivery;
+                    delivery === 0 ? "FREE" : "₹" + delivery;
                 document.getElementById("grandTotal").innerText = "₹" + total;
                 document.getElementById("cartTotal").innerText = total;
                 document.getElementById("itemCount").innerText = totalItems;
@@ -545,131 +558,74 @@
             function renderMyChoice() {
                 let container = document.getElementById("myChoiceList");
                 let choiceKeys = Object.keys(myChoice);
-
                 if (choiceKeys.length === 0) {
-                    container.innerHTML = `
-                <div class="my-choice-info">
-                  <h3>⭐ My Choice - Your Wishlist</h3>
-                  <p>Save your favorite products here and buy them later.</p>
-                  <p style="margin-top:15px;color:var(--accent);font-weight:600">No items saved yet</p>
-                  <button onclick="window.location.href='index.html'" style="margin-top:20px;padding:12px 30px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer">Browse Products</button>
-                </div>
-              `;
+                    container.innerHTML = `<div class="empty"><h3>⭐ My Choice - Your Wishlist</h3><p>Save your favorite products here</p><button onclick="window.location.href='index.html'">Browse Products</button></div>`;
                     updateCounts();
                     return;
                 }
-
                 container.innerHTML = choiceKeys
-                  .map(key => {
+                    .map(key => {
                         let item = myChoice[key];
-                        let imgSrc =
-                            item.image ||
-                            "https://via.placeholder.com/90x90/f59e0b/ffffff?text=CHOICE";
                         let price = parseFloat(item.price) || 0;
-
                         return `
-              <div class="cart-card">
-                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/90x90/f59e0b/ffffff?text=CHOICE'">
-                <div class="item-info">
-                  <h3>${item.name || "Product"}</h3>
-                  <div class="item-price">₹${price}</div>
-                  <div class="item-code">Code: ${item.productCode || key}</div>
-                  <div class="item-actions">
-                    <button class="btn-move-cart" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
-                    <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
-                  </div>
-                </div>
-              </div>
-            `;
+                      <div class="cart-card">
+                        <img src="${item.image || "https://via.placeholder.com/90"}">
+                        <div class="item-info">
+                          <h3>${item.name || "Product"}</h3>
+                          <div class="item-price">₹${price}</div>
+                          <div class="item-code">Code: ${item.productCode || key}</div>
+                          <div class="item-actions">
+                            <button class="btn-move-choice" style="background: var(--green);" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
+                            <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
+                          </div>
+                        </div>
+                      </div>
+                    `;
                     })
-                  .join("");
+                    .join("");
                 updateCounts();
             }
 
-            function updateQty(productId, change) {
-                if (!cart[productId]) return;
-
-                let currentQty = parseInt(cart[productId].qty) || 1;
-                let newQty = currentQty + change;
-
-                if (newQty < 1) {
-                    if (
-                        confirm(
-                            "Quantity 0 karne se item remove ho jayega. Remove karein?"
-                        )
-                    ) {
-                        delete cart[productId];
-                    } else {
-                        return;
-                    }
-                } else {
-                    cart[productId].qty = newQty;
-                }
-
-                saveCart();
-                renderCart();
-            }
-
-            function removeFromCart(productId) {
-                if (confirm("Remove this item from cart?")) {
-                    delete cart[productId];
-                    saveCart();
-                    renderCart();
-                }
-            }
-
-            function moveToMyChoice(productId) {
-                let item = cart[productId];
-                if (!item) return;
-
-                delete cart[productId];
-                saveCart();
-
-                myChoice[productId] = {...item };
-                delete myChoice[productId].qty;
-                myChoice[productId].savedAt = new Date().toLocaleString(
-                    "en-IN",
-                    { timeZone: "Asia/Kolkata" }
-                );
-                saveChoice();
-
-                renderCart();
-                alert("⭐ Moved to My Choice!");
-            }
-
-            function moveToCart(productId) {
-                let item = myChoice[productId];
-                if (!item) return;
-
-                delete myChoice[productId];
-                saveChoice();
-
-                cart[productId] = cart[productId] || {...item };
-                cart[productId].qty = (parseInt(cart[productId].qty) || 0) + 1;
-                cart[productId].addedAtIST = new Date().toLocaleString(
-                    "en-IN",
-                    { timeZone: "Asia/Kolkata" }
-                );
-                saveCart();
-
-                renderMyChoice();
-                alert("🛒 Moved to Cart!");
-            }
-
-            function removeFromChoice(productId) {
-                if (confirm("Remove from My Choice?")) {
-                    delete myChoice[productId];
-                    saveChoice();
-                    renderMyChoice();
-                }
-            }
-
-            function saveCart() {
+            function updateQty(id, change) {
+                if (!cart[id]) return;
+                cart[id].qty = (parseInt(cart[id].qty) || 1) + change;
+                if (cart[id].qty < 1) delete cart[id];
                 localStorage.setItem(CART_KEY, JSON.stringify(cart));
+                renderCart();
             }
 
-            function saveChoice() {
+            function removeFromCart(id) {
+                delete cart[id];
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+                renderCart();
+            }
+
+            function moveToMyChoice(id) {
+                let item = cart[id];
+                if (!item) return;
+                delete cart[id];
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+                myChoice[id] = { ...item };
+                delete myChoice[id].qty;
                 localStorage.setItem(CHOICE_KEY, JSON.stringify(myChoice));
+                renderCart();
+            }
+
+            function moveToCart(id) {
+                let item = myChoice[id];
+                if (!item) return;
+                delete myChoice[id];
+                localStorage.setItem(CHOICE_KEY, JSON.stringify(myChoice));
+                cart[id] = cart[id] || { ...item };
+                cart[id].qty = (parseInt(cart[id].qty) || 0) + 1;
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+                renderMyChoice();
+            }
+
+            function removeFromChoice(id) {
+                delete myChoice[id];
+                localStorage.setItem(CHOICE_KEY, JSON.stringify(myChoice));
+                renderMyChoice();
             }
 
             function updateCounts() {
@@ -677,57 +633,43 @@
                     (sum, item) => sum + (parseInt(item?.qty) || 1),
                     0
                 );
-                let choiceCount = Object.keys(myChoice).length;
                 document.getElementById("cartCount").innerText = cartCount;
-                document.getElementById("choiceCount").innerText = choiceCount;
+                document.getElementById("choiceCount").innerText =
+                    Object.keys(myChoice).length;
             }
 
-            function checkout() {
-                if (Object.keys(cart).length === 0) {
-                    alert("Cart khali hai!");
-                    return;
-                }
-                localStorage.setItem(
-                    "santra_checkout_cart",
-                    JSON.stringify(cart)
+            function shareProduct(id, name, price) {
+                let link = `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${id}`;
+                let text = `Check out *${name}*\nPrice: ₹${price}\n\nBuy here: ${link}`;
+                window.open(
+                    `https://wa.me/?text=${encodeURIComponent(text)}`,
+                    "_blank"
                 );
-                window.location.href = "checkout.html";
             }
 
-            // ✅ Generate Order Text + PDF Data
             function generateOrderData() {
-                let baseURL = "https://santramarketshoppingmall.firebaseapp.com";
-                
-                if (Object.keys(cart).length === 0) {
-                    return null;
-                }
-
-                let subtotal = Object.values(cart).reduce((sum, item) => {
-                    let qty = parseInt(item.qty) || 1;
-                    let price = parseFloat(item.price) || 0;
-                    return sum + price * qty;
-                }, 0);
-                let delivery = subtotal >= 500? 0 : 49;
+                let baseURL =
+                    "https://santramarketshoppingmall.firebaseapp.com";
+                if (Object.keys(cart).length === 0) return null;
+                let subtotal = Object.values(cart).reduce(
+                    (sum, item) =>
+                        sum +
+                        (parseFloat(item.price) || 0) *
+                            (parseInt(item.qty) || 1),
+                    0
+                );
+                let delivery = subtotal >= 500 ? 0 : 49;
                 let grandTotal = subtotal + delivery;
                 let orderId = "SM" + Date.now();
-
-                let text = `🛒 *New Order - SANTRA MALL* 🛒\n`;
-                text += `Order ID: ${orderId}\n`;
-                text += `Date: ${new Date().toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}\n\n`;
+                let text = `🛒 *New Order - SANTRA MALL* 🛒\nOrder ID: ${orderId}\nDate: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}\n\n`;
                 let count = 1;
                 let itemsArray = [];
-
                 Object.keys(cart).forEach(key => {
                     let item = cart[key];
                     let qty = parseInt(item.qty) || 1;
                     let price = parseFloat(item.price) || 0;
                     let itemTotal = price * qty;
-
-                    text += `${count}. *${item.name}*\n`;
-                    text += ` Qty: ${qty} x ₹${price} = ₹${itemTotal}\n`;
-                    text += ` Code: ${item.productCode || key}\n`;
-                    text += ` Link: ${baseURL}/product.html?id=${item.id || key}\n\n`;
-                    
+                    text += `${count}. *${item.name}*\n Qty: ${qty} x ₹${price} = ₹${itemTotal}\n Code: ${item.productCode || key}\n Link: ${baseURL}/product.html?id=${item.id || key}\n\n`;
                     itemsArray.push({
                         name: item.name,
                         qty: qty,
@@ -737,195 +679,203 @@
                     });
                     count++;
                 });
-
-                text += `━━━━━━━━━━━━━━━━━━\n`;
-                text += `*Subtotal: ₹${subtotal}*\n`;
-                text += `*Delivery: ${delivery === 0? 'FREE' : '₹' + delivery}*\n`;
-                text += `*🧾 GRAND TOTAL: ₹${grandTotal}*\n`;
-                text += `━━━━━━━━━━━━━━━━━━\n\n`;
-
-                text += `*📝 Customer Details:*\n`;
-                text += `Name: ________________\n`;
-                text += `Mobile: ________________\n`;
-                text += `Address: ________________\n`;
-                text += `Landmark: ________________\n`;
-                text += `Pincode: ________________\n`;
-                text += `City: ________________\n`;
-                text += `State: ________________\n`;
-                text += `Payment: Online / Cash on Delivery\n\n`;
-                text += `Please confirm this order ✅`;
-
-                return { text, grandTotal, orderId, itemsArray, subtotal, delivery };
+                text += `━━━━━━━━━━━━━━━━━━\n*Subtotal: ₹${subtotal}*\n*Delivery: ${delivery === 0 ? "FREE" : "₹" + delivery}*\n*🧾 GRAND TOTAL: ₹${grandTotal}*\n━━━━━━━━━━━━━━━━━━\n\n`;
+                return {
+                    text,
+                    grandTotal,
+                    orderId,
+                    itemsArray,
+                    subtotal,
+                    delivery
+                };
             }
 
-            // ✅ NEW: Send To WhatsApp + Email Both
-            function sendOrderToAll() {
+            async function generateAndUploadPDF(orderData) {
+                const btn =
+                    document.getElementById("sendOrderBtn") ||
+                    document.getElementById("pdfBtn");
+                const oldText = btn ? btn.innerText : "";
+                if (btn) btn.innerText = "⏳ Generating PDF...";
+
+                return new Promise(resolve => {
+                    setTimeout(async () => {
+                        try {
+                            if (
+                                typeof CLOUDINARY_CLOUD_NAME === "undefined" ||
+                                !CLOUDINARY_CLOUD_NAME ||
+                                CLOUDINARY_CLOUD_NAME.includes(
+                                    "YOUR_CLOUD_NAME"
+                                )
+                            ) {
+                                throw new Error(
+                                    "Cloudinary config missing in Secrets.js"
+                                );
+                            }
+
+                            const { jsPDF } = window.jspdf;
+                            const doc = new jsPDF();
+                            doc.setFillColor(228, 0, 70);
+                            doc.rect(0, 0, 210, 30, "F");
+                            doc.setFontSize(22);
+                            doc.setTextColor(255, 255, 255);
+                            doc.text("SANTRA MALL", 105, 18, {
+                                align: "center"
+                            });
+                            doc.setFontSize(10);
+                            doc.setTextColor(0, 0, 0);
+                            doc.text(`Order ID: ${orderData.orderId}`, 20, 40);
+                            doc.text(
+                                `Date: ${new Date().toLocaleDateString("en-IN")}`,
+                                20,
+                                46
+                            );
+                            let y = 68;
+                            doc.setFont("helvetica", "bold");
+                            doc.text("Item", 22, 60);
+                            doc.text("Qty", 110, 60);
+                            doc.text("Price", 130, 60);
+                            doc.text("Total", 160, 60);
+                            doc.setFont("helvetica", "normal");
+                            orderData.itemsArray.forEach(item => {
+                                if (y > 270) {
+                                    doc.addPage();
+                                    y = 20;
+                                }
+                                doc.text(item.name.substring(0, 40), 22, y);
+                                doc.text(String(item.qty), 110, y);
+                                doc.text(`Rs.${item.price}`, 130, y);
+                                doc.text(`Rs.${item.total}`, 160, y);
+                                y += 7;
+                            });
+                            y += 5;
+                            doc.line(20, y, 190, y);
+                            y += 7;
+                            doc.setFont("helvetica", "bold");
+                            doc.text(
+                                `Subtotal: Rs.${orderData.subtotal}`,
+                                130,
+                                y
+                            );
+                            y += 6;
+                            doc.text(
+                                `Delivery: ${orderData.delivery === 0 ? "FREE" : "Rs." + orderData.delivery}`,
+                                130,
+                                y
+                            );
+                            y += 6;
+                            doc.setFontSize(12);
+                            doc.text(
+                                `GRAND TOTAL: Rs.${orderData.grandTotal}`,
+                                130,
+                                y
+                            );
+
+                            const pdfBlob = doc.output("blob");
+                            const formData = new FormData();
+                            formData.append("file", pdfBlob);
+                            formData.append(
+                                "upload_preset",
+                                CLOUDINARY_UPLOAD_PRESET
+                            );
+                            formData.append("folder", "santra_invoices");
+
+                            const controller = new AbortController();
+                            const timeoutId = setTimeout(
+                                () => controller.abort(),
+                                15000
+                            );
+
+                            const res = await fetch(
+                                `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`,
+                                {
+                                    method: "POST",
+                                    body: formData,
+                                    signal: controller.signal
+                                }
+                            );
+                            clearTimeout(timeoutId);
+
+                            const data = await res.json();
+                            if (data.error) throw new Error(data.error.message);
+
+                            currentPDFLink = data.secure_url;
+                            document.getElementById(
+                                "pdfLinkBox"
+                            ).style.display = "block";
+                            document.getElementById("pdfLinkText").innerText =
+                                currentPDFLink;
+                            resolve(currentPDFLink);
+                        } catch (err) {
+                            console.error("PDF Upload Failed:", err);
+                            resolve(null);
+                        } finally {
+                            if (btn) btn.innerText = oldText;
+                        }
+                    }, 100);
+                });
+            }
+
+            async function sendOrderToAll() {
                 const orderData = generateOrderData();
                 if (!orderData) {
                     alert("❌ Cart is empty!");
                     return;
                 }
+                const btn = document.getElementById("sendOrderBtn");
+                btn.innerText = "⏳ Processing...";
+                btn.disabled = true;
 
-                // 1. WhatsApp Open
-                let whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(orderData.text)}`;
+                const pdfLink = await generateAndUploadPDF(orderData);
+
+                let text = orderData.text;
+                if (pdfLink) text += `📄 *Invoice PDF:* ${pdfLink}\n\n`;
+                text += `*📝 Customer Details:*\nName: ________________\nMobile: ________________\nAddress: ________________\n\nPlease confirm this order ✅`;
+
+                let whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
                 window.open(whatsappURL, "_blank");
 
-                // 2. Email Open - 1 sec baad
                 setTimeout(() => {
                     let subject = `New Order ${orderData.orderId} - SANTRA MALL - ₹${orderData.grandTotal}`;
-                    let mailtoURL = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(orderData.text)}`;
-                    window.location.href = mailtoURL;
+                    let mailtoURL = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+                    window.open(mailtoURL, "_blank");
                 }, 1000);
+
+                btn.innerText =
+                    "📲 Send Order - WhatsApp: 8769171078 | Email: santramarketshoppingmall@gmail.com";
+                btn.disabled = false;
             }
 
-            // ✅ NEW: WhatsApp Only
-            function shareCartWhatsApp() {
+            async function generateAndSharePDF() {
                 const orderData = generateOrderData();
                 if (!orderData) {
                     alert("❌ Cart is empty!");
                     return;
                 }
-                let whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(orderData.text)}`;
-                window.open(whatsappURL, "_blank");
-            }
+                const pdfBtn = document.getElementById("pdfBtn");
+                pdfBtn.innerText = "⏳ Generating PDF...";
+                pdfBtn.disabled = true;
 
-            // ✅ NEW: Email Only
-            function shareCartEmail() {
-                const orderData = generateOrderData();
-                if (!orderData) {
-                    alert("❌ Cart is empty!");
-                    return;
-                }
-                let subject = `New Order ${orderData.orderId} - SANTRA MALL - ₹${orderData.grandTotal}`;
-                let mailtoURL = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(orderData.text)}`;
-                window.location.href = mailtoURL;
-            }
-
-            // ✅ NEW: Professional PDF Invoice
-            function downloadCartPDF() {
-                const orderData = generateOrderData();
-                if (!orderData) {
-                    alert("❌ Cart is empty!");
-                    return;
-                }
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // Header
-                doc.setFillColor(228, 0, 70);
-                doc.rect(0, 0, 210, 30, 'F');
-                doc.setFontSize(22);
-                doc.setTextColor(255, 255, 255);
-                doc.text("SANTRA MALL", 105, 18, { align: "center" });
-                
-                // Order Info
-                doc.setFontSize(10);
-                doc.setTextColor(0, 0, 0);
-                doc.text(`Order ID: ${orderData.orderId}`, 20, 40);
-                doc.text(`Date: ${new Date().toLocaleDateString("en-IN")}`, 20, 46);
-                
-                // Table Header
-                doc.setFillColor(240, 240, 240);
-                doc.rect(20, 55, 170, 8, 'F');
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "bold");
-                doc.text("Item", 22, 60);
-                doc.text("Qty", 110, 60);
-                doc.text("Price", 130, 60);
-                doc.text("Total", 160, 60);
-                
-                // Items
-                doc.setFont("helvetica", "normal");
-                let y = 68;
-                orderData.itemsArray.forEach(item => {
-                    doc.text(item.name.substring(0, 40), 22, y);
-                    doc.text(String(item.qty), 110, y);
-                    doc.text(`Rs.${item.price}`, 130, y);
-                    doc.text(`Rs.${item.total}`, 160, y);
-                    y += 7;
-                });
-                
-                // Total
-                y += 5;
-                doc.line(20, y, 190, y);
-                y += 7;
-                doc.setFont("helvetica", "bold");
-                doc.text(`Subtotal: Rs.${orderData.subtotal}`, 130, y);
-                y += 6;
-                doc.text(`Delivery: ${orderData.delivery === 0? 'FREE' : 'Rs.' + orderData.delivery}`, 130, y);
-                y += 6;
-                doc.setFontSize(12);
-                doc.text(`GRAND TOTAL: Rs.${orderData.grandTotal}`, 130, y);
-                
-                // Footer
-                y += 15;
-                doc.setFontSize(9);
-                doc.setFont("helvetica", "normal");
-                doc.text("Customer Details:", 20, y);
-                y += 6;
-                doc.text("Name: ___________________ Mobile: ___________________", 20, y);
-                y += 6;
-                doc.text("Address: _________________________________________________", 20, y);
-                y += 6;
-                doc.text("City: ___________________ Pincode: ___________________", 20, y);
-                
-                doc.save(`SANTRA_Invoice_${orderData.orderId}.pdf`);
-            }
-
-            function shareWishlist() {
-                let wishlist = JSON.parse(
-                    localStorage.getItem("santra_mychoice") || "{}"
-                );
-                let baseURL =
-                    "https://santramarketshoppingmall.firebaseapp.com";
-
-                if (Object.keys(wishlist).length === 0) {
-                    alert("❌ My Choice is empty!");
-                    return;
-                }
-
-                let text = "💝 *My Choice - SANTRA MALL* 💝\n\n";
-                let count = 1;
-
-                Object.keys(wishlist).forEach(key => {
-                    let item = wishlist[key];
-                    text += `${count}. *${item.name}*\n`;
-                    text += `${baseURL}/product.html?id=${item.id || key}\n\n`;
-                    count++;
-                });
-
-                text += `Shop now at SANTRA MALL 🛒`;
-
-                let whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
-                window.open(whatsappURL, "_blank");
-            }
-
-            function shareProduct(productId, productName, price) {
-                const link = `https://santramarketshoppingmall.firebaseapp.com/product.html?id=${productId}`;
-                const text = `Check out *${productName}*\nPrice: ₹${price}\n\nBuy here: ${link}`;
-                let whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
-                window.open(whatsappURL, "_blank");
-            }
-
-            function updateCartDisplay() {
-                let cart = JSON.parse(
-                    localStorage.getItem("santra_cart") || "{}"
-                );
-                let cartCount = Object.keys(cart).length;
-
-                if (cartCount > 0) {
-                    document
-                      .getElementById("cartSummary")
-                      .classList.remove("hide");
+                const pdfLink = await generateAndUploadPDF(orderData);
+                if (pdfLink) {
+                    window.open(pdfLink, "_blank");
+                    alert("✅ PDF Ready! Link copied.");
                 } else {
-                    document
-                      .getElementById("cartSummary")
-                      .classList.add("hide");
+                    alert(
+                        "❌ PDF Upload Failed. Cloudinary config check karo Secrets.js me."
+                    );
+                }
+                pdfBtn.innerText = "📄 Download Invoice PDF";
+                pdfBtn.disabled = false;
+            }
+
+            function copyPDFLink() {
+                if (currentPDFLink) {
+                    navigator.clipboard.writeText(currentPDFLink);
+                    alert("✅ PDF Link Copied!");
                 }
             }
 
             window.onload = loadData;
         </script>
     </body>
-</html>3
+</html>
