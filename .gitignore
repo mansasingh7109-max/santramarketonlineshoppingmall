@@ -62,3 +62,9 @@ package-lock.json
 *credentials*
 *password*
 *secret*
+*.zip
+*.tar.gz
+.npm/
+node_modules/
+SANTRA_BACKUPS/
+santra-backups/
