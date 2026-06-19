@@ -1,0 +1,323 @@
+{
+    "Liquids/Oil": {
+        "displayName": "Liquids/Oil",
+        "filters": [
+            {
+                "field": "volume",
+                "label": "Volume",
+                "type": "radio",
+                "options": ["500ml", "1L", "2L", "5L"]
+            },
+            {
+                "field": "brand",
+                "label": "Brand",
+                "type": "checkbox",
+                "options": ["Fortune", "Saffola", "Dhara", "Nature Fresh"]
+            }
+        ]
+    },
+    "Grocery": {
+        "displayName": "Grocery/Kirana",
+        "filters": [
+            {
+                "field": "weight",
+                "label": "Weight",
+                "type": "radio",
+                "options": ["250g", "500g", "1kg", "2kg", "5kg"]
+            },
+            {
+                "field": "type",
+                "label": "Type",
+                "type": "checkbox",
+                "options": ["Organic", "Regular", "Premium"]
+            }
+        ]
+    },
+    "Fabric": {
+        "displayName": "Fabric",
+        "filters": [
+            {
+                "field": "length",
+                "label": "Length",
+                "type": "radio",
+                "options": ["1 Meter", "2 Meter", "3 Meter", "5 Meter"]
+            },
+            {
+                "field": "material",
+                "label": "Material",
+                "type": "checkbox",
+                "options": ["Cotton", "Silk", "Polyester", "Linen", "Georgette"]
+            }
+        ]
+    },
+    "Furniture": {
+        "displayName": "Furniture",
+        "filters": [
+            {
+                "field": "material",
+                "label": "Material",
+                "type": "checkbox",
+                "options": ["Wood", "Metal", "Plastic", "Sheesham", "MDF"]
+            },
+            {
+                "field": "color",
+                "label": "Color",
+                "type": "checkbox",
+                "options": ["Brown", "Black", "White", "Walnut", "Teak"]
+            }
+        ]
+    },
+    "Electronics": {
+        "displayName": "Electronics",
+        "filters": [
+            {
+                "field": "brand",
+                "label": "Brand",
+                "type": "checkbox",
+                "options": [
+                    "Samsung",
+                    "Mi",
+                    "Boat",
+                    "Apple",
+                    "Realme",
+                    "OnePlus"
+                ]
+            },
+            {
+                "field": "warranty",
+                "label": "Warranty",
+                "type": "radio",
+                "options": ["6 Months", "1 Year", "2 Years"]
+            }
+        ]
+    },
+    "Dress": {
+        "displayName": "Dress",
+        "filters": [
+            {
+                "field": "size",
+                "label": "Size",
+                "type": "checkbox",
+                "options": ["S", "M", "L", "XL", "XXL", "Free Size"]
+            },
+            {
+                "field": "color",
+                "label": "Color",
+                "type": "checkbox",
+                "options": ["Red", "Blue", "Black", "Green", "Pink", "White"]
+            },
+            {
+                "field": "fabric",
+                "label": "Fabric Type",
+                "type": "checkbox",
+                "options": ["Cotton", "Silk", "Chiffon", "Georgette"]
+            }
+        ]
+    },
+    "Jewellery": {
+        "displayName": "Jewellery",
+        "filters": [
+            {
+                "field": "material",
+                "label": "Material",
+                "type": "checkbox",
+                "options": [
+                    "Gold",
+                    "Silver",
+                    "Artificial",
+                    "Diamond",
+                    "Platinum"
+                ]
+            },
+            {
+                "field": "occasion",
+                "label": "Occasion",
+                "type": "radio",
+                "options": [
+                    "Wedding",
+                    "Party",
+                    "Daily Wear",
+                    "Festival",
+                    "Office"
+                ]
+            }
+        ]
+    },
+    "Jewellery combo": {
+        "displayName": "Jewellery Combo",
+        "filters": [
+            {
+                "field": "material",
+                "label": "Material",
+                "type": "checkbox",
+                "options": ["Gold", "Silver", "Artificial", "Diamond"]
+            },
+            {
+                "field": "occasion",
+                "label": "Occasion",
+                "type": "radio",
+                "options": ["Wedding", "Party", "Daily Wear", "Festival"]
+            }
+        ]
+    },
+    "Jewellery set": {
+        "displayName": "Jewellery Set",
+        "filters": [
+            {
+                "field": "material",
+                "label": "Material",
+                "type": "checkbox",
+                "options": ["Gold", "Silver", "Artificial"]
+            }
+        ]
+    },
+    "Bangles": {
+        "displayName": "Bangles",
+        "filters": [
+            {
+                "field": "size",
+                "label": "Size",
+                "type": "checkbox",
+                "options": ["2.2", "2.4", "2.6", "2.8", "2.10"]
+            },
+            {
+                "field": "material",
+                "label": "Material",
+                "type": "checkbox",
+                "options": ["Glass", "Metal", "Plastic", "Gold Plated"]
+            }
+        ]
+    },
+    "Soap": {
+        "displayName": "Soap",
+        "filters": [
+            {
+                "field": "weight",
+                "label": "Weight",
+                "type": "radio",
+                "options": ["75g", "100g", "125g", "200g"]
+            },
+            {
+                "field": "type",
+                "label": "Type",
+                "type": "checkbox",
+                "options": ["Beauty", "Antibacterial", "Herbal", "Luxury"]
+            }
+        ]
+    },
+    "Lux soap": {
+        "displayName": "Lux Soap",
+        "filters": [
+            {
+                "field": "weight",
+                "label": "Weight",
+                "type": "radio",
+                "options": ["75g", "100g", "125g"]
+            },
+            {
+                "field": "type",
+                "label": "Type",
+                "type": "checkbox",
+                "options": ["Beauty", "Rose", "Jasmine"]
+            }
+        ]
+    },
+    "Combo soap": {
+        "displayName": "Combo Soap",
+        "filters": [
+            {
+                "field": "pack",
+                "label": "Pack Size",
+                "type": "radio",
+                "options": ["Pack of 3", "Pack of 4", "Pack of 6"]
+            },
+            {
+                "field": "weight",
+                "label": "Weight Per Soap",
+                "type": "radio",
+                "options": ["75g", "100g", "125g"]
+            }
+        ]
+    },
+    "Dish wash": {
+        "displayName": "Dish Wash",
+        "filters": [
+            {
+                "field": "volume",
+                "label": "Volume",
+                "type": "radio",
+                "options": ["250ml", "500ml", "1L", "2L"]
+            },
+            {
+                "field": "type",
+                "label": "Type",
+                "type": "checkbox",
+                "options": ["Liquid", "Bar", "Powder"]
+            }
+        ]
+    },
+    "Gown": {
+        "displayName": "Gown",
+        "filters": [
+            {
+                "field": "size",
+                "label": "Size",
+                "type": "checkbox",
+                "options": ["S", "M", "L", "XL", "XXL", "Free Size"]
+            },
+            {
+                "field": "color",
+                "label": "Color",
+                "type": "checkbox",
+                "options": ["Red", "Blue", "Black", "Pink", "White", "Green"]
+            },
+            {
+                "field": "fabric",
+                "label": "Fabric",
+                "type": "checkbox",
+                "options": ["Georgette", "Silk", "Net", "Cotton", "Satin"]
+            }
+        ]
+    },
+    "Red gown western": {
+        "displayName": "Red Gown",
+        "filters": [
+            {
+                "field": "size",
+                "label": "Size",
+                "type": "checkbox",
+                "options": ["S", "M", "L", "XL"]
+            },
+            {
+                "field": "fabric",
+                "label": "Fabric",
+                "type": "checkbox",
+                "options": ["Georgette", "Silk", "Net"]
+            }
+        ]
+    },
+    "Blue Denim Jeans": {
+        "displayName": "Jeans",
+        "filters": [
+            {
+                "field": "size",
+                "label": "Size",
+                "type": "checkbox",
+                "options": ["28", "30", "32", "34", "36", "38"]
+            },
+            {
+                "field": "color",
+                "label": "Color",
+                "type": "checkbox",
+                "options": ["Blue", "Black", "Grey", "Light Blue"]
+            },
+            {
+                "field": "fit",
+                "label": "Fit Type",
+                "type": "radio",
+                "options": ["Slim Fit", "Regular Fit", "Skinny", "Bootcut"]
+            }
+        ]
+    }
+}
+
