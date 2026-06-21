@@ -1041,70 +1041,6 @@ cky
 .nav-item.active { background: #ffb74d; }
 .cart-count { background: #d32f2f; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; position: absolute; top: -5px; right: 5px; }
 
-/* ✅ HEADER - Logo Center + Icons Andar */
-.header {
-    background: linear-gradient(135deg, #ff9800, #f57c00);
-    padding: 15px 10px; /* ✅ Left-right padding di taaki icon bahar na jaye */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* ✅ Bahar gaya to hide ho jayega */
-}
-
-.logo-wrap {
-    text-align: center;
-    max-width: 100%; /* ✅ Body ke andar hi rahega */
-}
-
-.mall-title-row {
-    display: inline-flex; /* ✅ Logo + Icon ek line me */
-    align-items: center;
-    gap: 8px; /* ✅ Logo aur icon ke beech space */
-    position: relative;
-}
-
-#logoText {
-    color: #d32f2f;
-    font-size: 26px;
-    font-weight: 900;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    background: #c8e6c9;
-    padding: 5px 15px;
-    display: inline-block;
-}
-
-.mall-icons {
-    position: relative; /* ✅ Absolute nahi, Relative */
-    width: 35px;
-    height: 35px;
-    flex-shrink: 0; /* ✅ Chota na ho */
-}
-
-.earth-icon-mall {
-    font-size: 18px;
-    position: absolute;
-    top: 0;
-    left: 0; /* ✅ Upar left */
-    z-index: 2;
-}
-
-.fish-icon-mall {
-    font-size: 16px;
-    position: absolute;
-    bottom: 0;
-    right: 0; /* ✅ Neeche right - Diagonal */
-    transform: rotate(-10deg);
-    z-index: 1;
-}
-
-.tagline {
-    color: #2e7d32;
-    font-size: 16px;
-    font-weight: 700;
-    margin: 8px 0 0;
-}
-cky
 .header {
     background: linear-gradient(135deg, #ff9800, #f57c00);
     padding: 15px 10px;
@@ -1165,3 +1101,93 @@ cky
     margin: 8px 0 0;
     text-align: center;
 }
+cky
+
+/* ✅ HEADER FIX - Logo + Icons Center */
+.header {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    padding: 15px 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* ✅ Header ko center karo */
+}
+
+.logo-center-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ✅ Sab center me */
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* ✅ Logo aur icon ke beech gap */
+}
+
+#logoText {
+    color: #d32f2f;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    background: #c8e6c9;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.mall-icons {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
+}
+
+.earth-icon {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 0; /* ✅ Earth upar left */
+}
+
+.fish-icon {
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    right: 0; /* ✅ Fish neeche right - Diagonal */
+    transform: rotate(-10deg);
+}
+
+.tagline {
+    color: #2e7d32;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 8px 0 0;
+    text-align: center;
+}
+
+cky
+
+/* ✅ MAIN LAYOUT FIX - Sidebar Left Me Fix Rahega */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex; /* ✅ Ye sabse important hai */
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 90px; /* ✅ Left patti ki width */
+    background: #fff59d;
+    flex-shrink: 0; /* ✅ Sikudne mat dena */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.main-content {
+    flex: 1; /* ✅ Baaki saari jagah le lega */
+    width: calc(100% - 90px);
+}
+

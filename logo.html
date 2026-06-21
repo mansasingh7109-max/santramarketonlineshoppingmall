@@ -1,0 +1,415 @@
+/* ✅ MAIN LAYOUT FIX - Sidebar Left Me Fix Rahega */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex; /* ✅ Ye sabse important hai */
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 90px; /* ✅ Left patti ki width */
+    background: #fff59d;
+    flex-shrink: 0; /* ✅ Sikudne mat dena */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.main-content {
+    flex: 1; /* ✅ Baaki saari jagah le lega */
+    width: calc(100% - 90px);
+}
+
+Cky
+
+<body>
+    <div class="sidebar">
+        <a href="#" class="sidebar-btn">
+            <div>👤</div>
+            <div>Customer<br>Login</div>
+        </a>
+        <a href="help.html" class="sidebar-btn">
+            <div class="help-icon-wrap">
+                <div class="earth-icon-help">🌍</div>
+                <div class="fish-icon-help">🐬</div>
+            </div>
+            <div>HELP<br>DESK</div>
+        </a>
+        <!-- ✅ HOME TAB WAPAS LAGAO -->
+        <a href="index.html" class="sidebar-btn">
+            <div>🏠</div>
+
+
+
+
+cky
+
+<div class="header">
+  
+    <div class="logo-center-block">
+        <div class="logo-row">
+            <h1 id="logoText">SANTRAJET MALL</h1>
+            <div class="mall-icons">
+                <div class="earth-icon">🌍</div>
+                <div class="fish-icon">🐬</div>
+            </div>
+        </div>
+        <p class="tagline">Online Shopping</p>
+    </div>
+</div>
+
+Cky
+
+/* ✅ HEADER FIX - Logo + Icons Center */
+.header {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    padding: 15px 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* ✅ Header ko center karo */
+}
+
+.logo-center-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ✅ Sab center me */
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* ✅ Logo aur icon ke beech gap */
+}
+
+#logoText {
+    color: #d32f2f;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    background: #c8e6c9;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.mall-icons {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
+}
+
+.earth-icon {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 0; /* ✅ Earth upar left */
+}
+
+.fish-icon {
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    right: 0; /* ✅ Fish neeche right - Diagonal */
+    transform: rotate(-10deg);
+}
+
+.tagline {
+    color: #2e7d32;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 8px 0 0;
+    text-align: center;
+}
+
+
+
+cky
+.header {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    padding: 15px 10px;
+    width: 100%;
+}
+
+.logo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-with-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#logoText {
+    color: #d32f2f;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    background: #c8e6c9;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.mall-icons {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
+}
+
+.earth-icon-mall {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fish-icon-mall {
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: rotate(-10deg);
+}
+
+.tagline {
+    color: #2e7d32;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 8px 0 0;
+    text-align: center;
+}
+
+Cky
+
+<div class="header">
+    <div class="logo-wrap">
+        <div class="logo-with-icons">
+            <h1 id="logoText">SANTRAJET MALL</h1>
+            <div class="mall-icons">
+                <div class="earth-icon-mall">🌍</div>
+                <div class="fish-icon-mall">🐬</div>
+            </div>
+        </div>
+        <p class="tagline">Online Shopping</p>
+    </div>
+</div>
+
+cky
+<div class="header">
+    <div class="logo-wrap">
+        <div class="mall-title-row">
+            <h1 id="logoText">SANTRAJET MALL</h1>
+            <div class="mall-icons">
+                <div class="earth-icon-mall">🌍</div>
+                <div class="fish-icon-mall">🐬</div>
+            </div>
+        </div>
+        <p class="tagline">Online Shopping</p>
+    </div>
+</div>
+
+Style 
+
+/* ✅ HEADER - Logo Center + Icons Andar */
+.header {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    padding: 15px 10px; /* ✅ Left-right padding di taaki icon bahar na jaye */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* ✅ Bahar gaya to hide ho jayega */
+}
+
+.logo-wrap {
+    text-align: center;
+    max-width: 100%; /* ✅ Body ke andar hi rahega */
+}
+
+.mall-title-row {
+    display: inline-flex; /* ✅ Logo + Icon ek line me */
+    align-items: center;
+    gap: 8px; /* ✅ Logo aur icon ke beech space */
+    position: relative;
+}
+
+#logoText {
+    color: #d32f2f;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    background: #c8e6c9;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.mall-icons {
+    position: relative; /* ✅ Absolute nahi, Relative */
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0; /* ✅ Chota na ho */
+}
+
+.earth-icon-mall {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 0; /* ✅ Upar left */
+    z-index: 2;
+}
+
+.fish-icon-mall {
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    right: 0; /* ✅ Neeche right - Diagonal */
+    transform: rotate(-10deg);
+    z-index: 1;
+}
+
+.tagline {
+    color: #2e7d32;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 8px 0 0;
+}
+
+cky
+
+
+<!-- ✅ PURANA CODE HATA KE YE LAGAO -->
+<div class="header">
+    <div class="logo-wrap">
+        <h1 id="logoText">SANTRAJET MALL</h1>
+        <div class="tagline-wrap">
+            <div class="tagline-icons">
+                <div class="earth-icon-small">🌍</div>
+                <div class="fish-icon-small">🐬</div>
+            </div>
+            <p class="tagline">Online Shopping</p>
+        </div>
+    </div>
+</div>
+
+Style css
+
+
+/* ✅ ONLINE SHOPPING - Fish + Earth + Medium Text */
+.tagline-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.tagline-icons {
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+.earth-icon-small {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.fish-icon-small {
+    font-size: 16px;
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-10deg);
+    z-index: 1;
+}
+
+.tagline {
+    color: #2e7d32;
+    font-size: 16px; /* ✅ MEDIUM SIZE - Pehle 13px tha */
+    font-weight: 700; /* ✅ BOLD KAR DIYA */
+    margin: 0;
+}
+
+cky
+
+<div class="header">
+    <div class="logo-wrap">
+        <div class="mall-title-wrap">
+            <h1 id="logoText">SANTRAJET MALL</h1>
+            <div class="mall-icons">
+                <div class="earth-icon-mall">🌍</div>
+                <div class="fish-icon-mall">🐬</div>
+            </div>
+        </div>
+        <p class="tagline">Online Shopping</p>
+    </div>
+</div>
+
+Stylecss
+
+/* ✅ SANTRAJET MALL - Earth + Fish Diagonal */
+.logo-wrap {
+    text-align: center;
+}
+
+.mall-title-wrap {
+    display: inline-block;
+    position: relative;
+}
+
+#logoText {
+    color: #d32f2f;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    background: #c8e6c9;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.mall-icons {
+    position: absolute;
+    top: 0;
+    right: -45px; /* ✅ MALL ke right me */
+    width: 40px;
+    height: 40px;
+}
+
+.earth-icon-mall {
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    left: 0; /* ✅ Earth upar left */
+    z-index: 2;
+}
+
+.fish-icon-mall {
+    font-size: 18px;
+    position: absolute;
+    bottom: 0;
+    right: 0; /* ✅ Fish neeche right - Diagonal */
+    transform: rotate(-10deg);
+    z-index: 1;
+}
+
+.tagline {
+    color: #2e7d32;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 8px 0 0;
+}
+
