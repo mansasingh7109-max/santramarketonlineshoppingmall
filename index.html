@@ -257,14 +257,22 @@
             </div>
 
             <!-- ✅ MAIN CONTENT -->
-            <div class="main-content">
-                <div class="header">
-                    <div class="logo-wrap">
-                        <h1 id="logoText">SANTRAJET MALL</h1>
-                        <p class="tagline">Online Shopping</p>
-                    </div>
-                </div>
-
+            
+    <div class="main-content">
+      
+<div class="header">
+    <div class="logo-wrap">
+        <div class="logo-with-icons">
+            <h1 id="logoText">SANTRAJET MALL</h1>
+            <div class="mall-icons">
+                <div class="earth-icon-mall">🪩</div>
+                <div class="fish-icon-mall">🐋</div>
+            </div>
+        </div>
+        <p class="tagline">Online Shopping</p>
+    </div>
+</div>
+      
                 <div id="customerInfoBar" class="customer-info-bar hide">
                     <div>
                         <p>👤 <span id="customerNameDisplay"></span> | 📱 <span id="customerMobileDisplay"></span></p>
@@ -295,7 +303,7 @@
                     </div>
 
                     <div class="banner">
-                        <h2>Welcome to SANTRA MALL</h2>
+                        <h2>Welcome to A MALL</h2>
                         <p>Best Products, Best Prices!</p>
                     </div>
 
@@ -340,7 +348,7 @@
                 const firebaseConfig = {
                 apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
     authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
+    projectId: "santramarketshoppingmall",
     storageBucket: "santramarketshoppingmall.firebasestorage.app",
     messagingSenderId: "398490252924",
     appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
@@ -361,21 +369,21 @@
             let currentUser = null;
             let loginOTP = null;
             let tempCustomerData = null;
-            const CART_KEY = "santra_cart";
+            const CART_KEY = "a_cart";
             const ADMIN_WHATSAPP = "8769171078";
 
             function customerLogout() {
                 if (confirm("Logout karna hai?")) {
                     auth.signOut().then(() => {
-                        localStorage.removeItem("santra_customer");
-                        localStorage.removeItem("santra_cart");
-                        localStorage.removeItem("santra_wishlist");
+                        localStorage.removeItem("a_customer");
+                        localStorage.removeItem("a_cart");
+                        localStorage.removeItem("a_wishlist");
                         localStorage.removeItem("pendingOTP");
                         showToast("Logged out successfully");
                         setTimeout(() => location.reload(), 500);
                     }).catch((error) => {
                         console.error("Logout error:", error);
-                        localStorage.removeItem("santra_customer");
+                        localStorage.removeItem("a_customer");
                         location.reload();
                     });
                 }
@@ -386,7 +394,7 @@
             /* ============================================ */
             /*
             function checkCustomerLogin() {
-                const customer = JSON.parse(localStorage.getItem("santra_customer") || "{}");
+                const customer = JSON.parse(localStorage.getItem("a_customer") || "{}");
                 if (customer.name) {
                     document.getElementById("loginBtn").classList.add("hide");
                     document.getElementById("logoutBtn").classList.remove("hide");
@@ -399,7 +407,7 @@
 
             // ✅ NEW CODE - FIX: Sirf 2 button Logic - E-commerce jaisa
             function checkCustomerLogin() {
-                const customer = JSON.parse(localStorage.getItem("santra_customer") || "{}");
+                const customer = JSON.parse(localStorage.getItem("a_customer") || "{}");
                 const pendingOTP = localStorage.getItem("pendingOTP");
 
                 const loginBtn = document.getElementById("loginBtn");
@@ -623,7 +631,7 @@
             }
 
             function addToCart(product) {
-                let cart = JSON.parse(localStorage.getItem("santra_cart") || "{}");
+                let cart = JSON.parse(localStorage.getItem("a_cart") || "{}");
                 if (cart.cart) cart = cart.cart;
                 if (cart[product.id]) {
                     cart[product.id].qty += 1;
@@ -637,13 +645,13 @@
                         qty: 1
                     };
                 }
-                localStorage.setItem("santra_cart", JSON.stringify(cart));
+                localStorage.setItem("a_cart", JSON.stringify(cart));
                 showToast("✅ Added to Cart!");
                 updateCartCount();
             }
 
             function updateCartCount() {
-                let cart = JSON.parse(localStorage.getItem("santra_cart") || "{}");
+                let cart = JSON.parse(localStorage.getItem("a_cart") || "{}");
                 let totalItems = Object.values(cart).reduce((sum, item) => sum + (parseInt(item.qty) || 1), 0);
                 let cartBottom = document.getElementById("cartCountBottom");
                 if (cartBottom) cartBottom.innerText = totalItems;
@@ -676,7 +684,7 @@
             function openCategories() { window.location.href = "category.html"; }
             function openCart() { window.location.href = "cart.html"; }
             function openOrders() {
-                let customer = localStorage.getItem("santra_customer");
+                let customer = localStorage.getItem("a_customer");
                 if (!customer) {
                     alert("⚠️ Please login first to see your orders");
                     window.location.href = "customer-login.html";
