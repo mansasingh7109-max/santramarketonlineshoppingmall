@@ -3,46 +3,131 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>🛒 SANTRAJET MALL shopping online - Online Shopping</title>
+        <title>🛒 SANTRAJET MALL</title>
+
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="layout.css" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet" />
         <script src="./js/products.js"></script>
 
         <script>
-            // ✅ IMAGE TOOTI TO DUSRI LAGA DO
-            document.addEventListener(
-                "error",
-                function (e) {
-                    if (e.target.tagName === "IMG") {
-                        e.target.src =
-                            "https://via.placeholder.com/300?text=No+Image";
-                    }
-                },
-                true
-            );
+            document.addEventListener("error", function (e) {
+                if (e.target.tagName === "IMG") {
+                    e.target.src = "https://via.placeholder.com/300?text=No+Image";
+                }
+            }, true);
         </script>
         <style>
-            .customer-info-bar {
-                background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-                padding: 10px 15px;
-                border-radius: 8px;
-                margin: 10px 15px;
+        
+        /* ✅ BACKUP - Purane CSS Ko Override Karne Ke Liye */
+        .sidebar-btn {
+            background: linear-gradient(135deg, #ffcc80, #ffb74d)!important;
+            border: 3px solid #ff9800!important;
+            color: #FFF176;!important;
+            box-shadow: 0 4px 0 #f57c00!important;
+        }
+    
+            /* ✅ FIX 1: LEFT SIDEBAR - Sirf 5px gap */
+          .main-container {
+                display: flex;
+                min-height: 100vh;
+            }
+          .left-sidebar {
+                width: 100px;
+                background: linear-gradient(180deg, #fff9c4, #fff59d);
+                padding: 10px 5px;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 100;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+          .main-content {
+                flex: 1;
+                margin-left: 105px; /* ✅ 100px sidebar + 5px gap */
+                width: calc(100% - 105px);
+            }
+
+            /* ✅ SIDEBAR BUTTON - E-commerce jaisa */
+          .sidebar-btn {
+                background: linear-gradient(135deg, #ffcc80, #ffb74d);
+                color: #FFF176;
+                padding: 8px 5px;
+                border: 3px solid #ff9800;
+                border-radius: 12px;
+                font-weight: bold;
+                font-size: 10px;
+                cursor: pointer;
+                box-shadow: 0 3px 0 #f57c00, 0 5px 12px rgba(255, 152, 0, 0.3);
+                transition: 0.2s;
+                text-decoration: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                line-height: 1.2;
+                width: 90px;
+                min-height: 65px;
+                justify-content: center;
+            }
+          .sidebar-btn:active {
+                transform: translateY(2px);
+                box-shadow: 0 1px 0 #f57c00;
+            }
+          .sidebar-btn.icon {
+                font-size: 22px;
+                margin-bottom: 2px;
+            }
+
+          .header {
+                margin-left: 0;
+                background: linear-gradient(135deg, #ff9800, #f57c00);
+                padding: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+          .logo-wrap {
+                text-align: center;
+            }
+          .logo-wrap h1 {
+                color: #d32f2f;
+                font-size: 26px;
+                font-weight: 900;
+                margin: 0;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+                background: #c8e6c9;
+                padding: 5px 15px;
+                display: inline-block;
+            }
+          .tagline {
+                color: #2e7d32;
+                font-size: 13px;
+                margin: 5px 0 0;
+            }
+
+          .customer-info-bar {
+                background: linear-gradient(60deg, #e8f5e9, #c8e6c9);
+                padding: 3px 7px;
+                border-radius: 2px;
+                margin: 5px 10px;
                 border-left: 4px solid #2e7d32;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            .customer-info-bar p {
+          .customer-info-bar p {
                 margin: 0;
-                font-size: 13px;
+                font-size: 3px;
                 color: #1b5e20;
                 font-weight: bold;
             }
-            .logout-mini {
+          .logout-mini {
                 background: #d32f2f;
                 color: white;
                 border: none;
@@ -51,14 +136,14 @@
                 font-size: 11px;
                 cursor: pointer;
             }
-            .product-actions {
+          .product-actions {
                 display: flex;
                 gap: 5px;
                 margin-top: 10px;
             }
-            .add-to-cart-btn {
+          .add-to-cart-btn {
                 flex: 1;
-                background: var(--accent, #e91e63);
+                background: #e91e63;
                 color: white;
                 border: none;
                 padding: 8px;
@@ -67,7 +152,7 @@
                 cursor: pointer;
                 font-size: 13px;
             }
-            .buy-now-btn {
+          .buy-now-btn {
                 flex: 1;
                 background: #ff9800;
                 color: white;
@@ -78,16 +163,7 @@
                 cursor: pointer;
                 font-size: 13px;
             }
-            .profile-btn {
-                background: #4caf50;
-                color: white;
-                border: none;
-                padding: 8px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-weight: bold;
-            }
-            .img-count {
+          .img-count {
                 position: absolute;
                 top: 5px;
                 left: 5px;
@@ -97,8 +173,8 @@
                 border-radius: 10px;
                 font-size: 11px;
             }
-            .prev-btn,
-            .next-btn {
+          .prev-btn,
+          .next-btn {
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
@@ -108,481 +184,148 @@
                 padding: 5px 10px;
                 cursor: pointer;
                 font-size: 18px;
+                z-index: 10;
             }
-            .prev-btn {
-                left: 5px;
-            }
-            .next-btn {
+          .prev-btn { left: 5px; }
+          .next-btn { right: 5px; }
+          .hide { display: none!important; }
+          .new-badge {
+                position: absolute;
+                top: 5px;
                 right: 5px;
+                background: #e91e63;
+                color: white;
+                padding: 3px 8px;
+                border-radius: 5px;
+                font-size: 11px;
+                font-weight: bold;
+                z-index: 10;
             }
-            .hide {
-                display: none !important;
+          .filter-section {
+                background: white;
+                padding: 15px;
+                margin: 10px auto;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                max-width: 500px;
             }
-            .filter-group label {
+          .filter-group {
+                margin-bottom: 10px;
+            }
+          .filter-group label {
                 display: block;
-                margin: 6px 0;
+                margin: 6px 0 4px 0;
                 font-size: 14px;
+                font-weight: bold;
+                color: #333;
+            }
+            #userInfo {
+                color: #1b5e20;
+                font-weight: bold;
+                text-align: center;
+                font-size: 11px;
+                padding: 5px;
+                background: rgba(255,255,255,0.5);
+                border-radius: 8px;
+                margin-bottom: 5px;
             }
         </style>
+   
+
     </head>
 
     <body>
-        <div class="header">
-            <h1 id="logoText">🛒 SANTRAJET MALL shopping online</h1>
-
-            <div class="header-btns">
+        <div class="main-container">
+            <!-- ✅ LEFT SIDEBAR - Pehle jaisa -->
+            <div class="left-sidebar">
                 <div id="userInfo" class="hide">
-                    <span style="color: #1b5e20; font-weight: bold"
-                        >Hi, <b id="userName"></b
-                    ></span>
-                    <span
-                        id="oldCustomerBadge"
-                        class="hide"
-                        style="
-                            background: #ff6b00;
-                            color: white;
-                            padding: 4px 8px;
-                            border-radius: 5px;
-                            font-size: 11px;
-                            margin-left: 5px;
-                        "
-                    ></span>
+                    <div>Hi,</div>
+                    <b id="userName"></b>
+                    <span id="oldCustomerBadge" class="hide" style="background: #ff6b00; color: white; padding: 2px 4px; border-radius: 3px; font-size: 8px; margin-top: 2px; display: block;"></span>
                 </div>
-                <button id="loginBtn" onclick="handleLoginClick()">
-                    👤 Customer Login
-                </button>
-                <button
-                    id="verifyOtpBtn"
-                    class="hide"
-                    onclick="openVerifyOtpPopup()"
-                >
-                    🔐 Verify OTP
-                </button>
-                <button id="logoutBtn" class="hide" onclick="customerLogout()">
-                    Logout
-                </button>
-                <a href="cart.html">
-                    🛒 Cart <span id="cartCountIcon">0</span>
+
+                <!-- ✅ FIX 2: Sirf 2 button ek time pe - Pehle jaisa -->
+                <a href="customer-login.html" id="loginBtn" class="sidebar-btn hide">
+                    <div class="icon">👤</div>
+                    <div><br></div>
                 </a>
-                <a href="help.html" class="header-btn">💬 HELP DESK</a>
-            </div>
-        </div>
-
-        <div id="customerInfoBar" class="customer-info-bar hide">
-            <div>
-                <p>
-                    👤 <span id="customerNameDisplay"></span> | 📱
-                    <span id="customerMobileDisplay"></span>
-                </p>
-            </div>
-            <button class="logout-mini" onclick="customerLogout()">
-                🚪 Logout
-            </button>
-        </div>
-
-        <div class="mall-video-banner">
-            <video autoplay muted loop playsinline preload="auto">
-                <source src="banner.mp4" type="video/mp4" />
-            </video>
-        </div>
-
-        <div id="homePage">
-            <div class="search-bar">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="🔍 Search products, brands..."
-                    onkeypress="if (event.key === 'Enter') searchProducts();"
-                />
-                <button onclick="searchProducts()">Search</button>
+                
+                <a href="help.html" class="sidebar-btn">
+                    <div class="icon">🪩☎️🐋</div>
+                    <div>HELP<br>DESK</div>
+                </a>
             </div>
 
-            <!-- ✅ NAYA SMART FILTER - YAHI RAHEGA BAS -->
-            <div
-                class="filter-section"
-                style="
-                    background: white;
-                    padding: 15px;
-                    margin: 10px;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                "
-            >
-                <h3 style="margin-top: 0; color: #e91e63">🔍 Smart Filters</h3>
-
-                <select
-                    id="categorySelect"
-                    onchange="onCategoryChange()"
-                    style="
-                        width: 100%;
-                        padding: 12px;
-                        margin-bottom: 12px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        font-size: 15px;
-                    "
-                >
-                    <option value="">All Categories</option>
-                </select>
-
-                <div id="dynamicFilters"></div>
-
-                <button
-                    onclick="applySmartFilters()"
-                    style="
-                        width: 100%;
-                        background: #e91e63;
-                        color: white;
-                        padding: 12px;
-                        border: none;
-                        border-radius: 5px;
-                        font-weight: bold;
-                        margin-top: 10px;
-                        font-size: 15px;
-                    "
-                >
-                    Apply Filters
-                </button>
-                <button
-                    onclick="clearSmartFilters()"
-                    style="
-                        width: 100%;
-                        background: #999;
-                        color: white;
-                        padding: 10px;
-                        border: none;
-                        border-radius: 5px;
-                        margin-top: 8px;
-                    "
-                >
-                    Clear All
-                </button>
-            </div>
-
-            <!-- Purana Popup Filter - Abhi rakha hai backup ke liye -->
-            <div
-                id="filterPopup"
-                class="filter-popup hide"
-                onclick="closeFilterPopup()"
-            >
-                <div class="filter-content" onclick="event.stopPropagation()">
-                    <div class="filter-header">
-                        <h3>🔍 Filter Products</h3>
-                        <button
-                            class="close-filter"
-                            onclick="closeFilterPopup()"
-                        >
-                            ×
-                        </button>
-                    </div>
-                    <div id="autoFiltersContainer">
-                        <p style="text-align: center; color: #999">
-                            Loading filters...
-                        </p>
-                    </div>
-                    <div class="filter-actions">
-                        <button class="btn-clear" onclick="clearHomeFilters()">
-                            Clear All
-                        </button>
-                        <button class="btn-apply" onclick="applyHomeFilters()">
-                            Apply Filters
-                        </button>
+            <!-- ✅ MAIN CONTENT -->
+            <div class="main-content">
+                <div class="header">
+                    <div class="logo-wrap">
+                        <h1 id="logoText">SANTRAJET MALL</h1>
+                        <p class="tagline">Online Shopping</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="banner">
-                <h2>Welcome to SANTRA MALL</h2>
-                <p>Best Products, Best Prices!</p>
-            </div>
-
-            <div class="categories" id="categoryList">
-                <div class="loading">Loading categories...</div>
-            </div>
-
-            <div class="section-title">
-                <span>🔥 Hot Deals</span>
-                <span
-                    style="
-                        font-size: 12px;
-                        color: var(--accent);
-                        cursor: pointer;
-                    "
-                    onclick="window.location.href = 'category.html'"
-                    >View All →</span
-                >
-            </div>
-
-            <div id="myOrderDiv"></div>
-
-            <div class="products" id="productGrid">
-                <div class="loading">Loading products...</div>
-            </div>
-        </div>
-
-        <div class="bottom-nav">
-            <div class="nav-item active" id="navHome" onclick="goHome()">
-                <i>🏠</i>Home
-            </div>
-            <div class="nav-item" onclick="openCategories()">
-                <i>📱</i>Categories
-            </div>
-            <div
-                class="nav-item"
-                onclick="openCart()"
-                style="position: relative"
-            >
-                <i>🛒</i>Cart
-                <span class="cart-count" id="cartCountBottom">0</span>
-            </div>
-            <div class="nav-item" onclick="openOrders()"><i>📦</i>Orders</div>
-        </div>
-
-        <!-- Checkout Modal -->
-        <div id="checkoutModal" class="modal hide">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>📦 Checkout</h3>
-                    <button class="close-btn" onclick="closeCheckout()">
-                        ×
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input
-                        type="text"
-                        id="customerName"
-                        placeholder="Full Name *"
-                        style="
-                            width: 100%;
-                            padding: 10px;
-                            margin: 5px 0;
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                        "
-                    />
-                    <input
-                        type="tel"
-                        id="mobile"
-                        placeholder="Mobile Number *"
-                        maxlength="10"
-                        style="
-                            width: 100%;
-                            padding: 10px;
-                            margin: 5px 0;
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                        "
-                    />
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Email (Optional)"
-                        style="
-                            width: 100%;
-                            padding: 10px;
-                            margin: 5px 0;
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                        "
-                    />
-                    <textarea
-                        id="address"
-                        placeholder="Full Address *"
-                        rows="3"
-                        style="
-                            width: 100%;
-                            padding: 10px;
-                            margin: 5px 0;
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                        "
-                    ></textarea>
+                <div id="customerInfoBar" class="customer-info-bar hide">
                     <div>
-                        <label style="font-weight: bold; color: #333"
-                            >Additional Message / Note:</label
-                        >
-                        <textarea
-                            id="customerMessage"
-                            rows="3"
-                            placeholder="Any special instruction? Gift wrap needed? etc..."
-                            style="
-                                width: 100%;
-                                padding: 10px;
-                                margin: 5px 0;
-                                border: 1px solid #ddd;
-                                border-radius: 5px;
-                            "
-                        ></textarea>
+                        <p>👤 <span id="customerNameDisplay"></span> | 📱 <span id="customerMobileDisplay"></span></p>
                     </div>
-                    <div style="margin: 10px 0">
-                        <label
-                            ><input
-                                type="radio"
-                                name="payment"
-                                value="COD"
-                                checked
-                            />
-                            Cash on Delivery</label
-                        >
-                        <label style="margin-left: 15px"
-                            ><input
-                                type="radio"
-                                name="payment"
-                                value="Online"
-                            />
-                            Online Payment</label
-                        >
-                    </div>
-                    <div
-                        id="cartSummary"
-                        style="
-                            background: #f9;
-                            padding: 10px;
-                            border-radius: 5px;
-                            margin: 10px 0;
-                        "
-                    ></div>
-                    <button
-                        class="btn"
-                        style="width: 100%; background: #e94560"
-                        onclick="placeOrder()"
-                    >
-                        🛒 Place Order
-                    </button>
+                    <button class="logout-mini" onclick="customerLogout()">🚪 Logout</button>
                 </div>
-            </div>
-        </div>
 
-        <div id="productModal" class="modal hide">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">Product Name</h3>
-                    <button class="close-btn" onclick="closeProductModal()">
-                        ×
-                    </button>
+                <div class="mall-video-banner">
+                    <video autoplay muted loop playsinline preload="auto">
+                        <source src="banner.mp4" type="video/mp4" />
+                    </video>
                 </div>
-                <div class="modal-body">
-                    <div id="modalImgSlider"></div>
-                    <div>
-                        <span class="modal-price" id="modalPrice">₹0</span>
-                    </div>
-                    <span class="modal-mrp" id="modalMrp"></span>
-                </div>
-                <p style="margin: 10px 0">
-                    <b>Category:</b> <span id="modalCat"></span>
-                </p>
-                <p style="margin: 10px 0">
-                    <b>Stock:</b> <span id="modalStock"></span>
-                </p>
-                <p class="modal-desc" id="modalDesc"></p>
-                <div class="qty-controls" id="modalQtyControls">
-                    <button class="qty-btn" onclick="changeModalQty(-1)">
-                        -
-                    </button>
-                    <span class="qty-display" id="modalQty">1</span>
-                    <button class="qty-btn" onclick="changeModalQty(1)">
-                        +
-                    </button>
-                </div>
-                <button
-                    class="btn"
-                    style="background: #e40046"
-                    onclick="ToCartFromModal()"
-                >
-                    🛒 Add to Cart
-                </button>
-                <button class="btn btn-success" onclick="buyNowFromModal()">
-                    ⚡ Buy Now
-                </button>
-            </div>
-        </div>
 
-        <!-- Customer Login Modal -->
-        <div id="customerLoginModal" class="modal hide">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>👤 Customer Login with OTP</h3>
-                    <button
-                        class="close-btn"
-                        onclick="closeCustomerLogin()"
-                    ></button>
+                <div id="homePage">
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="🔍 Search products, brands..." onkeypress="if (event.key === 'Enter') searchProducts();" />
+                        <button onclick="searchProducts()">Search</button>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3 style="margin-top: 0; color: #e91e63">🔍 Smart Filters</h3>
+                        <select id="categorySelect" onchange="onCategoryChange()" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 15px;">
+                            <option value="">All Categories</option>
+                        </select>
+                        <div id="dynamicFilters"></div>
+                        <button onclick="applySmartFilters()" style="width: 100%; background: #e91e63; color: white; padding: 12px; border: none; border-radius: 5px; font-weight: bold; margin-top: 10px; font-size: 15px;">Apply Filters</button>
+                        <button onclick="clearSmartFilters()" style="width: 100%; background: #999; color: white; padding: 10px; border: none; border-radius: 5px; margin-top: 8px;">Clear All</button>
+                    </div>
+
+                    <div class="banner">
+                        <h2>Welcome to SANTRA MALL</h2>
+                        <p>Best Products, Best Prices!</p>
+                    </div>
+
+                    <div class="categories" id="categoryList">
+                        <div class="loading">Loading categories...</div>
+                    </div>
+
+                    <div class="section-title">
+                        <span>🔥 Hot Deals</span>
+                        <span style="font-size: 12px; color: var(--accent); cursor: pointer;" onclick="window.location.href = 'category.html'">View All →</span>
+                    </div>
+
+                    <div id="myOrderDiv"></div>
+                    <div class="products" id="productGrid">
+                        <div class="loading">Loading products...</div>
+                    </div>
                 </div>
-                <div class="modal-body" id="loginStep1">
-                    <p style="margin-bottom: 15px; color: #666">
-                        Login ke liye WhatsApp par OTP bhejenge
-                    </p>
-                    <input
-                        type="text"
-                        id="custName"
-                        placeholder="Full Name *"
-                    />
-                    <input
-                        type="tel"
-                        id="custMobile"
-                        placeholder="WhatsApp Mobile Number *"
-                        maxlength="10"
-                    />
-                    <input
-                        type="email"
-                        id="custEmail"
-                        placeholder="Email (Optional)"
-                    />
-                    <button
-                        onclick="sendLoginOTP()"
-                        style="
-                            width: 100%;
-                            background: #25d366;
-                            color: white;
-                            padding: 12px;
-                            border: none;
-                            border-radius: 5px;
-                            font-weight: bold;
-                            margin-top: 10px;
-                        "
-                    >
-                        📱 Send OTP on WhatsApp
-                    </button>
-                </div>
-                <div class="modal-body hide" id="loginStep2">
-                    <p style="margin-bottom: 15px; color: #666">
-                        WhatsApp check karo, OTP daalo
-                    </p>
-                    <p><b>Mobile:</b> <span id="otpMobileShow"></span></p>
-                    <input
-                        type="number"
-                        id="custOTP"
-                        placeholder="Enter 6-digit OTP *"
-                        maxlength="6"
-                    />
-                    <button
-                        onclick="verifyLoginOTP()"
-                        style="
-                            width: 100%;
-                            background: #4caf50;
-                            color: white;
-                            padding: 12px;
-                            border: none;
-                            border-radius: 5px;
-                            font-weight: bold;
-                            margin-top: 10px;
-                        "
-                    >
-                        ✅ Verify & Login
-                    </button>
-                    <button
-                        onclick="backToStep1()"
-                        style="
-                            width: 100%;
-                            background: #999;
-                            color: white;
-                            padding: 8px;
-                            border: none;
-                            border-radius: 5px;
-                            margin-top: 5px;
-                        "
-                    >
-                        ← Change Number
-                    </button>
+
+                <div class="bottom-nav">
+                    <div class="nav-item active" id="navHome" onclick="goHome()">
+                        <i>🏠</i>Home
+                    </div>
+                    <div class="nav-item" onclick="openCategories()">
+                        <i>📱</i>Categories
+                    </div>
+                    <div class="nav-item" onclick="openCart()" style="position: relative">
+                        <i>🛒</i>Cart
+                        <span class="cart-count" id="cartCountBottom">0</span>
+                    </div>
+                    <div class="nav-item" onclick="openOrders()"><i>📦</i>Orders</div>
                 </div>
             </div>
         </div>
@@ -594,43 +337,117 @@
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
         <script>
-            // 🔴 YAHAN APNA FIREBASE CONFIG DAAL DE
-            const firebaseConfig = {
+                const firebaseConfig = {
                 apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-                authDomain: "santramarketshoppingmall.firebaseapp.com",
-                projectId: "santramarketshoppingmall",
-                storageBucket: "santramarketshoppingmall.firebasestorage.app",
-                messagingSenderId: "398490252924",
-                appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-                measurementId: "G-ZW1ZR8HETY", // ← Comma zaroori hai
-                databaseURL:
-                    "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.firebasestorage.app",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY", // ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
             };
-
-            // Initialize Firebase
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             var rtdb = firebase.database();
             var auth = firebase.auth();
             var db = firebase.firestore();
-            console.log("🔥 Firebase Connected: RTDB + Firestore dono ready");
         </script>
         <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
-
-        <!-- ✅ SMART FILTER ENGINE - NAYA CODE -->
-   
-       <script src="filter-engine.js?v=3"></script>
 
         <script>
             let currentModalProduct = null;
             let allProducts = [];
-            let autoFilters = {};
-            let selectedFilters = {};
             let currentSlideIndex = {};
             let currentUser = null;
             let loginOTP = null;
             let tempCustomerData = null;
             const CART_KEY = "santra_cart";
             const ADMIN_WHATSAPP = "8769171078";
+
+            function customerLogout() {
+                if (confirm("Logout karna hai?")) {
+                    auth.signOut().then(() => {
+                        localStorage.removeItem("santra_customer");
+                        localStorage.removeItem("santra_cart");
+                        localStorage.removeItem("santra_wishlist");
+                        localStorage.removeItem("pendingOTP");
+                        showToast("Logged out successfully");
+                        setTimeout(() => location.reload(), 500);
+                    }).catch((error) => {
+                        console.error("Logout error:", error);
+                        localStorage.removeItem("santra_customer");
+                        location.reload();
+                    });
+                }
+            }
+
+            /* ============================================ */
+            /* ✅ OLD CODE BACKUP START - checkCustomerLogin */
+            /* ============================================ */
+            /*
+            function checkCustomerLogin() {
+                const customer = JSON.parse(localStorage.getItem("santra_customer") || "{}");
+                if (customer.name) {
+                    document.getElementById("loginBtn").classList.add("hide");
+                    document.getElementById("logoutBtn").classList.remove("hide");
+                    document.getElementById("verifyOtpBtn").classList.remove("hide");
+                }
+            }
+            */
+            /* ✅ OLD CODE BACKUP END */
+            /* ============================================ */
+
+            // ✅ NEW CODE - FIX: Sirf 2 button Logic - E-commerce jaisa
+            function checkCustomerLogin() {
+                const customer = JSON.parse(localStorage.getItem("santra_customer") || "{}");
+                const pendingOTP = localStorage.getItem("pendingOTP");
+
+                const loginBtn = document.getElementById("loginBtn");
+                const logoutBtn = document.getElementById("logoutBtn");
+                const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+                const userInfo = document.getElementById("userInfo");
+                const userName = document.getElementById("userName");
+                const customerInfoBar = document.getElementById("customerInfoBar");
+                const customerNameDisplay = document.getElementById("customerNameDisplay");
+                const customerMobileDisplay = document.getElementById("customerMobileDisplay");
+                const oldCustomerBadge = document.getElementById("oldCustomerBadge");
+
+                // Pehle sab hide
+                loginBtn.classList.add("hide");
+                logoutBtn.classList.add("hide");
+                verifyOtpBtn.classList.add("hide");
+                if (userInfo) userInfo.classList.add("hide");
+                if (customerInfoBar) customerInfoBar.classList.add("hide");
+
+                // CASE 1: Login hai
+                if (customer.name && customer.isLoggedIn === true) {
+                    if (customerInfoBar) customerInfoBar.classList.remove("hide");
+                    if (customerNameDisplay) customerNameDisplay.innerText = customer.name;
+                    if (customerMobileDisplay) customerMobileDisplay.innerText = customer.mobile;
+                    if (logoutBtn) logoutBtn.classList.remove("hide");
+                    if (userInfo) userInfo.classList.remove("hide");
+                    if (userName) userName.innerText = customer.name;
+
+                    if (customer.isOldCustomer && customer.totalOrders > 0) {
+                        if (oldCustomerBadge) {
+                            oldCustomerBadge.classList.remove("hide");
+                            oldCustomerBadge.innerText = `🔥 ${customer.totalOrders} Orders`;
+                        }
+                    }
+                }
+                // CASE 2: OTP Pending hai
+                else if (pendingOTP) {
+                    if (verifyOtpBtn) verifyOtpBtn.classList.remove("hide");
+                }
+                // CASE 3: Login nahi hai
+                else {
+                    if (loginBtn) loginBtn.classList.remove("hide");
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                checkCustomerLogin();
+            });
 
             auth.onAuthStateChanged(user => {
                 currentUser = user;
@@ -642,32 +459,22 @@
                 loadProducts();
                 updateCartCount();
                 checkCustomerLogin();
-                const urlParams = new URLSearchParams(window.location.search);
-                const orderId = urlParams.get("id");
-                if (orderId) loadSingleOrder(orderId);
             };
 
-            // 🔥 FIX: RTDB + FIRESTORE DONO SE LOAD KARO - V8 COMPAT
             function loadProducts() {
                 allProducts = [];
-
-                // 1. FIRESTORE SE LOAD
                 db.collection("products").onSnapshot(firestoreSnap => {
                     let firestoreProducts = [];
                     firestoreSnap.forEach(doc => {
                         let p = doc.data();
                         p.id = doc.id;
                         p.price = parseFloat(p.price) || 0;
-                        p.stock =
-                            p.stock !== undefined && p.stock !== null
-                                ? parseInt(p.stock)
-                                : 0;
+                        p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
                         p.mrp = parseFloat(p.mrp) || p.price;
                         p.dbType = "firestore";
                         firestoreProducts.push(p);
                     });
 
-                    // 2. RTDB SE LOAD
                     rtdb.ref("products").on("value", rtdbSnap => {
                         let rtdbProducts = [];
                         if (rtdbSnap.exists()) {
@@ -675,154 +482,69 @@
                                 let p = child.val();
                                 p.id = child.key;
                                 p.price = parseFloat(p.price) || 0;
-                                p.stock =
-                                    p.stock !== undefined && p.stock !== null
-                                        ? parseInt(p.stock)
-                                        : 0;
+                                p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
                                 p.mrp = parseFloat(p.mrp) || p.price;
                                 p.dbType = "rtdb";
                                 rtdbProducts.push(p);
                             });
                         }
 
-                        // 3. DONO MILA DO
-                        allProducts = [...firestoreProducts, ...rtdbProducts];
+                        allProducts = [...firestoreProducts,...rtdbProducts];
                         renderProducts(allProducts);
                         generateAutoCategories();
-                        generateAutoFilters();
-                        localStorage.setItem(
-                            "ALL_PRODUCTS",
-                            JSON.stringify(allProducts)
-                        );
+                        generateCategoryDropdown();
+                        localStorage.setItem("ALL_PRODUCTS", JSON.stringify(allProducts));
                     });
                 });
             }
 
             function generateAutoCategories() {
-                db.collection("categories")
-                    .get()
-                    .then(catSnap => {
-                        let categories = [];
-                        let catImages = {};
-
-                        catSnap.forEach(doc => {
-                            const data = doc.data();
-                            categories.push(data.name);
-                            catImages[data.name] = data.image || "";
-                        });
-
-                        const catsFromProducts = [
-                            ...new Set(
-                                allProducts.map(p => p.category).filter(c => c)
-                            )
-                        ];
-                        catsFromProducts.forEach(c => {
-                            if (!categories.includes(c)) categories.push(c);
-                        });
-
-                        if (categories.length === 0) {
-                            document.getElementById("categoryList").innerHTML =
-                                '<div class="loading">No categories found</div>';
-                            return;
-                        }
-
-                        let html = "";
-                        categories.forEach(catName => {
-                            const catImage =
-                                catImages[catName] ||
-                                "https://via.placeholder.com/50?text=" +
-                                    encodeURIComponent(catName);
-                            html += `<div class="cat-item" onclick="filterByCategory('${catName}')"><img src="${catImage}" alt="${catName}"><p>${catName}</p></div>`;
-                        });
-                        document.getElementById("categoryList").innerHTML =
-                            html;
-                    })
-                    .catch(err => {
-                        console.error("Category load error:", err);
-                        document.getElementById("categoryList").innerHTML =
-                            '<div class="loading">Error loading categories</div>';
+                db.collection("categories").get().then(catSnap => {
+                    let categories = [];
+                    let catImages = {};
+                    catSnap.forEach(doc => {
+                        const data = doc.data();
+                        categories.push(data.name);
+                        catImages[data.name] = data.image || "";
                     });
+
+                    const catsFromProducts = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+                    catsFromProducts.forEach(c => {
+                        if (!categories.includes(c)) categories.push(c);
+                    });
+
+                    if (categories.length === 0) {
+                        document.getElementById("categoryList").innerHTML = '<div class="loading">No categories found</div>';
+                        return;
+                    }
+
+                    let html = "";
+                    categories.forEach(catName => {
+                        const catImage = catImages[catName] || "https://via.placeholder.com/50?text=" + encodeURIComponent(catName);
+                        html += `<div class="cat-item" onclick="filterByCategory('${catName}')"><img src="${catImage}" alt="${catName}"><p>${catName}</p></div>`;
+                    });
+                    document.getElementById("categoryList").innerHTML = html;
+                }).catch(err => {
+                    console.error("Category load error:", err);
+                    document.getElementById("categoryList").innerHTML = '<div class="loading">Error loading categories</div>';
+                });
             }
 
-            function generateAutoFilters() {
-                autoFilters = {};
-                const skipFields = [
-                    "id",
-                    "name",
-                    "image",
-                    "images",
-                    "media",
-                    "description",
-                    "stock",
-                    "mrp",
-                    "price",
-                    "code",
-                    "sku",
-                    "imageUrl",
-                    "img",
-                    "photo",
-                    "thumbnail",
-                    "mediaUrl",
-                    "categoryImage",
-                    "time",
-                    "Time",
-                    "timestamp",
-                    "updatedAt",
-                    "updatedBy",
-                    "UpdatedBy",
-                    "createdAt",
-                    "sizePrice",
-                    "SizePrice",
-                    "dbType"
-                ];
-                allProducts.forEach(product => {
-                    Object.keys(product).forEach(key => {
-                        if (
-                            !skipFields.includes(key) &&
-                            product[key] !== null &&
-                            product[key] !== undefined &&
-                            product[key] !== ""
-                        ) {
-                            if (!autoFilters[key]) autoFilters[key] = new Set();
-                            autoFilters[key].add(product[key]);
-                        }
-                    });
+            function generateCategoryDropdown() {
+                const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+                let html = '<option value="">All Categories</option>';
+                categories.forEach(cat => {
+                    html += `<option value="${cat}">${cat}</option>`;
                 });
-                Object.keys(autoFilters).forEach(field => {
-                    autoFilters[field] = [...autoFilters[field]].sort();
-                });
-                renderAutoFilterPopup();
-            }
-
-            function renderAutoFilterPopup() {
-                const container = document.getElementById(
-                    "autoFiltersContainer"
-                );
-                if (!container) return;
-                let html = "";
-                Object.keys(autoFilters).forEach(field => {
-                    const values = autoFilters[field];
-                    if (values.length === 0) return;
-                    html += `<div class="filter-group"><label>${field.charAt(0).toUpperCase() + field.slice(1)}</label><select id="filter_${field}" data-field="${field}"><option value="">All ${field}</option>${values.map(val => `<option value="${val}">${val}</option>`).join("")}</select></div>`;
-                });
-                container.innerHTML =
-                    html ||
-                    '<p style="text-align:center;color:#999">No filters available</p>';
+                document.getElementById("categorySelect").innerHTML = html;
             }
 
             function getProductImage(p) {
-                if (typeof getProductThumbnail !== "undefined") {
+                if (typeof getProductThumbnail!== "undefined") {
                     return getProductThumbnail(p);
                 }
-                if (
-                    p.media &&
-                    Array.isArray(p.media) &&
-                    p.media.length > 0 &&
-                    p.media[0].url
-                )
-                    return p.media[0].url;
-                if (p.images && Array.isArray(p.images) && p.images.length > 0)
-                    return p.images[0];
+                if (p.media && Array.isArray(p.media) && p.media.length > 0 && p.media[0].url) return p.media[0].url;
+                if (p.images && Array.isArray(p.images) && p.images.length > 0) return p.images[0];
                 if (p.image) return p.image;
                 if (p.imageUrl) return p.imageUrl;
                 return "https://via.placeholder.com/300x300/cccccc/ffffff?text=No+Image";
@@ -833,19 +555,10 @@
                 products.forEach(p => {
                     currentSlideIndex[p.id] = 0;
                     let images = [];
-                    if (
-                        p.media &&
-                        Array.isArray(p.media) &&
-                        p.media.length > 0
-                    ) {
+                    if (p.media && Array.isArray(p.media) && p.media.length > 0) {
                         images = p.media.map(m => m.url).filter(url => url);
                     }
-                    if (
-                        images.length === 0 &&
-                        p.images &&
-                        Array.isArray(p.images) &&
-                        p.images.length > 0
-                    ) {
+                    if (images.length === 0 && p.images && Array.isArray(p.images) && p.images.length > 0) {
                         images = p.images.filter(url => url);
                     }
                     if (images.length === 0) {
@@ -853,25 +566,21 @@
                     }
                     html += `
                       <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-                        ${p.stock < 5 && p.stock > 0 ? '<div class="new-badge">Low Stock</div>' : ""}
-                        ${p.stock === 0 ? '<div class="new-badge" style="background:#999">Out of Stock</div>' : ""}
-                        ${images.length > 1 ? `<div class="img-count">📷 ${images.length}</div>` : ""}
+                        ${p.stock < 5 && p.stock > 0? '<div class="new-badge">Low Stock</div>' : ""}
+                        ${p.stock === 0? '<div class="new-badge" style="background:#999">Out of Stock</div>' : ""}
+                        ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ""}
                         <div class="image-slider" style="position:relative;">
-                         ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0 ? "active" : ""}" alt="${p.name}" style="display:${idx === 0 ? "block" : "none"};width:100%;height:200px;object-fit:cover;">`).join("")}
-                          ${
-                              images.length > 1
-                                  ? `
+                         ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? "active" : ""}" alt="${p.name}" style="display:${idx === 0? "block" : "none"};width:100%;height:200px;object-fit:cover;">`).join("")}
+                          ${images.length > 1? `
                             <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
                             <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
-                          `
-                                  : ""
-                          }
+                          ` : ""}
                         </div>
                         <div class="product-info">
                           <h3>${p.name || "Product"}</h3>
                           <div>
                             <span class="price">₹${p.price}</span>
-                          ${p.mrp && p.mrp > p.price ? `<span class="mrp" style="text-decoration:line-through;color:#999;margin-left:5px;">₹${p.mrp}</span>` : ""}
+                          ${p.mrp && p.mrp > p.price? `<span class="mrp" style="text-decoration:line-through;color:#999;margin-left:5px;">₹${p.mrp}</span>` : ""}
                           </div>
                           <p class="stock">Stock: ${p.stock}</p>
                         </div>
@@ -882,55 +591,7 @@
                       </div>
                     `;
                 });
-                document.getElementById("productGrid").innerHTML =
-                    html || '<div class="loading">No products found</div>';
-            }
-
-            function openFilterPopup() {
-                document.getElementById("filterPopup").classList.add("show");
-            }
-            function closeFilterPopup() {
-                document.getElementById("filterPopup").classList.remove("show");
-            }
-
-            function applyHomeFilters() {
-                selectedFilters = {};
-                const selects = document.querySelectorAll(
-                    "#autoFiltersContainer select"
-                );
-                selects.forEach(select => {
-                    const field = select.dataset.field;
-                    const value = select.value;
-                    if (value) selectedFilters[field] = value;
-                });
-                let filtered = allProducts.filter(p => {
-                    let match = true;
-                    Object.keys(selectedFilters).forEach(field => {
-                        if (p[field] != selectedFilters[field]) match = false;
-                    });
-                    return match;
-                });
-                renderProducts(filtered);
-                closeFilterPopup();
-            }
-
-            function clearHomeFilters() {
-                selectedFilters = {};
-                document
-                    .querySelectorAll("#autoFiltersContainer select")
-                    .forEach(select => {
-                        select.value = "";
-                    });
-                renderProducts(allProducts);
-                closeFilterPopup();
-            }
-
-            function filterByCategory(catName) {
-                let filtered = allProducts.filter(p => p.category === catName);
-                renderProducts(filtered);
-                document
-                    .getElementById("productGrid")
-                    .scrollIntoView({ behavior: "smooth" });
+                document.getElementById("productGrid").innerHTML = html || '<div class="loading">No products found</div>';
             }
 
             function changeSlide(productId, direction, event) {
@@ -957,14 +618,12 @@
                 let slides = sliderCard.querySelectorAll(".slide-img");
                 slides.forEach((slide, idx) => {
                     slide.style.display =
-                        idx === currentSlideIndex[productId] ? "block" : "none";
+                        idx === currentSlideIndex[productId]? "block" : "none";
                 });
             }
 
             function addToCart(product) {
-                let cart = JSON.parse(
-                    localStorage.getItem("santra_cart") || "{}"
-                );
+                let cart = JSON.parse(localStorage.getItem("santra_cart") || "{}");
                 if (cart.cart) cart = cart.cart;
                 if (cart[product.id]) {
                     cart[product.id].qty += 1;
@@ -984,16 +643,9 @@
             }
 
             function updateCartCount() {
-                let cart = JSON.parse(
-                    localStorage.getItem("santra_cart") || "{}"
-                );
-                let totalItems = Object.values(cart).reduce(
-                    (sum, item) => sum + (parseInt(item.qty) || 1),
-                    0
-                );
-                let cartIcon = document.getElementById("cartCountIcon");
+                let cart = JSON.parse(localStorage.getItem("santra_cart") || "{}");
+                let totalItems = Object.values(cart).reduce((sum, item) => sum + (parseInt(item.qty) || 1), 0);
                 let cartBottom = document.getElementById("cartCountBottom");
-                if (cartIcon) cartIcon.innerText = totalItems;
                 if (cartBottom) cartBottom.innerText = totalItems;
             }
 
@@ -1015,326 +667,182 @@
             }
 
             function searchProducts() {
-                let query = document
-                    .getElementById("searchInput")
-                    .value.toLowerCase();
-                let filtered = allProducts.filter(
-                    p =>
-                        p.name.toLowerCase().includes(query) ||
-                        (p.category && p.category.toLowerCase().includes(query))
-                );
+                let query = document.getElementById("searchInput").value.toLowerCase();
+                let filtered = allProducts.filter(p => p.name.toLowerCase().includes(query) || (p.category && p.category.toLowerCase().includes(query)));
                 renderProducts(filtered);
             }
 
-            function goHome() {
-                window.scrollTo(0, 0);
-            }
-
-            function openCategories() {
-                let pendingOTP = localStorage.getItem("pendingOTP");
-                if (pendingOTP) {
-                    openVerifyOtpPopup();
-                    return;
-                }
-                window.location.href = "category.html";
-            }
-
-            function openCart() {
-                let pendingOTP = localStorage.getItem("pendingOTP");
-                if (pendingOTP) {
-                    openVerifyOtpPopup();
-                    return;
-                }
-                window.location.href = "cart.html";
-            }
-
+            function goHome() { window.scrollTo(0, 0); }
+            function openCategories() { window.location.href = "category.html"; }
+            function openCart() { window.location.href = "cart.html"; }
             function openOrders() {
-                let pendingOTP = localStorage.getItem("pendingOTP");
-                if (pendingOTP) {
-                    openVerifyOtpPopup();
-                    return;
-                }
                 let customer = localStorage.getItem("santra_customer");
                 if (!customer) {
                     alert("⚠️ Please login first to see your orders");
-                    openCustomerLogin();
+                    window.location.href = "customer-login.html";
                 } else {
                     window.location.href = "orders.html";
                 }
             }
 
-            function customerLogout() {
-                if (confirm("Logout karna hai?")) {
-                    auth.signOut().then(() => {
-                        localStorage.removeItem("santra_customer");
-                        localStorage.removeItem("santra_cart");
-                        showToast("Logged out successfully");
-                        location.reload();
-                    });
-                }
-            }
-
-            function handleLoginClick() {
-                const customer = JSON.parse(
-                    localStorage.getItem("santra_customer") || "{}"
-                );
-                if (customer.name && customer.isLoggedIn === true) {
-                    window.location.href = "customer-account.html";
+            // ✅ FIX 2: Variants/Features/Size/Color/Character Auto Load - Pehle jaisa
+            function onCategoryChange() {
+                const cat = document.getElementById("categorySelect").value;
+                if (cat === "") {
+                    renderProducts(allProducts);
+                    document.getElementById("dynamicFilters").innerHTML = "";
                 } else {
-                    window.location.href = "customer-login.html";
+                    let filtered = allProducts.filter(p => p.category === cat);
+                    renderProducts(filtered);
+                    generateDynamicFilters(filtered);
                 }
             }
 
-            function checkCustomerLogin() {
-                const customer = JSON.parse(
-                    localStorage.getItem("santra_customer") || "{}"
-                );
-                if (customer.name && customer.isLoggedIn === true) {
-                    document
-                        .getElementById("customerInfoBar")
-                        .classList.remove("hide");
-                    document.getElementById("customerNameDisplay").innerText =
-                        customer.name;
-                    document.getElementById("customerMobileDisplay").innerText =
-                        customer.mobile;
-                    document.getElementById("loginBtn").innerText =
-                        "👤 My Profile";
-                    document.getElementById("loginBtn").onclick = () =>
-                        (window.location.href = "customer-account.html");
-                    document.getElementById("logoutBtn").classList.add("hide");
-                    document
-                        .getElementById("userInfo")
-                        .classList.remove("hide");
-                    document.getElementById("userName").innerText =
-                        customer.name;
+            function generateDynamicFilters(products) {
+                let variants = new Set();
+                let sizes = new Set();
+                let colors = new Set();
+                let features = new Set();
+                let characters = new Set();
+                let patterns = new Set();
+                let materials = new Set();
 
-                    if (customer.isOldCustomer && customer.totalOrders > 0) {
-                        document
-                            .getElementById("oldCustomerBadge")
-                            .classList.remove("hide");
-                        document.getElementById("oldCustomerBadge").innerText =
-                            `🔥 Old - ${customer.totalOrders} Orders`;
+                products.forEach(p => {
+                    if (p.variants) {
+                        if (Array.isArray(p.variants)) {
+                            p.variants.forEach(v => variants.add(v));
+                        } else if (typeof p.variants === 'string') {
+                            variants.add(p.variants);
+                        }
                     }
-                } else {
-                    let pendingOTP = localStorage.getItem("pendingOTP");
-                    if (pendingOTP) {
-                        document
-                            .getElementById("verifyOtpBtn")
-                            .classList.remove("hide");
+                    if (p.size) sizes.add(p.size);
+                    if (p.sizes && Array.isArray(p.sizes)) p.sizes.forEach(s => sizes.add(s));
+                    if (p.color) colors.add(p.color);
+                    if (p.colors && Array.isArray(p.colors)) p.colors.forEach(c => colors.add(c));
+                    if (p.features) {
+                        if (Array.isArray(p.features)) {
+                            p.features.forEach(f => features.add(f));
+                        } else if (typeof p.features === 'string') {
+                            features.add(p.features);
+                        }
                     }
-                    document
-                        .getElementById("customerInfoBar")
-                        .classList.add("hide");
-                    document.getElementById("loginBtn").innerText = "👤 Login";
-                    document.getElementById("loginBtn").onclick = () =>
-                        (window.location.href = "customer-login.html");
-                }
-            }
-
-            function closeCheckout() {
-                document.getElementById("checkoutModal").classList.add("hide");
-            }
-            function closeProductModal() {
-                document.getElementById("productModal").classList.add("hide");
-            }
-            function changeModalQty(val) {
-                let qty = parseInt(
-                    document.getElementById("modalQty").innerText
-                );
-                qty += val;
-                if (qty < 1) qty = 1;
-                document.getElementById("modalQty").innerText = qty;
-            }
-            function ToCartFromModal() {
-                if (currentModalProduct) {
-                    for (
-                        let i = 0;
-                        i <
-                        parseInt(document.getElementById("modalQty").innerText);
-                        i++
-                    ) {
-                        addToCart({
-                            id: currentModalProduct.id,
-                            name: currentModalProduct.name,
-                            price: currentModalProduct.price,
-                            image: getProductImage(currentModalProduct),
-                            code:
-                                currentModalProduct.code ||
-                                currentModalProduct.id
-                        });
-                    }
-                }
-            }
-            function buyNowFromModal() {
-                if (currentModalProduct) {
-                    addToCart({
-                        id: currentModalProduct.id,
-                        name: currentModalProduct.name,
-                        price: currentModalProduct.price,
-                        image: getProductImage(currentModalProduct),
-                        code: currentModalProduct.code || currentModalProduct.id
-                    });
-                    setTimeout(() => {
-                        window.location.href = "cart.html";
-                    }, 500);
-                }
-            }
-
-            function placeOrder() {
-                const name = document
-                    .getElementById("customerName")
-                    .value.trim();
-                const mobile = document.getElementById("mobile").value.trim();
-                const address = document.getElementById("address").value.trim();
-
-                if (!name || mobile.length !== 10 || !address) {
-                    showToast("❌ Please fill all required fields");
-                    return;
-                }
-
-                let cart = JSON.parse(
-                    localStorage.getItem("santra_cart") || "{}"
-                );
-                let cartItems = Object.values(cart);
-
-                if (cartItems.length === 0) {
-                    showToast("❌ Cart is empty");
-                    return;
-                }
-
-                const orderId = "SM" + Date.now();
-                const total = cartItems.reduce(
-                    (sum, item) => sum + item.price * item.qty,
-                    0
-                );
-
-                const now = new Date();
-                const istTime = now.toLocaleString("en-IN", {
-                    timeZone: "Asia/Kolkata",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true
+                    if (p.character) characters.add(p.character);
+                    if (p.pattern) patterns.add(p.pattern);
+                    if (p.material) materials.add(p.material);
                 });
 
-                const orderData = {
-                    orderId: orderId,
-                    customerName: name,
-                    mobile: mobile,
-                    email: document.getElementById("email").value.trim(),
-                    address: address,
-                    message: document
-                        .getElementById("customerMessage")
-                        .value.trim(),
-                    payment: document.querySelector(
-                        'input[name="payment"]:checked'
-                    ).value,
+                let html = '';
 
-                    items: cartItems,
-                    total: total,
-                    status: "Pending",
-                    addedAt: now.toISOString(),
-                    addedAtIST: istTime,
-                    orderDate: now.toLocaleDateString("en-IN", {
-                        timeZone: "Asia/Kolkata"
-                    }),
-                    orderTime: now.toLocaleTimeString("en-IN", {
-                        timeZone: "Asia/Kolkata"
-                    })
-                };
+                if (variants.size > 0) {
+                    html += `<div class="filter-group"><label><b>Variants:</b></label>`;
+                    html += `<select data-field="variants" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Variants</option>`;
+                    variants.forEach(v => html += `<option value="${v}">${v}</option>`);
+                    html += `</select></div>`;
+                }
 
-                rtdb.ref("orders/" + orderId)
-                    .set(orderData)
-                    .then(() => {
-                        localStorage.removeItem("santra_cart");
-                        showToast("✅ Order Placed Successfully!");
-                        setTimeout(() => {
-                            window.location.href =
-                                "orders.html?orderId=" + orderId;
-                        }, 1500);
-                    })
-                    .catch(err => {
-                        console.error("Order error:", err);
-                        showToast("❌ Order failed. Try again.");
-                    });
+                if (characters.size > 0) {
+                    html += `<div class="filter-group"><label><b>Character:</b></label>`;
+                    html += `<select data-field="character" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Characters</option>`;
+                    characters.forEach(c => html += `<option value="${c}">${c}</option>`);
+                    html += `</select></div>`;
+                }
+
+                if (sizes.size > 0) {
+                    html += `<div class="filter-group"><label><b>Size:</b></label>`;
+                    html += `<select data-field="size" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Sizes</option>`;
+                    sizes.forEach(s => html += `<option value="${s}">${s}</option>`);
+                    html += `</select></div>`;
+                }
+
+                if (colors.size > 0) {
+                    html += `<div class="filter-group"><label><b>Color:</b></label>`;
+                    html += `<select data-field="color" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Colors</option>`;
+                    colors.forEach(c => html += `<option value="${c}">${c}</option>`);
+                    html += `</select></div>`;
+                }
+
+                if (patterns.size > 0) {
+                    html += `<div class="filter-group"><label><b>Pattern:</b></label>`;
+                    html += `<select data-field="pattern" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Patterns</option>`;
+                    patterns.forEach(p => html += `<option value="${p}">${p}</option>`);
+                    html += `</select></div>`;
+                }
+
+                if (materials.size > 0) {
+                    html += `<div class="filter-group"><label><b>Material:</b></label>`;
+                    html += `<select data-field="material" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Materials</option>`;
+                    materials.forEach(m => html += `<option value="${m}">${m}</option>`);
+                    html += `</select></div>`;
+                }
+
+                if (features.size > 0) {
+                    html += `<div class="filter-group"><label><b>Features:</b></label>`;
+                    html += `<select data-field="features" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
+                    html += `<option value="">All Features</option>`;
+                    features.forEach(f => html += `<option value="${f}">${f}</option>`);
+                    html += `</select></div>`;
+                }
+
+                document.getElementById("dynamicFilters").innerHTML = html;
+            }
+
+            function applySmartFilters() {
+                const cat = document.getElementById("categorySelect").value;
+                let filtered = allProducts;
+
+                if (cat!== "") {
+                    filtered = filtered.filter(p => p.category === cat);
+                }
+
+                const dynamicFilters = document.querySelectorAll("#dynamicFilters select");
+                dynamicFilters.forEach(select => {
+                    const field = select.dataset.field;
+                    const value = select.value;
+                    if (value) {
+                        filtered = filtered.filter(p => {
+                            if (Array.isArray(p[field])) {
+                                return p[field].includes(value);
+                            }
+                            if (p[field] == value) return true;
+                            if (field === 'size' && p.sizes && p.sizes.includes(value)) return true;
+                            if (field === 'color' && p.colors && p.colors.includes(value)) return true;
+                            if (field === 'variants' && (p.character == value || p.pattern == value || p.material == value)) return true;
+                            return false;
+                        });
+                    }
+                });
+
+                renderProducts(filtered);
+            }
+
+            function clearSmartFilters() {
+                document.getElementById("categorySelect").value = "";
+                document.getElementById("dynamicFilters").innerHTML = "";
+                renderProducts(allProducts);
+            }
+
+            function filterByCategory(catName) {
+                document.getElementById("categorySelect").value = catName;
+                let filtered = allProducts.filter(p => p.category === catName);
+                renderProducts(filtered);
+                generateDynamicFilters(filtered);
+                document.getElementById("productGrid").scrollIntoView({ behavior: "smooth" });
             }
 
             function showToast(message) {
                 const toast = document.createElement("div");
-                toast.className = "toast show";
                 toast.innerText = message;
-                toast.style.cssText =
-                    "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:9999;font-size:14px";
+                toast.style.cssText = "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:9999;font-size:14px";
                 document.body.appendChild(toast);
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 3000);
+                setTimeout(() => document.body.removeChild(toast), 3000);
             }
-
-            function openVerifyOtpPopup() {
-                let pending = localStorage.getItem("pendingOTP");
-                if (!pending) {
-                    alert("❌ Koi OTP request nahi mili!");
-                    return;
-                }
-                showAutoOTPPopup();
-            }
-
-            function showAutoOTPPopup() {
-                // OTP ka code yahan
-            }
-
-            function sendLoginOTP() {
-                // Login OTP ka code
-            }
-
-            function verifyLoginOTP() {
-                // Verify OTP ka code
-            }
-
-            function backToStep1() {
-                document.getElementById("loginStep2").classList.add("hide");
-                document.getElementById("loginStep1").classList.remove("hide");
-                document.getElementById("custOTP").value = "";
-            }
-
-            function openCustomerLogin() {
-                const customer = JSON.parse(
-                    localStorage.getItem("santra_customer") || "{}"
-                );
-                document.getElementById("custName").value = customer.name || "";
-                document.getElementById("custMobile").value =
-                    customer.mobile || "";
-                document.getElementById("custEmail").value =
-                    customer.email || "";
-                document
-                    .getElementById("customerLoginModal")
-                    .classList.remove("hide");
-            }
-
-            function closeCustomerLogin() {
-                document
-                    .getElementById("customerLoginModal")
-                    .classList.add("hide");
-                document.getElementById("loginStep1").classList.remove("hide");
-                document.getElementById("loginStep2").classList.add("hide");
-                document.getElementById("custOTP").value = "";
-                loginOTP = null;
-                tempCustomerData = null;
-            }
-
-            function loadSingleOrder(orderId) {
-                rtdb.ref("orders/" + orderId).once("value", snap => {
-                    if (snap.exists()) {
-                        console.log("Order loaded:", snap.val());
-                    }
-                });
-            }
+            function openVerifyOtpPopup() { alert("OTP Verify feature - Add code"); }
         </script>
-
-        <script src="share.js"></script>
     </body>
 </html>
