@@ -4,7 +4,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>🛒 SANTRAJET MALL</title>
-
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="layout.css" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet" />
@@ -18,225 +17,318 @@
             }, true);
         </script>
         <style>
-        
-        /* ✅ BACKUP - Purane CSS Ko Override Karne Ke Liye */
-        .sidebar-btn {
-            background: linear-gradient(135deg, #ffcc80, #ffb74d)!important;
-            border: 3px solid #ff9800!important;
-            color: #FFF176;!important;
-            box-shadow: 0 4px 0 #f57c00!important;
+ .main-container {
+            display: flex;
+            min-height: 100vh;
         }
-    
-            /* ✅ FIX 1: LEFT SIDEBAR - Sirf 5px gap */
-          .main-container {
-                display: flex;
-                min-height: 100vh;
+ .left-sidebar {
+            width: 70px;
+            background: linear-gradient(180deg, #fff9c4, #fff59d);
+            padding: 10px 4px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+ .main-content {
+            flex: 1;
+            margin-left: 70px;
+            width: calc(100% - 70px);
+        }
+ .sidebar-btn {
+            background: linear-gradient(135deg, #ffcc80, #ffb74d);
+            color: #333;
+            padding: 4px 2px;
+            border: 3px solid #ff9800;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 7px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #f57c00, 0 5px 12px rgba(255, 152, 0, 0.3);
+            transition: 0.2s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            line-height: 1.1;
+            width: 62px;
+            min-height: 55px;
+            justify-content: center;
+        }
+ .sidebar-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #f57c00;
+        }
+ .sidebar-btn.icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        #logoutBtn {
+            display: none!important;
+        }
+        #logoutBtn.show {
+            display: flex!important;
+        }
+ .header {
+            margin-left: 0;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+ .logo-wrap { text-align: center; }
+ .logo-wrap h1 {
+            color: #d32f2f;
+            font-size: 26px;
+            font-weight: 900;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            background: #c8e6c9;
+            padding: 5px 15px;
+            display: inline-block;
+        }
+ .tagline {
+            color: #2e7d32;
+            font-size: 13px;
+            margin: 5px 0 0;
+        }
+ .products {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr)!important;
+            gap: 8px;
+            padding: 10px;
+            background: #e8f5e9!important;
+        }
+        @media (min-width: 768px) {
+     .products {
+                grid-template-columns: repeat(4, 1fr)!important;
             }
-          .left-sidebar {
-                width: 100px;
-                background: linear-gradient(180deg, #fff9c4, #fff59d);
-                padding: 10px 5px;
-                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-                position: fixed;
-                left: 0;
-                top: 0;
-                height: 90vh;
-                z-index: 100;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
+        }
+        @media (min-width: 481px) and (max-width: 767px) {
+     .products {
+                grid-template-columns: repeat(3, 1fr)!important;
             }
-          .main-content {
-                flex: 1;
-                margin-left: 105px; /* ✅ 100px sidebar + 5px gap */
-                width: calc(100% - 105px);
+        }
+ .product-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            background: white!important;
+        }
+ .product-card:active {
+            transform: scale(0.98);
+        }
+ .product-card img {
+            width: 100%!important;
+            height: 140px!important;
+            object-fit: contain!important;
+            display: block!important;
+            background: #f5f5f5!important;
+        }
+        @media (min-width: 768px) {
+     .product-card img {
+                height: 180px!important;
             }
-
-            /* ✅ SIDEBAR BUTTON - E-commerce jaisa */
-          .sidebar-btn {
-                background: linear-gradient(135deg, #ffcc80, #ffb74d);
-                color: #FFF176;
-                padding: 8px 5px;
-                border: 3px solid #ff9800;
-                border-radius: 12px;
-                font-weight: bold;
-                font-size: 10px;
-                cursor: pointer;
-                box-shadow: 0 3px 0 #f57c00, 0 5px 12px rgba(255, 152, 0, 0.3);
-                transition: 0.2s;
-                text-decoration: none;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                line-height: 1.2;
-                width: 90px;
-                min-height: 65px;
-                justify-content: center;
+        }
+ .product-info {
+            padding: 8px;
+        }
+ .product-card h3 {
+            font-size: 12px;
+            margin-bottom: 5px;
+            height: 32px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            color: #d32f2f!important;
+        }
+ .price {
+            font-weight: bold;
+            font-size: 14px;
+            color: #d32f2f!important;
+        }
+ .mrp {
+            text-decoration: line-through;
+            font-size: 10px;
+            margin-left: 5px;
+            color: #757575!important;
+        }
+ .stock {
+            font-size: 10px;
+            margin-top: 3px;
+            color: #388e3c!important;
+        }
+ .product-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+            padding: 6px;
+        }
+ .add-to-cart-btn {
+            flex: 1;
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+ .buy-now-btn {
+            flex: 1;
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+ .img-count {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+ .prev-btn,
+ .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+        }
+ .prev-btn { left: 5px; }
+ .next-btn { right: 5px; }
+ .hide { display: none!important; }
+ .new-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #e91e63;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 10;
+        }
+ .filter-section {
+            background: white;
+            padding: 15px;
+            margin: 10px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+ .filter-group {
+            margin-bottom: 10px;
+        }
+ .filter-group label {
+            display: block;
+            margin: 6px 0 4px 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+        #userInfo {
+            color: #1b5e20;
+            font-weight: bold;
+            text-align: center;
+            font-size: 10px;
+            padding: 5px;
+            background: rgba(255,255,0,0.5);
+            border-radius: 8px;
+            margin-bottom: 5px;
+            width: 62px;
+        }
+ .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            background: linear-gradient(135deg, #ff9800, #f57c00)!important;
+        }
+ .nav-item {
+            background: #ffcc80!important;
+            color: #b71c1c!important;
+            padding: 8px 15px!important;
+            border-radius: 12px!important;
+            font-weight: bold!important;
+            font-size: 11px!important;
+            cursor: pointer!important;
+            text-align: center!important;
+            min-width: 70px!important;
+            box-shadow: 0 3px 0 #f57c00!important;
+        }
+ .cart-count {
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            position: absolute;
+            top: -5px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #d32f2f!important;
+            color: white!important;
+        }
+        @media (max-width: 580px) {
+     .left-sidebar {
+                width: 65px!important;
             }
-          .sidebar-btn:active {
-                transform: translateY(2px);
-                box-shadow: 0 1px 0 #f57c00;
+     .main-content {
+                margin-left: 65px!important;
+                width: calc(100% - 65px)!important;
             }
-          .sidebar-btn.icon {
-                font-size: 22px;
-                margin-bottom: 2px;
+     .sidebar-btn {
+                width: 57px!important;
+                min-height: 50px!important;
+                font-size: 6px!important;
             }
-
-          .header {
-                margin-left: 0;
-                background: linear-gradient(135deg, #ff9800, #f57c00);
-                padding: 15px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+     .logo-wrap h1 {
+                font-size: 20px!important;
+                padding: 4px 10px!important;
             }
-          .logo-wrap {
-                text-align: center;
+     .product-card img {
+                height: 130px!important;
             }
-          .logo-wrap h1 {
-                color: #d32f2f;
-                font-size: 26px;
-                font-weight: 900;
-                margin: 0;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-                background: #c8e6c9;
-                padding: 5px 15px;
-                display: inline-block;
-            }
-          .tagline {
-                color: #2e7d32;
-                font-size: 13px;
-                margin: 5px 0 0;
-            }
-
-          .customer-info-bar {
-                background: linear-gradient(60deg, #e8f5e9, #c8e6c9);
-                padding: 3px 7px;
-                border-radius: 2px;
-                margin: 5px 10px;
-                border-left: 4px solid #2e7d32;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-          .customer-info-bar p {
-                margin: 0;
-                font-size: 3px;
-                color: #1b5e20;
-                font-weight: bold;
-            }
-          .logout-mini {
-                background: #d32f2f;
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                border-radius: 5px;
-                font-size: 11px;
-                cursor: pointer;
-            }
-          .product-actions {
-                display: flex;
-                gap: 5px;
-                margin-top: 10px;
-            }
-          .add-to-cart-btn {
-                flex: 1;
-                background: #e91e63;
-                color: white;
-                border: none;
-                padding: 8px;
-                border-radius: 6px;
-                font-weight: bold;
-                cursor: pointer;
-                font-size: 13px;
-            }
-          .buy-now-btn {
-                flex: 1;
-                background: #ff9800;
-                color: white;
-                border: none;
-                padding: 8px;
-                border-radius: 6px;
-                font-weight: bold;
-                cursor: pointer;
-                font-size: 13px;
-            }
-          .img-count {
-                position: absolute;
-                top: 5px;
-                left: 5px;
-                background: rgba(0, 0, 0, 0.7);
-                color: white;
-                padding: 2px 6px;
-                border-radius: 10px;
-                font-size: 11px;
-            }
-          .prev-btn,
-          .next-btn {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background: rgba(0, 0, 0, 0.5);
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 18px;
-                z-index: 10;
-            }
-          .prev-btn { left: 5px; }
-          .next-btn { right: 5px; }
-          .hide { display: none!important; }
-          .new-badge {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-                background: #e91e63;
-                color: white;
-                padding: 3px 8px;
-                border-radius: 5px;
-                font-size: 11px;
-                font-weight: bold;
-                z-index: 10;
-            }
-          .filter-section {
-                background: white;
-                padding: 15px;
-                margin: 10px auto;
-                border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                max-width: 500px;
-            }
-          .filter-group {
-                margin-bottom: 10px;
-            }
-          .filter-group label {
-                display: block;
-                margin: 6px 0 4px 0;
-                font-size: 14px;
-                font-weight: bold;
-                color: #333;
-            }
-            #userInfo {
-                color: #1b5e20;
-                font-weight: bold;
-                text-align: center;
-                font-size: 11px;
-                padding: 5px;
-                background: rgba(255,255,255,0.5);
-                border-radius: 8px;
-                margin-bottom: 5px;
-            }
+        }
         </style>
-   
-
     </head>
 
     <body>
         <div class="main-container">
-            <!-- ✅ LEFT SIDEBAR - Pehle jaisa -->
             <div class="left-sidebar">
                 <div id="userInfo" class="hide">
                     <div>Hi,</div>
@@ -244,35 +336,36 @@
                     <span id="oldCustomerBadge" class="hide" style="background: #ff6b00; color: white; padding: 2px 4px; border-radius: 3px; font-size: 8px; margin-top: 2px; display: block;"></span>
                 </div>
 
-                <!-- ✅ FIX 2: Sirf 2 button ek time pe - Pehle jaisa -->
-                <a href="customer-login.html" id="loginBtn" class="sidebar-btn hide">
+                <a href="customer-login.html" id="loginBtn" class="sidebar-btn">
                     <div class="icon">👤</div>
-                    <div><br></div>
+                    <div>Customer<br>Login</div>
                 </a>
-                
+
+                <button id="logoutBtn" class="sidebar-btn" onclick="customerLogout()">
+                    <div class="icon">🚪</div>
+                    <div>Logout</div>
+                </button>
+
                 <a href="help.html" class="sidebar-btn">
                     <div class="icon">🪩☎️<br>🐋</div>
                     <div>HELP<br>DESK</div>
                 </a>
             </div>
 
-            <!-- ✅ MAIN CONTENT -->
-            
-    <div class="main-content">
-      
-<div class="header">
-    <div class="logo-wrap">
-        <div class="logo-with-icons">
-            <h1 id="logoText">SANTRAJET MALL</h1>
-            <div class="mall-icons">
-                <div class="earth-icon-mall">🪩</div>
-                <div class="fish-icon-mall">🐋</div>
-            </div>
-        </div>
-        <p class="tagline">Online Shopping</p>
-    </div>
-</div>
-      
+            <div class="main-content">
+                <div class="header">
+                    <div class="logo-wrap">
+                        <div class="logo-with-icons">
+                            <h1 id="logoText">SANTRAJET MALL</h1>
+                            <div class="mall-icons">
+                                <div class="earth-icon-mall">🪩</div>
+                                <div class="fish-icon-mall">🐋</div>
+                            </div>
+                        </div>
+                        <p class="tagline">Online Shopping</p>
+                    </div>
+                </div>
+
                 <div id="customerInfoBar" class="customer-info-bar hide">
                     <div>
                         <p>👤 <span id="customerNameDisplay"></span> | 📱 <span id="customerMobileDisplay"></span></p>
@@ -339,22 +432,14 @@
         </div>
 
         <!-- ==================== FIREBASE SDK + CONFIG START ==================== -->
+        <script src="secrets.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
         <script>
-                const firebaseConfig = {
-                apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-    authDomain: "santramarketshoppingmall.firebaseapp.com",
-    projectId: "santramarketshoppingmall",
-    storageBucket: "santramarketshoppingmall.firebasestorage.app",
-    messagingSenderId: "398490252924",
-    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY", // ← Comma zaroori hai
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
-            };
+            // ✅ FIX: secrets.js se config aayega, yaha declare nahi karna
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             var rtdb = firebase.database();
             var auth = firebase.auth();
@@ -369,14 +454,15 @@
             let currentUser = null;
             let loginOTP = null;
             let tempCustomerData = null;
-            const CART_KEY = "a_cart";
-            const ADMIN_WHATSAPP = "8769171078";
 
+            // ✅ FIX: CART_KEY aur ADMIN_WHATSAPP ab secrets.js se aayenge
+            // Yaha declare nahi karna warna "already declared" error aayega
+            
             function customerLogout() {
                 if (confirm("Logout karna hai?")) {
                     auth.signOut().then(() => {
                         localStorage.removeItem("a_customer");
-                        localStorage.removeItem("a_cart");
+                        localStorage.removeItem(CART_KEY); // secrets.js se aayega
                         localStorage.removeItem("a_wishlist");
                         localStorage.removeItem("pendingOTP");
                         showToast("Logged out successfully");
@@ -389,30 +475,9 @@
                 }
             }
 
-            /* ============================================ */
-            /* ✅ OLD CODE BACKUP START - checkCustomerLogin */
-            /* ============================================ */
-            /*
             function checkCustomerLogin() {
-                const customer = JSON.parse(localStorage.getItem("a_customer") || "{}");
-                if (customer.name) {
-                    document.getElementById("loginBtn").classList.add("hide");
-                    document.getElementById("logoutBtn").classList.remove("hide");
-                    document.getElementById("verifyOtpBtn").classList.remove("hide");
-                }
-            }
-            */
-            /* ✅ OLD CODE BACKUP END */
-            /* ============================================ */
-
-            // ✅ NEW CODE - FIX: Sirf 2 button Logic - E-commerce jaisa
-            function checkCustomerLogin() {
-                const customer = JSON.parse(localStorage.getItem("a_customer") || "{}");
-                const pendingOTP = localStorage.getItem("pendingOTP");
-
                 const loginBtn = document.getElementById("loginBtn");
                 const logoutBtn = document.getElementById("logoutBtn");
-                const verifyOtpBtn = document.getElementById("verifyOtpBtn");
                 const userInfo = document.getElementById("userInfo");
                 const userName = document.getElementById("userName");
                 const customerInfoBar = document.getElementById("customerInfoBar");
@@ -420,41 +485,46 @@
                 const customerMobileDisplay = document.getElementById("customerMobileDisplay");
                 const oldCustomerBadge = document.getElementById("oldCustomerBadge");
 
-                // Pehle sab hide
-                loginBtn.classList.add("hide");
-                logoutBtn.classList.add("hide");
-                verifyOtpBtn.classList.add("hide");
-                if (userInfo) userInfo.classList.add("hide");
-                if (customerInfoBar) customerInfoBar.classList.add("hide");
+                if (!loginBtn ||!logoutBtn) {
+                    console.log("Login/Logout buttons not found in DOM");
+                    return;
+                }
 
-                // CASE 1: Login hai
+                const customer = JSON.parse(localStorage.getItem("a_customer") || "{}");
+
+                loginBtn.classList.add("hide");
+                logoutBtn.classList.remove("show");
+                logoutBtn.classList.add("hide");
+                if(userInfo) userInfo.classList.add("hide");
+                if(customerInfoBar) customerInfoBar.classList.add("hide");
+
                 if (customer.name && customer.isLoggedIn === true) {
-                    if (customerInfoBar) customerInfoBar.classList.remove("hide");
-                    if (customerNameDisplay) customerNameDisplay.innerText = customer.name;
-                    if (customerMobileDisplay) customerMobileDisplay.innerText = customer.mobile;
-                    if (logoutBtn) logoutBtn.classList.remove("hide");
-                    if (userInfo) userInfo.classList.remove("hide");
-                    if (userName) userName.innerText = customer.name;
+                    if(customerInfoBar) customerInfoBar.classList.remove("hide");
+                    if(customerNameDisplay) customerNameDisplay.innerText = customer.name;
+                    if(customerMobileDisplay) customerMobileDisplay.innerText = customer.mobile;
+                    logoutBtn.classList.remove("hide");
+                    logoutBtn.classList.add("show");
+                    if(userInfo) userInfo.classList.remove("hide");
+                    if(userName) userName.innerText = customer.name;
 
                     if (customer.isOldCustomer && customer.totalOrders > 0) {
-                        if (oldCustomerBadge) {
+                        if(oldCustomerBadge) {
                             oldCustomerBadge.classList.remove("hide");
                             oldCustomerBadge.innerText = `🔥 ${customer.totalOrders} Orders`;
                         }
                     }
                 }
-                // CASE 2: OTP Pending hai
-                else if (pendingOTP) {
-                    if (verifyOtpBtn) verifyOtpBtn.classList.remove("hide");
-                }
-                // CASE 3: Login nahi hai
                 else {
-                    if (loginBtn) loginBtn.classList.remove("hide");
+                    loginBtn.classList.remove("hide");
+                    logoutBtn.classList.add("hide");
+                    logoutBtn.classList.remove("show");
                 }
             }
 
             document.addEventListener("DOMContentLoaded", function() {
                 checkCustomerLogin();
+                loadProducts();
+                updateCartCount();
             });
 
             auth.onAuthStateChanged(user => {
@@ -462,12 +532,6 @@
                 checkCustomerLogin();
                 updateCartCount();
             });
-
-            window.onload = function () {
-                loadProducts();
-                updateCartCount();
-                checkCustomerLogin();
-            };
 
             function loadProducts() {
                 allProducts = [];
@@ -503,6 +567,9 @@
                         generateCategoryDropdown();
                         localStorage.setItem("ALL_PRODUCTS", JSON.stringify(allProducts));
                     });
+                }, error => {
+                    console.error("Firebase error:", error);
+                    renderProducts([]);
                 });
             }
 
@@ -544,7 +611,8 @@
                 categories.forEach(cat => {
                     html += `<option value="${cat}">${cat}</option>`;
                 });
-                document.getElementById("categorySelect").innerHTML = html;
+                const categorySelect = document.getElementById("categorySelect");
+                if(categorySelect) categorySelect.innerHTML = html;
             }
 
             function getProductImage(p) {
@@ -572,13 +640,16 @@
                     if (images.length === 0) {
                         images = [getProductImage(p)];
                     }
+
+                    const productData = JSON.stringify(p).replace(/'/g, "&apos;");
+
                     html += `
                       <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
                         ${p.stock < 5 && p.stock > 0? '<div class="new-badge">Low Stock</div>' : ""}
                         ${p.stock === 0? '<div class="new-badge" style="background:#999">Out of Stock</div>' : ""}
                         ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ""}
                         <div class="image-slider" style="position:relative;">
-                         ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? "active" : ""}" alt="${p.name}" style="display:${idx === 0? "block" : "none"};width:100%;height:200px;object-fit:cover;">`).join("")}
+                         ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? "active" : ""}" alt="${p.name}" style="display:${idx === 0? "block" : "none"};width:100%;height:140px;object-fit:contain;background:#f5f5f5;">`).join("")}
                           ${images.length > 1? `
                             <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
                             <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
@@ -593,7 +664,7 @@
                           <p class="stock">Stock: ${p.stock}</p>
                         </div>
                         <div class="product-actions">
-                         <button class="add-to-cart-btn" onclick="addToCart({id: '${p.id}', name: '${p.name}', price: ${p.price}, image: '${getProductImage(p)}', code: '${p.code || p.id}'});event.stopPropagation();">Add to Cart</button>
+                         <button class="add-to-cart-btn" onclick='addToCart(${productData});event.stopPropagation();'>Add to Cart</button>
                          <button class="buy-now-btn" onclick="buyNow('${p.id}', event)">Buy Now</button>
                         </div>
                       </div>
@@ -631,28 +702,36 @@
             }
 
             function addToCart(product) {
-                let cart = JSON.parse(localStorage.getItem("a_cart") || "{}");
-                if (cart.cart) cart = cart.cart;
-                if (cart[product.id]) {
-                    cart[product.id].qty += 1;
+                if (!product ||!product.id) {
+                    showToast("❌ Product data missing");
+                    return;
+                }
+
+                let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+
+                let existingIndex = cartArray.findIndex(item => item.id === product.id);
+
+                if (existingIndex > -1) {
+                    cartArray[existingIndex].qty += 1;
                 } else {
-                    cart[product.id] = {
+                    cartArray.push({
                         id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
+                        name: product.name || "Product",
+                        price: parseFloat(product.price) || 0,
+                        image: product.image || getProductImage(product),
                         productCode: product.code || product.id,
                         qty: 1
-                    };
+                    });
                 }
-                localStorage.setItem("a_cart", JSON.stringify(cart));
+
+                localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
                 showToast("✅ Added to Cart!");
                 updateCartCount();
             }
 
             function updateCartCount() {
-                let cart = JSON.parse(localStorage.getItem("a_cart") || "{}");
-                let totalItems = Object.values(cart).reduce((sum, item) => sum + (parseInt(item.qty) || 1), 0);
+                let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+                let totalItems = cartArray.reduce((sum, item) => sum + (parseInt(item.qty) || 1), 0);
                 let cartBottom = document.getElementById("cartCountBottom");
                 if (cartBottom) cartBottom.innerText = totalItems;
             }
@@ -693,7 +772,6 @@
                 }
             }
 
-            // ✅ FIX 2: Variants/Features/Size/Color/Character Auto Load - Pehle jaisa
             function onCategoryChange() {
                 const cat = document.getElementById("categorySelect").value;
                 if (cat === "") {
@@ -754,6 +832,7 @@
                     html += `<select data-field="character" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
                     html += `<option value="">All Characters</option>`;
                     characters.forEach(c => html += `<option value="${c}">${c}</option>`);
+                    
                     html += `</select></div>`;
                 }
 
