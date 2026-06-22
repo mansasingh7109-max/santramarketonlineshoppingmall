@@ -960,7 +960,7 @@ label {
     margin: 20px 0; /* top-bottom margin diya */
     max-height: none; /* height limit hataya */
 }
-/* ✅ LEFT SIDEBAR LAYOUT - 5px Gap Ke Saath */
+/* âœ… LEFT SIDEBAR LAYOUT - 5px Gap Ke Saath */
 .main-container {
     display: flex;
     min-height: 100vh;
@@ -988,7 +988,7 @@ label {
     width: calc(100% - 105px);
 }
 
-/* ✅ SIDEBAR BUTTON - Sab Help Desk Jaise - E-commerce Style */
+/* âœ… SIDEBAR BUTTON - Sab Help Desk Jaise - E-commerce Style */
 .sidebar-btn {
     background: linear-gradient(135deg, #ffcc80, #ffb74d);
     color: #FFF176;;
@@ -1038,7 +1038,7 @@ label {
     width: 90px;
 }
 
-/* ✅ Header ko right me shift karo */
+/* âœ… Header ko right me shift karo */
 .header {
     margin-left: 0;
     background: linear-gradient(135deg, #ff9800, #f57c00);
@@ -1069,7 +1069,7 @@ label {
     margin: 5px 0 0 0;
 }
 
-/* ✅ Bottom Nav Fixed */
+/* âœ… Bottom Nav Fixed */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -1106,7 +1106,7 @@ label {
     background: #ffb74d;
 }
 cky
-/* ✅ LEFT SIDEBAR LAYOUT - 100px + 5px Gap */
+/* âœ… LEFT SIDEBAR LAYOUT - 100px + 5px Gap */
 .main-container {
     display: flex;
     min-height: 100vh;
@@ -1134,7 +1134,7 @@ cky
     width: calc(100% - 105px);
 }
 
-/* ✅ SIDEBAR BUTTON - HELP DESK JAISA EXACT 3D STYLE */
+/* âœ… SIDEBAR BUTTON - HELP DESK JAISA EXACT 3D STYLE */
 .sidebar-btn {
     background: linear-gradient(135deg, #ffcc80, #ffb74d);
     color: #FFF176;;e
@@ -1185,7 +1185,7 @@ cky
 }
 
 .hide { display: none!important; }
-/* ✅ FORCE HELP DESK STYLE ON ALL BUTTONS - OVERRIDE PURANA CSS */
+/* âœ… FORCE HELP DESK STYLE ON ALL BUTTONS - OVERRIDE PURANA CSS */
 .sidebar-btn {
     background: linear-gradient(135deg, #ffcc80, #ffb74d)!important;
     border: 3px solid #ff9800!important;
@@ -1210,5 +1210,3 @@ cky
     font-size: 22px!important;
     margin-bottom: 3px!important;
 }
-
-

@@ -135,7 +135,7 @@ button[onclick*="login"] {
 }
 #loginBtn::before,
 .login-btn::before {
-    content: "🛍️" !important;
+    content: "ðŸ›ï¸" !important;
     font-size: 16px !important;
     display: block !important;
 }
@@ -149,7 +149,7 @@ button[onclick*="logout"] {
 }
 #logoutBtn::before,
 .logout-btn::before {
-    content: "🚪" !important;
+    content: "ðŸšª" !important;
     font-size: 16px !important;
     display: block !important;
 }
@@ -162,7 +162,7 @@ button[onclick*="wishlist"] {
     position: relative !important;
 }
 .wishlist-btn::before {
-    content: "♥️" !important;
+    content: "â™¥ï¸" !important;
     font-size: 16px !important;
     display: block !important;
 }
@@ -174,7 +174,7 @@ button[onclick*="help"] {
     grid-row: 3/4 !important;
 }
 .help-btn::before {
-    content: "👋" !important;
+    content: "ðŸ‘‹" !important;
     font-size: 16px !important;
     display: block !important;
 }
@@ -476,7 +476,7 @@ end line
 
 /* 1. LOGIN BUTTON - CUSTOMER LOGIN TEXT */
 #loginBtn {
-    font-size: 0 !important; /* Purana "👤 Login" hide */
+    font-size: 0 !important; /* Purana "ðŸ‘¤ Login" hide */
 }
 
 #loginBtn::before {
@@ -635,7 +635,7 @@ a[href*="cart"] {
     display: none!important;
 }
 <style>
-/* ✅ HELPDESK/FOOTER Jaisi Button Style */
+/* âœ… HELPDESK/FOOTER Jaisi Button Style */
 .header-btn {
     background: linear-gradient(135deg, #ff9800, #ff6f00);
     color: #FFF176;;
@@ -659,7 +659,7 @@ a[href*="cart"] {
 .hide { display: none !important; }
 </style>
 
-/* ✅ Customer Info Bar */
+/* âœ… Customer Info Bar */
 .customer-info-bar {
     background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
     padding: 10px 15px;
@@ -688,7 +688,7 @@ a[href*="cart"] {
     cursor: pointer;
 }
 
-/* ✅ Product Actions */
+/* âœ… Product Actions */
 .product-actions {
     display: flex;
     gap: 5px;
@@ -719,7 +719,7 @@ a[href*="cart"] {
     font-size: 13px;
 }
 
-/* ✅ Image Slider */
+/* âœ… Image Slider */
 .img-count {
     position: absolute;
     top: 5px;
@@ -762,7 +762,7 @@ a[href*="cart"] {
     z-index: 10;
 }
 
-/* ✅ Filter Section */
+/* âœ… Filter Section */
 .filter-section {
     background: white;
     padding: 15px;
@@ -784,7 +784,7 @@ a[href*="cart"] {
     color: #333;
 }
 
-/* ✅ Products Grid */
+/* âœ… Products Grid */
 .products {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -842,7 +842,7 @@ a[href*="cart"] {
     object-fit: cover;
 }
 
-/* ✅ Categories */
+/* âœ… Categories */
 .categories {
     display: flex;
     gap: 10px;
@@ -874,7 +874,7 @@ a[href*="cart"] {
     font-weight: bold;
 }
 
-/* ✅ Search Bar */
+/* âœ… Search Bar */
 .search-bar {
     display: flex;
     gap: 10px;
@@ -903,7 +903,7 @@ a[href*="cart"] {
     cursor: pointer;
 }
 
-/* ✅ Banner */
+/* âœ… Banner */
 .banner {
     background: linear-gradient(135deg, #ff9800, #f57c00);
     color: white;
@@ -923,7 +923,7 @@ a[href*="cart"] {
     color: #2e7d32;
 }
 cky
-/* ✅ HEADER */
+/* âœ… HEADER */
 .header {
     margin-left: 0;
     background: linear-gradient(135deg, #ff9800, #f57c00);
@@ -952,7 +952,7 @@ cky
     margin: 5px 0 0 0;
 }
 
-/* ✅ CUSTOMER INFO BAR */
+/* âœ… CUSTOMER INFO BAR */
 .customer-info-bar {
     background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
     padding: 10px 15px;
@@ -964,7 +964,7 @@ cky
     align-items: center;
 }
 
-/* ✅ PRODUCT GRID - 5px Gap Ke Saath */
+/* âœ… PRODUCT GRID - 5px Gap Ke Saath */
 .products {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -991,7 +991,7 @@ cky
 .add-to-cart-btn { flex: 1; background: #e91e63; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
 .buy-now-btn { flex: 1; background: #ff9800; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
 
-/* ✅ FILTER SECTION - Margin Kam Kiya 5px Gap Ke Liye */
+/* âœ… FILTER SECTION - Margin Kam Kiya 5px Gap Ke Liye */
 .filter-section {
     background: white;
     padding: 15px;
@@ -1010,7 +1010,7 @@ cky
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* ✅ BOTTOM NAV - FIXED FOOTER */
+/* âœ… BOTTOM NAV - FIXED FOOTER */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -1103,26 +1103,26 @@ cky
 }
 cky
 
-/* ✅ HEADER FIX - Logo + Icons Center */
+/* âœ… HEADER FIX - Logo + Icons Center */
 .header {
     background: linear-gradient(135deg, #ff9800, #f57c00);
     padding: 15px 10px;
     width: 100%;
     display: flex;
-    justify-content: center; /* ✅ Header ko center karo */
+    justify-content: center; /* âœ… Header ko center karo */
 }
 
 .logo-center-block {
     display: flex;
     flex-direction: column;
-    align-items: center; /* ✅ Sab center me */
+    align-items: center; /* âœ… Sab center me */
 }
 
 .logo-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px; /* ✅ Logo aur icon ke beech gap */
+    gap: 8px; /* âœ… Logo aur icon ke beech gap */
 }
 
 #logoText {
@@ -1147,14 +1147,14 @@ cky
     font-size: 18px;
     position: absolute;
     top: 0;
-    left: 0; /* ✅ Earth upar left */
+    left: 0; /* âœ… Earth upar left */
 }
 
 .fish-icon {
     font-size: 16px;
     position: absolute;
     bottom: 0;
-    right: 0; /* ✅ Fish neeche right - Diagonal */
+    right: 0; /* âœ… Fish neeche right - Diagonal */
     transform: rotate(-10deg);
 }
 
@@ -1168,18 +1168,18 @@ cky
 
 cky
 
-/* ✅ MAIN LAYOUT FIX - Sidebar Left Me Fix Rahega */
+/* âœ… MAIN LAYOUT FIX - Sidebar Left Me Fix Rahega */
 body {
     margin: 0;
     padding: 0;
-    display: flex; /* ✅ Ye sabse important hai */
+    display: flex; /* âœ… Ye sabse important hai */
     min-height: 100vh;
 }
 
 .sidebar {
-    width: 90px; /* ✅ Left patti ki width */
+    width: 90px; /* âœ… Left patti ki width */
     background: #fff59d;
-    flex-shrink: 0; /* ✅ Sikudne mat dena */
+    flex-shrink: 0; /* âœ… Sikudne mat dena */
     position: sticky;
     top: 0;
     height: 100vh;
@@ -1187,7 +1187,6 @@ body {
 }
 
 .main-content {
-    flex: 1; /* ✅ Baaki saari jagah le lega */
+    flex: 1; /* âœ… Baaki saari jagah le lega */
     width: calc(100% - 90px);
 }
-
