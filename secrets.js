@@ -28,7 +28,7 @@ if (typeof firebaseConfig !== 'undefined') {
 // STEP 2: BUSINESS_CONFIG
 if (typeof BUSINESS_CONFIG === 'undefined') {
   var BUSINESS_CONFIG = {
-    WHATSAPP_NUMBER: "8769171078",
+    WHATSAPP_NUMBER: "918769171078",
     EMAIL: "mansasingh7109@gmail.com",
     EMAIL_2: "santramarketshoppingmall@gmail.com"
   };
@@ -37,7 +37,7 @@ if (typeof BUSINESS_CONFIG === 'undefined') {
 // STEP 3: Global Variables
 if (typeof CART_KEY === 'undefined') var CART_KEY = "SANTRA_CART";
 if (typeof WISHLIST_KEY === 'undefined') var WISHLIST_KEY = "SANTRA_WISHLIST"; 
-if (typeof ADMIN_WHATSAPP === 'undefined') var ADMIN_WHATSAPP = "8769171078";
+if (typeof ADMIN_WHATSAPP === 'undefined') var ADMIN_WHATSAPP = "918769171078";
 if (typeof ADMIN_EMAIL === 'undefined') var ADMIN_EMAIL = "santramarketshoppingmall@gmail.com";
 if (typeof EMAILJS_PUBLIC_KEY === 'undefined') var EMAILJS_PUBLIC_KEY = EMAILJS_CONFIG.PUBLIC_KEY;
 
