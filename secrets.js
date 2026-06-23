@@ -47,3 +47,8 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length && masterConfig) {
   firebase.initializeApp(masterConfig);
   console.log("✅ Firebase Connected from secrets.js using:", masterConfig.projectId);
 }
+// STEP 5: Global Variables - CASE SENSITIVE HAI
+if (typeof CART_KEY === 'undefined') var CART_KEY = "santra_cart";
+if (typeof MYCHOICE_KEY === 'undefined') var MYCHOICE_KEY = "santra_mychoice";
+if (typeof ADMIN_WHATSAPP === 'undefined') var ADMIN_WHATSAPP = "918769171078";
+if (typeof ADMIN_EMAIL === 'undefined') var ADMIN_EMAIL = "santramarketshoppingmall@gmail.com";
