@@ -11,7 +11,6 @@
 .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
 .back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
 .header h1{font-size:18px;flex:1}
-.share-btn{background:rgba(255,255,255,0.2);border:none;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:18px}
 .container{max-width:600px;margin:0 auto;background:white}
 .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
 .slider-container{width:100%;height:100%;position:relative}
@@ -38,7 +37,7 @@
 .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
 .variant-btn:hover:not(:disabled){border-color:var(--accent);background:#fff0f5}
 .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent);box-shadow:0 0 0 3px rgba(228,0,70,0.1)}
-.variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5f5;border-color:#ddd;color:#aaa}
+.variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5;border-color:#ddd;color:#aaa}
 .variant-btn:disabled::after{content:'✕';position:absolute;top:3px;right:5px;font-size:14px;color:#ef4444;font-weight:bold}
 .variant-price{font-size:11px;display:block;color:#666;margin-top:2px;font-weight:normal}
 .variant-stock{font-size:10px;margin-top:2px;font-weight:normal;display:block;color:var(--green)}
@@ -47,12 +46,12 @@
 .features{background:linear-gradient(135deg,#f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
 .features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
 .features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
-.action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
+.action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0.1);max-width:600px;margin:0 auto;z-index:50}
 .btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;transition:all 0.3s}
 .btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
 .btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
 .btn-buy{background:var(--accent);color:white}
-.btn:disabled{opacity:0.5;cursor:not-allowed;background:#f5f5f5;color:#999;border-color:#ddd}
+.btn:disabled{opacity:0.5;cursor:not-allowed;background:#f5f5;color:#999;border-color:#ddd}
 .loader{text-align:center;padding:100px 20px;color:var(--accent);font-size:18px}
 .error{text-align:center;padding:100px 20px}
 .qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9;border-radius:8px}
@@ -78,30 +77,24 @@
   <button class="btn btn-buy" onclick="buyNow()" id="buyBtn">⚡ BUY NOW</button>
 </div>
 
-<script src="share.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="secrets.js"></script>
-<script src="/main.js"></script>  <!-- Ye wali file me addToCart function hai -->
 
 <script>
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
+// ✅ FIX: CART_KEY, WISHLIST_KEY secrets.js se lo - dobara declare mat karo
 let currentProduct = null;
 let selectedVariant = null;
 let selectedVariantData = null;
 let selectedQty = 1;
 let currentUser = null;
 
-auth.onAuthStateChanged((user) => {
-  currentUser = user;
-});
+auth.onAuthStateChanged((user) => { currentUser = user; });
 
 document.addEventListener('DOMContentLoaded', async function() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -113,111 +106,46 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function loadProduct(productId) {
   try {
     let cleanId = String(productId).trim();
-    console.log('🔍 Searching for ID:', cleanId);
-
     let doc = await db.collection('products').doc(cleanId).get();
-
     if(doc.exists) {
       currentProduct = {id: doc.id,...doc.data()};
-      console.log('✅ Product Firebase se mila - Direct ID:', cleanId);
     } else {
-      let altId = cleanId;
-      if(cleanId.startsWith('SM-')) {
-        altId = cleanId.replace('SM-', '-');
-        doc = await db.collection('products').doc(altId).get();
-        if(doc.exists) {
-          currentProduct = {id: doc.id,...doc.data()};
-          console.log('✅ Product Firebase se mila - SM- hatake:', altId);
-        }
-      }
-
-      if(!doc.exists && cleanId.startsWith('-')) {
-        altId = 'SM' + cleanId;
-        doc = await db.collection('products').doc(altId).get();
-        if(doc.exists) {
-          currentProduct = {id: doc.id,...doc.data()};
-          console.log('✅ Product Firebase se mila - SM- lagake:', altId);
-        }
-      }
-
-      if(!doc.exists) {
-        console.log('⚠️ Firebase me nahi mila, localStorage check kar rahe...');
-        let allProducts = JSON.parse(localStorage.getItem('ALL_PRODUCTS')) || [];
-        currentProduct = allProducts.find(p => p.id == cleanId || p.id == altId);
-        if(currentProduct) console.log('✅ Product localStorage se mila');
-      }
-
-      if(!doc.exists &&!currentProduct) {
-        console.log('⚠️ localStorage me bhi nahi mila, cart check kar rahe...');
-        let cartData = JSON.parse(localStorage.getItem('santra_cart') || '{}');
-        let checkoutCart = JSON.parse(localStorage.getItem('santra_checkout_cart') || '{}');
-        let cartItem = cartData[cleanId] || checkoutCart[cleanId] || cartData[altId] || checkoutCart[altId];
-
-        if(cartItem) {
-          currentProduct = {
-            id: cleanId,
-            name: cartItem.name,
-            price: cartItem.price,
-            mrp: cartItem.mrp || cartItem.price,
-            image: cartItem.image || cartItem.imageUrl,
-            imageUrl: cartItem.image || cartItem.imageUrl,
-            images: [cartItem.image || cartItem.imageUrl],
-            description: 'Product details from your cart',
-            stock: 'Available',
-            category: cartItem.category || 'General',
-            code: cartItem.code || cartItem.productCode || cleanId,
-            product_code: cartItem.code || cartItem.productCode
-          };
-          console.log('✅ Product CART se mila - Fallback Mode');
-        }
-      }
+      let altId = cleanId.startsWith('SM-')? cleanId.replace('SM-', '-') : 'SM' + cleanId;
+      doc = await db.collection('products').doc(altId).get();
+      if(doc.exists) currentProduct = {id: doc.id,...doc.data()};
 
       if(!currentProduct) {
-        return showError('Product Not Found', 'ID: ' + productId + '<br>Firebase, localStorage aur cart me nahi mila<br><br>Tried: ' + cleanId + ', ' + altId + '<br><br>Solution: Cart khali karke product wapas add kare');
+        let allProducts = JSON.parse(localStorage.getItem('ALL_PRODUCTS')) || [];
+        currentProduct = allProducts.find(p => p.id == cleanId || p.id == altId);
       }
+      if(!currentProduct) {
+        let cartData = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        let cartItem = cartData.find(item => item.id === cleanId || item.id === altId);
+        if(cartItem) {
+          currentProduct = {
+            id: cleanId, name: cartItem.name, price: cartItem.price, mrp: cartItem.mrp || cartItem.price,
+            image: cartItem.image, images: [cartItem.image], description: 'From cart',
+            stock: 'Available', category: cartItem.category || 'General', code: cartItem.code
+          };
+        }
+      }
+      if(!currentProduct) return showError('Product Not Found', 'ID: ' + productId);
     }
-
     document.getElementById('headerTitle').innerText = currentProduct.name;
     document.title = currentProduct.name + ' - SANTRA MALL';
     renderProduct(currentProduct);
     document.getElementById('actionBtns').style.display = 'flex';
-    saveViewHistory(currentProduct.id);
-
   } catch(error) {
     console.error('Error:', error);
     showError('Error Loading Product', error.message);
   }
 }
 
-function saveViewHistory(productId) {
-  try {
-    db.collection('viewHistory').add({
-      productId: productId,
-      productName: currentProduct.name,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      userAgent: navigator.userAgent
-    });
-  } catch(e) {
-    console.log('History save failed:', e);
-  }
-}
-
 function getVariantType(category) {
   const cat = (category || '').toLowerCase();
-  if(cat.includes('dress') || cat.includes('cloth') || cat.includes('shirt') || cat.includes('tshirt') ||
-     cat.includes('jeans') || cat.includes('kurta') || cat.includes('salwar') || cat.includes('suit') ||
-     cat.includes('gown') || cat.includes('saree')) {
-    return { label: 'Size', icon: '👕' };
-  }
-  if(cat.includes('oil') || cat.includes('liquid') || cat.includes('juice') || cat.includes('milk') ||
-     cat.includes('water') || cat.includes('handwash') || cat.includes('shampoo') || cat.includes('soap')) {
-    return { label: 'Volume', icon: '💧' };
-  }
-  if(cat.includes('food') || cat.includes('grain') || cat.includes('rice') || cat.includes('wheat') ||
-     cat.includes('dal') || cat.includes('seed') || cat.includes('sugar') || cat.includes('salt') ||
-     cat.includes('flour') || cat.includes('atta')) {
-    return { label: 'Weight', icon: '⚖️' };
-  }
+  if(cat.includes('dress') || cat.includes('shirt') || cat.includes('jeans') || cat.includes('kurta') || cat.includes('saree')) return { label: 'Size', icon: '👕' };
+  if(cat.includes('oil') || cat.includes('shampoo')) return { label: 'Volume', icon: '💧' };
+  if(cat.includes('food') || cat.includes('rice') || cat.includes('dal') || cat.includes('atta')) return { label: 'Weight', icon: '⚖️' };
   return { label: 'Variant', icon: '📦' };
 }
 
@@ -226,29 +154,16 @@ function renderProduct(p) {
   if(loader) loader.style.display = 'none';
 
   let images = [];
-  if(p.media && Array.isArray(p.media) && p.media.length > 0){
-    images = p.media.map(m => m.url).filter(url => url && url.startsWith('http'));
-  }
-  if(images.length === 0 && p.images && Array.isArray(p.images) && p.images.length > 0){
-    images = p.images.filter(url => url && url.startsWith('http'));
-  }
-  if(images.length === 0 && p.imageUrl){
-    images = [p.imageUrl];
-  }
-  if(images.length === 0 && p.image){
-    images = [p.image];
-  }
-  if(images.length === 0){
-    images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
-  }
+  if(p.media?.length) images = p.media.map(m => m.url).filter(url => url);
+  if(!images.length && p.images?.length) images = p.images.filter(url => url);
+  if(!images.length && p.imageUrl) images = [p.imageUrl];
+  if(!images.length && p.image) images = [p.image];
+  if(!images.length) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
 
   let variants = p.variants || p.sizes || p.size || [];
   if(typeof variants === 'string') variants = variants.split(',');
-
   let discount = p.mrp && p.price? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
   let productCode = p.code || p.product_code || p.id;
-  let category = p.category || 'General';
-  let seriesNo = p.seriesCode || getSeriesNumber(p.category, p.id);
   let variantType = getVariantType(p.category);
 
   let sliderHTML = `
@@ -270,7 +185,7 @@ function renderProduct(p) {
     let price = typeof v === 'object'? v.price : p.price;
     let stock = typeof v === 'object'? v.stock : 999;
     let isOut = stock <= 0;
-    return `<button class="variant-btn" onclick='selectVariant(${JSON.stringify(v)}, this)' ${isOut?'disabled':''}>
+    return `<button class="variant-btn" onclick='selectVariant(${JSON.stringify(v).replace(/'/g, "&apos;")}, this)' ${isOut?'disabled':''}>
       ${name}
       ${price && price!== p.price? `<span class="variant-price">₹${price}</span>` : ''}
       <span class="variant-stock ${isOut?'out-stock':'in-stock'}">${isOut?'Out of stock':stock+' left'}</span>
@@ -281,38 +196,36 @@ function renderProduct(p) {
     <div class="container">
       ${sliderHTML}
       <div class="details">
-        <h1 class="product-name" id="productName">${p.name}</h1>
+        <h1 class="product-name">${p.name}</h1>
         <div class="product-meta">
           <span>📦 Code: ${productCode}</span>
-          <span>📁 ${category}</span>
-          <span id="productStock">📊 Stock: ${p.stock || 'Available'}</span>
-          <span>🏷️ Series: ${seriesNo}</span>
+          <span>📁 ${p.category || 'General'}</span>
+          <span>📊 Stock: ${p.stock || 'Available'}</span>
         </div>
         <div class="price-box">
           <span class="price" id="productPrice">₹${p.price}</span>
-          ${p.mrp? `<span class="mrp" id="displayMrp">₹${p.mrp}</span>` : ''}
-          ${discount > 0? `<span class="discount" id="displayDiscount">${discount}% OFF</span>` : ''}
+          ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
+          ${discount > 0? `<span class="discount">${discount}% OFF</span>` : ''}
         </div>
         <div id="selectedVariantInfo" class="selected-variant-info" style="display:none">
           <strong>Selected:</strong> <span id="variantText"></span>
         </div>
-        ${variants.length > 0? `<div class="section" id="variantSection"><h3>${variantType.icon} Select ${variantType.label}:</h3><div class="variant-grid">${variantHTML}</div></div>` : ''}
+        ${variants.length > 0? `<div class="section"><h3>${variantType.icon} Select ${variantType.label}:</h3><div class="variant-grid">${variantHTML}</div></div>` : ''}
         <div class="qty-box">
           <span style="font-weight:bold">Quantity:</span>
-          <button onclick="changeQty(-1)" id="qtyMinus">-</button>
+          <button onclick="changeQty(-1)">-</button>
           <span id="qtyDisplay">1</span>
-          <button onclick="changeQty(1)" id="qtyPlus">+</button>
+          <button onclick="changeQty(1)">+</button>
         </div>
         <div class="section">
           <h3>Product Description:</h3>
-          <div class="desc">${p.description || 'Premium quality product from SANTRA MALL. Best in class with guaranteed satisfaction.'}</div>
+          <div class="desc">${p.description || 'Premium quality product from SANTRA MALL.'}</div>
         </div>
         <div class="features">
           <p>100% Original & Authentic Products</p>
           <p>Free Delivery on Orders Above ₹500</p>
           <p>Easy 7 Days Return Policy</p>
           <p>Cash on Delivery Available</p>
-          <p>Secure Payment Options</p>
         </div>
       </div>
     </div>
@@ -337,17 +250,11 @@ function selectVariant(variant, btn) {
   if(btn.disabled) return;
   selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
   selectedVariant = selectedVariantData.name || selectedVariantData.size || selectedVariantData.volume || selectedVariantData.weight;
-
   let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
   if(stock <= 0) return;
-
   document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-
-  if(selectedVariantData.price) {
-    document.getElementById('productPrice').innerText = '₹' + selectedVariantData.price;
-  }
-
+  if(selectedVariantData.price) document.getElementById('productPrice').innerText = '₹' + selectedVariantData.price;
   document.getElementById('selectedVariantInfo').style.display = 'block';
   document.getElementById('variantText').innerText = selectedVariant + (selectedVariantData.price? ' - ₹' + selectedVariantData.price : '');
 }
@@ -378,136 +285,70 @@ function changeQty(change) {
   document.getElementById('qtyDisplay').innerText = selectedQty;
 }
 
-function getSeriesNumber(category, productId) {
-  const prefix = {'Food':'FD','Cloth':'CL','Dress':'DR','Soap':'SP','Dish soap':'DS','Utensils':'UT','Stationaries':'ST','Seed':'SD','Home item':'HM','Salwar suit':'SS','Plant':'PL','Jewellery':'JW','Gown':'GN','Hair Oil':'HO','Handwash':'HW'};
-  let cat = category || 'GN';
-  let code = prefix[cat] || 'GN';
-  let numId = String(productId).replace(/[^0-9]/g, '');
-  return `${code}${numId.padStart(4, '0')}`;
-}
-
 function getProductLink() {
-  const baseUrl = window.location.origin;
-  const pathName = window.location.pathname;
-  let productPath = '/product.html';
-  if(pathName.includes('/santramarketshoppingmall')){
-      productPath = '/santramarketshoppingmall/product.html';
-  }
-  return `${baseUrl}${productPath}?id=${encodeURIComponent(currentProduct.id)}`;
+  return `${window.location.origin}/product.html?id=${encodeURIComponent(currentProduct.id)}`;
 }
 
 function addToCart() {
   let hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
-  if (hasVariants &&!selectedVariant) {
-    alert('⚠️ Please select a variant first!');
-    return;
-  }
-
+  if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
   let stock = selectedVariantData?.stock!== undefined? selectedVariantData.stock : 999999;
   if(stock <= 0) return alert('❌ This variant is out of stock!');
 
-  let cart = JSON.parse(localStorage.getItem(CART_KEY) || '{}');
-  let seriesNo = getSeriesNumber(currentProduct.category, currentProduct.id);
+  let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
   let finalPrice = selectedVariantData?.price || currentProduct.price;
 
   let cartItem = {
-    id: currentProduct.id,
-    name: currentProduct.name,
-    price: finalPrice,
-    image: currentProduct.imageUrl || currentProduct.image || (currentProduct.images? currentProduct.images[0] : ''),
-    code: currentProduct.code || currentProduct.product_code || seriesNo,
-    serial_no: seriesNo,
-    seriesNo: seriesNo,
+    id: currentProduct.id, name: currentProduct.name, price: finalPrice,
+    image: currentProduct.imageUrl || currentProduct.image || currentProduct.images?.[0] || '',
+    code: currentProduct.code || currentProduct.id,
     category: currentProduct.category || 'General',
     variant: selectedVariant || 'Default',
     variantType: getVariantType(currentProduct.category).label,
-    productLink: getProductLink(),
-    qty: selectedQty
+    productLink: getProductLink(), qty: selectedQty
   };
 
-  let existing = cart[currentProduct.id];
-  if(existing && existing.variant === cartItem.variant) {
-    existing.qty += selectedQty;
-  } else {
-    cart[currentProduct.id] = cartItem;
-  }
+  let existingIndex = cartArray.findIndex(item => item.id === currentProduct.id && item.variant === cartItem.variant);
+  if (existingIndex > -1) cartArray[existingIndex].qty += selectedQty;
+  else cartArray.push(cartItem);
 
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
   alert('✅ Added to Cart! 🛒');
-
-  if (currentUser) {
-    const cartRef = db.collection('users').doc(currentUser.uid).collection('cart').doc(currentProduct.id);
-    cartRef.set(cart[currentProduct.id], {merge: true});
-  }
+  if (currentUser) db.collection('users').doc(currentUser.uid).collection('cart').doc(currentProduct.id).set(cartItem, {merge: true});
 }
 
 function buyNow() {
   let hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
-  if (hasVariants &&!selectedVariant) {
-    alert('⚠️ Please select a variant first!');
-    return;
-  }
+  if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
   addToCart();
   window.location.href = 'cart.html';
 }
 
-// ✅ FIX 5: Wishlist → My Choice renamed
 function addToMyChoice() {
   let hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
-  if (hasVariants &&!selectedVariant) {
-    alert('⚠️ Please select a variant first!');
-    return;
-  }
+  if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
 
-  if (typeof WISHLIST_KEY === 'undefined') {
-    alert('😍 My Choice Coming Soon!');
-    return;
-  }
-
-  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '{}');
-  let seriesNo = getSeriesNumber(currentProduct.category, currentProduct.id);
+  let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
   let finalPrice = selectedVariantData?.price || currentProduct.price;
 
   let wishItem = {
-    id: currentProduct.id,
-    name: currentProduct.name,
-    price: finalPrice,
-    image: currentProduct.imageUrl || currentProduct.image || (currentProduct.images? currentProduct.images[0] : ''),
-    code: currentProduct.code || currentProduct.product_code || seriesNo,
-    serial_no: seriesNo,
-    seriesNo: seriesNo,
+    id: currentProduct.id, name: currentProduct.name, price: finalPrice,
+    image: currentProduct.imageUrl || currentProduct.image || currentProduct.images?.[0] || '',
+    code: currentProduct.code || currentProduct.id,
     category: currentProduct.category || 'General',
     variant: selectedVariant || 'Default',
-    variantType: getVariantType(currentProduct.category).label,
-    productLink: getProductLink(),
-    qty: selectedQty
+    productLink: getProductLink(), qty: selectedQty
   };
 
-  if(!wishlist[currentProduct.id]) {
-    wishlist[currentProduct.id] = wishItem;
+  let existingIndex = wishlist.findIndex(item => item.id === currentProduct.id && item.variant === wishItem.variant);
+  if(existingIndex === -1) {
+    wishlist.push(wishItem);
     localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
     alert('😍 Added to My Choice!');
   } else {
     alert('Already in My Choice!');
   }
-
-  if (currentUser) {
-    db.collection('users').doc(currentUser.uid).collection('wishlist').doc(currentProduct.id).set(wishItem, {merge: true});
-  }
-}
-
-function shareProduct() {
-  const shareUrl = getProductLink();
-  if(navigator.share) {
-    navigator.share({
-      title: currentProduct.name,
-      text: `Check out ${currentProduct.name} on SANTRA MALL - ₹${selectedVariantData?.price || currentProduct.price}`,
-      url: shareUrl
-    });
-  } else {
-    navigator.clipboard.writeText(shareUrl);
-    alert('🔗 Link copied to clipboard!');
-  }
+  if (currentUser) db.collection('users').doc(currentUser.uid).collection('wishlist').doc(currentProduct.id).set(wishItem, {merge: true});
 }
 
 function showError(title, msg) {
@@ -519,42 +360,6 @@ function showError(title, msg) {
     </div>
   `;
 }
-</script>
-<!-- BACKUP PROTECTION TERMINAL - 13/06/2026, 3:45 PM - RAKHA HAI SAFE -->
-<script>
-console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 13 June 2026, 3:45 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%c✅ Cart Fallback Added + 5-Way ID Check', 'color:#3b82f6;font-weight:bold');
-
-window.santraBackup = {
-  version: '3.4',
-  timestamp: '2026-06-13T15:45:00+05:30',
-  backupLocalStorage: function() {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      cart: localStorage.getItem('santra_cart'),
-      wishlist: localStorage.getItem('santra_wishlist'),
-      customer: localStorage.getItem('santra_customer')
-    };
-    localStorage.setItem('santra_backup_2026_06_13_1545', JSON.stringify(backup));
-    console.log('✅ Backup Created');
-    return backup;
-  },
-  restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_13_1545');
-    if(backup) {
-      const data = JSON.parse(backup);
-      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.cart) localStorage.setItem('santra_cart', data.cart);
-        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
-        alert('✅ Backup Restored! Reloading...');
-        location.reload();
-      }
-    }
-  }
-};
-window.santraBackup.backupLocalStorage();
 </script>
 </body>
 </html>
