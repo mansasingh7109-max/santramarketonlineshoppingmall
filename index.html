@@ -62,28 +62,6 @@
             min-height: 55px;
             justify-content: center;
         }
-
-.sidebar-btn {
-            background: linear-gradient(135deg, #ffcc80, #ffb74d);
-            color: #333;
-            padding: 4px 2px;
-            border: 3px solid #ff9800;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 7px;
-            cursor: pointer;
-            box-shadow: 0 3px 0 #f57c00, 0 5px 12px rgba(255, 152, 0, 0.3);
-            transition: 0.2s;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            line-height: 1.1;
-            width: 62px;
-            min-height: 55px;
-            justify-content: center;
-        }
 .sidebar-btn:active {
             transform: translateY(2px);
             box-shadow: 0 1px 0 #f57c00;
@@ -130,12 +108,12 @@
             background: #e8f5e9!important;
         }
         @media (min-width: 768px) {
-   .products {
+  .products {
                 grid-template-columns: repeat(4, 1fr)!important;
             }
         }
         @media (min-width: 481px) and (max-width: 767px) {
-   .products {
+  .products {
                 grid-template-columns: repeat(3, 1fr)!important;
             }
         }
@@ -159,7 +137,7 @@
             background: #f5f5f5!important;
         }
         @media (min-width: 768px) {
-   .product-card img {
+  .product-card img {
                 height: 180px!important;
             }
         }
@@ -326,23 +304,23 @@
             color: white!important;
         }
         @media (max-width: 580px) {
-   .left-sidebar {
+.left-sidebar {
                 width: 65px!important;
             }
-   .main-content {
+.main-content {
                 margin-left: 65px!important;
                 width: calc(100% - 65px)!important;
             }
-   .sidebar-btn {
+.sidebar-btn {
                 width: 57px!important;
                 min-height: 50px!important;
                 font-size: 6px!important;
             }
-   .logo-wrap h1 {
+.logo-wrap h1 {
                 font-size: 20px!important;
                 padding: 4px 10px!important;
             }
-   .product-card img {
+.product-card img {
                 height: 130px!important;
             }
         }
@@ -454,21 +432,19 @@
         </div>
 
         <!-- ==================== FIREBASE SDK + CONFIG START ==================== -->
-        <!-- 1. Sabse pehle Firebase SDK load karo -->
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
-        <!-- 2. Uske baad secrets.js jisme firebaseConfig + CART_KEY hai -->
         <script src="./secrets.js"></script>
-
-        <!-- 3. Ab Firebase initialize karo -->
         <script>
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             var rtdb = firebase.database();
             var auth = firebase.auth();
             var db = firebase.firestore();
+
+            // ✅ FIX 1: CART_KEY ko dobara declare nahi karna - secrets.js me hai
+            // ✅ FIX 2: auth aur db yahan define kar diye, ab error nahi aayega
         </script>
         <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
 
@@ -479,8 +455,6 @@
             let currentUser = null;
             let loginOTP = null;
             let tempCustomerData = null;
-
-            // ✅ FIX: CART_KEY aur ADMIN_WHATSAPP yaha se hata diya - secrets.js me hai
 
             function customerLogout() {
                 if (confirm("Logout karna hai?")) {
@@ -667,7 +641,6 @@
 
                     const productData = JSON.stringify(p).replace(/'/g, "&apos;");
 
-                    // ✅ FIX: product-card se onclick hata diya. Ab sirf image/info pe click se product page khulega
                     html += `
                       <div class="product-card">
                         ${p.stock < 5 && p.stock > 0? '<div class="new-badge">Low Stock</div>' : ""}
@@ -724,6 +697,33 @@
                 });
             }
 
+// ==================== OLD CODE BACKUP - 23/06/2026 ====================
+// function addToCart(product) {
+// if (!product ||!product.id) {
+// showToast("❌ Product data missing");
+// return;
+// }
+// let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+// let existingIndex = cartArray.findIndex(item => item.id === product.id);
+// if (existingIndex > -1) {
+// cartArray[existingIndex].qty += 1;
+// } else {
+// cartArray.push({
+// id: product.id,
+// name: product.name || "Product",
+// price: parseFloat(product.price) || 0,
+// image: product.image || getProductImage(product),
+// productCode: product.code || product.id,
+// qty: 1
+// });
+// }
+// localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
+// showToast("✅ Added to Cart!");
+// updateCartCount();
+// }
+// ==================== BACKUP END ====================
+
+// ✅ NEW CORRECTED CODE - ARRAY FORMAT
             function addToCart(product) {
                 if (!product ||!product.id) {
                     showToast("❌ Product data missing");
@@ -731,7 +731,6 @@
                 }
 
                 let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-
                 let existingIndex = cartArray.findIndex(item => item.id === product.id);
 
                 if (existingIndex > -1) {
