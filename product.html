@@ -8,56 +8,56 @@
     :root{--accent:#e40046;--text:#212121;--green:#10b981;--blue:#3b82f6;--orange:#f59e0b}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:#f1f3f6;padding-bottom:85px}
-   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-   .back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
-   .header h1{font-size:18px;flex:1}
-   .container{max-width:600px;margin:0 auto;background:white}
-   .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
-   .slider-container{width:100%;height:100%;position:relative}
-   .slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
-   .slide-img.active{display:block}
-   .slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:45px;height:45px;border-radius:50%;font-size:28px;cursor:pointer;z-index:10;font-weight:bold}
-   .slide-btn.prev{left:10px}
-   .slide-btn.next{right:10px}
-   .slide-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
-   .dot{width:10px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;cursor:pointer;border:2px solid white}
-   .dot.active{background:white;width:25px;border-radius:5px}
-   .img-count{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.7);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
-   .details{padding:20px}
-   .product-name{font-size:22px;margin-bottom:8px;font-weight:bold;color:var(--text);line-height:1.3}
-   .product-meta{color:#666;font-size:13px;margin-bottom:15px;display:flex;gap:15px;flex-wrap:wrap}
-   .product-meta span{background:#f3f4f6;padding:4px 10px;border-radius:4px}
-   .price-box{display:flex;align-items:center;gap:12px;margin:20px 0;padding:15px;background:#fff5f7;border-radius:8px}
-   .price{font-size:34px;font-weight:bold;color:var(--accent)}
-   .mrp{text-decoration:line-through;color:#999;font-size:20px}
-   .discount{background:var(--green);color:white;padding:5px 12px;border-radius:6px;font-size:14px;font-weight:bold}
-   .section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
-   .section h3{font-size:16px;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
-   .variant-grid{display:flex;flex-wrap:wrap;gap:10px}
-   .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
-   .variant-btn:hover:not(:disabled){border-color:var(--accent);background:#fff0f5}
-   .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent);box-shadow:0 0 0 3px rgba(228,0,70,0.1)}
-   .variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5;border-color:#ddd;color:#aaa}
-   .variant-btn:disabled::after{content:'✕';position:absolute;top:3px;right:5px;font-size:14px;color:#ef4444;font-weight:bold}
-   .variant-price{font-size:11px;display:block;color:#666;margin-top:2px;font-weight:normal}
-   .variant-stock{font-size:10px;margin-top:2px;font-weight:normal;display:block;color:var(--green)}
-   .variant-stock.out-stock{color:#ef4444;font-weight:bold}
-   .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
-   .features{background:linear-gradient(135deg,#f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
-   .features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
-   .features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
-   .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0.1);max-width:600px;margin:0 auto;z-index:50}
-   .btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;transition:all 0.3s}
-   .btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
-   .btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
-   .btn-buy{background:var(--accent);color:white}
-   .btn:disabled{opacity:0.5;cursor:not-allowed;background:#f5f5;color:#999;border-color:#ddd}
-   .loader{text-align:center;padding:100px 20px;color:var(--accent);font-size:18px}
-   .error{text-align:center;padding:100px 20px}
-   .qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9;border-radius:8px}
-   .qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
-   .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
-   .selected-variant-info{background:#e8f5e9;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid var(--green);font-size:14px}
+ .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+ .back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
+ .header h1{font-size:18px;flex:1}
+ .container{max-width:600px;margin:0 auto;background:white}
+ .image-slider-box{position:relative;width:100%;height:400px;background:#f9;overflow:hidden}
+ .slider-container{width:100%;height:100%;position:relative}
+ .slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
+ .slide-img.active{display:block}
+ .slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:45px;height:45px;border-radius:50%;font-size:28px;cursor:pointer;z-index:10;font-weight:bold}
+ .slide-btn.prev{left:10px}
+ .slide-btn.next{right:10px}
+ .slide-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+ .dot{width:10px;height:10px;background:rgba(255,255,0.5);border-radius:50%;cursor:pointer;border:2px solid white}
+ .dot.active{background:white;width:25px;border-radius:5px}
+ .img-count{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.7);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
+ .details{padding:20px}
+ .product-name{font-size:22px;margin-bottom:8px;font-weight:bold;color:var(--text);line-height:1.3}
+ .product-meta{color:#666;font-size:13px;margin-bottom:15px;display:flex;gap:15px;flex-wrap:wrap}
+ .product-meta span{background:#f3f4f6;padding:4px 10px;border-radius:4px}
+ .price-box{display:flex;align-items:center;gap:12px;margin:20px 0;padding:15px;background:#fff5f7;border-radius:8px}
+ .price{font-size:34px;font-weight:bold;color:var(--accent)}
+ .mrp{text-decoration:line-through;color:#999;font-size:20px}
+ .discount{background:var(--green);color:white;padding:5px 12px;border-radius:6px;font-size:14px;font-weight:bold}
+ .section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
+ .section h3{font-size:16px;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
+ .variant-grid{display:flex;flex-wrap:wrap;gap:10px}
+ .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
+ .variant-btn:hover:not(:disabled){border-color:var(--accent);background:#fff0f5}
+ .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent);box-shadow:0 0 0 3px rgba(228,0,70,0.1)}
+ .variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5;border-color:#ddd;color:#aaa}
+ .variant-btn:disabled::after{content:'✕';position:absolute;top:3px;right:5px;font-size:14px;color:#ef4444;font-weight:bold}
+ .variant-price{font-size:11px;display:block;color:#666;margin-top:2px;font-weight:normal}
+ .variant-stock{font-size:10px;margin-top:2px;font-weight:normal;display:block;color:var(--green)}
+ .variant-stock.out-stock{color:#ef4444;font-weight:bold}
+ .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
+ .features{background:linear-gradient(135deg,#f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
+ .features p{font-size:14px;color:#555;margin:8px 0;display:flex;align-items:center;gap:8px}
+ .features p::before{content:'✓';color:var(--green);font-weight:bold;font-size:18px}
+ .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
+ .btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer;transition:all 0.3s}
+ .btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
+ .btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
+ .btn-buy{background:var(--accent);color:white}
+ .btn:disabled{opacity:0.5;cursor:not-allowed;background:#f5f5;color:#999;border-color:#ddd}
+ .loader{text-align:center;padding:100px 20px;color:var(--accent);font-size:18px}
+ .error{text-align:center;padding:100px 20px}
+ .qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9;border-radius:8px}
+ .qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
+ .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
+ .selected-variant-info{background:#e8f5e9;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid var(--green);font-size:14px}
   </style>
 </head>
 <body>
@@ -80,296 +80,297 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="secrets.js"></script>
+<script src="./secrets.js"></script>
 
 <script>
-// ✅ FIX 1: Firebase double init hata diya - secrets.js me ho chuka hai
-const db = firebase.firestore();
-const auth = firebase.auth();
+window.addEventListener('load', function() {
+  if(typeof CART_KEY === 'undefined' || typeof MYCHOICE_KEY === 'undefined') {
+    document.querySelector('.loading-product').innerHTML = `
+      <div style="padding:20px;color:#e40046;text-align:center">
+        <h2>❌ ERROR</h2>
+        <p><b>secrets.js load nahi hua!</b></p>
+        <p>1. File ka naam <code>secrets.js</code> hai na?</p>
+        <p>2. GitHub pe upload kiya hai na?</p>
+        <p>3. <code>https://</code> se khol rahi ho na?</p>
+      </div>
+    `;
+    return;
+  }
+  initApp();
+});
 
-// ✅ FIX 2: CART_KEY, MYCHOICE_KEY secrets.js se lo - WISHLIST_KEY hata diya
-let currentProduct = null;
-let selectedVariant = null;
-let selectedVariantData = null;
-let selectedQty = 1;
-let currentUser = null;
+function initApp() {
+  const db = firebase.firestore();
+  const auth = firebase.auth();
 
-auth.onAuthStateChanged((user) => { currentUser = user; });
+  let currentProduct = null;
+  let selectedVariant = null;
+  let selectedVariantData = null;
+  let selectedQty = 1;
+  let currentUser = null;
 
-document.addEventListener('DOMContentLoaded', async function() {
+  auth.onAuthStateChanged((user) => { currentUser = user; });
+
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
   if(!productId) return showError('Product ID missing', 'URL me?id= nahi hai');
-  await loadProduct(productId);
-});
+  loadProduct(productId);
 
-async function loadProduct(productId) {
-  try {
-    let cleanId = String(productId).trim();
-    let doc = await db.collection('products').doc(cleanId).get();
-    if(doc.exists) {
-      currentProduct = {id: doc.id,...doc.data()};
+  async function loadProduct(productId) {
+    try {
+      let cleanId = String(productId).trim();
+      let doc = await db.collection('products').doc(cleanId).get();
+      if(doc.exists) {
+        currentProduct = {id: doc.id,...doc.data()};
+      } else {
+        let altId = cleanId.startsWith('SM-')? cleanId.replace('SM-', '') : 'SM-' + cleanId;
+        doc = await db.collection('products').doc(altId).get();
+        if(doc.exists) currentProduct = {id: doc.id,...doc.data()};
+        if(!currentProduct) return showError('Product Not Found', 'ID: ' + productId);
+      }
+      document.getElementById('headerTitle').innerText = currentProduct.name;
+      document.title = currentProduct.name + ' - SANTRA MALL';
+      renderProduct(currentProduct);
+      document.getElementById('actionBtns').style.display = 'flex';
+    } catch(error) {
+      console.error('Error:', error);
+      showError('Error Loading Product', error.message);
+    }
+  }
+
+  function getVariantType(category) {
+    const cat = (category || '').toLowerCase();
+    if(cat.includes('dress') || cat.includes('shirt') || cat.includes('jeans') || cat.includes('kurta') || cat.includes('saree') || cat.includes('cloth')) return { label: 'Size', icon: '👕' };
+    if(cat.includes('oil') || cat.includes('shampoo') || cat.includes('liquid')) return { label: 'Volume', icon: '💧' };
+    if(cat.includes('food') || cat.includes('rice') || cat.includes('dal') || cat.includes('atta') || cat.includes('grocery')) return { label: 'Weight', icon: '⚖️' };
+    return { label: 'Variant', icon: '📦' };
+  }
+
+  function getProductVariants(p) {
+    let variants = p.variants || p.sizes || p.size || p.volume || p.weight || [];
+    if(typeof variants === 'string') {
+      variants = variants.split(',').map(v => v.trim()).filter(v => v);
+    }
+    if(!Array.isArray(variants)) return [];
+    return variants;
+  }
+
+  function renderProduct(p) {
+    let loader = document.querySelector('.loading-product');
+    if(loader) loader.style.display = 'none';
+
+    let images = [];
+    if(p.media?.length) images = p.media.map(m => m.url).filter(url => url);
+    if(!images.length && p.images?.length) images = p.images.filter(url => url);
+    if(!images.length && p.imageUrl) images = [p.imageUrl];
+    if(!images.length && p.image) images = [p.image];
+    if(!images.length) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
+
+    let variants = getProductVariants(p);
+    let discount = p.mrp && p.price? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+    let productCode = p.code || p.product_code || p.id;
+    let variantType = getVariantType(p.category);
+
+    let sliderHTML = `
+      <div class="image-slider-box">
+        <div class="slider-container" id="imgSlider">
+          ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? 'active' : ''}" onerror="this.src='https://via.placeholder.com/500x500'">`).join('')}
+        </div>
+        ${images.length > 1? `
+          <button class="slide-btn prev" onclick="changeSlide(-1)">‹</button>
+          <button class="slide-btn next" onclick="changeSlide(1)">›</button>
+          <div class="slide-dots">${images.map((_, idx) => `<span class="dot ${idx === 0? 'active' : ''}" onclick="goToSlide(${idx})"></span>`).join('')}</div>
+          <div class="img-count">📷 ${images.length}</div>
+        ` : ''}
+      </div>
+    `;
+
+    let variantHTML = variants.map(v => {
+      let name = typeof v === 'object'? (v.name || v.size || v.volume || v.weight) : v;
+      let price = typeof v === 'object'? v.price : p.price;
+      let stock = typeof v === 'object'? (v.stock!== undefined? v.stock : 999) : 999;
+      let isOut = stock <= 0;
+      return `<button class="variant-btn" onclick='selectVariant(${JSON.stringify(v).replace(/'/g, "&apos;")}, this)' ${isOut?'disabled':''}>
+        ${name}
+        ${price && price!== p.price? `<span class="variant-price">₹${price}</span>` : ''}
+        <span class="variant-stock ${isOut?'out-stock':'in-stock'}">${isOut?'Out of stock':stock+' left'}</span>
+      </button>`;
+    }).join('');
+
+    document.getElementById('productContainer').innerHTML = `
+      <div class="container">
+        ${sliderHTML}
+        <div class="details">
+          <h1 class="product-name">${p.name}</h1>
+          <div class="product-meta">
+            <span>📦 Code: ${productCode}</span>
+            <span>📁 ${p.category || 'General'}</span>
+            <span>📊 Stock: ${p.stock || 'Available'}</span>
+          </div>
+          <div class="price-box">
+            <span class="price" id="productPrice">₹${p.price}</span>
+            ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
+            ${discount > 0? `<span class="discount">${discount}% OFF</span>` : ''}
+          </div>
+          <div id="selectedVariantInfo" class="selected-variant-info" style="display:none">
+            <strong>Selected:</strong> <span id="variantText"></span>
+          </div>
+          ${variants.length > 0? `<div class="section"><h3>${variantType.icon} Select ${variantType.label}:</h3><div class="variant-grid">${variantHTML}</div></div>` : ''}
+          <div class="qty-box">
+            <span style="font-weight:bold">Quantity:</span>
+            <button onclick="changeQty(-1)">-</button>
+            <span id="qtyDisplay">1</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+          <div class="section">
+            <h3>Product Description:</h3>
+            <div class="desc">${p.description || 'Premium quality product from SANTRA MALL.'}</div>
+          </div>
+          <div class="features">
+            <p>100% Original & Authentic Products</p>
+            <p>Free Delivery on Orders Above ₹500</p>
+            <p>Easy 7 Days Return Policy</p>
+            <p>Cash on Delivery Available</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    window.productImages = images;
+    window.currentSlideIndex = 0;
+
+    setTimeout(() => {
+      const firstBtn = document.querySelector('.variant-btn:not(:disabled)');
+      if(firstBtn) firstBtn.click();
+      else if(variants.length > 0) {
+        document.getElementById('cartBtn').disabled = true;
+        document.getElementById('buyBtn').disabled = true;
+        document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
+        document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
+      }
+    }, 100);
+  }
+
+  function selectVariant(variant, btn) {
+    if(btn.disabled) return;
+    selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
+    selectedVariant = selectedVariantData.name || selectedVariantData.size || selectedVariantData.volume || selectedVariantData.weight;
+    let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
+    if(stock <= 0) return;
+    document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if(selectedVariantData.price) document.getElementById('productPrice').innerText = '₹' + selectedVariantData.price;
+    document.getElementById('selectedVariantInfo').style.display = 'block';
+    document.getElementById('variantText').innerText = selectedVariant + (selectedVariantData.price? ' - ₹' + selectedVariantData.price : '');
+  }
+
+  function changeSlide(direction) {
+    const slides = document.querySelectorAll('.slide-img');
+    const dots = document.querySelectorAll('.dot');
+    if(!slides.length) return;
+    slides[window.currentSlideIndex].classList.remove('active');
+    dots[window.currentSlideIndex]?.classList.remove('active');
+    window.currentSlideIndex = (window.currentSlideIndex + direction + slides.length) % slides.length;
+    slides[window.currentSlideIndex].classList.add('active');
+    dots[window.currentSlideIndex]?.classList.add('active');
+  }
+
+  function goToSlide(index) {
+    const slides = document.querySelectorAll('.slide-img');
+    const dots = document.querySelectorAll('.dot');
+    slides[window.currentSlideIndex].classList.remove('active');
+    dots[window.currentSlideIndex]?.classList.remove('active');
+    window.currentSlideIndex = index;
+    slides[window.currentSlideIndex].classList.add('active');
+    dots[window.currentSlideIndex]?.classList.add('active');
+  }
+
+  function changeQty(change) {
+    selectedQty = Math.max(1, Math.min(10, selectedQty + change));
+    document.getElementById('qtyDisplay').innerText = selectedQty;
+  }
+
+  function getProductLink() {
+    return `${window.location.origin}/product.html?id=${encodeURIComponent(currentProduct.id)}`;
+  }
+
+  function showToast(message) {
+    const toast = document.createElement("div");
+    toast.innerText = message;
+    toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-size:15px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)";
+    document.body.appendChild(toast);
+    setTimeout(() => document.body.removeChild(toast), 3000);
+  }
+
+  window.addToCart = function() {
+    let hasVariants = getProductVariants(currentProduct).length > 0;
+    if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
+    let stock = selectedVariantData?.stock!== undefined? selectedVariantData.stock : 999999;
+    if(stock <= 0) return alert('❌ This variant is out of stock!');
+
+    let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    let finalPrice = selectedVariantData?.price || currentProduct.price;
+
+    let cartItem = {
+      id: currentProduct.id, name: currentProduct.name, price: finalPrice,
+      image: currentProduct.imageUrl || currentProduct.image || currentProduct.images?.[0] || '',
+      code: currentProduct.code || currentProduct.id,
+      category: currentProduct.category || 'General',
+      variant: selectedVariant || 'Default',
+      variantType: getVariantType(currentProduct.category).label,
+      productLink: getProductLink(), qty: selectedQty
+    };
+
+    let existingIndex = cartArray.findIndex(item => item.id === currentProduct.id && item.variant === cartItem.variant);
+    if (existingIndex > -1) cartArray[existingIndex].qty += selectedQty;
+    else cartArray.push(cartItem);
+
+    localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
+    showToast('✅ Added to Cart! 🛒');
+    if (currentUser) db.collection('users').doc(currentUser.uid).collection('cart').doc(currentProduct.id).set(cartItem, {merge: true});
+  }
+
+  window.buyNow = function() {
+    addToCart();
+    window.location.href = 'cart.html';
+  }
+
+  window.addToMyChoice = function() {
+    let hasVariants = getProductVariants(currentProduct).length > 0;
+    if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
+
+    let myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
+    let finalPrice = selectedVariantData?.price || currentProduct.price;
+
+    let myChoiceItem = {
+      id: currentProduct.id, name: currentProduct.name, price: finalPrice,
+      image: currentProduct.imageUrl || currentProduct.image || currentProduct.images?.[0] || '',
+      code: currentProduct.code || currentProduct.id,
+      category: currentProduct.category || 'General',
+      variant: selectedVariant || 'Default',
+      productLink: getProductLink(), qty: selectedQty
+    };
+
+    let existingIndex = myChoice.findIndex(item => item.id === currentProduct.id && item.variant === myChoiceItem.variant);
+    if(existingIndex === -1) {
+      myChoice.push(myChoiceItem);
+      localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
+      showToast('😍 Added to My Choice!');
     } else {
-      let altId = cleanId.startsWith('SM-')? cleanId.replace('SM-', '-') : 'SM' + cleanId;
-      doc = await db.collection('products').doc(altId).get();
-      if(doc.exists) currentProduct = {id: doc.id,...doc.data()};
-
-      if(!currentProduct) {
-        let allProducts = JSON.parse(localStorage.getItem('ALL_PRODUCTS')) || [];
-        currentProduct = allProducts.find(p => p.id == cleanId || p.id == altId);
-      }
-      if(!currentProduct) {
-        let cartData = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-        let cartItem = cartData.find(item => item.id === cleanId || item.id === altId);
-        if(cartItem) {
-          currentProduct = {
-            id: cleanId, name: cartItem.name, price: cartItem.price, mrp: cartItem.mrp || cartItem.price,
-            image: cartItem.image, images: [cartItem.image], description: 'From cart',
-            stock: 'Available', category: cartItem.category || 'General', code: cartItem.code
-          };
-        }
-      }
-      if(!currentProduct) return showError('Product Not Found', 'ID: ' + productId);
+      showToast('Already in My Choice!');
     }
-    document.getElementById('headerTitle').innerText = currentProduct.name;
-    document.title = currentProduct.name + ' - SANTRA MALL';
-    renderProduct(currentProduct);
-    document.getElementById('actionBtns').style.display = 'flex';
-  } catch(error) {
-    console.error('Error:', error);
-    showError('Error Loading Product', error.message);
+    if (currentUser) db.collection('users').doc(currentUser.uid).collection('mychoice').doc(currentProduct.id).set(myChoiceItem, {merge: true});
   }
-}
 
-function getVariantType(category) {
-  const cat = (category || '').toLowerCase();
-  if(cat.includes('dress') || cat.includes('shirt') || cat.includes('jeans') || cat.includes('kurta') || cat.includes('saree')) return { label: 'Size', icon: '👕' };
-  if(cat.includes('oil') || cat.includes('shampoo')) return { label: 'Volume', icon: '💧' };
-  if(cat.includes('food') || cat.includes('rice') || cat.includes('dal') || cat.includes('atta')) return { label: 'Weight', icon: '⚖️' };
-  return { label: 'Variant', icon: '📦' };
-}
-
-function renderProduct(p) {
-  let loader = document.querySelector('.loading-product');
-  if(loader) loader.style.display = 'none';
-
-  let images = [];
-  if(p.media?.length) images = p.media.map(m => m.url).filter(url => url);
-  if(!images.length && p.images?.length) images = p.images.filter(url => url);
-  if(!images.length && p.imageUrl) images = [p.imageUrl];
-  if(!images.length && p.image) images = [p.image];
-  if(!images.length) images = ['https://via.placeholder.com/500x500/e40046/ffffff?text=NO+IMAGE'];
-
-  let variants = p.variants || p.sizes || p.size || [];
-  if(typeof variants === 'string') variants = variants.split(',');
-  let discount = p.mrp && p.price? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
-  let productCode = p.code || p.product_code || p.id;
-  let variantType = getVariantType(p.category);
-
-  let sliderHTML = `
-    <div class="image-slider-box">
-      <div class="slider-container" id="imgSlider">
-        ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? 'active' : ''}" onerror="this.src='https://via.placeholder.com/500x500'">`).join('')}
+  function showError(title, msg) {
+    document.getElementById('productContainer').innerHTML = `
+      <div class="error">
+        <h2>❌ ${title}</h2>
+        <p>${msg}</p>
+        <button class="btn btn-buy" onclick="window.location.href='index.html'" style="margin-top:20px">Go to Home</button>
       </div>
-      ${images.length > 1? `
-        <button class="slide-btn prev" onclick="changeSlide(-1)">‹</button>
-        <button class="slide-btn next" onclick="changeSlide(1)">›</button>
-        <div class="slide-dots">${images.map((_, idx) => `<span class="dot ${idx === 0? 'active' : ''}" onclick="goToSlide(${idx})"></span>`).join('')}</div>
-        <div class="img-count">📷 ${images.length}</div>
-      ` : ''}
-    </div>
-  `;
-
-  let variantHTML = variants.map(v => {
-    let name = typeof v === 'object'? v.name : v;
-    let price = typeof v === 'object'? v.price : p.price;
-    let stock = typeof v === 'object'? v.stock : 999;
-    let isOut = stock <= 0;
-    return `<button class="variant-btn" onclick='selectVariant(${JSON.stringify(v).replace(/'/g, "&apos;")}, this)' ${isOut?'disabled':''}>
-      ${name}
-      ${price && price!== p.price? `<span class="variant-price">₹${price}</span>` : ''}
-      <span class="variant-stock ${isOut?'out-stock':'in-stock'}">${isOut?'Out of stock':stock+' left'}</span>
-    </button>`;
-  }).join('');
-
-  document.getElementById('productContainer').innerHTML = `
-    <div class="container">
-      ${sliderHTML}
-      <div class="details">
-        <h1 class="product-name">${p.name}</h1>
-        <div class="product-meta">
-          <span>📦 Code: ${productCode}</span>
-          <span>📁 ${p.category || 'General'}</span>
-          <span>📊 Stock: ${p.stock || 'Available'}</span>
-        </div>
-        <div class="price-box">
-          <span class="price" id="productPrice">₹${p.price}</span>
-          ${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ''}
-          ${discount > 0? `<span class="discount">${discount}% OFF</span>` : ''}
-        </div>
-        <div id="selectedVariantInfo" class="selected-variant-info" style="display:none">
-          <strong>Selected:</strong> <span id="variantText"></span>
-        </div>
-        ${variants.length > 0? `<div class="section"><h3>${variantType.icon} Select ${variantType.label}:</h3><div class="variant-grid">${variantHTML}</div></div>` : ''}
-        <div class="qty-box">
-          <span style="font-weight:bold">Quantity:</span>
-          <button onclick="changeQty(-1)">-</button>
-          <span id="qtyDisplay">1</span>
-          <button onclick="changeQty(1)">+</button>
-        </div>
-        <div class="section">
-          <h3>Product Description:</h3>
-          <div class="desc">${p.description || 'Premium quality product from SANTRA MALL.'}</div>
-        </div>
-        <div class="features">
-          <p>100% Original & Authentic Products</p>
-          <p>Free Delivery on Orders Above ₹500</p>
-          <p>Easy 7 Days Return Policy</p>
-          <p>Cash on Delivery Available</p>
-        </div>
-      </div>
-    </div>
-  `;
-
-  window.productImages = images;
-  window.currentSlideIndex = 0;
-
-  setTimeout(() => {
-    const firstBtn = document.querySelector('.variant-btn:not(:disabled)');
-    if(firstBtn) firstBtn.click();
-    else if(variants.length > 0) {
-      document.getElementById('cartBtn').disabled = true;
-      document.getElementById('buyBtn').disabled = true;
-      document.getElementById('cartBtn').innerText = '❌ OUT OF STOCK';
-      document.getElementById('buyBtn').innerText = '❌ OUT OF STOCK';
-    }
-  }, 100);
-}
-
-function selectVariant(variant, btn) {
-  if(btn.disabled) return;
-  selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
-  selectedVariant = selectedVariantData.name || selectedVariantData.size || selectedVariantData.volume || selectedVariantData.weight;
-  let stock = selectedVariantData.stock!== undefined? selectedVariantData.stock : 999999;
-  if(stock <= 0) return;
-  document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if(selectedVariantData.price) document.getElementById('productPrice').innerText = '₹' + selectedVariantData.price;
-  document.getElementById('selectedVariantInfo').style.display = 'block';
-  document.getElementById('variantText').innerText = selectedVariant + (selectedVariantData.price? ' - ₹' + selectedVariantData.price : '');
-}
-
-function changeSlide(direction) {
-  const slides = document.querySelectorAll('.slide-img');
-  const dots = document.querySelectorAll('.dot');
-  if(!slides.length) return;
-  slides[window.currentSlideIndex].classList.remove('active');
-  dots[window.currentSlideIndex]?.classList.remove('active');
-  window.currentSlideIndex = (window.currentSlideIndex + direction + slides.length) % slides.length;
-  slides[window.currentSlideIndex].classList.add('active');
-  dots[window.currentSlideIndex]?.classList.add('active');
-}
-
-function goToSlide(index) {
-  const slides = document.querySelectorAll('.slide-img');
-  const dots = document.querySelectorAll('.dot');
-  slides[window.currentSlideIndex].classList.remove('active');
-  dots[window.currentSlideIndex]?.classList.remove('active');
-  window.currentSlideIndex = index;
-  slides[window.currentSlideIndex].classList.add('active');
-  dots[window.currentSlideIndex]?.classList.add('active');
-}
-
-function changeQty(change) {
-  selectedQty = Math.max(1, Math.min(10, selectedQty + change));
-  document.getElementById('qtyDisplay').innerText = selectedQty;
-}
-
-function getProductLink() {
-  return `${window.location.origin}/product.html?id=${encodeURIComponent(currentProduct.id)}`;
-}
-
-// ✅ FIX 3: showToast function add kiya
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.innerText = message;
-  toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-size:15px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)";
-  document.body.appendChild(toast);
-  setTimeout(() => document.body.removeChild(toast), 3000);
-}
-
-// ✅ FIX 4: CART_KEY variable use karo
-function addToCart() {
-  let hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
-  if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
-  let stock = selectedVariantData?.stock!== undefined? selectedVariantData.stock : 999999;
-  if(stock <= 0) return alert('❌ This variant is out of stock!');
-
-  let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-  let finalPrice = selectedVariantData?.price || currentProduct.price;
-
-  let cartItem = {
-    id: currentProduct.id, name: currentProduct.name, price: finalPrice,
-    image: currentProduct.imageUrl || currentProduct.image || currentProduct.images?.[0] || '',
-    code: currentProduct.code || currentProduct.id,
-    category: currentProduct.category || 'General',
-    variant: selectedVariant || 'Default',
-    variantType: getVariantType(currentProduct.category).label,
-    productLink: getProductLink(), qty: selectedQty
-  };
-
-  let existingIndex = cartArray.findIndex(item => item.id === currentProduct.id && item.variant === cartItem.variant);
-  if (existingIndex > -1) cartArray[existingIndex].qty += selectedQty;
-  else cartArray.push(cartItem);
-
-  localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
-  showToast('✅ Added to Cart! 🛒');
-  if (currentUser) db.collection('users').doc(currentUser.uid).collection('cart').doc(currentProduct.id).set(cartItem, {merge: true});
-}
-
-function buyNow() {
-  let hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
-  if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
-  addToCart();
-  window.location.href = 'cart.html';
-}
-
-// ✅ FIX 5: MYCHOICE_KEY use karo - WISHLIST_KEY hata diya
-function addToMyChoice() {
-  let hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
-  if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
-
-  let myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
-  let finalPrice = selectedVariantData?.price || currentProduct.price;
-
-  let myChoiceItem = {
-    id: currentProduct.id, name: currentProduct.name, price: finalPrice,
-    image: currentProduct.imageUrl || currentProduct.image || currentProduct.images?.[0] || '',
-    code: currentProduct.code || currentProduct.id,
-    category: currentProduct.category || 'General',
-    variant: selectedVariant || 'Default',
-    productLink: getProductLink(), qty: selectedQty
-  };
-
-  let existingIndex = myChoice.findIndex(item => item.id === currentProduct.id && item.variant === myChoiceItem.variant);
-  if(existingIndex === -1) {
-    myChoice.push(myChoiceItem);
-    localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
-    showToast('😍 Added to My Choice!');
-  } else {
-    showToast('Already in My Choice!');
+    `;
   }
-  if (currentUser) db.collection('users').doc(currentUser.uid).collection('mychoice').doc(currentProduct.id).set(myChoiceItem, {merge: true});
-}
-
-function showError(title, msg) {
-  document.getElementById('productContainer').innerHTML = `
-    <div class="error">
-      <h2>❌ ${title}</h2>
-      <p>${msg}</p>
-      <button class="btn btn-buy" onclick="window.location.href='index.html'" style="margin-top:20px">Go to Home</button>
-    </div>
-  `;
 }
 </script>
 </body>
