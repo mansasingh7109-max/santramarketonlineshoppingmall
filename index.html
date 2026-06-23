@@ -17,11 +17,11 @@
             }, true);
         </script>
         <style>
- .main-container {
+.main-container {
             display: flex;
             min-height: 100vh;
         }
- .left-sidebar {
+.left-sidebar {
             width: 70px;
             background: linear-gradient(180deg, #fff9c4, #fff59d);
             padding: 10px 4px;
@@ -36,12 +36,12 @@
             gap: 8px;
             align-items: center;
         }
- .main-content {
+.main-content {
             flex: 1;
             margin-left: 70px;
             width: calc(100% - 70px);
         }
- .sidebar-btn {
+.sidebar-btn {
             background: linear-gradient(135deg, #ffcc80, #ffb74d);
             color: #333;
             padding: 4px 2px;
@@ -62,11 +62,33 @@
             min-height: 55px;
             justify-content: center;
         }
- .sidebar-btn:active {
+
+.sidebar-btn {
+            background: linear-gradient(135deg, #ffcc80, #ffb74d);
+            color: #333;
+            padding: 4px 2px;
+            border: 3px solid #ff9800;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 7px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #f57c00, 0 5px 12px rgba(255, 152, 0, 0.3);
+            transition: 0.2s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            line-height: 1.1;
+            width: 62px;
+            min-height: 55px;
+            justify-content: center;
+        }
+.sidebar-btn:active {
             transform: translateY(2px);
             box-shadow: 0 1px 0 #f57c00;
         }
- .sidebar-btn.icon {
+.sidebar-btn.icon {
             font-size: 18px;
             margin-bottom: 2px;
         }
@@ -76,7 +98,7 @@
         #logoutBtn.show {
             display: flex!important;
         }
- .header {
+.header {
             margin-left: 0;
             background: linear-gradient(135deg, #ff9800, #f57c00);
             padding: 15px;
@@ -84,8 +106,8 @@
             justify-content: center;
             align-items: center;
         }
- .logo-wrap { text-align: center; }
- .logo-wrap h1 {
+.logo-wrap { text-align: center; }
+.logo-wrap h1 {
             color: #d32f2f;
             font-size: 26px;
             font-weight: 900;
@@ -95,12 +117,12 @@
             padding: 5px 15px;
             display: inline-block;
         }
- .tagline {
+.tagline {
             color: #2e7d32;
             font-size: 13px;
             margin: 5px 0 0;
         }
- .products {
+.products {
             display: grid;
             grid-template-columns: repeat(2, 1fr)!important;
             gap: 8px;
@@ -108,16 +130,16 @@
             background: #e8f5e9!important;
         }
         @media (min-width: 768px) {
-     .products {
+   .products {
                 grid-template-columns: repeat(4, 1fr)!important;
             }
         }
         @media (min-width: 481px) and (max-width: 767px) {
-     .products {
+   .products {
                 grid-template-columns: repeat(3, 1fr)!important;
             }
         }
- .product-card {
+.product-card {
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
@@ -126,10 +148,10 @@
             position: relative;
             background: white!important;
         }
- .product-card:active {
+.product-card:active {
             transform: scale(0.98);
         }
- .product-card img {
+.product-card img {
             width: 100%!important;
             height: 140px!important;
             object-fit: contain!important;
@@ -137,14 +159,14 @@
             background: #f5f5f5!important;
         }
         @media (min-width: 768px) {
-     .product-card img {
+   .product-card img {
                 height: 180px!important;
             }
         }
- .product-info {
+.product-info {
             padding: 8px;
         }
- .product-card h3 {
+.product-card h3 {
             font-size: 12px;
             margin-bottom: 5px;
             height: 32px;
@@ -154,29 +176,29 @@
             -webkit-box-orient: vertical;
             color: #d32f2f!important;
         }
- .price {
+.price {
             font-weight: bold;
             font-size: 14px;
             color: #d32f2f!important;
         }
- .mrp {
+.mrp {
             text-decoration: line-through;
             font-size: 10px;
             margin-left: 5px;
             color: #757575!important;
         }
- .stock {
+.stock {
             font-size: 10px;
             margin-top: 3px;
             color: #388e3c!important;
         }
- .product-actions {
+.product-actions {
             display: flex;
             gap: 5px;
             margin-top: 10px;
             padding: 6px;
         }
- .add-to-cart-btn {
+.add-to-cart-btn {
             flex: 1;
             background: #e91e63;
             color: white;
@@ -187,7 +209,7 @@
             cursor: pointer;
             font-size: 11px;
         }
- .buy-now-btn {
+.buy-now-btn {
             flex: 1;
             background: #ff9800;
             color: white;
@@ -198,7 +220,7 @@
             cursor: pointer;
             font-size: 11px;
         }
- .img-count {
+.img-count {
             position: absolute;
             top: 5px;
             left: 5px;
@@ -208,8 +230,8 @@
             border-radius: 10px;
             font-size: 11px;
         }
- .prev-btn,
- .next-btn {
+.prev-btn,
+.next-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -221,10 +243,10 @@
             font-size: 18px;
             z-index: 10;
         }
- .prev-btn { left: 5px; }
- .next-btn { right: 5px; }
- .hide { display: none!important; }
- .new-badge {
+.prev-btn { left: 5px; }
+.next-btn { right: 5px; }
+.hide { display: none!important; }
+.new-badge {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -236,7 +258,7 @@
             font-weight: bold;
             z-index: 10;
         }
- .filter-section {
+.filter-section {
             background: white;
             padding: 15px;
             margin: 10px auto;
@@ -244,10 +266,10 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 500px;
         }
- .filter-group {
+.filter-group {
             margin-bottom: 10px;
         }
- .filter-group label {
+.filter-group label {
             display: block;
             margin: 6px 0 4px 0;
             font-size: 14px;
@@ -265,7 +287,7 @@
             margin-bottom: 5px;
             width: 62px;
         }
- .bottom-nav {
+.bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -277,7 +299,7 @@
             z-index: 99;
             background: linear-gradient(135deg, #ff9800, #f57c00)!important;
         }
- .nav-item {
+.nav-item {
             background: #ffcc80!important;
             color: #b71c1c!important;
             padding: 8px 15px!important;
@@ -289,7 +311,7 @@
             min-width: 70px!important;
             box-shadow: 0 3px 0 #f57c00!important;
         }
- .cart-count {
+.cart-count {
             border-radius: 50%;
             width: 18px;
             height: 18px;
@@ -304,23 +326,23 @@
             color: white!important;
         }
         @media (max-width: 580px) {
-     .left-sidebar {
+   .left-sidebar {
                 width: 65px!important;
             }
-     .main-content {
+   .main-content {
                 margin-left: 65px!important;
                 width: calc(100% - 65px)!important;
             }
-     .sidebar-btn {
+   .sidebar-btn {
                 width: 57px!important;
                 min-height: 50px!important;
                 font-size: 6px!important;
             }
-     .logo-wrap h1 {
+   .logo-wrap h1 {
                 font-size: 20px!important;
                 padding: 4px 10px!important;
             }
-     .product-card img {
+   .product-card img {
                 height: 130px!important;
             }
         }
@@ -432,16 +454,17 @@
         </div>
 
         <!-- ==================== FIREBASE SDK + CONFIG START ==================== -->
-        <script src="secrets.js"></script>
-     <script src="/main.js"></script>  <!-- Ye wali file me addToCart function hai -->
-
+        <!-- 1. Sabse pehle Firebase SDK load karo -->
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+        <!-- 2. Uske baad secrets.js jisme firebaseConfig + CART_KEY hai -->
+        <script src="./secrets.js"></script>
+
+        <!-- 3. Ab Firebase initialize karo -->
         <script>
-            // ✅ FIX: secrets.js se config aayega, yaha declare nahi karna
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             var rtdb = firebase.database();
             var auth = firebase.auth();
@@ -457,14 +480,13 @@
             let loginOTP = null;
             let tempCustomerData = null;
 
-            // ✅ FIX: CART_KEY aur ADMIN_WHATSAPP ab secrets.js se aayenge
-            // Yaha declare nahi karna warna "already declared" error aayega
-            
+            // ✅ FIX: CART_KEY aur ADMIN_WHATSAPP yaha se hata diya - secrets.js me hai
+
             function customerLogout() {
                 if (confirm("Logout karna hai?")) {
                     auth.signOut().then(() => {
                         localStorage.removeItem("a_customer");
-                        localStorage.removeItem(CART_KEY); // secrets.js se aayega
+                        localStorage.removeItem(CART_KEY);
                         localStorage.removeItem("a_wishlist");
                         localStorage.removeItem("pendingOTP");
                         showToast("Logged out successfully");
@@ -645,19 +667,20 @@
 
                     const productData = JSON.stringify(p).replace(/'/g, "&apos;");
 
+                    // ✅ FIX: product-card se onclick hata diya. Ab sirf image/info pe click se product page khulega
                     html += `
-                      <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
+                      <div class="product-card">
                         ${p.stock < 5 && p.stock > 0? '<div class="new-badge">Low Stock</div>' : ""}
                         ${p.stock === 0? '<div class="new-badge" style="background:#999">Out of Stock</div>' : ""}
                         ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ""}
-                        <div class="image-slider" style="position:relative;">
+                        <div class="image-slider" style="position:relative;" onclick="window.location.href='product.html?id=${p.id}'">
                          ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? "active" : ""}" alt="${p.name}" style="display:${idx === 0? "block" : "none"};width:100%;height:140px;object-fit:contain;background:#f5f5f5;">`).join("")}
                           ${images.length > 1? `
                             <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
                             <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
                           ` : ""}
                         </div>
-                        <div class="product-info">
+                        <div class="product-info" onclick="window.location.href='product.html?id=${p.id}'">
                           <h3>${p.name || "Product"}</h3>
                           <div>
                             <span class="price">₹${p.price}</span>
@@ -692,9 +715,7 @@
             }
 
             function updateSlider(productId) {
-                let sliderCard = document.querySelector(
-                    `[onclick*="product.html?id=${productId}"]`
-                );
+                let sliderCard = document.querySelector(`.image-slider[onclick*="product.html?id=${productId}"]`);
                 if (!sliderCard) return;
                 let slides = sliderCard.querySelectorAll(".slide-img");
                 slides.forEach((slide, idx) => {
@@ -834,7 +855,6 @@
                     html += `<select data-field="character" onchange="applySmartFilters()" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:5px;">`;
                     html += `<option value="">All Characters</option>`;
                     characters.forEach(c => html += `<option value="${c}">${c}</option>`);
-                    
                     html += `</select></div>`;
                 }
 
