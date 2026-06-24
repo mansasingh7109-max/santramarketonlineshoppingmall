@@ -8,6 +8,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
         <style>
+            /* ===== OLD CSS 100% SAME - NO CHANGE ===== */
             :root {
                 --bg: #f1f3f6;
                 --card: #ffffff;
@@ -28,7 +29,7 @@
                 color: var(--text);
                 padding-bottom: 140px;
             }
-          .header {
+       .header {
                 background: var(--accent);
                 color: white;
                 padding: 15px;
@@ -39,18 +40,18 @@
                 top: 0;
                 z-index: 100;
             }
-          .header h1 {
+       .header h1 {
                 font-size: 18px;
                 flex: 1;
             }
-          .back-btn {
+       .back-btn {
                 background: none;
                 border: none;
                 color: white;
                 font-size: 22px;
                 cursor: pointer;
             }
-          .tabs {
+       .tabs {
                 display: flex;
                 background: var(--card);
                 margin: 15px;
@@ -58,7 +59,7 @@
                 overflow: hidden;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             }
-          .tab {
+       .tab {
                 flex: 1;
                 padding: 14px;
                 text-align: center;
@@ -68,11 +69,11 @@
                 background: transparent;
                 font-size: 15px;
             }
-          .tab.active {
+       .tab.active {
                 background: var(--accent);
                 color: white;
             }
-          .cart-card {
+       .cart-card {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
@@ -81,7 +82,7 @@
                 gap: 12px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             }
-          .cart-card img {
+       .cart-card img {
                 width: 90px;
                 height: 90px;
                 object-fit: contain;
@@ -89,32 +90,32 @@
                 border-radius: 8px;
                 border: 1px solid #eee;
             }
-          .item-info {
+       .item-info {
                 flex: 1;
             }
-          .item-info h3 {
+       .item-info h3 {
                 font-size: 15px;
                 margin-bottom: 6px;
                 line-height: 1.3;
             }
-          .item-price {
+       .item-price {
                 color: var(--accent);
                 font-weight: 700;
                 font-size: 16px;
                 margin: 5px 0;
             }
-          .item-code {
+       .item-code {
                 font-size: 11px;
                 color: #666;
                 margin-top: 4px;
             }
-          .qty-controls {
+       .qty-controls {
                 display: flex;
                 gap: 8px;
                 align-items: center;
                 margin-top: 10px;
             }
-          .qty-btn {
+       .qty-btn {
                 background: #eee;
                 border: none;
                 width: 32px;
@@ -124,26 +125,26 @@
                 font-weight: bold;
                 font-size: 18px;
             }
-          .qty-btn:disabled {
+       .qty-btn:disabled {
                 background: #ddd;
                 cursor: not-allowed;
                 opacity: 0.5;
             }
-          .qty-display {
+       .qty-display {
                 padding: 0 12px;
                 font-weight: bold;
                 min-width: 30px;
                 text-align: center;
             }
-          .item-actions {
+       .item-actions {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
                 margin-top: 8px;
             }
-          .btn-move-choice,
-          .btn-remove,
-          .btn-share {
+       .btn-move-choice,
+       .btn-remove,
+       .btn-share {
                 color: white;
                 border: none;
                 padding: 10px 12px;
@@ -153,21 +154,21 @@
                 font-weight: 600;
                 width: 100%;
             }
-          .btn-move-choice {
+       .btn-move-choice {
                 background: var(--orange);
             }
-          .btn-remove {
+       .btn-remove {
                 background: #ef4444;
             }
-          .btn-share {
+       .btn-share {
                 background: var(--blue);
             }
-          .empty {
+       .empty {
                 text-align: center;
                 padding: 80px 20px;
                 color: #999;
             }
-          .empty button {
+       .empty button {
                 margin-top: 20px;
                 padding: 14px 32px;
                 background: var(--accent);
@@ -178,36 +179,36 @@
                 cursor: pointer;
                 font-size: 15px;
             }
-          .summary {
+       .summary {
                 background: var(--card);
                 margin: 15px;
                 border-radius: 12px;
                 padding: 18px;
             }
-          .summary-row {
+       .summary-row {
                 display: flex;
                 justify-content: space-between;
                 margin: 10px 0;
                 font-size: 14px;
             }
-          .total-row {
+       .total-row {
                 font-weight: 700;
                 font-size: 18px;
                 border-top: 2px solid #e0e0e0;
                 padding-top: 12px;
                 margin-top: 12px;
             }
-          .cart-total h3 {
+       .cart-total h3 {
                 font-size: 18px;
                 margin-bottom: 15px;
             }
-          .share-buttons {
+       .share-buttons {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
                 margin-bottom: 15px;
             }
-          .btn-send-all {
+       .btn-send-all {
                 background: linear-gradient(135deg, #25d366, #ea4335);
                 padding: 16px;
                 color: white;
@@ -217,11 +218,11 @@
                 font-size: 15px;
                 cursor: pointer;
             }
-          .btn-send-all:disabled {
+       .btn-send-all:disabled {
                 background: #ccc;
                 cursor: not-allowed;
             }
-          .btn-pdf {
+       .btn-pdf {
                 background: #7c3aed;
                 padding: 14px;
                 color: white;
@@ -231,7 +232,7 @@
                 font-size: 14px;
                 cursor: pointer;
             }
-          .btn-pdf:disabled {
+       .btn-pdf:disabled {
                 background: #ccc;
                 cursor: not-allowed;
             }
@@ -244,7 +245,7 @@
                 word-break: break-all;
                 display: none;
             }
-          .checkout-btn {
+       .checkout-btn {
                 position: fixed;
                 bottom: 70px;
                 left: 15px;
@@ -263,12 +264,12 @@
                 text-align: center;
                 display: block;
             }
-          .checkout-btn:disabled {
+       .checkout-btn:disabled {
                 background: #ccc;
                 cursor: not-allowed;
                 box-shadow: none;
             }
-          .bottom-nav {
+       .bottom-nav {
                 position: fixed;
                 bottom: 0;
                 left: 0;
@@ -280,25 +281,25 @@
                 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
                 z-index: 100;
             }
-          .nav-item {
+       .nav-item {
                 text-align: center;
                 text-decoration: none;
                 color: #666;
                 flex: 1;
                 padding: 5px;
             }
-          .nav-item.active {
+       .nav-item.active {
                 color: var(--accent);
             }
-          .nav-item div {
+       .nav-item div {
                 font-size: 22px;
             }
-          .nav-item span {
+       .nav-item span {
                 font-size: 11px;
                 display: block;
                 margin-top: 2px;
             }
-          .hide {
+       .hide {
                 display: none!important;
             }
         </style>
@@ -346,7 +347,6 @@
                 <div class="summary-row total-row">
                     <span>Total Amount</span><span id="grandTotal">₹0</span>
                 </div>
-            </div>
             <a href="checkout.html" id="checkoutBtn" class="checkout-btn">
                 ➡️ PROCEED TO CHECKOUT
             </a>
@@ -370,12 +370,15 @@
         <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
 
         <script>
-            // ✅ EmailJS Init - Ab secrets.js se aayega
-            if(typeof EMAILJS_CONFIG!== 'undefined') {
-                emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-            } else {
-                console.error("EMAILJS_CONFIG missing in secrets.js");
-            }
+            // ✅ BACKUP: Old code preserved + New fixes added
+            document.addEventListener('DOMContentLoaded', function() {
+                if(typeof EMAILJS_CONFIG!== 'undefined') {
+                    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                } else {
+                    console.error("EMAILJS_CONFIG missing in secrets.js");
+                }
+                loadData();
+            });
 
             let cart = {};
             let myChoice = {};
@@ -411,7 +414,17 @@
                         cart = {};
                     }
 
-                    myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "{}");
+                    // ✅ FIX 1: My Choice Array + Object dono handle - BACKUP SAFE
+                    let myChoiceData = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "{}");
+                    if (Array.isArray(myChoiceData)) {
+                        myChoice = {};
+                        myChoiceData.forEach(item => {
+                            let id = item.id || item.productId || item.code;
+                            if(id) myChoice[id] = item;
+                        });
+                    } else {
+                        myChoice = myChoiceData;
+                    }
 
                     Object.keys(cart).forEach(key => {
                         if (!cart[key].qty || cart[key].qty < 1) cart[key].qty = 1;
@@ -485,33 +498,40 @@
                 updateCounts();
             }
 
+            // ✅ FIX 2: My Choice Render - OLD CODE BACKUP + NEW FIX
             function renderMyChoice() {
                 let container = document.getElementById("myChoiceList");
-                let choiceKeys = Object.keys(myChoice);
-                if (choiceKeys.length === 0) {
+                let choiceArray = Object.values(myChoice);
+
+                if (choiceArray.length === 0) {
                     container.innerHTML = `<div class="empty"><h3>😍 My Choice - Your Wishlist</h3><p>Save your favorite products here</p><button onclick="window.location.href='index.html'">Browse Products</button></div>`;
                     updateCounts();
                     return;
                 }
-                container.innerHTML = choiceKeys.map(key => {
-                        let item = myChoice[key];
-                        if(!item) return '';
-                        let price = parseFloat(item.price) || 0;
-                        return `
+
+                container.innerHTML = choiceArray.map(item => {
+                    if(!item) return '';
+                    let price = parseFloat(item.price || item.sellingPrice || 0);
+                    let name = item.name || item.productName || "Product";
+                    let image = item.image || item.imageUrl || item.img || "https://via.placeholder.com/90";
+                    let code = item.productCode || item.code || item.id || item.productId || "NA";
+                    let id = item.id || item.productId || code;
+
+                    return `
                       <div class="cart-card">
-                        <img src="${item.image || "https://via.placeholder.com/90"}" onerror="this.src='https://via.placeholder.com/90'">
+                        <img src="${image}" onerror="this.src='https://via.placeholder.com/90'">
                         <div class="item-info">
-                          <h3>${item.name || "Product"}</h3>
+                          <h3>${name}</h3>
                           <div class="item-price">₹${price}</div>
-                          <div class="item-code">Code: ${item.productCode || key}</div>
+                          <div class="item-code">Code: ${code}</div>
                           <div class="item-actions">
-                            <button class="btn-move-choice" style="background: var(--green);" onclick="moveToCart('${key}')">🛒 Move to Cart</button>
-                            <button class="btn-remove" onclick="removeFromChoice('${key}')">🗑️ Remove</button>
+                            <button class="btn-move-choice" style="background: var(--green);" onclick="moveToCart('${id}')">🛒 Move to Cart</button>
+                            <button class="btn-remove" onclick="removeFromChoice('${id}')">🗑️ Remove</button>
                           </div>
                         </div>
                       </div>
                     `;
-                    }).join("");
+                }).join("");
                 updateCounts();
             }
 
@@ -564,16 +584,19 @@
 
             function updateCounts() {
                 let cartCount = Object.values(cart).reduce((sum, item) => sum + (parseInt(item?.qty) || 1), 0);
+                let myChoiceCount = Object.keys(myChoice).length;
                 document.getElementById("cartCount").innerText = cartCount;
-                document.getElementById("choiceCount").innerText = Object.keys(myChoice).length;
+                document.getElementById("choiceCount").innerText = myChoiceCount;
             }
 
+            // ✅ FIX 3: Share Link - OLD FORMAT WAPAS
             function shareProduct(id, name, price) {
                 let link = `https://mansasingh7109-max.github.io/santramarketonlineshoppingmall/product.html?id=${id}`;
                 let text = `Check out *${name}*\nPrice: ₹${price}\n\nBuy here: ${link}`;
                 window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
             }
 
+            // ✅ FIX 4: Order WhatsApp Message - OLD FORMAT + OTP LINE WAPAS
             function generateOrderData() {
                 let baseURL = "https://mansasingh7109-max.github.io/santramarketonlineshoppingmall";
                 if (Object.keys(cart).length === 0) return null;
@@ -581,6 +604,8 @@
                 let delivery = subtotal >= 500? 0 : 49;
                 let grandTotal = subtotal + delivery;
                 let orderId = "SM" + Date.now();
+
+                // ✅ PURANA FORMAT WAPAS - TU NE JO BHEJA THA
                 let text = `🛒 *New Order - SANTRA MALL* 🛒\nOrder ID: ${orderId}\nDate: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}\n\n`;
                 let count = 1;
                 let itemsArray = [];
@@ -600,6 +625,7 @@
                     count++;
                 });
                 text += `━━━━━━━━━━━━━━━━━━\n*Subtotal: ₹${subtotal}*\n*Delivery: ${delivery === 0? "FREE" : "₹" + delivery}*\n*🧾 GRAND TOTAL: ₹${grandTotal}*\n━━━━━━━━━━━━━━━━━━\n\n`;
+
                 return {
                     text,
                     grandTotal,
@@ -670,6 +696,7 @@
                 pdfBtn.disabled = false;
             }
 
+            // ✅ FIX 5: Send Order - OLD FORMAT + OTP LINE + FIREBASE ERROR FIX
             async function sendOrderToAll() {
                 const orderData = generateOrderData();
                 if (!orderData) {
@@ -681,7 +708,12 @@
                 btn.disabled = true;
 
                 try {
-                    // 1. Firebase me Order Save karo - Ab db secrets.js se aayega
+                    // Check 1: Firebase loaded hai ya nahi
+                    if (typeof db === 'undefined') {
+                        throw new Error('Firebase DB not initialized. Check secrets.js uploaded hai ya nahi');
+                    }
+
+                    // 1. Firebase me Order Save karo
                     await db.collection('orders').doc(orderData.orderId).set({
                         orderId: orderData.orderId,
                         items: orderData.itemsArray,
@@ -707,9 +739,11 @@
                         console.log('⚠️ Email failed, but order saved:', emailError);
                     }
 
-                    // 3. WhatsApp pe bhejo
+                    // 3. WhatsApp pe bhejo - PURANA FORMAT + OTP LINE
                     let text = orderData.text;
-                    text += `*📝 Customer Details:*\nName: ________________\nMobile: ________________\nAddress: ________________\n\nPlease confirm this order ✅`;
+                    text += `*📝 Customer Details:*\nName: ________________\nMobile: ________________\nAddress: ________________\n\nPlease confirm this order ✅\n\n`;
+                    text += `*>> IMPORTANT: PLEASE SEND OTP TO CONFIRM THIS ORDER <<*\n*OTP ke bina order confirm nahi hoga*`;
+
                     let whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
                     window.open(whatsappURL, "_blank");
 
@@ -721,7 +755,7 @@
 
                 } catch (error) {
                     console.error('Order Error:', error);
-                    alert('❌ Order failed. Try again. Check console for details.');
+                    alert('❌ Order failed: ' + error.message + '\nCheck console for details.');
                 }
 
                 btn.innerText = "📲 Send Order - WhatsApp: 8769171078 | Email: santramarketshoppingmall@gmail.com";
@@ -734,8 +768,6 @@
                     alert("✅ PDF Link Copied!");
                 }
             }
-
-            window.onload = loadData;
         </script>
     </body>
 </html>
