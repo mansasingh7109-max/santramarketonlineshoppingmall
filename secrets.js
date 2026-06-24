@@ -74,4 +74,17 @@ if (typeof BUSINESS_CONFIG === 'undefined') {
   };
   window.BUSINESS_CONFIG = BUSINESS_CONFIG;
 }
+// 👇 YE CODE secrets.js KE SABSE END ME DAAL DE 👇
 
+// STEP 6: Firebase Config ko Global karo
+window.firebaseConfig = masterConfig;
+
+// STEP 7: Firebase Initialize - Sabse Jaruri
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    firebase.initializeApp(masterConfig);
+    console.log("✅ Firebase Connected - Project:", masterConfig.projectId);
+} else if (firebase.apps.length) {
+    console.log("✅ Firebase Already Connected");
+} else {
+    console.error("❌ Firebase SDK load nahi hua");
+}
