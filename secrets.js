@@ -7,17 +7,19 @@ if (typeof masterConfig === 'undefined') {
     apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
     authDomain: "santramarketshoppingmall.firebaseapp.com",
     projectId: "santramarketshoppingmall",
-    storageBucket: "santramarketshoppingmall.firebasestorage.app",
+    storageBucket: "santramarketshoppingmall.appspot.com", // 👈 .appspot.com sahi hai
     messagingSenderId: "398490252924",
     appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY", // ← Comma zaroori hai
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+    measurementId: "G-ZW1ZR8HETY",
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com" // 👈 Last me / hata diya
+  };
+  window.masterConfig = masterConfig;
+  window.firebaseConfig = masterConfig; // 👈 Ye line sabse jaruri
 }
 
 // STEP 2: Global Keys - Sabse important
-// ✅ Agar kisi aur file me pehle se hai to skip kar dega
 if (typeof CART_KEY === 'undefined') {
-  var CART_KEY = "santra_mall_cart"; // ✅ Yahi final key hai
+  var CART_KEY = "santra_mall_cart";
   window.CART_KEY = CART_KEY;
 }
 
@@ -41,10 +43,14 @@ if (typeof ADMIN_EMAIL === 'undefined') {
   window.ADMIN_EMAIL = ADMIN_EMAIL;
 }
 
-// STEP 3: Firebase Init - Ek hi baar hoga
+// STEP 3: Firebase Init - EK HI BAAR HOGA
 if (typeof firebase !== 'undefined' && !firebase.apps.length && typeof masterConfig !== 'undefined') {
-  firebase.initializeApp(masterConfig);
-  console.log("✅ Firebase Connected:", masterConfig.projectId);
+    firebase.initializeApp(masterConfig);
+    console.log("✅ Firebase Connected:", masterConfig.projectId);
+} else if (firebase.apps.length) {
+    console.log("✅ Firebase Already Connected");
+} else {
+    console.error("❌ Firebase SDK load nahi hua");
 }
 
 // STEP 4: db, auth Global - Agar nahi hai to banao
@@ -73,18 +79,4 @@ if (typeof BUSINESS_CONFIG === 'undefined') {
     EMAIL_2: "santramarketshoppingmall@gmail.com"
   };
   window.BUSINESS_CONFIG = BUSINESS_CONFIG;
-}
-// 👇 YE CODE secrets.js KE SABSE END ME DAAL DE 👇
-
-// STEP 6: Firebase Config ko Global karo
-window.firebaseConfig = masterConfig;
-
-// STEP 7: Firebase Initialize - Sabse Jaruri
-if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-    firebase.initializeApp(masterConfig);
-    console.log("✅ Firebase Connected - Project:", masterConfig.projectId);
-} else if (firebase.apps.length) {
-    console.log("✅ Firebase Already Connected");
-} else {
-    console.error("❌ Firebase SDK load nahi hua");
 }
