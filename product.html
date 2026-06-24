@@ -80,7 +80,32 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="./secrets.js"></script>
+
+<!-- BACKUP: Purana secrets.js wala code - Jab chahe uncomment kar dena -->
+<!-- <script src="./secrets.js"></script> -->
+
+<!-- NEW: Firebase Config Direct Yahi Daal Diya -->
+<script>
+  // ⚠️ YAHAN APNI ASLI FIREBASE CONFIG DAALNA
+  const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.firebasestorage.app",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY", // ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  console.log("✅ Firebase Connected direct from product.html");
+
+  // ✅ FIX: CART_KEY aur MYCHOICE_KEY yahi define kar diye
+  const CART_KEY = 'santra_mall_cart';
+  const MYCHOICE_KEY = 'santra_mall_mychoice';
+</script>
 
 <script>
 // ✅ FIX 1: Global variables bahar nikale taaki sab functions use kar sake
@@ -255,7 +280,6 @@ function renderProduct(p) {
   }, 100);
 }
 
-// ✅ FIX 2: Saare functions global banaye - window. lagaya
 window.selectVariant = function(variant, btn) {
   if(btn.disabled) return;
   selectedVariantData = typeof variant === 'object'? variant : {name: variant, price: currentProduct.price};
@@ -340,19 +364,17 @@ window.buyNow = function() {
   window.location.href = 'cart.html';
 }
 
-// ✅ FIX 3: myChoice.findIndex error fix - Array check lagaya
 window.addToMyChoice = function() {
   let hasVariants = getProductVariants(currentProduct).length > 0;
   if (hasVariants &&!selectedVariant) return alert('⚠️ Please select a variant first!');
 
-  // ✅ FIX: localStorage se jo bhi aaye, array banao
   let myChoiceData = localStorage.getItem(MYCHOICE_KEY);
   let myChoice = [];
   try {
     myChoice = JSON.parse(myChoiceData || '[]');
-    if(!Array.isArray(myChoice)) myChoice = []; // Array nahi hai to khali array bana do
+    if(!Array.isArray(myChoice)) myChoice = [];
   } catch(e) {
-    myChoice = []; // JSON parse error pe bhi khali array
+    myChoice = [];
   }
 
   let finalPrice = selectedVariantData?.price || currentProduct.price;
