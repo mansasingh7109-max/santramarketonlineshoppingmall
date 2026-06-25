@@ -11,33 +11,33 @@
         <script src="secrets.js"></script>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; padding-bottom: 20px; }
-        .header { background: #e91e63; color: white; padding: 15px; text-align: center; font-weight: 600; font-size: 16px; position: sticky; top: 0; z-index: 100; }
-        .container { padding: 15px; }
-        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
-        .section-title { font-weight: 600; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .order-id { background: #fff9c4; padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 15px; border: 1px solid #f9e79f; }
-        .item { display: flex; gap: 12px; padding: 15px 0; border-bottom: 1px dashed #ddd; }
-        .item:last-child { border-bottom: none; }
-        .item img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
-        .item-details { flex: 1; font-size: 14px; }
-        .item-details h4 { font-size: 15px; margin-bottom: 4px; }
-        .item-details p { color: #666; margin: 2px 0; }
-        .item-details a { color: #e91e63; font-size: 12px; text-decoration: none; word-break: break-all; }
-        .grand-total { text-align: right; font-weight: 700; font-size: 18px; padding-top: 15px; margin-top: 10px; border-top: 2px solid #eee; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: #444; }
-        .form-group input,.form-group select { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; }
-        .form-group input:focus,.form-group select:focus { border-color: #e91e63; }
-        .btn-send { width: 100%; background: #00c853; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        .btn-send:disabled { background: #ccc; cursor: not-allowed; }
-        .delivery-title { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 18px; margin-bottom: 15px; }
-        .empty-cart { text-align: center; padding: 40px 20px; color: #999; }
-        .empty-cart button { margin-top: 15px; padding: 12px 24px; background: #e91e63; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .otp-box { background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px; margin-top: 20px; text-align: center; display: none; }
-        .otp-box h3 { color: #d32f2f; font-size: 18px; margin-bottom: 10px; }
-        .otp-box p { font-size: 15px; color: #333; line-height: 1.6; }
-        .whatsapp-btn { display: inline-block; background: #25d366; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 15px; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5; color: #333; padding-bottom: 20px; }
+       .header { background: #e91e63; color: white; padding: 15px; text-align: center; font-weight: 600; font-size: 16px; position: sticky; top: 0; z-index: 100; }
+       .container { padding: 15px; }
+       .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+       .section-title { font-weight: 600; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+       .order-id { background: #fff9c4; padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 15px; border: 1px solid #f9e79f; }
+       .item { display: flex; gap: 12px; padding: 15px 0; border-bottom: 1px dashed #ddd; }
+       .item:last-child { border-bottom: none; }
+       .item img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+       .item-details { flex: 1; font-size: 14px; }
+       .item-details h4 { font-size: 15px; margin-bottom: 4px; }
+       .item-details p { color: #666; margin: 2px 0; }
+       .item-details a { color: #e91e63; font-size: 12px; text-decoration: none; word-break: break-all; }
+       .grand-total { text-align: right; font-weight: 700; font-size: 18px; padding-top: 15px; margin-top: 10px; border-top: 2px solid #eee; }
+       .form-group { margin-bottom: 18px; }
+       .form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: #444; }
+       .form-group input,.form-group select { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; }
+       .form-group input:focus,.form-group select:focus { border-color: #e91e63; }
+       .btn-send { width: 100%; background: #00c853; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+       .btn-send:disabled { background: #ccc; cursor: not-allowed; }
+       .delivery-title { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 18px; margin-bottom: 15px; }
+       .empty-cart { text-align: center; padding: 40px 20px; color: #999; }
+       .empty-cart button { margin-top: 15px; padding: 12px 24px; background: #e91e63; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+       .otp-box { background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px; margin-top: 20px; text-align: center; display: none; }
+       .otp-box h3 { color: #d32f2f; font-size: 18px; margin-bottom: 10px; }
+       .otp-box p { font-size: 15px; color: #333; line-height: 1.6; }
+       .whatsapp-btn { display: inline-block; background: #25d366; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 15px; }
         </style>
     </head>
     <body>
@@ -128,26 +128,24 @@
         </div>
 
         <script>
-            // ✅ FIX 1: Firebase Safe Init
-            if (typeof firebase!== 'undefined' &&!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            const db = firebase.firestore();
+            // ✅ FIX 1: EmailJS Init - secrets.js se lega
+            document.addEventListener('DOMContentLoaded', function() {
+                if(typeof EMAILJS_CONFIG!== 'undefined') {
+                    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                }
+                loadOrder();
+            });
 
-            // ✅ FIX 2: EmailJS Init - Apni Public Key daal
-            emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // <-- BADAL DENA
+            // ❌ YE SAB DELETE KAR DIYA - AB secrets.js se aayega
+            // const db = firebase.firestore();
+            // emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+            // var CART_KEY = "SANTRA_CART";
+            // var ADMIN_WHATSAPP = "918769171078";
 
-            var CART_KEY = "SANTRA_CART"; // ✅ FIX 3: Capital me
             var cart = {};
             var orderId = "SM" + Date.now();
 
-            if (typeof ADMIN_WHATSAPP === "undefined") {
-                var ADMIN_WHATSAPP = "918769171078";
-                var ADMIN_EMAIL = "santramarketshoppingmall@gmail.com";
-                var ADMIN_EMAIL_2 = "mansasingh7109@gmail.com";
-            }
-
-            // ✅ FIX 4: Cart load - Array aur Object dono handle
+            // ✅ FIX 2: Cart load - CART_KEY ab secrets.js se aayega = "santraMallCart_v2"
             function loadOrder() {
                 try {
                     var rawData = localStorage.getItem(CART_KEY);
@@ -183,7 +181,6 @@
                     return;
                 }
 
-                // ✅ FIX 5: Button enable karo
                 document.getElementById("sendBtn").disabled = false;
                 renderOrderSummary();
             }
@@ -193,9 +190,11 @@
                 var container = document.getElementById("orderItems");
                 var count = 1;
                 var subtotal = 0;
+                // ✅ FIX 3: Share Link - Tera Github URL
+                var baseURL = "https://mansasingh7109-max.github.io/santramarketonlineshoppingmall";
 
                 container.innerHTML = Object.keys(cart)
-                .map(function (key) {
+              .map(function (key) {
                         var item = cart[key];
                         var qty = parseInt(item.qty) || 1;
                         var price = parseFloat(item.price) || 0;
@@ -209,19 +208,19 @@
           <h4>${count++}. ${item.name}</h4>
           <p>Code: ${item.productCode || item.code || "N/A"}</p>
           <p>Qty: ${qty} x ₹${price} = ₹${itemTotal}</p>
-          <a href="https://santramarketshoppingmall.firebaseapp.com/product.html?id=${item.id || key}">Link: View Product</a>
+          <a href="${baseURL}/product.html?id=${item.id || key}">Link: View Product</a>
         </div>
       </div>
     `;
                     })
-                .join("");
+              .join("");
 
                 var delivery = subtotal >= 500? 0 : 49;
                 var grandTotal = subtotal + delivery;
                 document.getElementById("grandTotal").innerText = grandTotal;
             }
 
-            // ✅ FIX 6: Send Order - Product Link Add Kiya
+            // ✅ FIX 4: Send Order - EMAILJS_CONFIG + ADMIN_WHATSAPP secrets.js se lega
             async function sendOrder() {
                 var name = document.getElementById("name").value.trim();
                 var mobile = document.getElementById("mobile").value.trim();
@@ -246,7 +245,7 @@
                 document.getElementById("sendBtn").disabled = true;
                 document.getElementById("sendBtn").innerText = "⏳ Sending...";
 
-                var baseURL = "https://santramarketshoppingmall.firebaseapp.com";
+                var baseURL = "https://mansasingh7109-max.github.io/santramarketonlineshoppingmall";
                 var subtotal = 0;
                 var text = "🛒 *New Order - SANTRA MALL* 🛒\n";
                 text += `Order ID: ${orderId}\n`;
@@ -260,11 +259,11 @@
                     var price = parseFloat(item.price) || 0;
                     var itemTotal = price * qty;
                     subtotal += itemTotal;
-                    let productLink = `${baseURL}/product.html?id=${item.id || key}`; // ✅ FIX: Link banaya
+                    let productLink = `${baseURL}/product.html?id=${item.id || key}`;
                     text += `${count}. *${item.name}*\n`;
                     text += `Qty: ${qty} x ₹${price} = ₹${itemTotal}\n`;
                     text += `Code: ${item.productCode || item.code || "N/A"}\n`;
-                    text += `Link: ${productLink}\n\n`; // ✅ FIX: Link add kiya
+                    text += `Link: ${productLink}\n\n`;
                     itemsArray.push({
                         name: item.name,
                         qty: qty,
@@ -309,7 +308,7 @@
                 };
 
                 try {
-                    // 1. Firebase me save karo
+                    // 1. Firebase me save karo - db ab secrets.js se aayega
                     try {
                         await db.collection('orders').doc(orderId).set(orderData);
                         console.log('✅ Firebase: Order saved');
@@ -317,9 +316,9 @@
                         console.log('⚠️ Firebase failed:', fbError);
                     }
 
-                    // 2. EmailJS se Email bhejo
+                    // 2. EmailJS se Email bhejo - EMAILJS_CONFIG secrets.js se aayega
                     try {
-                        await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                        await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
                             order_id: orderId,
                             customer_name: name,
                             customer_mobile: mobile,
@@ -334,7 +333,7 @@
                         console.log('⚠️ Email failed:', emailError);
                     }
 
-                    // 3. WhatsApp bhejo - Ye hamesha chalega
+                    // 3. WhatsApp bhejo - ADMIN_WHATSAPP secrets.js se aayega
                     var whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
                     window.open(whatsappURL, "_blank");
 
@@ -344,7 +343,7 @@
                         var mailtoURL = `mailto:${ADMIN_EMAIL},${ADMIN_EMAIL_2}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
                         window.open(mailtoURL, "_blank");
 
-                        // 5. Cart Khali Karo
+                        // 5. Cart Khali Karo - CART_KEY secrets.js se aayega
                         localStorage.removeItem(CART_KEY);
                         document.getElementById("formCard").style.display = "none";
                         document.getElementById("otpBox").style.display = "block";
@@ -355,7 +354,7 @@
 
                 } catch (error) {
                     console.error('Order Error:', error);
-                    alert('❌ Order failed. Try again.');
+                    alert('❌ Order failed: ' + error.message);
                     document.getElementById("sendBtn").disabled = false;
                     document.getElementById("sendBtn").innerText = "📱 SEND ORDER";
                 }
@@ -363,5 +362,28 @@
 
             window.onload = loadOrder;
         </script>
+  <script>
+    // ✅ SAB PAGE ME YE FUNCTION ADD KAR - Header count update ke liye
+function updateHeaderBadges() {
+    const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+        cartBadge.innerText = cartQty;
+        cartBadge.style.display = cartQty > 0? 'flex' : 'none';
+    }
+
+    const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+    const choiceBadge = document.getElementById('choiceBadge');
+    if (choiceBadge) {
+        choiceBadge.innerText = choiceArray.length;
+        choiceBadge.style.display = choiceArray.length > 0? 'flex' : 'none';
+    }
+}
+
+// ✅ Page load pe call kar
+window.addEventListener("load", updateHeaderBadges);
+window.addEventListener("storage", updateHeaderBadges); // Dusre tab me change ho to bhi update
+    </script>
     </body>
 </html>
