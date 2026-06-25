@@ -10,9 +10,9 @@ if (typeof masterConfig === 'undefined') {
     storageBucket: "santramarketshoppingmall.appspot.com",
     messagingSenderId: "398490252924",
     appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY",
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com"
-  };
+    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+    };
   window.masterConfig = masterConfig;
   window.firebaseConfig = masterConfig;
 }
