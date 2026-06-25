@@ -419,6 +419,17 @@
                     <div class="nav-item active" id="navHome" onclick="goHome()">
                         <i>🏠</i>Home
                     </div>
+                  
+
+<!-- Ab ye kar - Badge add kiya -->
+<button class="nav-btn" onclick="window.location.href='mychoice.html'" style="position: relative;">
+    <span>😍</span>
+    <span>My Choice</span>
+    <span id="homeChoiceBadge" style="position: absolute;top: 5px;right: 15px;background: #ffeb3b;color: #000;width: 18px;height: 18px;border-radius: 50%;font-size: 10px;font-weight: bold;display: none;align-items: center;justify-content: center;">0</span>
+</button>
+                    
+                    
+                    
                     <div class="nav-item" onclick="openCategories()">
                         <i>📱</i>Categories
                     </div>
@@ -952,5 +963,55 @@
             }
             function openVerifyOtpPopup() { alert("OTP Verify feature - Add code"); }
         </script>
+  <script>
+   // ✅ Home page me Cart + My Choice count dikhane ke liye
+function updateHomeBadges() {
+    // Cart Count
+    const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
+    const cartBadge = document.getElementById('homeCartBadge'); // Agar Cart ka badge hai to
+    if (cartBadge) {
+        cartBadge.innerText = cartQty;
+        cartBadge.style.display = cartQty > 0 ? 'flex' : 'none';
+    }
+
+    // My Choice Count
+    const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+    const choiceBadge = document.getElementById('homeChoiceBadge');
+    if (choiceBadge) {
+        choiceBadge.innerText = choiceArray.length;
+        choiceBadge.style.display = choiceArray.length > 0 ? 'flex' : 'none';
+    }
+}
+
+// ✅ Page load hote hi count dikhao
+window.addEventListener("load", updateHomeBadges);
+
+// ✅ Agar dusre tab me item add hua to bhi update ho
+window.addEventListener("storage", updateHomeBadges);
+</script>
+ <script>
+   // ✅ SAB PAGE ME YE FUNCTION ADD KAR - Header count update ke liye
+function updateHeaderBadges() {
+    const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+        cartBadge.innerText = cartQty;
+        cartBadge.style.display = cartQty > 0? 'flex' : 'none';
+    }
+
+    const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+    const choiceBadge = document.getElementById('choiceBadge');
+    if (choiceBadge) {
+        choiceBadge.innerText = choiceArray.length;
+        choiceBadge.style.display = choiceArray.length > 0? 'flex' : 'none';
+    }
+}
+
+// ✅ Page load pe call kar
+window.addEventListener("load", updateHeaderBadges);
+window.addEventListener("storage", updateHeaderBadges); // Dusre tab me change ho to bhi update 
+</script>
     </body>
 </html>
