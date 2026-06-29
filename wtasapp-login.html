@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Login - SANTRA MALL</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#f1f3f6;display:flex;flex-direction:column;min-height:100vh}
+.header{background:#1a1a2e;color:white;padding:15px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.header h1{color:#e94560;font-size:22px}
+.container{padding:20px;max-width:500px;margin:40px auto;flex:1}
+.login-card{background:white;border-radius:15px;padding:30px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+.login-title{color:#e40046;font-size:20px;margin-bottom:20px;text-align:center;font-weight:bold}
+.form-group{margin-bottom:15px}
+.form-group label{font-weight:bold;color:#333;font-size:14px;display:block;margin-bottom:5px}
+.form-group input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:16px;text-align:center}
+.btn-wa{width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+.btn-wa:disabled{background:#ccc;cursor:not-allowed}
+.otp-box{margin-top:20px;padding:20px;background:#f8f9fa;border-radius:8px;border:2px dashed #25D366;display:none}
+.otp-box.show{display:block}
+.otp-box h3{color:#25D366;margin-bottom:15px;text-align:center;font-size:16px}
+.toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999;font-size:14px}
+.toast.show{display:block}
+.toast.error{background:#f44336}
+.footer{background:#1a1a2e;color:white;text-align:center;padding:15px;font-size:14px;margin-top:auto}
+.footer span{color:#e94560;font-weight:bold}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔐 SANTRA MALL Login</h1>
+</div>
+
+<div class="container">
+  <div class="login-card">
+    <h3 class="login-title">📱 Customer Login by WhatsApp</h3>
+    
+    <div class="form-group">
+      <label>WhatsApp Mobile Number *</label>
+      <input type="tel" id="loginMobile" placeholder="10 digit mobile" maxlength="10">
+    </div>
+    <button class="btn-wa" id="sendOtpBtn">📲 Send OTP on WhatsApp</button>
+
+    <!-- ✅ OTP Box - Send ke baad dikhega -->
+    <div class="otp-box" id="otpBox">
+      <h3>🔐 Add WhatsApp OTP</h3>
+      <div class="form-group">
+        <label>Enter 6-digit OTP *</label>
+        <input type="text" id="otpInput" placeholder="OTP from WhatsApp" maxlength="6">
+      </div>
+      <button class="btn-wa" id="verifyOtpBtn" style="background:#10b981">✅ Verify OTP & Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Powered by <span>santrajet mall</span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+document.getElementById('sendOtpBtn').addEventListener('click', sendWhatsAppOTP);
+document.getElementById('verifyOtpBtn').addEventListener('click', verifyOTP);
+
+function sendWhatsAppOTP() {
+    const mobile = document.getElementById('loginMobile').value.trim();
+    
+    if (mobile.length!== 10) {
+        return showToast('❌ 10 digit mobile daalo', true);
+    }
+
+    const btn = document.getElementById('sendOtpBtn');
+    btn.disabled = true;
+    btn.innerText = 'Sending...';
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    db.collection('login_requests').doc(mobile).set({
+        mobile: mobile,
+        otp: otp,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        const msg = `🔐 *SANTRA MALL LOGIN OTP*\n\nYour OTP: *${otp}*\n\nValid for 10 minutes.`;
+        window.open(`https://wa.me/91${mobile}?text=${encodeURIComponent(msg)}`, '_blank');
+        
+        document.getElementById('otpBox').classList.add('show');
+        btn.innerText = '📲 OTP Sent - Check WhatsApp';
+        showToast('📲 OTP sent on WhatsApp!');
+    }).catch(err => {
+        showToast('❌ Error: ' + err.message, true);
+        btn.disabled = false;
+        btn.innerText = '📲 Send OTP on WhatsApp';
+    });
+}
+
+function verifyOTP() {
+    const mobile = document.getElementById('loginMobile').value.trim();
+    const enteredOTP = document.getElementById('otpInput').value.trim();
+    
+    if (enteredOTP.length!== 6) {
+        return showToast('❌ 6 digit OTP daalo!', true);
+    }
+
+    const btn = document.getElementById('verifyOtpBtn');
+    btn.disabled = true;
+    btn.innerText = 'Verifying...';
+
+    db.collection('login_requests').doc(mobile).get().then((doc) => {
+        if (!doc.exists) {
+            showToast('❌ OTP not found! Send again', true);
+            btn.disabled = false;
+            btn.innerText = '✅ Verify OTP & Continue';
+            return;
+        }
+        
+        if (doc.data().otp === enteredOTP) {
+            db.collection('login_requests').doc(mobile).update({
+                status: 'verified',
+                verifiedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            // ✅ Login success - customer-account.html kholo
+            localStorage.setItem('santra_whatsapp_mobile', mobile);
+            localStorage.setItem('santra_customer_mobile', mobile);
+            showToast('✅ OTP Verified! Opening Profile...');
+            
+            setTimeout(() => {
+                window.location.href = 'customer-account.html';
+            }, 1500);
+        } else {
+            showToast('❌ Wrong OTP!', true);
+            btn.disabled = false;
+            btn.innerText = '✅ Verify OTP & Continue';
+        }
+    }).catch(err => {
+        showToast('❌ Error: ' + err.message, true);
+        btn.disabled = false;
+        btn.innerText = '✅ Verify OTP & Continue';
+    });
+}
+
+function showToast(message, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.classList.add('show');
+    if (isError) toast.classList.add('error');
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.remove('error');
+    }, 3000);
+}
+</script>
+</body>
+</html>
