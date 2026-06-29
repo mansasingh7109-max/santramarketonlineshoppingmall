@@ -4,25 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Company Details - SANTRAJET MALL</title>
-  
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  
+
   <style>
     body{background:#f1f3f6;font-family:Arial;padding:20px;margin:0;}
-    .card{background:white;padding:20px;border-radius:8px;max-width:600px;margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+   .card{background:white;padding:20px;border-radius:8px;max-width:600px;margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
     h2{color:#e40046;margin-top:0;}
-    .btn{background:#e40046;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin-top:20px;font-weight:bold;}
+   .btn{background:#e40046;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin-top:20px;font-weight:bold;}
     p{line-height:1.6;}
   </style>
 </head>
 <body>
-  
-  
+
   <div class="company-detail-box" style="text-align: left; margin: 20px auto; padding: 30px; background: #ffffff; border-radius: 12px; max-width: 850px; line-height: 1.8; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
     <h2 style="color: #1e8449; text-align: center; margin-bottom: 25px; font-size: 28px;">COMPANY PROFILE - SANTRAJET MALL</h2>
-    
+
     <h3 style="color: #ff6b35; border-bottom: 2px solid #1e8449; padding-bottom: 8px; margin-top: 30px;">1. Basic Company Information:</h3>
     <p>
         <b>Legal Name:</b> SANTRAJET MALL<br>
@@ -150,7 +149,7 @@
         Thank you for trusting us ❤️
     </p>
 </div>
-  
+
 <div class="card">
   <h2>🏢 Company Details</h2>
   <p><b>Name:</b> <span id="companyName">SANTRAJET MALL</span></p>
@@ -158,26 +157,41 @@
   <p><b>Email:</b> <span id="email">santramarketshoppingmall@gmail.com</span></p>
   <p><b>Phone:</b> <span id="phone">8769171078</span></p>
   <p><b>Business Type:</b> <span id="businessType">E-commerce Store</span></p>
-  
+
   <div style="text-align:center;">
     <a href="creator.html" class="btn">CREATOR →</a>
   </div>
 </div>
 
 <script>
+  // ==================== OLD CODE BACKUP - 26/06/2026 ====================
+  /*
   // Step 1: Firebase Config - YAHAN APNI REAL KEY DAAL
-  
   const firebaseConfig = {
     apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.firebasestorage.app",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY"
   };
 
-alert("Config test: " + firebaseConfig.projectId);
+  alert("Config test: " + firebaseConfig.projectId); // ❌ YE HATA DIYA HAI
+  */
+  // ==================== OLD CODE BACKUP END ====================
+
+  // ✅ NEW CODE - ALERT HATA DIYA
+  // Step 1: Firebase Config - YAHAN APNI REAL KEY DAAL
+  const firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.firebasestorage.app",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY"
+  };
 
   // Step 2: Firebase Initialize
   if (!firebase.apps.length) {
@@ -199,6 +213,7 @@ alert("Config test: " + firebaseConfig.projectId);
     console.log("Firebase Error:", error);
   });
 </script>
+
   <script src="theme.js"></script>
   <!-- BACKUP PROTECTION TERMINAL - 4 June 2026, 4:34 PM -->
 <script>
@@ -211,7 +226,7 @@ window.santraBackup = {
   version: '1.0',
   timestamp: '2026-06-04T16:34:00+05:30',
   location: 'Pilibanga, Rajasthan',
-  
+
   // Backup localStorage data
   backupLocalStorage: function() {
     const backup = {
@@ -221,12 +236,12 @@ window.santraBackup = {
       cart: localStorage.getItem('santra_cart'),
       wishlist: localStorage.getItem('santra_wishlist')
     };
-    
+
     localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
     console.log('✅ LocalStorage Backup Created:', backup.timestamp);
     return backup;
   },
-  
+
   // Backup Firebase data before critical operations
   backupFirebaseOrder: function(orderData) {
     const backup = {
@@ -238,7 +253,7 @@ window.santraBackup = {
       status: orderData.status,
       serialNo: orderData.serialNo
     };
-    
+
     let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
     backups.unshift(backup);
     if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
@@ -246,7 +261,7 @@ window.santraBackup = {
     console.log('✅ Firebase Order Backup:', orderData.orderId);
     return backup;
   },
-  
+
   // Restore function
   restore: function() {
     const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
@@ -264,14 +279,14 @@ window.santraBackup = {
       alert('❌ No backup found for 4 June 2026, 4:34 PM');
     }
   },
-  
+
   // View all backups
   viewBackups: function() {
     const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
     console.table(backups);
     return backups;
   },
-  
+
   // Export backup as JSON
   exportBackup: function() {
     const backup = {
@@ -279,7 +294,7 @@ window.santraBackup = {
       localStorage: this.backupLocalStorage(),
       firebase: this.viewBackups()
     };
-    
+
     const dataStr = JSON.stringify(backup, null, 2);
     const dataBlob = new Blob([dataStr], {type: 'application/json'});
     const url = URL.createObjectURL(dataBlob);
