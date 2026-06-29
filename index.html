@@ -17,11 +17,12 @@
             }, true);
         </script>
         <style>
-.main-container {
+       .main-container {
             display: flex;
             min-height: 100vh;
+            background: #f1f3f6;
         }
-.left-sidebar {
+       .left-sidebar {
             width: 70px;
             background: linear-gradient(180deg, #fff9c4, #fff59d);
             padding: 10px 4px;
@@ -29,19 +30,21 @@
             position: fixed;
             left: 0;
             top: 0;
-            height: 90vh;
+            height: 100vh;
             z-index: 100;
             display: flex;
             flex-direction: column;
             gap: 8px;
             align-items: center;
+            overflow-y: auto;
         }
-.main-content {
+       .main-content {
             flex: 1;
             margin-left: 70px;
             width: calc(100% - 70px);
+            background: #f1f3f6;
         }
-.sidebar-btn {
+       .sidebar-btn {
             background: linear-gradient(135deg, #ffcc80, #ffb74d);
             color: #333;
             padding: 4px 2px;
@@ -62,11 +65,11 @@
             min-height: 55px;
             justify-content: center;
         }
-.sidebar-btn:active {
+       .sidebar-btn:active {
             transform: translateY(2px);
             box-shadow: 0 1px 0 #f57c00;
         }
-.sidebar-btn.icon {
+       .sidebar-btn.icon {
             font-size: 18px;
             margin-bottom: 2px;
         }
@@ -76,7 +79,7 @@
         #logoutBtn.show {
             display: flex!important;
         }
-.header {
+       .header {
             margin-left: 0;
             background: linear-gradient(135deg, #ff9800, #f57c00);
             padding: 15px;
@@ -84,8 +87,8 @@
             justify-content: center;
             align-items: center;
         }
-.logo-wrap { text-align: center; }
-.logo-wrap h1 {
+       .logo-wrap { text-align: center; }
+       .logo-wrap h1 {
             color: #d32f2f;
             font-size: 26px;
             font-weight: 900;
@@ -95,12 +98,12 @@
             padding: 5px 15px;
             display: inline-block;
         }
-.tagline {
+       .tagline {
             color: #2e7d32;
             font-size: 13px;
             margin: 5px 0 0;
         }
-.products {
+       .products {
             display: grid;
             grid-template-columns: repeat(2, 1fr)!important;
             gap: 8px;
@@ -108,16 +111,16 @@
             background: #e8f5e9!important;
         }
         @media (min-width: 768px) {
-  .products {
+           .products {
                 grid-template-columns: repeat(4, 1fr)!important;
             }
         }
         @media (min-width: 481px) and (max-width: 767px) {
-  .products {
+           .products {
                 grid-template-columns: repeat(3, 1fr)!important;
             }
         }
-.product-card {
+       .product-card {
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
@@ -126,10 +129,10 @@
             position: relative;
             background: white!important;
         }
-.product-card:active {
+       .product-card:active {
             transform: scale(0.98);
         }
-.product-card img {
+       .product-card img {
             width: 100%!important;
             height: 140px!important;
             object-fit: contain!important;
@@ -137,14 +140,14 @@
             background: #f5f5f5!important;
         }
         @media (min-width: 768px) {
-  .product-card img {
+           .product-card img {
                 height: 180px!important;
             }
         }
-.product-info {
+       .product-info {
             padding: 8px;
         }
-.product-card h3 {
+       .product-card h3 {
             font-size: 12px;
             margin-bottom: 5px;
             height: 32px;
@@ -154,29 +157,29 @@
             -webkit-box-orient: vertical;
             color: #d32f2f!important;
         }
-.price {
+       .price {
             font-weight: bold;
             font-size: 14px;
             color: #d32f2f!important;
         }
-.mrp {
+       .mrp {
             text-decoration: line-through;
             font-size: 10px;
             margin-left: 5px;
             color: #757575!important;
         }
-.stock {
+       .stock {
             font-size: 10px;
             margin-top: 3px;
             color: #388e3c!important;
         }
-.product-actions {
+       .product-actions {
             display: flex;
             gap: 5px;
             margin-top: 10px;
             padding: 6px;
         }
-.add-to-cart-btn {
+       .add-to-cart-btn {
             flex: 1;
             background: #e91e63;
             color: white;
@@ -187,7 +190,7 @@
             cursor: pointer;
             font-size: 11px;
         }
-.buy-now-btn {
+       .buy-now-btn {
             flex: 1;
             background: #ff9800;
             color: white;
@@ -198,7 +201,7 @@
             cursor: pointer;
             font-size: 11px;
         }
-.img-count {
+       .img-count {
             position: absolute;
             top: 5px;
             left: 5px;
@@ -208,8 +211,8 @@
             border-radius: 10px;
             font-size: 11px;
         }
-.prev-btn,
-.next-btn {
+       .prev-btn,
+       .next-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -221,10 +224,10 @@
             font-size: 18px;
             z-index: 10;
         }
-.prev-btn { left: 5px; }
-.next-btn { right: 5px; }
-.hide { display: none!important; }
-.new-badge {
+       .prev-btn { left: 5px; }
+       .next-btn { right: 5px; }
+       .hide { display: none!important; }
+       .new-badge {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -236,7 +239,7 @@
             font-weight: bold;
             z-index: 10;
         }
-.filter-section {
+       .filter-section {
             background: white;
             padding: 15px;
             margin: 10px auto;
@@ -244,10 +247,10 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 500px;
         }
-.filter-group {
+       .filter-group {
             margin-bottom: 10px;
         }
-.filter-group label {
+       .filter-group label {
             display: block;
             margin: 6px 0 4px 0;
             font-size: 14px;
@@ -265,7 +268,7 @@
             margin-bottom: 5px;
             width: 62px;
         }
-.bottom-nav {
+       .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -277,7 +280,7 @@
             z-index: 99;
             background: linear-gradient(135deg, #ff9800, #f57c00)!important;
         }
-.nav-item {
+       .nav-item {
             background: #ffcc80!important;
             color: #b71c1c!important;
             padding: 8px 15px!important;
@@ -289,7 +292,7 @@
             min-width: 70px!important;
             box-shadow: 0 3px 0 #f57c00!important;
         }
-.cart-count {
+       .cart-count {
             border-radius: 50%;
             width: 18px;
             height: 18px;
@@ -304,23 +307,23 @@
             color: white!important;
         }
         @media (max-width: 580px) {
-.left-sidebar {
+           .left-sidebar {
                 width: 65px!important;
             }
-.main-content {
+           .main-content {
                 margin-left: 65px!important;
                 width: calc(100% - 65px)!important;
             }
-.sidebar-btn {
+           .sidebar-btn {
                 width: 57px!important;
                 min-height: 50px!important;
                 font-size: 6px!important;
             }
-.logo-wrap h1 {
+           .logo-wrap h1 {
                 font-size: 20px!important;
                 padding: 4px 10px!important;
             }
-.product-card img {
+           .product-card img {
                 height: 130px!important;
             }
         }
@@ -336,10 +339,13 @@
                     <span id="oldCustomerBadge" class="hide" style="background: #ff6b00; color: white; padding: 2px 4px; border-radius: 3px; font-size: 8px; margin-top: 2px; display: block;"></span>
                 </div>
 
-                <a href="customer-login.html" id="loginBtn" class="sidebar-btn">
-                    <div class="icon">👤</div>
-                    <div>Customer<br>Login</div>
-                </a>
+                <!-- ✅ UPDATED: Customer Login/Profile Button -->
+                <div id="sidebarCustomerSection">
+                    <button class="sidebar-btn" onclick="window.location.href='customer-account.html'">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" style="width:24px;height:24px;" alt="Login">
+                        Customer<br>Login
+                    </button>
+                </div>
 
                 <button id="logoutBtn" class="sidebar-btn" onclick="customerLogout()">
                     <div class="icon">🚪</div>
@@ -419,20 +425,14 @@
                     <div class="nav-item active" id="navHome" onclick="goHome()">
                         <i>🏠</i>Home
                     </div>
-                  
 
-<!-- Ab ye kar - Badge add kiya -->
-<button class="nav-btn" onclick="window.location.href='mychoice.html'" style="position: relative;">
-    <span>😍</span>
-    <span>My Choice</span>
-    <span id="homeChoiceBadge" style="position: absolute;top: 5px;right: 15px;background: #ffeb3b;color: #000;width: 18px;height: 18px;border-radius: 50%;font-size: 10px;font-weight: bold;display: none;align-items: center;justify-content: center;">0</span>
-</button>
-                    
-                    
-                    
                     <div class="nav-item" onclick="openCategories()">
                         <i>📱</i>Categories
                     </div>
+                    <a href="mychoice.html" class="nav-item" style="position:relative">
+                        <i>😍</i>My Choice
+                        <span class="cart-count" id="choiceBadge" style="display:none">0</span>
+                    </a>
                     <div class="nav-item" onclick="openCart()" style="position: relative">
                         <i>🛒</i>Cart
                         <span class="cart-count" id="cartCountBottom">0</span>
@@ -447,15 +447,22 @@
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
         <script src="./secrets.js"></script>
+        <script src="mychoice.js"></script>
+        <script src="load-products.js"></script>
+
         <script>
-            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+           // ✅ FIX 1: CART_KEY & MYCHOICE_KEY define kiye
+           const CART_KEY = 'santraMallCart_v2';
+           const MYCHOICE_KEY = 'santraMallMyChoice_v2';
+
+           // ✅ FIX 2: Sirf 1 baar initialize karo
+           if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             var rtdb = firebase.database();
             var auth = firebase.auth();
             var db = firebase.firestore();
-
-            // ✅ FIX 1: CART_KEY ko dobara declare nahi karna - secrets.js me hai
-            // ✅ FIX 2: auth aur db yahan define kar diye, ab error nahi aayega
+            var storage = firebase.storage();
         </script>
         <!-- ==================== FIREBASE SDK + CONFIG END ==================== -->
 
@@ -470,51 +477,74 @@
             function customerLogout() {
                 if (confirm("Logout karna hai?")) {
                     auth.signOut().then(() => {
-                        localStorage.removeItem("a_customer");
+                        localStorage.removeItem("santra_customer");
                         localStorage.removeItem(CART_KEY);
-                        localStorage.removeItem("a_wishlist");
+                        localStorage.removeItem("santrajet_mychoice");
                         localStorage.removeItem("pendingOTP");
                         showToast("Logged out successfully");
                         setTimeout(() => location.reload(), 500);
                     }).catch((error) => {
                         console.error("Logout error:", error);
-                        localStorage.removeItem("a_customer");
+                        localStorage.removeItem("santra_customer");
                         location.reload();
                     });
                 }
             }
 
+            // ✅ UPDATED CUSTOMER UI - 29-JUNE-2026
+            function updateCustomerButton() {
+                const customer = localStorage.getItem('santra_customer');
+                const sidebarDiv = document.getElementById('sidebarCustomerSection');
+                const logoutBtn = document.getElementById('logoutBtn');
+                const userInfo = document.getElementById('userInfo');
+                const userName = document.getElementById('userName');
+
+                if(!sidebarDiv) return;
+
+                if(customer && JSON.parse(customer).isLoggedIn) {
+                    const cust = JSON.parse(customer);
+                    const firstName = (cust.name || 'Customer').split(' ')[0];
+                    const photo = cust.photo || 'https://cdn-icons-png.flaticon.com/128/1077/1077114.png';
+
+                    sidebarDiv.innerHTML = `
+                      <button class="sidebar-btn" onclick="window.location.href='customer-account.html'" style="background:linear-gradient(135deg,#10b981,#059669);">
+                        <img src="${photo}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:2px solid white" alt="Profile">
+                        ${firstName}<br>Profile
+                      </button>
+                    `;
+
+                    if(logoutBtn) logoutBtn.classList.add('show');
+                    if(userInfo) {
+                        userInfo.classList.remove('hide');
+                        if(userName) userName.innerText = firstName;
+                    }
+                } else {
+                    sidebarDiv.innerHTML = `
+                      <button class="sidebar-btn" onclick="window.location.href='customer-account.html'">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" style="width:24px;height:24px;" alt="Login">
+                        Customer<br>Login
+                      </button>
+                    `;
+                    if(logoutBtn) logoutBtn.classList.remove('show');
+                    if(userInfo) userInfo.classList.add('hide');
+                }
+            }
+
             function checkCustomerLogin() {
-                const loginBtn = document.getElementById("loginBtn");
-                const logoutBtn = document.getElementById("logoutBtn");
-                const userInfo = document.getElementById("userInfo");
-                const userName = document.getElementById("userName");
+                updateCustomerButton();
+
                 const customerInfoBar = document.getElementById("customerInfoBar");
                 const customerNameDisplay = document.getElementById("customerNameDisplay");
                 const customerMobileDisplay = document.getElementById("customerMobileDisplay");
                 const oldCustomerBadge = document.getElementById("oldCustomerBadge");
+                const customer = JSON.parse(localStorage.getItem("santra_customer") || "{}");
 
-                if (!loginBtn ||!logoutBtn) {
-                    console.log("Login/Logout buttons not found in DOM");
-                    return;
-                }
-
-                const customer = JSON.parse(localStorage.getItem("a_customer") || "{}");
-
-                loginBtn.classList.add("hide");
-                logoutBtn.classList.remove("show");
-                logoutBtn.classList.add("hide");
-                if(userInfo) userInfo.classList.add("hide");
                 if(customerInfoBar) customerInfoBar.classList.add("hide");
 
                 if (customer.name && customer.isLoggedIn === true) {
                     if(customerInfoBar) customerInfoBar.classList.remove("hide");
                     if(customerNameDisplay) customerNameDisplay.innerText = customer.name;
                     if(customerMobileDisplay) customerMobileDisplay.innerText = customer.mobile;
-                    logoutBtn.classList.remove("hide");
-                    logoutBtn.classList.add("show");
-                    if(userInfo) userInfo.classList.remove("hide");
-                    if(userName) userName.innerText = customer.name;
 
                     if (customer.isOldCustomer && customer.totalOrders > 0) {
                         if(oldCustomerBadge) {
@@ -522,11 +552,6 @@
                             oldCustomerBadge.innerText = `🔥 ${customer.totalOrders} Orders`;
                         }
                     }
-                }
-                else {
-                    loginBtn.classList.remove("hide");
-                    logoutBtn.classList.add("hide");
-                    logoutBtn.classList.remove("show");
                 }
             }
 
@@ -658,7 +683,7 @@
                         ${p.stock === 0? '<div class="new-badge" style="background:#999">Out of Stock</div>' : ""}
                         ${images.length > 1? `<div class="img-count">📷 ${images.length}</div>` : ""}
                         <div class="image-slider" style="position:relative;" onclick="window.location.href='product.html?id=${p.id}'">
-                         ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? "active" : ""}" alt="${p.name}" style="display:${idx === 0? "block" : "none"};width:100%;height:140px;object-fit:contain;background:#f5f5f5;">`).join("")}
+                         ${images.map((img, idx) => `<img src="${img}" class="slide-img ${idx === 0? "active" : ""}" alt="${p.name}" style="display:${idx === 0? "block" : "none"};width:100%;height:140px;object-fit:contain;background:#f5f5;">`).join("")}
                           ${images.length > 1? `
                             <button class="prev-btn" onclick="changeSlide('${p.id}', -1, event)"><</button>
                             <button class="next-btn" onclick="changeSlide('${p.id}', 1, event)">></button>
@@ -708,33 +733,6 @@
                 });
             }
 
-// ==================== OLD CODE BACKUP - 23/06/2026 ====================
-// function addToCart(product) {
-// if (!product ||!product.id) {
-// showToast("❌ Product data missing");
-// return;
-// }
-// let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-// let existingIndex = cartArray.findIndex(item => item.id === product.id);
-// if (existingIndex > -1) {
-// cartArray[existingIndex].qty += 1;
-// } else {
-// cartArray.push({
-// id: product.id,
-// name: product.name || "Product",
-// price: parseFloat(product.price) || 0,
-// image: product.image || getProductImage(product),
-// productCode: product.code || product.id,
-// qty: 1
-// });
-// }
-// localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
-// showToast("✅ Added to Cart!");
-// updateCartCount();
-// }
-// ==================== BACKUP END ====================
-
-// ✅ NEW CORRECTED CODE - ARRAY FORMAT
             function addToCart(product) {
                 if (!product ||!product.id) {
                     showToast("❌ Product data missing");
@@ -767,6 +765,13 @@
                 let totalItems = cartArray.reduce((sum, item) => sum + (parseInt(item.qty) || 1), 0);
                 let cartBottom = document.getElementById("cartCountBottom");
                 if (cartBottom) cartBottom.innerText = totalItems;
+
+                const choiceArray = JSON.parse(localStorage.getItem("santrajet_mychoice") || "[]");
+                const choiceBadge = document.getElementById('choiceBadge');
+                if (choiceBadge) {
+                    choiceBadge.innerText = choiceArray.length;
+                    choiceBadge.style.display = choiceArray.length > 0? 'flex' : 'none';
+                }
             }
 
             function buyNow(productId, event) {
@@ -796,10 +801,10 @@
             function openCategories() { window.location.href = "category.html"; }
             function openCart() { window.location.href = "cart.html"; }
             function openOrders() {
-                let customer = localStorage.getItem("a_customer");
+                let customer = localStorage.getItem("santra_customer");
                 if (!customer) {
                     alert("⚠️ Please login first to see your orders");
-                    window.location.href = "customer-login.html";
+                    window.location.href = "customer-account.html";
                 } else {
                     window.location.href = "orders.html";
                 }
@@ -961,57 +966,63 @@
                 document.body.appendChild(toast);
                 setTimeout(() => document.body.removeChild(toast), 3000);
             }
-            function openVerifyOtpPopup() { alert("OTP Verify feature - Add code"); }
         </script>
-  <script>
-   // ✅ Home page me Cart + My Choice count dikhane ke liye
-function updateHomeBadges() {
-    // Cart Count
-    const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-    let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
-    const cartBadge = document.getElementById('homeCartBadge'); // Agar Cart ka badge hai to
-    if (cartBadge) {
-        cartBadge.innerText = cartQty;
-        cartBadge.style.display = cartQty > 0 ? 'flex' : 'none';
-    }
+        <script>
+            // ✅ Home page me Cart + My Choice count dikhane ke liye
+            function updateHomeBadges() {
+                // Cart Count
+                const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+                let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
+                const cartBadge = document.getElementById('homeCartBadge');
+                if (cartBadge) {
+                    cartBadge.innerText = cartQty;
+                    cartBadge.style.display = cartQty > 0? 'flex' : 'none';
+                }
 
-    // My Choice Count
-    const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-    const choiceBadge = document.getElementById('homeChoiceBadge');
-    if (choiceBadge) {
-        choiceBadge.innerText = choiceArray.length;
-        choiceBadge.style.display = choiceArray.length > 0 ? 'flex' : 'none';
-    }
-}
+                // My Choice Count
+                const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+                const choiceBadge = document.getElementById('homeChoiceBadge');
+                if (choiceBadge) {
+                    choiceBadge.innerText = choiceArray.length;
+                    choiceBadge.style.display = choiceArray.length > 0? 'flex' : 'none';
+                }
+            }
 
-// ✅ Page load hote hi count dikhao
-window.addEventListener("load", updateHomeBadges);
+            // ✅ Page load hote hi count dikhao
+            window.addEventListener("load", updateHomeBadges);
 
-// ✅ Agar dusre tab me item add hua to bhi update ho
-window.addEventListener("storage", updateHomeBadges);
-</script>
- <script>
-   // ✅ SAB PAGE ME YE FUNCTION ADD KAR - Header count update ke liye
-function updateHeaderBadges() {
-    const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-    let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
-    const cartBadge = document.getElementById('cartBadge');
-    if (cartBadge) {
-        cartBadge.innerText = cartQty;
-        cartBadge.style.display = cartQty > 0? 'flex' : 'none';
-    }
+            // ✅ Agar dusre tab me item add hua to bhi update ho
+            window.addEventListener("storage", updateHomeBadges);
+        </script>
+        <script>
+            // ✅ SAB PAGE ME YE FUNCTION ADD KAR - Header count update ke liye
+            function updateHeaderBadges() {
+                const cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+                let cartQty = cartArray.reduce((sum, item) => sum + (item.qty || 1), 0);
+                const cartBadge = document.getElementById('cartBadge');
+                if (cartBadge) {
+                    cartBadge.innerText = cartQty;
+                    cartBadge.style.display = cartQty > 0? 'flex' : 'none';
+                }
 
-    const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-    const choiceBadge = document.getElementById('choiceBadge');
-    if (choiceBadge) {
-        choiceBadge.innerText = choiceArray.length;
-        choiceBadge.style.display = choiceArray.length > 0? 'flex' : 'none';
-    }
-}
+                const choiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+                const choiceBadge = document.getElementById('choiceBadge');
+                if (choiceBadge) {
+                    choiceBadge.innerText = choiceArray.length;
+                    choiceBadge.style.display = choiceArray.length > 0? 'flex' : 'none';
+                }
+            }
 
-// ✅ Page load pe call kar
-window.addEventListener("load", updateHeaderBadges);
-window.addEventListener("storage", updateHeaderBadges); // Dusre tab me change ho to bhi update 
-</script>
+            // ✅ Page load pe call kar
+            window.addEventListener("load", updateHeaderBadges);
+            window.addEventListener("storage", updateHeaderBadges); // Dusre tab me change ho to bhi update
+        </script>
+        <script src="category.js"></script>
+        <script src="cart.js"></script>
+        <script src="mychoice.js"></script>
+        <script src="customer-account.js"></script>
+<script src="login.js"></script>
+
     </body>
 </html>
+

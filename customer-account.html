@@ -1,452 +1,124 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>👤 My Profile - SANTRA MALL</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:#f1f3f6;padding:0}
-  .header{background:#1a1a2e;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
-  .header h1{color:#e94560;font-size:20px}
-  .back-btn{background:#666;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer}
-  .container{padding:20px;max-width:600px;margin:0 auto}
-  .profile-card{background:white;border-radius:15px;padding:30px;box-shadow:0 5px 20px rgba(0,0,0,0.1);margin-bottom:20px}
-  .profile-header{text-align:center;margin-bottom:25px}
-  .profile-photo{width:120px;height:120px;border-radius:50%;margin:0 auto 15px;display:block;object-fit:cover;border:4px solid #e40046;cursor:pointer}
-  .profile-photo:hover{opacity:0.8}
-  .profile-name{font-size:24px;font-weight:bold;color:#1a1a2e;margin-bottom:5px}
-  .profile-mobile{color:#666;font-size:14px}
-  .badge-verified{background:#10b981;color:white;padding:4px 12px;border-radius:20px;font-size:12px;display:inline-block;margin-top:8px}
-  .info-row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #eee}
-  .info-row:last-child{border-bottom:none}
-  .info-label{color:#666;font-weight:bold}
-  .info-value{color:#1a1a2e;text-align:right;flex:1;margin-left:20px}
-  .edit-mode{display:none}
-  .edit-mode input,.edit-mode textarea{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:15px;margin:8px 0}
-  .edit-mode input:focus,.edit-mode textarea:focus{border-color:#e40046;outline:none}
-  .btn{width:100%;padding:14px;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-  .btn-edit{background:#3b82f6;color:white}
-  .btn-save{background:#10b981;color:white}
-  .btn-cancel{background:#757575;color:white}
-  .btn-orders{background:#ff6b00;color:white}
-  .btn-logout{background:#f44336;color:white}
-  .btn:active{transform:scale(0.98)}
-  .upload-btn{background:#3b82f6;color:white;padding:8px 15px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:10px auto;display:block}
-  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px}
-  .stat-box{background:#f8f9fa;padding:15px;border-radius:10px;text-align:center}
-  .stat-box h3{color:#e40046;font-size:28px;margin-bottom:5px}
-  .stat-box p{color:#666;font-size:13px}
-  .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:15px 20px;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.3);display:none;z-index:9999}
-  .toast.show{display:block;animation:slideIn 0.3s}
-  .loader{display:none;text-align:center;padding:10px;color:#666;font-size:13px}
-    @keyframes slideIn{from{transform:translateX(400px)}to{transform:translateX(0)}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - SANTRA MALL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f1f3f6; }
+        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
+        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .hide { display: none !important; }
+        .login-box h2 { color: #e40046; text-align: center; margin-bottom: 15px; }
+        .login-box input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
+        .login-box button { width: 100%; padding: 14px; background: #25D366; color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .profile-header { text-align: center; }
+        .profile-pic { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #e40046; margin-bottom: 10px; }
+        .stats { display: flex; gap: 10px; margin-top: 15px; }
+        .stat-box { flex: 1; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-box b { display: block; font-size: 24px; color: #e40046; }
+        .stat-box span { font-size: 12px; color: #666; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; color: #333; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .save-btn { width: 100%; padding: 14px; background: #e40046; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .logout-btn { width: 100%; padding: 12px; background: #666; color: white; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+        .mychoice-item, .order-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .mychoice-item:last-child, .order-item:last-child { border-bottom: none; }
+        .mychoice-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; float: left; margin-right: 10px; }
+        .mychoice-item p { font-size: 13px; margin: 0; }
+        .mychoice-item b { color: #e40046; font-size: 14px; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        
+        <!-- LOGIN BOX -->
+        <div class="card login-box" id="loginBox">
+            <h2>🔐 Login with WhatsApp OTP</h2>
+            <p style="color:#666;font-size:13px;margin-bottom:15px;text-align:center">Profile dekhne ke liye login kare</p>
+            
+            <div id="step1_mobile">
+                <input type="tel" id="loginMobile" placeholder="WhatsApp Mobile Number *" maxlength="10">
+                <button id="sendOtpBtn" onclick="sendOTP()">📱 Send OTP on WhatsApp</button>
+            </div>
 
-<div class="header">
-  <h1>👤 My Profile</h1>
-  <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
-</div>
+            <div id="otpBox" class="hide">
+                <div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;border-radius:8px;margin:15px 0">
+                    <h3 style="margin:0 0 8px 0;color:#856404;font-size:16px">🔐 OTP Verification Required</h3>
+                    <p style="margin:5px 0;color:#856404;font-size:13px">Santrajet ne aapke WhatsApp <b id="showMobileOTP"></b> pe OTP bheja hai.</p>
+                </div>
+                <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6" style="width:100%;padding:15px;margin:10px 0;border:2px solid #ffc107;border-radius:8px;text-align:center;font-size:20px;letter-spacing:10px;font-weight:bold">
+                <button onclick="verifyOTP()" style="width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px;cursor:pointer">✅ Verify & Continue</button>
+                <button onclick="changeNumber()" style="width:100%;padding:12px;background:#666;color:white;border:none;border-radius:8px;margin-top:8px;cursor:pointer">← Login as Other Number</button>
+            </div>
+        </div>
 
-<div class="container">
-  <!-- Profile Display Mode -->
-  <div class="profile-card" id="viewMode">
-    <div class="profile-header">
-      <img id="displayPhoto" src="https://via.placeholder.com/120?text=Photo" class="profile-photo" onclick="document.getElementById('photoInput').click()">
-      <div class="profile-name" id="displayName">Loading...</div>
-      <div class="profile-mobile" id="displayMobile">+91 XXXXXXXXXX</div>
-      <span class="badge-verified">✅ Verified Customer</span>
+        <!-- PROFILE BOX -->
+        <div class="card profile-box hide" id="profileBox">
+            <div class="profile-header">
+                <img id="profilePic" class="profile-pic" src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" alt="Profile">
+                <input type="file" id="photoInput" accept="image/*" style="display:none">
+                <button onclick="document.getElementById('photoInput').click()" style="background:#e40046;color:white;border:none;padding:8px 15px;border-radius:5px;font-size:12px;cursor:pointer">Change Photo</button>
+            </div>
+
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="fullName" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" id="mobileNum" readonly style="background:#f5f5f5">
+            </div>
+            <div class="form-group">
+                <label>Email (Optional)</label>
+                <input type="email" id="emailId" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label>Full Address</label>
+                <input type="text" id="fullAddress" placeholder="House no, Street, City, PIN">
+            </div>
+
+            <button class="save-btn" onclick="saveProfile()">💾 Save Profile</button>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats" id="stats">
+            <div class="stat-box">
+                <b id="totalOrders">0</b>
+                <span>Total Orders</span>
+            </div>
+            <div class="stat-box">
+                <b id="totalSpent">₹0</b>
+                <span>Total Spent</span>
+            </div>
+        </div>
+
+        <!-- MY CHOICE -->
+        <div class="card" id="myChoiceCard">
+            <h3 style="color:#e40046;margin-bottom:15px">😍 My Choice</h3>
+            <div id="myChoiceList"></div>
+            <button onclick="window.location.href='mychoice.html'" style="width:100%;padding:12px;background:#e40046;color:white;border:none;border-radius:8px;margin-top:10px;font-weight:bold;cursor:pointer">View All My Choice →</button>
+        </div>
+
+        <!-- MY ORDERS -->
+        <div class="card" id="ordersCard">
+            <h3 style="color:#e40046;margin-bottom:15px">📦 My Orders</h3>
+            <div id="ordersList"></div>
+            <button onclick="window.location.href='orders.html'" style="width:100%;padding:12px;background:#ff9800;color:white;border:none;border-radius:8px;margin-top:10px;font-weight:bold;cursor:pointer">View All Orders →</button>
+        </div>
+
     </div>
 
-    <div class="info-row">
-      <span class="info-label">📧 Email:</span>
-      <span class="info-value" id="displayEmail">Not provided</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">📍 Location:</span>
-      <span class="info-value" id="displayLocation">Not provided</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">📦 Total Orders:</span>
-      <span class="info-value" id="displayOrders">0</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">📅 Member Since:</span>
-      <span class="info-value" id="displayJoined">-</span>
-    </div>
-
-    <button class="btn btn-edit" onclick="enableEditMode()">✏️ Edit Profile</button>
-    <button class="btn btn-orders" onclick="window.location.href='orders.html'">📦 My Orders</button>
-    <button class="btn btn-logout" onclick="customerLogout()">🚪 Logout</button>
-  </div>
-
-  <!-- Profile Edit Mode -->
-  <div class="profile-card edit-mode" id="editMode">
-    <h2 style="color:#e40046;margin-bottom:20px;text-align:center">✏️ Edit Profile</h2>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="./secrets.js"></script>
     
-    <img id="editPhoto" src="https://via.placeholder.com/120?text=Photo" class="profile-photo">
-    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="uploadPhotoToFirebase()">
-    <button class="upload-btn" onclick="document.getElementById('photoInput').click()">📷 Change Photo</button>
-    <div class="loader" id="uploadLoader">⏳ Uploading...</div>
-
-    <label style="font-weight:bold;color:#333;font-size:14px">Full Name *</label>
-    <input type="text" id="editName" placeholder="Full Name" required>
-
-    <label style="font-weight:bold;color:#333;font-size:14px">Mobile Number *</label>
-    <input type="tel" id="editMobile" placeholder="Mobile" readonly style="background:#f5f5f5">
-
-    <label style="font-weight:bold;color:#333;font-size:14px">Email</label>
-    <input type="email" id="editEmail" placeholder="Email (Optional)">
-
-    <label style="font-weight:bold;color:#333;font-size:14px">Full Address / Location *</label>
-    <textarea id="editLocation" placeholder="Full Address" rows="3" required></textarea>
-
-    <button class="btn btn-save" onclick="saveProfile()">💾 Save Changes</button>
-    <button class="btn btn-cancel" onclick="cancelEdit()">❌ Cancel</button>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-grid">
-    <div class="stat-box">
-      <h3 id="statOrders">0</h3>
-      <p>Total Orders</p>
-    </div>
-    <div class="stat-box">
-      <h3 id="statSpent">₹0</h3>
-      <p>Total Spent</p>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- ==================== FIREBASE SDK + STORAGE ==================== -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-<script src="secrets.js"></script>
-<script>
-/*
-=================================
-OLD CODE BACKUP - 09/06/2026 - PURANA CODE
-=================================
-
-// ❌ OLD: ImgBB API use kar rahe the - Key expose hoti thi
-// const IMGBB_API_KEY = 'YOUR_IMGBB_KEY';
-// fetch('https://api.imgbb.com/1/upload', {
-// method: 'POST',
-// body: formData
-// })
-
-// ❌ OLD: Profile page tha hi nahi
-// Customer login ke baad direct index.html pe bhej deta tha
-
-// ❌ OLD: Photo upload nahi tha
-// ❌ OLD: Location field nahi tha
-// ❌ OLD: Edit profile nahi tha
-
-=================================
-*/
-
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage(); // ✅ FREE Firebase Storage
-const auth = firebase.auth();
-
-let currentCustomer = null;
-
-// ✅ Page Load - Profile Load Karo
-window.onload = function() {
-  loadProfile();
-  loadStats();
-}
-
-// ✅ Profile Load from LocalStorage + Firebase
-function loadProfile() {
-  let customer = localStorage.getItem('santra_customer');
-  
-  if(!customer) {
-    showToast('❌ Please login first!');
-    setTimeout(() => window.location.href = 'customer-login.html', 1500);
-    return;
-  }
-  
-  customer = JSON.parse(customer);
-  
-  if(!customer.isLoggedIn) {
-    showToast('❌ Session expired! Please login again.');
-    setTimeout(() => window.location.href = 'customer-login.html', 1500);
-    return;
-  }
-  
-  currentCustomer = customer;
-  
-  // ✅ TAB NAME CHANGE
-  document.title = `👤 My Profile - ${customer.name} - SANTRA MALL`;
-  
-  // Display Mode me data dikhao
-  document.getElementById('displayName').innerText = customer.name;
-  document.getElementById('displayMobile').innerText = `+91 ${customer.mobile}`;
-  document.getElementById('displayEmail').innerText = customer.email || 'Not provided';
-  document.getElementById('displayLocation').innerText = customer.location || 'Not provided';
-  document.getElementById('displayPhoto').src = customer.photo || 'https://via.placeholder.com/120?text=Photo';
-  
-  // Firebase se latest data fetch karo
-  db.collection('customers').doc(customer.mobile).get().then(doc => {
-    if(doc.exists) {
-      const data = doc.data();
-      document.getElementById('displayOrders').innerText = data.totalOrders || 0;
-      document.getElementById('displayJoined').innerText = data.createdAt || 'N/A';
-      
-      // LocalStorage update karo
-      const updatedCustomer = {...customer,...data};
-      localStorage.setItem('santra_customer', JSON.stringify(updatedCustomer));
-      currentCustomer = updatedCustomer;
-    }
-  });
-}
-
-// ✅ Edit Mode Enable
-function enableEditMode() {
-  document.getElementById('viewMode').style.display = 'none';
-  document.getElementById('editMode').style.display = 'block';
-  
-  document.getElementById('editName').value = currentCustomer.name || '';
-  document.getElementById('editMobile').value = currentCustomer.mobile || '';
-  document.getElementById('editEmail').value = currentCustomer.email || '';
-  document.getElementById('editLocation').value = currentCustomer.location || '';
-  document.getElementById('editPhoto').src = currentCustomer.photo || 'https://via.placeholder.com/120?text=Photo';
-}
-
-// ✅ Cancel Edit
-function cancelEdit() {
-  document.getElementById('editMode').style.display = 'none';
-  document.getElementById('viewMode').style.display = 'block';
-}
-
-// ✅ Photo Upload to Firebase Storage - 100% FREE + SECURE
-function uploadPhotoToFirebase() {
-  const file = document.getElementById('photoInput').files[0];
-  if(!file) return;
-  
-  // Check file size - 2MB max
-  if(file.size > 2 * 1024 * 1024) {
-    showToast('❌ Photo size 2MB se kam honi chahiye!');
-    return;
-  }
-  
-  document.getElementById('uploadLoader').style.display = 'block';
-  
-  // Firebase Storage path: profile_photos/mobile/timestamp.jpg
-  const fileName = `profile_photos/${currentCustomer.mobile}/${Date.now()}.jpg`;
-  const storageRef = storage.ref(fileName);
-  
-  // Upload karo
-  const uploadTask = storageRef.put(file);
-  
-  uploadTask.on('state_changed', 
-    (snapshot) => {
-      // Progress
-      let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      document.getElementById('uploadLoader').innerText = `⏳ Uploading... ${Math.round(progress)}%`;
-    }, 
-    (error) => {
-      // Error
-      document.getElementById('uploadLoader').style.display = 'none';
-      showToast('❌ Upload failed: ' + error.message);
-    }, 
-    () => {
-      // Success - URL get karo
-      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        document.getElementById('editPhoto').src = downloadURL;
-        document.getElementById('uploadLoader').style.display = 'none';
-        showToast('✅ Photo uploaded successfully!');
-      });
-    }
-  );
-}
-
-// ✅ Save Profile - Firebase + LocalStorage Sync
-function saveProfile() {
-  const name = document.getElementById('editName').value.trim();
-  const mobile = document.getElementById('editMobile').value.trim();
-  const email = document.getElementById('editEmail').value.trim();
-  const location = document.getElementById('editLocation').value.trim();
-  const photo = document.getElementById('editPhoto').src;
-  
-  if(!name ||!location) {
-    showToast('❌ Name aur Location required hai!');
-    return;
-  }
-  
-  const customerData = {
-    name: name,
-    mobile: mobile,
-    email: email,
-    photo: photo,
-    location: location,
-    loginTime: currentCustomer.loginTime,
-    isLoggedIn: true,
-    isOldCustomer: currentCustomer.isOldCustomer || false,
-    totalOrders: currentCustomer.totalOrders || 0,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-  
-  // Firebase update - SAB FILES SE CONNECT
-  db.collection('customers').doc(mobile).set(customerData, { merge: true })
-.then(() => {
-    // LocalStorage update - SAB FILES SYNC
-    localStorage.setItem('santra_customer', JSON.stringify(customerData));
-    currentCustomer = customerData;
-    
-    // ✅ TAB NAME UPDATE
-    document.title = `👤 My Profile - ${name} - SANTRA MALL`;
-    
-    showToast('✅ Profile Saved Successfully!');
-    
-    // View mode me wapas jao
-    setTimeout(() => {
-      cancelEdit();
-      loadProfile();
-    }, 1000);
-  })
-.catch(err => showToast('❌ Error: ' + err));
-}
-
-// ✅ Load Stats - Orders + Total Spent
-function loadStats() {
-  if(!currentCustomer) return;
-  
-  db.collection('orders').where('customerMobile', '==', currentCustomer.mobile).get()
-.then(snap => {
-    let totalOrders = snap.size;
-    let totalSpent = 0;
-    
-    snap.forEach(doc => {
-      const order = doc.data();
-      totalSpent += order.totalAmount || 0;
-    });
-    
-    document.getElementById('statOrders').innerText = totalOrders;
-    document.getElementById('statSpent').innerText = `₹${totalSpent}`;
-  });
-}
-
-// ✅ Logout - Sab clear karo
-function customerLogout() {
-  if(confirm('Logout karna hai?')) {
-    localStorage.removeItem('santra_customer');
-    localStorage.removeItem('santra_cart');
-    localStorage.removeItem('santra_wishlist');
-    showToast('✅ Logged out successfully');
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1000);
-  }
-}
-
-// ✅ Toast Message
-function showToast(message) {
-  const toast = document.getElementById('toast');
-  toast.innerText = message;
-  toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-}
-</script>
-
-<!-- ==================== BACKUP PROTECTION TERMINAL - 09/06/2026, 11:45 PM ==================== -->
-<script>
-console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 09 June 2026, 11:45 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
-
-window.santraBackup = {
-  version: '2.2',
-  timestamp: '2026-06-09T23:45:00+05:30',
-  location: 'Nawai, Rajasthan',
-
-  backupLocalStorage: function() {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orders: localStorage.getItem('santra_orders'),
-      customer: localStorage.getItem('santra_customer'),
-      cart: localStorage.getItem('santra_cart'),
-      wishlist: localStorage.getItem('santra_wishlist')
-    };
-    localStorage.setItem('santra_backup_2026_06_09_2345', JSON.stringify(backup));
-    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
-    return backup;
-  },
-
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100);
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-
-  restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_09_2345');
-    if(backup) {
-      const data = JSON.parse(backup);
-      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.orders) localStorage.setItem('santra_orders', data.orders);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
-        if(data.cart) localStorage.setItem('santra_cart', data.cart);
-        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
-        alert('✅ Backup Restored! Reloading...');
-        location.reload();
-      }
-    } else {
-      alert('❌ No backup found for 09 June 2026, 11:45 PM');
-    }
-  },
-
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-09T23:45:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-09_2345.json`;
-    link.click();
-    console.log('✅ Backup Exported');
-  }
-};
-
-window.santraBackup.backupLocalStorage();
-
-console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
-console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
-</script>
+    <!-- ✅ JS FILE LINK KAR - YAHI SAHI TAREEKA HAI -->
+    <script src="customer-account.js"></script>
 </body>
 </html>

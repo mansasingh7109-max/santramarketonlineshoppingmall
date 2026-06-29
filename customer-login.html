@@ -1,547 +1,413 @@
-<!DOCTYPE html>
-<html lang="hi">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔐 Customer Login - SANTRA MALL</title>
-  <!-- ✅ Eruda Console for Mobile Debugging -->
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-  <script>eruda.init();</script>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:#f1f3f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-  .login-box{background:white;padding:30px;border-radius:15px;box-shadow:0 5px 30px rgba(0,0,0,0.2);width:100%;max-width:400px}
-  .login-box h2{color:#e40046;text-align:center;margin-bottom:25px}
-  .login-box input,.login-box textarea{width:100%;padding:14px;margin:8px 0;border:2px solid #ddd;border-radius:8px;font-size:16px}
-  .login-box input:focus,.login-box textarea:focus{border-color:#e40046;outline:none}
-  .btn{width:100%;padding:15px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-  .btn:disabled{background:#ccc;cursor:not-allowed}
-  .btn:active{transform:scale(0.98)}
-  .btn-otp{background:#ff6b00}
-  .info{background:#e8f5e9;padding:12px;border-radius:8px;margin:15px 0;font-size:13px;color:#2e7d32;border-left:4px solid #4caf50}
-  .info.old{background:#fff3cd;color:#856404;border-left:4px solid #ff9800}
-  .back{text-align:center;margin-top:15px}
-  .back a{color:#666;text-decoration:none}
-  .popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center}
-  .popup-box{background:white;padding:25px;border-radius:15px;max-width:350px;text-align:center}
-  .popup-box h3{color:#e40046;margin-bottom:15px}
-  .popup-btn{padding:12px 25px;border:none;border-radius:8px;font-weight:bold;margin:5px;cursor:pointer}
-  .btn-yes{background:#4caf50;color:white}
-  .btn-no{background:#f44336;color:white}
-  .otp-section{display:none;margin-top:15px;padding:15px;background:#f9f9f9;border-radius:8px}
-  .profile-section{display:none}
-  .profile-photo{width:100px;height:100px;border-radius:50%;margin:0 auto 15px;display:block;object-fit:cover;border:3px solid #e40046}
-  .upload-btn{background:#3b82f6;color:white;padding:8px 15px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:10px 0}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Login - SANTRA MALL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {--accent: #e40046;--text: #212121;--green: #10b981;--whatsapp: #25d366;}
+        * {margin: 0;padding: 0;box-sizing: border-box;font-family: "Poppins", Arial, sans-serif;}
+        body {background: #f1f3f6;min-height: 100vh;display: flex;align-items: center;justify-content: center;padding: 20px;}
+   .login-container {background: white;border-radius: 16px;padding: 30px;max-width: 450px;width: 100%;box-shadow: 0 4px 20px rgba(0,0,0,0.1);}
+   .logo {text-align: center;margin-bottom: 25px;}
+   .logo h1 {color: var(--accent);font-size: 28px;margin-bottom: 5px;}
+   .logo p {color: #666;font-size: 14px;}
+   .form-group {margin-bottom: 18px;}
+   .form-group label {display: block;margin-bottom: 6px;font-weight: 600;font-size: 14px;color: var(--text);}
+   .form-group input {width: 100%;padding: 14px;border: 2px solid #e0e0;border-radius: 8px;font-size: 15px;transition: all 0.3s;}
+   .form-group input:focus {outline: none;border-color: var(--accent);}
+   .btn {width: 100%;padding: 16px;background: var(--accent);color: white;border: none;border-radius: 8px;font-weight: 700;font-size: 16px;cursor: pointer;margin-top: 10px;}
+   .btn:disabled {background: #ccc;cursor: not-allowed;}
+   .btn-whatsapp {background: var(--whatsapp);}
+   .divider {text-align: center;margin: 25px 0;color: #999;font-size: 14px;position: relative;}
+   .divider::before,.divider::after {content: '';position: absolute;top: 50%;width: 40%;height: 1px;background: #e0e0e0;}
+   .divider::before {left: 0;}
+   .divider::after {right: 0;}
+   .btn-google {width: 100%;padding: 14px;background: white;color: #333;border: 2px solid #e0e0e0;border-radius: 8px;font-weight: 600;font-size: 15px;cursor: pointer;display: flex;align-items: center;justify-content: center;gap: 10px;}
+   .btn-google img {width: 20px;height: 20px;}
+   .error {background: #fee;padding: 12px;border-radius: 8px;color: #c00;font-size: 14px;margin-bottom: 15px;display: none;}
+   .success {background: #efe;padding: 12px;border-radius: 8px;color: #060;font-size: 14px;margin-bottom: 15px;display: none;}
+   .info {background: #e0f2fe;padding: 12px;border-radius: 8px;color: #0369a1;font-size: 13px;margin-bottom: 15px;}
+   .back-link {text-align: center;margin-top: 20px;}
+   .back-link a {color: var(--accent);text-decoration: none;font-weight: 600;font-size: 14px;}
+   .profile-box {text-align: center;padding: 20px;}
+   .profile-photo-wrapper {position: relative;width: 100px;height: 100px;margin: 0 auto 15px;}
+   .profile-photo {width: 100px;height: 100px;border-radius: 50%;border: 4px solid var(--accent);object-fit: cover;cursor: pointer;}
+   .upload-icon {position: absolute;bottom: 0;right: 0;background: var(--accent);color: white;width: 32px;height: 32px;border-radius: 50%;display: flex;align-items: center;justify-content: center;cursor: pointer;border: 3px solid white;}
+       #photoInput {display: none;}
+   .profile-name {font-size: 22px;font-weight: bold;margin-bottom: 5px;}
+   .profile-info {color: #666;font-size: 14px;margin: 5px 0;}
+   .profile-status {color: var(--green);font-weight: 600;margin-top: 10px;}
+   .btn-logout {width: 100%;padding: 14px;background: #ef4444;color: white;border: none;border-radius: 8px;font-weight: 600;font-size: 15px;cursor: pointer;margin-top: 20px;}
+   .otp-timer {text-align: center;color: #666;font-size: 13px;margin-top: 10px;}
+   .whatsapp-link {background: #dcf8c6;padding: 15px;border-radius: 8px;margin: 15px 0;text-align: center;border: 2px solid var(--whatsapp);}
+   .whatsapp-link a {color: var(--whatsapp);font-weight: 700;text-decoration: none;font-size: 15px;}
+   .optional-note {background: #fff3cd;padding: 15px;border-radius: 8px;margin-bottom: 20px;border: 1px solid #ffc107;text-align: center;}
+    </style>
 </head>
 <body>
+    <div class="login-container" id="loginBox">
+        <div class="logo">
+            <h1>🛒 SANTRA MALL</h1>
+            <p>Customer Profile</p>
+        </div>
 
-<!-- LOGIN FORM -->
-<div class="login-box" id="loginForm">
-  <h2>🛒 SANTRA MALL Login</h2>
+        <!-- ✅ CORRECTION: Optional Note Add Kiya -->
+        <div class="optional-note">
+            <strong>⚠️ Optional:</strong> Login zaruri nahi hai. Order bina login ke bhi kar sakte ho.<br>
+            Profile banana chahte ho to login karo.
+        </div>
 
-  <div class="info" id="infoBox">
-    <b>📱 WhatsApp OTP Login</b><br>
-    Step 1: Name + Mobile dalo<br>
-    Step 2: Admin WhatsApp pe OTP bhejega<br>
-    Step 3: OTP yaha daalo
-  </div>
+        <div class="error" id="errorMsg"></div>
+        <div class="success" id="successMsg"></div>
 
-  <input type="text" id="custName" placeholder="Full Name *" required>
-  <input type="tel" id="custMobile" placeholder="WhatsApp Number *" maxlength="10" required>
-  <input type="email" id="custEmail" placeholder="Email (Optional)">
+        <div id="requestOtpSection">
+            <div class="info">
+                📱 <strong>WhatsApp OTP Login:</strong> Apna naam, mobile aur email daalo. Admin aapko WhatsApp par OTP bhejega.
+            </div>
 
-  <button class="btn" id="loginBtn" onclick="checkAndLogin()">📲 Login / Request OTP</button>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="customerName" placeholder="Enter your full name" required>
+            </div>
 
-  <div class="otp-section" id="otpSection">
-    <p style="font-size:13px;color:#666;margin-bottom:10px">Admin ne WhatsApp pe OTP bhej diya? Yaha dalo:</p>
-    <input type="text" id="otpInput" placeholder="6 Digit OTP" maxlength="6">
-    <button class="btn btn-otp" onclick="verifyOTP()">✅ Verify & Login</button>
-  </div>
+            <div class="form-group">
+                <label>Mobile Number *</label>
+                <input type="tel" id="customerMobile" placeholder="10-digit WhatsApp number" maxlength="10" required>
+            </div>
 
-  <div class="back">
-    <a href="index.html">← Back to Home</a>
-  </div>
-</div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="customerEmail" placeholder="Enter your email" required>
+            </div>
 
-<!-- PROFILE FORM - OTP VERIFY KE BAAD DIKHEGA -->
-<div class="login-box profile-section" id="profileForm">
-  <h2>👤 My Profile</h2>
+            <button type="button" class="btn btn-whatsapp" id="requestOtpBtn" onclick="requestWhatsAppOTP()">
+                📱 Request OTP on WhatsApp
+            </button>
+        </div>
 
-  <div class="info">
-    <b>✅ Login Successful!</b><br>
-    Profile complete karo - Ye detail order me auto-fill hogi
-  </div>
+        <div id="verifyOtpSection" style="display: none;">
+            <div class="info">
+                ✅ <strong>Request Sent!</strong><br>
+                Admin aapko WhatsApp par OTP bhejega. Wait karo aur OTP yaha daalo.
+            </div>
 
-  <img id="profilePhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo">
-  <input type="file" id="photoUpload" accept="image/*" style="display:none" onchange="uploadPhoto()">
-  <button class="upload-btn" onclick="document.getElementById('photoUpload').click()">📷 Upload Photo</button>
+            <div class="whatsapp-link" id="whatsappLinkBox" style="display: none;">
+                <p style="margin-bottom: 8px;font-size: 13px;">Agar WhatsApp auto nahi khula:</p>
+                <a href="#" id="manualWhatsAppLink" target="_blank">👉 Click Here to Open WhatsApp</a>
+            </div>
 
-  <input type="text" id="profileName" placeholder="Full Name *" required>
-  <input type="tel" id="profileMobile" placeholder="Mobile Number *" maxlength="10" readonly style="background:#f5f5f5">
-  <input type="email" id="profileEmail" placeholder="Email (Optional)">
-  <textarea id="profileLocation" placeholder="Full Address / Location *" rows="3" required></textarea>
+            <div class="form-group">
+                <label>Enter OTP *</label>
+                <input type="text" id="otpInput" placeholder="6-digit OTP from WhatsApp" maxlength="6">
+            </div>
 
-  <button class="btn" style="background:#4caf50" onclick="saveProfile()">💾 Save Profile</button>
-  <button class="btn" style="background:#f44336" onclick="customerLogout()">🚪 Logout</button>
+            <button type="button" class="btn" id="verifyOtpBtn" onclick="verifyWhatsAppOTP()">
+                ✓ Verify & Create Profile
+            </button>
 
-  <div class="back">
-    <a href="index.html">← Back to Home</a>
-  </div>
-</div>
+            <div class="otp-timer" id="otpTimer"></div>
 
-<!-- Security Popup -->
-<div class="popup" id="securityPopup">
-  <div class="popup-box">
-    <h3>⚠️ Security Check</h3>
-    <p id="securityMsg" style="margin:15px 0;font-size:14px"></p>
-    <button class="popup-btn btn-yes" onclick="confirmNewUser()">Yes, I'm New User</button>
-    <button class="popup-btn btn-no" onclick="closePopup()">No, Cancel</button>
-  </div>
-</div>
+            <button type="button" class="btn" style="background: #999;margin-top: 10px;" onclick="backToRequest()">
+                ← Change Details
+            </button>
+        </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="secrets.js"></script>
-<script>
-/*
+        <div class="divider">OR</div>
 
-OLD CODE BACKUP - 10/06/2026 - PURANA CODE
+        <button class="btn-google" onclick="googleLogin()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            Continue with Google
+        </button>
 
-// ❌ OLD: Login button click pe koi response nahi tha kyunki Firebase Rules me login_requests allow nahi tha
-// ❌ OLD: Error handling nahi tha, button disable nahi hota tha
-// ❌ OLD: secrets.js load check nahi tha
+        <div class="back-link">
+            <a href="index.html">← Continue Shopping Without Login</a>
+        </div>
+    </div>
 
-function checkAndLogin() {
-  const name = document.getElementById('custName').value.trim();
-  const mobile = document.getElementById('custMobile').value.trim();
-  const email = document.getElementById('custEmail').value.trim();
-  if (!name || mobile.length!== 10) {
-    alert('❌ Name aur 10 digit mobile required hai!');
-    return;
-  }
-  currentUserData = {name, mobile, email};
-  db.collection('customers').doc(mobile).get().then(doc => {
-    //... baaki code
-  });
-}
+    <!-- Profile Section -->
+    <div class="login-container" id="profileBox" style="display: none;">
+        <div class="profile-box">
+            <div class="profile-photo-wrapper">
+                <img src="https://via.placeholder.com/100" class="profile-photo" id="profilePhoto" alt="Profile">
+                <div class="upload-icon" onclick="document.getElementById('photoInput').click()">📷</div>
+                <input type="file" id="photoInput" accept="image/*" onchange="uploadPhoto(event)">
+            </div>
+            <div class="profile-name" id="profileName">Customer Name</div>
+            <div class="profile-info" id="profileEmail">email@example.com</div>
+            <div class="profile-info" id="profileMobile">+91 9876543210</div>
+            <div class="profile-status" id="profileStatus">✓ Verified</div>
 
-NEW CODE STARTS BELOW - 10/06/2026
+            <button class="btn" onclick="window.location.href='my-orders.html'" style="margin-top: 20px;">
+                📦 My Orders
+            </button>
+            <button class="btn" onclick="window.location.href='mychoice.html'" style="margin-top: 10px;">
+                😍 My Choice
+            </button>
+            <button class="btn" onclick="window.location.href='index.html'" style="margin-top: 10px;">
+                🛒 Continue Shopping
+            </button>
+            <button class="btn-logout" onclick="logout()">
+                🚪 Logout
+            </button>
+        </div>
+    </div>
 
-*/
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
-// ✅ FIREBASE INIT + ERROR CHECK
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-console.log('Firebase Connected:', typeof firebase!== 'undefined');
-console.log('Firestore Connected:', typeof db!== 'undefined');
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+          authDomain: "santramarketshoppingmall.firebaseapp.com",
+          databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
+          projectId: "santramarketshoppingmall",
+          storageBucket: "santramarketshoppingmall.appspot.com",
+          messagingSenderId: "398490252924",
+          appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+          measurementId: "G-ZW1ZR8HETY"
+        };
 
-const ADMIN_WHATSAPP = "917725960293";
-const IMGBB_API_KEY = localStorage.getItem('imgbb_key') || 'YOUR_IMGBB_KEY';
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const rtdb = firebase.database();
+        const storage = firebase.storage();
 
-let currentUserData = null;
+        const ADMIN_WHATSAPP = "918769171078";
+        let currentRequestId = null;
+        let otpTimerInterval = null;
 
-// ✅ FIXED: Step 1: Check karo Old Customer hai ya New
-function checkAndLogin() {
-  console.log('Login Button Clicked');
-
-  const name = document.getElementById('custName').value.trim();
-  const mobile = document.getElementById('custMobile').value.trim();
-  const email = document.getElementById('custEmail').value.trim();
-
-  if (!name || mobile.length!== 10) {
-    alert('❌ Name aur 10 digit mobile required hai!');
-    return;
-  }
-
-  // ✅ Button disable karo taki double click na ho
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true;
-  btn.innerText = 'Checking...';
-
-  currentUserData = {name, mobile, email};
-
-  db.collection('customers').doc(mobile).get().then(doc => {
-    if(doc.exists) {
-      const data = doc.data();
-      if(data.verified === true) {
-        if(data.name && data.name!== name) {
-          document.getElementById('securityMsg').innerHTML =
-            `Ye mobile number <b>${data.name}</b> naam se registered tha.<br><br>Ab aap <b>${name}</b> naam se login kar rahe ho.<br><br>Kya aap naya user ho?`;
-          document.getElementById('securityPopup').style.display = 'flex';
-          btn.disabled = false;
-          btn.innerText = '📲 Login / Request OTP';
-          return;
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.innerText = msg;
+            el.style.display = 'block';
+            document.getElementById('successMsg').style.display = 'none';
         }
-        directLogin(mobile, data);
-      } else {
-        requestOTP(name, mobile, email, true);
-      }
-    } else {
-      requestOTP(name, mobile, email, false);
-    }
-  }).catch(err => {
-    // ✅ ERROR DIKHAO
-    alert('Firebase Error: ' + err.message);
-    console.error('Login Error:', err);
-    btn.disabled = false;
-    btn.innerText = '📲 Login / Request OTP';
-  });
-}
 
-// ✅ Direct Login for Old Verified Customer
-function directLogin(mobile, data) {
-  const customerData = {
-    name: data.name,
-    mobile: mobile,
-    email: data.email || '',
-    photo: data.photo || '',
-    location: data.location || '',
-    loginTime: Date.now(),
-    isLoggedIn: true,
-    isOldCustomer: true,
-    totalOrders: data.totalOrders || 0
-  };
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.innerText = msg;
+            el.style.display = 'block';
+            document.getElementById('errorMsg').style.display = 'none';
+        }
 
-  localStorage.setItem('santra_customer', JSON.stringify(customerData));
+        async function requestWhatsAppOTP() {
+            const name = document.getElementById('customerName').value.trim();
+            const mobile = document.getElementById('customerMobile').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
 
-  db.collection('customers').doc(mobile).update({
-    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-  });
+            if (!name ||!mobile ||!email) return showError("Please fill all fields");
+            if (mobile.length!== 10 ||!/^\d+$/.test(mobile)) return showError("Please enter valid 10-digit mobile number");
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError("Please enter valid email address");
 
-  document.getElementById('infoBox').className = 'info old';
-  document.getElementById('infoBox').innerHTML =
-    `🔥 <b>Welcome Back ${data.name}!</b><br>You have ${data.totalOrders || 0} past orders.<br>Direct login successful!`;
+            const btn = document.getElementById('requestOtpBtn');
+            btn.disabled = true;
+            btn.innerText = "Sending Request...";
 
-  document.title = `👤 My Profile - ${data.name} - SANTRA MALL`;
+            try {
+                const requestId = "REQ" + Date.now();
+                currentRequestId = requestId;
 
-  setTimeout(() => {
-    showProfileForm(customerData);
-  }, 1500);
-}
+                await rtdb.ref('otp_requests/' + requestId).set({
+                    requestId: requestId,
+                    name: name,
+                    mobile: mobile,
+                    email: email,
+                    status: 'pending',
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
 
-// ✅ OTP Request for New Customer or Unverified
-function requestOTP(name, mobile, email, isOldButUnverified) {
-  db.collection('login_requests').doc(mobile).set({
-    name: name,
-    mobile: mobile,
-    email: email,
-    otp: '',
-    status: 'pending',
-    requestedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    requestedTime: Date.now(),
-    isOldCustomer: isOldButUnverified
-  }).then(() => {
-    db.collection('customers').doc(mobile).set({
-      name: name,
-      mobile: mobile,
-      email: email,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdTime: Date.now(),
-      verified: false,
-      totalOrders: 0,
-      lastLogin: Date.now()
-    }, { merge: true });
+                const adminMsg = `🔔 *NEW OTP REQUEST - SANTRA MALL*\n\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n📧 Email: ${email}\n🆔 Request ID: ${requestId}\n\n*Action:* Admin panel me OTP generate karke customer ko WhatsApp par bhejo.`;
 
-    localStorage.setItem('pendingOTP', JSON.stringify({name, mobile, email, time: Date.now()}));
+                const whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(adminMsg)}`;
+                const newWindow = window.open(whatsappURL, '_blank');
 
-    let msg = `🔐 *NEW LOGIN OTP REQUEST*\n\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n📧 Email: ${email || 'N/A'}\n\n${isOldButUnverified? '⚠️ OLD CUSTOMER - Unverified' : '🆕 NEW CUSTOMER'}\n\nAdmin panel se OTP generate karke customer ko bhejo.`;
+                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                    document.getElementById('whatsappLinkBox').style.display = 'block';
+                    document.getElementById('manualWhatsAppLink').href = whatsappURL;
+                    showError("Popup blocked! Click the WhatsApp link below.");
+                } else {
+                    showSuccess("✅ Request sent! Admin will send OTP to your WhatsApp soon.");
+                }
 
-    window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+                document.getElementById('requestOtpSection').style.display = 'none';
+                document.getElementById('verifyOtpSection').style.display = 'block';
+                startOtpTimer();
+                listenForOTPApproval(requestId);
 
-    document.getElementById('otpSection').style.display = 'block';
-    document.getElementById('loginBtn').style.display = 'none';
-    document.getElementById('infoBox').innerHTML =
-      `<b>✅ Request Sent!</b><br>Admin ko WhatsApp gaya.<br>2-5 min me OTP aayega. Yaha dalo.`;
+            } catch (error) {
+                showError("Error: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "📱 Request OTP on WhatsApp";
+            }
+        }
 
-    listenForOTP(mobile);
-  }).catch(err => {
-    alert('Firebase Error: ' + err.message);
-    console.error('Request OTP Error:', err);
-    document.getElementById('loginBtn').disabled = false;
-    document.getElementById('loginBtn').innerText = '📲 Login / Request OTP';
-  });
-}
+        function listenForOTPApproval(requestId) {
+            rtdb.ref('otp_requests/' + requestId).on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    if (data.status === 'approved' && data.otp) {
+                        showSuccess("🎉 OTP Generated! Check your WhatsApp: " + data.otp);
+                        clearInterval(otpTimerInterval);
+                        document.getElementById('otpTimer').innerText = "✅ OTP received on WhatsApp";
+                    }
+                }
+            });
+        }
 
-// ✅ Real-time OTP Listener
-function listenForOTP(mobile) {
-  db.collection('login_requests').doc(mobile).onSnapshot(doc => {
-    if(doc.exists && doc.data().otp && doc.data().otp.length === 6) {
-      document.getElementById('otpInput').value = doc.data().otp;
-      document.getElementById('infoBox').className = 'info';
-      document.getElementById('infoBox').innerHTML =
-        `<b>🎉 OTP Received!</b><br>Auto-filled: ${doc.data().otp}<br>Verify button dabao.`;
-    }
-  });
-}
+        function startOtpTimer() {
+            let seconds = 300;
+            const timerEl = document.getElementById('otpTimer');
+            otpTimerInterval = setInterval(() => {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                timerEl.innerText = `⏰ Waiting for OTP: ${mins}:${secs.toString().padStart(2, '0')}`;
+                if (seconds <= 0) {
+                    clearInterval(otpTimerInterval);
+                    timerEl.innerText = "⚠️ OTP expired. Please request again.";
+                }
+                seconds--;
+            }, 1000);
+        }
 
-// ✅ OTP Verify Karo + Profile Form Open
-function verifyOTP() {
-  const otp = document.getElementById('otpInput').value.trim();
-  const mobile = currentUserData.mobile;
+        async function verifyWhatsAppOTP() {
+            const otp = document.getElementById('otpInput').value.trim();
+            if (!otp || otp.length!== 6) return showError("Please enter 6-digit OTP");
+            if (!currentRequestId) return showError("Please request OTP first");
 
-  if(otp.length!== 6) {
-    alert('❌ 6 digit OTP daalo!');
-    return;
-  }
+            const btn = document.getElementById('verifyOtpBtn');
+            btn.disabled = true;
+            btn.innerText = "Verifying...";
 
-  db.collection('login_requests').doc(mobile).get().then(doc => {
-    if(!doc.exists) {
-      alert('❌ Request not found! Pehle login request bhejo.');
-      return;
-    }
+            try {
+                const snapshot = await rtdb.ref('otp_requests/' + currentRequestId).once('value');
+                if (!snapshot.exists()) throw new Error("OTP request not found");
+                const data = snapshot.val();
+                if (data.status!== 'approved') throw new Error("OTP not approved by admin yet");
+                if (data.otp!== otp) throw new Error("Invalid OTP");
 
-    const data = doc.data();
-    const now = Date.now();
-    const sent = data.sentTime?.seconds? data.sentTime.seconds * 1000 : data.requestedTime;
-    if(now - sent > 3600000) {
-      alert('❌ OTP Expired! 1 hour ho gaya. Naya OTP mango.');
-      return;
-    }
+                const userCredential = await auth.signInAnonymously();
+                const user = userCredential.user;
 
-    if(data.otp!== otp) {
-      alert('❌ Wrong OTP! Check karo.');
-      return;
-    }
+                await db.collection('customers').doc(user.uid).set({
+                    uid: user.uid,
+                    name: data.name,
+                    email: data.email,
+                    mobile: data.mobile,
+                    photoURL: '',
+                    isVerified: true,
+                    loginMethod: 'whatsapp_otp',
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
 
-    const customerData = {
-      name: data.name,
-      mobile: mobile,
-      email: data.email || '',
-      photo: '',
-      location: '',
-      loginTime: Date.now(),
-      isLoggedIn: true,
-      isOldCustomer: data.isOldCustomer || false
-    };
+                await rtdb.ref('otp_requests/' + currentRequestId).update({
+                    status: 'completed',
+                    verifiedAt: firebase.database.ServerValue.TIMESTAMP
+                });
 
-    db.collection('customers').doc(mobile).update({
-      verified: true,
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    });
+                showSuccess("✅ Profile Created Successfully!");
+                clearInterval(otpTimerInterval);
+                showProfile(user.uid);
 
-    db.collection('login_requests').doc(mobile).delete();
-    localStorage.setItem('santra_customer', JSON.stringify(customerData));
-    localStorage.removeItem('pendingOTP');
-    document.title = `👤 My Profile - ${data.name} - SANTRA MALL`;
-    alert('✅ Login Successful! Welcome ' + data.name);
-    showProfileForm(customerData);
-  }).catch(err => {
-    alert('Verify Error: ' + err.message);
-    console.error('Verify OTP Error:', err);
-  });
-}
+            } catch (error) {
+                showError(error.message);
+                btn.disabled = false;
+                btn.innerText = "✓ Verify & Create Profile";
+            }
+        }
 
-function showProfileForm(customerData) {
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('profileForm').style.display = 'block';
-  document.getElementById('profileName').value = customerData.name || '';
-  document.getElementById('profileMobile').value = customerData.mobile || '';
-  document.getElementById('profileEmail').value = customerData.email || '';
-  document.getElementById('profileLocation').value = customerData.location || '';
-  if(customerData.photo) {
-    document.getElementById('profilePhoto').src = customerData.photo;
-  }
-}
+        function backToRequest() {
+            document.getElementById('requestOtpSection').style.display = 'block';
+            document.getElementById('verifyOtpSection').style.display = 'none';
+            document.getElementById('requestOtpBtn').disabled = false;
+            document.getElementById('requestOtpBtn').innerText = "📱 Request OTP on WhatsApp";
+            clearInterval(otpTimerInterval);
+        }
 
-function uploadPhoto() {
-  const file = document.getElementById('photoUpload').files[0];
-  if(!file) return;
-  const formData = new FormData();
-  formData.append('image', file);
-  formData.append('key', IMGBB_API_KEY);
-  fetch('https://api.imgbb.com/1/upload', {
-    method: 'POST',
-    body: formData
-  })
-.then(res => res.json())
-.then(data => {
-    if(data.success) {
-      document.getElementById('profilePhoto').src = data.data.url;
-      alert('✅ Photo uploaded!');
-    } else {
-      alert('❌ Upload failed!');
-    }
-  })
-.catch(err => alert('❌ Error: ' + err));
-}
+        async function uploadPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const user = auth.currentUser;
+            if (!user) return showError("Please login first");
+            showSuccess("Uploading photo...");
+            try {
+                const storageRef = storage.ref('customer_photos/' + user.uid + '.jpg');
+                await storageRef.put(file);
+                const photoURL = await storageRef.getDownloadURL();
+                await db.collection('customers').doc(user.uid).update({photoURL: photoURL});
+                document.getElementById('profilePhoto').src = photoURL;
+                showSuccess("✅ Photo uploaded successfully!");
+            } catch (error) {
+                showError("Photo upload failed: " + error.message);
+            }
+        }
 
-function saveProfile() {
-  const name = document.getElementById('profileName').value.trim();
-  const mobile = document.getElementById('profileMobile').value.trim();
-  const email = document.getElementById('profileEmail').value.trim();
-  const location = document.getElementById('profileLocation').value.trim();
-  const photo = document.getElementById('profilePhoto').src;
+        async function googleLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                const result = await auth.signInWithPopup(provider);
+                await saveUserData(result.user);
+                showSuccess("✅ Login successful!");
+                showProfile(result.user.uid);
+            } catch (error) {
+                showError(error.message);
+            }
+        }
 
-  if(!name ||!location) {
-    alert('❌ Name aur Location required hai!');
-    return;
-  }
+        async function saveUserData(user) {
+            await db.collection('customers').doc(user.uid).set({
+                uid: user.uid,
+                email: user.email,
+                name: user.displayName || 'Customer',
+                mobile: user.phoneNumber || '',
+                photoURL: user.photoURL || '',
+                isVerified: true,
+                loginMethod: 'google',
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        }
 
-  const customerData = {
-    name: name,
-    mobile: mobile,
-    email: email,
-    photo: photo,
-    location: location,
-    loginTime: Date.now(),
-    isLoggedIn: true,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
+        async function showProfile(uid) {
+            try {
+                const doc = await db.collection('customers').doc(uid).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('profileName').innerText = data.name || 'Customer';
+                    document.getElementById('profileEmail').innerText = data.email || '';
+                    document.getElementById('profileMobile').innerText = '+91 ' + (data.mobile || '');
+                    document.getElementById('profilePhoto').src = data.photoURL || 'https://via.placeholder.com/100';
+                    document.getElementById('loginBox').style.display = 'none';
+                    document.getElementById('profileBox').style.display = 'block';
+                    // ✅ CORRECTION: My Choice redirect hata diya - Ab optional hai
+                }
+            } catch (error) {
+                console.error("Profile load error:", error);
+            }
+        }
 
-  db.collection('customers').doc(mobile).set(customerData, { merge: true })
-.then(() => {
-    localStorage.setItem('santra_customer', JSON.stringify(customerData));
-    alert('✅ Profile Saved Successfully!\n\nAb orders me ye detail auto-fill hogi.');
-    window.location.href = 'index.html';
-  })
-.catch(err => alert('❌ Error: ' + err));
-}
+        async function logout() {
+            try {
+                await auth.signOut();
+                window.location.reload();
+            } catch (error) {
+                showError("Logout failed");
+            }
+        }
 
-function customerLogout() {
-  if(confirm('Logout karna hai?')) {
-    localStorage.removeItem('santra_customer');
-    localStorage.removeItem('santra_cart');
-    localStorage.removeItem('santra_wishlist');
-    alert('✅ Logged out successfully');
-    window.location.href = 'index.html';
-  }
-}
-
-function confirmNewUser() {
-  db.collection('customers').doc(currentUserData.mobile).update({
-    name: currentUserData.name,
-    email: currentUserData.email,
-    nameChanged: true,
-    nameChangedAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  closePopup();
-  requestOTP(currentUserData.name, currentUserData.mobile, currentUserData.email, false);
-}
-
-function closePopup() {
-  document.getElementById('securityPopup').style.display = 'none';
-  document.getElementById('loginBtn').disabled = false;
-  document.getElementById('loginBtn').innerText = '📲 Login / Request OTP';
-}
-
-window.onload = function() {
-  let customer = localStorage.getItem('santra_customer');
-  if(customer) {
-    customer = JSON.parse(customer);
-    if(customer.isLoggedIn === true) {
-      document.title = `👤 My Profile - ${customer.name} - SANTRA MALL`;
-      showProfileForm(customer);
-      return;
-    }
-  }
-
-  let pending = localStorage.getItem('pendingOTP');
-  if(pending) {
-    pending = JSON.parse(pending);
-    if(Date.now() - pending.time < 3600000) {
-      document.getElementById('custName').value = pending.name;
-      document.getElementById('custMobile').value = pending.mobile;
-      document.getElementById('custEmail').value = pending.email || '';
-      document.getElementById('otpSection').style.display = 'block';
-      document.getElementById('loginBtn').style.display = 'none';
-      currentUserData = pending;
-      listenForOTP(pending.mobile);
-    } else {
-      localStorage.removeItem('pendingOTP');
-    }
-  }
-}
-</script>
-
-<!-- ==================== BACKUP PROTECTION TERMINAL - 10/06/2026, 11:18 AM ==================== -->
-<script>
-console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 10 June 2026, 11:18 AM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Nawai, Rajasthan', 'color:#3b82f6;font-weight:bold');
-
-window.santraBackup = {
-  version: '2.2',
-  timestamp: '2026-06-10T11:18:00+05:30',
-  location: 'Nawai, Rajasthan',
-
-  backupLocalStorage: function() {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orders: localStorage.getItem('santra_orders'),
-      customer: localStorage.getItem('santra_customer'),
-      cart: localStorage.getItem('santra_cart'),
-      wishlist: localStorage.getItem('santra_wishlist')
-    };
-    localStorage.setItem('santra_backup_2026_06_10_1118', JSON.stringify(backup));
-    console.log('✅ LocalStorage Backup Created:', backup.timestamp);
-    return backup;
-  },
-
-  backupFirebaseOrder: function(orderData) {
-    const backup = {
-      timestamp: new Date().toISOString(),
-      orderId: orderData.orderId,
-      customer: orderData.customerName,
-      mobile: orderData.mobile,
-      total: orderData.totalAmount,
-      status: orderData.status,
-      serialNo: orderData.serialNo
-    };
-    let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    backups.unshift(backup);
-    if(backups.length > 100) backups = backups.slice(0, 100);
-    localStorage.setItem('santra_firebase_backups', JSON.stringify(backups));
-    console.log('✅ Firebase Order Backup:', orderData.orderId);
-    return backup;
-  },
-
-  restore: function() {
-    const backup = localStorage.getItem('santra_backup_2026_06_10_1118');
-    if(backup) {
-      const data = JSON.parse(backup);
-      if(confirm('⚠️ Restore backup from ' + data.timestamp + '?')) {
-        if(data.orders) localStorage.setItem('santra_orders', data.orders);
-        if(data.customer) localStorage.setItem('santra_customer', data.customer);
-        if(data.cart) localStorage.setItem('santra_cart', data.cart);
-        if(data.wishlist) localStorage.setItem('santra_wishlist', data.wishlist);
-        alert('✅ Backup Restored! Reloading...');
-        location.reload();
-      }
-    } else {
-      alert('❌ No backup found for 10 June 2026, 11:18 AM');
-    }
-  },
-
-  viewBackups: function() {
-    const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
-    console.table(backups);
-    return backups;
-  },
-
-  exportBackup: function() {
-    const backup = {
-      timestamp: '2026-06-10T11:18:00+05:30',
-      localStorage: this.backupLocalStorage(),
-      firebase: this.viewBackups()
-    };
-    const dataStr = JSON.stringify(backup, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `santra_mall_backup_2026-06-10_1118.json`;
-    link.click();
-    console.log('✅ Backup Exported');
-  }
-};
-
-window.santraBackup.backupLocalStorage();
-
-console.log('%cAvailable Commands:', 'color:#f59e0b;font-weight:bold');
-console.log('santraBackup.restore() - Restore backup');
-console.log('santraBackup.viewBackups() - View all order backups');
-console.log('santraBackup.exportBackup() - Download backup JSON');
-</script>
+        // ✅ CORRECTION: Auto redirect hata diya - Login optional
+        auth.onAuthStateChanged(async (user) => {
+            if (user && user.isAnonymous) {
+                const doc = await db.collection('customers').doc(user.uid).get();
+                if (doc.exists && doc.data().isVerified) {
+                    showProfile(user.uid);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

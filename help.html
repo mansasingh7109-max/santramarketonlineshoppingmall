@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Help Desk - SANTRAJET MALL</title>
-  
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  
+
   <style>
     body{
       background:#f1f3f6;
@@ -16,7 +16,7 @@
       padding:20px;
       margin:0;
     }
-    .card{
+   .card{
       background:white;
       padding:20px;
       border-radius:8px;
@@ -25,7 +25,7 @@
       box-shadow:0 2px 8px rgba(0,0,0,0.1);
     }
     h2{color:#e40046;margin-top:0;}
-    .btn{
+   .btn{
       background:#e40046;
       color:white;
       padding:12px 24px;
@@ -44,11 +44,11 @@
   <p><b>CUSTOMER CARE CONTACT NUMBER:</b> <span id="phone">Loading...</span></p>
   <p><b>Email:</b> <span id="email">Loading...</span></p>
   <p><b>WhatsApp:</b> <span id="whatsapp">Loading...</span></p>
-  
+
   <div class="helpdesk-box" style="text-align: left; margin: 20px auto; padding: 30px; background: #ffffff; border-radius: 12px; max-width: 850px; line-height: 1.8; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
     <h2 style="color: #1e8449; text-align: center; margin-bottom: 25px; font-size: 28px;">HELP DESK - SANTRAJET MALL</h2>
     <p style="text-align: center; color: #666; margin-bottom: 30px;">We are here to help you from 10 AM to 8 PM, Monday to Sunday</p>
-    
+
     <h3 style="color: #ff6b35; border-bottom: 2px solid #1e8449; padding-bottom: 8px; margin-top: 30px;">1. Quick Contact Options:</h3>
     <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0;">
         <div style="flex: 1; min-width: 250px; padding: 15px; background: #e8f5e8; border-radius: 8px;">
@@ -80,7 +80,7 @@
     </ul>
 
     <h3 style="color: #ff6b35; border-bottom: 2px solid #1e8449; padding-bottom: 8px; margin-top: 30px;">3. Frequently Asked Questions (FAQs):</h3>
-    
+
     <div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #1e8449; border-radius: 5px;">
         <b>Q1. How to place an order?</b><br>
         Ans: Select product → Add to Cart → Click Order on WhatsApp button → Send your address → Confirm COD. That's it!
@@ -148,8 +148,7 @@
         SANTRAJET MALL Help Desk - Your Happiness is Our Priority ❤️
     </p>
 </div>
-  
-  
+
   <!-- Company Details Button -->
   <div style="text-align:center;">
     <a href="company-details.html" class="btn">Company Details →</a>
@@ -159,6 +158,14 @@
 </div>
 
 <script>
+  // ==================== OLD CODE BACKUP - 26/06/2026 ====================
+  /*
+  // PEHLE YAHAN ALERT THA - AB HATA DIYA
+  // alert("Config test: " + firebaseConfig.projectId);
+  */
+  // ==================== OLD CODE BACKUP END ====================
+
+  // ✅ NEW CODE - ALERT HATA DIYA + 2 CORRECTION
   // STEP 1: REAL FIREBASE CONFIG - admin.html se copy karke yahan paste kar
      const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
@@ -183,23 +190,24 @@
       const docSnap = await docRef.get();
       if (docSnap.exists) {
         const data = docSnap.data();
-        
-        document.getElementById("phone").innerHTML = data.phone || "8769171078";
-        document.getElementById("email").innerHTML = data.email || "santramarketshoppingmall@gmail.com";
-        document.getElementById("whatsapp").innerHTML = data.whatsapp || data.phone || "8769171078";
-        
+
+        // ✅ CORRECTION 1: innerHTML ki jagah innerText - XSS safe
+        document.getElementById("phone").innerText = data.phone || "8769171078";
+        document.getElementById("email").innerText = data.email || "santramarketshoppingmall@gmail.com";
+        document.getElementById("whatsapp").innerText = data.whatsapp || data.phone || "8769171078";
+
       } else {
         // Firebase me data nahi mila to default dikha de
-        document.getElementById("phone").innerHTML = "8769171078";
-        document.getElementById("email").innerHTML = "mansasingh7109@gmail.com";
-        document.getElementById("whatsapp").innerHTML = "8769171078";
+        document.getElementById("phone").innerText = "8769171078";
+        document.getElementById("email").innerText = "mansasingh7109@gmail.com";
+        document.getElementById("whatsapp").innerText = "8769171078";
       }
     } catch (error) {
-      console.log("Firebase Error:", error);
+      console.log("Firebase Error:", error); // ✅ CORRECTION 2: console.log use kiya, alert nahi
       // Error aaye to bhi default data dikha de
-      document.getElementById("phone").innerHTML = "8769171078";
-      document.getElementById("email").innerHTML = "santramarketshoppingmall@gmail.com";
-      document.getElementById("whatsapp").innerHTML = "8769171078";
+      document.getElementById("phone").innerText = "8769171078";
+      document.getElementById("email").innerText = "santramarketshoppingmall@gmail.com";
+      document.getElementById("whatsapp").innerText = "8769171078";
     }
   }
   loadCompanyDetails();
@@ -216,7 +224,7 @@ window.santraBackup = {
   version: '1.0',
   timestamp: '2026-06-04T16:34:00+05:30',
   location: 'Pilibanga, Rajasthan',
-  
+
   // Backup localStorage data
   backupLocalStorage: function() {
     const backup = {
@@ -226,12 +234,12 @@ window.santraBackup = {
       cart: localStorage.getItem('santra_cart'),
       wishlist: localStorage.getItem('santra_wishlist')
     };
-    
+
     localStorage.setItem('santra_backup_2026_06_04_1634', JSON.stringify(backup));
     console.log('✅ LocalStorage Backup Created:', backup.timestamp);
     return backup;
   },
-  
+
   // Backup Firebase data before critical operations
   backupFirebaseOrder: function(orderData) {
     const backup = {
@@ -243,7 +251,7 @@ window.santraBackup = {
       status: orderData.status,
       serialNo: orderData.serialNo
     };
-    
+
     let backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
     backups.unshift(backup);
     if(backups.length > 100) backups = backups.slice(0, 100); // Keep last 100
@@ -251,7 +259,7 @@ window.santraBackup = {
     console.log('✅ Firebase Order Backup:', orderData.orderId);
     return backup;
   },
-  
+
   // Restore function
   restore: function() {
     const backup = localStorage.getItem('santra_backup_2026_06_04_1634');
@@ -269,14 +277,14 @@ window.santraBackup = {
       alert('❌ No backup found for 4 June 2026, 4:34 PM');
     }
   },
-  
+
   // View all backups
   viewBackups: function() {
     const backups = JSON.parse(localStorage.getItem('santra_firebase_backups') || '[]');
     console.table(backups);
     return backups;
   },
-  
+
   // Export backup as JSON
   exportBackup: function() {
     const backup = {
@@ -284,7 +292,7 @@ window.santraBackup = {
       localStorage: this.backupLocalStorage(),
       firebase: this.viewBackups()
     };
-    
+
     const dataStr = JSON.stringify(backup, null, 2);
     const dataBlob = new Blob([dataStr], {type: 'application/json'});
     const url = URL.createObjectURL(dataBlob);
