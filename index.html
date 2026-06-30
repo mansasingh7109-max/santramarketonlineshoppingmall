@@ -387,7 +387,7 @@
 
                 <div id="homePage">
                     <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="🔍 Search products, brands..." onkeypress="if (event.key === 'Enter') searchProducts();" />
+<input type="text" id="searchInput" placeholder="🔍 Search products, brands..." onkeypress="if (event.key === 'Enter') searchProducts();" onkeyup="handleSearchInput()" oninput="handleSearchInput()" />
                         <button onclick="searchProducts()">Search</button>
                     </div>
 
@@ -1026,7 +1026,30 @@
         
         <script src="customer-account.js"></script>
 <script src="login.js"></script>
+<script>
+  // ✅ SEARCH HISTORY SAVE - Firebase me
+function saveSearch(mobile, term) {
+  if(!mobile || !term || term.length < 2) return;
+  if(typeof firebase === 'undefined' || !firebase.firestore) return;
+  firebase.firestore().collection('search_history').add({
+    mobile: mobile,
+    search: term,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(e=>console.log('search save error',e));
+}
 
+// ✅ Search box se call karo
+function handleSearchInput() {
+  const input = document.getElementById('searchInput') || document.getElementById('searchBox');
+  if(!input) return;
+  const term = input.value.trim();
+  const customer = JSON.parse(localStorage.getItem('santra_customer') || '{}');
+  if(customer.mobile && term) {
+    saveSearch(customer.mobile, term);
+  }
+}
+
+</script>
     </body>
 </html>
 
