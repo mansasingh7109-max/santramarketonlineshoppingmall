@@ -1,3 +1,5 @@
+window.MYCHOICE_KEY = "santraMallMyChoice_v2";
+
 // ✅ MYCHOICE.JS - SANTRA MALL - 26 JUNE 2026 - GUEST + RTDB + FIRESTORE VERSION
 
 /*
