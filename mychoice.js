@@ -1,5 +1,5 @@
-// ✅ MYCHOICE.JS - SANTRA MALL - 26 JUNE 2026 - GUEST + RTDB + FIRESTORE VERSION
-// Is file ko index.html aur product.html me add kar dena
+// ✅ MYCHOICE.JS - SANTRA MALL - 30 JUNE 2026 - UNIVERSAL VERSION
+// Is file ko index.html, product.html, cart.html, mychoice.html me add kar dena
 
 /*
 ⚠️ ===== OLD CODE BACKUP - 25 JUNE 2026 SE PEHLE WALA =====
@@ -68,109 +68,64 @@ window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 
 ===== OLD CODE BACKUP END =====
 */
 
-// ✅ STEP 1: MYCHOICE_KEY check - Agar secrets.js me nahi hai to banao
+// ✅ STEP 1: KEY UNIFY - sab jagah same
 if (typeof MYCHOICE_KEY === "undefined") {
-  var MYCHOICE_KEY = "santra_mall_mychoice";
+  var MYCHOICE_KEY = "santraMallMyChoice_v2"; // ✅ cart.html se match
   window.MYCHOICE_KEY = MYCHOICE_KEY;
 }
 
-// ✅ STEP 2: Add to My Choice Function - GUEST + RTDB + FIRESTORE + LOCALSTORAGE
+// ✅ STEP 2: Add to My Choice - UNIVERSAL
 window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 1) {
-  // ✅ FIX 1: Null/ID check
   if (!product) {
-    console.error("❌ addToMyChoice: Product is null", product);
-    showToast("❌ Product load nahi hua. Page refresh karo");
+    console.error("❌ addToMyChoice: Product null");
+    showToast("❌ Product load nahi hua");
     return false;
   }
   if (!product.id &&!product.code) {
-    console.error("❌ addToMyChoice: Product ID missing", product);
-    showToast("❌ Product ID nahi mila");
-    return false;
+    product.id = product.id || 'temp_' + Date.now();
   }
 
-  // My Choice data nikalo localStorage se backup ke liye
-  let myChoiceData = localStorage.getItem(MYCHOICE_KEY);
   let myChoice = [];
   try {
-    myChoice = JSON.parse(myChoiceData || "[]");
+    myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
     if (!Array.isArray(myChoice)) myChoice = [];
-  } catch (e) {
-    console.log("MyChoice parse error, resetting:", e);
-    myChoice = [];
-  }
+  } catch (e) { myChoice = []; }
 
-  // Price nikalo
   let finalPrice = product.price || product.sellingPrice || 0;
-  if (selectedVariant && selectedVariant.price) {
-    finalPrice = selectedVariant.price;
-  }
+  if (selectedVariant?.price) finalPrice = selectedVariant.price;
 
-  // ✅ FIX 2: Image 5 jagah se check karo
-  let productImage = "";
-  if (product.media && product.media.length > 0) {
-    productImage = product.media[0].url || product.media[0];
-  } else if (product.images && product.images.length > 0) {
-    productImage = product.images[0];
-  } else if (product.imageUrl) {
-    productImage = product.imageUrl;
-  } else if (product.image) {
-    productImage = product.image;
-  } else if (product.img) {
-    productImage = product.img;
-  }
+  let productImage = product.image || product.imageUrl || product.img || "";
+  if (product.images?.[0]) productImage = product.images[0];
+  if (product.media?.[0]) productImage = product.media[0].url || product.media[0];
 
-  // Variant name nikalo
-  let variantName = "Default";
-  if (selectedVariant) {
-    variantName = selectedVariant.name || selectedVariant.size || selectedVariant.volume || selectedVariant.weight || "Default";
-  }
+  let variantName = selectedVariant?.name || selectedVariant?.size || "Default";
 
-  // My Choice Item banao
   let myChoiceItem = {
     id: product.id || product.code,
     name: product.name || product.productName || "Product",
     price: finalPrice,
     image: productImage,
-    code: product.code || product.productCode || product.id,
+    code: product.code || product.id,
     category: product.category || "General",
     variant: variantName,
-    from: product.from || 'unknown',
-    productLink: window.location.origin + "/product.html?id=" + encodeURIComponent(product.id || product.code) + "&from=" + (product.from || 'unknown'),
-    qty: selectedQty || 1,
+    productLink: location.origin + "/product.html?id=" + encodeURIComponent(product.id || product.code),
     addedAt: new Date().toISOString()
   };
 
-  // Check karo already hai ya nahi
-  let existingIndex = myChoice.findIndex(
-    item => item.id === myChoiceItem.id && item.variant === myChoiceItem.variant
-  );
-
+  let existingIndex = myChoice.findIndex(item => item.id === myChoiceItem.id);
   if (existingIndex === -1) {
-    // 1. localStorage me save - offline backup + Guest ke liye
     myChoice.push(myChoiceItem);
     localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
 
-    // 2. RTDB me save karo - Primary - SIRF LOGIN HONE PE
+    // ✅ FIX: RTDB path sahi kiya (// nahi, /)
     if (typeof auth!== "undefined" && auth.currentUser && typeof rtdb!== "undefined") {
-      rtdb.ref('users/' + auth.currentUser.uid + '//' + myItem.id)
-      .set(myChoiceItem)
-      .then(() => console.log("✅ Saved to RTDB"))
-      .catch(err => console.log("RTDB save failed:", err));
+      rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + myChoiceItem.id).set(myChoiceItem);
     }
-
-    // 3. Firestore me bhi save karo - Backup - SIRF LOGIN HONE PE
     if (typeof auth!== "undefined" && auth.currentUser && typeof db!== "undefined") {
-      db.collection("users")
-      .doc(auth.currentUser.uid)
-      .collection("mychoice")
-      .doc(myChoiceItem.id)
-      .set(myChoiceItem, { merge: true })
-      .then(() => console.log("✅ Saved to Firestore"))
-      .catch(err => console.log("Firestore save failed:", err));
+      db.collection("users").doc(auth.currentUser.uid).collection("mychoice").doc(myChoiceItem.id).set(myChoiceItem, { merge: true });
     }
 
     showToast("😍 Added to My Choice!");
-    console.log("✅ Saved to My Choice:", myChoiceItem);
     updateChoiceCount();
     return true;
   } else {
@@ -179,80 +134,99 @@ window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 
   }
 };
 
-// ✅ STEP 3: Toast Function - Agar nahi hai to banao
+// ✅ STEP 3: Toast
 if (typeof showToast === "undefined") {
   window.showToast = function (message) {
-    const toast = document.createElement("div");
-    toast.innerText = message;
-    toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-size:15px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)";
-    document.body.appendChild(toast);
-    setTimeout(() => {
-      if (document.body.contains(toast)) document.body.removeChild(toast);
-    }, 3000);
+    const t = document.createElement("div");
+    t.innerText = message;
+    t.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-weight:bold";
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
   };
 }
 
-// ✅ STEP 4: Update Choice Count - GUEST + LOGIN DONO KE LIYE
+// ✅ STEP 4: Update Count - AUTO
 window.updateChoiceCount = function () {
   try {
-    // ✅ CORRECTION 1: Pehle check karo login hai ya nahi
+    let count = 0;
     if (typeof auth!== "undefined" && auth.currentUser && typeof rtdb!== "undefined") {
-      // Logged in - RTDB se real count lao
-      rtdb.ref('users/' + auth.currentUser.uid + '/myChoice').once('value').then((snapshot) => {
-        let count = snapshot.exists()? snapshot.numChildren() : 0;
-        updateCountUI(count);
-      }).catch(() => {
-        // RTDB fail ho to localStorage se
-        let myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-        updateCountUI(Array.isArray(myChoice)? myChoice.length : 0);
+      rtdb.ref('users/' + auth.currentUser.uid + '/myChoice').once('value').then(s => {
+        count = s.exists()? s.numChildren() : 0;
+        updateUI(count);
       });
     } else {
-      // Guest - localStorage se count
-      let myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-      let count = Array.isArray(myChoice)? myChoice.length : 0;
-      updateCountUI(count);
+      let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+      count = Array.isArray(data)? data.length : 0;
+      updateUI(count);
     }
-
-    function updateCountUI(count) {
-      // ✅ CORRECTION 2: Saare possible selectors add kiye
-      let countElements = document.querySelectorAll(".mychoice-count, #mychoiceCount,.wish-count, #wishCount,.wishlist-count");
-      countElements.forEach(el => {
-        if (el) {
-          el.innerText = count;
-          el.style.display = count > 0? 'flex' : 'none'; // ✅ CORRECTION 3: 0 pe hide
-        }
+    function updateUI(c) {
+      document.querySelectorAll(".mychoice-count, #mychoiceCount,.wish-count, #wishCount,.wishlist-count, #choiceCount").forEach(el => {
+        el.innerText = c;
+        el.style.display = c > 0? 'flex' : 'none';
       });
-      console.log("✅ My Choice count updated:", count);
     }
-  } catch (e) {
-    console.log("Choice count update failed:", e);
-  }
+  } catch(e) {}
 };
 
-// ✅ STEP 5: Remove from My Choice - GUEST + LOGIN
+// ✅ STEP 5: Remove
 window.removeFromMyChoice = function(productId) {
-  // LocalStorage se hatao
-  let myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-  myChoice = myChoice.filter(item => item.id!== productId);
-  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
-
-  // Login hai to Firebase se bhi hatao
-  if (typeof auth!== "undefined" && auth.currentUser && typeof rtdb!== "undefined") {
+  let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+  data = data.filter(i => i.id!== productId);
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(data));
+  if (auth?.currentUser) {
     rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + productId).remove();
   }
-  if (typeof auth!== "undefined" && auth.currentUser && typeof db!== "undefined") {
-    db.collection("users").doc(auth.currentUser.uid).collection("mychoice").doc(productId).delete();
-  }
-
   updateChoiceCount();
-  showToast("❌ Removed from My Choice");
+  showToast("❌ Removed");
 };
 
-// Page load pe count update karo
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", updateChoiceCount);
-} else {
-  updateChoiceCount();
-}
+// ✅ STEP 6: MOVE FUNCTIONS for cart.html
+window.moveToCart = function(id) {
+  let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+  let item = data.find(i => i.id === id);
+  if(item && typeof addToCart === 'function') {
+    addToCart(item);
+    removeFromMyChoice(id);
+    showToast("✅ Moved to Cart");
+  }
+};
 
-console.log("✅ mychoice.js loaded - UPDATED 26 JUNE 2026 - GUEST + RTDB + FIRESTORE");
+window.moveToMyChoice = function(id) {
+  // cart se mychoice me - cart.html use karega
+  if(typeof cart!== 'undefined' && cart[id]) {
+    addToMyChoice(cart[id]);
+    if(typeof removeFromCart === 'function') removeFromCart(id);
+  }
+};
+
+// ✅ STEP 7: AUTO-BIND BUTTONS - index.html aur product.html ke liye
+document.addEventListener('DOMContentLoaded', () => {
+  updateChoiceCount();
+
+  // Auto-bind heart buttons
+  setTimeout(() => {
+    document.querySelectorAll('button,.heart,.wishlist-btn, [onclick*="MyChoice"]').forEach(btn => {
+      const txt = (btn.innerText + btn.className).toLowerCase();
+      if(txt.includes('heart') || txt.includes('wish') || txt.includes('mychoice') || btn.innerHTML.includes('🤍') || btn.innerHTML.includes('😍')) {
+        if(!btn.dataset.mychoiceBound) {
+          btn.dataset.mychoiceBound = '1';
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if(window.currentProduct) {
+              addToMyChoice(window.currentProduct);
+            } else {
+              // Try to get product from card
+              const card = btn.closest('[data-product],.product-card,.product');
+              if(card?.dataset?.product) {
+                try { addToMyChoice(JSON.parse(card.dataset.product)); } catch {}
+              }
+            }
+          });
+        }
+      }
+    });
+  }, 800);
+});
+
+console.log("✅ mychoice.js loaded - UNIVERSAL 30 JUNE");
