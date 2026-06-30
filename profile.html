@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:transparent;padding:40px;min-height:650px} /* ✅ FIX 1: min-height add */
+.card-title{color:#e40046;font-size:18px;margin-bottom:15px;text-align:center;font-weight:bold;border-bottom:2px solid #e40046;padding-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.form-group{margin-bottom:12px}
+.form-group label{font-weight:bold;color:#333;font-size:13px;display:block;margin-bottom:4px}
+.form-group input,.form-group textarea{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px}
+.form-group input:disabled{background:#f5f5f5;color:#333}
+.btn-save{width:100%;padding:12px;background:#10b981;color:white;border:none;border-radius:8px;font-weight:bold;font-size:15px;margin-top:10px;cursor:pointer}
+.btn-save:disabled{background:#ccc;cursor:not-allowed}
+.btn-edit{background:#f59e0b;color:white;padding:6px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
+.btn-logout{background:#ef4444;color:white;padding:6px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
+.profile-header{text-align:center;margin-bottom:20px}
+.profile-photo{width:100px;height:100px;border-radius:50%;margin:0 auto 10px;display:block;object-fit:cover;border:3px solid #e40046;background:#f0f0f0}
+.upload-btn{background:#3b82f6;color:white;padding:6px 12px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:8px auto;display:block}
+.detail-row{display:flex;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.detail-row:last-child{border-bottom:none}
+.detail-label{font-weight:bold;color:#666;width:140px;font-size:14px}
+.detail-value{color:#333;flex:1;font-size:14px;word-break:break-word}
+.toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
+.toast.show{display:block}
+.toast.error{background:#f44336}
+.loader{display:none;text-align:center;padding:8px;color:#666;font-size:12px}
+    #profileForm{display:none}
+    #profileView{display:none}
+  </style>
+</head>
+<body>
+
+  <div class="card-title">
+    <span>📝 Profile & Delivery Details</span>
+    <div>
+      <button class="btn-edit" id="editBtn" style="display:none">✏️ Edit</button>
+      <button class="btn-logout" id="logoutBtn" style="display:none;margin-left:8px">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- FORM MODE -->
+  <div id="profileForm">
+    <div class="profile-header">
+      <img id="editPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo">
+      <input type="file" id="photoInput" accept="image/*" style="display:none">
+      <button class="upload-btn" id="changePhotoBtn">📷 Change Photo</button>
+      <div class="loader" id="uploadLoader">⏳ Uploading...</div>
+    </div>
+    <div class="form-group"><label>WhatsApp Mobile Number</label><input type="tel" id="whatsappMobile" disabled></div>
+    <div class="form-group"><label>Full Name *</label><input type="text" id="editName" placeholder="Full Name" required></div>
+    <div class="form-group"><label>Email ID</label><input type="email" id="editEmail" placeholder="Email (Optional)"></div>
+    <div class="form-group"><label>Delivery Mobile Number *</label><input type="tel" id="editDeliveryMobile" placeholder="Delivery ke liye number" maxlength="10" required></div>
+    <div class="form-group"><label>Full Delivery Address *</label><textarea id="editLocation" placeholder="House no, Street, Landmark, City, State, Pincode" rows="3" required></textarea></div>
+    <button class="btn-save" id="saveBtn">💾 Save Profile</button>
+  </div>
+
+  <!-- VIEW MODE: Profile Card -->
+  <div id="profileView">
+    <div class="profile-header"><img id="viewPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo"></div>
+    <div class="detail-row"><div class="detail-label">WhatsApp:</div><div class="detail-value" id="viewWhatsapp">-</div></div>
+    <div class="detail-row"><div class="detail-label">Full Name:</div><div class="detail-value" id="viewName">-</div></div>
+    <div class="detail-row"><div class="detail-label">Email:</div><div class="detail-value" id="viewEmail">-</div></div>
+    <div class="detail-row"><div class="detail-label">Delivery Mobile:</div><div class="detail-value" id="viewDeliveryMobile">-</div></div>
+    <div class="detail-row"><div class="detail-label">Address:</div><div class="detail-value" id="viewLocation">-</div></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+<script src="santra-auth.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY",
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+let uploadedPhotoURL = null;
+
+window.addEventListener('load', function() {
+    loadProfileData();
+    document.getElementById('editBtn').addEventListener('click', showEditForm);
+    document.getElementById('logoutBtn').addEventListener('click', profileLogout);
+    document.getElementById('changePhotoBtn').addEventListener('click', () => document.getElementById('photoInput').click());
+    document.getElementById('photoInput').addEventListener('change', uploadPhoto);
+    document.getElementById('saveBtn').addEventListener('click', saveProfile);
+});
+
+window.addEventListener('storage', function(e) {
+    if (e.key === 'santra_logout_signal' || e.key === 'santra_whatsapp_mobile') {
+        loadProfileData();
+    }
+});
+
+function loadProfileData() {
+    const savedMobile = localStorage.getItem('santra_customer_mobile');
+    const whatsappMobile = localStorage.getItem('santra_whatsapp_mobile') || '';
+    document.getElementById('whatsappMobile').value = whatsappMobile;
+
+    if (savedMobile || whatsappMobile) {
+        const mobileToLoad = savedMobile || whatsappMobile;
+        db.collection('customers').doc(mobileToLoad).get().then(doc => {
+            if (doc.exists && doc.data().name) {
+                showProfileCard(doc.data());
+            } else {
+                showProfileForm(whatsappMobile);
+            }
+        }).catch(() => {
+            showProfileForm(whatsappMobile);
+        });
+    } else {
+        showProfileForm('');
+    }
+}
+
+function showProfileForm(mobile = '') {
+    document.getElementById('profileForm').style.display = 'block';
+    document.getElementById('profileView').style.display = 'none';
+    document.getElementById('editBtn').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'none';
+
+    const whatsappMobile = localStorage.getItem('santra_whatsapp_mobile') || mobile;
+    document.getElementById('whatsappMobile').value = whatsappMobile;
+
+    const loadMobile = localStorage.getItem('santra_customer_mobile') || whatsappMobile;
+    if (loadMobile) {
+        db.collection('customers').doc(loadMobile).get().then(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById('editName').value = data.name || '';
+                document.getElementById('editDeliveryMobile').value = data.mobile || loadMobile;
+                document.getElementById('editEmail').value = data.email || '';
+                document.getElementById('editLocation').value = data.location || '';
+                document.getElementById('editPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
+                uploadedPhotoURL = data.photo;
+            } else {
+                document.getElementById('editDeliveryMobile').value = whatsappMobile;
+            }
+            resizeIframe(); // ✅ FIX
+        });
+    } else {
+        resizeIframe(); // ✅ FIX
+    }
+}
+
+function showProfileCard(data) {
+    document.getElementById('profileForm').style.display = 'none';
+    document.getElementById('profileView').style.display = 'block';
+    document.getElementById('editBtn').style.display = 'inline-block';
+    document.getElementById('logoutBtn').style.display = 'inline-block';
+
+    document.getElementById('viewPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
+    document.getElementById('viewWhatsapp').innerText = data.loginMobile || '-';
+    document.getElementById('viewName').innerText = data.name || '-';
+    document.getElementById('viewEmail').innerText = data.email || '-';
+    document.getElementById('viewDeliveryMobile').innerText = data.mobile || '-';
+    document.getElementById('viewLocation').innerText = data.location || '-';
+
+    resizeIframe(); // ✅ FIX
+}
+
+function showEditForm() {
+    showProfileForm();
+}
+
+// ✅ FIX: Iframe height proper bhejo
+function resizeIframe() {
+    setTimeout(() => {
+        const height = Math.max(document.body.scrollHeight, 650);
+        window.parent.postMessage({type: 'resizeIframe', height: height}, '*');
+    }, 150);
+}
+
+function profileLogout() {
+    if(confirm('Logout karna hai?')) {
+        localStorage.removeItem('santra_whatsapp_mobile');
+        localStorage.removeItem('santra_customer_mobile');
+        localStorage.removeItem('santra_login_mobile');
+        localStorage.setItem('santra_logout_signal', Date.now());
+        window.parent.postMessage({type: 'logout'}, '*');
+        loadProfileData();
+        showToast('✅ Logged Out');
+    }
+}
+
+function uploadPhoto() {
+    const file = document.getElementById('photoInput').files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) return showToast('❌ Photo 2MB se kam honi chahiye!', true);
+    const mobile = document.getElementById('editDeliveryMobile').value.trim();
+    if (!mobile || mobile.length!== 10) return showToast('❌ Pehle Delivery Mobile daalo!', true);
+    document.getElementById('uploadLoader').style.display = 'block';
+    const fileName = `profile_photos/${mobile}/${Date.now()}.jpg`;
+    const uploadTask = storage.ref(fileName).put(file);
+    uploadTask.on('state_changed', null, (error) => {
+        document.getElementById('uploadLoader').style.display = 'none';
+        showToast('❌ Upload failed!', true);
+    }, () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            document.getElementById('editPhoto').src = downloadURL;
+            uploadedPhotoURL = downloadURL;
+            document.getElementById('uploadLoader').style.display = 'none';
+            showToast('✅ Photo uploaded!');
+        });
+    });
+}
+
+function saveProfile() {
+    const whatsappMobile = document.getElementById('whatsappMobile').value.trim();
+    const name = document.getElementById('editName').value.trim();
+    const deliveryMobile = document.getElementById('editDeliveryMobile').value.trim();
+    const email = document.getElementById('editEmail').value.trim();
+    const location = document.getElementById('editLocation').value.trim();
+
+    // ✅ FIX 2: Photo placeholder check
+    let photo = uploadedPhotoURL || '';
+    if (!photo) {
+        const currentSrc = document.getElementById('editPhoto').src;
+        photo = currentSrc.includes('placeholder')? '' : currentSrc;
+    }
+
+    if (!name) return showToast('❌ Full Name required hai!', true);
+    if (!deliveryMobile || deliveryMobile.length!== 10) return showToast('❌ 10 digit Delivery Mobile daalo!', true);
+    if (!location) return showToast('❌ Delivery Address required hai!', true);
+
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.innerText = '⏳ Saving...';
+
+    const customerData = {
+        name: name,
+        loginMobile: whatsappMobile,
+        mobile: deliveryMobile,
+        email: email,
+        photo: photo,
+        location: location,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    db.collection('customers').doc(deliveryMobile).set(customerData, { merge: true }).then(() => {
+        localStorage.setItem('santra_customer_mobile', deliveryMobile);
+        if(whatsappMobile) localStorage.setItem('santra_whatsapp_mobile', whatsappMobile);
+
+        showToast('✅ Profile Saved Successfully!');
+        showProfileCard(customerData);
+        window.parent.postMessage({type: 'profileUpdated', photo: photo}, '*');
+        btn.disabled = false;
+        btn.innerText = '💾 Save Profile';
+    }).catch(err => {
+        showToast('❌ Error: ' + err.message, true);
+        btn.disabled = false;
+        btn.innerText = '💾 Save Profile';
+    });
+}
+
+function showToast(message, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.classList.add('show');
+    if (isError) toast.classList.add('error');
+    setTimeout(() => { toast.classList.remove('show'); toast.classList.remove('error'); }, 2000);
+}
+
+window.addEventListener('message', function(e) {
+    if (e.data.type === 'getProfileData') {
+        const profileData = {
+            name: document.getElementById('editName').value.trim(),
+            email: document.getElementById('editEmail').value.trim(),
+            mobile: document.getElementById('editDeliveryMobile').value.trim(),
+            location: document.getElementById('editLocation').value.trim()
+        };
+        window.parent.postMessage({type: 'profileDataResponse', data: profileData, mobile: e.data.mobile}, '*');
+    }
+});
+</script>
+</body>
+</html>
