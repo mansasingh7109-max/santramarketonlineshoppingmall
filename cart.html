@@ -276,17 +276,24 @@
             window.onload = function() { if (typeof firebase === 'undefined' || typeof firebase.database === 'undefined') { console.error('Firebase not loaded properly'); showToast('❌ Firebase Error - Refresh Page'); return; } loadData(); };
 
             // ==================== ✅ NEW CORRECTION 2 & 3 - 30 JUNE 2026 ====================
-            // Chrome me render force karo + cart.js sync
+            // Chrome me render force karo + s sync
             document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     if(typeof loadData === 'function') loadData();
                     if(typeof renderCart === 'function') renderCart();
                     if(typeof renderMyChoice === 'function') renderMyChoice();
-                    // cart.js se badge sync
+                    // s se badge sync
                     if(typeof window.updateCartBadge === 'function') window.updateCartBadge();
                 }, 800);
             });
             // ==================== NEW CORRECTION END ====================
         </script>
+        <!-- OLD -->
+<script src="cart.js"></script>
+<script src="mychoice.js"></script>
+
+<!-- NEW - date-time add kar -->
+<script src="cart.js?v=3006252011"></script>
+<script src="mychoice.js?v=3006252011"></script>
     </body>
 </html>
