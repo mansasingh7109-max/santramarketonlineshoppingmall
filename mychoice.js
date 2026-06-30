@@ -79,3 +79,106 @@ window.removeFromMyChoice = function(productId) { /* same as before */ };
 if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", updateChoiceCount); } else { updateChoiceCount(); }
 
 console.log("✅ mychoice.js loaded - UPDATED 26 JUNE 2026 - GUEST + RTDB + FIRESTORE");
+// ==================== MYCHOICE CHROME FIX PATCH - 30 JUNE 2026 ====================
+// ✅ OLD KEY migrate - backup safe
+(function migrateMyChoice() {
+    const OLD_KEYS = ["santra_wishlist", "mychoice", "santraMyChoice"];
+    const NEW_KEY = window.MYCHOICE_KEY;
+    try {
+        for(let old of OLD_KEYS) {
+            const data = localStorage.getItem(old);
+            if(data &&!localStorage.getItem(NEW_KEY)) {
+                localStorage.setItem(NEW_KEY, data);
+                console.log('✅ MyChoice migrated from', old);
+                break;
+            }
+        }
+    } catch(e) {}
+})();
+
+// ✅ FIX: toggleMyChoice ke baad UI update force
+const originalToggle = window.toggleMyChoice;
+window.toggleMyChoice = function(id) {
+    originalToggle(id);
+    setTimeout(() => {
+        updateChoiceCount();
+        // mychoice page pe ho to render karo
+        if(typeof renderMyChoicePage === 'function') renderMyChoicePage();
+        // popup ho to update
+        const popup = document.getElementById('myChoicePopup');
+        if(popup && popup.style.display!== 'none') {
+            if(typeof loadMyChoicePopup === 'function') loadMyChoicePopup();
+        }
+    }, 400);
+};
+
+// ✅ FIX: addToMyChoice me image fallback aur
+const originalAdd = window.addToMyChoice;
+window.addToMyChoice = function(product, variant=null, qty=1) {
+    // image fix - home page ke liye
+    if(product &&!product.image && product.images) {
+        product.image = product.images[0];
+    }
+    if(product &&!product.image && product.media) {
+        product.image = product.media[0]?.url || product.media[0];
+    }
+    const result = originalAdd(product, variant, qty);
+    // badge update
+    setTimeout(updateChoiceCount, 200);
+    return result;
+};
+
+// ✅ updateChoiceCount complete karo (tere me empty tha)
+window.updateChoiceCount = function() {
+    const badges = [
+        document.getElementById('choiceBadge'),
+        document.getElementById('bottomChoiceBadge'),
+        document.getElementById('wishlistBadge')
+    ];
+    let list = [];
+    try { list = JSON.parse(localStorage.getItem(window.MYCHOICE_KEY) || '[]'); } catch(e) {}
+    const count = list.length;
+    badges.forEach(b => {
+        if(b) {
+            b.innerText = count;
+            b.style.display = count > 0? 'flex' : 'none';
+        }
+    });
+};
+
+// ✅ removeFromMyChoice complete
+window.removeFromMyChoice = function(productId) {
+    let list = JSON.parse(localStorage.getItem(window.MYCHOICE_KEY) || '[]');
+    list = list.filter(x => x.id!== productId);
+    localStorage.setItem(window.MYCHOICE_KEY, JSON.stringify(list));
+
+    const user = typeof auth!== 'undefined'? auth.currentUser : null;
+    if(user && typeof rtdb!== 'undefined') {
+        rtdb.ref('users/' + user.uid + '/myChoice/' + productId).remove();
+    }
+    if(user && typeof db!== 'undefined') {
+        db.collection("users").doc(user.uid).collection("mychoice").doc(productId).delete();
+    }
+
+    showToast("💔 Removed from My Choice");
+    updateChoiceCount();
+    if(typeof renderMyChoicePage === 'function') renderMyChoicePage();
+};
+
+// ✅ Chrome localStorage quota fix
+try {
+    const test = '__test__';
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+} catch(e) {
+    console.warn('localStorage blocked, using memory');
+    window.MYCHOICE_MEMORY = [];
+    const origGet = localStorage.getItem;
+    localStorage.getItem = function(k) {
+        if(k === window.MYCHOICE_KEY) return JSON.stringify(window.MYCHOICE_MEMORY);
+        return origGet.call(this, k);
+    };
+}
+// ==================== PATCH END ====================
+console.log("✅ mychoice.js PATCH loaded - 30 JUNE");
+
