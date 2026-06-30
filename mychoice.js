@@ -1,9 +1,8 @@
-// ✅ MYCHOICE.JS - SANTRA MALL - 30 JUNE 2026 - UNIVERSAL VERSION
-// Is file ko index.html, product.html, cart.html, mychoice.html me add kar dena
-
 /*
-⚠️ ===== OLD CODE BACKUP - 25 JUNE 2026 SE PEHLE WALA =====
-⚠️ Agar kuch toot jaye to ye uncomment kar dena
+
+⚠️ OLD CODE BACKUP - 30 JUNE 2026 SE PEHLE WALA
+⚠️ Agar kuch gadbad ho to isko uncomment karke use kar lena
+
 
 window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 1) {
   if (!product) {
@@ -65,168 +64,130 @@ window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 
     return false;
   }
 };
-===== OLD CODE BACKUP END =====
+
+OLD CODE BACKUP END
+
 */
 
-// ✅ STEP 1: KEY UNIFY - sab jagah same
-if (typeof MYCHOICE_KEY === "undefined") {
-  var MYCHOICE_KEY = "santraMallMyChoice_v2"; // ✅ cart.html se match
+// ✅ MYCHOICE.JS - SANTRA MALL - UPDATED 30 JUNE 2026
+// ✅ KEYS UNIFY - cart.html, mychoice.html, index.html sab me same
+if (typeof MYCHOICE_KEY === 'undefined') {
+  var MYCHOICE_KEY = 'santraMallMyChoice_v2';
   window.MYCHOICE_KEY = MYCHOICE_KEY;
 }
+if (typeof CART_KEY === 'undefined') {
+  var CART_KEY = 'santraMallCart_v2';
+  window.CART_KEY = CART_KEY;
+}
 
-// ✅ STEP 2: Add to My Choice - UNIVERSAL
-window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 1) {
-  if (!product) {
-    console.error("❌ addToMyChoice: Product null");
-    showToast("❌ Product load nahi hua");
-    return false;
-  }
-  if (!product.id &&!product.code) {
-    product.id = product.id || 'temp_' + Date.now();
-  }
+// ✅ FIXED VERSION - duplicate error se bachao
+if (typeof window.addToMyChoice === 'undefined') {
+  window.addToMyChoice = function(product) {
+    if(!product ||!product.id) return;
 
-  let myChoice = [];
-  try {
-    myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-    if (!Array.isArray(myChoice)) myChoice = [];
-  } catch (e) { myChoice = []; }
+    let list = [];
+    try {
+      list = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
+    } catch(e) { list = []; }
 
-  let finalPrice = product.price || product.sellingPrice || 0;
-  if (selectedVariant?.price) finalPrice = selectedVariant.price;
+    // sirf objects rakho, strings hatao (purana kachra saaf)
+    list = list.filter(i => typeof i === 'object' && i!== null && i.id);
 
-  let productImage = product.image || product.imageUrl || product.img || "";
-  if (product.images?.[0]) productImage = product.images[0];
-  if (product.media?.[0]) productImage = product.media[0].url || product.media[0];
+    if(!list.find(i => i.id === product.id)) {
+      list.push({
+        id: product.id,
+        name: product.name || 'Product',
+        price: product.price || 0,
+        image: product.image || '',
+        code: product.code || product.id,
+        category: product.category || 'General',
+        variant: product.variant || 'Default',
+        addedAt: new Date().toISOString()
+      });
+      localStorage.setItem(MYCHOICE_KEY, JSON.stringify(list));
 
-  let variantName = selectedVariant?.name || selectedVariant?.size || "Default";
+      // Toast
+      if(typeof showToast === 'function') {
+        showToast('😍 Added to My Choice!');
+      } else {
+        alert('😍 Added to My Choice!');
+      }
 
-  let myChoiceItem = {
-    id: product.id || product.code,
-    name: product.name || product.productName || "Product",
-    price: finalPrice,
-    image: productImage,
-    code: product.code || product.id,
-    category: product.category || "General",
-    variant: variantName,
-    productLink: location.origin + "/product.html?id=" + encodeURIComponent(product.id || product.code),
-    addedAt: new Date().toISOString()
+      // Badge update
+      if(typeof updateChoiceCount === 'function') updateChoiceCount();
+
+      // Firebase sync (agar login hai)
+      if(typeof auth!== 'undefined' && auth.currentUser && typeof rtdb!== 'undefined') {
+        rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + product.id).set(list.find(i => i.id === product.id));
+      }
+    } else {
+      if(typeof showToast === 'function') showToast('Already in My Choice!');
+    }
   };
+}
 
-  let existingIndex = myChoice.findIndex(item => item.id === myChoiceItem.id);
-  if (existingIndex === -1) {
-    myChoice.push(myChoiceItem);
-    localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
-
-    // ✅ FIX: RTDB path sahi kiya (// nahi, /)
-    if (typeof auth!== "undefined" && auth.currentUser && typeof rtdb!== "undefined") {
-      rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + myChoiceItem.id).set(myChoiceItem);
-    }
-    if (typeof auth!== "undefined" && auth.currentUser && typeof db!== "undefined") {
-      db.collection("users").doc(auth.currentUser.uid).collection("mychoice").doc(myChoiceItem.id).set(myChoiceItem, { merge: true });
-    }
-
-    showToast("😍 Added to My Choice!");
-    updateChoiceCount();
-    return true;
-  } else {
-    showToast("Already in My Choice!");
-    return false;
-  }
-};
-
-// ✅ STEP 3: Toast
-if (typeof showToast === "undefined") {
-  window.showToast = function (message) {
-    const t = document.createElement("div");
-    t.innerText = message;
-    t.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-weight:bold";
+// ✅ Toast function (agar nahi hai to)
+if (typeof window.showToast === 'undefined') {
+  window.showToast = function(msg) {
+    const t = document.createElement('div');
+    t.innerText = msg;
+    t.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)';
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2500);
   };
 }
 
-// ✅ STEP 4: Update Count - AUTO
-window.updateChoiceCount = function () {
+// ✅ Badge update
+window.updateChoiceCount = function() {
   try {
-    let count = 0;
-    if (typeof auth!== "undefined" && auth.currentUser && typeof rtdb!== "undefined") {
-      rtdb.ref('users/' + auth.currentUser.uid + '/myChoice').once('value').then(s => {
-        count = s.exists()? s.numChildren() : 0;
-        updateUI(count);
-      });
-    } else {
-      let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-      count = Array.isArray(data)? data.length : 0;
-      updateUI(count);
-    }
-    function updateUI(c) {
-      document.querySelectorAll(".mychoice-count, #mychoiceCount,.wish-count, #wishCount,.wishlist-count, #choiceCount").forEach(el => {
-        el.innerText = c;
-        el.style.display = c > 0? 'flex' : 'none';
-      });
-    }
+    let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
+    let count = Array.isArray(data)? data.length : 0;
+    document.querySelectorAll('.mychoice-count, #mychoiceCount,.wish-count, #wishCount,.nav-badge').forEach(el => {
+      if(el) {
+        el.innerText = count;
+        el.style.display = count > 0? 'flex' : 'none';
+      }
+    });
   } catch(e) {}
 };
 
-// ✅ STEP 5: Remove
-window.removeFromMyChoice = function(productId) {
-  let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-  data = data.filter(i => i.id!== productId);
-  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(data));
-  if (auth?.currentUser) {
-    rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + productId).remove();
-  }
-  updateChoiceCount();
-  showToast("❌ Removed");
-};
+// ✅ Home page hearts - 3 sec wait + auto bind
+function bindHomePageHearts() {
+  document.querySelectorAll('[class*="product"],.product-card,.card').forEach(card => {
+    const heart = card.querySelector('.fa-heart, button, [class*="heart"], [class*="wish"]');
+    if(heart &&!heart.dataset.mychoiceBound) {
+      heart.dataset.mychoiceBound = '1';
+      heart.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-// ✅ STEP 6: MOVE FUNCTIONS for cart.html
-window.moveToCart = function(id) {
-  let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-  let item = data.find(i => i.id === id);
-  if(item && typeof addToCart === 'function') {
-    addToCart(item);
-    removeFromMyChoice(id);
-    showToast("✅ Moved to Cart");
-  }
-};
+        const img = card.querySelector('img')?.src || card.querySelector('img')?.dataset.src || '';
+        const name = card.querySelector('h3, h4,.title, [class*="name"]')?.innerText?.trim() || 'Product';
+        const priceText = card.querySelector('.price, [class*="price"]')?.innerText || '0';
+        const price = parseInt(priceText.replace(/\D/g, '')) || 0;
+        const link = card.querySelector('a[href*="id="]')?.href || '';
+        const id = link? link.split('id=')[1].split('&')[0] : 'home_' + Date.now();
 
-window.moveToMyChoice = function(id) {
-  // cart se mychoice me - cart.html use karega
-  if(typeof cart!== 'undefined' && cart[id]) {
-    addToMyChoice(cart[id]);
-    if(typeof removeFromCart === 'function') removeFromCart(id);
-  }
-};
+        addToMyChoice({id: id, name: name, image: img, price: price});
+      });
+    }
+  });
+}
 
-// ✅ STEP 7: AUTO-BIND BUTTONS - index.html aur product.html ke liye
+// ✅ Page load pe chalao
 document.addEventListener('DOMContentLoaded', () => {
   updateChoiceCount();
-
-  // Auto-bind heart buttons
-  setTimeout(() => {
-    document.querySelectorAll('button,.heart,.wishlist-btn, [onclick*="MyChoice"]').forEach(btn => {
-      const txt = (btn.innerText + btn.className).toLowerCase();
-      if(txt.includes('heart') || txt.includes('wish') || txt.includes('mychoice') || btn.innerHTML.includes('🤍') || btn.innerHTML.includes('😍')) {
-        if(!btn.dataset.mychoiceBound) {
-          btn.dataset.mychoiceBound = '1';
-          btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if(window.currentProduct) {
-              addToMyChoice(window.currentProduct);
-            } else {
-              // Try to get product from card
-              const card = btn.closest('[data-product],.product-card,.product');
-              if(card?.dataset?.product) {
-                try { addToMyChoice(JSON.parse(card.dataset.product)); } catch {}
-              }
-            }
-          });
-        }
-      }
-    });
-  }, 800);
+  setTimeout(bindHomePageHearts, 2000);
+  // Products late load hote hain, isliye har 3 sec check karo
+  setInterval(bindHomePageHearts, 3000);
 });
 
-console.log("✅ mychoice.js loaded - UNIVERSAL 30 JUNE");
+// ✅ Remove function (mychoice.html ke liye)
+window.removeFromMyChoice = function(id) {
+  let list = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
+  list = list.filter(i => i.id!== id);
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(list));
+  updateChoiceCount();
+  showToast('❌ Removed');
+  if(typeof renderMyChoice === 'function') renderMyChoice();
+};
