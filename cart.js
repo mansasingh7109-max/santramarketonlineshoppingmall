@@ -1,3 +1,7 @@
+// ✅ FORCE SAME KEY EVERYWHERE
+window.CART_KEY = "santraMallCart_v2";
+localStorage.setItem('CART_KEY_FORCED', 'santraMallCart_v2');
+
 // ==================== CART.JS - UNIVERSAL CART HANDLER ====================
 // 30-JUNE-2026 06:45 PM - UPDATED FOR SANTRA MALL - OLD LAYOUT SAFE
 // index.html, cart.html, product.html sab me chalega
