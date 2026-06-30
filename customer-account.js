@@ -1,243 +1,286 @@
-// ===== SANTRA MALL - CUSTOMER ACCOUNT JS - 29-JUNE-2026 =====
-
-let currentUser = null;
-let generatedOTP = null;
-let currentMobile = null;
-
-function showElement(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('hide');
-}
-function hideElement(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hide');
-}
+// ==================== CUSTOMER-ACCOUNT.JS ====================
+// 30-JUNE-2026 02:15 PM - UPDATED
+// OLD CODE BACKUP - 29-JUNE-2026 03:20 PM
+// ISSUE FIXED: Cannot read properties of null (reading 'classList')
+// REASON: Acode me elements nahi mile to error aata tha
+// FIX: safeGet() helper add kiya - har getElementById check karega
+// =============================================================
 
 window.addEventListener('load', function() {
-    setTimeout(checkLoginStatus, 100);
-});
-
-function checkLoginStatus() {
-    const customerStr = localStorage.getItem('santra_customer');
-    
-    if (customerStr) {
-        try {
-            const customer = JSON.parse(customerStr);
-            if (customer && customer.isLoggedIn === true && customer.mobile) {
-                currentUser = customer;
-                showProfile();
-                loadMyChoice();
-                loadOrders();
-                return;
-            }
-        } catch(e) {
-            localStorage.removeItem('santra_customer');
-        }
+  try {
+    if (typeof firebase === 'undefined') {
+      showToast('❌ Firebase load nahi hua. Internet check karo', true);
+      return;
     }
-    showLogin();
-}
-
-function showLogin() {
-    hideElement('profileBox');
-    showElement('loginBox');
-    document.getElementById('stats').style.display = 'none';
-    document.getElementById('myChoiceCard').style.display = 'none';
-    document.getElementById('ordersCard').style.display = 'none';
-}
-
-function showProfile() {
-    hideElement('loginBox');
-    showElement('profileBox');
-    document.getElementById('stats').style.display = 'flex';
-    document.getElementById('myChoiceCard').style.display = 'block';
-    document.getElementById('ordersCard').style.display = 'block';
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     
-    if (currentUser) {
-        document.getElementById('profilePic').src = currentUser.photo || 'https://cdn-icons-png.flaticon.com/128/1077/1077114.png';
-        document.getElementById('fullName').value = currentUser.name || '';
-        document.getElementById('mobileNum').value = currentUser.mobile || '';
-        document.getElementById('emailId').value = currentUser.email || '';
-        document.getElementById('fullAddress').value = currentUser.address || '';
-        document.getElementById('totalOrders').innerText = currentUser.totalOrders || 0;
-        document.getElementById('totalSpent').innerText = '₹' + (currentUser.totalSpent || 0);
-    }
-}
+    const db = firebase.firestore();
+    const storage = firebase.storage();
 
-function sendOTP() {
-    const mobile = document.getElementById('loginMobile').value.trim();
-    if (mobile.length !== 10) {
-        alert('Please enter valid 10 digit mobile number');
+    let currentCustomer = null;
+    let uploadedPhotoURL = null;
+
+    // ✅ SAFE HELPER - ye error khatam karega
+    function safeGet(id){
+      const el = document.getElementById(id);
+      if(!el) console.warn('Element not found:', id);
+      return el;
+    }
+    function safeClass(id, action, cls){
+      const el = safeGet(id);
+      if(el && el.classList) el.classList[action](cls);
+    }
+    function safeShow(id, show=true){
+      const el = safeGet(id);
+      if(el) el.style.display = show ? 'block' : 'none';
+    }
+
+    // ✅ EVENT LISTENERS - safe
+    const sendOtpBtn = safeGet('sendOtpBtn');
+    const verifyOtpBtn = safeGet('verifyOtpBtn');
+    const editProfileBtn = safeGet('editProfileBtn');
+    const logoutBtn = safeGet('logoutBtn');
+    const changePhotoBtn = safeGet('changePhotoBtn');
+    const photoInput = safeGet('photoInput');
+    const saveChangesBtn = safeGet('saveChangesBtn');
+    const cancelEditBtn = safeGet('cancelEditBtn');
+    const displayPhoto = safeGet('displayPhoto');
+
+    if(sendOtpBtn) sendOtpBtn.addEventListener('click', sendLoginOTP);
+    if(verifyOtpBtn) verifyOtpBtn.addEventListener('click', verifyLoginOTP);
+    if(editProfileBtn) editProfileBtn.addEventListener('click', enableEditMode);
+    if(logoutBtn) logoutBtn.addEventListener('click', customerLogout);
+    if(changePhotoBtn) changePhotoBtn.addEventListener('click', () => photoInput && photoInput.click());
+    if(photoInput) photoInput.addEventListener('change', uploadPhotoToFirebase);
+    if(saveChangesBtn) saveChangesBtn.addEventListener('click', saveProfile);
+    if(cancelEditBtn) cancelEditBtn.addEventListener('click', cancelEdit);
+    if(displayPhoto) displayPhoto.addEventListener('click', () => {
+      const viewMode = safeGet('viewMode');
+      if(viewMode && !viewMode.classList.contains('hide')) {
+        enableEditMode();
+      }
+    });
+
+    checkLoginAndLoad();
+    if(typeof updateCartBadge === 'function') updateCartBadge();
+
+    function checkLoginAndLoad() {
+      let customer = localStorage.getItem('santra_customer');
+      if(!customer || !JSON.parse(customer).isLoggedIn) {
+        safeClass('loginBox','remove','hide');
+        safeClass('viewMode','add','hide');
         return;
+      }
+      currentCustomer = JSON.parse(customer);
+      safeClass('loginBox','add','hide');
+      safeClass('viewMode','remove','hide');
+      document.title = `👤 My Profile - ${currentCustomer.name} - SANTRA MALL`;
+      loadProfile();
+      loadStats();
     }
-    currentMobile = mobile;
-    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    if(typeof db !== 'undefined') {
-        db.collection('login_requests').doc(mobile).set({
-            mobile: mobile,
-            otp: generatedOTP,
-            time: new Date().toISOString(),
-            status: 'pending'
+
+    function sendLoginOTP() {
+      const btn = safeGet('sendOtpBtn');
+      const mobileEl = safeGet('loginMobile');
+      if(!mobileEl) return;
+      const mobile = mobileEl.value.trim();
+      if(mobile.length !== 10) return showToast('❌ 10 digit mobile daalo', true);
+
+      if(btn){ btn.disabled = true; btn.innerText = 'Sending...'; }
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      db.collection('login_requests').doc(mobile).set({
+        otp: otp,
+        inVerified: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        type: 'profile_login'
+      }).then(() => {
+        const msg = `🔐 *SANTRA MALL LOGIN OTP*\n\nYour OTP: *${otp}*\n\nValid for 10 minutes.`;
+        const waUrl = `https://wa.me/91${mobile}?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
+        safeShow('otpVerifyBox', true);
+        showToast('📲 OTP sent on WhatsApp!');
+        if(btn){ btn.disabled = false; btn.innerText = '📲 Send OTP on WhatsApp'; }
+      }).catch(err => {
+        showToast('❌ Error: ' + err.message, true);
+        if(btn){ btn.disabled = false; btn.innerText = '📲 Send OTP on WhatsApp'; }
+      });
+    }
+
+    function verifyLoginOTP() {
+      const mobileEl = safeGet('loginMobile');
+      const otpEl = safeGet('loginOTP');
+      if(!mobileEl || !otpEl) return;
+      const mobile = mobileEl.value.trim();
+      const enteredOTP = otpEl.value.trim();
+      if(enteredOTP.length !== 6) return showToast('❌ 6 digit OTP daalo!', true);
+
+      db.collection('login_requests').doc(mobile).get().then((doc) => {
+        if(!doc.exists) return showToast('❌ OTP not found! Send again', true);
+        const data = doc.data();
+        if(data.otp === enteredOTP) {
+          return db.collection('customers').doc(mobile).get();
+        } else {
+          showToast('❌ Wrong OTP!', true);
+          return Promise.reject('WRONG_OTP');
+        }
+      }).then((custDoc) => {
+        if(custDoc && custDoc.exists) {
+          currentCustomer = custDoc.data();
+          currentCustomer.isLoggedIn = true;
+          currentCustomer.otpVerified = true;
+        } else {
+          currentCustomer = {
+            loginMobile: mobile, mobile: mobile, name: 'Customer', email: '',
+            photo: '', location: '', isLoggedIn: true, isOldCustomer: false,
+            otpVerified: true, totalOrders: 0, createdAt: new Date().toLocaleDateString('en-IN')
+          };
+          db.collection('customers').doc(mobile).set(currentCustomer);
+        }
+        db.collection('login_requests').doc(mobile).update({
+          inVerified: true, verifiedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-    }
-    
-    const msg = `SANTRAJET MALL OTP: ${generatedOTP}%0A%0AYe OTP 5 minute me expire ho jayega.`;
-    window.open(`https://wa.me/91${mobile}?text=${msg}`, '_blank');
-    
-    document.getElementById('showMobileOTP').innerText = mobile;
-    showElement('otpBox');
-    document.getElementById('sendOtpBtn').disabled = true;
-    document.getElementById('sendOtpBtn').innerText = 'OTP Sent ✓';
-}
-
-function verifyOTP() {
-    const enteredOTP = document.getElementById('otpInput').value.trim();
-    if (enteredOTP === generatedOTP) {
-        currentUser = {
-            mobile: currentMobile,
-            name: '',
-            email: '',
-            address: '',
-            photo: 'https://cdn-icons-png.flaticon.com/128/1077/1077114.png',
-            isLoggedIn: true,
-            totalOrders: 0,
-            totalSpent: 0,
-            createdAt: new Date().toISOString()
-        };
-        localStorage.setItem('santra_customer', JSON.stringify(currentUser));
+        localStorage.setItem('santra_customer', JSON.stringify(currentCustomer));
         
-        if(typeof db !== 'undefined') {
-            db.collection('customers').doc(currentMobile).set(currentUser, { merge: true });
+        if(typeof sendAdminNotification === 'function') {
+            sendAdminNotification({ type: 'NEW_CUSTOMER_LOGIN', name: currentCustomer.name, mobile: mobile });
         }
-        
-        alert('Login Successful! ✅');
-        showProfile();
-        loadMyChoice();
-        loadOrders();
-    } else {
-        alert('Wrong OTP! Try again ❌');
+        showToast('✅ Login Successful!');
+        setTimeout(() => location.reload(), 1000);
+      }).catch(err => {
+        if(err !== 'WRONG_OTP') showToast('❌ Error: ' + err, true);
+      });
     }
-}
 
-function changeNumber() {
-    hideElement('otpBox');
-    document.getElementById('loginMobile').value = '';
-    document.getElementById('otpInput').value = '';
-    document.getElementById('sendOtpBtn').disabled = false;
-    document.getElementById('sendOtpBtn').innerText = '📱 Send OTP on WhatsApp';
-}
+    function loadProfile() {
+      if(!currentCustomer) return;
+      const setText = (id, val) => { const el = safeGet(id); if(el) el.innerText = val; };
+      const setSrc = (id, val) => { const el = safeGet(id); if(el) el.src = val; };
+      
+      setText('displayName', currentCustomer.name || 'Customer');
+      setText('displayMobile', `+91 ${currentCustomer.mobile}`);
+      setText('displayLoginMobile', currentCustomer.loginMobile || currentCustomer.mobile);
+      setText('displayDeliveryMobile', currentCustomer.mobile || 'Not provided');
+      setText('displayEmail', currentCustomer.email || 'Not provided');
+      setText('displayLocation', currentCustomer.location || 'Not provided');
+      setSrc('displayPhoto', currentCustomer.photo || 'https://via.placeholder.com/120?text=Photo');
+      if(currentCustomer.otpVerified) safeClass('verifiedBadge','remove','hide');
 
-function saveProfile() {
-    const name = document.getElementById('fullName').value.trim();
-    const email = document.getElementById('emailId').value.trim();
-    const address = document.getElementById('fullAddress').value.trim();
-    
-    if (!name) {
-        alert('Please enter your name');
-        return;
-    }
-    
-    currentUser.name = name;
-    currentUser.email = email;
-    currentUser.address = address;
-    currentUser.lastUpdated = new Date().toISOString();
-    
-    localStorage.setItem('santra_customer', JSON.stringify(currentUser));
-    
-    if(typeof db !== 'undefined') {
-        db.collection('customers').doc(currentUser.mobile).set(currentUser, { merge: true });
-    }
-    
-    alert('Profile Updated Successfully! ✅');
-}
-
-if(document.getElementById('photoInput')) {
-    document.getElementById('photoInput').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            document.getElementById('profilePic').src = event.target.result;
-            currentUser.photo = event.target.result;
-            localStorage.setItem('santra_customer', JSON.stringify(currentUser));
-            if(typeof db !== 'undefined') {
-                db.collection('customers').doc(currentUser.mobile).update({ 
-                    photo: event.target.result,
-                    lastUpdated: new Date().toISOString()
-                });
-            }
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-function loadMyChoice() {
-    const myChoice = JSON.parse(localStorage.getItem('santraMallMyChoice_v2') || '[]');
-    const listDiv = document.getElementById('myChoiceList');
-    if (!listDiv) return;
-    
-    if (myChoice.length === 0) {
-        listDiv.innerHTML = '<p style="text-align:center;color:#999;font-size:13px">No favorites yet</p>';
-        return;
-    }
-    
-    let html = '';
-    myChoice.slice(0, 4).forEach(item => {
-        html += `
-            <div class="mychoice-item" onclick="window.location.href='product.html?id=${item.id}'">
-                <img src="${item.image || 'https://via.placeholder.com/100'}" alt="${item.name}">
-                <p>${item.name}</p>
-                <b>₹${item.price}</b>
-            </div>
-        `;
-    });
-    listDiv.innerHTML = html;
-}
-
-function loadOrders() {
-    if (!currentUser || typeof db === 'undefined') return;
-    db.collection('orders').where('customerMobile', '==', currentUser.mobile).orderBy('verifiedAt', 'desc').limit(3).get().then(snap => {
-        const ordersDiv = document.getElementById('ordersList');
-        if (!ordersDiv) return;
-        
-        if (snap.empty) {
-            ordersDiv.innerHTML = '<p style="text-align:center;color:#999;font-size:13px">No orders yet</p>';
-            return;
+      db.collection('customers').doc(currentCustomer.loginMobile || currentCustomer.mobile).get().then(doc => {
+        if(doc.exists) {
+          const data = doc.data();
+          setText('displayOrders', data.totalOrders || 0);
+          setText('displayJoined', data.createdAt || 'N/A');
+          const updatedCustomer = {...currentCustomer,...data};
+          localStorage.setItem('santra_customer', JSON.stringify(updatedCustomer));
+          currentCustomer = updatedCustomer;
         }
-        
-        let total = 0;
-        let count = 0;
-        let html = '';
-        snap.forEach(doc => {
-            const order = doc.data();
-            total += order.total || 0;
-            count++;
-            html += `
-                <div class="order-item">
-                    <b>Order #${doc.id.substring(0,8)}</b><br>
-                    <span>₹${order.total} | ${order.status || 'Pending'}</span>
-                </div>
-            `;
-        });
-        
-        ordersDiv.innerHTML = html;
-        document.getElementById('totalOrders').innerText = count;
-        document.getElementById('totalSpent').innerText = '₹' + total;
-        
-        currentUser.totalOrders = count;
-        currentUser.totalSpent = total;
-        localStorage.setItem('santra_customer', JSON.stringify(currentUser));
-    }).catch(err => {
-        console.log('Orders load error:', err);
-    });
-}
+      });
+    }
 
-function logout() {
-    if (confirm('Logout karna hai?')) {
+    function enableEditMode() {
+      safeClass('viewMode','add','hide');
+      safeShow('editMode', true);
+      const setVal = (id, val) => { const el = safeGet(id); if(el) el.value = val; };
+      setVal('editName', currentCustomer.name || '');
+      setVal('editLoginMobile', currentCustomer.loginMobile || currentCustomer.mobile || '');
+      setVal('editDeliveryMobile', currentCustomer.mobile || '');
+      setVal('editEmail', currentCustomer.email || '');
+      setVal('editLocation', currentCustomer.location || '');
+      const editPhoto = safeGet('editPhoto');
+      if(editPhoto) editPhoto.src = currentCustomer.photo || 'https://via.placeholder.com/120?text=Photo';
+    }
+
+    function cancelEdit() {
+      safeShow('editMode', false);
+      safeClass('viewMode','remove','hide');
+    }
+
+    function uploadPhotoToFirebase() {
+      const fileInput = safeGet('photoInput');
+      if(!fileInput || !fileInput.files[0]) return;
+      const file = fileInput.files[0];
+      if(file.size > 2 * 1024 * 1024) return showToast('❌ Photo size 2MB se kam honi chahiye!', true);
+      
+      const loader = safeGet('uploadLoader');
+      if(loader) loader.style.display = 'block';
+      
+      const fileName = `profile_photos/${currentCustomer.loginMobile}/${Date.now()}.jpg`;
+      storage.ref(fileName).put(file).then(snap => snap.ref.getDownloadURL()).then((downloadURL) => {
+        const editPhoto = safeGet('editPhoto');
+        if(editPhoto) editPhoto.src = downloadURL;
+        uploadedPhotoURL = downloadURL;
+        if(loader) loader.style.display = 'none';
+        showToast('✅ Photo uploaded!');
+      }).catch((error) => {
+        if(loader) loader.style.display = 'none';
+        showToast('❌ Upload failed: ' + error.message, true);
+      });
+    }
+
+    function saveProfile() {
+      const getVal = (id) => safeGet(id)?.value.trim() || '';
+      const name = getVal('editName');
+      const loginMobile = getVal('editLoginMobile');
+      const deliveryMobile = getVal('editDeliveryMobile');
+      const email = getVal('editEmail');
+      const location = getVal('editLocation');
+      const photo = uploadedPhotoURL || safeGet('editPhoto')?.src;
+
+      if(!name || !loginMobile || !deliveryMobile || !location) return showToast('❌ Name, Dono Mobile aur Location required hai!', true);
+      if(loginMobile.length !== 10 || deliveryMobile.length !== 10) return showToast('❌ 10 digit mobile daalo', true);
+
+      const customerData = { name, loginMobile, mobile: deliveryMobile, email, photo, location,
+        isLoggedIn: true, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+
+      db.collection('customers').doc(loginMobile).set(customerData, { merge: true })
+      .then(() => {
+        localStorage.setItem('santra_customer', JSON.stringify(customerData));
+        currentCustomer = customerData;
+        showToast('✅ Profile Saved Successfully!');
+        setTimeout(() => { cancelEdit(); loadProfile(); }, 1000);
+      })
+      .catch(err => showToast('❌ Error: ' + err, true));
+    }
+
+    function loadStats() {
+      if(!currentCustomer) return;
+      const mobileToUse = currentCustomer.mobile || currentCustomer.loginMobile;
+      db.collection('orders').where('customerMobile', '==', mobileToUse).get()
+      .then(snap => {
+        let totalOrders = snap.size;
+        let totalSpent = 0;
+        snap.forEach(doc => { totalSpent += doc.data().totalAmount || 0; });
+        const setText = (id, val) => { const el = safeGet(id); if(el) el.innerText = val; };
+        setText('statOrders', totalOrders);
+        setText('statSpent', `₹${totalSpent}`);
+        setText('displayOrders', totalOrders);
+      });
+    }
+
+    function customerLogout() {
+      if(confirm('Logout karna hai?')) {
         localStorage.removeItem('santra_customer');
-        localStorage.removeItem('santraMallCart_v2');
-        localStorage.removeItem('santraMallMyChoice_v2');
-        window.location.href = 'index.html';
+        localStorage.removeItem('santra_cart');
+        showToast('✅ Logged out successfully');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+      }
     }
-}
+
+    function showToast(message, isError = false) {
+      const toast = safeGet('toast');
+      if(!toast) return alert(message);
+      toast.innerText = message;
+      toast.classList.add('show');
+      if(isError) toast.classList.add('error');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.remove('error');
+      }, 3000);
+    }
+
+  } catch(e) {
+    alert('JavaScript Error: ' + e.message + '\n\nsecrets.js file check karo!');
+    console.error(e);
+  }
+});
