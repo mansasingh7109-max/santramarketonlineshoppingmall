@@ -214,3 +214,70 @@ window.shareCartLink = function() {
 
 // ✅ Page load pe badge update
 document.addEventListener('DOMContentLoaded', function() { setTimeout(updateCartBadge, 500); });
+// ==================== CHROME FIX PATCH - 30 JUNE 2026 ====================
+// ✅ OLD KEY se NEW KEY me migrate karo (backup safe)
+(function migrateCartKey() {
+    const OLD_KEY = "santra_cart";
+    const NEW_KEY = window.CART_KEY;
+    try {
+        const oldData = localStorage.getItem(OLD_KEY);
+        const newData = localStorage.getItem(NEW_KEY);
+        if (oldData &&!newData) {
+            localStorage.setItem(NEW_KEY, oldData);
+            console.log('✅ Cart migrated from old key');
+        }
+    } catch(e) { console.log('migrate error', e); }
+})();
+
+// ✅ FIX: addToCart ke baad popup force open karo
+const originalAddToCart = window.addToCart;
+window.addToCart = function(productData) {
+    originalAddToCart(productData);
+    // popup kholo
+    setTimeout(() => {
+        const popup = document.getElementById('cartPopup') || document.getElementById('myCartPopup');
+        if(popup) {
+            popup.style.display = 'block';
+            popup.classList.add('show');
+            // items render karo
+            if(typeof renderCartPopup === 'function') renderCartPopup();
+        }
+    }, 300);
+};
+
+// ✅ FIX: My Choice (wishlist) - same key issue
+window.WISH_KEY = window.WISH_KEY || "santra_wishlist_v2";
+window.addToWishlist = window.addToWishlist || function(productData) {
+    if(!productData ||!productData.id) return;
+    let wish = JSON.parse(localStorage.getItem(window.WISH_KEY) || "[]");
+    if(!wish.find(p => p.id === productData.id)) {
+        wish.push({
+            id: productData.id,
+            name: productData.name,
+            price: productData.price,
+            image: productData.image || (productData.images && productData.images[0]) || ''
+        });
+        localStorage.setItem(window.WISH_KEY, JSON.stringify(wish));
+        if(typeof showToast!== 'undefined') showToast("❤️ My Choice me add ho gaya");
+        // badge update
+        const wishBadge = document.getElementById('wishlistBadge');
+        if(wishBadge) {
+            wishBadge.innerText = wish.length;
+            wishBadge.style.display = 'flex';
+        }
+    } else {
+        if(typeof showToast!== 'undefined') showToast("Already in My Choice");
+    }
+};
+
+// ✅ Chrome me localStorage block fix - try catch
+const originalSetItem = localStorage.setItem;
+localStorage.setItem = function(key, value) {
+    try {
+        originalSetItem.apply(this, arguments);
+    } catch(e) {
+        console.warn('localStorage full or blocked, using sessionStorage');
+        sessionStorage.setItem(key, value);
+    }
+};
+// ==================== PATCH END ====================
