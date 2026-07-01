@@ -1794,3 +1794,13 @@ cky
 .text-tagline-icon-group .mall-icons { position:absolute !important; left:50% !important; margin-left:70px !important; top:26px !important; }
 .text-tagline-icon-group .earth-icon-mall { position:absolute !important; font-size:16px !important; }
 .text-tagline-icon-group .fish-icon-mall { position:absolute !important; font-size:16px !important; top:15px !important; left:-3px !important; transform:rotate(15deg) !important; }
+
+cky
+
+/* Online Shopping */
+div[style*="Online Shopping"] {
+  color: #FFEB3B !important;  /* <-- ye badlo, yellow */
+  font-size: 18px !important;
+  margin-top: 50px !important;
+}
+
