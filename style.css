@@ -940,7 +940,9 @@ cky
 .logo-wrap { text-align: center; }
 
 .logo-wrap h1 {
-    color: #d32f2f;
+    color:
+    background: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
     font-size: 26px;
     font-weight: 900;
     margin: 0;
@@ -1257,7 +1259,8 @@ body {
 }
 
 .logo-wrap h1 {
-  background: #F9A825 !important;
+  background: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
   color: #d50000 !important;
   font-size: 28px !important;
   font-weight: 800 !important;
@@ -1322,8 +1325,9 @@ body {
 }
 
 .logo-wrap h1 {
-  background: #64B5F6 !important;
-  color: #d32f2f !important;
+  background: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
+  color:  !important;
   font-size: 28px !important;
   font-weight: 800 !important;
   text-align: center !important;
@@ -1459,8 +1463,9 @@ div[style*="video"],
  
  santrajet mall ka box boundry
 .logo-wrap h1 {
-  color: #d32f2f !important;
-  background: #81c784 !important;
+  color: #FFF176 !important;
+  background:     color: ;
+ !important;
   font-size: 26px !important;
   font-weight: 900 !important;
   margin: 0 auto !important;
@@ -1629,6 +1634,8 @@ header {
 
 .logo-wrap { 
   text-align: center !important; 
+  background: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
 }
 
 .header h1,
@@ -1636,7 +1643,8 @@ header h1,
 .header .logo,
 header .logo,
 .logo-wrap h1 {
-  color: #d32f2f !important;
+  background: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFF176 100%) !important;
   font-size: 35px !important;
   font-weight: 900 !important;
   line-height: 1.2 !important;
@@ -2045,4 +2053,11 @@ cky
   text-align: center !important;
   
   font-size: var(--group-font) !important; /* YEHI BHAI-BEHEN KO EK SATH BADA KARTA HAI */
+}
+
+/* Online Shopping */
+div[style*="Online Shopping"] {
+  color: #FFEB3B !important;  /* <-- ye badlo, yellow */
+  font-size: 18px !important;
+  margin-top: 50px !important;
 }
