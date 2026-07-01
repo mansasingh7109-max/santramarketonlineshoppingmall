@@ -6,7 +6,7 @@
 
 /* ===== 1. HEADER CONTAINER - WISHLIST ORANGE BG + RIGHT ALIGN ===== */
 header,
-.header,
+
 .main-header,
 .top-bar,
 .navbar,
@@ -14,7 +14,10 @@ header,
 .site-header,
 #header,
 .header-wrapper {
-    background: #ff7a00 !important; /* Wishlist button wala exact orange */
+    background: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+background-color: transparent !important;
+    /* Wishlist button wala exact orange */
     padding: 10px 15px 10px 80px !important; /* Left=125px sidebar ke liye space */
     text-align: right !important;
     position: relative !important;
@@ -116,7 +119,8 @@ a.header-btn {
     justify-content: center !important;
     margin: 0 !important;
     padding: 3px !important;
-    background: #ff9800 !important; /* Light orange */
+    background: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
     color: #FFF176; !important;
     border: 2px solid #ff9800 !important;
     border-radius: 8px !important;
@@ -558,11 +562,11 @@ end line
 
 .tagline {
     margin: 0;
-    color: #81C784;
+    color: #FFF176;
     font-weight: 500;
     font-size: clamp(12px, 2.5vw, 18px);
     letter-spacing: 1px;
-    margin-top: 2px;
+    margin-top: 20px;
 } /* SantraJet Mall Logo + Tagline Styling */
 .logo-wrap {
     text-align: right;
@@ -579,11 +583,11 @@ end line
 
 .tagline {
     margin: 0;
-    color: #81C784 /* Green Light Color */
+    color: #FFF176 /* Yellow Light Color */
     font-weight: 500;
     font-size: clamp(12px, 2.5vw, 18px);
     letter-spacing: 1px;
-    margin-top: 2px;
+    margin-top: 30px;
 }
 /* Left Sidebar - Footer jaisa Flat Orange Style */
 .logout-mini,
@@ -926,7 +930,7 @@ cky
 /* âœ… HEADER */
 .header {
     margin-left: 0;
-    background: linear-gradient(135deg, #ff9800, #f57c00);
+    background: linear-gradient(135deg, #ff9800, #F48FB1);
     padding: 15px;
     display: flex;
     justify-content: center;
@@ -947,8 +951,8 @@ cky
 }
 
 .tagline {
-    color: #2e7d32;
-    font-size: 13px;
+    color: #FFF176;
+    font-size: 30px;
     margin: 5px 0 0 0;
 }
 
@@ -1042,7 +1046,7 @@ cky
 .cart-count { background: #d32f2f; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; position: absolute; top: -5px; right: 5px; }
 
 .header {
-    background: linear-gradient(135deg, #ff9800, #f57c00);
+    background: linear-gradient(135deg, #ff9800, #F48FB1);
     padding: 15px 10px;
     width: 100%;
 }
@@ -1095,8 +1099,8 @@ cky
 }
 
 .tagline {
-    color: #2e7d32;
-    font-size: 16px;
+    color: #FFF176;
+    font-size: 30px;
     font-weight: 700;
     margin: 8px 0 0;
     text-align: center;
@@ -1105,7 +1109,7 @@ cky
 
 /* âœ… HEADER FIX - Logo + Icons Center */
 .header {
-    background: linear-gradient(135deg, #ff9800, #f57c00);
+    background: linear-gradient(135deg, #ff9800, #F48FB1);
     padding: 15px 10px;
     width: 100%;
     display: flex;
@@ -1131,8 +1135,8 @@ cky
     font-weight: 900;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    background: #c8e6c9;
-    padding: 5px 15px;
+    background: #FFF176;
+    padding: 70px 90px;
     display: inline-block;
 }
 
@@ -1159,10 +1163,10 @@ cky
 }
 
 .tagline {
-    color: #2e7d32;
-    font-size: 16px;
+    color: #FFF176;
+    font-size: 30px;
     font-weight: 700;
-    margin: 8px 0 0;
+    margin: 50px 0 0;
     text-align: center;
 }
 
@@ -1189,4 +1193,856 @@ body {
 .main-content {
     flex: 1; /* âœ… Baaki saari jagah le lega */
     width: calc(100% - 90px);
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 10px;
+}
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  display: block;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+}
+.product-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.product-card h3 { 
+  font-size: 14px; 
+  margin: 5px 0; 
+  height: 35px;
+  overflow: hidden;
+}
+.product-card p { 
+  color: green; 
+  font-weight: bold; 
+  margin: 0; 
+  font-size: 16px;
+}
+
+/* === FINAL FIX - Single Header, No Yellow === */
+.header {
+  background: #ff7f00 !important;
+  padding: 20px 0 30px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Orange box - single only */
+.logo-wrap {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  width: 92% !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.logo-wrap h1 {
+  background: #F9A825 !important;
+  color: #d50000 !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  padding: 14px 10px !important;
+  margin: 0 !important;
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: 2px 2px 0 #fff59d !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Online Shopping */
+.logo-wrap .tagline,
+.header .tagline {
+  color: #FFF176 !important;
+  font-size: 15px !important;
+  text-align: bottom !important;
+  margin-top: 12px !important;
+  display: block !important;
+}
+
+/* Neeche wali yellow patti hatao */
+.header::after, .header::before {
+  content: none !important;
+}
+
+
+/* === SUPER OVERRIDE - Sab yellow hatao (1 July) === */
+.header,
+.header *,
+.logo-wrap,
+.logo-wrap *,
+.logo-wrap h1,
+.logo-wrap h1 *,
+.header .logo,
+.header-logo {
+  border: 0 !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Orange box - plain */
+.header {
+  background:  !important;
+  padding: 22px 0 30px !important;
+  height: auto !important;
+}
+
+/* Logo box - single, center, NO yellow */
+.logo-wrap {
+  width: 100% !important;
+  margin: 0 auto !important;
+  background: transparent !important;
+}
+
+.logo-wrap h1 {
+  background: #64B5F6 !important;
+  color: #d32f2f !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  padding: 14px 12px !important;
+  margin: 0 !important;
+  border-radius: 10px !important;
+  display: block !important;
+  width: 100% !important;
+  text-shadow: 2px 2px 0 #fff59d !important;
+}
+
+/* Online Shopping */
+.tagline {
+  color: #FFF176 !important;
+  font-size: 15px !important;
+  margin-top: 30px !important;
+}
+
+/* neeche wali patti force off */
+.header::after, .header::before {
+  display: none !important;
+  content: "" !important;
+  height: 0 !important;
+}
+
+
+/* === ORANGE BOX = VIDEO WIDTH === */
+.header {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* andar ka content center rahe */
+.header .logo-wrap,
+.header .container {
+  width: 94% !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+/* video jaisa full bleed */
+body .header {
+  position: relative !important;
+  transform: none !important;
+}
+
+
+/* body ka left yellow sidebar hatane ke liye */
+body, html {
+  overflow-x: hidden !important;
+}
+.main-content, .page-wrapper {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+cky
+/* === HEADER = VIDEO WIDTH - No Gap === */
+body, html {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* Left sidebar ko upar float kar do, content ko push na kare */
+.CustomerLogin, 
+div[style*="Customer Login"],
+div[style*="HELP DESK"],
+.left-sidebar {
+  position: absolute !important;
+  left: 2px !important;
+  top: 0px !important;
+  z-index: 9999 !important;
+  width: 200px !important;
+}
+
+/* Header aur video dono full width */
+.header,
+.video-section,
+div[style*="video"],
+.main-banner {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  box-sizing: border-box !important;
+  transform: translateX(0) !important;
+}
+
+/* Orange box ko stretch karo */
+.header {
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+}
+
+
+/* ===== SANTRAJET FINAL FIX - paste at END of style.css ===== */
+
+/* 1. HEADER = Orange box full width */
+.header {
+  background:  !important;
+  background-image: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 28px 12px 34px !important;
+  display: block !important;
+  text-align: center !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  position: relative !important;
+  left: 0 !important;
+}
+
+/* 2. LOGO-WRAP = Green box, no yellow */
+
+.logo-wrap {
+  text-align: center !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+ 
+ santrajet mall ka box boundry
+.logo-wrap h1 {
+  color: #d32f2f !important;
+  background: #81c784 !important;
+  font-size: 26px !important;
+  font-weight: 900 !important;
+  margin: 0 auto !important;
+  padding: 10px 22px !important;
+  display: inline-block !important;
+  border-radius: 12px !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  text-shadow: 2px 2px 0 #fff59d !important;
+}
+
+/* 3. TAGLINE = Online Shopping */
+.tagline {
+  color:  #FFF176!important;
+  font-size: 30px !important;
+  font-weight: 500 !important;
+  margin: 10px 0 0 !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+/* extra: neeche wali yellow patti band */
+.header::before, .header::after {
+  display: none !important;
+  content: none !important;
+}
+
+cky
+
+/* ===== BACKGROUND COLOR FIX ===== */
+
+/* 1. Product cards ke peeche wala bada background */
+body,
+#app,
+.main-content,
+.products,
+.product-grid {
+  background-color: #e8f5e9 !important;  /* abhi ka white-grey */
+}
+
+/* 2. Search box ke peeche */
+.search-box,
+.search-container {
+  background-color: #e8f5e9 !important;  /* pure white */
+}
+/* === SANTRAJET MALL aur Online Shopping ko middle me === */
+.orange-box, header, .header-banner, div[style*="#ff9800"] {
+  padding-top: 10px !important;
+  padding-bottom: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* === SANTRAJET MALL + Online Shopping - center se thoda niche === */
+header, .header-banner, div[style*="background:#ff"] {
+  padding-top: 40px !important;   /* 5=center tha, 20=thoda niche */
+  padding-bottom: 20px !important;
+  text-align: center !important;
+}
+
+/* Box ka peela background */
+div[style*="SANTRAJET MALL"] {
+  background-color: #FFF9C4 !important;  /* <-- ye badlo */
+  border-radius: 5px !important;
+}
+
+/* Text ka laal colour */
+div[style*="SANTRAJET MALL"] {
+  color: #D50000 !important;  /* <-- ye badlo, red */
+  font-size: 26px !important;
+  font-weight: 900 !important;
+}
+
+/* Online Shopping */
+div[style*="Online Shopping"] {
+  color: #FFEB3B !important;  /* <-- ye badlo, yellow */
+  font-size: 18px !important;
+  margin-top: 50px !important;
+}
+
+/* === SANTRAJET + Online Shopping - bottom se thoda upar === */
+header, .header-banner, div[style*="background:#ff"] {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;  /* BOTTOM se chipkao */
+  align-items: center !important;        /* LEFT-RIGHT center */
+  height: 260px !important;              /* orange box ki height */
+  padding-bottom: 20px !important;       /* bottom se 20px upar */
+  padding-top: 0 !important;
+}
+
+/* SANTRAJET MALL box - Online Shopping ke upar */
+div[style*="SANTRAJET MALL"] {
+  margin-bottom: 10px !important;   /* dono ke beech gap */
+  order: 1 !important;
+}
+
+/* Online Shopping text - sabse niche */
+div[style*="Online Shopping"] {
+  margin-top: 0 !important;
+  order: 2 !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+
+/* ===== SANTRAJET FINAL FIX - bottom ke paas ===== */
+.header {
+  background: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+background-image: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+background-color: transparent !important;
+  width: 100% !important;
+  padding: 65px 12px 20px !important;  /* upar 65px, neeche 20px */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important; /* bottom se chipkao */
+  align-items: center !important;
+  text-align: center !important;
+}
+
+/* SANTRAJET ka peela box - mota padding hatao */
+.logo-wrap h1 {
+  padding: 6px 15px !important;  /* pehle 70px tha, ab 6px */
+  margin: 0 !important;
+  display: inline-block !important;
+}
+
+/* Online Shopping - gap */
+.tagline {
+  margin: 10px 0 0 0 !important;
+  font-size: 30px !important;
+  text-align: center !important;
+}
+
+/* layout.css ka 80% aur 120px wala tod */
+header .logo,
+.header .logo,
+header h1,
+.header h1 {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  font-size: 35px !important;  /* bada 120px hatao */
+}
+
+cky
+
+/* ===== FINAL FIX - Last me paste karo ===== */
+.header,
+header {
+  background: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 0%, #FFB74D 100%) !important;
+  background-color: transparent !important;
+  margin-left: 0 !important;
+  padding: 15px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.logo-wrap { 
+  text-align: center !important; 
+}
+
+.header h1,
+header h1,
+.header .logo,
+header .logo,
+.logo-wrap h1 {
+  color: #d32f2f !important;
+  font-size: 35px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  margin: 0 auto !important;
+  padding: 5px 12px !important;
+  letter-spacing: 1px !important;
+  text-shadow: 1px 1px 0 #fff176, 2px 2px 0 #fff176 !important;
+  background: transparent !important;
+  transform: none !important;
+  position: static !important;
+  display: inline-block !important;
+}
+
+.tagline {
+  font-size: 20px !important;
+  color: #FFF176 !important;
+  margin: 6px 0 0 !important;
+}
+
+/* Mobile */
+@media (max-width: 580px) {
+  .header h1,
+  .logo-wrap h1 {
+    font-size: 16px !important;
+  }
+}
+
+cky
+
+/* ===== ICONS + TAGLINE FIX ===== */
+.mall-icons {
+  width: 22px !important;
+  height: 22px !important;
+  position: relative !important;
+  margin-left: 6px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* Ball upar, Fish uske just niche */
+.earth-icon-mall,
+.earth-icon {
+  font-size: 12px !important;
+  position: absolute !important;
+  top: -2px !important;
+  right: 0 !important;
+  left: auto !important;
+}
+
+.fish-icon-mall,
+.fish-icon {
+  font-size: 11px !important;
+  position: absolute !important;
+  top: 9px !important;   /* ball ke just niche */
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+/* SANTRAJET MALL ke just niche tagline */
+.tagline {
+  font-size: 12px !important;
+  color: #FFF176 !important;
+  margin: 2px 0 0 !important;   /* 50px ko 2px kiya */
+  line-height: 1 !important;
+  font-weight: 600 !important;
+}
+
+cky
+
+/* ===== CENTER LOCK - Logo center, icons alag ===== */
+.header {
+  text-align: center !important;
+  position: relative !important;
+  padding: 18px 10px 14px !important;
+}
+
+.logo-wrap {
+  position: relative !important;
+  display: inline-block !important; /* center me lock */
+  padding: 0 34px 0 0 !important;    /* right me icons ke liye jagah */
+}
+
+/* SANTRAJET MALL - center */
+.header h1,
+.logo-wrap h1 {
+  margin: 0 auto !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+/* Tagline - logo ke just niche, center */
+.tagline {
+  display: block !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  margin: 3px 0 0 !important;
+  color: #FFF176 !important;
+}
+
+/* Icons - logo ke right side, apni jagah */
+.mall-icons {
+  position: absolute !important;
+  right: 0px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 26px !important;
+  height: 32px !important;
+}
+
+/* Ball */
+.earth-icon-mall {
+  position: absolute !important;
+  top: 0px !important;
+  left: 2px !important;
+  font-size: 12px !important;
+}
+
+/* Fish - ball ke niche */
+.fish-icon-mall {
+  position: absolute !important;
+  top: 16px !important;
+  left: 10px !important;
+  font-size: 12px !important;
+  transform: rotate(18deg) !important;
+}
+
+/* ===== FINAL CENTER GROUP - sab ek saath center ===== */
+.header {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 16px 0 12px !important;
+}
+
+.logo-wrap {
+  position: relative !important;
+  display: inline-block !important;
+  text-align: center !important;
+}
+
+/* SANTRAJET MALL - perfect center */
+.logo-wrap h1 {
+  display: block !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  position: static !important;
+  transform: none !important;
+}
+
+/* Online Shopping - just niche center */
+.tagline {
+  display: block !important;
+  text-align: center !important;
+  margin: 4px 0 0 !important;
+  font-size: 12px !important;
+}
+
+/* Icons - logo ke bahar, center ko touch nahi karenge */
+.mall-icons {
+  position: absolute !important;
+  top: -2px !important;
+  right: -28px !important;  /* logo ke right side chipke */
+  width: 26px !important;
+  height: 34px !important;
+}
+
+.earth-icon-mall {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  font-size: 13px !important;
+}
+
+.fish-icon-mall {
+  position: absolute !important;
+  top: 16px !important;
+  left: 8px !important;
+  font-size: 13px !important;
+  transform: rotate(18deg) !important;
+}
+
+cky
+
+/* === SANTRAJET MALL - FINAL LOCK (layout.css end) === */
+.header { display:flex!important; justify-content:center!important; }
+.logo-wrap { position:relative!important; display:inline-block!important; text-align:center!important; padding-bottom:18px!important; }
+
+.header h1 { font-size:22px!important; margin:0 auto!important; }
+.tagline { font-size:14px!important; margin:4px 0 0!important; display:block!important; text-align:center!important; }
+
+.mall-icons {
+  position:absolute!important;
+  left:50%!important;
+  margin-left:68px!important; /* LL ke niche */
+  top:28px!important;
+  width:24px!important; height:30px!important;
+}
+.earth-icon-mall { font-size:16px!important; top:0!important; left:0!important; }
+.fish-icon-mall { font-size:16px!important; top:12px!important; left:6px!important; transform:rotate(15deg)!important; }
+
+cky
+
+/* ===== GROUP - bhai bada, behen chhoti, saath me bade ===== */
+.logo-wrap {
+  --base: 50px;   /* bhai ka size - isko badhao to sab badhega */
+  --scale: 1.7;     /* extra zoom - 1.2 = 20% aur bada */
+  --x: 0px; --y: 0px;
+
+  position: relative !important;
+  display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x),var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important;
+  text-align: center !important;
+}
+
+/* BHAI - 100% */
+.logo-wrap h1 { font-size: 1em !important; margin:0 !important; }
+
+/* CHHOTI BEHEN - 64% */
+.tagline { font-size: 0.64em !important; margin-top:0.2em !important; display:block !important; }
+
+/* ICONS BEHEN - 73% */
+.mall-icons { position:absolute !important; left:50% !important; margin-left:3.1em !important; top:1.25em !important; }
+.earth-icon-mall, .fish-icon-mall { font-size: 0.73em !important; position:absolute !important; }
+.earth-icon-mall { top:0 !important; left:0 !important; }
+.fish-icon-mall { top:0.6em !important; left:0.28em !important; transform:rotate(15deg) !important; }
+
+cky
+
+/* ===== SANTRAJET GROUP - bhai bada, behen chhoti ===== */
+.logo-wrap {
+  --base: 80px;   /* <-- bada-chhota yahan se: 50=chhota, 80=bada */
+  --scale: 1;
+  --x: 0px;
+  --y: 4px;
+
+  position: relative !important;
+  display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x), var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important;
+  text-align: center !important;
+  padding-bottom: 0.8em !important;
+}
+
+.logo-wrap h1 {
+  font-size: 1em !important;
+  margin: 0 !important;
+  line-height: 1.1 !important;
+}
+
+.tagline {
+  font-size: 0.64em !important;
+  margin-top: 0.2em !important;
+  display: block !important;
+}
+
+.mall-icons {
+  position: absolute !important;
+  left: 50% !important;
+  margin-left: 3.1em !important;
+  top: 1.25em !important;
+}
+
+.earth-icon-mall, .fish-icon-mall {
+  font-size: 0.73em !important;
+  position: absolute !important;
+}
+
+.earth-icon-mall { top: 0 !important; left: 0 !important; }
+.fish-icon-mall { top: 0.6em !important; left: 0.28em !important; transform: rotate(15deg) !important; }
+
+cky
+
+/* ===== SANTRAJET GROUP - layout.css ke END me ===== */
+.logo-wrap {
+  --base: 26px;   /* 22=chhota, 26=medium, 32=bada */
+  --scale: 1;
+  --x: 0px;
+  --y: 4px;
+
+  position: relative !important;
+  display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x), var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important;
+  text-align: center !important;
+  padding-bottom: 0.8em !important;
+}
+.logo-wrap h1 { font-size: 1em !important; margin:0 !important; }
+.tagline { font-size: 0.64em !important; margin-top:0.2em !important; display:block !important; }
+.mall-icons { position:absolute !important; left:50% !important; margin-left:3.1em !important; top:1.25em !important; }
+.earth-icon-mall, .fish-icon-mall { font-size: 0.73em !important; position:absolute !important; }
+.earth-icon-mall { top:0 !important; left:0 !important; }
+.fish-icon-mall { top:0.6em !important; left:0.28em !important; transform:rotate(15deg) !important; }
+
+.fish-icon-mall {
+  position: absolute !important;
+  top: 0.72em !important;   /* 0.65 se 0.72 = thoda aur niche */
+  left: 0.38em !important;  /* 0.22 se 0.38 = center se thoda aage/right */
+  font-size: 0.7em !important;
+  transform: rotate(15deg) !important;
+}
+
+cky
+
+/* ===== LL ke niche earth, earth ke left-niche fish ===== */
+.logo-wrap {
+  --base: 26px; --scale: 1; --x: 0px; --y: 4px;
+  --ix: 2.45em; --iy: 0.95em;
+  position: relative !important; display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x), var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important; text-align: center !important;
+  padding-bottom: 1.2em !important;
+}
+.logo-wrap h1 { font-size: 1em !important; margin:0 !important; }
+.tagline { font-size: 0.64em !important; margin-top:0.25em !important; display:block !important; }
+.mall-icons { position:absolute !important; left:50% !important; margin-left:var(--ix) !important; top:var(--iy) !important; }
+.earth-icon-mall { position:absolute !important; top:0 !important; left:0.1em !important; font-size:0.7em !important; }
+.fish-icon-mall { position:absolute !important; top:0.75em !important; left:-0.02em !important; font-size:0.7em !important; transform:rotate(15deg) !important; }
+
+cky
+
+/* ===== BACKGROUND 2 COLOUR GRADIENT ===== */
+.header-gradient {
+  position: relative !important;
+  width: 100% !important;
+  height: 200ppx !important; /* chaho to badha do */
+  background: linear-gradient(90deg, #ff7e7e, #ffb86c) !important; /* 2 colour yahan badlo */
+}
+
+/* ===== TEXT TAGLINE ICON GROUP ===== */
+.text-tagline-icon-group {
+  /* --- YAHAN SE CONTROL --- */
+  --size: 500%;      /* Size 80% = poora group kitna bada (100% = full) */
+  --left: 20%;      /* Left 20% = left se kitna andar */
+  --right: auto;    /* Right 40% chahiye to left:auto karke right:40% likho */
+  --top: 18%;       /* Top 10% = upar se niche */
+  --bottom: auto;   /* Bottom chahiye to top:auto karke bottom:10% likho */
+  --center: 50%;    /* Center ke liye left:50% rakho */
+
+  /* --- POSITION --- */
+  position: absolute !important;
+  width: var(--size) !important;
+  left: var(--left) !important;   /* Left 40% etc */
+  top: var(--top) !important;     /* Top */
+  right: var(--right) !important; /* Right */
+  bottom: var(--bottom) !important;/* Bottom */
+  transform: translateX(-50%) !important; /* Center me lane ke liye - hatana ho to delete kardo */
+  text-align: center !important;
+  
+  /* andar ka base size - isse bhai-behen ek sath bade-chote honge */
+  font-size: 26px !important; 
+}
+
+/* --- ANDAR KE HISSE (bhai bada, behen chhoti) --- */
+.text-tagline-icon-group h1 {
+  font-size: 1em !important; /* TEXT */
+  margin: 0 !important;
+}
+.text-tagline-icon-group .tagline {
+  font-size: 0.64em !important; /* TAGLINE */
+  display: block !important;
+  margin-top: 0.2em !important;
+}
+.text-tagline-icon-group .mall-icons {
+  position: absolute !important;
+  left: 50% !important;
+  margin-left: 2.45em !important; /* LL ke niche */
+  top: 0.95em !important;
+}
+.text-tagline-icon-group .earth-icon-mall { /* BIG BALL */
+  position: absolute !important;
+  font-size: 0.7em !important;
+  left: 0.1em !important; top: 0 !important;
+}
+.text-tagline-icon-group .fish-icon-mall { /* CHOTI BALL */
+  position: absolute !important;
+  font-size: 0.7em !important;
+  left: -0.02em !important; /* left side */
+  top: 0.75em !important;   /* niche */
+  transform: rotate(15deg) !important;
+}
+
+cky
+
+.text-tagline-icon-group {
+  /* --- TU SIRF YE 2 BADLEGI --- */
+  --group-width: 80%;   /* kitni jagah lega */
+  --group-font: 50px;   /* <-- ISSE SAB EK SATH BADE-CHOTE HONGE */
+
+  /* --- position --- */
+  --left: 20%;
+  --top: 18%;
+
+  position: absolute !important;
+  width: var(--group-width) !important;
+  left: var(--left) !important;
+  top: var(--top) !important;
+  transform: translateX(-50%) !important;
+  text-align: center !important;
+  
+  font-size: var(--group-font) !important; /* YEHI BHAI-BEHEN KO EK SATH BADA KARTA HAI */
 }

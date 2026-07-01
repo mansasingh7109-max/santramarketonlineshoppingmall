@@ -14,17 +14,23 @@ body {
 
 /* ===== HEADER - LEMON YELLOW SIDEBAR + ORANGE ===== */
 .header:not(.admin-header) {
-    padding: 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    min-height: 240px !important;
-    background: #ff7a00 !important;
-    border-bottom: 4px solid #fff176 !important;
-    width: 90% !important;
-    position: relative !important;
-    box-shadow: 0 5px 0 #fff176 !important;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  min-height: 170px !important;
+  background:  !important;
+  padding-bottom: 15px !important;
+  
+  /* YELLOW HATAO */
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  
+  /* WIDTH FIX - sidebar ke liye jagah chhodo */
+  width: calc(100% - 40px) !important;
+margin-left: 40px !important;
+  position: relative !important;
 }
 
 /* LEFT YELLOW LEMON SIDEBAR 5px */
@@ -40,6 +46,28 @@ body {
     z-index: 1 !important;
 }
 
+
+/* LEFT YELLOW SIDEBAR ke liye content shift - UPDATED */
+.header:not(.admin-header),
+.main-content, 
+.products, 
+.product-grid,
+.video-section, 
+.search-box,
+.container,
+#app > div {
+  margin-left: 40px !important;
+width: calc(100% - 40px) !important;
+  box-sizing: border-box !important;
+}
+
+/* sidebar ko patla karo taaki kam jagah le */
+.left-sidebar,
+div[style*="Customer Login"],
+div[style*="HELP DESK"] {
+  width: 80px !important;
+  max-width: 80px !important;
+}
 /* SANTRA MALL LOGO - RED TEXT + LIGHT GREEN 3D SHADOW - RIGHT ALIGN */
 .header h1,
 .header .brand-name,
@@ -49,10 +77,13 @@ header .logo {
     position: center !important;
     right: 50px !important;
     left: 20% !important;
-    top: 50% !important;
+    top: 80% !important;
     transform: translateY(-50%) !important;
+    font-size: 26px !important;
     color: #d32f2f !important; /* RED Text */
-    background: #81c784 !important;
+    background: linear-gradient(90deg, #F48FB1 -50%, #FFB74D 100%) !important;
+  background-image: linear-gradient(90deg, #F48FB1 -50%, #FFB74D 100%) !important;
+background-color: transparent !important;
     -webkit-text-fill-color: #ff0000 !important;
     font-family: "Poppins", sans-serif !important;
     font-size: 120px !important;
@@ -78,7 +109,7 @@ header .logo {
     .header .logo,
     header h1,
     header .logo {
-        font-size: 20px !important;
+        font-size: 18px !important;
         right: 50px !important;
         left: 10% !important;
         letter-spacing: 2px !important;
@@ -1058,14 +1089,14 @@ label {
     font-weight: 900;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    background: #c8e6c9;
-    padding: 5px 15px;
+    background: #FFF176;
+    padding: 70px 15px;
     display: inline-block;
 }
 
 .tagline {
-    color: #2e7d32;
-    font-size: 13px;
+    color: #FFF176;
+    font-size: 30px;
     margin: 5px 0 0 0;
 }
 
@@ -1210,3 +1241,556 @@ cky
     font-size: 22px!important;
     margin-bottom: 3px!important;
 }
+
+cky
+
+/* ===== YELLOW PATTI - FINAL FIX (NO SCROLL) ===== */
+.left-sidebar,
+div[style*="Customer Login"],
+div[style*="HELP DESK"] {
+  background: #fff9b0 !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 58px !important;   /* footer ke upar stop */
+  width: 40px !important;
+  height: auto !important;
+  z-index: 9999 !important;  /* <-- 5 ki jagah 9999 karo */
+  pointer-events: none !important;
+}
+
+/* .header::before ko hata do - yehi scroll kara raha tha */
+.header::before {
+  display: none !important;
+}
+
+/* Footer upar rahe */
+.footer,
+.bottom-nav,
+nav[class*="bottom"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  z-index: 10000 !important;
+}
+
+/* === YELLOW PATTI KE PEECHE WHITE HATAO === */
+html, body {
+  background: #fff9b0 !important;  /* left side ka base yellow */
+}
+
+/* Content area ko mint rakho */
+#app, .main-content, .container, main {
+  background-color: #e8f5e9 !important;  /* tera mint green */
+  margin-left: 40px !important;  /* patti ke liye jagah */
+}
+/* Piche ka white background ko yellow karo (sirf left side) */
+body {
+  background: linear-gradient(to right, #fff9b0 0px, #fff9b0 40px, #e8f5e9 40px, #e8f5e9 100%) !important;
+}
+
+cky
+
+/* ===== FINAL FIX - SANTRAJET LOGO MEDIUM ===== */
+.header h1,
+header h1,
+.header .logo,
+header .logo,
+.header .brand-name,
+.logo-wrap h1 {
+    font-size: 35px !important;
+    line-height: 1.2 !important;
+    transform: none !important;
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    text-shadow: 1px 1px 0 #fff176, 2px 2px 0 #fff176 !important;
+    letter-spacing: 1px !important;
+    padding: 5px 12px !important;
+    margin: 0 auto !important;
+    display: inline-block !important;
+}
+
+/* Tagline medium */
+.tagline {
+    font-size: 18px !important;
+    margin: 6px 0 0 !important;
+    color: #FFF176 !important;
+}
+
+/* Mobile pe aur chhota */
+@media (max-width: 580px) {
+  .header h1,
+  header h1,
+  .header .logo,
+  header .logo {
+      font-size: 20px !important;
+  }
+  .tagline {
+      font-size: 24px !important;
+  }
+}
+
+cky
+
+/* ===== LOGO CENTER + MEDIUM ===== */
+.header,
+header {
+    text-align: center !important;
+    padding-top: 10px !important;
+}
+
+.header h1,
+header h1,
+.header .logo,
+header .logo,
+.logo-wrap h1 {
+    font-size: 35px !important;
+    display: inline-block !important;
+    margin: 0 auto !important;
+    padding: 6px 14px !important;  /* ye padding = thoda sa andar */
+    transform: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    text-shadow: 1px 1px 0 #fff176 !important;
+}
+
+/* Mobile center */
+@media (max-width: 580px) {
+  .header h1,
+  header h1 {
+      font-size: 16px !important;
+      padding: 5px 12px !important;
+  }
+}
+
+cky
+/* ===== CENTER LOCK - Logo center, icons alag ===== */
+.header {
+  text-align: center !important;
+  position: relative !important;
+  padding: 18px 10px 14px !important;
+}
+
+.logo-wrap {
+  position: relative !important;
+  display: inline-block !important; /* center me lock */
+  padding: 0 34px 0 0 !important;    /* right me icons ke liye jagah */
+}
+
+/* SANTRAJET MALL - center */
+.header h1,
+.logo-wrap h1 {
+  margin: 0 auto !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+/* Tagline - logo ke just niche, center */
+.tagline {
+  display: block !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  margin: 3px 0 0 !important;
+  color: #FFF176 !important;
+}
+
+/* Icons - logo ke right side, apni jagah */
+.mall-icons {
+  position: absolute !important;
+  right: 0px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 26px !important;
+  height: 32px !important;
+}
+
+/* Ball */
+.earth-icon-mall {
+  position: absolute !important;
+  top: 0px !important;
+  left: 2px !important;
+  font-size: 12px !important;
+}
+
+/* Fish - ball ke niche */
+.fish-icon-mall {
+  position: absolute !important;
+  top: 16px !important;
+  left: 10px !important;
+  font-size: 12px !important;
+  transform: rotate(18deg) !important;
+}
+
+
+cky
+
+/* ===== FINAL CENTER GROUP - sab ek saath center ===== */
+.header {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 16px 0 12px !important;
+}
+
+.logo-wrap {
+  position: relative !important;
+  display: inline-block !important;
+  text-align: center !important;
+}
+
+/* SANTRAJET MALL - perfect center */
+.logo-wrap h1 {
+  display: block !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  position: static !important;
+  transform: none !important;
+}
+
+/* Online Shopping - just niche center */
+.tagline {
+  display: block !important;
+  text-align: center !important;
+  margin: 4px 0 0 !important;
+  font-size: 12px !important;
+}
+
+/* Icons - logo ke bahar, center ko touch nahi karenge */
+.mall-icons {
+  position: absolute !important;
+  top: -2px !important;
+  right: -28px !important;  /* logo ke right side chipke */
+  width: 26px !important;
+  height: 34px !important;
+}
+
+.earth-icon-mall {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  font-size: 13px !important;
+}
+
+.fish-icon-mall {
+  position: absolute !important;
+  top: 16px !important;
+  left: 8px !important;
+  font-size: 13px !important;
+  transform: rotate(18deg) !important;
+}
+
+cky
+
+/* === LL KE NICHE - 100% FINAL === */
+.logo-wrap {
+  position: relative !important;
+  display: inline-block !important;
+  padding-bottom: 18px !important; /* niche jagah banao */
+}
+
+.mall-icons {
+  position: absolute !important;
+  left: 50% !important;
+  margin-left: 68px !important;  /* 58 se 68 kiya - LL ke bilkul niche */
+  top: 40px !important;         /* 20 se 28 kiya - text ke niche */
+  width: 20px !important;
+  height: 28px !important;
+}
+
+.earth-icon-mall {
+  top: 0 !important;
+  left: 0 !important;
+  font-size: 11px !important;
+}
+
+.fish-icon-mall {
+  top: 11px !important;
+  left: 5px !important;
+  font-size: 11px !important;
+  transform: rotate(15deg) !important;
+}
+
+cky
+
+/* === SERVER SIZE FIX - Acode jaisa === */
+.header h1,
+.logo-wrap h1 {
+  font-size: 22px !important;   /* 18 se 22 kiya */
+  line-height: 1.2 !important;
+}
+
+.tagline {
+  font-size: 14px !important;   /* 11-12 se 14 kiya */
+  margin-top: 5px !important;
+}
+
+.mall-icons {
+  width: 28px !important;
+  height: 36px !important;
+}
+
+.earth-icon-mall {
+  font-size: 16px !important;   /* 11 se 16 */
+}
+
+.fish-icon-mall {
+  font-size: 16px !important;   /* 11 se 16 */
+  top: 14px !important;
+}
+
+cky
+
+/* ===== GROUP - bhai bada, behen chhoti, saath me bade ===== */
+.logo-wrap {
+  --base: 50px;   /* bhai ka size - isko badhao to sab badhega */
+  --scale: 1.7;     /* extra zoom - 1.2 = 20% aur bada */
+  --x: 0px; --y: 0px;
+
+  position: relative !important;
+  display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x),var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important;
+  text-align: center !important;
+}
+
+/* BHAI - 100% */
+.logo-wrap h1 { font-size: 1em !important; margin:0 !important; }
+
+/* CHHOTI BEHEN - 64% */
+.tagline { font-size: 0.64em !important; margin-top:0.2em !important; display:block !important; }
+
+/* ICONS BEHEN - 73% */
+.mall-icons { position:absolute !important; left:50% !important; margin-left:3.1em !important; top:1.25em !important; }
+.earth-icon-mall, .fish-icon-mall { font-size: 0.73em !important; position:absolute !important; }
+.earth-icon-mall { top:0 !important; left:0 !important; }
+.fish-icon-mall { top:0.6em !important; left:0.28em !important; transform:rotate(15deg) !important; }
+
+cky
+
+/* ===== SANTRAJET GROUP - bhai bada, behen chhoti ===== */
+.logo-wrap {
+  --base: 50px;   /* <-- bada-chhota yahan se: 22=chhota, 50=bada */
+  --scale: 1;
+  --x: 0px;
+  --y: 4px;
+
+  position: relative !important;
+  display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x), var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important;
+  text-align: center !important;
+  padding-bottom: 0.8em !important;
+}
+
+.logo-wrap h1 {
+  font-size: 1em !important;
+  margin: 0 !important;
+  line-height: 1.1 !important;
+}
+
+.tagline {
+  font-size: 0.64em !important;
+  margin-top: 0.2em !important;
+  display: block !important;
+}
+
+.mall-icons {
+  position: absolute !important;
+  left: 50% !important;
+  margin-left: 3.1em !important;
+  top: 1.25em !important;
+}
+
+.earth-icon-mall, .fish-icon-mall {
+  font-size: 0.73em !important;
+  position: absolute !important;
+}
+
+.earth-icon-mall { top: 0 !important; left: 0 !important; }
+.fish-icon-mall { top: 0.6em !important; left: 0.28em !important; transform: rotate(15deg) !important; }
+
+cky
+
+/* ===== LL ke niche earth, uske niche fish ===== */
+.logo-wrap {
+  --base: 26px;
+  --scale: 1;
+  --x: 0px;
+  --y: 4px;
+  /* icon ki position yahan se fine-tune */
+  --ix: 2.45em;  /* left-right: kam karo to left, badhao to right */
+  --iy: 0.95em;  /* up-down: kam karo to upar, badhao to niche */
+
+  position: relative !important;
+  display: inline-block !important;
+  font-size: var(--base) !important;
+  transform: translate(var(--x), var(--y)) scale(var(--scale)) !important;
+  transform-origin: center top !important;
+  text-align: center !important;
+  padding-bottom: 1.2em !important;
+}
+
+.logo-wrap h1 { font-size: 1em !important; margin:0 !important; }
+.tagline { font-size: 0.64em !important; margin-top:0.25em !important; display:block !important; }
+
+.mall-icons {
+  position: absolute !important;
+  left: 50% !important;
+  margin-left: var(--ix) !important;
+  top: var(--iy) !important;
+  width: 1em !important;
+  height: 1.4em !important;
+}
+
+.earth-icon-mall {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0.1em !important;
+  font-size: 0.7em !important;
+}
+
+.fish-icon-mall {
+  position: absolute !important;
+  top: 0.65em !important;   /* earth ke bilkul niche */
+  left: 0.22em !important;  /* earth ke center me */
+  font-size: 0.7em !important;
+  transform: rotate(15deg) !important;
+}
+
+.fish-icon-mall {
+  position: absolute !important;
+  top: 0.72em !important;   /* 0.65 se 0.72 = thoda aur niche */
+  left: 0.38em !important;  /* 0.22 se 0.38 = center se thoda aage/right */
+  font-size: 0.7em !important;
+  transform: rotate(15deg) !important;
+}
+
+cky
+
+/* ===== BACKGROUND 2 COLOUR GRADIENT ===== */
+.header-gradient {
+  position: relative !important;
+  width: 100% !important;
+  height: 200px !important; /* chaho to badha do */
+  background: linear-gradient(90deg, #ff7e7e, #ffb86c) !important; /* 2 colour yahan badlo */
+}
+
+/* ===== TEXT TAGLINE ICON GROUP ===== */
+.text-tagline-icon-group {
+  /* --- YAHAN SE CONTROL --- */
+  --size: 100%;      /* Size 60% = poora group kitna bada (100% = full) */
+  --left: 20%;      /* Left 20% = left se kitna andar */
+  --right: auto;    /* Right 40% chahiye to left:auto karke right:40% likho */
+  --top: 18%;       /* Top 10% = upar se niche */
+  --bottom: auto;   /* Bottom chahiye to top:auto karke bottom:10% likho */
+  --center: 50%;    /* Center ke liye left:50% rakho */
+
+  /* --- POSITION --- */
+  position: absolute !important;
+  width: var(--size) !important;
+  left: var(--left) !important;   /* Left 40% etc */
+  top: var(--top) !important;     /* Top */
+  right: var(--right) !important; /* Right */
+  bottom: var(--bottom) !important;/* Bottom */
+  transform: translateX(-50%) !important; /* Center me lane ke liye - hatana ho to delete kardo */
+  text-align: center !important;
+  
+  /* andar ka base size - isse bhai-behen ek sath bade-chote honge */
+  font-size: 26px !important; 
+}
+
+/* --- ANDAR KE HISSE (bhai bada, behen chhoti) --- */
+.text-tagline-icon-group h1 {
+  font-size: 1em !important; /* TEXT */
+  margin: 0 !important;
+}
+.text-tagline-icon-group .tagline {
+  font-size: 0.64em !important; /* TAGLINE */
+  display: block !important;
+  margin-top: 0.2em !important;
+}
+.text-tagline-icon-group .mall-icons {
+  position: absolute !important;
+  left: 50% !important;
+  margin-left: 2.45em !important; /* LL ke niche */
+  top: 0.95em !important;
+}
+.text-tagline-icon-group .earth-icon-mall { /* BIG BALL */
+  position: absolute !important;
+  font-size: 0.7em !important;
+  left: 0.1em !important; top: 0 !important;
+}
+.text-tagline-icon-group .fish-icon-mall { /* CHOTI BALL */
+  position: absolute !important;
+  font-size: 0.7em !important;
+  left: -0.02em !important; /* left side */
+  top: 0.75em !important;   /* niche */
+  transform: rotate(15deg) !important;
+}
+
+cky
+
+.text-tagline-icon-group {
+  /* --- TU SIRF YE 2 BADLEGI --- */
+  --group-width: 80%;   /* kitni jagah lega */
+  --group-font: 50px;   /* <-- ISSE SAB EK SATH BADE-CHOTE HONGE */
+
+  /* --- position --- */
+  --left: 20%;
+  --top: 18%;
+
+  position: absolute !important;
+  width: var(--group-width) !important;
+  left: var(--left) !important;
+  top: var(--top) !important;
+  transform: translateX(-50%) !important;
+  text-align: center !important;
+  
+  font-size: var(--group-font) !important; /* YEHI BHAI-BEHEN KO EK SATH BADA KARTA HAI */
+}
+
+cky
+
+.text-tagline-icon-group {
+  --group-width: 100%;   /* 80% mat kar, 100% rakh */
+  --group-font: 24px;    /* <-- ISSE SAB BADE HONGE, 50px nahi */
+  
+  --left: 50%;           /* 20% nahi, center ke liye 50% */
+  --top: 15%;            /* upar-neeche */
+
+  position: absolute !important;
+  width: var(--group-width) !important;
+  left: var(--left) !important;
+  top: var(--top) !important;
+  transform: translateX(-50%) !important;
+  text-align: center !important;
+  font-size: var(--group-font) !important;
+}
+
+cky
+
+/* === GROUP === */
+.text-tagline-icon-group {
+  --big: 35;     /* <-- 26 = normal, 35 = bada, 20 = chhota (px nahi, sirf number) */
+  --x: 0px;      /* left-right */
+  --y: 5px;      /* up-down */
+
+  position: absolute !important;
+  left: 50% !important;
+  top: 20px !important;
+  transform: translateX(-50%) translate(var(--x), var(--y)) !important;
+  font-size: calc(var(--big) * 1px) !important; /* YE SABKO EK SATH BADA KAREGA */
+  text-align: center !important;
+}
+
+/* andar */
+.text-tagline-icon-group h1 { font-size: 1em !important; margin:0 !important; }
+.text-tagline-icon-group .tagline { font-size: 0.6em !important; display:block !important; }
+.text-tagline-icon-group .mall-icons { position:absolute !important; left:50% !important; margin-left:70px !important; top:26px !important; }
+.text-tagline-icon-group .earth-icon-mall { position:absolute !important; font-size:16px !important; }
+.text-tagline-icon-group .fish-icon-mall { position:absolute !important; font-size:16px !important; top:15px !important; left:-3px !important; transform:rotate(15deg) !important; }
