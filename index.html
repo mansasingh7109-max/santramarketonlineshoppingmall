@@ -7,6 +7,13 @@
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="layout.css" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet" />
+        
+  <!-- SABSE PEHLE CONFIG -->
+  <script src="config.js?v=1"></script>
+  
+  <!-- Fir baki scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/..."></script>
+
         <script src="./js/products.js"></script>
 
         <script>
@@ -20,7 +27,7 @@
        .main-container {
             display: flex;
             min-height: 100vh;
-            background: #f1f3f6;
+            background: #fff9c4;
         }
        .left-sidebar {
             width: 70px;
@@ -30,7 +37,7 @@
             position: fixed;
             left: 0;
             top: 0;
-            height: 80vh;
+            height: 100vh;
             z-index: 100;
             display: flex;
             flex-direction: column;
@@ -42,7 +49,7 @@
             flex: 1;
             margin-left: 70px;
             width: calc(100% - 70px);
-            background: #f1f3f6;
+            background: #fff9c4;
         }
        .sidebar-btn {
             background: linear-gradient(135deg, #ffcc80, #ffb74d);
@@ -79,29 +86,26 @@
         #logoutBtn.show {
             display: flex!important;
         }
-       .header {
-            margin-left: 0;
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+
        .logo-wrap { text-align: center; }
        .logo-wrap h1 {
-            color: #d32f2f;
-            font-size: 26px;
+            color: #FFF176
+            font-size: 20px;
             font-weight: 900;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            background: #c8e6c9;
-            padding: 5px 15px;
-            display: inline-block;
+            background: ;
+padding: 20px 30px;
+display: inline-block;
+font-size: 35px;      /* pehle 40+ tha, ab medium */
+line-height: 1.2;
         }
        .tagline {
-            color: #2e7d32;
-            font-size: 13px;
-            margin: 5px 0 0;
+    color: #FFF176;
+    font-size: 15px;   /* medium, padhne layak */
+    margin: 6px 0 0;   /* 60px mat rakho, upar aa jayega */
+    letter-spacing: 0.5px;
+}
         }
        .products {
             display: grid;
