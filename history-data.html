@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 History Data Center - SANTRA MALL</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#f3f4f6;padding:15px}
+    .header{background:#8b5cf6;color:white;padding:20px;text-align:center;font-size:20px;font-weight:bold;margin-bottom:15px;border-radius:10px;position:relative}
+    .back-btn{position:absolute;left:15px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:14px}
+    .card{background:white;padding:20px;border-radius:10px;margin-bottom:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+    .card h3{color:#8b5cf6;margin-bottom:15px;font-size:18px}
+    .btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn{padding:14px;background:#3b82f6;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center}
+    .btn.green{background:#10b981}.btn.orange{background:#f59e0b}.btn.red{background:#ef4444}.btn.purple{background:#8b5cf6}
+    .filter-row{display:flex;gap:10px;margin:15px 0;flex-wrap:wrap}
+    .filter-row input,.filter-row select{flex:1;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px}
+    .data-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:13px}
+    .data-table th{background:#8b5cf6;color:white;padding:10px;text-align:left;position:sticky;top:0}
+    .data-table td{padding:8px;border-bottom:1px solid #eee;vertical-align:top}
+    .data-table tr:hover{background:#f9fafb}
+    .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
+    .toast.show{display:block}
+    .count-badge{background:#8b5cf6;color:white;padding:3px 8px;border-radius:12px;font-size:12px;margin-left:5px}
+    .status-pending{background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;font-size:11px}
+    .status-confirmed{background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:4px;font-size:11px}
+    .status-purchased{background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px}
+    .tabs{display:flex;gap:5px;margin-bottom:10px}
+    .tab{padding:8px 15px;background:#e5e7eb;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
+    .tab.active{background:#8b5cf6;color:white}
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <button class="back-btn" onclick="window.location.href='admin-otp.html'">← Back</button>
+    📊 History Data Center<br><span style="font-size:14px;font-weight:normal">SANTRA MALL - Full Customer Data</span>
+  </div>
+
+  <div class="card">
+    <h3>📥 Download Center</h3>
+    <div class="btn-grid">
+      <button class="btn green" onclick="downloadAllCustomers()">👥 All Customers</button>
+      <button class="btn purple" onclick="downloadOTPHistory()">🔐 OTP History</button>
+      <button class="btn orange" onclick="downloadOrders()">📦 Orders History</button>
+      <button class="btn red" onclick="downloadSearchHistory()">🔍 Search History</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Filter & Search</h3>
+    <div class="filter-row">
+      <input type="text" id="searchCustomer" placeholder="Name / Mobile / Email" onkeyup="searchData()">
+      <select id="monthFilter" onchange="filterData()"><option value="">All Months</option><option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option><option value="4">May</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Aug</option><option value="8">Sep</option><option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option></select>
+      <select id="yearFilter" onchange="filterData()"><option value="">All Years</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchView('customers', this)">👥 Customers</button>
+      <button class="tab" onclick="switchView('orders', this)">📦 Orders</button>
+    </div>
+    
+    <div id="customersView">
+      <h3>👥 Customers List <span class="count-badge" id="customerCount">0</span></h3>
+      <div style="overflow-x:auto;max-height:400px">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Name</th><th>Mobile</th><th>Email</th><th>Location</th><th>Last OTP</th><th>Logins</th><th>Date</th></tr></thead>
+          <tbody id="customerBody"><tr><td colspan="8" style="text-align:center;padding:20px">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="ordersView" style="display:none">
+      <h3>📦 Orders History <span class="count-badge" id="orderCount">0</span></h3>
+      <div style="overflow-x:auto;max-height:500px">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Date</th><th>Customer</th><th>Mobile</th><th>Products</th><th>Amount</th><th>Status</th><th>Link</th></tr></thead>
+          <tbody id="orderBody"><tr><td colspan="8" style="text-align:center;padding:20px">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = { apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA", authDomain:"santramarketshoppingmall.firebaseapp.com", projectId:"santramarketshoppingmall" };
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let allCustomers = [], allOrders = [], currentView = 'customers';
+
+window.addEventListener('load', () => { loadCustomers(); loadOrders(); });
+
+function loadCustomers() {
+    // ✅ DESC order - naya upar
+    db.collection('customers').orderBy('updatedAt', 'desc').onSnapshot(snapshot => {
+        allCustomers = []; let series = snapshot.size;
+        snapshot.forEach(doc => {
+            const d = doc.data();
+            allCustomers.push({ series: series--, id: doc.id, ...d, dateObj: d.updatedAt ? d.updatedAt.toDate() : new Date() });
+        });
+        renderCustomers(allCustomers);
+    });
+}
+
+function loadOrders() {
+    // ✅ Sab orders lao - group collection
+    db.collectionGroup('orders').orderBy('orderDate', 'desc').onSnapshot(snapshot => {
+        allOrders = []; let series = snapshot.size;
+        snapshot.forEach(doc => {
+            const d = doc.data();
+            allOrders.push({ series: series--, id: doc.id, ...d, dateObj: d.orderDate ? new Date(d.orderDate) : new Date() });
+        });
+        renderOrders(allOrders);
+    });
+}
+
+function switchView(view, btn) {
+    currentView = view;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('customersView').style.display = view==='customers'?'block':'none';
+    document.getElementById('ordersView').style.display = view==='orders'?'block':'none';
+}
+
+function renderCustomers(list) {
+    const tbody = document.getElementById('customerBody');
+    document.getElementById('customerCount').innerText = list.length;
+    if(!list.length){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">No data</td></tr>'; return; }
+    tbody.innerHTML = list.map(c => `
+        <tr>
+            <td><b>${c.series}</b></td>
+            <td>${c.name||'-'}</td><td>${c.mobile||'-'}</td><td>${c.email||'-'}</td>
+            <td>${c.location||'-'}</td><td>${c.lastOTP||'-'}</td><td>${c.totalLogins||1}</td>
+            <td>${c.dateObj.toLocaleDateString('en-IN')}</td>
+        </tr>`).join('');
+}
+
+function renderOrders(list) {
+    const tbody = document.getElementById('orderBody');
+    document.getElementById('orderCount').innerText = list.length;
+    if(!list.length){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">No orders</td></tr>'; return; }
+    tbody.innerHTML = list.map(o => {
+        const products = (o.items||[]).map(it=>`${it.name} (₹${it.price} x${it.qty})`).join('<br>');
+        const link = `https://wa.me/91${o.customerPhone}?text=Order ${o.id}`;
+        const statusClass = o.status==='Pending'?'status-pending':o.status==='Confirmed'?'status-confirmed':'status-purchased';
+        return `
+        <tr>
+            <td><b>${o.series}</b></td>
+            <td>${o.dateObj.toLocaleString('en-IN')}</td>
+            <td>${o.customerName||'-'}</td>
+            <td>${o.customerPhone||'-'}</td>
+            <td style="max-width:200px">${products}</td>
+            <td>₹${o.total||0}</td>
+            <td><span class="${statusClass}">${o.status||'Pending'}</span></td>
+            <td><a href="${link}" target="_blank" style="color:#25D366">WhatsApp</a></td>
+        </tr>`;
+    }).join('');
+}
+
+function searchData() {
+    const q = document.getElementById('searchCustomer').value.toLowerCase();
+    if(currentView==='customers'){
+        const f = !q ? allCustomers : allCustomers.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.mobile||'').includes(q)||(c.email||'').toLowerCase().includes(q));
+        renderCustomers(f);
+    } else {
+        const f = !q ? allOrders : allOrders.filter(o=>(o.customerName||'').toLowerCase().includes(q)||(o.customerPhone||'').includes(q));
+        renderOrders(f);
+    }
+}
+function filterData(){ searchData(); }
+
+function downloadAllCustomers(){ /* same as before */ const data=allCustomers.map(c=>({'Series':c.series,'Name':c.name,'Mobile':c.mobile,'Email':c.email,'Location':c.location,'Last OTP':c.lastOTP,'Logins':c.totalLogins,'Date':c.dateObj.toLocaleDateString('en-IN')})); const ws=XLSX.utils.json_to_sheet(data); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Customers"); XLSX.writeFile(wb,`Customers_${Date.now()}.xlsx`); showToast('✅ Downloaded'); }
+function downloadOTPHistory(){ db.collection('otp_history').orderBy('sentAt','desc').get().then(s=>{let d=[],i=1; s.forEach(doc=>{const x=doc.data(); d.push({'Series':i++,'Date':x.sentAt?x.sentAt.toDate().toLocaleString('en-IN'):'','Name':x.name,'Mobile':x.mobile,'OTP':x.otp});}); const ws=XLSX.utils.json_to_sheet(d); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"OTP"); XLSX.writeFile(wb,`OTP.xlsx`); showToast('✅'); }); }
+function downloadOrders(){ const d=allOrders.map(o=>({'Series':o.series,'Date':o.dateObj.toLocaleString('en-IN'),'Customer':o.customerName,'Mobile':o.customerPhone,'Products':(o.items||[]).map(i=>i.name).join(', '),'Amount':o.total,'Status':o.status})); const ws=XLSX.utils.json_to_sheet(d); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Orders"); XLSX.writeFile(wb,`Orders.xlsx`); showToast('✅'); }
+function downloadSearchHistory(){ db.collection('search_history').orderBy('timestamp','desc').limit(1000).get().then(s=>{let d=[],i=1; s.forEach(doc=>{const x=doc.data(); d.push({'Series':i++,'Date':x.timestamp?x.timestamp.toDate().toLocaleString('en-IN'):'','Mobile':x.mobile,'Search':x.search});}); const ws=XLSX.utils.json_to_sheet(d); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Search"); XLSX.writeFile(wb,`Search.xlsx`); showToast('✅'); }); }
+
+function showToast(m){ const t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+</script>
+</body>
+</html>
