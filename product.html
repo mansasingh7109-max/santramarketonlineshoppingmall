@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product - SANTRA MALL</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    
+  <!-- SABSE PEHLE CONFIG -->
+  <script src="config.js?v=1"></script>
+  
+  <!-- Fir baki scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/..."></script>
+
     <style>
         :root {--accent: #e40046;--text: #212121;--green: #10b981;--orange: #f59e0b;}
         * {margin: 0;padding: 0;box-sizing: border-box;font-family: "Poppins", Arial, sans-serif;}
@@ -107,11 +114,7 @@
         // const MYCHOICE_KEY = "santrajet_mychoice";
         // ==================== OLD CODE BACKUP END ====================
 
-        // ✅ NEW - cart.html se match karo
-        const CART_KEY = "santraMallCart_v2";
-        const MYCHOICE_KEY = "santraMallMyChoice_v2";
-        window.CART_KEY = CART_KEY;
-        window.MYCHOICE_KEY = MYCHOICE_KEY;
+
 
         let currentProduct = null;
         let selectedVariant = null;
@@ -155,7 +158,7 @@
                         if (choiceBadge) { choiceBadge.innerText = count; choiceBadge.style.display = count > 0? 'flex' : 'none'; }
                     });
                 } else {
-                    let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+                    let cart = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
                     let totalQty = Array.isArray(cart)? cart.reduce((sum, item) => sum + (item.qty || 1), 0) : Object.values(cart).reduce((sum, item) => sum + (item.qty || 1), 0);
                     const cartBadge = document.getElementById('cartBadge');
                     if (cartBadge) { cartBadge.innerText = totalQty; cartBadge.style.display = totalQty > 0? 'flex' : 'none'; }
@@ -244,12 +247,12 @@
             let productImage = getProductThumbnail(currentProduct);
             let cartItem = { id: currentProduct.id, name: currentProduct.name, price: finalPrice, image: productImage, code: currentProduct.code || currentProduct.id, variant: selectedVariant || "Default", qty: selectedQty, dbType: currentProduct.dbType || 'rtdb' };
             // LocalStorage - HAMESHA
-            let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+            let cartArray = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
             if (!Array.isArray(cartArray)) cartArray = Object.values(cartArray);
             let existingIndex = cartArray.findIndex(item => item && item.id === currentProduct.id && item.variant === cartItem.variant);
             if (existingIndex > -1) cartArray[existingIndex].qty += selectedQty;
             else cartArray.push(cartItem);
-            localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
+            localStorage.setItem(window.CART_KEY, JSON.stringify(cartArray));
             // RTDB - SIRF LOGIN
             if (user) {
                 const cartRef = rtdb.ref('users/' + user.uid + '/cart/' + currentProduct.id);
