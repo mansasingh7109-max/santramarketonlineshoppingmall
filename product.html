@@ -5,69 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product - SANTRA MALL</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-    
-  <!-- SABSE PEHLE CONFIG -->
-  <script src="config.js?v=1"></script>
-  
-  <!-- Fir baki scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/..."></script>
+
+  <!-- ✅ STEP 1: Sirf Firebase SDK head me -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <style>
         :root {--accent: #e40046;--text: #212121;--green: #10b981;--orange: #f59e0b;}
         * {margin: 0;padding: 0;box-sizing: border-box;font-family: "Poppins", Arial, sans-serif;}
         body {background: #f1f3f6;padding-bottom: 85px;}
-     .header {background: var(--accent);color: white;padding: 12px 15px;display: flex;align-items: center;gap: 10px;position: sticky;top: 0;z-index: 100;}
-     .back-btn {background: none;border: none;color: white;font-size: 22px;cursor: pointer;}
-     .header h1 {font-size: 18px;flex: 1;}
-     .header-icons {display: flex;align-items: center;gap: 15px;}
-     .header-icon {color: white;text-decoration: none;font-size: 24px;position: relative;}
-     .header-badge {position: absolute;top: -8px;right: -8px;background: #ffeb3b;color: #000;width: 20px;height: 20px;border-radius: 50%;font-size: 11px;font-weight: bold;display: none;align-items: center;justify-content: center;}
-     .container {max-width: 600px;margin: 0 auto;background: white;}
-     .image-slider-box {position: relative;width: 100%;height: 400px;background: #f9f9f9;overflow: hidden;}
-     .slider-container {width: 100%;height: 100%;position: relative;}
-     .slide-img {width: 100%;height: 100%;object-fit: contain;display: none;position: absolute;top: 0;left: 0;}
-     .slide-img.active {display: block;}
-     .slide-btn {position: absolute;top: 50%;transform: translateY(-50%);background: rgba(0,0,0,0.5);color: white;border: none;width: 45px;height: 45px;border-radius: 50%;font-size: 28px;cursor: pointer;z-index: 10;font-weight: bold;}
-     .slide-btn.prev {left: 10px;}
-     .slide-btn.next {right: 10px;}
-     .slide-dots {position: absolute;bottom: 15px;left: 50%;transform: translateX(-50%);display: flex;gap: 8px;z-index: 10;}
-     .dot {width: 10px;height: 10px;background: rgba(255,255,255,0.5);border-radius: 50%;cursor: pointer;border: 2px solid white;}
-     .dot.active {background: white;width: 25px;border-radius: 5px;}
-     .img-count {position: absolute;top: 15px;right: 15px;background: rgba(0,0,0,0.7);color: white;padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: bold;z-index: 10;}
-     .details {padding: 20px;}
-     .product-name {font-size: 22px;margin-bottom: 8px;font-weight: bold;color: var(--text);line-height: 1.3;}
-     .product-meta {color: #666;font-size: 13px;margin-bottom: 15px;display: flex;gap: 15px;flex-wrap: wrap;}
-     .product-meta span {background: #f3f4f6;padding: 4px 10px;border-radius: 4px;}
-     .price-box {display: flex;align-items: center;gap: 12px;margin: 20px 0;padding: 15px;background: #fff5f7;border-radius: 8px;}
-     .price {font-size: 34px;font-weight: bold;color: var(--accent);}
-     .mrp {text-decoration: line-through;color: #999;font-size: 20px;}
-     .discount {background: var(--green);color: white;padding: 5px 12px;border-radius: 6px;font-size: 14px;font-weight: bold;}
-     .section {margin: 25px 0;padding-top: 20px;border-top: 1px solid #eee;}
-     .section h3 {font-size: 16px;margin-bottom: 12px;color: var(--text);display: flex;align-items: center;gap: 8px;}
-     .variant-grid {display: flex;flex-wrap: wrap;gap: 10px;}
-     .variant-btn {padding: 12px 22px;border: 2px solid #ddd;background: white;border-radius: 8px;cursor: pointer;font-weight: bold;min-width: 65px;text-align: center;font-size: 15px;transition: all 0.2s;position: relative;}
-     .variant-btn:hover:not(:disabled) {border-color: var(--accent);background: #fff0f5;}
-     .variant-btn.active {border-color: var(--accent);background: #fff0f5;color: var(--accent);box-shadow: 0 0 3px rgba(228,0,70,0.1);}
-     .variant-btn:disabled {opacity: 0.35;cursor: not-allowed;background: #f5f5f5;border-color: #ddd;color: #aaa;}
-     .variant-btn:disabled::after {content: "✕";position: absolute;top: 3px;right: 5px;font-size: 14px;color: #ef4444;font-weight: bold;}
-     .variant-price {font-size: 11px;display: block;color: #666;margin-top: 2px;font-weight: normal;}
-     .variant-stock {font-size: 10px;margin-top: 2px;font-weight: normal;display: block;color: var(--green);}
-     .variant-stock.out-stock {color: #ef4444;font-weight: bold;}
-     .desc {line-height: 1.8;color: #555;font-size: 15px;white-space: pre-wrap;}
-     .features {background: linear-gradient(135deg, #f9f9f9, #fff);padding: 18px;border-radius: 10px;margin: 15px 0;border: 1px solid #eee;}
-     .features p {font-size: 14px;color: #555;margin: 8px 0;display: flex;align-items: center;gap: 8px;}
-     .features p::before {content: "✓";color: var(--green);font-weight: bold;font-size: 18px;}
-     .action-btns {position: fixed;bottom: 0;left: 0;right: 0;background: white;padding: 12px;display: flex;gap: 8px;box-shadow: 0 -4px 15px rgba(0,0,0,0.1);max-width: 600px;margin: 0 auto;z-index: 50;}
-     .btn {flex: 1;padding: 16px;border: none;border-radius: 8px;font-weight: bold;font-size: 16px;cursor: pointer;transition: all 0.3s;}
-     .btn-wish {width: 60px;background: #fff0f5;color: var(--accent);font-size: 28px;}
-     .btn-cart {background: white;border: 2px solid var(--accent);color: var(--accent);}
-     .btn-buy {background: var(--accent);color: white;}
-     .btn:disabled {opacity: 0.5;cursor: not-allowed;background: #f5f5f5;color: #999;border-color: #ddd;}
-     .loader {text-align: center;padding: 100px 20px;color: var(--accent);font-size: 18px;}
-     .error {text-align: center;padding: 100px 20px;}
-     .qty-box {display: flex;align-items: center;gap: 15px;margin: 20px 0;padding: 15px;background: #f9f9f9;border-radius: 8px;}
-     .qty-box button {width: 40px;height: 40px;border: 2px solid var(--accent);background: white;color: var(--accent);border-radius: 8px;font-size: 20px;cursor: pointer;font-weight: bold;}
-     .qty-box span {font-size: 20px;font-weight: bold;min-width: 30px;text-align: center;}
+  .header {background: var(--accent);color: white;padding: 12px 15px;display: flex;align-items: center;gap: 10px;position: sticky;top: 0;z-index: 100;}
+  .back-btn {background: none;border: none;color: white;font-size: 22px;cursor: pointer;}
+  .header h1 {font-size: 18px;flex: 1;}
+  .header-icons {display: flex;align-items: center;gap: 15px;}
+  .header-icon {color: white;text-decoration: none;font-size: 24px;position: relative;}
+  .header-badge {position: absolute;top: -8px;right: -8px;background: #ffeb3b;color: #000;width: 20px;height: 20px;border-radius: 50%;font-size: 11px;font-weight: bold;display: none;align-items: center;justify-content: center;}
+  .container {max-width: 600px;margin: 0 auto;background: white;}
+  .image-slider-box {position: relative;width: 100%;height: 400px;background: #f9f9;overflow: hidden;}
+  .slider-container {width: 100%;height: 100%;position: relative;}
+  .slide-img {width: 100%;height: 100%;object-fit: contain;display: none;position: absolute;top: 0;left: 0;}
+  .slide-img.active {display: block;}
+  .slide-btn {position: absolute;top: 50%;transform: translateY(-50%);background: rgba(0,0,0,0.5);color: white;border: none;width: 45px;height: 45px;border-radius: 50%;font-size: 28px;cursor: pointer;z-index: 10;font-weight: bold;}
+  .slide-btn.prev {left: 10px;}
+  .slide-btn.next {right: 10px;}
+  .slide-dots {position: absolute;bottom: 15px;left: 50%;transform: translateX(-50%);display: flex;gap: 8px;z-index: 10;}
+  .dot {width: 10px;height: 10px;background: rgba(255,255,0.5);border-radius: 50%;cursor: pointer;border: 2px solid white;}
+  .dot.active {background: white;width: 25px;border-radius: 5px;}
+  .img-count {position: absolute;top: 15px;right: 15px;background: rgba(0,0,0,0.7);color: white;padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: bold;z-index: 10;}
+  .details {padding: 20px;}
+  .product-name {font-size: 22px;margin-bottom: 8px;font-weight: bold;color: var(--text);line-height: 1.3;}
+  .product-meta {color: #666;font-size: 13px;margin-bottom: 15px;display: flex;gap: 15px;flex-wrap: wrap;}
+  .product-meta span {background: #f3f4f6;padding: 4px 10px;border-radius: 4px;}
+  .price-box {display: flex;align-items: center;gap: 12px;margin: 20px 0;padding: 15px;background: #fff5f7;border-radius: 8px;}
+  .price {font-size: 34px;font-weight: bold;color: var(--accent);}
+  .mrp {text-decoration: line-through;color: #999;font-size: 20px;}
+  .discount {background: var(--green);color: white;padding: 5px 12px;border-radius: 6px;font-size: 14px;font-weight: bold;}
+  .section {margin: 25px 0;padding-top: 20px;border-top: 1px solid #eee;}
+  .section h3 {font-size: 16px;margin-bottom: 12px;color: var(--text);display: flex;align-items: center;gap: 8px;}
+  .variant-grid {display: flex;flex-wrap: wrap;gap: 10px;}
+  .variant-btn {padding: 12px 22px;border: 2px solid #ddd;background: white;border-radius: 8px;cursor: pointer;font-weight: bold;min-width: 65px;text-align: center;font-size: 15px;transition: all 0.2s;position: relative;}
+  .variant-btn:hover:not(:disabled) {border-color: var(--accent);background: #fff0f5;}
+  .variant-btn.active {border-color: var(--accent);background: #fff0f5;color: var(--accent);box-shadow: 0 0 3px rgba(228,0,70,0.1);}
+  .variant-btn:disabled {opacity: 0.35;cursor: not-allowed;background: #f5f5f5;border-color: #ddd;color: #aaa;}
+  .variant-btn:disabled::after {content: "✕";position: absolute;top: 3px;right: 5px;font-size: 14px;color: #ef4444;font-weight: bold;}
+  .variant-price {font-size: 11px;display: block;color: #666;margin-top: 2px;font-weight: normal;}
+  .variant-stock {font-size: 10px;margin-top: 2px;font-weight: normal;display: block;color: var(--green);}
+  .variant-stock.out-stock {color: #ef4444;font-weight: bold;}
+  .desc {line-height: 1.8;color: #555;font-size: 15px;white-space: pre-wrap;}
+  .features {background: linear-gradient(135deg, #f9f9, #fff);padding: 18px;border-radius: 10px;margin: 15px 0;border: 1px solid #eee;}
+  .features p {font-size: 14px;color: #555;margin: 8px 0;display: flex;align-items: center;gap: 8px;}
+  .features p::before {content: "✓";color: var(--green);font-weight: bold;font-size: 18px;}
+  .action-btns {position: fixed;bottom: 0;left: 0;right: 0;background: white;padding: 12px;display: flex;gap: 8px;box-shadow: 0 -4px 15px rgba(0,0,0,0.1);max-width: 600px;margin: 0 auto;z-index: 50;}
+  .btn {flex: 1;padding: 16px;border: none;border-radius: 8px;font-weight: bold;font-size: 16px;cursor: pointer;transition: all 0.3s;}
+  .btn-wish {width: 60px;background: #fff0f5;color: var(--accent);font-size: 28px;}
+  .btn-cart {background: white;border: 2px solid var(--accent);color: var(--accent);}
+  .btn-buy {background: var(--accent);color: white;}
+  .btn:disabled {opacity: 0.5;cursor: not-allowed;background: #f5f5;color: #999;border-color: #ddd;}
+  .loader {text-align: center;padding: 100px 20px;color: var(--accent);font-size: 18px;}
+  .error {text-align: center;padding: 100px 20px;}
+  .qty-box {display: flex;align-items: center;gap: 15px;margin: 20px 0;padding: 15px;background: #f9f9f9;border-radius: 8px;}
+  .qty-box button {width: 40px;height: 40px;border: 2px solid var(--accent);background: white;color: var(--accent);border-radius: 8px;font-size: 20px;cursor: pointer;font-weight: bold;}
+  .qty-box span {font-size: 20px;font-weight: bold;min-width: 30px;text-align: center;}
     </style>
 </head>
 <body>
@@ -88,33 +88,13 @@
         <button class="btn btn-buy" id="buyBtn">⚡ BUY NOW</button>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <!-- ✅ STEP 2: secrets.js ko body ke end me load karo -->
+  <!-- Ab HTML load ho chuka hoga, to 'null' error nahi aayega -->
+  <script src="secrets.js?v=6"></script>
 
     <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-          authDomain: "santramarketshoppingmall.firebaseapp.com",
-          databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
-          projectId: "santramarketshoppingmall",
-          storageBucket: "santramarketshoppingmall.appspot.com",
-          messagingSenderId: "398490252924",
-          appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-          measurementId: "G-ZW1ZR8HETY"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const rtdb = firebase.database();
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        // ==================== OLD CODE BACKUP - 25/06/2026 ====================
-        // const CART_KEY = "santrajet_cart";
-        // const MYCHOICE_KEY = "santrajet_mychoice";
-        // ==================== OLD CODE BACKUP END ====================
-
-
+        // ✅ STEP 3: Tumhara product ka code - secrets.js ke baad chalega
+        // Ab rtdb, db, auth, CART_KEY sab ready hain secrets.js se
 
         let currentProduct = null;
         let selectedVariant = null;
@@ -136,12 +116,14 @@
             return "https://via.placeholder.com/500x500?text=No+Image";
         }
 
-        window.addEventListener("load", function () {
-            const productId = new URLSearchParams(window.location.search).get("id");
-            if (!productId) return showError("Product ID missing", "URL me?id= nahi hai.");
+        // ✅ DOM ready ka wait mat karo, secrets.js already wait kar chuka
+        const productId = new URLSearchParams(window.location.search).get("id");
+        if (!productId) {
+            showError("Product ID missing", "URL me?id= add karo. Example: product.html?id=P123");
+        } else {
             loadProduct(productId);
             updateHeaderBadges();
-        });
+        }
 
         function updateHeaderBadges() {
             auth.onAuthStateChanged(user => {
@@ -158,7 +140,7 @@
                         if (choiceBadge) { choiceBadge.innerText = count; choiceBadge.style.display = count > 0? 'flex' : 'none'; }
                     });
                 } else {
-                    let cart = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+                    let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
                     let totalQty = Array.isArray(cart)? cart.reduce((sum, item) => sum + (item.qty || 1), 0) : Object.values(cart).reduce((sum, item) => sum + (item.qty || 1), 0);
                     const cartBadge = document.getElementById('cartBadge');
                     if (cartBadge) { cartBadge.innerText = totalQty; cartBadge.style.display = totalQty > 0? 'flex' : 'none'; }
@@ -178,12 +160,12 @@
                 try {
                     let doc = await db.collection("products").doc(cleanId).get();
                     if (doc.exists) currentProduct = { id: doc.id,...doc.data(), dbType: 'firestore' };
-                } catch (e) {}
+                } catch (e) { console.log("Firestore error:", e); }
                 if (!currentProduct) {
                     try {
                         let snapshot = await rtdb.ref("products/" + cleanId).once("value");
                         if (snapshot.exists()) currentProduct = { id: cleanId,...snapshot.val(), dbType: 'rtdb' };
-                    } catch (e) {}
+                    } catch (e) { console.log("RTDB error:", e); }
                 }
                 if (!currentProduct) {
                     try {
@@ -191,13 +173,19 @@
                         if (!q1.empty) { let doc = q1.docs[0]; currentProduct = { id: doc.id,...doc.data(), dbType: 'firestore' }; }
                     } catch (e) {}
                 }
-                if (!currentProduct) return showError("Product Not Found", "ID: " + productId);
-                document.getElementById("headerTitle").innerText = currentProduct.name;
+                if (!currentProduct) return showError("Product Not Found", "ID: " + productId + " database me nahi mila");
+
+                const headerEl = document.getElementById("headerTitle");
+                if(headerEl) headerEl.innerText = currentProduct.name;
+
                 document.title = currentProduct.name + " - SANTRA MALL";
                 renderProduct(currentProduct);
                 document.getElementById("actionBtns").style.display = "flex";
                 checkWishlistStatus();
-            } catch (error) { showError("Error Loading Product", error.message); }
+            } catch (error) {
+                console.error(error);
+                showError("Error Loading Product", error.message);
+            }
         }
 
         function renderProduct(p) {
@@ -213,7 +201,7 @@
                 let isOut = stock <= 0;
                 return `<button class="variant-btn" onclick='selectVariant(${JSON.stringify(v).replace(/'/g, "&apos;")}, this)' ${isOut? "disabled" : ""}>${name}${price && price!== p.price? `<span class="variant-price">₹${price}</span>` : ""}<span class="variant-stock ${isOut? "out-stock" : "in-stock"}">${isOut? "Out of stock" : stock + " left"}</span></button>`;
             }).join("");
-            document.getElementById("productContainer").innerHTML = `<div class="container">${sliderHTML}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code || p.id}</span><span>📁 ${p.category || "General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ""}${discount > 0? `<span class="discount">${discount}% OFF</span>` : ""}</div>${variants.length > 0? `<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>` : ""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description || "Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>100% Original & Authentic Products</p><p>Free Delivery on Orders Above ₹500</p><p>Easy 7 Days Return Policy</p><p>Cash on Delivery Available</p></div></div></div>`;
+            document.getElementById("productContainer").innerHTML = `<div class="container">${sliderHTML}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code || p.id}</span><span>📁 ${p.category || "General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ""}${discount > 0? `<span class="discount">${discount}% OFF</span>` : ""}</div>${variants.length > 0? `<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>` : ""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description || "Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>100% Original & Authentic Products</p><p>Free Delivery on Orders Above ₹500</p><p>Easy 7 Days Return Policy</p><p>Cash on Delivery Available</p></div></div>`;
             window.productImages = images; window.currentSlideIndex = 0;
             setTimeout(() => {
                 const firstBtn = document.querySelector(".variant-btn:not(:disabled)");
@@ -236,8 +224,6 @@
         window.goToSlide = function (index) { const slides = document.querySelectorAll(".slide-img"); const dots = document.querySelectorAll(".dot"); slides[window.currentSlideIndex].classList.remove("active"); dots[window.currentSlideIndex]?.classList.remove("active"); window.currentSlideIndex = index; slides[window.currentSlideIndex].classList.add("active"); dots[window.currentSlideIndex]?.classList.add("active"); };
         window.changeQty = function (change) { selectedQty = Math.max(1, Math.min(10, selectedQty + change)); document.getElementById("qtyDisplay").innerText = selectedQty; };
         function showToast(message) { const toast = document.createElement("div"); toast.innerText = message; toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-size:15px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)"; document.body.appendChild(toast); setTimeout(() => document.body.removeChild(toast), 3000); }
-
-        // ✅ ADD TO CART - GUEST + LOGIN
         function addToCart() {
             if (!currentProduct) return showToast("Product load nahi hua");
             let hasVariants = (currentProduct.variants || currentProduct.sizes || []).length > 0;
@@ -246,14 +232,20 @@
             let finalPrice = selectedVariantData?.price || currentProduct.price;
             let productImage = getProductThumbnail(currentProduct);
             let cartItem = { id: currentProduct.id, name: currentProduct.name, price: finalPrice, image: productImage, code: currentProduct.code || currentProduct.id, variant: selectedVariant || "Default", qty: selectedQty, dbType: currentProduct.dbType || 'rtdb' };
-            // LocalStorage - HAMESHA
-            let cartArray = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+
+            if(window.parent!== window) {
+                window.parent.postMessage({ type: 'addToCart', product: cartItem }, '*');
+                showToast("✅ Added to Cart! 🛒");
+                updateHeaderBadges();
+                return;
+            }
+
+            let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
             if (!Array.isArray(cartArray)) cartArray = Object.values(cartArray);
             let existingIndex = cartArray.findIndex(item => item && item.id === currentProduct.id && item.variant === cartItem.variant);
             if (existingIndex > -1) cartArray[existingIndex].qty += selectedQty;
             else cartArray.push(cartItem);
-            localStorage.setItem(window.CART_KEY, JSON.stringify(cartArray));
-            // RTDB - SIRF LOGIN
+            localStorage.setItem(CART_KEY, JSON.stringify(cartArray));
             if (user) {
                 const cartRef = rtdb.ref('users/' + user.uid + '/cart/' + currentProduct.id);
                 cartRef.once('value').then(snapshot => {
@@ -265,20 +257,25 @@
             updateHeaderBadges();
         }
         function buyNow() { addToCart(); setTimeout(() => { window.location.href = "cart.html"; }, 500); }
-
-        // ✅ ADD TO MY CHOICE
         function addToMyChoice() {
             if (!currentProduct) return showToast("Product load nahi hua");
             const user = auth.currentUser;
             let finalPrice = selectedVariantData?.price || currentProduct.price;
             let productImage = getProductThumbnail(currentProduct);
             let choiceItem = { id: currentProduct.id, name: currentProduct.name, price: finalPrice, image: productImage, code: currentProduct.code || currentProduct.id, variant: selectedVariant || "Default", from: currentProduct.dbType || 'rtdb' };
-            // LocalStorage
+
+            if(window.parent!== window) {
+                window.parent.postMessage({ type: 'addToChoice', product: choiceItem }, '*');
+                showToast("😍 Added to My Choice!");
+                updateHeaderBadges();
+                updateWishlistIcon(true);
+                return;
+            }
+
             let myChoiceArray = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
             if (!Array.isArray(myChoiceArray)) myChoiceArray = Object.values(myChoiceArray);
             let existingIndex = myChoiceArray.findIndex(item => item && item.id === currentProduct.id && item.variant === choiceItem.variant);
             if (existingIndex === -1) { myChoiceArray.push(choiceItem); localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoiceArray)); }
-            // RTDB
             if (user) { rtdb.ref('users/' + user.uid + '/myChoice/' + currentProduct.id).set(choiceItem).then(() => { showToast("😍 Added to My Choice!"); updateHeaderBadges(); updateWishlistIcon(true); }); }
             else { showToast("😍 Added to My Choice!"); updateHeaderBadges(); updateWishlistIcon(true); }
         }
@@ -298,6 +295,5 @@
         }
         function showError(title, msg) { document.getElementById("productContainer").innerHTML = `<div class="error"><h2>❌ ${title}</h2><p>${msg}</p><button class="btn btn-buy" onclick="window.location.href='index.html'" style="margin-top:20px">Go to Home</button></div>`; }
     </script>
-    <!-- ✅ Duplicate scripts hata diye - error fix -->
 </body>
 </html>
