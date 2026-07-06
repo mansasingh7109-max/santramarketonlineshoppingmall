@@ -2061,3 +2061,11 @@ div[style*="Online Shopping"] {
   font-size: 18px !important;
   margin-top: 50px !important;
 }
+
+/* Neeche wali patti = Left HELP DESK patti */
+div[style*="bottom: 0"], 
+div[style*="bottom:0"],
+.bottom-nav, #bottomNav {
+  background: linear-gradient(180deg, #FFF176, #4DB6AC) !important;
+}
+
