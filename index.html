@@ -712,7 +712,18 @@ line-height: 1.2;
                           <p class="stock">Stock: ${p.stock}</p>
                         </div>
                         <div class="product-actions">
-                         <button class="add-to-cart-btn" onclick='addToCart(${productData});event.stopPropagation();'>Add to Cart</button>
+<div style="display:flex; gap:5px; margin:5px 0; flex-wrap:wrap; justify-content:center;">
+  ${['S','M','L','XL','XXL'].map(s=>`
+    <button type="button"
+      class="size-btn-${p.id}"
+      data-size="${s}"
+      onclick="selectHomeSize('${p.id}','${s}',event)"
+      style="padding:3px 8px; border:1px solid #ddd; border-radius:4px; background:${(window.homeSelectedSizes && window.homeSelectedSizes['${p.id}'] || 'M')===s ? '#e91e63' : '#fff'}; color:${(window.homeSelectedSizes && window.homeSelectedSizes['${p.id}'] || 'M')===s ? '#fff' : '#333'}; font-size:12px;">
+      ${s}
+    </button>
+  `).join('')}
+</div>
+<button class="add-to-cart-btn" onclick="addHomeToCart('${p.id}', '${p.name.replace(/'/g,"\\'")}', ${p.price},'${p.image || (p.images && p.images[0]) || ''}' );event.stopPropagation();">Add to Cart</button>
                          <button class="buy-now-btn" onclick="buyNow('${p.id}', event)">Buy Now</button>
                         </div>
                       </div>
@@ -1059,8 +1070,48 @@ function handleSearchInput() {
 }
 
 </script>
+<script>
+
+window.homeSelectedSizes = window.homeSelectedSizes || {};
+function selectHomeSize(id, size, e){
+  e.stopPropagation();
+  window.homeSelectedSizes[id] = size;
+  // button ka color update karo
+  document.querySelectorAll(`.size-btn-${id}`).forEach(btn=>{
+    btn.style.background = btn.dataset.size===size? '#e91e63' : '#fff';
+    btn.style.color = btn.dataset.size===size? '#fff' : '#000';
+  });
+}
+function addHomeToCart(id, name, price, image){
+  try {
+    const size = (window.homeSelectedSizes && window.homeSelectedSizes[id]) || 'M';
+
+    // Original addToCart ko hi use karo - ye sahi key pe save karega
+    const product = {
+id: id + '_' + size,
+    name: name + ' (Size ' + size + ')',
+      price: Number(price) || 0,
+image: image || '',
+      qty: 1,
+      size: size
+    };
+
+    if (typeof addToCart === 'function') {
+      addToCart(product); // <-- ye teri site ka asli function hai
+    }
+
+    alert(name + ' (Size ' + size + ') cart me add ho gaya!');
+
+  } catch(err) {
+    console.error(err);
+    alert('Error: ' + err.message);
+  }
+}
+</script>
+
 <script src="cart.js"></script>
 <script src="mychoice.js"></script>
+
 
     </body>
 </html>
