@@ -11,7 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="config.js"></script>
     <script src="secrets.js"></script>
-    <style>/* tera pura CSS same */ *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;padding-bottom:20px}.header{background:#e91e63;color:white;padding:15px;text-align:center;font-weight:600;font-size:16px;position:sticky;top:0;z-index:100}.container{padding:15px}.card{background:white;border-radius:12px;padding:20px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.section-title{font-weight:600;font-size:18px;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #eee}.order-id{background:#fff9c4;padding:12px;border-radius:8px;font-size:14px;margin-bottom:15px;border:1px solid #f9e79f}.item{display:flex;gap:12px;padding:15px 0;border-bottom:1px dashed #ddd}.item:last-child{border-bottom:none}.item img{width:70px;height:70px;border-radius:8px;object-fit:cover}.item-details{flex:1;font-size:14px}.item-details h4{font-size:15px;margin-bottom:4px}.item-details p{color:#666;margin:2px 0}.item-details a{color:#e91e63;font-size:12px;text-decoration:none;word-break:break-all}.grand-total{text-align:right;font-weight:700;font-size:18px;padding-top:15px;margin-top:10px;border-top:2px solid #eee}.form-group{margin-bottom:18px}.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#444}.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;outline:none}.form-group input:focus,.form-group select:focus{border-color:#e91e63}.btn-send{width:100%;background:#00c853;color:white;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}.btn-send:disabled{background:#ccc;cursor:not-allowed}.delivery-title{display:flex;align-items:center;gap:6px;font-weight:600;font-size:18px;margin-bottom:15px}.empty-cart{text-align:center;padding:40px 20px;color:#999}.empty-cart button{margin-top:15px;padding:12px 24px;background:#e91e63;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer}.otp-box{background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:20px;margin-top:20px;text-align:center;display:none}.otp-box h3{color:#d32f2f;font-size:18px;margin-bottom:10px}.otp-box p{font-size:15px;color:#333;line-height:1.6}.whatsapp-btn{display:inline-block;background:#25d366;color:white;padding:12px 25px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px}</style>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;padding-bottom:20px}.header{background:#e91e63;color:white;padding:15px;text-align:center;font-weight:600;font-size:16px;position:sticky;top:0;z-index:100}.container{padding:15px}.card{background:white;border-radius:12px;padding:20px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.section-title{font-weight:600;font-size:18px;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #eee}.order-id{background:#fff9c4;padding:12px;border-radius:8px;font-size:14px;margin-bottom:15px;border:1px solid #f9e79f}.item{display:flex;gap:12px;padding:15px 0;border-bottom:1px dashed #ddd}.item:last-child{border-bottom:none}.item img{width:70px;height:70px;border-radius:8px;object-fit:cover}.item-details{flex:1;font-size:14px}.item-details h4{font-size:15px;margin-bottom:4px}.item-details p{color:#666;margin:2px 0}.item-details a{color:#e91e63;font-size:12px;text-decoration:none;word-break:break-all}.grand-total{text-align:right;font-weight:700;font-size:18px;padding-top:15px;margin-top:10px;border-top:2px solid #eee}.form-group{margin-bottom:18px}.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#444}.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;outline:none}.form-group input:focus,.form-group select:focus{border-color:#e91e63}.btn-send{width:100%;background:#00c853;color:white;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}.btn-send:disabled{background:#ccc;cursor:not-allowed}.delivery-title{display:flex;align-items:center;gap:6px;font-weight:600;font-size:18px;margin-bottom:15px}.empty-cart{text-align:center;padding:40px 20px;color:#999}.empty-cart button{margin-top:15px;padding:12px 24px;background:#e91e63;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer}.otp-box{background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:20px;margin-top:20px;text-align:center;display:none}.otp-box h3{color:#d32f2f;font-size:18px;margin-bottom:10px}.otp-box p{font-size:15px;color:#333;line-height:1.6}.whatsapp-btn{display:inline-block;background:#25d366;color:white;padding:12px 25px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px}</style>
 </head>
 <body>
     <div class="header">🛒 Complete Your Order</div>
@@ -22,6 +22,7 @@
             <div id="orderItems"></div>
             <div class="grand-total">Grand Total: ₹<span id="grandTotal">0</span></div>
         </div>
+
         <div class="card" id="formCard">
             <div class="delivery-title">📍 Delivery Address</div>
             <div class="form-group"><label>Full Name *</label><input type="text" id="name" placeholder="Enter your name" required></div>
@@ -48,24 +49,42 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof firebaseConfig!== "undefined") { localStorage.setItem("fb_cfg", JSON.stringify(firebaseConfig)); }
+    if (typeof firebaseConfig!== "undefined" &&!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     if (typeof EMAILJS_CONFIG!== "undefined") { emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY); }
+    window.db = firebase.firestore();
+    window.rtdb = firebase.database();
+    window.auth = firebase.auth();
     loadOrder();
 });
 var cart = {};
 var orderId = "SM" + Date.now();
-var itemsArray = []; // FIX 1
+var itemsArray = [];
 
 function loadOrder() {
-    try {
-        var rawData = localStorage.getItem(CART_KEY);
-        if (rawData && rawData!== "{}" && rawData!== "null" && rawData!== "[]") {
-            var cartData = JSON.parse(rawData);
-            if (Array.isArray(cartData)) { cart = {}; cartData.forEach(item => { let id = item.id || Math.random(); cart[id] = item; }); }
-            else { cart = cartData.cart? cartData.cart : cartData; }
+    auth.onAuthStateChanged(user => {
+        if(user){
+            rtdb.ref("users/"+user.uid+"/cart").once("value").then(s=>{
+                cart = {};
+                if(s.exists()) s.forEach(c=>{cart[c.key]=c.val();});
+                finishLoad();
+            });
+        } else {
+            try {
+                var rawData = localStorage.getItem('cart') || localStorage.getItem('santra_cart') || localStorage.getItem('CART_KEY') || '{}';
+                var cartData = JSON.parse(rawData);
+                cart = cartData.cart? cartData.cart : cartData;
+                if(Array.isArray(cart)){
+                    let temp={}; cart.forEach(i=>{let id=i.id||i.productId||Math.random(); temp[id]=i;}); cart=temp;
+                }
+            } catch (e) { cart = {}; }
+            finishLoad();
         }
-    } catch (e) { cart = {}; }
-    if (Object.keys(cart).length === 0) {
+    });
+}
+
+function finishLoad(){
+    Object.keys(cart).forEach(k=>{ if(!cart[k] ||!cart[k].price || parseFloat(cart[k].price) <= 0){ delete cart[k]; } });
+    if (!cart || Object.keys(cart).length === 0) {
         document.getElementById("orderCard").innerHTML = `<div class="empty-cart"><h3>🛒 Cart is Empty</h3><p>Pehle cart me products add karo</p><button onclick="window.location.href='index.html'">Shop Now</button></div>`;
         document.getElementById("sendBtn").disabled = true; return;
     }
@@ -83,14 +102,38 @@ function renderOrderSummary() {
         var qty = parseInt(item.qty) || 1;
         var price = parseFloat(item.price) || 0;
         var itemTotal = price * qty; subtotal += itemTotal;
-        var size = item.size || item.variant || "M"; // FIX 2 - size pakka milega
+        var size = item.size || item.variant || "Default";
+        var displayName = item.name + (item.size? ` (Size ${item.size})` : '');
         itemsArray.push({id:key, name:item.name, size:size, qty:qty, price:price, total:itemTotal, image:item.image, code:item.code||key, link:baseURL+"/product.html?id="+(item.id||key)});
-        return `<div class="item"><img src="${item.image || 'https://via.placeholder.com/70'}" alt="${item.name}"><div class="item-details"><h4>${count++}. ${item.name}</h4><p>Code: ${item.code||"N/A"}</p><p>Size: ${size}<br>Qty: ${qty} x ₹${price} = ₹${itemTotal}</p><a href="${baseURL}/product.html?id=${item.id||key}">Link: View Product</a></div></div>`;
+        // ✅ + - aur Remove wapas
+        return `<div class="item"><img src="${item.image || 'https://via.placeholder.com/70'}" alt="${item.name}"><div class="item-details"><h4>${count++}. ${displayName}</h4><p>Code: ${item.code||key}</p><p>Size: ${size}</p><p>Qty: <button onclick="updateQty('${key}',-1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">-</button> ${qty} <button onclick="updateQty('${key}',1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">+</button> x ₹${price} = ₹${itemTotal} <button onclick="removeItem('${key}')" style="border:none;background:none;color:#e91e63;font-size:11px;margin-left:6px;cursor:pointer">Remove</button></p><a href="product.html?id=${item.id||key}" target="_blank" style="color:#e91e63">Link: View Product</a></div></div>`;
     }).join("");
     var delivery = subtotal >= 500? 0 : 49;
     var grandTotal = subtotal + delivery;
     document.getElementById("grandTotal").innerText = grandTotal;
     window._totals = {subtotal, delivery, grandTotal};
+}
+
+function updateQty(key, delta){
+    if(!cart[key]) return;
+    cart[key].qty = Math.max(1, (parseInt(cart[key].qty)||1) + delta);
+    saveCartToStorage();
+    renderOrderSummary();
+}
+function removeItem(key){
+    delete cart[key];
+    saveCartToStorage();
+    renderOrderSummary();
+    if(Object.keys(cart).length===0) loadOrder();
+}
+function saveCartToStorage(){
+    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('santra_cart', JSON.stringify(cart));
+    let u = auth.currentUser; if(u){ rtdb.ref("users/"+u.uid+"/cart").set(cart); }
+}
+
+function openProduct(id){
+    window.parent.postMessage({type:"openProduct", id:id}, "*");
 }
 
 async function sendOrder() {
@@ -115,34 +158,25 @@ async function sendOrder() {
 
     var text = "🛒 *New Order - SANTRA MALL* 🛒\n";
     text += `Order ID: ${orderId}\nDate: ${new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}\n\n`;
-
-    itemsArray.forEach((item,i)=>{ // FIX 3 - WhatsApp me size+qty
+    itemsArray.forEach((item,i)=>{
         text += `${i+1}. ${item.name}\nSize: ${item.size}\nQty: ${item.qty} x ₹${item.price} = ₹${item.total}\nCode: ${item.code}\nLink: ${item.link}\n\n`;
     });
-
     text += `━━━━━━━━━━━━━━━━━━\nSubtotal: ₹${subtotal}\nDelivery: ${delivery===0?"FREE":"₹"+delivery}\n*GRAND TOTAL: ₹${grandTotal}*\n━━━━━━━━━━━━━━━━━━\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}\nPayment: ${payment}\n\n*>> PLEASE SEND OTP TO CONFIRM <<*`;
 
-    var orderData = {
-        orderId, customerName:name, customerMobile:mobile, customerEmail:email,
-        customerAddress:`${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}`,
-        items: itemsArray, subtotal, delivery, total:grandTotal, paymentMode:payment,
-        status:"Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    var orderData = {orderId, customerName:name, customerMobile:mobile, customerEmail:email, customerAddress:`${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}`, items: itemsArray, subtotal, delivery, total:grandTotal, paymentMode:payment, status:"Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()};
 
     try {
         await db.collection("orders").doc(orderId).set(orderData);
         await firebase.database().ref("orders/"+orderId).set(orderData);
         await db.collection("login_requests").doc(mobile).set({mobile, status:"pending", timestamp:firebase.firestore.FieldValue.serverTimestamp(), profile:{name,mobile,email,location:orderData.customerAddress}});
-
-        try { await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {order_id:orderId, customer_name:name, customer_mobile:mobile, customer_email:email, customer_address:orderData.customerAddress, order_total:grandTotal, order_items:itemsArray.map(i=>`${i.name} (${i.size}) x ${i.qty} = ₹${i.total}`).join("\n"), to_email:ADMIN_EMAIL}); } catch(e){}
-
-        window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`,"_blank");
+        try { await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {order_id:orderId, customer_name:name, customer_mobile:mobile, customer_email:email, customer_address:orderData.customerAddress, order_total:grandTotal, order_items:itemsArray.map(i=>`${i.name} (${i.size}) x ${i.qty} = ₹${i.total}`).join("\n"), to_email:"santramarketshoppingmall@gmail.com"}); } catch(e){}
+        window.open(`https://wa.me/918769171078?text=${encodeURIComponent(text)}`,"_blank");
         setTimeout(()=>{
-            localStorage.removeItem(CART_KEY);
-            document.getElementById("formCard").style.display="none";
-            document.getElementById("otpBox").style.display="block";
-            window.scrollTo({top:0,behavior:"smooth"});
-            alert("✅ Order Placed Successfully! WhatsApp opened.");
+            localStorage.clear(); localStorage.setItem('cart','{}'); localStorage.setItem('santra_cart','{}'); cart = {};
+            let u=auth.currentUser; if(u){rtdb.ref("users/"+u.uid+"/cart").remove();}
+            document.getElementById("formCard").style.display="none"; document.getElementById("otpBox").style.display="block";
+            document.getElementById("orderItems").innerHTML=""; document.getElementById("grandTotal").innerText="0";
+            window.scrollTo({top:0,behavior:"smooth"}); alert("✅ Order Placed Successfully! Cart khali ho gaya.");
         },800);
     } catch (error) {
         alert("❌ Order failed: "+error.message);
@@ -150,7 +184,7 @@ async function sendOrder() {
         document.getElementById("sendBtn").innerText = "📱 SEND ORDER";
     }
 }
-window.onload = loadOrder;
 </script>
 </body>
 </html>
+
