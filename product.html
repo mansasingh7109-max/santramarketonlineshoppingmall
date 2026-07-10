@@ -59,6 +59,7 @@
        .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
        .loader{padding:40px;text-align:center}
     </style>
+    <script src="order-saver.js"></script>
 </head>
 <body>
     <div class="header">
@@ -97,10 +98,35 @@ function updateHeaderBadges(){
 
 async function loadProduct(id){
   try{
-    let clean=String(id).trim(); currentProduct=null;
-    try{let d=await db.collection("products").doc(clean).get();if(d.exists)currentProduct={id:d.id,...d.data(),dbType:"firestore"}}catch(e){}
-    if(!currentProduct){try{let s=await rtdb.ref("products/"+clean).once("value");if(s.exists())currentProduct={id:clean,...s.val(),dbType:"rtdb"}}catch(e){}}
-    if(!currentProduct)return showError("Product Not Found","ID: "+id);
+let clean = String(id).trim();
+currentProduct = null;
+
+// 1. pehle exact ID try karo
+try {
+  let d = await db.collection("products").doc(clean).get();
+  if(d.exists) currentProduct = {id:d.id,...d.data(), dbType:"firestore"}
+} catch(e){}
+
+// 2. nahi mila to _M, _XXL hata ke try karo (ye tumhara main fix hai)
+if(!currentProduct && clean.includes('_')) {
+  let base = clean.split('_')[0];
+  try {
+    let d2 = await db.collection("products").doc(base).get();
+    if(d2.exists) currentProduct = {id:d2.id,...d2.data(), dbType:"firestore"}
+  } catch(e){}
+  clean = base; // aage RTDB ke liye bhi base use hoga
+}
+
+// 3. RTDB fallback
+if(!currentProduct){
+  try{
+    let s = await rtdb.ref("products/"+clean).once("value");
+    if(s.exists()) currentProduct = {id:clean,...s.val(), dbType:"rtdb"}
+  }catch(e){}
+}
+
+if(!currentProduct) return showError("Product Not Found","ID: "+id);
+    
     document.getElementById("headerTitle").innerText=currentProduct.name;
     document.title=currentProduct.name+" - SANTRA MALL";
     renderProduct(currentProduct);
