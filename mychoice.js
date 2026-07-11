@@ -3,7 +3,6 @@
 ⚠️ OLD CODE BACKUP - 30 JUNE 2026 SE PEHLE WALA
 ⚠️ Agar kuch gadbad ho to isko uncomment karke use kar lena
 
-
 window.addToMyChoice = function (product, selectedVariant = null, selectedQty = 1) {
   if (!product) {
     showToast("❌ Product load nahi hua");
@@ -69,8 +68,8 @@ OLD CODE BACKUP END
 
 */
 
-// ✅ MYCHOICE.JS - SANTRA MALL - UPDATED 30 JUNE 2026
-// ✅ KEYS UNIFY - cart.html, mychoice.html, index.html sab me same
+// ✅ MYCHOICE.JS - SANTRA MALL - UPDATED 11 JULY 2026
+// ✅ Home page + Product page dono ke liye fix
 if (typeof MYCHOICE_KEY === 'undefined') {
   var MYCHOICE_KEY = 'santraMallMyChoice_v2';
   window.MYCHOICE_KEY = MYCHOICE_KEY;
@@ -80,21 +79,41 @@ if (typeof CART_KEY === 'undefined') {
   window.CART_KEY = CART_KEY;
 }
 
-// ✅ FIXED VERSION - duplicate error se bachao
-if (typeof window.addToMyChoice === 'undefined') {
-  window.addToMyChoice = function(product) {
-    if(!product ||!product.id) return;
+// ✅ FIXED - product page ke liye currentProduct support
+if (typeof window.addToMyChoice === 'undefined' || true) { // force override
+  window.addToMyChoice = function(product, selectedVariant = null, selectedQty = 1) {
+
+    // 🔥 PRODUCT PAGE FIX: agar product nahi mila to currentProduct use karo
+    if(!product ||!product.id) {
+      if(typeof currentProduct!== 'undefined' && currentProduct && currentProduct.id) {
+        product = {
+          id: currentProduct.id,
+          name: currentProduct.name,
+          price: currentProduct.price,
+          image: (typeof getProductThumbnail === 'function')? getProductThumbnail(currentProduct) : (currentProduct.image || ''),
+          code: currentProduct.code || currentProduct.id,
+          category: currentProduct.category || 'General',
+          variant: 'Default'
+        };
+      } else {
+        showToast("❌ Product load nahi hua");
+        return false;
+      }
+    }
 
     let list = [];
     try {
       list = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
     } catch(e) { list = []; }
 
-    // sirf objects rakho, strings hatao (purana kachra saaf)
+    // purana kachra saaf
     list = list.filter(i => typeof i === 'object' && i!== null && i.id);
 
-    if(!list.find(i => i.id === product.id)) {
-      list.push({
+    // sirf id check (home page jaisa)
+    let existing = list.find(i => i.id === product.id);
+
+    if(!existing) {
+      let newItem = {
         id: product.id,
         name: product.name || 'Product',
         price: product.price || 0,
@@ -103,30 +122,45 @@ if (typeof window.addToMyChoice === 'undefined') {
         category: product.category || 'General',
         variant: product.variant || 'Default',
         addedAt: new Date().toISOString()
-      });
+      };
+      list.push(newItem);
+
+      // ✅ 3 JAGAH SAVE - taaki sab pages padh sake
       localStorage.setItem(MYCHOICE_KEY, JSON.stringify(list));
+      localStorage.setItem('sm_wishlist_v1', JSON.stringify(list));
+      localStorage.setItem('santraMallWishlist', JSON.stringify(list));
 
-      // Toast
-      if(typeof showToast === 'function') {
-        showToast('😍 Added to My Choice!');
-      } else {
-        alert('😍 Added to My Choice!');
-      }
+      showToast('😍 Added to My Choice!');
 
-      // Badge update
-      if(typeof updateChoiceCount === 'function') updateChoiceCount();
+      // heart update (product page)
+      const wishBtn = document.getElementById('wishBtn');
+      if(wishBtn) wishBtn.innerText = '❤️';
 
-      // Firebase sync (agar login hai)
+      updateChoiceCount();
+
+      // Firebase sync
       if(typeof auth!== 'undefined' && auth.currentUser && typeof rtdb!== 'undefined') {
-        rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + product.id).set(list.find(i => i.id === product.id));
+        rtdb.ref('users/' + auth.currentUser.uid + '/myChoice/' + product.id).set(newItem);
       }
+      return true;
     } else {
-      if(typeof showToast === 'function') showToast('Already in My Choice!');
+      // remove karo (toggle)
+      list = list.filter(i => i.id!== product.id);
+      localStorage.setItem(MYCHOICE_KEY, JSON.stringify(list));
+      localStorage.setItem('sm_wishlist_v1', JSON.stringify(list));
+      localStorage.setItem('santraMallWishlist', JSON.stringify(list));
+
+      const wishBtn = document.getElementById('wishBtn');
+      if(wishBtn) wishBtn.innerText = '🤍';
+
+      showToast('❌ Removed');
+      updateChoiceCount();
+      return false;
     }
   };
 }
 
-// ✅ Toast function (agar nahi hai to)
+// ✅ Toast
 if (typeof window.showToast === 'undefined') {
   window.showToast = function(msg) {
     const t = document.createElement('div');
@@ -137,7 +171,7 @@ if (typeof window.showToast === 'undefined') {
   };
 }
 
-// ✅ Badge update
+// ✅ Badge
 window.updateChoiceCount = function() {
   try {
     let data = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
@@ -151,43 +185,38 @@ window.updateChoiceCount = function() {
   } catch(e) {}
 };
 
-// ✅ Home page hearts - 3 sec wait + auto bind
+// ✅ Home hearts
 function bindHomePageHearts() {
   document.querySelectorAll('[class*="product"],.product-card,.card').forEach(card => {
     const heart = card.querySelector('.fa-heart, button, [class*="heart"], [class*="wish"]');
     if(heart &&!heart.dataset.mychoiceBound) {
       heart.dataset.mychoiceBound = '1';
       heart.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const img = card.querySelector('img')?.src || card.querySelector('img')?.dataset.src || '';
-        const name = card.querySelector('h3, h4,.title, [class*="name"]')?.innerText?.trim() || 'Product';
-        const priceText = card.querySelector('.price, [class*="price"]')?.innerText || '0';
-        const price = parseInt(priceText.replace(/\D/g, '')) || 0;
+        e.preventDefault(); e.stopPropagation();
+        const img = card.querySelector('img')?.src || '';
+        const name = card.querySelector('h3, h4,.title')?.innerText?.trim() || 'Product';
+        const price = parseInt((card.querySelector('.price')?.innerText || '0').replace(/\D/g, '')) || 0;
         const link = card.querySelector('a[href*="id="]')?.href || '';
         const id = link? link.split('id=')[1].split('&')[0] : 'home_' + Date.now();
-
-        addToMyChoice({id: id, name: name, image: img, price: price});
+        addToMyChoice({id, name, image: img, price});
       });
     }
   });
 }
 
-// ✅ Page load pe chalao
 document.addEventListener('DOMContentLoaded', () => {
   updateChoiceCount();
   setTimeout(bindHomePageHearts, 2000);
-  // Products late load hote hain, isliye har 3 sec check karo
   setInterval(bindHomePageHearts, 3000);
 });
 
-// ✅ Remove function (mychoice.html ke liye)
 window.removeFromMyChoice = function(id) {
   let list = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || '[]');
   list = list.filter(i => i.id!== id);
   localStorage.setItem(MYCHOICE_KEY, JSON.stringify(list));
+  localStorage.setItem('sm_wishlist_v1', JSON.stringify(list));
+  localStorage.setItem('santraMallWishlist', JSON.stringify(list));
   updateChoiceCount();
   showToast('❌ Removed');
-  if(typeof renderMyChoice === 'function') renderMyChoice();
+  if(typeof loadMyChoice === 'function') loadMyChoice();
 };

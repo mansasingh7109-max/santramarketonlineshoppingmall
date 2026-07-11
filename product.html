@@ -9,8 +9,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="config.js?v=2"></script>
-    <script src="secrets.js?v=6"></script>
+<script src="config.js?v=2"></script>
+<script src="secrets.js?v=6"></script>
+<script src="self-healing-lock.js"></script>
     <style>
         :root { --accent:#e40046; --text:#212121; --green:#10b981; --orange:#f59e0b; }
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",Arial,sans-serif}
@@ -80,6 +81,7 @@
     </div>
 
 <script>
+
 let currentProduct=null, selectedVariant=null, selectedVariantData=null, selectedQty=1;
 
 function getProductImages(p){if(p&&p.images&&Array.isArray(p.images)&&p.images.length>0){return p.images.filter(i=>i&&typeof i==="string"&&i.trim()!=="")}else if(p&&p.image&&typeof p.image==="string"&&p.image.trim()!==""){return[p.image]}return["https://via.placeholder.com/500x500?text=No+Image"]}
@@ -131,7 +133,18 @@ if(!currentProduct) return showError("Product Not Found","ID: "+id);
     document.title=currentProduct.name+" - SANTRA MALL";
     renderProduct(currentProduct);
     document.getElementById("actionBtns").style.display="flex";
-  }catch(e){showError("Error",e.message)}
+
+
+// ✅ wishlist status check - YAHAN PASTE KARO
+let wishlist = JSON.parse(localStorage.getItem(MYCHOICE_KEY)||"[]");
+if(wishlist.some(p=>p.id===currentProduct.id)){
+  document.getElementById("wishBtn").innerText="❤️";
+} else {
+  document.getElementById("wishBtn").innerText="🤍";
+}
+
+}catch(e){showError("Error",e.message)}
+
 }
 
 function renderProduct(p){
@@ -178,17 +191,78 @@ function addToCart(){
 function buyNow(){addToCart();setTimeout(()=>window.location.href="cart.html",500)}
 
 function addToMyChoice(){
-  if(!currentProduct)return showToast("Product load nahi hua");
-  let price=selectedVariantData?.price||currentProduct.price;
-  let item={id:currentProduct.id,name:currentProduct.name,price:price,image:getProductThumbnail(currentProduct),code:currentProduct.code||currentProduct.id,variant:selectedVariant||"Default",size:selectedVariant||"M"};
-  let my=JSON.parse(localStorage.getItem(MYCHOICE_KEY)||"[]");
-  let idx=my.findIndex(i=>i.id===item.id&&i.size===item.size);
-  if(idx>-1){my.splice(idx,1);document.getElementById("wishBtn").innerText="🤍";showToast("💔 Removed")}else{my.push(item);document.getElementById("wishBtn").innerText="❤️";showToast("😍 Added to My Choice! "+item.name)}
-  localStorage.setItem(MYCHOICE_KEY,JSON.stringify(my));
+  if(!currentProduct) return showToast("Wait, product load ho raha hai");
+  
+  let item = {
+    id: currentProduct.id,
+    name: currentProduct.name,
+    price: currentProduct.price,
+    image: getProductThumbnail(currentProduct),
+    code: currentProduct.code || currentProduct.id,
+    variant: "Default",
+    size: "M"
+  };
+  
+  // ✅ hamesha same key use karo (secrets.js wala)
+  let my = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
+  
+  // home page jaisa — sirf id check
+  let idx = my.findIndex(i => i.id === item.id);
+  
+  if(idx > -1){
+    my.splice(idx, 1);
+    document.getElementById("wishBtn").innerText = "🤍";
+    showToast("Removed");
+  } else {
+    my.push(item);
+    document.getElementById("wishBtn").innerText = "❤️";
+    showToast("Added to My Choice");
+  }
+  
+  // dono keys me save — home aur product same ho jaye
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(my));
+  localStorage.setItem('sm_wishlist_v1', JSON.stringify(my));
+  localStorage.setItem('santraMallWishlist', JSON.stringify(my)); // home page ka purana key
+  
   updateHeaderBadges();
 }
-
+  
+  
 function showError(t,m){document.getElementById("productContainer").innerHTML=`<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p></div>`}
 </script>
+<!-- Product Page Wishlist -->
+<script>
+  const WISHLIST_KEY = window.WISHLIST_KEY || 'sm_wishlist_v1';
+  
+  function toggleWishlistFromProduct(){
+    const product = {
+      id: document.querySelector('[data-product-id]')?.dataset.productId || location.pathname,
+      name: document.querySelector('h1')?.textContent.trim(),
+      price: document.querySelector('.price, #price')?.textContent.trim(),
+      image: document.querySelector('.product-image img, #main-img')?.src
+    };
+    
+    let list = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+    const exists = list.find(p => p.id === product.id);
+    
+    if(exists){
+      list = list.filter(p => p.id !== product.id);
+      alert('Removed from My Choice 💔');
+    } else {
+      list.push(product);
+      alert('Added to My Choice 😍');
+    }
+    
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+    if(window.SM_LOCK?.backup) window.SM_LOCK.backup();
+  }
+
+  // Heart button ko connect karo
+  document.addEventListener('DOMContentLoaded', () => {
+    const heart = document.querySelector('.heart-btn, .wishlist-btn, #wishlist-heart');
+    if(heart) heart.onclick = toggleWishlistFromProduct;
+  });
+</script>
+<script src="mychoice.js"></script>
 </body>
 </html>
