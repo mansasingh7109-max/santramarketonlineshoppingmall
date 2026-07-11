@@ -765,7 +765,12 @@ line-height: 1.2;
                     return;
                 }
 
-                let cartArray = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+                let cartArray = [];
+try {
+  const saved = localStorage.getItem(CART_KEY);
+  cartArray = saved ? JSON.parse(saved) : [];
+  if (!Array.isArray(cartArray)) cartArray = [];
+} catch(e) { cartArray = []; }
                 let existingIndex = cartArray.findIndex(item => item.id === product.id);
 
                 if (existingIndex > -1) {
@@ -1019,6 +1024,21 @@ line-height: 1.2;
 
             // ✅ Agar dusre tab me item add hua to bhi update ho
             window.addEventListener("storage", updateHomeBadges);
+            window.addEventListener("load", updateHomeBadges);
+});
+
+
+// ✅ NEW - Checkout se order ke baad cart khali karne ka signal
+window.addEventListener('message', (e)=>{
+  if(e.data && e.data.type === 'cartCleared'){
+    // My Cart iframe reload
+    document.querySelectorAll('iframe[src*="cart"]').forEach(f=> f.contentWindow.location.reload());
+    // cart count update
+    if(typeof updateHomeBadges === 'function') updateHomeBadges();
+    if(typeof updateHeaderBadges === 'function') updateHeaderBadges();
+  }
+});
+
         </script>
         <script>
             // ✅ SAB PAGE ME YE FUNCTION ADD KAR - Header count update ke liye
