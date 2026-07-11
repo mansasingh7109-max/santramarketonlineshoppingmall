@@ -14,6 +14,7 @@
     <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;padding-bottom:20px}.header{background:#e91e63;color:white;padding:15px;text-align:center;font-weight:600;font-size:16px;position:sticky;top:0;z-index:100}.container{padding:15px}.card{background:white;border-radius:12px;padding:20px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.section-title{font-weight:600;font-size:18px;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #eee}.order-id{background:#fff9c4;padding:12px;border-radius:8px;font-size:14px;margin-bottom:15px;border:1px solid #f9e79f}.item{display:flex;gap:12px;padding:15px 0;border-bottom:1px dashed #ddd}.item:last-child{border-bottom:none}.item img{width:70px;height:70px;border-radius:8px;object-fit:cover}.item-details{flex:1;font-size:14px}.item-details h4{font-size:15px;margin-bottom:4px}.item-details p{color:#666;margin:2px 0}.item-details a{color:#e91e63;font-size:12px;text-decoration:none;word-break:break-all}.grand-total{text-align:right;font-weight:700;font-size:18px;padding-top:15px;margin-top:10px;border-top:2px solid #eee}.form-group{margin-bottom:18px}.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#444}.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;outline:none}.form-group input:focus,.form-group select:focus{border-color:#e91e63}.btn-send{width:100%;background:#00c853;color:white;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}.btn-send:disabled{background:#ccc;cursor:not-allowed}.delivery-title{display:flex;align-items:center;gap:6px;font-weight:600;font-size:18px;margin-bottom:15px}.empty-cart{text-align:center;padding:40px 20px;color:#999}.empty-cart button{margin-top:15px;padding:12px 24px;background:#e91e63;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer}.otp-box{background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:20px;margin-top:20px;text-align:center;display:none}.otp-box h3{color:#d32f2f;font-size:18px;margin-bottom:10px}.otp-box p{font-size:15px;color:#333;line-height:1.6}.whatsapp-btn{display:inline-block;background:#25d366;color:white;padding:12px 25px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px}</style>
     <script src="order-saver.js"></script>
 </head>
+
 <body>
     <div class="header">🛒 Complete Your Order</div>
     <div class="container">
@@ -37,6 +38,11 @@
             <div class="form-group"><label>State *</label><input type="text" id="state" placeholder="Maharashtra" required></div>
             <div class="form-group"><label>Payment Mode *</label><select id="payment" required><option value="">Select Payment</option><option value="Cash on Delivery">Cash on Delivery</option><option value="Online Payment">Online Payment</option></select></div>
             <button class="btn-send" id="sendBtn" onclick="sendOrder()">📱 SEND ORDER</button>
+        </div>
+        <div id="popupBlockNote" style="display:none; position:fixed; bottom:15px; left:10px; right:10px; background:#fff8e1; padding:14px; border:2px solid #ff9800; border-radius:10px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.2); font-family:sans-serif;">
+          <b style="color:#e65100;">⚠️ WhatsApp nahi khula?</b><br>
+          <span style="font-size:14px;">1. Browser ke upar "Pop-up blocked" pe click karke <b>Allow</b> karo<br>2. Ya direct <a id="manualWaLink" href="#" target="_blank" style="color:#075E54; font-weight:bold; text-decoration:underline;">YAHAN CLICK KARO</a></span>
+          <div style="margin-top:8px; font-size:12px; color:#555;">Order ID: <span id="noteOrderId"></span></div>
         </div>
         <div class="otp-box" id="otpBox">
             <h3>⚠️ IMPORTANT - OTP REQUIRED ⚠️</h3>
@@ -65,17 +71,16 @@ function loadOrder() {
     auth.onAuthStateChanged(user => {
         if(user){
             rtdb.ref("users/"+user.uid+"/cart").once("value").then(s=>{
-                cart = {};
-                if(s.exists()) s.forEach(c=>{cart[c.key]=c.val();});
-                finishLoad();
+                cart = {}; if(s.exists()) s.forEach(c=>{cart[c.key]=c.val();}); finishLoad();
             });
         } else {
             try {
-                var rawData = localStorage.getItem('cart') || localStorage.getItem('santra_cart') || localStorage.getItem('CART_KEY') || '{}';
+                // FIX: sm_cart ko pehle check karo (index.html yahi use karta hai)
+                var rawData = localStorage.getItem('sm_cart') || localStorage.getItem('cart') || localStorage.getItem('santra_cart') || '{}';
                 var cartData = JSON.parse(rawData);
                 cart = cartData.cart? cartData.cart : cartData;
                 if(Array.isArray(cart)){
-                    let temp={}; cart.forEach(i=>{let id=i.id||i.productId||Math.random(); temp[id]=i;}); cart=temp;
+                    let temp={}; cart.forEach(i=>{let id=i.id||i.productId||i.code||Math.random().toString(36).substr(2,9); temp[id]=i;}); cart=temp;
                 }
             } catch (e) { cart = {}; }
             finishLoad();
@@ -106,8 +111,8 @@ function renderOrderSummary() {
         var size = item.size || item.variant || "Default";
         var displayName = item.name + (item.size? ` (Size ${item.size})` : '');
         itemsArray.push({id:key, name:item.name, size:size, qty:qty, price:price, total:itemTotal, image:item.image, code:item.code||key, link:baseURL+"/product.html?id="+(item.id||key)});
-        // ✅ + - aur Remove wapas
-        return `<div class="item"><img src="${item.image || 'https://via.placeholder.com/70'}" alt="${item.name}"><div class="item-details"><h4>${count++}. ${displayName}</h4><p>Code: ${item.code||key}</p><p>Size: ${size}</p><p>Qty: <button onclick="updateQty('${key}',-1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">-</button> ${qty} <button onclick="updateQty('${key}',1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">+</button> x ₹${price} = ₹${itemTotal} <button onclick="removeItem('${key}')" style="border:none;background:none;color:#e91e63;font-size:11px;margin-left:6px;cursor:pointer">Remove</button></p><a href="product.html?id=${item.id||key}" target="_blank" style="color:#e91e63">Link: View Product</a></div></div>`;
+        // ✅ + - aur Remove yahin se aata hai
+        return `<div class="item"><img src="${item.image || 'https://via.placeholder.com/70'}" alt="${item.name}"><div class="item-details"><h4>${count++}. ${displayName}</h4><p>Code: ${item.code||key}</p><p>Size: ${size}</p><p>Qty: <button onclick="updateQty('${key}',-1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">-</button> ${qty} <button onclick="updateQty('${key}',1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">+</button> x ₹${price} = ₹${itemTotal} <button onclick="removeItem('${key}')" style="border:none;background:none;color:#e91e63;font-size:11px;margin-left:6px;cursor:pointer">Remove</button></p><a href="product.html?id=${item.id||key}" target="_blank">Link: View Product</a></div></div>`;
     }).join("");
     var delivery = subtotal >= 500? 0 : 49;
     var grandTotal = subtotal + delivery;
@@ -128,13 +133,11 @@ function removeItem(key){
     if(Object.keys(cart).length===0) loadOrder();
 }
 function saveCartToStorage(){
+    // FIX: teeno keys update karo
+    localStorage.setItem('sm_cart', JSON.stringify(cart));
     localStorage.setItem('cart', JSON.stringify(cart));
     localStorage.setItem('santra_cart', JSON.stringify(cart));
     let u = auth.currentUser; if(u){ rtdb.ref("users/"+u.uid+"/cart").set(cart); }
-}
-
-function openProduct(id){
-    window.parent.postMessage({type:"openProduct", id:id}, "*");
 }
 
 async function sendOrder() {
@@ -163,28 +166,55 @@ async function sendOrder() {
         text += `${i+1}. ${item.name}\nSize: ${item.size}\nQty: ${item.qty} x ₹${item.price} = ₹${item.total}\nCode: ${item.code}\nLink: ${item.link}\n\n`;
     });
     text += `━━━━━━━━━━━━━━━━━━\nSubtotal: ₹${subtotal}\nDelivery: ${delivery===0?"FREE":"₹"+delivery}\n*GRAND TOTAL: ₹${grandTotal}*\n━━━━━━━━━━━━━━━━━━\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}\nPayment: ${payment}\n\n*>> PLEASE SEND OTP TO CONFIRM <<*`;
+window._waFullText = text;   // <-- ye line add karo
 
     var orderData = {orderId, customerName:name, customerMobile:mobile, customerEmail:email, customerAddress:`${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}`, items: itemsArray, subtotal, delivery, total:grandTotal, paymentMode:payment, status:"Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()};
 
     try {
-    await saveOrderSafely(orderId, orderData);
+await saveOrderSafely(orderId, orderData, text);
+
+        // ✅ Cart ko sahi se khali karo
+        localStorage.removeItem('sm_cart');
+        localStorage.removeItem('cart');
+        localStorage.removeItem('santra_cart');
+        localStorage.setItem('sm_cart', '[]');
+        localStorage.setItem('cart', '[]');
+        localStorage.setItem('santra_cart', '[]');
+        localStorage.setItem('whatsapp_sent', 'true');
+
         await db.collection("login_requests").doc(mobile).set({mobile, status:"pending", timestamp:firebase.firestore.FieldValue.serverTimestamp(), profile:{name,mobile,email,location:orderData.customerAddress}});
         try { await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {order_id:orderId, customer_name:name, customer_mobile:mobile, customer_email:email, customer_address:orderData.customerAddress, order_total:grandTotal, order_items:itemsArray.map(i=>`${i.name} (${i.size}) x ${i.qty} = ₹${i.total}`).join("\n"), to_email:"santramarketshoppingmall@gmail.com"}); } catch(e){}
-        window.open(`https://wa.me/918769171078?text=${encodeURIComponent(text)}`,"_blank");
+        sendWhatsApp();
         setTimeout(()=>{
-            localStorage.clear(); localStorage.setItem('cart','{}'); localStorage.setItem('santra_cart','{}'); cart = {};
-            let u=auth.currentUser; if(u){rtdb.ref("users/"+u.uid+"/cart").remove();}
-            document.getElementById("formCard").style.display="none"; document.getElementById("otpBox").style.display="block";
-            document.getElementById("orderItems").innerHTML=""; document.getElementById("grandTotal").innerText="0";
-            window.scrollTo({top:0,behavior:"smooth"}); alert("✅ Order Placed Successfully! Cart khali ho gaya.");
+            cart = {};
+            document.getElementById("sendBtn").innerText = "✅ OTP Sent on WhatsApp";
         },800);
+        let u=auth.currentUser; if(u){rtdb.ref("users/"+u.uid+"/cart").remove();}
+        document.getElementById("formCard").style.display="none"; document.getElementById("otpBox").style.display="block";
+        document.getElementById("orderItems").innerHTML=""; document.getElementById("grandTotal").innerText="0";
+        window.scrollTo({top:0,behavior:"smooth"}); alert("✅ Order Placed Successfully! Cart khali ho gaya.");
     } catch (error) {
         alert("❌ Order failed: "+error.message);
         document.getElementById("sendBtn").disabled = false;
         document.getElementById("sendBtn").innerText = "📱 SEND ORDER";
     }
 }
+
+function sendWhatsApp() {
+  // purana short msg nahi, pura order text bhejo
+  const msg = window._waFullText || `Hi, my Order ID: ${orderId}. Please send OTP.`;
+  const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  
+  document.getElementById('manualWaLink').href = whatsappUrl;
+  document.getElementById('noteOrderId').innerText = orderId;
+
+  const newWin = window.open(whatsappUrl, '_blank');
+
+  setTimeout(() => {
+    document.getElementById('popupBlockNote').style.display = 'block';
+    setTimeout(() => { document.getElementById('popupBlockNote').style.display = 'none'; }, 8000);
+  }, 800);
+}
 </script>
 </body>
 </html>
-
