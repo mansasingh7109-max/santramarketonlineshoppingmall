@@ -58,7 +58,15 @@
 
 <script>
 document.addEventListener("DOMContentLoaded",function(){if(typeof EMAILJS_CONFIG!=="undefined"&&EMAILJS_CONFIG.PUBLIC_KEY!=="YOUR_KEY"){emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);}loadData();window.addEventListener("message",function(event){if(event.data&&event.data.type==="addToCart"){addToCartFromMessage(event.data.product);}if(event.data&&event.data.type==="addToChoice"){addToChoiceFromMessage(event.data.product);}if(event.data&&event.data.type==="refreshCart"){loadData();}});});
-var ADMIN_WHATSAPP="918769171078";var ADMIN_EMAIL="santramarketshoppingmall@gmail.com";let cart={};let myChoice={};let currentTab="cart";
+var ADMIN_WHATSAPP="918769171078";var ADMIN_EMAIL="santramarketshoppingmall@gmail.com";let cart = [];
+try {
+  const saved = localStorage.getItem('cart');
+  cart = saved ? JSON.parse(saved) : [];
+  if (!Array.isArray(cart)) cart = [];
+} catch(e) {
+  cart = [];
+}
+let myChoice = {}; let currentTab="cart";
 
 window.switchTab=function(tab){currentTab=tab;document.getElementById("cartTab").classList.toggle("active",tab==="cart");document.getElementById("choiceTab").classList.toggle("active",tab==="choice");document.getElementById("cartView").classList.toggle("hide",tab!=="cart");document.getElementById("choiceView").classList.toggle("hide",tab!=="choice");document.getElementById("pageTitle").innerText=tab==="cart"?"🛒 My Cart":"😍 My Choice";if(tab==="choice")renderMyChoice();else renderCart();};
 
