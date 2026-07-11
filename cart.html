@@ -49,6 +49,7 @@
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+ <script src="self-healing-lock.js"></script>
         <script>
             const firebaseConfig={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",measurementId:"G-ZW1ZR8HETY"};
             window.initFirebaseOnce(firebaseConfig);
@@ -102,6 +103,14 @@ async function sendOrderToAll(){const orderData=generateOrderData();if(!orderDat
 async function generateAndSharePDF(){}
 function showToast(m){let t=document.createElement("div");t.innerText=m;t.style.cssText="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999";document.body.appendChild(t);setTimeout(()=>t.remove(),2000);}
 window.onload=function(){loadData();};
-</script></body></html>
+</script>
+<script>window.addEventListener('message', (e)=>{
+  if(e.data && e.data.type === 'cartCleared'){
+    location.reload(); // khud reload ho jao
+  }
+});
+</script>
+</body>
+</html>
 
 
