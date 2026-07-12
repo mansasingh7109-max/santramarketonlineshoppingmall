@@ -1,8 +1,8 @@
-// santra-home.js - v2.1 FIXED (uses v2 cart key)
+// santra-home.js - v2.2 FIXED (products render + v2 cart key)
 (function(){
-  console.log('🏠 Santra Home v2 Running');
+  console.log('🏠 Santra Home v2.2 Running');
 
-  const CART_KEY = 'santraMallCart_v2'; // <-- FIXED
+  const CART_KEY = 'santraMallCart_v2';
 
   const Cart = {
     get:()=>JSON.parse(localStorage.getItem(CART_KEY)||'[]'),
@@ -24,14 +24,38 @@
     }
   };
 
-  // sirf agar pehle se nahi hai to set karo
   if(typeof window.addToCart!== 'function'){
     window.addToCart = (p)=>Cart.add(p);
   }
 
+  function renderProducts(){
+    const grid = document.getElementById('productGrid');
+    if(!grid) return;
+
+    // Demo products - baad me Firebase se laenge
+    const products = JSON.parse(localStorage.getItem('santraProducts')||'[]').length
+     ? JSON.parse(localStorage.getItem('santraProducts'))
+      : [
+        {id:'p1', name:'Designer Frock', price:499, mrp:999, image:'https://via.placeholder.com/300x400?text=Frock'},
+        {id:'p2', name:'Cotton Kurti', price:399, mrp:799, image:'https://via.placeholder.com/300x400?text=Kurti'},
+        {id:'p3', name:'Silk Saree', price:899, mrp:1499, image:'https://via.placeholder.com/300x400?text=Saree'}
+      ];
+
+    localStorage.setItem('santraProducts', JSON.stringify(products));
+
+    grid.innerHTML = products.map(p => `
+      <div class="product-card" data-id="${p.id}" style="border:1px solid #eee;padding:10px;margin:10px;border-radius:8px">
+        <img src="${p.image}" style="width:100%;height:200px;object-fit:cover" onclick="window.location='product.html?id=${p.id}'">
+        <h3 class="product-title">${p.name}</h3>
+        <p>₹${p.price} <s style="color:#888">₹${p.mrp}</s></p>
+        <button class="add-to-cart" style="background:#e91e63;color:white;border:none;padding:8px 15px;border-radius:5px;width:100%">Add to Cart</button>
+      </div>
+    `).join('');
+  }
+
   function getProductFromCard(card){
     return {
-      id: card.dataset.id || card.querySelector('[data-id]')?.dataset.id || Math.random().toString(36).slice(2),
+      id: card.dataset.id || Math.random().toString(36).slice(2),
       name: card.querySelector('.product-title, h3, h4')?.innerText.trim() || 'Product',
       price: +(card.innerText.match(/₹\s?(\d+)/)?.[1] || 0),
       image: card.querySelector('img')?.src || ''
@@ -39,7 +63,6 @@
   }
 
   function healHome(){
-    // sirf ek baar fix karo, har 3 sec nahi
     document.querySelectorAll('.add-to-cart').forEach(btn=>{
       if(!btn._fixed){
         btn._fixed=true;
@@ -53,6 +76,10 @@
     Cart.save(Cart.get());
   }
 
-  document.addEventListener('DOMContentLoaded',healHome);
+  document.addEventListener('DOMContentLoaded',()=>{
+    renderProducts(); // pehle products dikhao
+    healHome(); // phir button fix karo
+  });
+
   setInterval(()=>localStorage.setItem('homeAlive',Date.now()),10000);
 })();
