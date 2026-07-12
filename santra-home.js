@@ -1,11 +1,13 @@
-// santra-home.js - Customer Home Page Only (Auto-Heal)
+// santra-home.js - v2.1 FIXED (uses v2 cart key)
 (function(){
-  console.log('🏠 Santra Home Running');
+  console.log('🏠 Santra Home v2 Running');
+
+  const CART_KEY = 'santraMallCart_v2'; // <-- FIXED
 
   const Cart = {
-    get:()=>JSON.parse(localStorage.getItem('santraCart')||'[]'),
+    get:()=>JSON.parse(localStorage.getItem(CART_KEY)||'[]'),
     save:(c)=>{
-      localStorage.setItem('santraCart',JSON.stringify(c));
+      localStorage.setItem(CART_KEY,JSON.stringify(c));
       const n=c.reduce((a,i)=>a+(i.qty||1),0);
       document.querySelectorAll('#cartCount,.cart-count').forEach(e=>e.textContent=n)
     },
@@ -21,49 +23,36 @@
       setTimeout(()=>t.remove(),1500)
     }
   };
-  window.addToCart = (p)=>Cart.add(p);
+
+  // sirf agar pehle se nahi hai to set karo
+  if(typeof window.addToCart!== 'function'){
+    window.addToCart = (p)=>Cart.add(p);
+  }
 
   function getProductFromCard(card){
     return {
       id: card.dataset.id || card.querySelector('[data-id]')?.dataset.id || Math.random().toString(36).slice(2),
-      name: card.querySelector('.product-title, h3, h4')?.innerText.trim() || card.innerText.split('\n')[0] || 'Product',
+      name: card.querySelector('.product-title, h3, h4')?.innerText.trim() || 'Product',
       price: +(card.innerText.match(/₹\s?(\d+)/)?.[1] || 0),
       image: card.querySelector('img')?.src || ''
     };
   }
 
   function healHome(){
-    document.querySelectorAll('.add-to-cart, [onclick*="addToCart"], button').forEach(btn=>{
-      if(btn.innerText.toLowerCase().includes('cart') &&!btn._fixed){
+    // sirf ek baar fix karo, har 3 sec nahi
+    document.querySelectorAll('.add-to-cart').forEach(btn=>{
+      if(!btn._fixed){
         btn._fixed=true;
         btn.onclick=(e)=>{
           e.preventDefault();
-          const card=btn.closest('.product-card,.card,[class*="product"]');
+          const card=btn.closest('.product-card');
           if(card) Cart.add(getProductFromCard(card))
         };
       }
     });
-    const applyBtn=document.querySelector('button');
-    if(applyBtn && applyBtn.innerText.includes('Apply') &&!applyBtn._fixed){
-      applyBtn._fixed=true;
-      applyBtn.onclick=()=>{document.querySelectorAll('.product-card').forEach(c=>c.style.display='')};
-    }
-    document.querySelectorAll('[class*="category"],.circle').forEach(cat=>{
-      if(!cat._fixed){cat._fixed=true;cat.style.cursor='pointer';cat.onclick=()=>window.scrollTo({top:600,behavior:'smooth'})}
-    });
-    const search=document.querySelector('input[placeholder*="Search"]');
-    if(search &&!search._fixed){
-      search._fixed=true;
-      search.oninput=()=>{
-        const v=search.value.toLowerCase();
-        document.querySelectorAll('.product-card').forEach(c=>c.style.display=c.innerText.toLowerCase().includes(v)?'':'none')
-      }
-    }
     Cart.save(Cart.get());
   }
 
-  setInterval(healHome,3000);
   document.addEventListener('DOMContentLoaded',healHome);
-  window.addEventListener('error',()=>setTimeout(healHome,1000));
   setInterval(()=>localStorage.setItem('homeAlive',Date.now()),10000);
 })();
