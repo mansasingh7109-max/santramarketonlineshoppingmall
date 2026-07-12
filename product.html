@@ -23,7 +23,7 @@
       .header-icon{color:white;text-decoration:none;font-size:24px;position:relative}
       .header-badge{position:absolute;top:-8px;right:-8px;background:#ffeb3b;color:#000;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:bold;display:none;align-items:center;justify-content:center}
       .container{max-width:600px;margin:0 auto;background:white}
-      .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
+      .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9;overflow:hidden}
       .slider-container{width:100%;height:100%;position:relative}
       .slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
       .slide-img.active{display:block}
@@ -62,7 +62,6 @@
     </style>
     <script src="order-saver.js"></script>
 </head>
-
 <body>
     <div class="header">
         <button class="back-btn" onclick="window.history.back()">←</button>
@@ -83,7 +82,6 @@
 
 <script>
 let currentProduct=null, selectedVariant=null, selectedVariantData=null, selectedQty=1;
-// === FIX 1: Keys define (purana code safe) ===
 
 function getProductImages(p){if(p&&p.images&&Array.isArray(p.images)&&p.images.length>0){return p.images.filter(i=>i&&typeof i==="string"&&i.trim()!=="")}else if(p&&p.image&&typeof p.image==="string"&&p.image.trim()!==""){return[p.image]}return["https://via.placeholder.com/500x500?text=No+Image"]}
 function getProductThumbnail(p){if(p&&p.image)return p.image;if(p&&p.images&&p.images.length)return p.images[0];return"https://via.placeholder.com/500"}
@@ -103,14 +101,10 @@ async function loadProduct(id){
   try{
 let clean = String(id).trim();
 currentProduct = null;
-
-// 1. pehle exact ID try karo
 try {
   let d = await db.collection("products").doc(clean).get();
   if(d.exists) currentProduct = {id:d.id,...d.data(), dbType:"firestore"}
 } catch(e){}
-
-// 2. nahi mila to _M, _XXL hata ke try karo
 if(!currentProduct && clean.includes('_')) {
   let base = clean.split('_')[0];
   try {
@@ -119,15 +113,12 @@ if(!currentProduct && clean.includes('_')) {
   } catch(e){}
   clean = base;
 }
-
-// 3. RTDB fallback
 if(!currentProduct){
   try{
     let s = await rtdb.ref("products/"+clean).once("value");
     if(s.exists()) currentProduct = {id:clean,...s.val(), dbType:"rtdb"}
   }catch(e){}
 }
-
 if(!currentProduct) return showError("Product Not Found","ID: "+id);
 
     document.getElementById("headerTitle").innerText=currentProduct.name;
@@ -141,7 +132,6 @@ if(wishlist.some(p=>p.id===currentProduct.id)){
 } else {
   document.getElementById("wishBtn").innerText="🤍";
 }
-
 }catch(e){showError("Error",e.message)}
 }
 
@@ -151,7 +141,7 @@ function renderProduct(p){
   let discount=p.mrp&&p.price?Math.round(((p.mrp-p.price)/p.mrp)*100):0;
   let slider=`<div class="image-slider-box"><div class="slider-container" id="imgSlider">${images.map((img,i)=>`<img src="${img}" class="slide-img ${i===0?"active":""}" onerror="this.src='https://via.placeholder.com/500'">`).join("")}</div>${images.length>1?`<button class="slide-btn prev" onclick="changeSlide(-1)">‹</button><button class="slide-btn next" onclick="changeSlide(1)">›</button><div class="slide-dots">${images.map((_,i)=>`<span class="dot ${i===0?"active":""}" onclick="goToSlide(${i})"></span>`).join("")}</div><div class="img-count">📷 ${images.length}</div>`:""}</div>`;
   let variantHTML=variants.map(v=>{let n=typeof v==="object"?v.name||v.size:v;let pr=typeof v==="object"?v.price:p.price;let st=typeof v==="object"?v.stock??999:999;let out=st<=0;return`<button class="variant-btn" data-variant='${JSON.stringify(v).replace(/'/g,"&apos;")}' ${out?"disabled":""}>${n}${pr&&pr!==p.price?`<span class="variant-price">₹${pr}</span>`:""}<span class="variant-stock">${out?"Out of stock":st+" left"}</span></button>`}).join("");
-  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description||"Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>✅ 100% Original & Authentic</p><p>🚚 Free Delivery Above ₹500</p><p>↩️ Easy 7 Days Return</p><p>💵 Cash on Delivery</p></div>`;
+  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description||"Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>✅ 100% Original & Authentic</p><p>🚚 Free Delivery Above ₹500</p><p>↩️ Easy 7 Days Return</p><p>💵 Cash on Delivery</p></div></div>`;
   window.productImages=images; window.currentSlideIndex=0;
   setTimeout(()=>{
     document.querySelectorAll(".variant-btn:not(:disabled)").forEach(b=>b.onclick=()=>selectVariant(JSON.parse(b.dataset.variant),b));
@@ -189,21 +179,17 @@ function buyNow(){addToCart();setTimeout(()=>window.location.href="cart.html",50
 
 function addToMyChoice(){
   if(!currentProduct) return showToast("Wait, product load ho raha hai");
-  let item = { id: currentProduct.id, name: currentProduct.name, price: currentProduct.price, image: getProductThumbnail(currentProduct), code: currentProduct.code || currentProduct.id, variant: "Default", size: "M" };
+  let item = {id: currentProduct.id,name: currentProduct.name,price: currentProduct.price,image: getProductThumbnail(currentProduct),code: currentProduct.code || currentProduct.id,variant: "Default",size: "M"};
   let my = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
   let idx = my.findIndex(i => i.id === item.id);
-  if(idx > -1){ my.splice(idx, 1); document.getElementById("wishBtn").innerText = "🤍"; showToast("Removed"); } else { my.push(item); document.getElementById("wishBtn").innerText = "❤️"; showToast("Added to My Choice"); }
+  if(idx > -1){my.splice(idx, 1);document.getElementById("wishBtn").innerText = "🤍";showToast("Removed");} else {my.push(item);document.getElementById("wishBtn").innerText = "❤️";showToast("Added to My Choice");}
   localStorage.setItem(MYCHOICE_KEY, JSON.stringify(my));
   localStorage.setItem('sm_wishlist_v1', JSON.stringify(my));
   localStorage.setItem('santraMallWishlist', JSON.stringify(my));
   updateHeaderBadges();
 }
-
 function showError(t,m){document.getElementById("productContainer").innerHTML=`<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p></div>`}
 </script>
-<!-- === FIX 2: neeche wala crash script HATA DIYA === -->
+<script src="mychoice.js"></script>
 </body>
 </html>
-
-
-
