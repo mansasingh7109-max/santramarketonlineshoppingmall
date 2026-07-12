@@ -16,52 +16,53 @@
         :root { --accent:#e40046; --text:#212121; --green:#10b981; --orange:#f59e0b; }
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",Arial,sans-serif}
         body{background:#f1f3f6;padding-bottom:85px}
-       .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-       .back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
-       .header h1{font-size:18px;flex:1}
-       .header-icons{display:flex;align-items:center;gap:15px}
-       .header-icon{color:white;text-decoration:none;font-size:24px;position:relative}
-       .header-badge{position:absolute;top:-8px;right:-8px;background:#ffeb3b;color:#000;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:bold;display:none;align-items:center;justify-content:center}
-       .container{max-width:600px;margin:0 auto;background:white}
-       .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
-       .slider-container{width:100%;height:100%;position:relative}
-       .slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
-       .slide-img.active{display:block}
-       .slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:45px;height:45px;border-radius:50%;font-size:28px;cursor:pointer;z-index:10;font-weight:bold}
-       .slide-btn.prev{left:10px}.slide-btn.next{right:10px}
-       .slide-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
-       .dot{width:10px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;cursor:pointer;border:2px solid white}
-       .dot.active{background:white;width:25px;border-radius:5px}
-       .img-count{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.7);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
-       .details{padding:20px}
-       .product-name{font-size:22px;margin-bottom:8px;font-weight:bold;color:var(--text);line-height:1.3}
-       .product-meta{color:#666;font-size:13px;margin-bottom:15px;display:flex;gap:15px;flex-wrap:wrap}
-       .product-meta span{background:#f3f4f6;padding:4px 10px;border-radius:4px}
-       .price-box{display:flex;align-items:center;gap:12px;margin:20px 0;padding:15px;background:#fff5f7;border-radius:8px}
-       .price{font-size:34px;font-weight:bold;color:var(--accent)}
-       .mrp{text-decoration:line-through;color:#999;font-size:20px}
-       .discount{background:var(--green);color:white;padding:5px 12px;border-radius:6px;font-size:14px;font-weight:bold}
-       .section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
-       .variant-grid{display:flex;flex-wrap:wrap;gap:10px}
-       .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
-       .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent)}
-       .variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5f5}
-       .variant-price{font-size:11px;display:block;color:#666;margin-top:2px}
-       .variant-stock{font-size:10px;margin-top:2px;display:block;color:var(--green)}
-       .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
-       .features{background:linear-gradient(135deg,#f9f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
-       .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
-       .btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
-       .btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
-       .btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
-       .btn-buy{background:var(--accent);color:white}
-       .qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9f9;border-radius:8px}
-       .qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
-       .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
-       .loader{padding:40px;text-align:center}
+      .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+      .back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
+      .header h1{font-size:18px;flex:1}
+      .header-icons{display:flex;align-items:center;gap:15px}
+      .header-icon{color:white;text-decoration:none;font-size:24px;position:relative}
+      .header-badge{position:absolute;top:-8px;right:-8px;background:#ffeb3b;color:#000;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:bold;display:none;align-items:center;justify-content:center}
+      .container{max-width:600px;margin:0 auto;background:white}
+      .image-slider-box{position:relative;width:100%;height:400px;background:#f9f9f9;overflow:hidden}
+      .slider-container{width:100%;height:100%;position:relative}
+      .slide-img{width:100%;height:100%;object-fit:contain;display:none;position:absolute;top:0;left:0}
+      .slide-img.active{display:block}
+      .slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:45px;height:45px;border-radius:50%;font-size:28px;cursor:pointer;z-index:10;font-weight:bold}
+      .slide-btn.prev{left:10px}.slide-btn.next{right:10px}
+      .slide-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+      .dot{width:10px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;cursor:pointer;border:2px solid white}
+      .dot.active{background:white;width:25px;border-radius:5px}
+      .img-count{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.7);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;z-index:10}
+      .details{padding:20px}
+      .product-name{font-size:22px;margin-bottom:8px;font-weight:bold;color:var(--text);line-height:1.3}
+      .product-meta{color:#666;font-size:13px;margin-bottom:15px;display:flex;gap:15px;flex-wrap:wrap}
+      .product-meta span{background:#f3f4f6;padding:4px 10px;border-radius:4px}
+      .price-box{display:flex;align-items:center;gap:12px;margin:20px 0;padding:15px;background:#fff5f7;border-radius:8px}
+      .price{font-size:34px;font-weight:bold;color:var(--accent)}
+      .mrp{text-decoration:line-through;color:#999;font-size:20px}
+      .discount{background:var(--green);color:white;padding:5px 12px;border-radius:6px;font-size:14px;font-weight:bold}
+      .section{margin:25px 0;padding-top:20px;border-top:1px solid #eee}
+      .variant-grid{display:flex;flex-wrap:wrap;gap:10px}
+      .variant-btn{padding:12px 22px;border:2px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:bold;min-width:65px;text-align:center;font-size:15px;transition:all 0.2s;position:relative}
+      .variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent)}
+      .variant-btn:disabled{opacity:0.35;cursor:not-allowed;background:#f5f5f5}
+      .variant-price{font-size:11px;display:block;color:#666;margin-top:2px}
+      .variant-stock{font-size:10px;margin-top:2px;display:block;color:var(--green)}
+      .desc{line-height:1.8;color:#555;font-size:15px;white-space:pre-wrap}
+      .features{background:linear-gradient(135deg,#f9f9f9,#fff);padding:18px;border-radius:10px;margin:15px 0;border:1px solid #eee}
+      .action-btns{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px;display:flex;gap:8px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);max-width:600px;margin:0 auto;z-index:50}
+      .btn{flex:1;padding:16px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
+      .btn-wish{width:60px;background:#fff0f5;color:var(--accent);font-size:28px}
+      .btn-cart{background:white;border:2px solid var(--accent);color:var(--accent)}
+      .btn-buy{background:var(--accent);color:white}
+      .qty-box{display:flex;align-items:center;gap:15px;margin:20px 0;padding:15px;background:#f9f9f9;border-radius:8px}
+      .qty-box button{width:40px;height:40px;border:2px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:20px;cursor:pointer;font-weight:bold}
+      .qty-box span{font-size:20px;font-weight:bold;min-width:30px;text-align:center}
+      .loader{padding:40px;text-align:center}
     </style>
     <script src="order-saver.js"></script>
 </head>
+
 <body>
     <div class="header">
         <button class="back-btn" onclick="window.history.back()">←</button>
@@ -81,8 +82,8 @@
     </div>
 
 <script>
-
 let currentProduct=null, selectedVariant=null, selectedVariantData=null, selectedQty=1;
+// === FIX 1: Keys define (purana code safe) ===
 
 function getProductImages(p){if(p&&p.images&&Array.isArray(p.images)&&p.images.length>0){return p.images.filter(i=>i&&typeof i==="string"&&i.trim()!=="")}else if(p&&p.image&&typeof p.image==="string"&&p.image.trim()!==""){return[p.image]}return["https://via.placeholder.com/500x500?text=No+Image"]}
 function getProductThumbnail(p){if(p&&p.image)return p.image;if(p&&p.images&&p.images.length)return p.images[0];return"https://via.placeholder.com/500"}
@@ -109,14 +110,14 @@ try {
   if(d.exists) currentProduct = {id:d.id,...d.data(), dbType:"firestore"}
 } catch(e){}
 
-// 2. nahi mila to _M, _XXL hata ke try karo (ye tumhara main fix hai)
+// 2. nahi mila to _M, _XXL hata ke try karo
 if(!currentProduct && clean.includes('_')) {
   let base = clean.split('_')[0];
   try {
     let d2 = await db.collection("products").doc(base).get();
     if(d2.exists) currentProduct = {id:d2.id,...d2.data(), dbType:"firestore"}
   } catch(e){}
-  clean = base; // aage RTDB ke liye bhi base use hoga
+  clean = base;
 }
 
 // 3. RTDB fallback
@@ -128,14 +129,12 @@ if(!currentProduct){
 }
 
 if(!currentProduct) return showError("Product Not Found","ID: "+id);
-    
+
     document.getElementById("headerTitle").innerText=currentProduct.name;
     document.title=currentProduct.name+" - SANTRA MALL";
     renderProduct(currentProduct);
     document.getElementById("actionBtns").style.display="flex";
 
-
-// ✅ wishlist status check - YAHAN PASTE KARO
 let wishlist = JSON.parse(localStorage.getItem(MYCHOICE_KEY)||"[]");
 if(wishlist.some(p=>p.id===currentProduct.id)){
   document.getElementById("wishBtn").innerText="❤️";
@@ -144,7 +143,6 @@ if(wishlist.some(p=>p.id===currentProduct.id)){
 }
 
 }catch(e){showError("Error",e.message)}
-
 }
 
 function renderProduct(p){
@@ -153,7 +151,7 @@ function renderProduct(p){
   let discount=p.mrp&&p.price?Math.round(((p.mrp-p.price)/p.mrp)*100):0;
   let slider=`<div class="image-slider-box"><div class="slider-container" id="imgSlider">${images.map((img,i)=>`<img src="${img}" class="slide-img ${i===0?"active":""}" onerror="this.src='https://via.placeholder.com/500'">`).join("")}</div>${images.length>1?`<button class="slide-btn prev" onclick="changeSlide(-1)">‹</button><button class="slide-btn next" onclick="changeSlide(1)">›</button><div class="slide-dots">${images.map((_,i)=>`<span class="dot ${i===0?"active":""}" onclick="goToSlide(${i})"></span>`).join("")}</div><div class="img-count">📷 ${images.length}</div>`:""}</div>`;
   let variantHTML=variants.map(v=>{let n=typeof v==="object"?v.name||v.size:v;let pr=typeof v==="object"?v.price:p.price;let st=typeof v==="object"?v.stock??999:999;let out=st<=0;return`<button class="variant-btn" data-variant='${JSON.stringify(v).replace(/'/g,"&apos;")}' ${out?"disabled":""}>${n}${pr&&pr!==p.price?`<span class="variant-price">₹${pr}</span>`:""}<span class="variant-stock">${out?"Out of stock":st+" left"}</span></button>`}).join("");
-  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description||"Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>✅ 100% Original & Authentic</p><p>🚚 Free Delivery Above ₹500</p><p>↩️ Easy 7 Days Return</p><p>💵 Cash on Delivery</p></div></div></div>`;
+  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description||"Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>✅ 100% Original & Authentic</p><p>🚚 Free Delivery Above ₹500</p><p>↩️ Easy 7 Days Return</p><p>💵 Cash on Delivery</p></div>`;
   window.productImages=images; window.currentSlideIndex=0;
   setTimeout(()=>{
     document.querySelectorAll(".variant-btn:not(:disabled)").forEach(b=>b.onclick=()=>selectVariant(JSON.parse(b.dataset.variant),b));
@@ -161,7 +159,6 @@ function renderProduct(p){
     document.getElementById("cartBtn").onclick=addToCart;
     document.getElementById("buyBtn").onclick=buyNow;
     document.getElementById("wishBtn").onclick=addToMyChoice;
-    // Heart check on load
     let my=JSON.parse(localStorage.getItem(MYCHOICE_KEY)||"[]");
     if(my.some(i=>i.id===p.id))document.getElementById("wishBtn").innerText="❤️";
   },100);
@@ -192,86 +189,21 @@ function buyNow(){addToCart();setTimeout(()=>window.location.href="cart.html",50
 
 function addToMyChoice(){
   if(!currentProduct) return showToast("Wait, product load ho raha hai");
-  
-  let item = {
-    id: currentProduct.id,
-    name: currentProduct.name,
-    price: currentProduct.price,
-    image: getProductThumbnail(currentProduct),
-    code: currentProduct.code || currentProduct.id,
-    variant: "Default",
-    size: "M"
-  };
-  
-  // ✅ hamesha same key use karo (secrets.js wala)
+  let item = { id: currentProduct.id, name: currentProduct.name, price: currentProduct.price, image: getProductThumbnail(currentProduct), code: currentProduct.code || currentProduct.id, variant: "Default", size: "M" };
   let my = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-  
-  // home page jaisa — sirf id check
   let idx = my.findIndex(i => i.id === item.id);
-  
-  if(idx > -1){
-    my.splice(idx, 1);
-    document.getElementById("wishBtn").innerText = "🤍";
-    showToast("Removed");
-  } else {
-    my.push(item);
-    document.getElementById("wishBtn").innerText = "❤️";
-    showToast("Added to My Choice");
-  }
-  
-  // dono keys me save — home aur product same ho jaye
+  if(idx > -1){ my.splice(idx, 1); document.getElementById("wishBtn").innerText = "🤍"; showToast("Removed"); } else { my.push(item); document.getElementById("wishBtn").innerText = "❤️"; showToast("Added to My Choice"); }
   localStorage.setItem(MYCHOICE_KEY, JSON.stringify(my));
   localStorage.setItem('sm_wishlist_v1', JSON.stringify(my));
-  localStorage.setItem('santraMallWishlist', JSON.stringify(my)); // home page ka purana key
-  
+  localStorage.setItem('santraMallWishlist', JSON.stringify(my));
   updateHeaderBadges();
 }
-  
-  
+
 function showError(t,m){document.getElementById("productContainer").innerHTML=`<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p></div>`}
 </script>
-<!-- Product Page Wishlist -->
-<script>
-  const WISHLIST_KEY = window.WISHLIST_KEY || 'sm_wishlist_v1';
-  
-  function toggleWishlistFromProduct(){
-    const product = {
-      id: document.querySelector('[data-product-id]')?.dataset.productId || location.pathname,
-      name: document.querySelector('h1')?.textContent.trim(),
-      price: document.querySelector('.price, #price')?.textContent.trim(),
-      image: document.querySelector('.product-image img, #main-img')?.src
-    };
-    
-    let list = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
-    const exists = list.find(p => p.id === product.id);
-    
-    if(exists){
-      list = list.filter(p => p.id !== product.id);
-      alert('Removed from My Choice 💔');
-    } else {
-      list.push(product);
-      alert('Added to My Choice 😍');
-    }
-    
-    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
-    if(window.SM_LOCK?.backup) window.SM_LOCK.backup();
-  }
-
-  // Heart button ko connect karo
-  document.addEventListener('DOMContentLoaded', () => {
-    const heart = document.querySelector('.heart-btn, .wishlist-btn, #wishlist-heart');
-    if(heart) heart.onclick = toggleWishlistFromProduct;
-  });
-</script>
-<script src="mychoice.js"></script>
-<script>
-// product load hone ke baad
-if(!product){
-  document.body.innerHTML = "<h3 style='text-align:center;margin-top:50px'>Product not found, wapas home jao</h3>";
-  // ya fir home pe redirect
-  // window.location.href = 'index.html';
-  return;
-}
-</script>
+<!-- === FIX 2: neeche wala crash script HATA DIYA === -->
 </body>
 </html>
+
+
+
