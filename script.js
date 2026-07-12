@@ -388,7 +388,7 @@ function orderOnWhatsApp(
     let number = SANTRA_DB.settings?.helpdeskWhatsapp || "8769171078";
     let serial = productCode || "N/A";
     const baseURL = window.location.origin.includes("localhost")
-        ? "https://mansasingh7109-max.github.io/santramarketonlineshoppingmall"
+        ? "https://santramarketshoppingmall.web.app"
         : window.location.origin;
     let link = productLink || `${baseURL}/product.html?id=${productId}`;
     const message = `New Order - SANTRA MALL
