@@ -264,5 +264,14 @@ function showError(t,m){document.getElementById("productContainer").innerHTML=`<
   });
 </script>
 <script src="mychoice.js"></script>
+<script>
+// product load hone ke baad
+if(!product){
+  document.body.innerHTML = "<h3 style='text-align:center;margin-top:50px'>Product not found, wapas home jao</h3>";
+  // ya fir home pe redirect
+  // window.location.href = 'index.html';
+  return;
+}
+</script>
 </body>
 </html>
