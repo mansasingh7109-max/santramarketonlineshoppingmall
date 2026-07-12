@@ -1140,9 +1140,17 @@ image: image || '',
 <script src="mychoice.js"></script>
 <!-- ADMIN (sabse last me, </body> se pehle) -->
 <script src="santra-admin.js"></script>
-<script src="santra-master-auto.js"></script>
-  
-  
+
+<!-- ONE-TIME CLEANUP - purana cart hatao -->
+<script>
+  try {
+    localStorage.removeItem('santraCart');
+    localStorage.removeItem('santraWishlist');
+    localStorage.removeItem('santraHeartbeat');
+    console.log('✅ Old v1 data cleared');
+  } catch(e) {}
+</script>
+
     </body>
 </html>
 
