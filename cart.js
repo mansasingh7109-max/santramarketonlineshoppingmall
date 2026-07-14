@@ -1,9 +1,12 @@
-// ✅ FORCE SAME KEY EVERYWHERE
+// ✅ FORCE SAME KEY EVERYWHERE - Sabse pehle
+delete window.CART_KEY; // Purana hatao
+delete window.WISH_KEY;
 window.CART_KEY = "santraMallCart_v2";
+window.WISH_KEY = "santraMyChoice_v2";
 localStorage.setItem('CART_KEY_FORCED', 'santraMallCart_v2');
 
 // ==================== CART.JS - UNIVERSAL CART HANDLER ====================
-// 30-JUNE-2026 06:45 PM - UPDATED FOR SANTRA MALL - OLD LAYOUT SAFE
+// 13-JULY-2026 10:15 AM - UPDATED FOR SANTRA MALL - ARRAY SAFE
 // index.html, cart.html, product.html sab me chalega
 
 /*
@@ -12,14 +15,41 @@ window.CART_KEY = window.CART_KEY || "santra_cart";
 ===== OLD CODE BACKUP END =====
 */
 
-// ✅ FIX 1: KEY MATCH - sab files se same
-window.CART_KEY = window.CART_KEY || "santraMallCart_v2";
+// ✅ SAFE GET CART - Array guarantee
+window.getSafeCart = function() {
+    let cart = [];
+    try{
+        const raw = localStorage.getItem(window.CART_KEY);
+        cart = raw? JSON.parse(raw) : [];
+        if(!Array.isArray(cart)) cart = [];
+    }catch(e){
+        console.warn('Cart parse error, resetting:', e);
+        cart = [];
+    }
+    return cart;
+}
+
+// ✅ SAFE GET WISHLIST - Array guarantee
+window.getSafeWishlist = function() {
+    let wish = [];
+    try{
+        const raw = localStorage.getItem(window.WISH_KEY);
+        wish = raw? JSON.parse(raw) : [];
+        if(!Array.isArray(wish)) wish = [];
+    }catch(e){
+        console.warn('Wishlist parse error, resetting:', e);
+        wish = [];
+    }
+    return wish;
+}
 
 // ✅ BADGE UPDATE - Header + Bottom Nav
 window.updateCartBadge = function() {
     const cartBadge = document.getElementById('cartBadge');
     const bottomCartBadge = document.getElementById('bottomCartBadge');
-    if (!cartBadge &&!bottomCartBadge) return;
+    const choiceBadge = document.getElementById('choiceBadge');
+    if (!cartBadge &&!bottomCartBadge &&!choiceBadge) return;
+
     const user = typeof auth!== 'undefined'? auth.currentUser : null;
 
     if (user && typeof rtdb!== 'undefined') {
@@ -31,11 +61,18 @@ window.updateCartBadge = function() {
             setCartBadgeCount(cartBadge, totalQty);
             setCartBadgeCount(bottomCartBadge, totalQty);
         });
+
+        rtdb.ref('users/' + user.uid + '/wishlist').on('value', (snapshot) => {
+            let count = snapshot.exists()? snapshot.numChildren() : 0;
+            setCartBadgeCount(choiceBadge, count);
+        });
     } else {
-        let cart = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+        let cart = getSafeCart();
+        let wish = getSafeWishlist();
         let totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
         setCartBadgeCount(cartBadge, totalQty);
         setCartBadgeCount(bottomCartBadge, totalQty);
+        setCartBadgeCount(choiceBadge, wish.length);
     }
 }
 
@@ -46,36 +83,50 @@ function setCartBadgeCount(badge, count) {
     }
 }
 
-// ✅ ADD TO CART - Universal - IMAGE FIX
+// ✅ ADD TO CART - Universal - IMAGE FIX + ARRAY SAFE + PRODUCT PAGE SUPPORT
 window.addToCart = function(productData) {
-    if (!productData ||!productData.id) {
-        if(typeof showToast!== 'undefined') showToast("Product not found");
-        return;
+    // ✅ FIX 1: Agar productData nahi aaya to currentProduct check karo - Product page ke liye
+    if (!productData ||!productData.id || productData.id === 'undefined') {
+        if(typeof currentProduct!== 'undefined' && currentProduct && currentProduct.id){
+            productData = currentProduct;
+            // Variant bhi add karo agar select hai
+            if(typeof selectedVariant!== 'undefined' && selectedVariant){
+                productData.variant = selectedVariant;
+                productData.id = currentProduct.id + '-' + selectedVariant;
+            }
+            if(typeof selectedVariantData!== 'undefined' && selectedVariantData && selectedVariantData.price){
+                productData.price = selectedVariantData.price;
+            }
+        } else {
+            if(typeof showToast!== 'undefined') showToast("Product not found");
+            return;
+        }
     }
+
     const user = typeof auth!== 'undefined'? auth.currentUser : null;
 
-    // ✅ FIX 2: IMAGE PROPERLY PICK KARO - home page ke liye
+    // ✅ FIX 2: IMAGE PROPERLY PICK KARO - undefined check add kiya
     let img = productData.image || '';
-    if(!img && productData.images && productData.images.length > 0) img = productData.images[0];
-    if(!img && productData.media && productData.media.length > 0) img = productData.media[0].url || productData.media[0];
+    if(!img && productData.images && Array.isArray(productData.images) && productData.images.length > 0) img = productData.images[0];
+    if(!img && productData.media && Array.isArray(productData.media) && productData.media.length > 0) img = productData.media[0].url || productData.media[0];
     if(!img) img = 'https://via.placeholder.com/90x90?text=No+Image';
 
     let cartItem = {
         id: productData.id,
         name: productData.name,
         price: productData.price,
-        image: img, // ✅ image save hoga
+        image: img,
         code: productData.code || productData.id,
         variant: productData.variant || "Default",
-        qty: 1,
+        qty: productData.qty || 1,
         dbType: productData.dbType || 'rtdb'
     };
 
-    // LocalStorage
-    let cartArray = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+    // LocalStorage - ARRAY SAFE
+    let cartArray = getSafeCart();
     let existingIndex = cartArray.findIndex(item => item.id === productData.id);
     if (existingIndex > -1) {
-        cartArray[existingIndex].qty += 1;
+        cartArray[existingIndex].qty += (productData.qty || 1);
     } else {
         cartArray.push(cartItem);
     }
@@ -87,7 +138,7 @@ window.addToCart = function(productData) {
         cartRef.once('value').then(snapshot => {
             if (snapshot.exists()) {
                 const currentQty = snapshot.val().qty || 1;
-                return cartRef.update({ qty: currentQty + 1, image: img });
+                return cartRef.update({ qty: currentQty + (productData.qty || 1), image: img });
             } else {
                 return cartRef.set(cartItem);
             }
@@ -110,10 +161,10 @@ window.buyNow = function(productId) {
     setTimeout(() => { window.location.href = "cart.html"; }, 500);
 }
 
-// ✅ REMOVE FROM CART
+// ✅ REMOVE FROM CART - ARRAY SAFE
 window.removeFromCart = function(productId) {
     const user = typeof auth!== 'undefined'? auth.currentUser : null;
-    let cartArray = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+    let cartArray = getSafeCart();
     cartArray = cartArray.filter(item => item.id!== productId);
     localStorage.setItem(window.CART_KEY, JSON.stringify(cartArray));
     if (user && typeof rtdb!== 'undefined') {
@@ -124,11 +175,11 @@ window.removeFromCart = function(productId) {
     if (typeof renderCartPage === 'function') { renderCartPage(); }
 }
 
-// ✅ UPDATE QTY
+// ✅ UPDATE QTY - ARRAY SAFE
 window.updateCartQty = function(productId, newQty) {
     if (newQty < 1) return removeFromCart(productId);
     const user = typeof auth!== 'undefined'? auth.currentUser : null;
-    let cartArray = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+    let cartArray = getSafeCart();
     let index = cartArray.findIndex(item => item.id === productId);
     if (index > -1) {
         cartArray[index].qty = newQty;
@@ -141,7 +192,7 @@ window.updateCartQty = function(productId, newQty) {
     if (typeof renderCartPage === 'function') { renderCartPage(); }
 }
 
-// ✅ GET CART ITEMS
+// ✅ GET CART ITEMS - ARRAY SAFE
 window.getCartItems = function(callback) {
     const user = typeof auth!== 'undefined'? auth.currentUser : null;
     if (user && typeof rtdb!== 'undefined') {
@@ -153,8 +204,27 @@ window.getCartItems = function(callback) {
             callback(items);
         });
     } else {
-        let items = JSON.parse(localStorage.getItem(window.CART_KEY) || "[]");
+        let items = getSafeCart();
         callback(items);
+    }
+}
+
+// ✅ ADD TO WISHLIST - ARRAY SAFE
+window.addToWishlist = function(productData) {
+    if(!productData ||!productData.id) return;
+    let wish = getSafeWishlist();
+    if(!wish.find(p => p.id === productData.id)) {
+        wish.push({
+            id: productData.id,
+            name: productData.name,
+            price: productData.price,
+            image: productData.image || (productData.images && productData.images[0]) || ''
+        });
+        localStorage.setItem(window.WISH_KEY, JSON.stringify(wish));
+        if(typeof showToast!== 'undefined') showToast("❤️ My Choice me add ho gaya");
+        updateCartBadge();
+    } else {
+        if(typeof showToast!== 'undefined') showToast("Already in My Choice");
     }
 }
 
@@ -218,6 +288,7 @@ window.shareCartLink = function() {
 
 // ✅ Page load pe badge update
 document.addEventListener('DOMContentLoaded', function() { setTimeout(updateCartBadge, 500); });
+
 // ==================== CHROME FIX PATCH - 30 JUNE 2026 ====================
 // ✅ OLD KEY se NEW KEY me migrate karo (backup safe)
 (function migrateCartKey() {
@@ -249,31 +320,6 @@ window.addToCart = function(productData) {
     }, 300);
 };
 
-// ✅ FIX: My Choice (wishlist) - same key issue
-window.WISH_KEY = window.WISH_KEY || "santra_wishlist_v2";
-window.addToWishlist = window.addToWishlist || function(productData) {
-    if(!productData ||!productData.id) return;
-    let wish = JSON.parse(localStorage.getItem(window.WISH_KEY) || "[]");
-    if(!wish.find(p => p.id === productData.id)) {
-        wish.push({
-            id: productData.id,
-            name: productData.name,
-            price: productData.price,
-            image: productData.image || (productData.images && productData.images[0]) || ''
-        });
-        localStorage.setItem(window.WISH_KEY, JSON.stringify(wish));
-        if(typeof showToast!== 'undefined') showToast("❤️ My Choice me add ho gaya");
-        // badge update
-        const wishBadge = document.getElementById('wishlistBadge');
-        if(wishBadge) {
-            wishBadge.innerText = wish.length;
-            wishBadge.style.display = 'flex';
-        }
-    } else {
-        if(typeof showToast!== 'undefined') showToast("Already in My Choice");
-    }
-};
-
 // ✅ Chrome me localStorage block fix - try catch
 const originalSetItem = localStorage.setItem;
 localStorage.setItem = function(key, value) {
@@ -285,3 +331,6 @@ localStorage.setItem = function(key, value) {
     }
 };
 // ==================== PATCH END ====================
+
+// ✅ Debug - Sabse end me daalo taki function define ho jaye
+console.log('Cart.js loaded, addToCart exists:', typeof window.addToCart);
