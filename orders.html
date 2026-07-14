@@ -99,15 +99,17 @@
   </div>
 </div>
 
-<!-- ✅ NEW: SANTRA AUTH CONNECT -->
+<!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE - ZINDAGI BHAR KA FIX -->
+<script src="constants.js?v=1"></script>
+<script src="config.js?v=6"></script>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="santra-auth.js"></script>
 
 <script>
 /*
-
-OLD CODE BACKUP - 10/06/2026 - SAFE
+⚠️ OLD CODE BACKUP - 10/06/2026 - SAFE
 
 Tera purana code yahan save hai, kuch gadbad ho to wapas use kar lena.
 Main changes: 
@@ -115,9 +117,41 @@ Main changes:
 2. Login check santraRequireLogin() se
 3. currentCustomerMobile = santraGetCustomer()
 
+const db = firebase.firestore();
+let allOrders = [];
+let currentCustomerMobile = null;
+let currentCustomerData = null;
+
+function checkLoginAndLoad() {
+  currentCustomerMobile = santraGetCustomer();
+  if(currentCustomerMobile){
+    showCustomerInfo();
+    loadOrders();
+  }
+}
+
+OLD CODE BACKUP END
 */
 
+// ✅ NAYA CODE: window se config lo - SAFE HAI
+const firebaseConfig = window.firebaseConfig || {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.appspot.com",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY",
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+
+// ✅ CUSTOMER_KEY constants.js se
+const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+
 let allOrders = [];
 let currentCustomerMobile = null;
 let currentCustomerData = null;
@@ -127,15 +161,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function checkLoginAndLoad() {
-  // ✅ NEW: santra-auth se login check
-  currentCustomerMobile = santraGetCustomer();
+  // ✅ FIX: CUSTOMER_KEY use karo
+  currentCustomerMobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
   
   if(currentCustomerMobile){
     // Profile data load
     db.collection('customers').doc(currentCustomerMobile).get().then(doc => {
       if(doc.exists) {
         currentCustomerData = doc.data();
-        localStorage.setItem('santra_customer', JSON.stringify(currentCustomerData));
+        localStorage.setItem(CUSTOMER_KEY + '_profile', JSON.stringify(currentCustomerData));
       }
     });
     
@@ -154,8 +188,12 @@ function checkLoginAndLoad() {
 
 function logoutCustomer() {
   if(confirm('Logout karna hai?')) {
-    localStorage.removeItem('santra_whatsapp_mobile');
-    localStorage.removeItem('santra_customer');
+    // ✅ FIX: CUSTOMER_KEY use karo
+    localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_profile');
+    localStorage.setItem(CUSTOMER_KEY + '_logout_signal', Date.now());
     alert('✅ Logged out!');
     window.location.href = 'customer-login.html';
   }
@@ -180,7 +218,7 @@ function loadOrders() {
         snapshot.forEach(doc => {
           allOrders.push({id: doc.id,...doc.data()});
         });
-        allOrders.sort((a,b) => (b.orderTime || 0) - (a.orderTime || 0));
+        allOrders.sort((a,b) => (b.orderTime || b.createdAt?.toMillis() || 0) - (a.orderTime || a.createdAt?.toMillis() || 0));
         renderOrders(allOrders);
       });
 }
@@ -193,9 +231,24 @@ function renderOrders(orders) {
   }
   
   container.innerHTML = orders.map(order => {
-    let orderDate = order.createdAt? order.createdAt.toDate() : new Date();
+    let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderTime || Date.now());
     let dateStr = orderDate.toLocaleString('en-IN', {timeZone:'Asia/Kolkata'});
     let statusClass = 'status-' + (order.status || 'pending').toLowerCase();
+    
+    // Items list
+    let itemsHTML = '';
+    if(order.items && Array.isArray(order.items)) {
+      itemsHTML = order.items.map(item => `
+        <div class="item-row">
+          <img src="${item.image || 'https://via.placeholder.com/60'}" onclick="window.location.href='${BASE_URL}/product.html?id=${item.id}'">
+          <div class="item-details">
+            <h4>${item.name}</h4>
+            <p>Size: ${item.size || 'M'} | Qty: ${item.qty || 1} | ₹${item.price}</p>
+            <a href="${BASE_URL}/product.html?id=${item.id}" class="item-link" target="_blank">View Product →</a>
+          </div>
+        </div>
+      `).join('');
+    }
     
     return `
       <div class="order-card">
@@ -207,15 +260,33 @@ function renderOrders(orders) {
           </div>
           <span class="status-badge ${statusClass}">${order.status || 'Pending'}</span>
         </div>
+        
+        ${order.address ? `
+          <div class="address-box">
+            <p><b>📍 Delivery Address:</b></p>
+            <p>${order.address}</p>
+          </div>
+        ` : ''}
+        
+        <div class="items-list">
+          <b>🛒 Items:</b>
+          ${itemsHTML}
+        </div>
+        
         <div class="total-section">
           <div class="total-row grand-total"><span>Total:</span><span>₹${order.totalAmount || order.total || 0}</span></div>
         </div>
-        ${order.status === 'pending' ? `
+        
+        ${order.status === 'pending' || order.status === 'otp_pending' ? `
           <div class="otp-box">
             <b>🔐 Order OTP Required</b>
             <input type="text" id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6">
             <button class="btn-verify" onclick="verifyOrderOTP('${order.id}')">✅ Verify OTP</button>
           </div>
+        ` : ''}
+        
+        ${order.status === 'cancelled' ? `
+          <button class="btn-cancel" onclick="alert('Order already cancelled')">❌ Cancelled</button>
         ` : ''}
       </div>
     `;
@@ -242,6 +313,8 @@ function filterOrders() {
   const filtered = allOrders.filter(o => o.id.toLowerCase().includes(term) || (o.customerMobile||'').includes(term));
   renderOrders(filtered);
 }
+
+console.log("✅ customer-orders.html loaded - 15 JULY 2026 - CONSTANTS.JS SUPPORT");
 </script>
 </body>
 </html>
