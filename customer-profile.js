@@ -1,6 +1,45 @@
-// ===== CUSTOMER PROFILE JS - NO LOGIN - 29-JUNE-2026 =====
+/*
+⚠️ OLD CODE BACKUP - 29 JUNE 2026 SE PEHLE WALA
+⚠️ Agar kuch gadbad ho to isko uncomment karke use kar lena
 
 let uploadedPhotoURL = null;
+
+// Page Load Pe Old Data Load Karo
+window.addEventListener('load', function() {
+    loadExistingProfile();
+    document.getElementById('changePhotoBtn').addEventListener('click', () => {
+        document.getElementById('photoInput').click();
+    });
+    document.getElementById('photoInput').addEventListener('change', uploadPhotoToFirebase);
+    document.getElementById('saveChangesBtn').addEventListener('click', saveProfile);
+});
+
+// Purana Data Load Karo LocalStorage Se
+function loadExistingProfile() {
+    const saved = localStorage.getItem('santra_customer_profile');
+    if (saved) {
+        const data = JSON.parse(saved);
+        document.getElementById('editName').value = data.name || '';
+        document.getElementById('editLoginMobile').value = data.loginMobile || '';
+        document.getElementById('editDeliveryMobile').value = data.mobile || '';
+        document.getElementById('editEmail').value = data.email || '';
+        document.getElementById('editLocation').value = data.location || '';
+        document.getElementById('editPhoto').src = data.photo || 'https://via.placeholder.com/120?text=Photo';
+        uploadedPhotoURL = data.photo;
+    }
+}
+
+OLD CODE BACKUP END
+*/
+
+// ===== CUSTOMER PROFILE JS - UPDATED 14 JULY 2026 - CONSTANTS.JS SUPPORT =====
+
+let uploadedPhotoURL = null;
+
+// ✅ NAYA: Keys constants.js se
+const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
+const ADMIN_EMAIL = window.ADMIN_EMAIL || "santramarketshoppingmall@gmail.com";
 
 // ✅ Page Load Pe Old Data Load Karo
 window.addEventListener('load', function() {
@@ -14,9 +53,9 @@ window.addEventListener('load', function() {
     document.getElementById('saveChangesBtn').addEventListener('click', saveProfile);
 });
 
-// ✅ Purana Data Load Karo LocalStorage Se
+// ✅ Purana Data Load Karo LocalStorage Se - CUSTOMER_KEY use karo
 function loadExistingProfile() {
-    const saved = localStorage.getItem('santra_customer_profile');
+    const saved = localStorage.getItem(CUSTOMER_KEY + '_profile');
     if (saved) {
         const data = JSON.parse(saved);
         document.getElementById('editName').value = data.name || '';
@@ -26,6 +65,7 @@ function loadExistingProfile() {
         document.getElementById('editLocation').value = data.location || '';
         document.getElementById('editPhoto').src = data.photo || 'https://via.placeholder.com/120?text=Photo';
         uploadedPhotoURL = data.photo;
+        console.log('✅ Profile loaded from:', CUSTOMER_KEY + '_profile');
     }
 }
 
@@ -97,9 +137,11 @@ function saveProfile() {
 
     // ✅ 1. Firebase Me Save - Admin Panel Me Dikh Jayega
     db.collection('customers').doc(loginMobile).set(customerData, { merge: true })
-   .then(() => {
-        // ✅ 2. LocalStorage Me Save
-        localStorage.setItem('santra_customer_profile', JSON.stringify(customerData));
+  .then(() => {
+        // ✅ 2. LocalStorage Me Save - CUSTOMER_KEY use karo
+        localStorage.setItem(CUSTOMER_KEY + '_profile', JSON.stringify(customerData));
+        localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', loginMobile);
+        localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', loginMobile);
 
         // ✅ 3. Activity Log - Admin History Ke Liye
         db.collection('activity_logs').add({
@@ -112,7 +154,7 @@ function saveProfile() {
             newData: customerData
         });
 
-        // ✅ 4. Email To Admin
+        // ✅ 4. Email To Admin - window.ADMIN_EMAIL use karo
         const emailBody = `
             Customer Profile Updated:
             Name: ${name}
@@ -132,7 +174,7 @@ function saveProfile() {
             window.location.href = 'index.html';
         }, 1500);
     })
-   .catch(err => {
+  .catch(err => {
         showToast('❌ Error: ' + err.message, true);
         btn.disabled = false;
         btn.innerText = '💾 Save Profile';

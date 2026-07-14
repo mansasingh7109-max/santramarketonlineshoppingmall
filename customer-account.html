@@ -35,28 +35,59 @@
   Powered by <span>santrajet mall</span>
 </div>
 
+<!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE - ZINDAGI BHAR KA FIX -->
+<script src="constants.js?v=1"></script>
+<script src="config.js?v=6"></script>
+
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="santra-auth.js"></script>
 <script>
+/*
+⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-    authDomain: "santramarketshoppingmall.firebaseapp.com",
-    projectId: "santramarketshoppingmall",
-    storageBucket: "santramarketshoppingmall.appspot.com",
-    messagingSenderId: "398490252924",
-    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
-    
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.appspot.com",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY",
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
 };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+const mobile = localStorage.getItem('santra_whatsapp_mobile');
+OLD CODE BACKUP END
+*/
+
+// ✅ NAYA CODE: window se config lo - SAFE HAI
+const firebaseConfig = window.firebaseConfig || {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.appspot.com",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY",
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ✅ CUSTOMER_KEY constants.js se
+const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+
 // ✅ Iframe height auto adjust
 function resizeIframe(obj) {
   setTimeout(() => {
-    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+    try {
+      obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+    } catch(e) {
+      console.warn('Iframe resize error:', e);
+    }
   }, 200);
 }
 
@@ -66,16 +97,23 @@ window.addEventListener('message', function(e) {
     loadHeaderPhoto();
     document.getElementById('profileFrame').contentWindow.location.reload();
   }
+  if (e.data.type === 'resizeIframe') {
+    // Child iframe se height aayi
+    const iframe = document.getElementById(e.data.iframeId);
+    if (iframe) iframe.style.height = e.data.height + 'px';
+  }
 });
 
-// ✅ Header photo load karo
+// ✅ Header photo load karo - CUSTOMER_KEY use karo
 function loadHeaderPhoto() {
-  const mobile = localStorage.getItem('santra_whatsapp_mobile');
+  const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
   if (mobile) {
     db.collection('customers').doc(mobile).get().then(doc => {
       if (doc.exists && doc.data().photo) {
         document.getElementById('headerPhoto').src = doc.data().photo;
       }
+    }).catch(err => {
+      console.warn('Header photo load error:', err);
     });
   }
 }

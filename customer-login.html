@@ -73,11 +73,26 @@
 
   <div class="toast" id="toast"></div>
 
+<!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE - ZINDAGI BHAR KA FIX -->
+<script src="constants.js?v=1"></script>
+<script src="config.js?v=6"></script>
+
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="santra-auth.js"></script>
+
 <script>
- const firebaseConfig = {
+ /*
+ ⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA
+ const firebaseConfig = { ... }; // Hardcoded
+ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+ const db = firebase.firestore();
+ const ADMIN_WHATSAPP = "918769171078"; 
+ OLD CODE BACKUP END
+ */
+
+ // ✅ NAYA CODE: window se config lo - SAFE HAI
+ const firebaseConfig = window.firebaseConfig || {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
   projectId: "santramarketshoppingmall",
@@ -85,11 +100,16 @@
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
   measurementId: "G-ZW1ZR8HETY"
-};
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+ };
 
-const ADMIN_WHATSAPP = "918769171078"; 
+ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+ const db = firebase.firestore();
+
+ // ✅ ADMIN_WHATSAPP bhi window se
+ const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
+
+ // ✅ KEYS constants.js se
+ const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
 
 window.addEventListener('load', function() {
     checkLoginStatus();
@@ -107,8 +127,9 @@ window.addEventListener('load', function() {
 });
 
 function checkLoginStatus() {
-    const mobile = localStorage.getItem('santra_whatsapp_mobile');
-    const loginMobile = localStorage.getItem('santra_login_mobile');
+    // ✅ FIX: CUSTOMER_KEY use karo
+    const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
+    const loginMobile = localStorage.getItem(CUSTOMER_KEY + '_login_mobile');
     
     if (mobile) {
         showLoginSuccess(mobile);
@@ -123,7 +144,7 @@ function openProfilePopup() {
     const mobile = document.getElementById('loginMobile').value.trim();
     if (!mobile || mobile.length!== 10) return showToast('❌ 10 digit mobile daalo!', true);
     
-    localStorage.setItem('santra_login_mobile', mobile);
+    localStorage.setItem(CUSTOMER_KEY + '_login_mobile', mobile);
     document.getElementById('popupDeliveryMobile').value = mobile;
     document.getElementById('popupName').value = '';
     document.getElementById('popupEmail').value = '';
@@ -206,7 +227,7 @@ function sendRequestToAdmin(mobile, profileData) {
 }
 
 function resendRequest() {
-    const mobile = localStorage.getItem('santra_login_mobile');
+    const mobile = localStorage.getItem(CUSTOMER_KEY + '_login_mobile');
     if (!mobile) return;
     
     db.collection('customers').doc(mobile).get().then(doc => {
@@ -227,7 +248,6 @@ function resendRequest() {
     });
 }
 
-// ✅ UPDATED verifyOtp - 4 hour + fast
 function verifyOtp() {
     const mobile = document.getElementById('loginMobile').value.trim();
     const otp = document.getElementById('otpInput').value.trim();
@@ -268,9 +288,9 @@ function verifyOtp() {
         }
         
         if (otp === savedOtp) {
-            localStorage.setItem('santra_whatsapp_mobile', mobile);
-            localStorage.setItem('santra_customer_mobile', mobile);
-            localStorage.removeItem('santra_login_mobile');
+            localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', mobile);
+            localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', mobile);
+            localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
             
             db.collection('customers').doc(mobile).update({
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -307,10 +327,10 @@ function showLoginSuccess(mobile) {
 }
 
 function logout() {
-    localStorage.removeItem('santra_whatsapp_mobile');
-    localStorage.removeItem('santra_customer_mobile');
-    localStorage.removeItem('santra_login_mobile');
-    localStorage.setItem('santra_logout_signal', Date.now());
+    localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
+    localStorage.setItem(CUSTOMER_KEY + '_logout_signal', Date.now());
     window.parent.postMessage({type: 'logout'}, '*');
     location.reload();
 }
