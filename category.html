@@ -8,53 +8,53 @@
     :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
     body{background:var(--bg);padding-bottom:70px;}
- .header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
- .header h1{color:var(--accent);font-size:20px;}
- .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
- .filter-toggle{background:var(--accent);color:white;border:none;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer}
- .container{padding:15px;display:flex;gap:15px;max-width:1400px;margin:auto}
+.header{background:var(--card);padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.header h1{color:var(--accent);font-size:20px;}
+.back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
+.filter-toggle{background:var(--accent);color:white;border:none;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer}
+.container{padding:15px;display:flex;gap:15px;max-width:1400px;margin:auto}
 
     /* SIDEBAR FILTERS */
- .filters-sidebar{width:280px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto}
- .filters-sidebar h3{color:var(--accent);font-size:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f3f6}
- .filter-group{margin-bottom:18px;padding-bottom:15px;border-bottom:1px solid #f1f3f6}
- .filter-group h4{font-size:14px;color:#333;margin-bottom:8px;display:flex;align-items:center;gap:8px}
- .filter-group img{width:24px;height:24px;object-fit:cover;border-radius:4px}
- .filter-group label{display:flex;align-items:center;padding:5px 0;font-size:13px;cursor:pointer;color:#555;gap:6px}
- .filter-group input{margin-right:0;accent-color:var(--accent)}
- .clear-filter{background:#64748b;color:white;border:none;padding:8px;width:100%;border-radius:6px;margin-top:10px;cursor:pointer;font-size:13px}
- .filter-count{background:var(--accent);color:white;padding:2px 6px;border-radius:10px;font-size:11px;margin-left:5px}
+.filters-sidebar{width:280px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto}
+.filters-sidebar h3{color:var(--accent);font-size:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f3f6}
+.filter-group{margin-bottom:18px;padding-bottom:15px;border-bottom:1px solid #f1f3f6}
+.filter-group h4{font-size:14px;color:#333;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.filter-group img{width:24px;height:24px;object-fit:cover;border-radius:4px}
+.filter-group label{display:flex;align-items:center;padding:5px 0;font-size:13px;cursor:pointer;color:#555;gap:6px}
+.filter-group input{margin-right:0;accent-color:var(--accent)}
+.clear-filter{background:#64748b;color:white;border:none;padding:8px;width:100%;border-radius:6px;margin-top:10px;cursor:pointer;font-size:13px}
+.filter-count{background:var(--accent);color:white;padding:2px 6px;border-radius:10px;font-size:11px;margin-left:5px}
 
     /* MAIN CONTENT */
- .main-content{flex:1}
- .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
- .cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
- .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
- .cat-card h4{font-size:14px;color:#333;}
- .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:15px;}
- .product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
- .product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
- .product-card h4{font-size:14px;margin:8px 0 4px;color:#333;min-height:36px;}
- .price{color:var(--accent);font-weight:bold;font-size:16px;}
- .mrp{color:#999;font-size:13px;text-decoration:line-through;margin-left:6px;}
- .product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
- .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
- .nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
- .nav-item.active{color:var(--accent);}
- .nav-item div{font-size:22px;}
- .nav-item span{font-size:11px;display:block;margin-top:2px;}
- .cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
- .hide{display:none!important;}
- .loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
- .all-prod-btn{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-right:8px;}
- .active-chip{display:inline-block;background:#e40046;color:white;padding:4px 10px;border-radius:15px;font-size:12px;margin:3px;cursor:pointer}
- .mobile-filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none}
- .mobile-filter-overlay.show{display:block}
+.main-content{flex:1}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+.cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
+.cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
+.cat-card h4{font-size:14px;color:#333;}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:15px;}
+.product-card{background:var(--card);border-radius:8px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.product-card img{width:100%;height:140px;object-fit:cover;border-radius:6px;}
+.product-card h4{font-size:14px;margin:8px 0 4px;color:#333;min-height:36px;}
+.price{color:var(--accent);font-weight:bold;font-size:16px;}
+.mrp{color:#999;font-size:13px;text-decoration:line-through;margin-left:6px;}
+.product-card button{width:100%;padding:8px;background:var(--accent);color:white;border:none;border-radius:4px;margin-top:8px;font-size:13px;cursor:pointer;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100;}
+.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px;position:relative;}
+.nav-item.active{color:var(--accent);}
+.nav-item div{font-size:22px;}
+.nav-item span{font-size:11px;display:block;margin-top:2px;}
+.cart-badge{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:10px;position:absolute;top:0;right:25%;}
+.hide{display:none!important;}
+.loader{text-align:center;padding:40px;color:#999;grid-column:1/-1;}
+.all-prod-btn{background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;font-weight:bold;cursor:pointer;margin-right:8px;}
+.active-chip{display:inline-block;background:#e40046;color:white;padding:4px 10px;border-radius:15px;font-size:12px;margin:3px;cursor:pointer}
+.mobile-filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none}
+.mobile-filter-overlay.show{display:block}
     @media(max-width:768px){
-  .container{flex-direction:column}
-  .filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}
-  .filters-sidebar.show{left:0}
-  .close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px}
+ .container{flex-direction:column}
+ .filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}
+ .filters-sidebar.show{left:0}
+ .close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px}
     }
   </style>
 </head>
@@ -116,15 +116,13 @@
   </a>
 </div>
 
-<!-- ✅ FIREBASE COMPAT SDK - Direct Load No secrets.js -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<!-- ✅ NAYA: COMMON.JS SABSE PEHLE - CONSTANTS + FIREBASE AUTO LOAD -->
+<script src="common.js"></script>
+<script src="cache-buster.js"></script>
 
 <script>
 /* ==================== OLD CODE BACKUP - 09/06/2026 ====================
-PURANA CODE - RTDB ONLY - REALTIME LISTENER NAHI THA
+PURANA CODE - RTDB ONLY - REALTIME LISTENER NAHI THA - secrets.js use karta tha
 
 if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
 const rtdb = firebase.database();
@@ -143,24 +141,24 @@ function loadProducts() {
 
 ================== OLD CODE END ================== */
 
-// ✅ NEW UPDATED CODE - 28/06/2026 10:53 PM - NO secrets.js
-// ✅ FIREBASE CONFIG DIRECT - Duplicate declaration fix
-const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.appspot.com",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
+// ===== CATEGORY PAGE - UPDATED 15 JULY 2026 =====
+// ✅ CONSTANTS.JS + COMMON.JS SUPPORT + REALTIME FIREBASE
 
-// ✅ Sirf ek baar initialize - Duplicate error fix
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const rtdb = firebase.database();
-const auth = firebase.auth();
+// ✅ NAYA: Firebase common.js se aayega - wait karo
+let db, rtdb, auth;
+window.addEventListener('firebaseReady', function() {
+  db = window.db;
+  rtdb = firebase.database();
+  auth = window.auth;
+  console.log('✅ Firebase ready in category.html');
+  initCategoryPage();
+});
+
+// ✅ CONSTANTS.JS se keys lo
+const CART_KEY = window.CART_KEY || "santraMallCart_v2";
+const MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
+const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 
 let allProducts = [];
 let allCategories = [];
@@ -170,10 +168,21 @@ let categoryStructure = { types: [], variants: [], activeFilters: [], typeImages
 let appliedFilters = { type: [], variants: {} };
 let currentUser = null;
 
-auth.onAuthStateChanged((user) => {
-  currentUser = user;
-  updateCartCount();
-});
+function initCategoryPage() {
+  auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    updateCartCount();
+  });
+
+  loadProducts();
+  loadCategories();
+
+  let urlParams = new URLSearchParams(window.location.search);
+  let catName = urlParams.get('name');
+  if(catName) {
+    setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 800);
+  }
+}
 
 // ✅ LOAD PRODUCTS - FIRESTORE + RTDB BOTH - REALTIME
 function loadProducts() {
@@ -489,7 +498,7 @@ function renderProducts(){
 
     container.innerHTML += `
       <div class="product-card">
-        <img src="${finalImg}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}">
+        <img src="${finalImg}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}" onclick="window.location.href='product.html?id=${p.id}'">
         <h4>${p.name}</h4>
         <div>
           <span class="price">₹${p.price}</span>
@@ -519,45 +528,33 @@ window.toggleMobileFilter = function() {
 
 window.addToCart = async function(pid){
   if(!currentUser){
-    alert('Please login first!');
-    window.location.href = 'customer-account.html';
+    santraToast('Please login first!', true);
+    setTimeout(() => window.location.href = 'customer-account.html', 1000);
     return;
   }
   const product = allProducts.find(p => p.id == pid);
   if(!product || product.stock <= 0) {
-    alert('Product out of stock!');
+    santraToast('Product out of stock!', true);
     return;
   }
 
-  try {
-    const cartRef = db.collection('users').doc(currentUser.uid).collection('cart').doc(pid);
-    const cartDoc = await cartRef.get();
-
-    if(cartDoc.exists) {
-      const currentQty = cartDoc.data().qty || 0;
-      if(currentQty >= product.stock){
-        alert('No more stock available!');
-        return;
-      }
-      await cartRef.update({ qty: currentQty + 1 });
-    } else {
-      await cartRef.set({
-        name: product.name,
-        price: product.price,
-        image: product.imageUrl || product.image,
-        qty: 1,
-        productId: pid
-      });
-    }
-    alert('Added to cart!');
-  } catch(err) {
-    alert('Error: ' + err.message);
+  // ✅ santraAddToCart from common.js - CONSTANTS.JS use karega
+  const success = window.santraAddToCart(product);
+  if(success) {
+    santraToast('✅ Added to cart!');
+    updateCartCount();
+  } else {
+    santraToast('Error adding to cart', true);
   }
 }
 
 function updateCartCount(){
   if(!currentUser) {
-    document.getElementById('cartCount').innerText = '0';
+    // ✅ GUEST CART - CONSTANTS.JS se CART_KEY lo
+    let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    cart = cart.filter(item => item!== null && item!== undefined);
+    let total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+    document.getElementById('cartCount').innerText = total;
     return;
   }
   db.collection('users').doc(currentUser.uid).collection('cart').onSnapshot(snap => {
@@ -569,23 +566,14 @@ function updateCartCount(){
   });
 }
 
-// ✅ INIT - 28-JUNE-2026
-window.onload = function(){
-  loadProducts();
-  loadCategories();
-  let urlParams = new URLSearchParams(window.location.search);
-  let catName = urlParams.get('name');
-  if(catName) {
-    setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 500);
-  }
-}
+console.log("✅ category.html loaded - 15 JULY 2026 - CONSTANTS.JS + COMMON.JS SUPPORT");
 </script>
 
-<!-- ==================== BACKUP PROTECTION - 28/06/2026 ==================== -->
+<!-- ==================== BACKUP PROTECTION - 15/07/2026 ==================== -->
 <script>
-console.log('%c🔒 SANTRA MALL CATEGORY BACKUP - NO secrets.js', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 28 June 2026', 'color:#10b981;font-weight:bold');
-console.log('%c✅ Duplicate Declaration Fixed + RTDB + Firestore', 'color:#3b82f6;font-weight:bold');
+console.log('%c🔒 SANTRA MALL CATEGORY BACKUP - CONSTANTS.JS', 'color:#e40046;font-size:16px;font-weight:bold');
+console.log('%cBackup Time: 15 July 2026', 'color:#10b981;font-weight:bold');
+console.log('%c✅ Common.js + Constants.js Integration', 'color:#3b82f6;font-weight:bold');
 </script>
 </body>
 </html>
