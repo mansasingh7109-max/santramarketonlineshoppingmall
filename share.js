@@ -11,26 +11,29 @@ function shareCart() {
         alert("❌ Cart is empty!");
         return;
     }
-    // ... baaki purana code
+    // ... purana code - general wa.me link
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
 }
 
 function shareSingleProduct(productId) {
     let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
     let item = cart.find(p => p.id === productId);
     if (!item) return;
-    // ... baaki purana code
+    // ... purana code - general wa.me link
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
 }
 
 OLD CODE BACKUP END
 */
 
 // ===== SANTRA MALL - SHARE.JS - UPDATED 15 JULY 2026 =====
-// ✅ CONSTANTS.JS SUPPORT + DUPLICATE FIX + ERROR PROOF
+// ✅ CONSTANTS.JS SUPPORT + ADMIN WHATSAPP DIRECT + DUPLICATE FIX
 
-// ✅ FIX 1: const hatao, window se lo - DUPLICATE ERROR KHATAM
+// ✅ NAYA: Constants se keys lo - common.js load karega
 const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+const ADMIN_WHATSAPP = "918769171078"; // ✅ Tera admin number with 91 country code
 
-// ✅ FIX 2: CART_KEY ko function banao - const error nahi aayega
+// ✅ FIX: window.CART_KEY use karo, const mat banao - DUPLICATE ERROR KHATAM
 const getCartKey = () => window.CART_KEY || "santraMallCart_v2";
 
 // ✅ Toast helper - common.js se aayega, nahi to fallback
@@ -42,7 +45,7 @@ const showToast = (msg, isError = false) => {
     }
 };
 
-// ✅ 1. CART PAGE - Send Order / Share Cart Button
+// ✅ 1. CART PAGE - Send Order / Share Cart Button - ADMIN KO DIRECT
 function shareCart() {
     let cartKey = getCartKey();
     let cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
@@ -52,7 +55,7 @@ function shareCart() {
         return;
     }
 
-    let text = "🛒 *My Cart - SANTRA MALL* 🛒\n\n";
+    let text = "🛒 *NEW ORDER - SANTRA MALL* 🛒\n\n";
     let total = 0;
     
     cart.forEach((item, index) => {
@@ -65,34 +68,38 @@ function shareCart() {
         text += `${index + 1}. *${item.name || 'Product'}*\n`;
         text += `Size: ${size}\n`;  // ✅ SIZE
         text += `Qty: ${qty} x ₹${price} = ₹${itemTotal}\n`;  // ✅ QTY
+        text += `Code: ${item.code || item.id}\n`;
         text += `Link: ${BASE_URL}/product.html?id=${item.id}\n\n`;
     });
 
     text += `━━━━━━━━━━━━━━━━━━\n`;
     text += `*Grand Total: ₹${total}*\n`;
+    text += `Customer wants to place this order.\n`;
     text += `Shop: ${BASE_URL}`;
 
-    // WhatsApp pe bhejo - Error proof
+    // ✅ FIX: Direct Admin WhatsApp pe bhejo - 8769171078
+    const whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
+    
     try {
         if (navigator.share) {
             navigator.share({ 
-                title: "My Cart - SANTRA MALL", 
+                title: "New Order - SANTRA MALL", 
                 text: text 
             }).catch(err => {
-                console.log('Share cancelled:', err);
-                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                console.log('Share cancelled, using WhatsApp:', err);
+                window.open(whatsappURL, '_blank');
             });
         } else {
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(whatsappURL, '_blank');
         }
-        showToast('✅ Opening WhatsApp...');
+        showToast('✅ Opening Admin WhatsApp...');
     } catch(err) {
         console.error('Share error:', err);
         showToast('❌ Share failed!', true);
     }
 }
 
-// ✅ 2. SINGLE PRODUCT SHARE - Cart me har item ke neeche wala blue Share button
+// ✅ 2. SINGLE PRODUCT SHARE - Cart me har item ke neeche wala blue Share button - ADMIN KO
 function shareSingleProduct(productId) {
     let cartKey = getCartKey();
     let cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
@@ -107,44 +114,47 @@ function shareSingleProduct(productId) {
     let qty = parseInt(item.qty) || 1;
     let price = parseFloat(item.price) || 0;
     
-    let text = `🛍️ *SANTRA MALL* 🛍️\n\n`;
+    let text = `🛍️ *PRODUCT INQUIRY - SANTRA MALL* 🛍️\n\n`;
     text += `*${item.name || 'Product'}*\n`;
     text += `━━━━━━━━━━━━━━━━━━\n`;
     text += `Size: ${size}\n`;  // ✅ SIZE FIX
     text += `Qty: ${qty}\n`;    // ✅ QTY FIX
     text += `Price: ₹${price}\n`;
-    text += `Total: ₹${price * qty}\n\n`;
-    text += `🔗 Order Now: ${BASE_URL}/product.html?id=${item.id}\n\n`;
-    text += `Visit: ${BASE_URL}`;
+    text += `Total: ₹${price * qty}\n`;
+    text += `Code: ${item.code || item.id}\n\n`;
+    text += `🔗 View Product: ${BASE_URL}/product.html?id=${item.id}\n\n`;
+    text += `Customer is interested in this product.`;
     
-    // WhatsApp pe bhejo - Error proof
+    // ✅ FIX: Direct Admin WhatsApp pe bhejo - 8769171078
+    const whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
+    
     try {
         if (navigator.share) {
             navigator.share({ 
                 title: item.name, 
                 text: text 
             }).catch(err => {
-                console.log('Share cancelled:', err);
-                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                console.log('Share cancelled, using WhatsApp:', err);
+                window.open(whatsappURL, '_blank');
             });
         } else {
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(whatsappURL, '_blank');
         }
-        showToast('✅ Opening WhatsApp...');
+        showToast('✅ Opening Admin WhatsApp...');
     } catch(err) {
         console.error('Share error:', err);
         showToast('❌ Share failed!', true);
     }
 }
 
-// ✅ 3. PRODUCT PAGE SE DIRECT SHARE - For product.html
+// ✅ 3. PRODUCT PAGE SE DIRECT SHARE - For product.html - ADMIN KO
 function shareProductDirect(product) {
     if (!product ||!product.id) {
         showToast("❌ Product data missing!", true);
         return;
     }
     
-    let text = `🛍️ *SANTRA MALL* 🛍️\n\n`;
+    let text = `🛍️ *PRODUCT INQUIRY - SANTRA MALL* 🛍️\n\n`;
     text += `*${product.name || 'Product'}*\n`;
     text += `━━━━━━━━━━━━━━━━━━\n`;
     text += `Price: ₹${product.price || 0}\n`;
@@ -152,8 +162,12 @@ function shareProductDirect(product) {
         let off = Math.round((1 - product.price/product.mrp) * 100);
         text += `MRP: ₹${product.mrp} (${off}% OFF)\n`;
     }
-    text += `\n🔗 Buy Now: ${BASE_URL}/product.html?id=${product.id}\n\n`;
-    text += `Visit: ${BASE_URL}`;
+    text += `Code: ${product.code || product.id}\n\n`;
+    text += `🔗 Buy Now: ${BASE_URL}/product.html?id=${product.id}\n\n`;
+    text += `Customer wants to know more about this product.`;
+    
+    // ✅ FIX: Direct Admin WhatsApp pe bhejo
+    const whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
     
     try {
         if (navigator.share) {
@@ -161,20 +175,20 @@ function shareProductDirect(product) {
                 title: product.name, 
                 text: text 
             }).catch(err => {
-                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                window.open(whatsappURL, '_blank');
             });
         } else {
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(whatsappURL, '_blank');
         }
-        showToast('✅ Opening WhatsApp...');
+        showToast('✅ Opening Admin WhatsApp...');
     } catch(err) {
         showToast('❌ Share failed!', true);
     }
 }
 
-// ✅ 4. Share buttons auto add - for home page
+// ✅ 4. Share buttons auto add
 function addShareButtons() {
-    console.log("✅ Share buttons ready, CART_KEY:", getCartKey());
+    console.log("✅ Share buttons ready, CART_KEY:", getCartKey(), "ADMIN:", ADMIN_WHATSAPP);
 }
 
 // Export for module use
@@ -190,5 +204,5 @@ window.shareProductDirect = shareProductDirect;
 // ✅ Auto load
 document.addEventListener('DOMContentLoaded', () => {
     addShareButtons();
-    console.log('✅ share.js loaded, CART_KEY:', getCartKey());
+    console.log('✅ share.js loaded, CART_KEY:', getCartKey(), 'ADMIN:', ADMIN_WHATSAPP);
 });
