@@ -1,3 +1,8 @@
+/*
+
+⚠️ OLD CODE BACKUP - 29 JUNE 2026 SE PEHLE WALA
+⚠️ Agar kuch gadbad ho to isko uncomment karke use kar lena
+
 // ✅ FORCE SAME KEY EVERYWHERE - Sabse pehle
 delete window.CART_KEY; // Purana hatao
 delete window.WISH_KEY;
@@ -5,15 +10,18 @@ window.CART_KEY = "santraMallCart_v2";
 window.WISH_KEY = "santraMyChoice_v2";
 localStorage.setItem('CART_KEY_FORCED', 'santraMallCart_v2');
 
+window.CART_KEY = window.CART_KEY || "santra_cart";
+
+OLD CODE BACKUP END
+
+*/
+
 // ==================== CART.JS - UNIVERSAL CART HANDLER ====================
-// 13-JULY-2026 10:15 AM - UPDATED FOR SANTRA MALL - ARRAY SAFE
+// 14-JULY-2026 - UPDATED FOR SANTRA MALL - ARRAY SAFE + CONSTANTS.JS
 // index.html, cart.html, product.html sab me chalega
 
-/*
-⚠️ ===== OLD CODE BACKUP - 29 JUNE WALA =====
-window.CART_KEY = window.CART_KEY || "santra_cart";
-===== OLD CODE BACKUP END =====
-*/
+// ✅ NAYA CODE: constants.js se keys aayenge - const mat banao
+// window.CART_KEY aur window.MYCHOICE_KEY constants.js me define ho chuke hain
 
 // ✅ SAFE GET CART - Array guarantee
 window.getSafeCart = function() {
@@ -33,7 +41,7 @@ window.getSafeCart = function() {
 window.getSafeWishlist = function() {
     let wish = [];
     try{
-        const raw = localStorage.getItem(window.WISH_KEY);
+        const raw = localStorage.getItem(window.MYCHOICE_KEY);
         wish = raw? JSON.parse(raw) : [];
         if(!Array.isArray(wish)) wish = [];
     }catch(e){
@@ -220,7 +228,7 @@ window.addToWishlist = function(productData) {
             price: productData.price,
             image: productData.image || (productData.images && productData.images[0]) || ''
         });
-        localStorage.setItem(window.WISH_KEY, JSON.stringify(wish));
+        localStorage.setItem(window.MYCHOICE_KEY, JSON.stringify(wish));
         if(typeof showToast!== 'undefined') showToast("❤️ My Choice me add ho gaya");
         updateCartBadge();
     } else {
