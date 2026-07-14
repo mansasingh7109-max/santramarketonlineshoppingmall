@@ -1,10 +1,27 @@
-// share.js - UPDATED 09/07/2026 - Size + Qty fix
-const CART_KEY = "santraMallCart_v2";
+/*
+
+⚠️ OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA
+⚠️ Agar kuch gadbad ho to isko uncomment karke use kar lena
+
+// const CART_KEY = "santraMallCart_v2";
+// const BASE_URL = "https://santramarketshoppingmall.web.app";
+
+OLD CODE BACKUP END
+
+*/
+
+// ✅ SHARE.JS - UPDATED 14 JULY 2026 - CONSTANTS.JS SUPPORT
+// ✅ constants.js se CART_KEY aayega - const mat banao
+
 const BASE_URL = "https://santramarketshoppingmall.web.app";
+
+// ✅ FIX: window.CART_KEY use karo, hardcode mat karo
+const getCartKey = () => window.CART_KEY || "santraMallCart_v2";
 
 // ✅ 1. CART PAGE - Send Order / Share Cart Button
 function shareCart() {
-    let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    let cartKey = getCartKey();
+    let cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
     
     if (cart.length === 0) {
         alert("❌ Cart is empty!");
@@ -41,11 +58,12 @@ function shareCart() {
 
 // ✅ 2. SINGLE PRODUCT SHARE (Cart me har item ke neeche wala blue Share button)
 function shareSingleProduct(productId) {
-    let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    let cartKey = getCartKey();
+    let cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
     let item = cart.find(p => p.id === productId);
     if (!item) return;
     
-    let size = item.size || 'M';
+    let size = item.size || item.variant || 'M';
     let qty = item.qty || 1;
     
     let text = `*${item.name}*\n`;
@@ -57,9 +75,10 @@ function shareSingleProduct(productId) {
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
 }
 
-// ✅ 3. Share buttons auto add
+// ✅ 3. Share buttons auto add - for home page hearts
 function addShareButtons() {
     // purana code same
+    console.log("✅ Share buttons ready");
 }
 
 // Export for module use
@@ -69,3 +88,9 @@ export const shareSingleProductExport = shareSingleProduct;
 // Make globally available
 window.shareCart = shareCart;
 window.shareSingleProduct = shareSingleProduct;
+
+// ✅ Auto load
+document.addEventListener('DOMContentLoaded', () => {
+    addShareButtons();
+    console.log('✅ share.js loaded, CART_KEY:', getCartKey());
+});
