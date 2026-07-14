@@ -25,12 +25,12 @@ OLD CODE BACKUP END
 */
 
 // ===== SANTRA MALL - SHARE.JS - UPDATED 15 JULY 2026 =====
-// ✅ CONSTANTS.JS + COMMON.JS SUPPORT + ERROR PROOF
+// ✅ CONSTANTS.JS SUPPORT + DUPLICATE FIX + ERROR PROOF
 
-// ✅ NAYA: Constants se keys lo - common.js load karega
+// ✅ FIX 1: const hatao, window se lo - DUPLICATE ERROR KHATAM
 const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 
-// ✅ FIX: window.CART_KEY use karo, const mat banao
+// ✅ FIX 2: CART_KEY ko function banao - const error nahi aayega
 const getCartKey = () => window.CART_KEY || "santraMallCart_v2";
 
 // ✅ Toast helper - common.js se aayega, nahi to fallback
@@ -73,19 +73,23 @@ function shareCart() {
     text += `Shop: ${BASE_URL}`;
 
     // WhatsApp pe bhejo - Error proof
-    if (navigator.share) {
-        navigator.share({ 
-            title: "My Cart - SANTRA MALL", 
-            text: text 
-        }).catch(err => {
-            console.log('Share cancelled, using WhatsApp:', err);
+    try {
+        if (navigator.share) {
+            navigator.share({ 
+                title: "My Cart - SANTRA MALL", 
+                text: text 
+            }).catch(err => {
+                console.log('Share cancelled:', err);
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            });
+        } else {
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-        });
-    } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+        showToast('✅ Opening WhatsApp...');
+    } catch(err) {
+        console.error('Share error:', err);
+        showToast('❌ Share failed!', true);
     }
-    
-    showToast('✅ Opening WhatsApp...');
 }
 
 // ✅ 2. SINGLE PRODUCT SHARE - Cart me har item ke neeche wala blue Share button
@@ -114,19 +118,23 @@ function shareSingleProduct(productId) {
     text += `Visit: ${BASE_URL}`;
     
     // WhatsApp pe bhejo - Error proof
-    if (navigator.share) {
-        navigator.share({ 
-            title: item.name, 
-            text: text 
-        }).catch(err => {
-            console.log('Share cancelled, using WhatsApp:', err);
+    try {
+        if (navigator.share) {
+            navigator.share({ 
+                title: item.name, 
+                text: text 
+            }).catch(err => {
+                console.log('Share cancelled:', err);
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            });
+        } else {
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-        });
-    } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+        showToast('✅ Opening WhatsApp...');
+    } catch(err) {
+        console.error('Share error:', err);
+        showToast('❌ Share failed!', true);
     }
-    
-    showToast('✅ Opening WhatsApp...');
 }
 
 // ✅ 3. PRODUCT PAGE SE DIRECT SHARE - For product.html
@@ -147,15 +155,20 @@ function shareProductDirect(product) {
     text += `\n🔗 Buy Now: ${BASE_URL}/product.html?id=${product.id}\n\n`;
     text += `Visit: ${BASE_URL}`;
     
-    if (navigator.share) {
-        navigator.share({ 
-            title: product.name, 
-            text: text 
-        }).catch(err => {
+    try {
+        if (navigator.share) {
+            navigator.share({ 
+                title: product.name, 
+                text: text 
+            }).catch(err => {
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            });
+        } else {
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-        });
-    } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+        showToast('✅ Opening WhatsApp...');
+    } catch(err) {
+        showToast('❌ Share failed!', true);
     }
 }
 
@@ -174,7 +187,7 @@ window.shareCart = shareCart;
 window.shareSingleProduct = shareSingleProduct;
 window.shareProductDirect = shareProductDirect;
 
-// ✅ Auto load - common.js ke baad chalega
+// ✅ Auto load
 document.addEventListener('DOMContentLoaded', () => {
     addShareButtons();
     console.log('✅ share.js loaded, CART_KEY:', getCartKey());
