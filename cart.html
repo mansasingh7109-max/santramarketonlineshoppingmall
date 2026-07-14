@@ -9,6 +9,18 @@
             rel="stylesheet"
         />
         <script src="config.js?v=2"></script>
+        <script src="config.js?v=2"></script>
+
+        <!-- ✅ Yaha ye naya script daal do - 1 line ka fix -->
+        <script>
+            // Github pe config.js me const CART_KEY hai, isliye window.CART_KEY undefined hai
+            // Is line se hum zabardasti global CART_KEY bana denge
+            window.CART_KEY = window.CART_KEY || "santraMallCart_v2";
+            window.MYCHOICE_KEY =
+                window.MYCHOICE_KEY || "santraMallMyChoice_v2";
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
         <!-- ✅ FIX 1: cart.js load karo sabse pehle -->
@@ -408,9 +420,10 @@
             window.initFirebaseOnce(firebaseConfig);
             var rtdb = window.rtdb;
             var db = window.db;
+            var MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
+            var CART_KEY = window.CART_KEY || "santraMallCart_v2";
             var auth = window.auth;
-            var MYCHOICE_KEY = window.MYCHOICE_KEY;
-            var CART_KEY = window.CART_KEY;
+
             var EMAILJS_CONFIG = {
                 PUBLIC_KEY: "YOUR_KEY",
                 SERVICE_ID: "YOUR_SERVICE",
