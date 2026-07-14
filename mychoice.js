@@ -68,16 +68,25 @@ OLD CODE BACKUP END
 
 */
 
-// ✅ MYCHOICE.JS - SANTRA MALL - UPDATED 11 JULY 2026
-// ✅ Home page + Product page dono ke liye fix
-if (typeof MYCHOICE_KEY === 'undefined') {
-  var MYCHOICE_KEY = 'santraMallMyChoice_v2';
-  window.MYCHOICE_KEY = MYCHOICE_KEY;
-}
-if (typeof CART_KEY === 'undefined') {
-  var CART_KEY = 'santraMallCart_v2';
-  window.CART_KEY = CART_KEY;
-}
+// ✅ MYCHOICE.JS - SANTRA MALL - UPDATED 14 JULY 2026
+// ✅ Home page + Product page dono ke liye fix + SyntaxError fix
+
+// ✅ PURANA CODE COMMENT OUT - constants.js se aa raha hai
+// if (typeof MYCHOICE_KEY === 'undefined') {
+// var MYCHOICE_KEY = 'santraMallMyChoice_v2';
+// window.MYCHOICE_KEY = MYCHOICE_KEY;
+// }
+// if (typeof CART_KEY === 'undefined') {
+// var CART_KEY = 'santraMallCart_v2';
+// window.CART_KEY = CART_KEY;
+// }
+
+// ✅ NAYA CODE: window se direct use karo - SAFE HAI
+const MYCHOICE_KEY = window.MYCHOICE_KEY;
+const CART_KEY = window.CART_KEY;
+const rtdb = window.rtdb;
+const db = window.db;
+const auth = window.auth;
 
 // ✅ FIXED - product page ke liye currentProduct support
 if (typeof window.addToMyChoice === 'undefined' || true) { // force override
