@@ -1,5 +1,15 @@
 // SANTRA MALL - Crash-Proof Config v2.0
 (function() {
+  
+  // ✅ PURANA CODE - COMMENT OUT KAR DIYA - SAVE HAI
+  // const CART_KEY = "santraMallCart_v2"; // constants.js me chala gaya
+  // const MYCHOICE_KEY = "santraMallMyChoice_v2"; // constants.js me chala gaya
+  // window.CART_KEY = CART_KEY; // constants.js kar dega
+  // window.MYCHOICE_KEY = MYCHOICE_KEY; // constants.js kar dega
+  // var rtdb = firebase.database(); // ← OLD CODE - config.js khud banayega initFirebaseOnce me
+  // var db = firebase.firestore(); // ← OLD CODE - config.js khud banayega
+  // var auth = firebase.auth(); // ← OLD CODE - config.js khud banayega
+
   // 1. Config ek baar hi bane
   if (!window.SANTRA) {
     window.SANTRA = {
@@ -40,10 +50,15 @@
     });
   }
 
-  // 3. Firebase duplicate protection
+  // 3. Firebase duplicate protection - SAFER VERSION
   if (typeof window.initFirebaseOnce === 'undefined') {
     window.initFirebaseOnce = function(config) {
       if (!window.firebaseApp) {
+        // ✅ Check karo firebase load hua ya nahi
+        if (typeof firebase === 'undefined') {
+          console.error("❌ Firebase not loaded yet");
+          return null;
+        }
         window.firebaseApp = firebase.initializeApp(config);
         window.rtdb = firebase.database();
         window.db = firebase.firestore();
