@@ -3,29 +3,31 @@
     <head>
         <meta charset="UTF-8" />
         <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+        <script>
+            eruda.init();
+        </script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>🛒 My Cart - SANTRA MALL</title>
         <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
             rel="stylesheet"
         />
-        <script src="config.js?v=2"></script>
+
+        <!-- ✅ FIX 1: config.js sirf 1 baar -->
         <script src="config.js?v=2"></script>
 
-        <!-- ✅ Yaha ye naya script daal do - 1 line ka fix -->
+        <!-- ✅ FIX 2: CART_KEY global fix - config.js ke baad -->
         <script>
-            // Github pe config.js me const CART_KEY hai, isliye window.CART_KEY undefined hai
-            // Is line se hum zabardasti global CART_KEY bana denge
             window.CART_KEY = window.CART_KEY || "santraMallCart_v2";
             window.MYCHOICE_KEY =
                 window.MYCHOICE_KEY || "santraMallMyChoice_v2";
         </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <!-- ✅ FIX 3: jspdf sirf 1 baar -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-        <!-- ✅ FIX 1: cart.js load karo sabse pehle -->
+
+        <!-- ✅ FIX 4: cart.js load karo sabse pehle -->
         <script src="cart.js?v=3"></script>
 
         <style>
@@ -400,14 +402,14 @@
             >
         </div>
 
+        <!-- ✅ FIX 5: FIREBASE SABSE PEHLE INITIALIZE KARO -->
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-        <!-- ✅ SAFEGUARD SABSE PEHLE -->
-        <script src="double-code-safeguard.js"></script>
         <script>
+            // ✅ FIREBASE PEHLE INITIALIZE KARO - SAFEGUARD SE PEHLE
             const firebaseConfig = {
                 apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
                 authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -419,13 +421,27 @@
                 appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
                 measurementId: "G-ZW1ZR8HETY"
             };
-            window.initFirebaseOnce(firebaseConfig);
-            var rtdb = window.rtdb;
-            var db = window.db;
-            var MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
-            var CART_KEY = window.CART_KEY || "santraMallCart_v2";
-            var auth = window.auth;
 
+            // Sirf ek baar init karo
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+                console.log("✅ Firebase initialized");
+            }
+
+            var rtdb = firebase.database();
+            var db = firebase.firestore();
+            var auth = firebase.auth();
+
+            window.rtdb = rtdb;
+            window.db = db;
+            window.auth = auth;
+        </script>
+
+        <!-- ✅ SAFEGUARD FIREBASE KE BAAD -->
+        <script src="double-code-safeguard.js"></script>
+
+        <script>
+            // ✅ FIX 6: CART_KEY aur MYCHOICE_KEY yaha se hata diye - upar define ho chuke hain
             var EMAILJS_CONFIG = {
                 PUBLIC_KEY: "YOUR_KEY",
                 SERVICE_ID: "YOUR_SERVICE",
@@ -457,14 +473,14 @@
             var ADMIN_WHATSAPP = "918769171078";
             var ADMIN_EMAIL = "santramarketshoppingmall@gmail.com";
 
-            // ✅ FIX 2: SAFE ARRAY GUARANTEE - Ye naya function add kiya
+            // ✅ FIX 7: SAFE ARRAY GUARANTEE - Naya function
             function getSafeCartArray() {
                 let arr = [];
                 try {
                     const raw =
                         localStorage.getItem("cart") ||
                         localStorage.getItem("santra_cart") ||
-                        localStorage.getItem(CART_KEY);
+                        localStorage.getItem(window.CART_KEY);
                     arr = raw ? JSON.parse(raw) : [];
                     if (!Array.isArray(arr)) arr = [];
                 } catch (e) {
@@ -474,7 +490,7 @@
                 return arr;
             }
 
-            // ✅ OLD CODE RAKHA - bas safe banaya
+            // ✅ OLD CODE SAME RAHA - sirf safe banaya
             let cart = {};
             let myChoice = {};
             let currentTab = "cart";
@@ -527,7 +543,7 @@
                 showToast("😍 Added to My Choice!");
             }
 
-            // ✅ FIX: loadData me Array se Object banaya - SAFE
+            // ✅ FIX 8: loadData me getSafeCartArray use kiya
             function loadData() {
                 auth.onAuthStateChanged(user => {
                     if (user) {
@@ -569,7 +585,8 @@
                             });
 
                             myChoice = JSON.parse(
-                                localStorage.getItem(MYCHOICE_KEY) || "{}"
+                                localStorage.getItem(window.MYCHOICE_KEY) ||
+                                    "{}"
                             );
                         } catch (e) {
                             console.error("loadData error:", e);
@@ -726,14 +743,15 @@
                 showToast("❌ Removed");
             }
 
+            // ✅ FIX 9: saveCart me Object se Array banake save karo
             function saveCart() {
                 let u = auth.currentUser;
                 if (u) {
                     rtdb.ref("users/" + u.uid + "/cart").set(cart);
                 } else {
-                    // ✅ FIX: Object ko Array me convert karke save karo taki cart.js se match ho
+                    // Object ko Array me convert karke save karo
                     localStorage.setItem(
-                        CART_KEY,
+                        window.CART_KEY,
                         JSON.stringify(Object.values(cart))
                     );
                 }
@@ -746,7 +764,7 @@
                     rtdb.ref("users/" + u.uid + "/myChoice").set(myChoice);
                 } else {
                     localStorage.setItem(
-                        MYCHOICE_KEY,
+                        window.MYCHOICE_KEY,
                         JSON.stringify(myChoice)
                     );
                 }
@@ -842,7 +860,7 @@
         <script>
             window.addEventListener("message", e => {
                 if (e.data && e.data.type === "cartCleared") {
-                    location.reload(); // khud reload ho jao
+                    location.reload();
                 }
             });
         </script>
