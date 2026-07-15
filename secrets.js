@@ -4,7 +4,7 @@
 // STEP 1: Firebase Config
 if (typeof masterConfig === 'undefined') {
   var masterConfig = {
-    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
     authDomain: "santramarketshoppingmall.firebaseapp.com",
     projectId: "santramarketshoppingmall",
     storageBucket: "santramarketshoppingmall.appspot.com",
@@ -12,23 +12,23 @@ if (typeof masterConfig === 'undefined') {
     appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
     measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
     databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
-    
   };
   window.masterConfig = masterConfig;
   window.firebaseConfig = masterConfig;
 }
 
-// STEP 2: Global Keys - YE SABSE ZARURI HAI
-if (typeof CART_KEY === 'undefined') {
-  var CART_KEY = "santraMallCart_v2";
-  window.CART_KEY = CART_KEY;
-}
+// STEP 2: Global Keys - CART_KEY & MYCHOICE_KEY HATA DIYE ❌
+// if (typeof CART_KEY === 'undefined') {
+//   var CART_KEY = "santraMallCart_v2"; // ← constants.js me chala gaya
+//   window.CART_KEY = CART_KEY;
+// }
 
-if (typeof MYCHOICE_KEY === 'undefined') {
-  var MYCHOICE_KEY = "santraMallMyChoice_v2";
-  window.MYCHOICE_KEY = MYCHOICE_KEY;
-}
+// if (typeof MYCHOICE_KEY === 'undefined') {
+//   var MYCHOICE_KEY = "santraMallMyChoice_v2"; // ← constants.js me chala gaya
+//   window.MYCHOICE_KEY = MYCHOICE_KEY;
+// }
 
+// ADMIN_WHATSAPP rakh sakti hai agar constants.js me nahi daala
 if (typeof ADMIN_WHATSAPP === 'undefined') {
   var ADMIN_WHATSAPP = "918769171078";
   window.ADMIN_WHATSAPP = ADMIN_WHATSAPP;
@@ -51,7 +51,7 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length && typeof masterCon
 
 // STEP 4: db, auth, rtdb Global
 if (typeof db === 'undefined' && typeof firebase !== 'undefined' && firebase.apps.length) {
-  var db = firebase.firestore(); // ✅ Firestore
+  var db = firebase.firestore();
   window.db = db;
 }
 
@@ -60,9 +60,8 @@ if (typeof auth === 'undefined' && typeof firebase !== 'undefined' && firebase.a
   window.auth = auth;
 }
 
-// ✅ RTDB WAPAS ADD KIYA - TERE PRODUCTS DONO ME HAI
 if (typeof rtdb === 'undefined' && typeof firebase !== 'undefined' && firebase.apps.length) {
-  var rtdb = firebase.database(); // ✅ Realtime Database
+  var rtdb = firebase.database();
   window.rtdb = rtdb;
 }
 
@@ -79,12 +78,12 @@ if (typeof BUSINESS_CONFIG === 'undefined') {
 // STEP 6: EMAILJS CONFIG
 if (typeof EMAILJS_CONFIG === 'undefined') {
   var EMAILJS_CONFIG = {
-    PUBLIC_KEY: "", // 👈 Yahan EmailJS ka Public Key
-    SERVICE_ID: "",  // 👈 Yahan Service ID
-    TEMPLATE_ID: "" // 👈 Yahan Template ID
+    PUBLIC_KEY: "", 
+    SERVICE_ID: "",
+    TEMPLATE_ID: ""
   };
   window.EMAILJS_CONFIG = EMAILJS_CONFIG;
 }
 
-console.log("✅ secrets.js done. CART_KEY:", CART_KEY, "MYCHOICE_KEY:", MYCHOICE_KEY);
-
+// ✅ console.log me se bhi CART_KEY hata de
+console.log("✅ secrets.js done");
