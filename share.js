@@ -67,14 +67,13 @@ window.shareCart = function() {
         let itemTotal = price * qty;
         subtotal += itemTotal;
         let code = item.code || item.productCode || item.id || 'N/A';
-        let name = item.name || item.productName || 'Product';
+                let name = item.name || item.productName || 'Product';
         let id = item.id || code;
-        
-        text += `${index + 1}. *${name}*\n`;
+        let cleanId = (item.id || code).split('_')[0].split('-')[0];
+        text += `${index + 1}. *${name}* - ${BASE_URL}/product.html?id=${cleanId}\n`;
         text += `Size: ${size}\n`;
         text += `Qty: ${qty} x ₹${price} = ₹${itemTotal}\n`;
-        text += `Code: ${code}\n`;
-        text += `Link: ${BASE_URL}/product.html?id=${id}\n\n`;
+        text += `Code: ${code}\n\n`;
     });
 
     let delivery = subtotal >= 500 ? 0 : 49;
