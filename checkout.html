@@ -170,7 +170,7 @@ function renderOrderSummary() {
         subtotal += itemTotal;
         var size = item.size || item.variant || "Default";
         var displayName = item.name + (item.size? ` (Size ${item.size})` : '');
-        itemsArray.push({id:key, name:item.name, size:size, qty:qty, price:price, total:itemTotal, image:item.image, code:item.code||key, link:baseURL+"/product.html?id="+(item.id||key)});
+        itemsArray.push({id:key, name:item.name, size:size, qty:qty, price:price, total:itemTotal, image:item.image, code:item.code||key, link:baseURL+"/product.html?id="+( (item.id||key).split('_')[0].split('-')[0] )});
         return `<div class="item"><img src="${item.image || 'https://via.placeholder.com/70'}" alt="${item.name}"><div class="item-details"><h4>${count++}. ${displayName}</h4><p>Code: ${item.code||key}</p><p>Size: ${size}</p><p>Qty: <button onclick="updateQty('${key}',-1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">-</button> ${qty} <button onclick="updateQty('${key}',1)" style="padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer">+</button> x ₹${price} = ₹${itemTotal} <button onclick="removeItem('${key}')" style="border:none;background:none;color:#e91e63;font-size:11px;margin-left:6px;cursor:pointer">Remove</button></p><a href="product.html?id=${item.id||key}" target="_blank">Link: View Product</a></div></div>`;
     }).join("");
     var delivery = subtotal >= 500? 0 : 49;
