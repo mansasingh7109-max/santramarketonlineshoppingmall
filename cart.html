@@ -214,9 +214,27 @@
             }
 
             function updateQty(id, ch) { if (!cart[id]) return; cart[id].qty = (parseInt(cart[id].qty) || 1) + ch; if (cart[id].qty < 1) delete cart[id]; saveCart(); renderCart(); }
-            function removeFromCart(id) { delete cart[id]; saveCart(); renderCart(); if(typeof santraToast!== 'undefined') santraToast("🗑 Removed"); }
-            function moveToMyChoice(id) { let i = cart[id]; if (!i) return; delete cart[id]; saveCart(); myChoice[id] = {...i}; delete myChoice[id].qty; saveMyChoice(); renderCart(); if(typeof santraToast!== 'undefined') santraToast("😍 Moved!"); }
-            function moveToCart(id) { let i = myChoice[id]; if (!i) return; delete myChoice[id]; saveMyChoice(); if(typeof window.addToCart === 'function') window.addToCart({...i, qty: 1}); else { cart[id] = {...i, qty: 1}; saveCart(); } renderMyChoice(); if(typeof santraToast!== 'undefined') santraToast("✅ Moved!"); }
+            function removeFromCart(id) { delete cart[id]; saveCart(); renderCart(); if(typeof santraToast!== 'undefined') santraToast("🗑 Removed"); 
+            }
+// ✅ FINAL - My Cart <-> My Choice Both Work (Object System)
+function moveToMyChoice(id){
+    let i = cart[id]; if(!i) return;
+    delete cart[id]; saveCart();
+    myChoice[id] = {...i};
+    saveMyChoice();
+    renderCart(); renderMyChoice();
+    if(typeof updateCartBadge==='function') updateCartBadge();
+    if(typeof santraToast!=='undefined') santraToast("😍 Moved to My Choice");
+}
+function moveToCart(id){
+    let i = myChoice[id]; if(!i) return;
+    delete myChoice[id]; saveMyChoice();
+    cart[id] = {...i, qty: i.qty || 1}; saveCart();
+    renderCart(); renderMyChoice();
+    if(typeof updateCartBadge==='function') updateCartBadge();
+    if(typeof santraToast!=='undefined') santraToast("✅ Moved back to My Cart");
+}
+
             function removeFromChoice(id) { delete myChoice[id]; saveMyChoice(); renderMyChoice(); if(typeof santraToast!== 'undefined') santraToast("❌ Removed"); }
 
             function saveCart() {
@@ -268,11 +286,25 @@
                 const btn = document.getElementById("sendOrderBtn"); btn.innerText = "⏳ Sending..."; btn.disabled = true;
                 try {
                     if(window.db) { await window.db.collection("orders").doc(orderData.orderId).set({ orderId: orderData.orderId, total: orderData.grandTotal, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() }); }
-                    let whatsappURL = `https://wa.me/${window.ADMIN_WHATSAPP}?text=${encodeURIComponent(orderData.text)}`; window.open(whatsappURL, "_blank");
-                    if(typeof santraToast!== 'undefined') santraToast("✅ Order Sent!"); cart = {}; saveCart(); renderCart();
-                } catch (e) { alert("Error: " + e.message); }
-                btn.innerText = "📲 Send Order - WhatsApp: 8769171078 | Email: santramarketshoppingmall@gmail.com"; btn.disabled = false;
-            }
+// ✅ NEW MESSAGE with Size + Qty + Link + Total
+        window.shareCart(); // ye naya wala message bhejega
+        if(typeof santraToast!=='undefined') santraToast("✅ Order Sent!");
+        btn.innerText = "✅ Sent!";
+        btn.disabled = false;
+        cart = {};
+saveCart();
+renderCart();
+        return;
+        } catch (e) { 
+            console.log("Error ignored:", e.message);
+            window.shareCart(); // error aaye to bhi WhatsApp khulega
+            btn.innerText = "✅ Sent!";
+            btn.disabled = false;
+            return;
+        }
+        btn.innerText = "➡️ Send Order - WhatsApp: 8769171078 | Email: santramarketshoppingmall@gmail.com"; 
+        btn.disabled = false;
+        }
             async function generateAndSharePDF() { if(typeof santraToast!== 'undefined') santraToast("PDF feature coming soon!"); }
 
             document.addEventListener("DOMContentLoaded", function () {
