@@ -1,83 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:transparent;padding:40px;min-height:650px}
-   .card-title{color:#e40046;font-size:18px;margin-bottom:15px;text-align:center;font-weight:bold;border-bottom:2px solid #e40046;padding-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-   .form-group{margin-bottom:12px}
-   .form-group label{font-weight:bold;color:#333;font-size:13px;display:block;margin-bottom:4px}
-   .form-group input,.form-group textarea{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px}
-   .form-group input:disabled{background:#f5f5f5;color:#333}
-   .btn-save{width:100%;padding:12px;background:#10b981;color:white;border:none;border-radius:8px;font-weight:bold;font-size:15px;margin-top:10px;cursor:pointer}
-   .btn-save:disabled{background:#ccc;cursor:not-allowed}
-   .btn-edit{background:#f59e0b;color:white;padding:6px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
-   .btn-logout{background:#ef4444;color:white;padding:6px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
-   .profile-header{text-align:center;margin-bottom:20px}
-   .profile-photo{width:100px;height:100px;border-radius:50%;margin:0 auto 10px;display:block;object-fit:cover;border:3px solid #e40046;background:#f0f0f0}
-   .upload-btn{background:#3b82f6;color:white;padding:6px 12px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:8px auto;display:block}
-   .detail-row{display:flex;padding:12px 0;border-bottom:1px solid #f0f0f0}
-   .detail-row:last-child{border-bottom:none}
-   .detail-label{font-weight:bold;color:#666;width:140px;font-size:14px}
-   .detail-value{color:#333;flex:1;font-size:14px;word-break:break-word}
-   .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
-   .toast.show{display:block}
-   .toast.error{background:#f44336}
-   .loader{display:none;text-align:center;padding:8px;color:#666;font-size:12px}
-    #profileForm{display:none}
-    #profileView{display:none}
-  </style>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:transparent;padding:20px;min-height:650px}
+.card-title{color:#e40046;font-size:18px;margin-bottom:15px;text-align:center;font-weight:bold;border-bottom:2px solid #e40046;padding-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.form-group{margin-bottom:12px}
+.form-group label{font-weight:bold;color:#333;font-size:13px;display:block;margin-bottom:4px}
+.form-group input,.form-group textarea{width:100%;padding:11px;border:2px solid #ddd;border-radius:8px;font-size:14px}
+.form-group input:disabled{background:#f5f5f5}
+.btn-save{width:100%;padding:12px;background:#10b981;color:white;border:none;border-radius:8px;font-weight:bold;font-size:15px;margin-top:10px;cursor:pointer}
+.btn-save:disabled{background:#ccc}
+.btn-edit{background:#f59e0b;color:white;padding:6px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
+.btn-logout{background:#ef4444;color:white;padding:6px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold}
+.profile-header{text-align:center;margin-bottom:18px}
+.profile-photo{width:100px;height:100px;border-radius:50%;margin:0 auto 10px;display:block;object-fit:cover;border:3px solid #e40046;background:#f0f0f0}
+.upload-btn{background:#3b82f6;color:white;padding:6px 12px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:8px auto;display:block}
+.detail-row{display:flex;padding:11px 0;border-bottom:1px solid #f0f0f0}
+.detail-label{font-weight:bold;color:#666;width:130px;font-size:13px}
+.detail-value{color:#333;flex:1;font-size:13px;word-break:break-word}
+.toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
+.toast.show{display:block}
+.toast.error{background:#f44336}
+.loader{display:none;text-align:center;padding:8px;color:#666;font-size:12px}
+#profileForm{display:none}
+#profileView{display:none}
+.otp-note{background:#fff8e1;padding:8px;border-radius:6px;font-size:11px;color:#92400e;margin-bottom:10px;border-left:3px solid #f59e0b}
+</style>
 </head>
 <body>
 
-  <div class="card-title">
-    <span>📝 Profile & Delivery Details</span>
-    <div>
-      <button class="btn-edit" id="editBtn" style="display:none">✏️ Edit</button>
-      <button class="btn-logout" id="logoutBtn" style="display:none;margin-left:8px">🚪 Logout</button>
-    </div>
-  </div>
+<div class="card-title">
+<span>📝 Profile & Delivery Details</span>
+<div>
+<button class="btn-edit" id="editBtn" style="display:none">✏️ Edit</button>
+<button class="btn-logout" id="logoutBtn" style="display:none;margin-left:6px">🚪 Logout</button>
+</div>
+</div>
 
-  <!-- FORM MODE -->
-  <div id="profileForm">
-    <div class="profile-header">
-      <img id="editPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo">
-      <input type="file" id="photoInput" accept="image/*" style="display:none">
-      <button class="upload-btn" id="changePhotoBtn">📷 Change Photo</button>
-      <div class="loader" id="uploadLoader">⏳ Uploading...</div>
-    </div>
-    <div class="form-group"><label>WhatsApp Mobile Number</label><input type="tel" id="whatsappMobile" disabled></div>
-    <div class="form-group"><label>Full Name *</label><input type="text" id="editName" placeholder="Full Name" required></div>
-    <div class="form-group"><label>Email ID</label><input type="email" id="editEmail" placeholder="Email (Optional)"></div>
-    <div class="form-group"><label>Delivery Mobile Number *</label><input type="tel" id="editDeliveryMobile" placeholder="Delivery ke liye number" maxlength="10" required></div>
-    <div class="form-group"><label>Full Delivery Address *</label><textarea id="editLocation" placeholder="House no, Street, Landmark, City, State, Pincode" rows="3" required></textarea></div>
-    <button class="btn-save" id="saveBtn">💾 Save Profile</button>
-  </div>
+<div class="otp-note">✅ Information add karo - Yehi data orders.html me jayega - OTP 4 hour valid</div>
 
-  <!-- VIEW MODE: Profile Card -->
-  <div id="profileView">
-    <div class="profile-header"><img id="viewPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo"></div>
-    <div class="detail-row"><div class="detail-label">WhatsApp:</div><div class="detail-value" id="viewWhatsapp">-</div></div>
-    <div class="detail-row"><div class="detail-label">Full Name:</div><div class="detail-value" id="viewName">-</div></div>
-    <div class="detail-row"><div class="detail-label">Email:</div><div class="detail-value" id="viewEmail">-</div></div>
-    <div class="detail-row"><div class="detail-label">Delivery Mobile:</div><div class="detail-value" id="viewDeliveryMobile">-</div></div>
-    <div class="detail-row"><div class="detail-label">Address:</div><div class="detail-value" id="viewLocation">-</div></div>
-  </div>
+<!-- FORM MODE -->
+<div id="profileForm">
+<div class="profile-header">
+<img id="editPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo">
+<input type="file" id="photoInput" accept="image/*" style="display:none">
+<button class="upload-btn" id="changePhotoBtn">📷 Change Photo</button>
+<div class="loader" id="uploadLoader">⏳ Uploading...</div>
+</div>
+<div class="form-group"><label>WhatsApp Mobile Number</label><input type="tel" id="whatsappMobile" disabled></div>
+<div class="form-group"><label>Full Name *</label><input type="text" id="editName" placeholder="Full Name" required></div>
+<div class="form-group"><label>Email ID</label><input type="email" id="editEmail" placeholder="Email (Optional)"></div>
+<div class="form-group"><label>Delivery Mobile Number *</label><input type="tel" id="editDeliveryMobile" placeholder="Delivery ke liye number" maxlength="10" required></div>
+<div class="form-group"><label>Full Delivery Address *</label><textarea id="editLocation" placeholder="House no, Street, Landmark, City, State, Pincode" rows="3" required></textarea></div>
+<button class="btn-save" id="saveBtn">💾 Save Profile</button>
+</div>
 
-  <div class="toast" id="toast"></div>
+<!-- VIEW MODE -->
+<div id="profileView">
+<div class="profile-header"><img id="viewPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo"></div>
+<div class="detail-row"><div class="detail-label">WhatsApp:</div><div class="detail-value" id="viewWhatsapp">-</div></div>
+<div class="detail-row"><div class="detail-label">Full Name:</div><div class="detail-value" id="viewName">-</div></div>
+<div class="detail-row"><div class="detail-label">Email:</div><div class="detail-value" id="viewEmail">-</div></div>
+<div class="detail-row"><div class="detail-label">Delivery Mobile:</div><div class="detail-value" id="viewDeliveryMobile">-</div></div>
+<div class="detail-row"><div class="detail-label">Address:</div><div class="detail-value" id="viewLocation">-</div></div>
+</div>
 
-<!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE - ZINDAGI BHAR KA FIX -->
+<div class="toast" id="toast"></div>
+
+<!-- ✅ CONSTANTS.JS SABSE PEHLE -->
 <script src="constants.js?v=1"></script>
 <script src="config.js?v=6"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-<script src="santra-auth.js"></script>
+
 <script>
 /*
-⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA
+⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA - SAFE HIDE - TERI PURANI FILE YAHAN HAI
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -91,12 +92,15 @@ const firebaseConfig = {
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
-
 const mobile = localStorage.getItem('santra_whatsapp_mobile');
-OLD CODE BACKUP END
+function loadProfileData() {... doc(mobileToLoad).get()... }
+function showProfileForm() {... }
+function saveProfile() { db.collection('customers').doc(deliveryMobile).set... }
+
+OLD CODE BACKUP END - KUCH GADBAD HO TO WAPAS USE KAR LENA
 */
 
-// ✅ NAYA CODE: window se config lo - SAFE HAI
+// ✅ NAYA CODE - 15 JULY 2026 - FINAL FIX - CUSTOMER-ACCOUNT + ORDERS + LOGIN FULL CONNECT
 const firebaseConfig = window.firebaseConfig || {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -112,8 +116,8 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-// ✅ CUSTOMER_KEY constants.js se
 const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 
 let uploadedPhotoURL = null;
 
@@ -126,25 +130,38 @@ window.addEventListener('load', function() {
     document.getElementById('saveBtn').addEventListener('click', saveProfile);
 });
 
+// ✅ Parent + Other tabs se logout/login suno
 window.addEventListener('storage', function(e) {
     if (e.key === CUSTOMER_KEY + '_logout_signal' || e.key === CUSTOMER_KEY + '_whatsapp_mobile') {
         loadProfileData();
     }
 });
+window.addEventListener('message', function(e){
+  if(e.data.type==='loginSuccess'){
+    setTimeout(()=>loadProfileData(), 600);
+  }
+});
 
 function loadProfileData() {
-    // ✅ FIX: CUSTOMER_KEY use karo
-    const savedMobile = localStorage.getItem(CUSTOMER_KEY + '_customer_mobile');
-    const whatsappMobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || '';
+    const whatsappMobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem(CUSTOMER_KEY + '_customer_mobile') || '';
     document.getElementById('whatsappMobile').value = whatsappMobile;
 
-    if (savedMobile || whatsappMobile) {
-        const mobileToLoad = savedMobile || whatsappMobile;
-        db.collection('customers').doc(mobileToLoad).get().then(doc => {
+    if (whatsappMobile) {
+        // ✅ FIX: Doc ID hamesha WhatsApp Mobile se lo - Delivery se nahi
+        db.collection('customers').doc(whatsappMobile).get().then(doc => {
             if (doc.exists && doc.data().name) {
                 showProfileCard(doc.data());
             } else {
-                showProfileForm(whatsappMobile);
+                // Purana data deliveryMobile se bana ho to check karo
+                const oldMobile = localStorage.getItem(CUSTOMER_KEY + '_customer_mobile');
+                if(oldMobile && oldMobile!==whatsappMobile){
+                  db.collection('customers').doc(oldMobile).get().then(d2=>{
+                    if(d2.exists) showProfileCard(d2.data());
+                    else showProfileForm(whatsappMobile);
+                  });
+                } else {
+                  showProfileForm(whatsappMobile);
+                }
             }
         }).catch(() => {
             showProfileForm(whatsappMobile);
@@ -163,15 +180,14 @@ function showProfileForm(mobile = '') {
     const whatsappMobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || mobile;
     document.getElementById('whatsappMobile').value = whatsappMobile;
 
-    const loadMobile = localStorage.getItem(CUSTOMER_KEY + '_customer_mobile') || whatsappMobile;
-    if (loadMobile) {
-        db.collection('customers').doc(loadMobile).get().then(doc => {
+    if (whatsappMobile) {
+        db.collection('customers').doc(whatsappMobile).get().then(doc => {
             if (doc.exists) {
                 const data = doc.data();
                 document.getElementById('editName').value = data.name || '';
-                document.getElementById('editDeliveryMobile').value = data.mobile || loadMobile;
+                document.getElementById('editDeliveryMobile').value = data.mobile || whatsappMobile;
                 document.getElementById('editEmail').value = data.email || '';
-                document.getElementById('editLocation').value = data.location || '';
+                document.getElementById('editLocation').value = data.location || data.address || '';
                 document.getElementById('editPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
                 uploadedPhotoURL = data.photo;
             } else {
@@ -191,29 +207,34 @@ function showProfileCard(data) {
     document.getElementById('logoutBtn').style.display = 'inline-block';
 
     document.getElementById('viewPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
-    document.getElementById('viewWhatsapp').innerText = data.loginMobile || '-';
+    document.getElementById('viewWhatsapp').innerText = data.loginMobile || data.whatsappMobile || '-';
     document.getElementById('viewName').innerText = data.name || '-';
     document.getElementById('viewEmail').innerText = data.email || '-';
     document.getElementById('viewDeliveryMobile').innerText = data.mobile || '-';
-    document.getElementById('viewLocation').innerText = data.location || '-';
+    document.getElementById('viewLocation').innerText = data.location || data.address || '-';
+
+    // Edit form me bhi bhar do
+    document.getElementById('editName').value = data.name || '';
+    document.getElementById('editDeliveryMobile').value = data.mobile || '';
+    document.getElementById('editEmail').value = data.email || '';
+    document.getElementById('editLocation').value = data.location || data.address || '';
+    document.getElementById('editPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
+    uploadedPhotoURL = data.photo;
 
     resizeIframe();
 }
 
-function showEditForm() {
-    showProfileForm();
-}
+function showEditForm() { showProfileForm(); }
 
 function resizeIframe() {
     setTimeout(() => {
-        const height = Math.max(document.body.scrollHeight, 650);
-        window.parent.postMessage({type: 'resizeIframe', height: height}, '*');
-    }, 150);
+        const height = Math.max(document.body.scrollHeight, 700);
+        window.parent.postMessage({type: 'resizeIframe', height: height, iframeId: 'profileFrame'}, '*');
+    }, 200);
 }
 
 function profileLogout() {
     if(confirm('Logout karna hai?')) {
-        // ✅ FIX: CUSTOMER_KEY use karo
         localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
         localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
         localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
@@ -227,9 +248,9 @@ function profileLogout() {
 function uploadPhoto() {
     const file = document.getElementById('photoInput').files[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) return showToast('❌ Photo 2MB se kam honi chahiye!', true);
-    const mobile = document.getElementById('editDeliveryMobile').value.trim();
-    if (!mobile || mobile.length!== 10) return showToast('❌ Pehle Delivery Mobile daalo!', true);
+    if (file.size > 2 * 1024 * 1024) return showToast('❌ Photo 2MB se kam!', true);
+    const mobile = document.getElementById('whatsappMobile').value.trim() || document.getElementById('editDeliveryMobile').value.trim();
+    if (!mobile) return showToast('❌ Pehle Mobile daalo!', true);
     document.getElementById('uploadLoader').style.display = 'block';
     const fileName = `profile_photos/${mobile}/${Date.now()}.jpg`;
     const uploadTask = storage.ref(fileName).put(file);
@@ -259,30 +280,36 @@ function saveProfile() {
         photo = currentSrc.includes('placeholder')? '' : currentSrc;
     }
 
-    if (!name) return showToast('❌ Full Name required hai!', true);
-    if (!deliveryMobile || deliveryMobile.length!== 10) return showToast('❌ 10 digit Delivery Mobile daalo!', true);
-    if (!location) return showToast('❌ Delivery Address required hai!', true);
+    if (!name) return showToast('❌ Full Name required!', true);
+    if (!deliveryMobile || deliveryMobile.length!== 10) return showToast('❌ 10 digit Delivery Mobile!', true);
+    if (!location) return showToast('❌ Address required!', true);
 
     const btn = document.getElementById('saveBtn');
     btn.disabled = true;
     btn.innerText = '⏳ Saving...';
 
+    // ✅ FIX: Doc ID hamesha WhatsApp Mobile - Yahi pehle ka bug tha!
+    const docId = whatsappMobile || deliveryMobile;
+
     const customerData = {
         name: name,
         loginMobile: whatsappMobile,
+        whatsappMobile: whatsappMobile,
         mobile: deliveryMobile,
         email: email,
         photo: photo,
         location: location,
+        address: location,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    db.collection('customers').doc(deliveryMobile).set(customerData, { merge: true }).then(() => {
-        // ✅ FIX: CUSTOMER_KEY use karo
+    db.collection('customers').doc(docId).set(customerData, { merge: true }).then(() => {
         localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', deliveryMobile);
-        if(whatsappMobile) localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', whatsappMobile);
+        localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', whatsappMobile);
+        localStorage.setItem(CUSTOMER_KEY + '_profile', JSON.stringify(customerData));
+        localStorage.setItem('temp_profile_' + whatsappMobile, JSON.stringify(customerData));
 
-        showToast('✅ Profile Saved Successfully!');
+        showToast('✅ Profile Saved! Orders me bhi dikhega');
         showProfileCard(customerData);
         window.parent.postMessage({type: 'profileUpdated', photo: photo}, '*');
         btn.disabled = false;
@@ -299,20 +326,8 @@ function showToast(message, isError = false) {
     toast.innerText = message;
     toast.classList.add('show');
     if (isError) toast.classList.add('error');
-    setTimeout(() => { toast.classList.remove('show'); toast.classList.remove('error'); }, 2000);
+    setTimeout(() => { toast.classList.remove('show'); toast.classList.remove('error'); }, 3000);
 }
-
-window.addEventListener('message', function(e) {
-    if (e.data.type === 'getProfileData') {
-        const profileData = {
-            name: document.getElementById('editName').value.trim(),
-            email: document.getElementById('editEmail').value.trim(),
-            mobile: document.getElementById('editDeliveryMobile').value.trim(),
-            location: document.getElementById('editLocation').value.trim()
-        };
-        window.parent.postMessage({type: 'profileDataResponse', data: profileData, mobile: e.data.mobile}, '*');
-    }
-});
 </script>
 </body>
 </html>
