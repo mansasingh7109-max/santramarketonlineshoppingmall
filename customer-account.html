@@ -1,50 +1,53 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Profile - SANTRA MALL</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:#f1f3f6;display:flex;flex-direction:column;min-height:100vh}
-    .header{background:#1a1a2e;color:white;padding:15px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
-    .header img{width:45px;height:45px;border-radius:50%;border:2px solid #e94560;object-fit:cover;background:#f0f0f0}
-    .header h1{color:#e94560;font-size:22px}
-    .container{padding:20px;max-width:600px;margin:0 auto;flex:1}
-    .footer{background:#1a1a2e;color:white;text-align:center;padding:15px;font-size:14px;margin-top:auto}
-    .footer span{color:#e94560;font-weight:bold}
-    iframe{width:100%;border:none;border-radius:15px;margin-bottom:20px;background:white;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Profile - SANTRA MALL</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f1f3f6;display:flex;flex-direction:column;min-height:100vh}
+.header{background:#1a1a2e;color:white;padding:15px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.2);position:sticky;top:0;z-index:10}
+.header img{width:45px;height:45px;border-radius:50%;border:2px solid #e94560;object-fit:cover;background:#f0f0f0}
+.header h1{color:#e94560;font-size:22px}
+.container{padding:15px;max-width:600px;margin:0 auto;flex:1;width:100%}
+.footer{background:#1a1a2e;color:white;text-align:center;padding:15px;font-size:14px;margin-top:auto}
+.footer span{color:#e94560;font-weight:bold}
+iframe{width:100%;border:none;border-radius:15px;margin-bottom:15px;background:white;box-shadow:0 5px 20px rgba(0,0,0,0.1);min-height:400px;transition:height 0.3s}
+.hide{display:none !important}
+.otp-badge{background:#fff3cd;padding:10px;border-radius:8px;text-align:center;font-size:12px;color:#92400e;margin-bottom:12px;border-left:4px solid #f59e0b}
+</style>
 </head>
 <body>
 
 <div class="header">
-  <img id="headerPhoto" src="https://via.placeholder.com/45?text=👤">
-  <h1>Customer Profile</h1>
+<img id="headerPhoto" src="https://via.placeholder.com/45?text=👤">
+<h1>Customer Profile</h1>
 </div>
 
 <div class="container">
-  <!-- ✅ 1ST POPUP: Customer Login -->
-  <iframe id="loginFrame" src="customer-login.html" onload="resizeIframe(this)"></iframe>
+<div class="otp-badge" id="loginBadge">🔐 Login OTP 4 hours valid - Har Order pe naya OTP</div>
 
-  <!-- ✅ 2ND POPUP: Profile Details -->
-  <iframe id="profileFrame" src="profile.html" onload="resizeIframe(this)"></iframe>
+<!-- ✅ 1ST POPUP: Customer Login -->
+<iframe id="loginFrame" src="customer-login.html?v=7" onload="resizeIframe(this)"></iframe>
+
+<!-- ✅ 2ND POPUP: Profile Details -->
+<iframe id="profileFrame" src="profile.html?v=7" onload="resizeIframe(this)"></iframe>
 </div>
 
 <div class="footer">
-  Powered by <span>santrajet mall</span>
+Powered by <span>santrajet mall</span>
 </div>
 
-<!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE - ZINDAGI BHAR KA FIX -->
+<!-- ✅ CONSTANTS.JS SABSE PEHLE -->
 <script src="constants.js?v=1"></script>
 <script src="config.js?v=6"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script src="santra-auth.js"></script>
+
 <script>
 /*
-⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA
+⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA - SAFE HIDE - TERI PURANI FILE YAHAN HAI
 const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -57,12 +60,11 @@ const firebaseConfig = {
 };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-const mobile = localStorage.getItem('santra_whatsapp_mobile');
-OLD CODE BACKUP END
+function resizeIframe(obj) { obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px'; }
+OLD CODE BACKUP END - SAFE HAI
 */
 
-// ✅ NAYA CODE: window se config lo - SAFE HAI
+// ✅ NAYA CODE - 15 JULY 2026 - FINAL CLEAN - LOGIN + PROFILE FULL CONNECT
 const firebaseConfig = window.firebaseConfig || {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -77,48 +79,83 @@ const firebaseConfig = window.firebaseConfig || {
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ✅ CUSTOMER_KEY constants.js se
 const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 
-// ✅ Iframe height auto adjust
-function resizeIframe(obj) {
-  setTimeout(() => {
-    try {
-      obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-    } catch(e) {
-      console.warn('Iframe resize error:', e);
-    }
-  }, 200);
+// ✅ Single resize function - Duplicate hata diya
+function resizeIframe(obj){
+  setTimeout(()=>{
+    try{
+      let h = obj.contentWindow.document.documentElement.scrollHeight;
+      if(h>100) obj.style.height = h + 30 + 'px';
+    }catch(e){}
+  }, 400);
 }
 
-// ✅ Login ya Profile update hone pe header photo update karo
-window.addEventListener('message', function(e) {
-  if (e.data.type === 'loginSuccess' || e.data.type === 'profileUpdated') {
+function checkLoginAndToggle(){
+  const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem(CUSTOMER_KEY + '_customer_mobile');
+  const loginFrame = document.getElementById('loginFrame');
+  const profileFrame = document.getElementById('profileFrame');
+  const badge = document.getElementById('loginBadge');
+  
+  if(mobile){
+    loginFrame.classList.add('hide');
+    profileFrame.classList.remove('hide');
+    badge.innerHTML = `✅ Logged in: ${mobile} | <a href="orders.html" style="color:#e40046;font-weight:bold">📦 My Orders</a> | OTP 4 hours valid`;
     loadHeaderPhoto();
-    document.getElementById('profileFrame').contentWindow.location.reload();
+    profileFrame.src = 'profile.html?v=' + Date.now();
+  } else {
+    loginFrame.classList.remove('hide');
+    profileFrame.classList.remove('hide');
+    badge.innerHTML = `🔐 Login OTP 4 hours valid - Har Order pe naya OTP - Pehle Login karo`;
+    document.getElementById('headerPhoto').src = 'https://via.placeholder.com/45?text=👤';
   }
-  if (e.data.type === 'resizeIframe') {
-    // Child iframe se height aayi
-    const iframe = document.getElementById(e.data.iframeId);
-    if (iframe) iframe.style.height = e.data.height + 'px';
+}
+
+window.addEventListener('message', function(e){
+  if(e.data.type === 'loginSuccess'){
+    setTimeout(()=>{ checkLoginAndToggle(); }, 800);
+  }
+  if(e.data.type === 'profileUpdated'){
+    loadHeaderPhoto();
+    checkLoginAndToggle();
+  }
+  if(e.data.type === 'logout'){
+    localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
+    checkLoginAndToggle();
+    document.getElementById('loginFrame').src = 'customer-login.html?v=' + Date.now();
+  }
+  if(e.data.type === 'resizeIframe' && e.data.height){
+    let iframe = document.getElementById(e.data.iframeId);
+    if(iframe) iframe.style.height = e.data.height + 'px';
   }
 });
 
-// ✅ Header photo load karo - CUSTOMER_KEY use karo
-function loadHeaderPhoto() {
+function loadHeaderPhoto(){
   const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
-  if (mobile) {
-    db.collection('customers').doc(mobile).get().then(doc => {
-      if (doc.exists && doc.data().photo) {
-        document.getElementById('headerPhoto').src = doc.data().photo;
-      }
-    }).catch(err => {
-      console.warn('Header photo load error:', err);
-    });
-  }
+  if(!mobile) return;
+  db.collection('customers').doc(mobile).get().then(doc=>{
+    if(doc.exists && doc.data().photo){
+      document.getElementById('headerPhoto').src = doc.data().photo;
+    }
+  }).catch(()=>{});
 }
 
-window.addEventListener('load', loadHeaderPhoto);
+window.addEventListener('load', ()=>{
+  checkLoginAndToggle();
+  loadHeaderPhoto();
+  setInterval(()=>{
+    document.querySelectorAll('iframe').forEach(f=>{
+      try{ 
+        let h = f.contentWindow.document.documentElement.scrollHeight;
+        if(h>150) f.style.height = h+30+'px';
+      }catch(e){}
+    });
+  }, 1200);
+});
+
+console.log("✅ customer-account.html FINAL CLEAN 15 JULY - NO DUPLICATE");
 </script>
 </body>
 </html>
