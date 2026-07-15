@@ -134,16 +134,40 @@ function finishLoad(){
     renderOrderSummary();
 }
 
+// ✅ FIXED - Cart.html se Copy hoke Checkout pe dikhega
+function getCartData(){
+    let keys = ["santraMallCart_v2", "cart", "santra_cart"];
+    for(let k of keys){
+        let raw = localStorage.getItem(k);
+        if(raw){
+            try{
+                let p = JSON.parse(raw);
+                let arr = Array.isArray(p)? p : Object.values(p);
+                if(arr.length>0) return arr;
+            }catch(e){}
+        }
+    }
+    return [];
+}
+
 function renderOrderSummary() {
     document.getElementById("orderId").innerText = orderId;
     var container = document.getElementById("orderItems");
     var count = 1; var subtotal = 0; itemsArray = [];
     var baseURL = "https://santramarketshoppingmall.web.app";
+    var cartRaw = getCartData();
+    var cartObj = {};
+    cartRaw.forEach(function(it, idx){
+        let key = it.id || it.code || idx;
+        cartObj[key] = it;
+    });
+    var cart = cartObj;
     container.innerHTML = Object.keys(cart).map(function (key) {
         var item = cart[key];
         var qty = parseInt(item.qty) || 1;
         var price = parseFloat(item.price) || 0;
-        var itemTotal = price * qty; subtotal += itemTotal;
+        var itemTotal = price * qty;
+        subtotal += itemTotal;
         var size = item.size || item.variant || "Default";
         var displayName = item.name + (item.size? ` (Size ${item.size})` : '');
         itemsArray.push({id:key, name:item.name, size:size, qty:qty, price:price, total:itemTotal, image:item.image, code:item.code||key, link:baseURL+"/product.html?id="+(item.id||key)});
