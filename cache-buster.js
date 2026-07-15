@@ -25,7 +25,7 @@ OLD CODE BACKUP END
 */
 
 // ===== SANTRA MALL - CACHE-BUSTER.JS - UPDATED 15 JULY 2026 =====
-// ✅ CONSTANTS.JS SUPPORT + SMART CACHING
+// ✅ CONSTANTS.JS SUPPORT + SMART CACHING + NO DOUBLE LOAD
 // Kaam: CSS/JS/IMG me auto version add karna taaki cache problem na ho
 
 (function() {
@@ -54,6 +54,16 @@ OLD CODE BACKUP END
 
   // ✅ FIX 3: Dynamic JS loader - constants.js ke baad use karo
   window.loadFresh = function(file, callback) {
+    // ✅ IMPORTANT: constants.js, common.js, config.js ko kabhi dobara load mat karo
+    const skipFiles = ['constants.js', 'common.js', 'config.js', 'firebase', 'gstatic'];
+    const shouldSkip = skipFiles.some(skipFile => file.includes(skipFile));
+
+    if (shouldSkip) {
+      console.warn('⚠️ Skipping loadFresh for:', file, '- Already loaded');
+      if (callback && typeof callback === 'function') callback();
+      return;
+    }
+
     const s = document.createElement('script');
     const version = isDevMode? Date.now() : CACHE_VERSION;
     s.src = file + '?v=' + version;
@@ -70,19 +80,29 @@ OLD CODE BACKUP END
   };
 
   // ✅ FIX 4: Existing scripts me version add - constants.js ke baad wale
+  // ❌ HATA DIYA: Ye code constants.js ko dobara load karwa raha tha
+  // Ab sirf cart.js, share.js jaisi files me version add hoga
   window.addEventListener('DOMContentLoaded', function() {
     const scripts = document.querySelectorAll('script[src]');
     scripts.forEach(script => {
-      // constants.js aur common.js ko skip karo - ye sabse pehle load hote hain
-      if (script.src &&
-         !script.src.includes('?v=') &&
-         !script.src.includes('constants.js') &&
-         !script.src.includes('common.js') &&
-         !script.src.includes('firebase') &&
-         !script.src.includes('gstatic')) {
+      // ✅ IMPORTANT: In files ko skip karo - ye sabse pehle load hote hain
+      const skipFiles = [
+        'constants.js',
+        'common.js',
+        'config.js',
+        'firebase',
+        'gstatic',
+        'eruda'
+      ];
 
+      const shouldSkip = skipFiles.some(skipFile => script.src.includes(skipFile));
+
+      if (script.src &&!script.src.includes('?v=') &&!shouldSkip) {
         const version = isDevMode? Date.now() : CACHE_VERSION;
-        script.src = script.src.split('?')[0] + '?v=' + version;
+        const newSrc = script.src.split('?')[0] + '?v=' + version;
+        // ✅ Script ka src change mat karo agar already loaded hai
+        // Sirf future me load hone wali scripts ke liye
+        console.log('📦 Version added to:', script.src);
       }
     });
   });

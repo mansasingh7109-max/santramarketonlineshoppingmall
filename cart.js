@@ -1,3 +1,39 @@
+// ==================== CART.JS - UNIVERSAL CART HANDLER ====================
+// 14-JULY-2026 - UPDATED FOR SANTRA MALL - ARRAY SAFE + CONSTANTS.JS
+// index.html, cart.html, product.html sab me chalega
+
+// ✅ NAYA CODE: constants.js se keys aayenge - const mat banao
+// window.CART_KEY aur window.MYCHOICE_KEY constants.js me define ho chuke hain
+
+// ✅ SAFE GET CART - Array guarantee
+window.getSafeCart = function() {
+    let cart = [];
+    try{
+        const raw = localStorage.getItem(window.CART_KEY);
+        cart = raw? JSON.parse(raw) : [];
+        if(!Array.isArray(cart)) cart = [];
+    }catch(e){
+        console.warn('Cart parse error, resetting:', e);
+        cart = [];
+    }
+    return cart;
+}
+
+// ✅ SAFE GET WISHLIST - Array guarantee
+window.getSafeWishlist = function() {
+    let wish = [];
+    try{
+        const raw = localStorage.getItem(window.MYCHOICE_KEY);
+        wish = raw? JSON.parse(raw) : [];
+        if(!Array.isArray(wish)) wish = [];
+    }catch(e){
+        console.warn('Wishlist parse error, resetting:', e);
+        wish = [];
+    }
+    return wish;
+}
+
+// ... Baaki tera poora code same rahega ...
 /*
 
 ⚠️ OLD CODE BACKUP - 29 JUNE 2026 SE PEHLE WALA
