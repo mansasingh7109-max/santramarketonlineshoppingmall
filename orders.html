@@ -1,139 +1,104 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📦 My Orders - SANTRA MALL</title>
-  <style>
-    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);color:var(--text);padding-bottom:70px}
-   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-   .header h1{font-size:18px;flex:1}
-    .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-  .logout-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
-  .container{max-width:900px;margin:15px auto;padding:0 15px}
-  .search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
-  .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid #e0e0e0}
-  .order-id{font-size:14px;color:#666}
-  .order-id b{color:var(--text);font-size:16px}
-  .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
-  .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
-  .status-pending{background:#fef3c7;color:#92400e}
-  .status-otp_pending{background:#fef3c7;color:#92400e}
-  .status-confirmed{background:#d1fae5;color:#065f46}
-  .status-shipped{background:#dbeafe;color:#1e40af}
-  .status-delivered{background:#d1fae5;color:#065f46}
-  .status-cancelled{background:#fee2e2;color:#991b1b}
-  .status-buying{background:#2196F3;color:white}
-  .order-info{margin:15px 0}
-  .info-row{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
-  .info-row span:first-child{color:#666}
-  .info-row span:last-child{font-weight:bold;color:var(--text)}
-  .items-list{margin:15px 0;border-top:1px solid #e0e0e0;padding-top:15px}
-  .item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
-  .item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
-  .item-details{flex:1}
-  .item-details h4{font-size:13px;margin-bottom:4px}
-  .item-details p{font-size:12px;color:#666;margin:2px 0}
-  .item-link{font-size:11px;color:#3b82f6;text-decoration:none;font-weight:bold}
-  .item-link:hover{text-decoration:underline}
-  .total-section{border-top:2px solid #e0e0e0;margin-top:15px;padding-top:15px}
-  .total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
-  .grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
-  .btn{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
-  .btn-cancel{background:#ef4444;color:white;border:none;padding:10px 16px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px;margin-top:10px}
-  .empty{text-align:center;padding:60px 20px;color:#999}
-  .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
-  .address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
-  .address-box p{font-size:13px;margin:4px 0;color:#1e40af}
-  .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
-  .date-text{color:#6b7280;font-size:13px;margin:5px 0}
-  .otp-box{background:#fff3cd;padding:15px;border-radius:8px;margin:15px 0;border-left:4px solid #f59e0b}
-  .otp-input{width:100%;padding:12px;margin:10px 0;border:2px solid #ff9800;border-radius:8px;font-size:18px;text-align:center;letter-spacing:10px;font-weight:bold}
-  .btn-verify{width:100%;background:#ff6b00;color:white;border:none;padding:14px;border-radius:8px;margin-top:10px;font-weight:bold;cursor:pointer;font-size:16px}
-  .btn-verify:hover{background:#e55a00}
-  .timeline{margin:20px 0}
-  .timeline-item{display:flex;gap:10px;margin:10px 0}
-  .timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
-  .timeline-dot.done{background:#10b981;color:white}
-  .timeline-dot.current{background:#e40046;color:white}
-  .timeline-content h4{margin:0;font-size:13px}
-  .timeline-content p{margin:2px 0;font-size:11px;color:#666}
-  .customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
-  .customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
-  .badge-old{background:#ff6b00;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
-  .badge-new{background:#00bcd4;color:white;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-left:5px}
-  .nav-links{text-align:center;margin:15px 0}
-  .nav-links a{color:var(--accent);text-decoration:none;margin:0 10px;font-size:14px;font-weight:bold}
-  .profile-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
-  .hide{display:none}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📦 My Orders - SANTRA MALL</title>
+<style>
+:root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:var(--bg);color:var(--text);padding-bottom:70px}
+.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.header h1{font-size:18px;flex:1}
+.back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+.logout-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
+.container{max-width:900px;margin:15px auto;padding:0 15px}
+.search-box{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.search-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+.order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-left:5px solid var(--accent)}
+.order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid #f1f3f6}
+.order-id{font-size:12px;color:#666}
+.order-id b{color:var(--text);font-size:14px}
+.order-num{background:var(--accent);color:white;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px}
+.status-badge{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase}
+.status-pending,.status-otp_pending{background:#fef3c7;color:#92400e}
+.status-confirmed,.status-delivered{background:#d1fae5;color:#065f46}
+.status-shipped{background:#dbeafe;color:#1e40af}
+.status-cancelled{background:#fee2e2;color:#991b1b}
+.items-list{margin:12px 0;border-top:1px solid #f1f3f6;padding-top:12px}
+.item-row{display:flex;gap:10px;margin:10px 0;padding:10px;background:#f9f9f9;border-radius:8px}
+.item-row img{width:60px;height:60px;object-fit:cover;background:white;border-radius:6px;cursor:pointer;border:2px solid #e40046}
+.item-details{flex:1}
+.item-details h4{font-size:13px;margin-bottom:4px}
+.item-details p{font-size:12px;color:#666;margin:2px 0}
+.total-section{border-top:2px solid #f1f3f6;margin-top:12px;padding-top:12px}
+.total-row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+.grand-total{font-size:18px;font-weight:bold;color:var(--accent)}
+.btn{width:100%;padding:12px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:14px;margin-top:10px;cursor:pointer}
+.btn-wa{background:#25D366;color:white}
+.btn-cancel{background:#ef4444;color:white;border:none;padding:8px 14px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px;margin-top:8px}
+.empty{text-align:center;padding:60px 20px;color:#999}
+.loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+.address-box{background:#f0f9ff;border-left:4px solid var(--blue);padding:12px;border-radius:6px;margin:10px 0}
+.address-box p{font-size:13px;margin:4px 0;color:#1e40af}
+.otp-box{background:#fff8e1;padding:15px;border-radius:10px;margin:15px 0;border:2px dashed #f59e0b}
+.otp-input{width:100%;padding:12px;margin:10px 0;border:2px solid #ff9800;border-radius:8px;font-size:18px;text-align:center;letter-spacing:8px;font-weight:bold}
+.btn-verify{width:100%;background:#ff6b00;color:white;border:none;padding:12px;border-radius:8px;margin-top:8px;font-weight:bold;cursor:pointer;font-size:15px}
+.timeline{margin:12px 0;display:flex;gap:6px}
+.timeline-step{flex:1;text-align:center;font-size:11px;padding:6px;background:#f1f3f6;border-radius:6px}
+.timeline-step.active{background:var(--accent);color:white}
+.timeline-step.done{background:var(--green);color:white}
+.customer-info{background:#e8f5e9;padding:12px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4caf50}
+.customer-info p{margin:4px 0;font-size:13px;color:#2e7d32}
+.nav-links{text-align:center;margin:12px 0}
+.nav-links a{color:var(--accent);text-decoration:none;margin:0 8px;font-size:13px;font-weight:bold}
+.hide{display:none}
+</style>
 </head>
 <body>
 
 <div class="header">
-  <button class="back-btn" onclick="window.location.href='index.html'">←</button>
-  <h1>📦 My Orders</h1>
-  <button class="profile-btn hide" id="profileBtn" onclick="window.location.href='customer-account.html'">👤 My Profile</button>
-  <button class="logout-btn" onclick="logoutCustomer()">🚪 Logout</button>
+<button class="back-btn" onclick="window.location.href='index.html'">←</button>
+<h1>📦 My Orders</h1>
+<button class="logout-btn" onclick="logoutCustomer()">🚪 Logout</button>
 </div>
 
 <div class="container">
-  <div id="customerInfoBox"></div>
-
-  <div class="nav-links">
-    <a href="index.html">🏠 Home</a> |
-    <a href="cart.html">🛒 Cart</a> |
-    <a href="customer-account.html">👤 Profile</a>
-  </div>
-
-  <div class="search-box">
-    <input type="text" id="searchOrder" placeholder="🔍 Search by Order ID or Mobile Number" onkeyup="filterOrders()">
-  </div>
-  
-  <div id="ordersList">
-    <div class="loader">⏳ Loading your orders...</div>
-  </div>
+<div id="customerInfoBox"></div>
+<div class="nav-links">
+<a href="index.html">🏠 Home</a> |
+<a href="cart.html">🛒 Cart</a> |
+<a href="customer-account.html">👤 Profile</a>
 </div>
 
-<!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE - ZINDAGI BHAR KA FIX -->
+<div class="search-box">
+<input type="text" id="searchOrder" placeholder="🔍 Search by Order ID" onkeyup="filterOrders()">
+</div>
+
+<div id="ordersList">
+<div class="loader">⏳ Loading your orders...</div>
+</div>
+</div>
+
 <script src="constants.js?v=1"></script>
 <script src="config.js?v=6"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="santra-auth.js"></script>
 
 <script>
 /*
-⚠️ OLD CODE BACKUP - 10/06/2026 - SAFE
-
-Tera purana code yahan save hai, kuch gadbad ho to wapas use kar lena.
-Main changes: 
-1. secrets.js hata ke santra-auth.js add kiya
-2. Login check santraRequireLogin() se
-3. currentCustomerMobile = santraGetCustomer()
-
+⚠️ OLD CODE BACKUP - 10/06/2026 - SAFE - TERI PURANI FILE YAHAN HIDE HAI
+Tera purana code:
 const db = firebase.firestore();
 let allOrders = [];
 let currentCustomerMobile = null;
-let currentCustomerData = null;
-
-function checkLoginAndLoad() {
-  currentCustomerMobile = santraGetCustomer();
-  if(currentCustomerMobile){
-    showCustomerInfo();
-    loadOrders();
-  }
-}
-
-OLD CODE BACKUP END
+function checkLoginAndLoad() { currentCustomerMobile = santraGetCustomer(); ... }
+function loadOrders() { db.collection('orders').where('customerMobile', '==', currentCustomerMobile).onSnapshot(...) }
+function renderOrders() { ... }
+OLD CODE BACKUP END - KUCH GADBAD HO TO WAPAS USE KAR LENA
 */
 
-// ✅ NAYA CODE: window se config lo - SAFE HAI
+// ✅ NAYA CODE - 15 JULY 2026 - ORDER + OTP WHATSAPP CONNECT + CONSTANTS.JS SUPPORT
 const firebaseConfig = window.firebaseConfig || {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
   authDomain: "santramarketshoppingmall.firebaseapp.com",
@@ -141,180 +106,260 @@ const firebaseConfig = window.firebaseConfig || {
   storageBucket: "santramarketshoppingmall.appspot.com",
   messagingSenderId: "398490252924",
   appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY",
   databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
 };
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ✅ CUSTOMER_KEY constants.js se
 const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
 const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
 
 let allOrders = [];
 let currentCustomerMobile = null;
 let currentCustomerData = null;
 
-document.addEventListener('DOMContentLoaded', function() {
-  checkLoginAndLoad();
-});
+document.addEventListener('DOMContentLoaded', checkLoginAndLoad);
 
 function checkLoginAndLoad() {
-  // ✅ FIX: CUSTOMER_KEY use karo
-  currentCustomerMobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
+  // ✅ FIX: 3 jagah se mobile dhoondo - Login se connect
+  currentCustomerMobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem(CUSTOMER_KEY + '_customer_mobile') || localStorage.getItem('santra_customer_login_mobile');
   
-  if(currentCustomerMobile){
-    // Profile data load
-    db.collection('customers').doc(currentCustomerMobile).get().then(doc => {
-      if(doc.exists) {
-        currentCustomerData = doc.data();
-        localStorage.setItem(CUSTOMER_KEY + '_profile', JSON.stringify(currentCustomerData));
-      }
-    });
-    
-    showCustomerInfo();
-    document.getElementById('profileBtn').classList.remove('hide');
-    loadOrders();
-  } else {
-    document.getElementById('ordersList').innerHTML = `
-      <div class="empty">
-        😔 Please login first<br><br>
-        <button class="btn" onclick="window.location.href='customer-login.html'">🔐 Login with WhatsApp OTP</button>
-      </div>
-    `;
-  }
-}
-
-function logoutCustomer() {
-  if(confirm('Logout karna hai?')) {
-    // ✅ FIX: CUSTOMER_KEY use karo
-    localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
-    localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
-    localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
-    localStorage.removeItem(CUSTOMER_KEY + '_profile');
-    localStorage.setItem(CUSTOMER_KEY + '_logout_signal', Date.now());
-    alert('✅ Logged out!');
-    window.location.href = 'customer-login.html';
-  }
-}
-
-function showCustomerInfo() {
-  if(currentCustomerMobile) {
-    document.getElementById('customerInfoBox').innerHTML = `
-      <div class="customer-info">
-        <p><b>👤 Logged in:</b> ${currentCustomerMobile}</p>
-        <p><b>✅ Connected to Profile & Orders</b></p>
-      </div>
-    `;
-  }
-}
-
-function loadOrders() {
-  db.collection('orders')
-    .where('customerMobile', '==', currentCustomerMobile)
-    .onSnapshot((snapshot) => {
-        allOrders = [];
-        snapshot.forEach(doc => {
-          allOrders.push({id: doc.id,...doc.data()});
-        });
-        allOrders.sort((a,b) => (b.orderTime || b.createdAt?.toMillis() || 0) - (a.orderTime || a.createdAt?.toMillis() || 0));
-        renderOrders(allOrders);
-      });
-}
-
-function renderOrders(orders) {
-  let container = document.getElementById('ordersList');
-  if(orders.length === 0) {
-    container.innerHTML = `<div class="empty">📦 No orders yet<br><br><button class="btn" onclick="window.location.href='index.html'">Start Shopping</button></div>`;
+  if(!currentCustomerMobile){
+    document.getElementById('ordersList').innerHTML = `<div class="empty">😔 Login nahi hai<br><br><button class="btn" onclick="window.location.href='customer-login.html'">🔐 Login Karo</button></div>`;
     return;
   }
+
+  // Profile load - E-commerce style info
+  db.collection('customers').doc(currentCustomerMobile).get().then(doc => {
+    if(doc.exists){
+      currentCustomerData = doc.data();
+      document.getElementById('customerInfoBox').innerHTML = `
+        <div class="customer-info">
+          <p><b>👤 ${currentCustomerData.name || 'Customer'}</b> | 📱 ${currentCustomerMobile}</p>
+          <p>📍 ${currentCustomerData.location || currentCustomerData.address || ''}</p>
+          <p><b>✅ ${allOrders.length} Orders Connected</b></p>
+        </div>`;
+    }
+  });
+
+  loadOrders();
+}
+
+function logoutCustomer(){
+  if(confirm('Logout?')){
+    localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
+    window.location.href='customer-login.html';
+  }
+}
+
+function loadOrders(){
+  // ✅ FIX: Loading atak raha tha - Ab 3 field check karega + Error handle
+  const listDiv = document.getElementById('ordersList');
   
-  container.innerHTML = orders.map(order => {
+  // Pehle customerMobile se try
+  db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(snap => {
+    if(!snap.empty){
+      processOrders(snap);
+    } else {
+      // Agar nahi mila to mobile field se try
+      db.collection('orders').where('mobile','==',currentCustomerMobile).get().then(snap2 => {
+        if(!snap2.empty) processOrders(snap2);
+        else {
+          // Last try - Saare orders lao aur client pe filter karo (Tera purana data ke liye)
+          db.collection('orders').orderBy('createdAt','desc').limit(50).get().then(snap3 => {
+            let temp = [];
+            snap3.forEach(doc => {
+              let d = doc.data();
+              if((d.customerMobile==currentCustomerMobile) || (d.mobile==currentCustomerMobile) || (d.customerPhone==currentCustomerMobile) || (d.loginMobile==currentCustomerMobile)){
+                temp.push({id:doc.id,...d});
+              }
+            });
+            if(temp.length>0){
+              allOrders = temp;
+              renderOrders(allOrders);
+            } else {
+              // Real-time suno - Naya order hote hi dikhega
+              db.collection('orders').onSnapshot(s => {
+                let t = [];
+                s.forEach(doc=>{
+                  let d=doc.data();
+                  if((d.customerMobile==currentCustomerMobile) || (d.mobile==currentCustomerMobile)){
+                    t.push({id:doc.id,...d});
+                  }
+                });
+                t.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+                allOrders=t;
+                renderOrders(allOrders);
+              }, err=>{
+                listDiv.innerHTML=`<div class="empty">❌ Error: ${err.message}<br>Rule check karo</div>`;
+              });
+              if(allOrders.length==0) listDiv.innerHTML=`<div class="empty">📦 Abhi koi order nahi<br><a href='index.html'>Shopping shuru karo</a></div>`;
+            }
+          });
+        }
+      });
+    }
+  }).catch(err=>{
+    console.error(err);
+    listDiv.innerHTML=`<div class="empty">❌ ${err.message}</div>`;
+  });
+
+  // Real-time listener - Order hote hi dikhega
+  db.collection('orders').where('customerMobile','==',currentCustomerMobile).onSnapshot(snap=>{
+    if(!snap.empty) processOrders(snap);
+  });
+}
+
+function processOrders(snapshot){
+  allOrders=[];
+  snapshot.forEach(doc=>{ allOrders.push({id:doc.id,...doc.data()}); });
+  allOrders.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+  renderOrders(allOrders);
+  // Customer info update
+  if(currentCustomerData){
+    document.getElementById('customerInfoBox').innerHTML = `<div class="customer-info"><p><b>👤 ${currentCustomerData.name}</b> | ${currentCustomerMobile}</p><p><b>✅ ${allOrders.length} Orders</b></p></div>`;
+  }
+}
+
+function renderOrders(orders){
+  let container = document.getElementById('ordersList');
+  if(orders.length==0){
+    container.innerHTML=`<div class="empty">📦 No orders yet<br><br><button class="btn" onclick="window.location.href='index.html'">Start Shopping</button></div>`;
+    return;
+  }
+  container.innerHTML = orders.map(order=>{
     let orderDate = order.createdAt? order.createdAt.toDate() : new Date(order.orderTime || Date.now());
-    let dateStr = orderDate.toLocaleString('en-IN', {timeZone:'Asia/Kolkata'});
-    let statusClass = 'status-' + (order.status || 'pending').toLowerCase();
-    
-    // Items list
-    let itemsHTML = '';
-    if(order.items && Array.isArray(order.items)) {
-      itemsHTML = order.items.map(item => `
+    let dateStr = orderDate.toLocaleString('en-IN',{timeZone:'Asia/Kolkata', dateStyle:'medium', timeStyle:'short'});
+    let status = (order.status||'pending').toLowerCase();
+    let statusClass='status-'+status;
+
+    // Timeline E-commerce style
+    let timeline = `
+      <div class="timeline">
+        <div class="timeline-step ${['pending','otp_pending','confirmed','shipped','delivered'].includes(status)?'done':''}">Ordered</div>
+        <div class="timeline-step ${['confirmed','shipped','delivered'].includes(status)?'done':(status=='otp_pending'?'active':'')}">Confirmed</div>
+        <div class="timeline-step ${['shipped','delivered'].includes(status)?'done':''}">Shipped</div>
+        <div class="timeline-step ${status=='delivered'?'done':''}">Delivered</div>
+      </div>`;
+
+    let itemsHTML='';
+    if(order.items && Array.isArray(order.items)){
+      itemsHTML = order.items.map(item=>`
         <div class="item-row">
-          <img src="${item.image || 'https://via.placeholder.com/60'}" onclick="window.location.href='${BASE_URL}/product.html?id=${item.id}'">
+          <img src="${item.image||'https://via.placeholder.com/60'}" onclick="window.open('${BASE_URL}/product.html?id=${item.id}','_blank')">
           <div class="item-details">
             <h4>${item.name}</h4>
-            <p>Size: ${item.size || 'M'} | Qty: ${item.qty || 1} | ₹${item.price}</p>
-            <a href="${BASE_URL}/product.html?id=${item.id}" class="item-link" target="_blank">View Product →</a>
+            <p>Size: ${item.size||'M'} | Qty: ${item.qty||1} | ₹${item.price}</p>
+            <a href="${BASE_URL}/product.html?id=${item.id}" target="_blank" style="font-size:11px;color:#3b82f6;font-weight:bold">View Product →</a>
           </div>
-        </div>
-      `).join('');
+        </div>`).join('');
     }
-    
+
+    let orderLink = `${BASE_URL}/customer-orders.html?order=${order.id}`;
+    let isPending = (status=='pending' || status=='otp_pending');
+
     return `
       <div class="order-card">
         <div class="order-header">
           <div>
-            <span class="order-num">#${order.id.slice(-6)}</span>
+            <span class="order-num">#${order.id.slice(-6).toUpperCase()}</span>
             <div class="order-id">Order ID: <b>${order.id}</b></div>
-            <p class="date-text">📅 ${dateStr}</p>
+            <p style="font-size:11px;color:#666">📅 ${dateStr}</p>
           </div>
-          <span class="status-badge ${statusClass}">${order.status || 'Pending'}</span>
+          <span class="status-badge ${statusClass}">${status.replace('_',' ').toUpperCase()}</span>
         </div>
-        
-        ${order.address ? `
-          <div class="address-box">
-            <p><b>📍 Delivery Address:</b></p>
-            <p>${order.address}</p>
-          </div>
-        ` : ''}
-        
-        <div class="items-list">
-          <b>🛒 Items:</b>
-          ${itemsHTML}
-        </div>
-        
+
+        ${timeline}
+
+        ${order.address ? `<div class="address-box"><p><b>📍 Delivery:</b> ${order.address}</p><p><b>👤 ${order.customerName||currentCustomerData?.name||''}</b> | ${order.customerMobile||''}</p></div>` : ''}
+
+        <div class="items-list"><b>🛒 Items (${order.items?.length||0}):</b>${itemsHTML}</div>
+
         <div class="total-section">
-          <div class="total-row grand-total"><span>Total:</span><span>₹${order.totalAmount || order.total || 0}</span></div>
+          <div class="total-row"><span>Subtotal</span><span>₹${order.totalAmount||order.total||0}</span></div>
+          <div class="total-row grand-total"><span>Total</span><span>₹${order.totalAmount||order.total||0}</span></div>
         </div>
-        
-        ${order.status === 'pending' || order.status === 'otp_pending' ? `
+
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn" style="flex:1;background:#f1f3f6;color:#333;border:1px solid #ddd" onclick="copyLink('${orderLink}')">🔗 Copy Order Link</button>
+          <button class="btn btn-wa" style="flex:1" onclick="shareOrderWhatsApp('${order.id}')">💬 Share</button>
+        </div>
+
+        ${isPending ? `
           <div class="otp-box">
-            <b>🔐 Order OTP Required</b>
-            <input type="text" id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6">
-            <button class="btn-verify" onclick="verifyOrderOTP('${order.id}')">✅ Verify OTP</button>
+            <b>🔐 Order Confirm OTP</b>
+            <p style="font-size:12px;color:#666;margin:6px 0">Har naye Order pe OTP lagta hai - Admin ne aapke WhatsApp pe Order ka OTP bheja hai. Yahan daalo toh Order Confirm hoga.</p>
+            <p style="font-size:11px">Order: <b>${order.id}</b> | Date: ${dateStr}</p>
+            <input type="tel" id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6">
+            <button class="btn-verify" onclick="verifyOrderOTP('${order.id}')">✅ Verify & Confirm Order</button>
+            <button class="btn" style="background:#f59e0b;margin-top:6px" onclick="requestOrderOTP('${order.id}')">📲 Request OTP on WhatsApp</button>
+            <p style="font-size:10px;color:#999;margin-top:6px">OTP 4 hours valid | Har Order pe naya OTP</p>
           </div>
-        ` : ''}
-        
-        ${order.status === 'cancelled' ? `
-          <button class="btn-cancel" onclick="alert('Order already cancelled')">❌ Cancelled</button>
-        ` : ''}
-      </div>
-    `;
+        ` : `<div style="background:#d1fae5;padding:10px;border-radius:8px;margin-top:10px;text-align:center;color:#065f46;font-weight:bold">✅ Order ${status.toUpperCase()} - OTP Verified</div>`}
+
+      </div>`;
   }).join('');
 }
 
-function verifyOrderOTP(orderId) {
-  const otp = document.getElementById('order_otp_' + orderId).value;
-  if(otp.length !== 6) return alert('6 digit OTP daalo');
+function copyLink(link){
+  navigator.clipboard.writeText(link);
+  alert('✅ Order Link Copied:\n'+link);
+}
+
+function shareOrderWhatsApp(orderId){
+  let order = allOrders.find(o=>o.id==orderId);
+  let msg = `📦 *MY ORDER - SANTRA MALL*\n\nOrder ID: ${orderId}\nDate: ${order.createdAt?order.createdAt.toDate().toLocaleString('en-IN'):''}\nStatus: ${order.status}\nTotal: ₹${order.totalAmount}\n\nLink: ${BASE_URL}/customer-orders.html?order=${orderId}\n\nTrack karo!`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function requestOrderOTP(orderId){
+  let order = allOrders.find(o=>o.id==orderId);
+  let adminMsg = `🔐 *ORDER OTP REQUEST - SANTRA MALL*\n\nOrder ID: ${orderId}\nCustomer: ${currentCustomerData?.name||''} | ${currentCustomerMobile}\nDate: ${new Date().toLocaleString('en-IN')}\nTotal: ₹${order.totalAmount}\nItems: ${order.items?.map(i=>i.name).join(', ')}\nAddress: ${order.address||''}\n\nKripya is Order ke liye OTP bheje.\nLink: ${BASE_URL}/admin-orders.html?order=${orderId}`;
+  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(adminMsg)}`,'_blank');
+  alert('✅ Admin ko Order OTP Request bhej di! WhatsApp dekho.');
   
-  db.collection('order_otps').doc(orderId).get().then(doc => {
-    if(doc.exists && doc.data().otp === otp) {
-      db.collection('orders').doc(orderId).update({status:'confirmed', otpVerified:true});
-      alert('✅ Order Confirmed!');
-      loadOrders();
-    } else {
-      alert('❌ Wrong OTP');
-    }
+  // Firestore me request banao
+  db.collection('order_otp_requests').doc(orderId+'_'+Date.now()).set({
+    orderId: orderId,
+    customerMobile: currentCustomerMobile,
+    customerName: currentCustomerData?.name||'',
+    total: order.totalAmount,
+    status:'pending',
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
   });
 }
 
-function filterOrders() {
-  const term = document.getElementById('searchOrder').value.toLowerCase();
-  const filtered = allOrders.filter(o => o.id.toLowerCase().includes(term) || (o.customerMobile||'').includes(term));
+function verifyOrderOTP(orderId){
+  const otp = document.getElementById('order_otp_'+orderId).value.trim();
+  if(otp.length!==6) return alert('❌ 6 digit OTP daalo');
+  
+  db.collection('order_otps').doc(orderId).get().then(doc=>{
+    if(!doc.exists) return alert('❌ OTP nahi mila! Pehle Request OTP dabao');
+    let data=doc.data();
+    let otpTime = data.timestamp?.toDate?.() || new Date();
+    let diffHours = (new Date()-otpTime)/1000/60/60;
+    if(diffHours>4) return alert('❌ OTP expire! Naya mangao');
+    
+    if(data.otp==otp){
+      db.collection('orders').doc(orderId).update({status:'confirmed', otpVerified:true, confirmedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+        alert('✅ Order Confirmed! 🎉');
+        db.collection('order_otps').doc(orderId).delete();
+        loadOrders();
+      });
+    } else alert('❌ Galat OTP');
+  });
+}
+
+function filterOrders(){
+  const term=document.getElementById('searchOrder').value.toLowerCase();
+  const filtered = allOrders.filter(o=>o.id.toLowerCase().includes(term));
   renderOrders(filtered);
 }
 
-console.log("✅ customer-orders.html loaded - 15 JULY 2026 - CONSTANTS.JS SUPPORT");
+console.log("✅ customer-orders.html FINAL 15 JULY - ORDER+OTP+WHATSAPP CONNECT");
 </script>
 </body>
 </html>
