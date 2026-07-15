@@ -1,11 +1,32 @@
-   // const db = firebase.firestore(); ← is line ko hata de ya comment kar de
-   // db admin.html se aa jayega
+/*
+⚠️ OLD CODE BACKUP - 26 JUNE 2026 SE PEHLE WALA
+⚠️ Agar kuch gadbad ho to isko uncomment karke use kar lena
+
+const db = firebase.firestore(); // ← is line ko hata de ya comment kar de
+// db admin.html se aa jayega
+
 // ===== SANTRA MALL - CONFIRM ORDER MODULE =====
 // File: confirm-order.js
 // Kaam: OTP Verify + Order Confirm + WhatsApp
 
-// IMPORTANT: Firebase pehle initialize hona chahiye
-// const db = firebase.firestore();
+OLD CODE BACKUP END
+*/
+
+// ===== SANTRA MALL - CONFIRM ORDER MODULE - UPDATED 15 JULY 2026 =====
+// File: confirm-order.js
+// Kaam: OTP Verify + Order Confirm + WhatsApp + CONSTANTS.JS SUPPORT
+// IMPORTANT: Firebase pehle initialize hona chahiye - admin.html me hota hai
+
+// ✅ NAYA: Keys constants.js se lo - admin.html load karta hai
+const CART_KEY = window.CART_KEY || "santraMallCart_v2";
+const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
+const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+
+console.log('✅ confirm-order.js loaded - CART_KEY:', CART_KEY);
+
+// const db = firebase.firestore(); ← is line ko hata de ya comment kar de
+// db admin.html se aa jayega - global variable
 
 // ===== FUNCTION 1: OTP VERIFY KARO =====
 async function santraVerifyOTP(orderDocId, customerOTP) {
@@ -91,34 +112,35 @@ async function santraConfirmOrder(orderDocId, paymentMode, adminRemark) {
   }
 }
 
-// ===== FUNCTION 3: WHATSAPP MESSAGE BHEJO =====
+// ===== FUNCTION 3: WHATSAPP MESSAGE BHEJO - CONSTANTS.JS USE KARO =====
 function santraSendConfirmation(orderData) {
   try {
     const message = `🎉 *SANTRA MALL - Order Confirmed*
 
-Hi ${orderData.customerName},
+Hi ${orderData.customerName || orderData.name || 'Customer'},
 
 Aapka order confirm ho gaya hai ✅
 
 *Order Details:*
-Order ID: #${orderData.orderId}
-Total Amount: ₹${orderData.totalAmount}
-Payment Mode: ${orderData.paymentMode}
-Items: ${orderData.items.length} products
+Order ID: #${orderData.orderId || orderData.id}
+Total Amount: ₹${orderData.totalAmount || orderData.total || 0}
+Payment Mode: ${orderData.paymentMode || 'COD'}
+Items: ${orderData.items ? orderData.items.length : 0} products
 
 *Delivery Address:*
-${orderData.customerAddress}
-${orderData.customerCity}, ${orderData.customerState} - ${orderData.customerPincode}
+${orderData.customerAddress || orderData.address || orderData.location || 'Address'}
+${orderData.customerCity || ''}, ${orderData.customerState || ''} - ${orderData.customerPincode || orderData.pincode || ''}
 
 Track your order:
-santra.com/order.html?orderId=${orderData.orderId}
+${BASE_URL}/order.html?orderId=${orderData.orderId || orderData.id}
 
 Delivery in 3-5 days 🚚
 
 Thanks for shopping! 🛍️`;
 
     const encodedMsg = encodeURIComponent(message);
-    const whatsappLink = `https://wa.me/91${orderData.customerMobile}?text=${encodedMsg}`;
+    const customerMobile = orderData.customerMobile || orderData.mobile || orderData.loginMobile;
+    const whatsappLink = `https://wa.me/91${customerMobile}?text=${encodedMsg}`;
     
     // Nayi tab me WhatsApp khol do
     window.open(whatsappLink, '_blank');
@@ -130,14 +152,58 @@ Thanks for shopping! 🛍️`;
   }
 }
 
-// ===== FUNCTION 4: CART KHALI KARO =====
+// ===== FUNCTION 4: CART KHALI KARO - CONSTANTS.JS USE KARO =====
 function santraClearCartAfterConfirm() {
-  localStorage.removeItem('cart');
+  localStorage.removeItem(CART_KEY);
   localStorage.removeItem('checkout_data');
-  console.log('Cart cleared after confirm');
+  localStorage.removeItem(CUSTOMER_KEY + '_checkout_temp');
+  console.log('✅ Cart cleared after confirm - Key:', CART_KEY);
+}
+
+// ✅ NAYA FUNCTION 5: ORDER CANCEL KARO
+async function santraCancelOrder(orderDocId, cancelReason) {
+  try {
+    console.log('Cancel Order start:', orderDocId);
+    
+    const orderRef = db.collection('orders').doc(orderDocId);
+    
+    await orderRef.update({
+      status: 'cancelled',
+      cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+      cancelledBy: 'admin',
+      cancelReason: cancelReason || 'Cancelled by Admin',
+      timeline: firebase.firestore.FieldValue.arrayUnion({
+        status: 'cancelled',
+        timestamp: new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'}),
+        remark: `Cancelled: ${cancelReason || 'Admin decision'}`
+      })
+    });
+    
+    console.log('Order Cancelled in Firebase');
+    return { 
+      success: true, 
+      message: 'Order cancelled successfully' 
+    };
+    
+  } catch (error) {
+    console.error('Cancel Order Error:', error);
+    return { 
+      success: false, 
+      message: 'Cancel nahi hua: ' + error.message 
+    };
+  }
 }
 
 // ===== EXPORT FOR TESTING =====
 if (typeof module !== 'undefined') {
-  module.exports = { santraVerifyOTP, santraConfirmOrder, santraSendConfirmation };
+  module.exports = { santraVerifyOTP, santraConfirmOrder, santraSendConfirmation, santraClearCartAfterConfirm, santraCancelOrder };
 }
+
+// ✅ Global functions - admin.html use karega
+window.santraVerifyOTP = santraVerifyOTP;
+window.santraConfirmOrder = santraConfirmOrder;
+window.santraSendConfirmation = santraSendConfirmation;
+window.santraClearCartAfterConfirm = santraClearCartAfterConfirm;
+window.santraCancelOrder = santraCancelOrder;
+
+console.log("✅ confirm-order.js loaded - 15 JULY 2026 - CONSTANTS.JS SUPPORT");
