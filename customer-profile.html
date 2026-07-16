@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>customer-profile.html - FINAL FIX - Full Detail</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f1f3f6}.header{background:#e40046;color:white;padding:12px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10}.container{max-width:1100px;margin:8px auto;padding:0 8px}.card{background:white;border-radius:12px;padding:12px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.profile-box{background:#f0fdf4;border:2px solid #10b981;border-radius:10px;padding:12px}.delivery-box{background:#fffbeb;border:1.5px solid #f59e0b;border-radius:10px;padding:10px;margin:8px 0}.wa-box{background:#dcf8c6;border:1.5px solid #25D366;border-radius:10px;padding:10px;margin:8px 0;font-size:12px;white-space:pre-wrap;line-height:1.5}.order-table{width:100%;border-collapse:collapse;font-size:12px;display:block;overflow-x:auto;white-space:nowrap}.order-table table{width:1200px;border-collapse:collapse}.order-table th{background:#8b5cf6;color:white;padding:10px;position:sticky;top:0}.order-table td{padding:10px;border-bottom:1px solid #eee;vertical-align:top;white-space:normal;min-width:180px}.action-box{background:#e0f2fe;border:2px dashed #0ea5e9;border-radius:10px;padding:10px}.btn{padding:7px 12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:2px;color:white;font-size:11px}.btn-green{background:#10b981}.btn-blue{background:#3b82f6}.btn-purple{background:#8b5cf6}.btn-orange{background:#f59e0b}.btn-black{background:#1a1a1a}.btn-whatsapp{background:#25D366}.link{color:#2563eb;text-decoration:underline;word-break:break-all;font-weight:bold}</style></head>
+<body><div class="header"><button onclick="history.back()" style="background:none;border:none;color:white;font-size:22px">←</button><h3 id="title">👤 Customer Profile</h3></div>
+<div class="container"><div class="card" id="profileDetail">Loading... Fixing empty mobile & Present 0 bug...</div><div class="card"><h3>🛒 Orders - Full Detail - WhatsApp Jaisa + Delivery + Payment + Editing</h3><div class="order-table" id="tableWrap"><div id="allOrdersTable">Loading...</div></div></div></div>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="time-fix.js"></script>
+<script>
+// Bas ye 1 line kahi bhi add karo - Sahi IST Time mil jayega
+let t = getISTNow();
+console.log(t.presentTime, t.presentDate, t.istDateKey, t.dateTimeIST);
+// Output: 07:27 pm, 17/7/2026, 2026-07-17, 17/7/2026, 7:27:53 pm
+</script>
+<script src="time-fix.html"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9"};
+if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);const rtdb=firebase.database();
+let allOrders=[],selMobile="",selName="",selKey="",selDate="";
+
+function pDate(i){if(!i)return null;try{let d;if(typeof i==='number')d=new Date(i);else if(i&&i.toDate)d=i.toDate();else if(i&&i.seconds)d=new Date(i.seconds*1000);else d=new Date(i);if(isNaN(d.getTime()))return null;if(d.getFullYear()<2020)return null;return d}catch(e){return null;}}
+function kDate(d){if(!d)return '';let s=d.toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'});let a=s.split('/');return `${a[2]}-${a[1]}-${a[0]}`;}
+function getRealIST(d){if(!d)return {timeStr:'-',dateStr:'-',fullIST:'-',timestamp:0};return {timeStr:d.toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true}),dateStr:d.toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'}),fullIST:d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),timestamp:d.getTime()};}
+function getItems(o){let it=o.items||o.products||o.cart||[];if(Array.isArray(it))return it;if(typeof it==='object'&&it!==null){try{let v=Object.values(it);if(v.length>0&&typeof v[0]==='object')return v;}catch(e){}}return [];}
+
+async function load(){
+let params=new URLSearchParams(location.search);selMobile=params.get('mobile')||'';selName=params.get('name')||'';selKey=params.get('key')||'';selDate=params.get('date')||'';
+document.getElementById('title').innerText='👤 '+(selMobile||selName||selKey)+' - '+selDate;
+
+const snap=await rtdb.ref('orders').once('value');const data=snap.val()||{};
+let all=[];
+Object.keys(data).forEach(k=>{
+let o=data[k];
+let d=pDate(o.date||o.createdAt||o.timestamp||o.istDateKey); // Real date only - no new Date() fallback
+if(!d)return; // Auto 12:13 am bug fix - date khali hai to skip
+let real=getRealIST(d);
+let items=getItems(o);
+all.push({
+id:k,oid:o.ono||k,
+name:o.customer?.n||o.customerName||o.name||selName||'Customer',
+mobile:o.customer?.m||o.mobile||o.customerMobile||'',
+total:o.total||o.grandTotal||0,
+subtotal:o.subtotal||o.total||0,
+deliveryCharge:o.deliveryCharge||0,
+date:d,k:o.istDateKey||kDate(d),
+realTime:real.timeStr,realDate:real.dateStr,fullIST:real.fullIST,timestamp:real.timestamp,
+pd:o.presentDate||real.dateStr,pt:o.presentTime||real.timeStr,
+year:o.presentYear||d.getFullYear(),
+status:o.status||'Pending',
+items:items,
+otp:o.otp||'',adminMessage:o.adminMessage||'',customerMessage:o.customerMessage||'',
+deliveryName:o.customer?.n||o.deliveryDetails?.name||o.shippingName||o.customerName||o.name||'',
+deliveryMobile:o.customer?.m||o.deliveryDetails?.mobile||o.mobile||'',
+deliveryAddress:o.customer?.a||o.deliveryDetails?.address||o.shippingAddress?.address||o.address||o.shippingAddress||'-',
+deliveryCity:o.deliveryDetails?.city||o.city||o.shippingAddress?.city||'-',
+deliveryPincode:o.deliveryDetails?.pincode||o.pincode||'-',
+paymentMode:o.paymentMethod||o.paymentMode||'COD',
+paymentStatus:o.paymentStatus||'Pending',
+isRead:o.isRead||false
+});
+});
+
+// Filter - Mobile se ya Name se - Mobile empty ho to Name se
+if(selMobile){allOrders=all.filter(o=>o.mobile===selMobile);}
+else if(selName){allOrders=all.filter(o=>o.name.toLowerCase()===selName.toLowerCase());}
+else if(selKey){allOrders=all.filter(o=> (o.mobile||o.name||o.id)===selKey );}
+else{allOrders=all;}
+
+allOrders.sort((a,b)=>b.timestamp-a.timestamp);
+
+if(allOrders.length===0){document.getElementById('profileDetail').innerHTML='❌ No orders for '+(selMobile||selName);document.getElementById('allOrdersTable').innerHTML='No orders';return;}
+
+let totalSpent=allOrders.reduce((s,x)=>s+(x.total||0),0);
+let first=allOrders[0];
+let present=selDate?allOrders.filter(o=>o.k===selDate):[];
+let presentCount=present.length;
+
+document.getElementById('profileDetail').innerHTML=`
+<div class="profile-box">
+<b>👤 Name:</b> ${first.name} | <b>📱 Mobile:</b> ${first.mobile||'- (Empty - Name se khula)'} | <b>📍 Address:</b> ${first.deliveryAddress||'-'}<br>
+<b>📦 Total Orders:</b> ${allOrders.length} | <b>💰 Spent:</b> ₹${totalSpent} | <b>📅 Date:</b> ${selDate||'All'} Present ${presentCount} | <b>⏰ Last:</b> ${first.fullIST}<br>
+<button class="btn btn-blue" onclick="location.href='customers-by-date.html?date=${selDate}'">👥 Back</button>
+<button class="btn btn-purple" onclick="location.href='date-wise-orders.html'">📅 Calendar</button>
+</div>
+<div class="delivery-box">
+<b>📍 Delivery Form + 💳 Payment Mode:</b><br>
+<b>👤 Name:</b> ${first.deliveryName||first.name} | <b>📱 Mobile:</b> ${first.deliveryMobile||first.mobile||'-'}<br>
+<b>🏠 Address:</b> ${first.deliveryAddress||'-'} - ${first.deliveryCity||'-'} - ${first.deliveryPincode||'-'}<br>
+<b>💳 Payment Mode:</b> <span style="background:${first.paymentMode.toLowerCase().includes('online')?'#3b82f6':'#f59e0b'};color:white;padding:2px 8px;border-radius:10px">${first.paymentMode}</span> | <b>💰 Total:</b> ₹${first.total}
+</div>
+`;
+
+// Show ALL orders - not only present - Present 0 bug fix
+let displayOrders=allOrders;
+
+let html=`<table><tr><th>Order ID + Date Time</th><th>Product + Price + Product Page Link</th><th>Delivery + Payment + WhatsApp Jaisa</th><th>Editing - OTP + AI Help + Notification + Read + WhatsApp Send</th></tr>`;
+displayOrders.forEach(o=>{
+let items=o.items;
+let isPresent=selDate?o.k===selDate:false;
+let waAdmin=`🛒 ADMIN KO GAYA - NEW ORDER
+📦 ${o.oid} - 📅 ${o.realDate} 🕐 ${o.realTime} IST Year ${o.year}
+👤 ${o.deliveryName||o.name} - ${o.deliveryMobile||o.mobile}
+📍 ${o.deliveryAddress}, ${o.deliveryCity} ${o.deliveryPincode}
+💰 ₹${o.total} - ${o.paymentMode} - ${o.status}
+🛍️ ${items.map(it=>`${it.name||it.title||'Product'} ${it.size?`(Size ${it.size})`:''} x${it.qty||it.quantity||1} = ₹${it.price||0} - Link: product.html?id=${it.id||it.productId||''}`).join(' | ')}`;
+
+let waCustomer=`🛍️ SANTRA MALL - ORDER ${o.status}
+Namaste ${o.name}, Order ${o.oid} ${o.status}
+📅 ${o.realDate} ${o.realTime} IST - 💰 ₹${o.total} - ${o.paymentMode}
+📍 ${o.deliveryCity} - OTP ${o.otp||'-'}`;
+
+html+=`<tr style="${isPresent?'background:#f0fdf4;border-left:4px solid #10b981':''}"><td>
+<b>${isPresent?'🔥 Present Upar - ':''}📦 ${o.oid}</b><br>
+📅 ${o.realDate}<br>🕐 ${o.realTime} IST<br>Year ${o.year}<br>Status: <b>${o.status}</b><br>
+${o.isRead?'<span style="background:#10b981;color:white;padding:2px 6px;border-radius:8px;font-size:10px">👁️ Read</span>':'<span style="background:#ef4444;color:white;padding:2px 6px;border-radius:8px;font-size:10px">❌ Unread</span>'}
+</td>
+<td>${items.length?items.map(it=>`• ${it.name||it.title||'Product'} ${it.size?`(Size ${it.size})`:''} x${it.qty||it.quantity||1} = ₹${it.price||it.total||0}<br><a class="link" href="product.html?id=${it.id||it.productId||''}" target="_blank">🔗 Product Page Link - ${it.id||''}</a>`).join('<br><hr>'):'No items'}<br><b>Total ₹${o.total}</b><br>Payment ${o.paymentMode}</td>
+<td><div class="wa-box" style="font-size:11px">${waAdmin}</div><div style="font-size:11px;background:#e3f2fd;padding:6px;border-radius:6px;white-space:pre-wrap">${waCustomer}</div><div style="font-size:11px">Delivery: ${o.deliveryAddress} - ${o.deliveryCity}<br>Payment: ${o.paymentMode} - ${o.paymentStatus}</div></td>
+<td><div class="action-box">
+<b>✏️ Is order ke liye: ${o.oid}</b> ${isPresent?'<span style="background:#10b981;color:white;padding:2px 6px;border-radius:6px;font-size:9px">Present Upar - 2nd No.</span>':'<span style="background:#e40046;color:white;padding:2px 6px;border-radius:6px;font-size:9px">Previous Niche - 1st No.</span>'}<br>
+<select id="st_${o.id}" style="width:100%;padding:6px;margin:4px 0;border:1.5px solid #e40046;border-radius:6px"><option value="">Status - Pending/Shipped/Delivered</option><option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option><option value="Confirmed" ${o.status==='Confirmed'?'selected':''}>Confirmed</option><option value="Shipped">Shipped</option><option value="Out for Delivery">Out for Delivery</option><option value="Delivered">Delivered</option></select>
+<div style="display:flex;gap:4px"><input id="otp_${o.id}" value="${o.otp||''}" placeholder="OTP Confirm" style="flex:1;padding:6px;border:1.5px solid #10b981;border-radius:6px"><button class="btn btn-green" onclick="verifyOTP('${o.id}')">Verify</button></div>
+<input id="msg_${o.id}" value="${o.adminMessage||''}" placeholder="Admin Message - Confirm ready for shipping jaise - AI Help suggest karega" style="width:100%;padding:6px;margin:4px 0;border:1.5px solid #8b5cf6;border-radius:6px">
+<textarea id="custMsg_${o.id}" placeholder="Customer ko notification - AI Help se" style="width:100%;height:50px;padding:6px;border:1px solid #ddd;border-radius:6px">${o.customerMessage||o.adminMessage||`Namaste ${o.name}, Order ${o.oid} ${o.status} - ₹${o.total} - ${o.deliveryCity}`}</textarea>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">
+<button class="btn btn-green" onclick="saveUpdate('${o.id}')">💾 Save Update - Customer ko Show</button>
+<button class="btn btn-purple" onclick="aiHelp('${o.id}')">🤖 AI Help - Suggest</button>
+<button class="btn btn-blue" onclick="sendNotification('${o.id}')">🔔 Notification - Done = Bhej diya</button>
+<button class="btn btn-whatsapp" onclick="sendWhatsApp('${o.id}')">📱 WhatsApp Send</button>
+<button class="btn btn-black" onclick="markRead('${o.id}')">👁️ Mark Read</button>
+<button class="btn btn-orange" onclick="clearMsg('${o.id}')">🗑️ Clear - Confirm ready wala hatayega</button>
+</div>
+</div></td></tr>`;
+});
+html+=`</table>`;
+document.getElementById('allOrdersTable').innerHTML=html;
+}
+window.saveUpdate=async function(id){let st=document.getElementById('st_'+id).value;let msg=document.getElementById('msg_'+id).value;let custMsg=document.getElementById('custMsg_'+id).value;let otp=document.getElementById('otp_'+id).value;if(!st){alert('Status select karo - Pending/Shipped etc');return;}await rtdb.ref('orders/'+id).update({status:st,adminMessage:msg,customerMessage:custMsg,otp:otp,statusUpdatedAt:Date.now(),isRead:false});alert('✅ Saved - '+st+' - Ab customer ko dikhega');load();}
+window.verifyOTP=function(id){let otp=document.getElementById('otp_'+id).value;if(!otp){alert('OTP likho');return;}rtdb.ref('orders/'+id).update({otp:otp,otpVerified:true});alert('✅ OTP Verify '+otp);}
+window.aiHelp=function(id){let o=allOrders.find(x=>x.id===id);let st=document.getElementById('st_'+id).value||o.status;let suggest='';if(st==='Pending')suggest='Aapka order Pending hai, jaldi confirm hoga';else if(st==='Confirmed')suggest='Aapka order Confirmed ho gaya hai, packing ho rahi hai';else if(st==='Shipped')suggest='Confirm ready for shipping - Aapka order ship ho gaya hai, tracking jaldi aayega';else if(st==='Out for Delivery')suggest='Aaj aapka order deliver hoga - OTP ready rakhe';else if(st==='Delivered')suggest='Order deliver ho gaya, dhanyawad';document.getElementById('custMsg_'+id).value=`Namaste ${o.name} 🙏, Order ${o.oid} ${st} ho gaya hai. ${suggest}. Total ₹${o.total}. Payment ${o.paymentMode}. Delivery ${o.deliveryCity}. OTP ${o.otp||'-'}. Dhanyawad - Santra Mall`;document.getElementById('msg_'+id).value=suggest;}
+window.sendNotification=async function(id){let msg=document.getElementById('custMsg_'+id).value;await rtdb.ref('orders/'+id).update({notificationSent:true,notificationTime:Date.now(),customerMessage:msg,isRead:false});alert('🔔 Notification Done = Bhej diya customer ko app me - Ab customer ko show hoga');load();}
+window.sendWhatsApp=async function(id){let o=allOrders.find(x=>x.id===id);let msg=document.getElementById('custMsg_'+id).value;let mob=(o.mobile||'').replace(/[^0-9]/g,'').slice(-10);if(!mob){alert('Mobile khali hai - WhatsApp nahi bhej sakte');return;}window.open(`https://wa.me/91${mob}?text=${encodeURIComponent(msg)}`,'_blank');await rtdb.ref('orders/'+id).update({whatsappSent:true,whatsappTime:Date.now()});}
+window.markRead=async function(id){await rtdb.ref('orders/'+id).update({isRead:true,readAt:Date.now()});alert('👁️ Mark Read');load();}
+window.clearMsg=async function(id){await rtdb.ref('orders/'+id).update({adminMessage:'',customerMessage:''});alert('🗑️ Clear ho gaya - Confirm ready wala hat gaya');load();}
+load();
+</script></body></html>

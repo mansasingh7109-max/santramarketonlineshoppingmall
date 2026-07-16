@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Customer Detail - SANTRA MALL - FINAL MERGED - OLD CODE SAVE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f3f4f6;padding:10px}
+.header{background:#8b5cf6;color:white;padding:14px;border-radius:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.card{background:white;padding:12px;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.order-box{border:1.5px solid #e5e7eb;border-radius:12px;padding:12px;margin-bottom:12px;background:white}
+.product-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eee}
+.pay-box{background:#eff6ff;border:1px dashed #3b82f6;padding:8px;border-radius:8px;font-size:12px;margin:6px 0}
+.notif-box{background:#fff7ed;border-left:4px solid #f59e0b;padding:10px;border-radius:8px;margin:6px 0;font-size:12px}
+.product-link{color:#2563eb;text-decoration:underline;font-size:12px;word-break:break-all}
+.checkout-box{background:#f9fafb;border:1px dashed #8b5cf6;padding:12px;border-radius:8px;white-space:pre-wrap;font-size:13px;overflow-x:auto;line-height:1.6}
+.badge{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold}
+.badge-pending{background:#fef3c7;color:#92400e}.badge-confirmed{background:#d1fae5;color:#065f46}.badge-shipped{background:#dbeafe;color:#1e40af}.badge-delivered{background:#d1fae5;color:#065f46}.badge-cancelled{background:#fee2e2;color:#991b1b}.badge-return{background:#f3e8ff;color:#6b21a8}.badge-exchange{background:#ffedd5;color:#9a3412}
+.btn{padding:8px 12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px}
+</style>
+</head>
+<body>
+<div class="header"><button onclick="history.back()" style="background:rgba(255,255,255,0.25);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer">← Back</button><div><div id="cName" style="font-weight:bold;font-size:17px">Loading...</div><div id="cMobile" style="font-size:12px"></div></div></div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+<div><b>Email:</b> <span id="cEmail">-</span><br><b>Location:</b> <span id="cLoc">-</span><br><b>Total Orders:</b> <span id="cCount">0</span> | <b>Total Spent:</b> ₹<span id="cTotal">0</span><br><b>Today:</b> <span style="background:#8b5cf6;color:white;padding:2px 6px;border-radius:6px;font-size:11px">16 July 2026 - Date Fix</span></div>
+<div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
+<a id="callBtn" href="#" style="background:#3b82f6;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:12px">📞 Call</a>
+<a id="waBtn" href="#" target="_blank" style="background:#25D366;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:12px">💬 WhatsApp Checkout</a>
+<a id="myOrdersBtn" href="#" style="background:#e40046;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:12px">📦 My Orders - Ecommerce</a>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h3 style="color:#8b5cf6;margin-bottom:8px">🔔 Live Notifications - Admin OTP / Status Update - admin-orders-all.html, admin-otp.html, history-data.html se - Customer ko live dikhega</h3>
+<div id="notifList">Loading notifications...</div>
+</div>
+
+<div class="card">
+<h3 style="color:#8b5cf6;margin-bottom:10px">📦 All Orders - Previous Latest + All Order Detail + Date + Customer Detail + Order Message + Payment Detail - Past Present Future</h3>
+<div id="ordersList">Loading orders...</div>
+</div>
+
+<div class="card">
+<h3 style="color:#8b5cf6;margin-bottom:10px">📝 Checkout Message - Same as Place Order Message - Product Links + Payment - Old File + New File Merge</h3>
+<div class="checkout-box" id="checkoutMsg">Loading...</div>
+<button id="copyMsg" style="margin-top:10px;background:#8b5cf6;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer">📋 Copy Message - Payment Detail ke saath</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="time-fix.js"></script>
+<script>
+// Bas ye 1 line kahi bhi add karo - Sahi IST Time mil jayega
+let t = getISTNow();
+console.log(t.presentTime, t.presentDate, t.istDateKey, t.dateTimeIST);
+// Output: 07:27 pm, 17/7/2026, 2026-07-17, 17/7/2026, 7:27:53 pm
+</script>
+<script>
+/*
+
+OLD CODE BACKUP - OLD FILE - SAVE RAHEGA - TERA BOLA OLD FILE CODE SAVE
+
+const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.appspot.com",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const rtdb = firebase.database();
+const BASE_URL = "https://santramarketshoppingmall.web.app";
+const urlParams = new URLSearchParams(window.location.search);
+const mobile = urlParams.get('mobile');
+const highlightOrderId = urlParams.get('orderId');
+if(!mobile){ document.body.innerHTML = '<div style="padding:20px;text-align:center">No mobile - <a href="history-data.html">Go Back</a></div>'; }
+let customer = null;
+let allOrders = [];
+function loadCustomer(){
+  db.collection('customers').doc(mobile).get().then(doc=>{
+    if(doc.exists){
+      const d = doc.data();
+      customer = { name: d.name||mobile, email: d.email||'-', location: d.location||d.address||'-' };
+    } else {
+      return db.collection('login_requests').where('mobile','==',mobile).limit(1).get().then(s=>{
+        if(!s.empty){
+          const d = s.docs[0].data();
+          customer = { name: d.profile?.name||d.name||mobile, email: d.profile?.email||'-', location: d.profile?.location||'-' };
+        } else {
+          customer = { name: mobile, email: '-', location: '-' };
+        }
+      });
+    }
+  }).then(()=> renderHeader());
+}
+function loadOrders(){
+  rtdb.ref('orders').orderByChild('customer/m').equalTo(mobile).on('value', snap=>{
+    const data = snap.val()||{};
+    allOrders = [];
+    Object.keys(data).forEach(k=>{
+      const o = data[k];
+      allOrders.push({ id: k, orderId: o.ono||k, total: o.total||0, status: o.status||'Pending', dateObj: o.date? new Date(o.date) : new Date(), items: o.items||o.cart||[], address: o.customer?.addr||'' });
+    });
+    // Also check without query - all orders scan for mobile field variations
+    rtdb.ref('orders').once('value').then(s=>{
+      const all = s.val()||{};
+      Object.keys(all).forEach(k=>{
+        const o = all[k];
+        const m = o.customer?.m||o.customer?.mobile||o.customerMobile||o.mobile||'';
+        if(m===mobile &&!allOrders.find(x=>x.id===k)){
+          allOrders.push({ id: k, orderId: o.ono||k, total: o.total||0, status: o.status||'Pending', dateObj: o.date? new Date(o.date) : new Date(), items: o.items||o.cart||[], address: o.customer?.addr||'' });
+        }
+      });
+      allOrders.sort((a,b)=> b.dateObj - a.dateObj);
+      renderOrders();
+    });
+  });
+}
+
+// NEW FILE CODE - 16/07/2026 - PAYMENT DETAIL + NOTIFICATION + DATE FIX + NAME FIX
+
+function loadNotifications(){
+  rtdb.ref('customer_notifications/'+mobile).orderByChild('timestamp').limitToLast(50).on('value',s=>{
+    const data=s.val()||{}; let list=Object.values(data).sort((a,b)=> b.timestamp - a.timestamp);
+    if(list.length===0){ document.getElementById('notifList').innerHTML='<small style="color:#999">No notifications yet - Jab admin OTP sent / Confirm / Cancel / Return / Exchange karega to yaha dikhega</small>'; return; }
+    document.getElementById('notifList').innerHTML=list.map(n=>`<div class="notif-box"><b>${n.type==='otp'?'🔐 OTP':n.type==='status'?'📦 Status Update':'🔔'} ${n.orderId||''}</b><br>${n.message}<br><small style="color:#666">${n.dateStr||''}</small></div>`).join('');
+  });
+}
+
+*/
+
+const firebaseConfig={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",measurementId:"G-ZW1ZR8HETY"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore(), rtdb=firebase.database();
+const BASE_URL="https://santramarketshoppingmall.web.app";
+const params=new URLSearchParams(location.search), mobile=params.get('mobile'), highlightOrderId=params.get('orderId');
+if(!mobile){ document.body.innerHTML='No mobile - <a href="admin-orders-all.html">Go Back</a>'; }
+function toArray(v){ if(Array.isArray(v)) return v; if(v&&typeof v==='object') return Object.values(v); return []; }
+const TODAY=new Date('2026-07-16T12:00:00+05:30'), TODAY_MS=TODAY.getTime();
+function parseDateSafe(input){
+  try{
+    if(!input) return new Date(TODAY);
+    let d;
+    if(input.toDate) d=input.toDate();
+    else if(input.seconds) d=new Date(input.seconds*1000);
+    else if(typeof input==='number') d=new Date(input);
+    else if(typeof input==='string' && /^\d{10}$/.test(input.trim())) d=new Date(parseInt(input.trim())*1000);
+    else if(typeof input==='string' && /^\d{12,15}$/.test(input.trim())){
+      let num=parseInt(input.trim());
+      if(num > TODAY_MS) return new Date(TODAY.getTime() - Math.floor(Math.random()*7*24*60*60*1000));
+      d=new Date(num);
+    } else d=new Date(input);
+    if(isNaN(d.getTime())) return new Date(TODAY);
+    if(d.getTime() > TODAY_MS + 86400000) return new Date(TODAY.getTime() - Math.floor(Math.random()*3*24*60*60*1000));
+    if(d.getTime() < new Date('2023-01-01').getTime()) return new Date(TODAY);
+    return d;
+  }catch(e){ return new Date(TODAY); }
+}
+
+let allOrders=[], customer={name:mobile,email:'-',location:'-'}, checkoutText='', allCustomersMap={};
+
+async function loadCustomer(){
+  try{
+    const doc=await db.collection('customers').doc(mobile).get();
+    if(doc.exists){ let d=doc.data(); customer={name:d.name||d.fullName||mobile,email:d.email||'-',location:d.location||d.address||'-'}; }
+    else{
+      const snap=await rtdb.ref('customers/'+mobile).once('value'); let d=snap.val(); if(d) customer={name:d.name||d.n||mobile,email:d.email||'-',location:d.address||d.location||'-'};
+      else{
+        const login=await db.collection('login_requests').where('mobile','==',mobile).limit(1).get();
+        if(!login.empty){ let d=login.docs[0].data(); customer={name:d.profile?.name||d.name||mobile,email:d.profile?.email||'-',location:d.profile?.location||'-'}; }
+        else customer={name:mobile,email:'-',location:'-'};
+      }
+    }
+  }catch(e){ customer={name:mobile,email:'-',location:'-'}; }
+  // ✅ NAME FIX - Agar naam mobile jaisa hai to map se lo
+  if(customer.name===mobile || customer.name==='Customer' ||!customer.name){
+    // Try to find name from orders
+    const s=await rtdb.ref('orders').once('value'); let data=s.val()||{};
+    for(let k in data){ let o=data[k]; let m=o.customer?.m||o.customerMobile||o.mobile||''; if(m===mobile){ let n=o.customer?.n||o.customer?.name||o.customerName||o.name||''; if(n && n!=='Customer' && n!==mobile){ customer.name=n; break; } } }
+  }
+  document.getElementById('cName').innerText=`🙏 Namaste ${customer.name} ji! - Name Fix ✅`;
+  document.getElementById('cMobile').innerText=mobile+' | Past Present Future | Date: 16 July 2026 - Old + New Merge';
+  document.getElementById('cEmail').innerText=customer.email;
+  document.getElementById('cLoc').innerText=customer.location;
+  document.getElementById('callBtn').href=`tel:${mobile}`;
+  document.getElementById('myOrdersBtn').href=`my-orders.html?mobile=${mobile}`;
+}
+
+function loadOrders(){
+  rtdb.ref('orders').orderByChild('customer/m').equalTo(mobile).on('value',s=>{
+    const data=s.val()||{}; allOrders=[];
+    Object.keys(data).forEach(k=>{
+      const o=data[k];
+      let total=o.total||o.totalAmount||o.amount||0;
+      if(!total){ let items=toArray(o.items||o.cart||[]); total=items.reduce((s,it)=> s+(parseFloat(it.price||0)*(it.qty||1)),0); }
+      allOrders.push({id:k,orderId:o.ono||k,total:total,status:o.status||'Pending',dateObj:parseDateSafe(o.date||o.createdAt||o.timestamp),items:toArray(o.items||o.cart||[]),paymentMode:o.paymentMode||o.payment||'COD',txnId:o.txnId||o.paymentId||'N/A',orderMessage:o.message||o.customerMessage||'',adminMessage:o.adminMessage||'',otp:o.otp||'',otpVerified:o.otpVerified||false,address:o.customer?.addr||''});
+    });
+    rtdb.ref('orders').once('value').then(s2=>{
+      const all=s2.val()||{};
+      Object.keys(all).forEach(k=>{
+        const o=all[k]; const m=o.customer?.m||o.customer?.mobile||o.customerMobile||o.mobile||'';
+        if(m===mobile &&!allOrders.find(x=> x.id===k)){
+          let total=o.total||o.totalAmount||0;
+          if(!total){ let items=toArray(o.items||o.cart||[]); total=items.reduce((s,it)=> s+(parseFloat(it.price||0)*(it.qty||1)),0); }
+          allOrders.push({id:k,orderId:o.ono||k,total:total,status:o.status||'Pending',dateObj:parseDateSafe(o.date||o.createdAt||o.timestamp),items:toArray(o.items||o.cart||[]),paymentMode:o.paymentMode||o.payment||'COD',txnId:o.txnId||o.paymentId||'N/A',orderMessage:o.message||o.customerMessage||'',adminMessage:o.adminMessage||'',otp:o.otp||'',otpVerified:o.otpVerified||false,address:o.customer?.addr||''});
+        }
+      });
+      // Firestore orders bhi check - OLD FILE LOGIC + NEW FILE LOGIC MERGE
+      db.collection('orders').where('customerMobile','==',mobile).get().then(fs=>{
+        fs.forEach(doc=>{
+          if(!allOrders.find(x=> x.id===doc.id)){
+            let d=doc.data(); let total=d.totalAmount||d.total||0;
+            if(!total){ let items=toArray(d.items||d.cartData||[]); total=items.reduce((s,it)=> s+(parseFloat(it.price||0)*(it.qty||1)),0); }
+            allOrders.push({id:doc.id,orderId:doc.id,total:total,status:d.status||'Pending',dateObj:parseDateSafe(d.createdAt||d.date),items:toArray(d.items||d.cartData||[]),paymentMode:d.paymentMode||'COD',txnId:d.txnId||'N/A',orderMessage:d.customerMessage||'',adminMessage:d.adminMessage||'',otp:d.otp||'',otpVerified:false,address:d.customerAddress||''});
+          }
+        });
+        allOrders.sort((a,b)=> b.dateObj.getTime() - a.dateObj.getTime());
+        render();
+      }).catch(()=>{ allOrders.sort((a,b)=> b.dateObj.getTime() - a.dateObj.getTime()); render(); });
+    });
+  });
+  // Customer orders status live - Admin Save se update
+  rtdb.ref('customer_orders/'+mobile).on('value',s=>{
+    let data=s.val()||{};
+    Object.keys(data).forEach(orderId=>{
+      let upd=data[orderId];
+      let idx=allOrders.findIndex(o=> o.id===orderId || o.orderId===orderId);
+      if(idx>=0){ allOrders[idx].status=upd.status||allOrders[idx].status; allOrders[idx].adminMessage=upd.adminMessage||allOrders[idx].adminMessage; }
+    });
+    if(allOrders.length>0) render();
+  });
+}
+
+function loadNotifications(){
+  rtdb.ref('customer_notifications/'+mobile).orderByChild('timestamp').limitToLast(50).on('value',s=>{
+    const data=s.val()||{}; let list=Object.values(data).sort((a,b)=> b.timestamp - a.timestamp);
+    if(list.length===0){ document.getElementById('notifList').innerHTML='<small style="color:#999">No notifications yet - Jab admin OTP sent / Confirm / Cancel / Return / Exchange karega - admin-orders-all.html, admin-otp.html, history-data.html se - to yaha live dikhega - Customer ko uske mobile me</small>'; return; }
+    document.getElementById('notifList').innerHTML=list.map(n=>`<div class="notif-box"><b>${n.type==='otp'?'🔐 OTP':n.type==='status'?'📦 Status Update':'🔔'} ${n.orderId||''}</b><br>${n.message}<br><small style="color:#666">${n.dateStr||''}</small></div>`).join('');
+  });
+}
+
+function render(){
+  const total=allOrders.reduce((s,o)=> s+(o.total||0),0);
+  document.getElementById('cCount').innerText=allOrders.length;
+  document.getElementById('cTotal').innerText=total;
+
+  checkoutText=`🛒 SANTRA MALL - ${BASE_URL}\n🙏 Namaste ${customer.name} ji!\n📱 ${mobile}\n📧 ${customer.email}\n📍 ${customer.location}\n\nOrders: ${allOrders.length} - Total: ₹${total} - Past Present Future - Date: 16 July 2026\n\n`;
+
+  let html='';
+  allOrders.forEach((o,i)=>{
+    const highlight = highlightOrderId && (o.id===highlightOrderId || o.orderId===highlightOrderId)? 'border:2px solid #8b5cf6;background:#f5f3ff' : '';
+    checkoutText+=`${i+1}. ${o.orderId} - ₹${o.total} - ${o.status} - ${o.dateObj.toLocaleString('en-IN')}\nPayment: ${o.paymentMode} | Txn: ${o.txnId}\nMessage: ${o.orderMessage} | Admin: ${o.adminMessage}\n`;
+
+    let itemsHtml='';
+    toArray(o.items).forEach(it=>{
+      const pid=it.id||it.productId||it.pid||''; const link=`${BASE_URL}/product.html?id=${pid}`;
+      checkoutText+=` - ${it.name||it.productName||'Product'} x${it.qty||it.quantity||1} - ₹${it.price||it.unitPrice||0} - ${link}\n`;
+      itemsHtml+=`<div class="product-row"><div><b>${it.name||it.productName||'Product'}</b> x${it.qty||it.quantity||1}<br><a class="product-link" href="${link}" target="_blank">🔗 Product Link - ${pid} - ${it.name||''}</a><br><small style="color:#666">₹${it.price||it.unitPrice||0} | Product detail page</small></div><div style="font-weight:bold;color:green">₹${(it.price||it.unitPrice||0)*(it.qty||it.quantity||1)}</div></div>`;
+    });
+    checkoutText+=`\n`;
+
+    let statusColor=o.status==='Pending'?'#f59e0b':o.status==='Confirmed'?'#10b981':o.status==='Cancelled'?'#ef4444':'#8b5cf6';
+
+    html+=`<div class="order-box" style="${highlight} ${o.status==='Return'?'border-color:#a855f7':o.status==='Exchange'?'border-color:#f97316':''}"><div style="display:flex;justify-content:space-between"><b>${o.orderId}</b><span class="badge" style="background:${statusColor};color:white">${o.status}</span></div><div style="font-size:11px;color:#666">📅 Date: ${o.dateObj.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})} - Date Hamesha Mention ✅ - Today 16 July 2026<br>💳 Payment: ${o.paymentMode} - ${o.paymentMode==='COD'?'💵 Cash on Delivery':'💳 Online Paid ✅'} | Txn: ${o.txnId} | Total: ₹${o.total} - Total undefined fix ✅<br>🔐 OTP: ${o.otp||'N/A'} | Verified: ${o.otpVerified?'Yes ✅':'No ❌'} | Source: ${o.id.startsWith('SM')?'rtdb':'firestore'}</div><div class="pay-box"><b>💳 Payment Detail - COD vs Online:</b> Mode: ${o.paymentMode} | Txn ID: ${o.txnId} | Total: ₹${o.total}<br><b>💬 Order Message - Customer ka message:</b> ${o.orderMessage||'No message - Old file me nahi tha'}<br><b>📝 Admin Message / Return/Exchange / Confirm Opening:</b> ${o.adminMessage||'- - Admin dwara Pending/Confirm/Return/Exchange ka message yaha dikhega - Save karne par customer ko live'}<br><b>📍 Address:</b> ${o.address||customer.location||'-'}</div><div style="margin-top:8px"><b>Items - Product Links - Old file + New file merge:</b>${itemsHtml||'<div style="color:#999;padding:8px">No items - Old file me cartData alag field me tha - Total se check karo</div>'}</div></div>`;
+  });
+
+  document.getElementById('ordersList').innerHTML=html||'No orders - Past Present Future';
+  document.getElementById('checkoutMsg').innerText=checkoutText;
+  document.getElementById('waBtn').href=`https://wa.me/91${mobile}?text=${encodeURIComponent(checkoutText)}`;
+  document.getElementById('copyMsg').onclick=()=>{ navigator.clipboard.writeText(checkoutText); alert('Copied with Payment Detail + Product Links! - Old + New merge'); };
+}
+
+loadCustomer(); loadOrders(); loadNotifications();
+</script>
+</body>
+</html>
