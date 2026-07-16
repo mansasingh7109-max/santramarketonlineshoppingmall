@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Share OTP Verify - Santra Market - 16 July 2026</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<style>
+body{font-family:Arial;background:#f5f5f5;margin:0;padding:12px}
+.card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn{width:100%;padding:12px;border:none;border-radius:8px;font-weight:bold;color:#fff;margin-top:8px;cursor:pointer}
+.btn-g{background:#25D366}.btn-b{background:#2196F3}.btn-o{background:#FF9800}.btn-r{background:#f44336}.btn-p{background:#9C27B0}
+input{width:100%;padding:11px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;margin-top:8px}
+.small{font-size:12px;color:#666}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h3 style="margin:0">🔐 share-otp-verify.html - Share.js Formality</h3>
+<p class="small">
+Github: mansasingh7109-max.github.io/santramarketonlineshoppingmall/<br>
+Firebase: santramarketshoppingmall.web.app / santramarketshoppingmall.firebaseapp.com<br>
+Admin: 8769171078, 9829508335, 9001654667<br>
+Email: mansasingh7109@gmail.com, santramarketshoppingmall@gmail.com, manishatak07@gmail.com<br>
+Wishlist = My Choice | Date Present: 16 July 2026
+</p>
+<hr>
+<b>Mobile:</b> <span id="mob"></span> | <b>Order:</b> <span id="oid"></span><br>
+<b>Via:</b> <span id="via"></span> | <b>Ref:</b> <span id="ref"></span> | <b>Source:</b> <span id="src"></span>
+</div>
+
+<div class="card">
+<h4 style="margin:0">📱 Customer Login se Connect - OTP WhatsApp</h4>
+<input id="mobileInput" placeholder="10 digit mobile - 8769171078 etc">
+<input id="otpInput" placeholder="6 digit OTP">
+<button class="btn btn-b" onclick="sendOTP()">Send OTP - WhatsApp for Confirm</button>
+<button class="btn btn-g" onclick="verifyOTP()">Verify OTP & Confirm Order</button>
+<p id="otpStatus" class="small"></p>
+</div>
+
+<div class="card">
+<h4 style="margin:0">📦 Status - Customer ko ye dikhega - Pending / Confirm etc</h4>
+<p><b>Status:</b> <span id="orderStatus" style="color:#FF9800">Pending - OTP Wait</span></p>
+<button class="btn btn-o" onclick="updateStatus('OTP WhatsApp for Confirm Pending')">🕐 OTP WhatsApp for Confirm Pending</button>
+<button class="btn btn-b" onclick="updateStatus('Confirmed')">✅ Confirmed</button>
+<button class="btn btn-r" onclick="updateStatus('Cancelled')">❌ Cancelled</button>
+<button class="btn btn-g" onclick="goToOrders()">➡️ Go to Orders Page - orders.html</button>
+<button class="btn btn-p" onclick="goToMyChoice()">🧡 Go to My Choice - Wishlist</button>
+</div>
+
+<script>
+// Firebase config - Tera wala - santramarketshoppingmall
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.appspot.com",
+  messagingSenderId: "...",
+  appId: "...",
+  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const p = new URLSearchParams(window.location.search);
+const mobile = p.get('mobile');
+const orderId = p.get('orderId');
+const via = p.get('via') || 'share_link';
+const refAdmin = p.get('ref') || '8769171078';
+const source = p.get('source') || via;
+const sharePid = p.get('share_product');
+
+document.getElementById('mob').innerText = mobile || '-';
+document.getElementById('oid').innerText = orderId || '-';
+document.getElementById('via').innerText = via;
+document.getElementById('ref').innerText = refAdmin;
+document.getElementById('src').innerText = source;
+if(mobile) document.getElementById('mobileInput').value = mobile;
+if(mobile) localStorage.setItem('customer_mobile', mobile);
+
+let genOTP = null;
+
+async function sendOTP(){
+  const mob = document.getElementById('mobileInput').value.trim().replace(/\D/g,'').slice(-10);
+  if(mob.length<10){alert('10 digit mobile');return;}
+  genOTP = Math.floor(100000+Math.random()*900000);
+  
+  await db.collection('login_requests').doc(mob+'_'+Date.now()).set({
+    mobile: mob, otp: genOTP, type: 'share-otp-verify.html', orderId: orderId||'SHARE_'+Date.now(),
+    via: via, source: source, share_product: sharePid||'', refAdmin: refAdmin,
+    status: 'OTP WhatsApp for Confirm Pending',
+    date: new Date().toISOString(), // Present 16 July 2026 - Future September fix
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    website: 'santramarketshoppingmall.web.app',
+    github: 'mansasingh7109-max.github.io/santramarketonlineshoppingmall/'
+  });
+
+  await db.collection('customers').doc(mob).set({
+    mobile: mob, lastOrder: orderId, loginVia: via, lastLogin: new Date().toISOString(),
+    adminMobiles: ['8769171078','9829508335','9001654667']
+  },{merge:true});
+
+  document.getElementById('otpStatus').innerHTML = `✅ OTP (Demo): <b>${genOTP}</b><br>admin-customer.html me Pending me ayega<br>Status: OTP WhatsApp for Confirm Pending`;
+  if(orderId){
+    await db.collection('orders').doc(orderId).update({status:'OTP WhatsApp for Confirm Pending', otp:genOTP, otpTime:new Date().toISOString()}).catch(()=>{});
+    document.getElementById('orderStatus').innerText='OTP WhatsApp for Confirm Pending';
+  }
+}
+
+async function verifyOTP(){
+  const entered = document.getElementById('otpInput').value.trim();
+  if(!entered){alert('OTP dalo');return;}
+  if(parseInt(entered)!==genOTP){alert('OTP galat');return;}
+  const mob = document.getElementById('mobileInput').value.trim().replace(/\D/g,'').slice(-10);
+  localStorage.setItem('otp_verified_'+mob,'true');
+  localStorage.setItem('customer_mobile',mob);
+
+  if(orderId){
+    await db.collection('orders').doc(orderId).update({status:'Confirmed - OTP Verified via share-otp-verify.html', verifiedAt:new Date().toISOString(), verifiedMobile:mob}).catch(()=>{});
+    await db.collection('customer_notifications').doc(mob).collection('orders').doc(orderId).set({status:'Confirmed - OTP Verified', verifiedAt:new Date().toISOString()},{merge:true}).catch(()=>{});
+  }
+
+  document.getElementById('orderStatus').innerText='Confirmed - OTP Verified ✅';
+  document.getElementById('orderStatus').style.color='green';
+  document.getElementById('otpStatus').innerHTML+=`<br><br>✅ Verified - Ab orders.html me Share Link order bhi dikhega`;
+  setTimeout(goToOrders,1200);
+}
+
+async function updateStatus(s){
+  if(!orderId){alert('Order ID nahi');return;}
+  await db.collection('orders').doc(orderId).update({status:s, updatedAt:new Date().toISOString()});
+  document.getElementById('orderStatus').innerText=s;
+}
+
+function goToOrders(){
+  const mob=document.getElementById('mobileInput').value.trim().replace(/\D/g,'').slice(-10)||mobile;
+  window.location.href=`my-orders.html?mobile=${mob}&verified=true&via=${via}&ref=${refAdmin}&source=${source}&file=share-otp-verify.html`;
+}
+function goToMyChoice(){
+  window.location.href=`my-choice.html?mobile=${localStorage.getItem('customer_mobile')||mobile}`;
+}
+</script>
+</body>
+</html>

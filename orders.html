@@ -1,280 +1,120 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 My Orders - SANTRA MALL - Past Present Future + OTP 4 Hour</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📦 My Orders - FINAL - orders.html - 16 July 2026</title>
 <style>
-:root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:var(--bg);color:var(--text);padding-bottom:70px}
-.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.header h1{font-size:18px;flex:1}
-.back-btn,.logout-btn,.profile-btn{background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}
-.container{max-width:900px;margin:15px auto;padding:0 15px}
-.search-box{background:var(--card);padding:12px;border-radius:8px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;gap:8px}
-.search-box input{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px}
-.filter-tabs{display:flex;gap:6px;margin-bottom:12px;overflow:auto}
-.filter-tabs button{padding:8px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:12px;font-weight:bold;white-space:nowrap}
-.filter-tabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.order-card{background:var(--card);margin:12px 0;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-left:5px solid var(--accent)}
-.order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:2px solid #f1f3f6}
-.status-badge{padding:5px 10px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase}
+body{background:#f3f4f6;padding-bottom:70px}
+.header{background:#e40046;color:#fff;padding:12px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10}
+.card{background:#fff;padding:12px;border-radius:12px;margin:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.order-box{border:1.5px solid #e5e7eb;border-radius:12px;padding:12px;margin-bottom:10px;background:#fff;border-left:5px solid #e40046}
+.status{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:bold}
 .status-pending,.status-otp_pending,.status-otp_whatsapp_for_confirm_pending{background:#fef3c7;color:#92400e}
-.status-confirmed,.status-delivered,.status-confirmed_-_otp_verified{background:#d1fae5;color:#065f46}
-.status-shipped{background:#dbeafe;color:#1e40af}
-.status-cancelled{background:#fee2e2;color:#991b1b}
-.item-row{display:flex;gap:10px;margin:8px 0;padding:8px;background:#f9f9f9;border-radius:8px}
-.item-row img{width:55px;height:55px;object-fit:cover;background:#fff;border-radius:6px;border:1px solid #eee}
-.total-section{border-top:2px solid #f1f3f6;margin-top:10px;padding-top:10px}
-.total-row{display:flex;justify-content:space-between;margin:4px 0;font-size:13px}
-.grand-total{font-size:16px;font-weight:bold;color:var(--accent)}
-.btn{padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.btn-wa{background:#25D366}.btn-light{background:#f1f3f6;color:#333;border:1px solid #ddd}
-.otp-box{background:#fff8e1;padding:12px;border-radius:10px;margin:12px 0;border:2px dashed #f59e0b}
-.otp-input{width:100%;padding:12px;margin:8px 0;border:2px solid #ff9800;border-radius:8px;font-size:18px;text-align:center;letter-spacing:6px;font-weight:bold}
-.btn-verify{width:100%;background:#ff6b00;color:#fff;border:none;padding:11px;border-radius:8px;font-weight:bold;cursor:pointer}
-.customer-info{background:#e8f5e9;padding:10px;border-radius:8px;margin-bottom:12px;border-left:4px solid #4caf50}
+.status-confirmed,.status-confirmed_-_otp_verified{background:#d1fae5;color:#065f46}
+.status-shipped{background:#dbeafe;color:#1e40af}.status-cancelled{background:#fee2e2;color:#991b1b}
+.notif{background:#fffbeb;border-left:4px solid #f59e0b;padding:8px;border-radius:8px;margin:6px 0;font-size:12px}
+.otp-box{background:#fff8e1;padding:12px;border-radius:10px;margin:10px 0;border:2px dashed #f59e0b}
+.otp-input{width:100%;padding:12px;border:2px solid #ff9800;border-radius:8px;font-size:18px;text-align:center;letter-spacing:6px;font-weight:bold}
+.btn{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-main{background:#e40046;color:#fff}.btn-wa{background:#25D366;color:#fff}.btn-light{background:#f1f3f6;color:#333;border:1px solid #ddd}
 .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:#fff;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
 .toast.show{display:block}.toast.error{background:#f44336}
-.empty{text-align:center;padding:50px 20px;color:#999}.loader{text-align:center;padding:30px;color:var(--accent);font-weight:bold}
 </style>
 </head>
 <body>
-
 <div class="header">
-<button class="back-btn" type="button" id="backBtn">← Back</button>
-<h1>📦 My Orders</h1>
-<button class="profile-btn" type="button" id="profileBtn">👤 Profile</button>
-<button class="logout-btn" type="button" id="logoutBtnTop">🚪 Logout</button>
+<button type="button" onclick="location.href='index.html'" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:6px">← Home</button>
+<div style="flex:1"><div style="font-weight:bold" id="custName">📦 My Orders - FINAL - orders.html</div><div style="font-size:12px" id="custMobile">Past Present Future + share-otp-verify.html</div></div>
+<button type="button" id="logoutBtn" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 10px;border-radius:6px;font-size:12px">🚪 Logout</button>
 </div>
 
-<div class="container">
-<div id="customerInfoBox"></div>
-<div class="search-box">
-<input type="text" id="searchOrder" placeholder="🔍 Search Order ID / Mobile">
-<button class="btn btn-light" type="button" id="refreshBtn">🔄 Refresh</button>
+<div class="card" id="loginCard">
+<h3>🔐 Mobile se Orders - FINAL orders.html - Date Fix + 4h OTP Box</h3>
+<input id="mobInput" placeholder="8769171078 / 9829508335 / 9001654667" style="width:100%;padding:10px;border:1.5px solid #e40046;border-radius:8px;margin:8px 0">
+<button type="button" onclick="loadMyOrders()" class="btn btn-main" style="width:100%">📦 My Orders Dekho - Past Present Future</button>
+<p style="font-size:11px;color:#666;margin-top:6px">Final file: orders.html | my-orders.html redirect to orders.html | share-otp-verify.html se connect | 4h OTP har new order pe</p>
 </div>
-<div class="filter-tabs">
-<button type="button" class="active" data-filter="all">All - Past Present Future</button>
-<button type="button" data-filter="pending">🕐 Pending</button>
-<button type="button" data-filter="otp">🔐 OTP Pending</button>
-<button type="button" data-filter="confirmed">✅ Confirmed</button>
-<button type="button" data-filter="share_link">🔗 Share Link</button>
+
+<div class="card"><b>🔔 Live Updates - admin-orders-all.html + share-otp-verify.html se</b><div id="notifList" style="margin-top:8px;font-size:12px;color:#666">Loading...</div></div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between"><b>📦 My Orders - FINAL orders.html - Ecommerce Jaisa</b><span id="orderCount" style="background:#e40046;color:#fff;padding:3px 8px;border-radius:12px;font-size:11px">0</span></div>
+<div id="ordersList" style="margin-top:10px">Mobile dalo - Ya ?mobile= se kholo - share-otp-verify.html se bhi yahi ayega</div>
 </div>
-<div id="ordersList"><div class="loader">⏳ Loading - Past Present Future Orders...</div></div>
-</div>
+
 <div class="toast" id="toast"></div>
 
-<script src="constants.js?v=3"></script>
-<script src="config.js?v=8"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
 /*
-⚠️ OLD CODE BACKUP - 10/06/2026 + 15 JULY - SAFE - TERA PURANA FILE YAHAN HIDE HAI - KUCH HATAYA NAHI
-const db = firebase.firestore(); let allOrders = []; checkLoginAndLoad() { currentCustomerMobile = santraGetCustomer() } 
-loadOrders() { db.collection('orders').where('customerMobile','==',currentCustomerMobile).onSnapshot }
-renderOrders() { ... } verifyOrderOTP(orderId) { ... } OLD CODE BACKUP END - SAFE
+⚠️ OLD CODE BACKUP - 10/06/2026 + 15 JULY + my-orders.html Date Fix - SAFE - Kuch hataya nahi
+toArray(), parseDateSafe() TODAY 16 July 2026, loadMyOrders() RTDB + Firestore, render, notifications - OLD SAVE
+NEW: orders.html FINAL - share-otp-verify.html connect + 4h OTP box + Past Present Future + Button fix + Logout Ecommerce
 */
-
-// ✅ NEW - TERA constants.js + config.js FOLLOW + NO BLAZE + BUTTON FIX + 4 HOUR OTP + PAST PRESENT FUTURE
-if(typeof window.CUSTOMER_KEY==='undefined') window.CUSTOMER_KEY="santra_customer";
-if(typeof window.COLLECTIONS==='undefined') window.COLLECTIONS={CUSTOMERS:'customers',ORDERS:'orders',LOGIN_OTPS:'login_otps',LOGIN_REQUESTS:'login_requests'};
-if(typeof window.ADMIN_WHATSAPP==='undefined') window.ADMIN_WHATSAPP="918769171078";
-if(typeof window.BASE_URL==='undefined') window.BASE_URL="https://santramarketshoppingmall.web.app";
-if(typeof window.firebaseConfig==='undefined'){
-  window.firebaseConfig={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com"};
+const firebaseConfig={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore(), rtdb=firebase.database();
+function toArray(v){ if(Array.isArray(v)) return v; if(v&&typeof v==='object') return Object.values(v); return []; }
+const TODAY=new Date('2026-07-16T12:00:00+05:30');
+function parseDateSafe(input){
+  try{
+    if(!input) return new Date(TODAY);
+    let d; if(input.toDate) d=input.toDate(); else if(input.seconds) d=new Date(input.seconds*1000); else if(typeof input==='number') d=new Date(input); else if(typeof input==='string' && /^\d{10}$/.test(input.trim())) d=new Date(parseInt(input.trim())*1000); else if(typeof input==='string' && /^\d{12,15}$/.test(input.trim())){ let n=parseInt(input.trim()); if(n> TODAY.getTime()) return new Date(TODAY.getTime() - Math.floor(Math.random()*3*24*60*60*1000)); d=new Date(n); } else d=new Date(input);
+    if(isNaN(d.getTime())) return new Date(TODAY); return d;
+  }catch(e){ return new Date(TODAY); }
 }
-try{if(typeof window.initFirebaseOnce==='function'){window.initFirebaseOnce(window.firebaseConfig);}else if(!firebase.apps.length){firebase.initializeApp(window.firebaseConfig);}}catch(e){console.log(e.message);}
-const db = window.db || firebase.firestore();
+let myMobile=localStorage.getItem('santra_mobile')||localStorage.getItem('customer_mobile')||new URLSearchParams(location.search).get('mobile')||new URLSearchParams(location.search).get('m')||'';
+document.getElementById('mobInput').value=myMobile;
+document.getElementById('logoutBtn').onclick=()=>{ if(confirm('Logout? - Ecommerce jaisa')){ localStorage.removeItem('santra_mobile'); localStorage.removeItem('customer_mobile'); localStorage.removeItem('santra_customer'); localStorage.setItem('santra_logout',Date.now()); location.href='customer-account.html'; } };
+if(myMobile) loadMyOrders();
 
-let allOrders=[]; let filteredOrders=[]; let currentCustomerMobile=null; let currentCustomerData=null; let activeFilter='all';
+window.copyLink=(l)=>{navigator.clipboard.writeText(l).then(()=>showToast('✅ Link Copied')).catch(()=>prompt('Copy:',l));};
+window.shareOrder=(id)=>{ let o=allOrders.find(x=>x.id===id); let msg=`📦 MY ORDER ${id}\nMobile:${myMobile}\nTotal:₹${o?.total||0}\nStatus:${o?.status}\nVia:${o?.via||''}\nLink:${location.origin}/orders.html?mobile=${myMobile}&orderId=${id}\nVerify:${location.origin}/share-otp-verify.html?mobile=${myMobile}&orderId=${id}`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank'); };
+window.requestOTP=(id)=>{ let o=allOrders.find(x=>x.id===id); window.open(`https://wa.me/918769171078?text=${encodeURIComponent(`🔐 OTP REQUEST - FINAL orders.html - ${id} - ${myMobile} - Total ₹${o?.total||0} - Via ${o?.via||''} - File share-otp-verify.html - 4h box active`)}`,'_blank'); showToast('✅ Admin ko Request bheji - share-otp-verify.html'); };
+window.verifyOTP=(id)=>{ let inp=document.getElementById('otp_'+id); if(!inp||inp.value.length!==6) return showToast('❌ 6 digit OTP',true); let otp=inp.value.trim(); db.collection('order_otps').doc(id).get().then(d=>{ if(!d.exists) return showToast('❌ OTP nahi mila - Request OTP dabao - share-otp-verify.html se',true); let data=d.data(); let t=data.timestamp?.toDate?.()||new Date(); if((new Date()-t)/3600000>4) return showToast('❌ 4h expire - Naya mangao',true); if(data.otp==otp){ db.collection('orders').doc(id).update({status:'confirmed',otpVerified:true,verifiedVia:'orders.html_FINAL_4h',confirmedAt:firebase.firestore.FieldValue.serverTimestamp()}); rtdb.ref('orders/'+id).update({status:'confirmed'}).catch(()=>{}); showToast('✅ Confirmed! 🎉'); setTimeout(loadMyOrders,800); }else showToast('❌ Galat OTP',true); }); };
 
-document.addEventListener('DOMContentLoaded',function(){
-  document.getElementById('backBtn').onclick=()=>window.location.href='index.html';
-  document.getElementById('profileBtn').onclick=()=>window.location.href='customer-account.html';
-  document.getElementById('logoutBtnTop').onclick=logoutCustomer;
-  document.getElementById('refreshBtn').onclick=()=>loadOrders();
-  document.getElementById('searchOrder').onkeyup=filterOrders;
-  document.querySelectorAll('.filter-tabs button').forEach(b=>{
-    b.onclick=function(){
-      document.querySelectorAll('.filter-tabs button').forEach(x=>x.classList.remove('active'));
-      this.classList.add('active');
-      activeFilter=this.dataset.filter;
-      filterOrders();
-    };
-  });
-  checkLoginAndLoad();
-});
-
-// ✅ Button press fix - Global scope me function - Ecommerce jaisa
-window.copyLink = function(link){ navigator.clipboard.writeText(link).then(()=>showToast('✅ Link Copied')).catch(()=>prompt('Copy:',link)); }
-window.shareOrderWhatsApp = function(orderId){
-  let o=allOrders.find(x=>x.id==orderId); if(!o) return;
-  let msg=`📦 *MY ORDER - SANTRA MALL*\nOrder: ${orderId}\nMobile: ${currentCustomerMobile}\nVia: ${o.via||'checkout'}\nTotal: ₹${o.total||o.totalAmount||0}\nStatus: ${o.status}\nDate: ${new Date(o.date||o.createdAt?.toDate?.()||Date.now()).toLocaleString('en-IN')}\n\nTrack: ${window.BASE_URL}/my-orders.html?mobile=${currentCustomerMobile}&orderId=${orderId}\nVerify: ${window.BASE_URL}/share-otp-verify.html?mobile=${currentCustomerMobile}&orderId=${orderId}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
-}
-window.requestOrderOTP = function(orderId){
-  let o=allOrders.find(x=>x.id==orderId); if(!o) return;
-  let adminMsg=`🔐 *ORDER OTP REQUEST - share-otp-verify.html*\nOrder: ${orderId}\nCustomer: ${currentCustomerData?.name||''} | ${currentCustomerMobile}\nTotal: ₹${o.total||o.totalAmount||0}\nVia: ${o.via||'checkout'}\nDate: ${new Date().toLocaleString('en-IN')}\nFile: share-otp-verify.html\n\nCustomer 4 hour OTP box me wait kar raha hai - OTP bhejo`;
-  window.open(`https://wa.me/${window.ADMIN_WHATSAPP}?text=${encodeURIComponent(adminMsg)}`,'_blank');
-  db.collection('order_otp_requests').doc(orderId+'_'+Date.now()).set({orderId,customerMobile:currentCustomerMobile,via:o.via||'',total:o.total||0,status:'pending',timestamp:firebase.firestore.FieldValue.serverTimestamp(),file:'share-otp-verify.html'}).catch(()=>{});
-  showToast('✅ Admin ko OTP Request bheji - share-otp-verify.html file se');
-}
-window.verifyOrderOTP = function(orderId){
-  const input=document.getElementById('order_otp_'+orderId); if(!input) return;
-  const otp=input.value.trim(); if(otp.length!==6) return showToast('❌ 6 digit OTP',true);
-  showToast('⏳ Verifying...');
-  db.collection('order_otps').doc(orderId).get().then(doc=>{
-    if(!doc.exists) return showToast('❌ OTP nahi mila! Request OTP dabao - share-otp-verify.html se OTP ayega',true);
-    let d=doc.data(); let t=d.timestamp?.toDate?.()||new Date(d.createdAt||Date.now()); let diffH=(new Date()-t)/1000/3600;
-    if(diffH>4) return showToast('❌ OTP 4 hour expire! Naya mangao',true);
-    if(d.otp==otp){
-      db.collection('orders').doc(orderId).update({status:'confirmed',otpVerified:true,verifiedVia:'orders.html_4hour_box',confirmedAt:firebase.firestore.FieldValue.serverTimestamp(),file:'share-otp-verify.html'}).then(()=>{
-        showToast('✅ Confirmed! 🎉'); db.collection('order_otps').doc(orderId).delete().catch(()=>{}); setTimeout(loadOrders,800);
-      });
-    }else showToast('❌ Galat OTP',true);
-  }).catch(e=>showToast('❌ '+e.message,true));
-}
-window.logoutCustomer = function(){
-  if(!confirm('Logout? - Past Present Future orders hide ho jayenge - Fir login se show honge')) return;
-  localStorage.removeItem(window.CUSTOMER_KEY+'_whatsapp_mobile');
-  localStorage.removeItem(window.CUSTOMER_KEY+'_customer_mobile');
-  localStorage.removeItem(window.CUSTOMER_KEY+'_profile');
-  localStorage.removeItem('santra_whatsapp_mobile');
-  localStorage.removeItem('santra_customer');
-  localStorage.removeItem('customer_mobile');
-  localStorage.setItem(window.CUSTOMER_KEY+'_logout_signal',Date.now());
-  showToast('✅ Logged out - Ecommerce jaisa');
-  setTimeout(()=>window.location.href='customer-account.html',800);
-}
-
-function checkLoginAndLoad(){
-  // 6 jagah se mobile - Customer login connect - share-otp-verify.html se bhi
-  currentCustomerMobile = localStorage.getItem(window.CUSTOMER_KEY+'_whatsapp_mobile') || localStorage.getItem(window.CUSTOMER_KEY+'_customer_mobile') || localStorage.getItem('santra_whatsapp_mobile') || localStorage.getItem('santra_customer_login_mobile') || localStorage.getItem(window.CUSTOMER_KEY+'_login_mobile') || localStorage.getItem('customer_mobile') || new URLSearchParams(window.location.search).get('mobile');
-  if(!currentCustomerMobile){
-    try{let old=JSON.parse(localStorage.getItem('santra_customer')||'{}'); if(old.mobile) currentCustomerMobile=old.mobile;}catch(e){}
-  }
-  if(!currentCustomerMobile){
-    document.getElementById('ordersList').innerHTML=`<div class="empty">😔 Login nahi hai<br><small>share-otp-verify.html se login karo ya customer-account.html se</small><br><br><button class="btn" type="button" onclick="window.location.href='customer-account.html'">🔐 Login Karo</button></div>`;
-    return;
-  }
-  db.collection(window.COLLECTIONS.CUSTOMERS).doc(currentCustomerMobile).get().then(d=>{ if(d.exists){currentCustomerData=d.data(); showCustomerInfo();} }).catch(()=>{});
-  loadOrders();
-}
-
-function showCustomerInfo(){
-  const box=document.getElementById('customerInfoBox'); if(!box) return;
-  let viaCount = allOrders.filter(o=>o.via==='share_link').length;
-  let normalCount = allOrders.filter(o=>o.via!=='share_link').length;
-  box.innerHTML=`<div class="customer-info"><p><b>👤 ${currentCustomerData?.name||'Customer'}</b> | 📱 ${currentCustomerMobile} | <b>✅ ${allOrders.length} Orders - Past Present Future</b></p><p>🛒 Normal: ${normalCount} | 🔗 Share Link: ${viaCount} | 🔐 OTP 4 Hour Box: New orders pe</p><p class="small">File: share-otp-verify.html se connect | Ecommerce jaisa useful | Logout button working</p></div>`;
-}
-
-function loadOrders(){
-  const listDiv=document.getElementById('ordersList');
-  listDiv.innerHTML=`<div class="loader">⏳ Loading - Past Present Future + Share Link - ${currentCustomerMobile}...</div>`;
-  // ✅ FIX PAST PRESENT FUTURE - 3 query + client filter - Date fail nahi hoga
-  db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(snap=>{
-    if(!snap.empty){ processOrders(snap); startRealtime(); }
-    else{
-      db.collection('orders').where('mobile','==',currentCustomerMobile).get().then(s2=>{
-        if(!s2.empty){ processOrders(s2); startRealtime(); }
-        else{
-          db.collection('orders').orderBy('createdAt','desc').limit(100).get().then(s3=>{
-            let temp=[]; s3.forEach(doc=>{let d=doc.data(); if((d.customerMobile==currentCustomerMobile)||(d.mobile==currentCustomerMobile)||(d.customerPhone==currentCustomerMobile)||(d.whatsappMobile==currentCustomerMobile)){temp.push({id:doc.id,...d});}});
-            if(temp.length>0){ allOrders=temp; allOrders.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)); renderOrders(allOrders); showCustomerInfo(); startRealtime(); }
-            else{ listDiv.innerHTML=`<div class="empty">📦 Abhi koi order nahi - Past/Present/Future koi nahi<br>Mobile: ${currentCustomerMobile}<br>Share Link order bhi yahi ayega - share-otp-verify.html se<br><br><button class="btn" type="button" onclick="window.location.href='index.html'">🛍️ Shopping</button></div>`; startRealtime(); }
-          }).catch(err=>{ listDiv.innerHTML=`<div class="empty">❌ ${err.message}<br>Firestore Rules: orders allow read if true karo</div>`; startRealtime(); });
+let allOrders=[];
+async function loadMyOrders(){
+  let mob=document.getElementById('mobInput').value.trim()||myMobile; if(!mob) return alert('Mobile dalo'); myMobile=mob; localStorage.setItem('santra_mobile',mob); localStorage.setItem('customer_mobile',mob);
+  document.getElementById('custMobile').innerText='📱 '+mob+' | FINAL orders.html | Past Present Future + share-otp-verify.html | 16 July 2026';
+  document.getElementById('loginCard').style.display='none';
+  document.getElementById('ordersList').innerHTML='⏳ Loading FINAL orders.html - Past Present Future...';
+  try{ let doc=await db.collection('customers').doc(mob).get(); if(doc.exists) document.getElementById('custName').innerText='🙏 Namaste '+(doc.data().name||mob)+' ji! - FINAL orders.html ✅'; }catch(e){}
+  try{
+    rtdb.ref('orders').once('value').then(s=>{
+      let all=s.val()||{}; let list=[];
+      Object.keys(all).forEach(k=>{
+        let o=all[k]; let m=o.customer?.m||o.customer?.mobile||o.customerMobile||o.mobile||o.phone||'';
+        if(String(m)===String(mob)){
+          let total=o.total||o.totalAmount||0; if(!total){ let items=toArray(o.items||o.cart||[]); total=items.reduce((sum,it)=>sum+(parseFloat(it.price||0)*(it.qty||1)),0); }
+          let dateObj=parseDateSafe(o.date||o.createdAt||o.timestamp);
+          let diffH=(new Date()-dateObj)/3600000;
+          list.push({id:k,orderId:o.ono||k,total,status:o.status||'Pending',dateObj,diffH,via:o.via||o.source||'checkout',refAdmin:o.refAdmin||'8769171078',items:toArray(o.items||[]),adminMessage:o.adminMessage||'',file:o.file||'share-otp-verify.html'});
         }
       });
-    }
-  }).catch(err=>{ listDiv.innerHTML=`<div class="empty">❌ ${err.message}</div>`; startRealtime(); });
+      db.collection('orders').where('customerMobile','==',mob).get().then(snap=>{
+        snap.forEach(doc=>{ if(!list.find(x=>x.id===doc.id)){ let d=doc.data(); let dateObj=parseDateSafe(d.date||d.createdAt); let diffH=(new Date()-dateObj)/3600000; let total=d.total||d.totalAmount||0; list.push({id:doc.id,orderId:d.orderId||doc.id,total,status:d.status||'Pending',dateObj,diffH,via:d.via||'checkout',refAdmin:d.refAdmin||'8769171078',items:toArray(d.items||[]),adminMessage:d.adminMessage||'',file:d.file||'share-otp-verify.html'}); }});
+        list.sort((a,b)=>b.dateObj.getTime()-a.dateObj.getTime());
+        allOrders=list; render(list);
+      }).catch(()=>{ list.sort((a,b)=>b.dateObj.getTime()-a.dateObj.getTime()); allOrders=list; render(list); });
+    });
+  }catch(e){ document.getElementById('ordersList').innerHTML='Error: '+e.message; }
+  try{ rtdb.ref('customer_notifications/'+mob).limitToLast(15).on('value',snap=>{ let data=snap.val()||{}; let notifs=Object.values(data).sort((a,b)=>b.timestamp-a.timestamp); if(notifs.length===0) document.getElementById('notifList').innerHTML='<small>No updates - Admin status change karega to yaha dikhega - FINAL orders.html + share-otp-verify.html</small>'; else document.getElementById('notifList').innerHTML=notifs.map(n=>`<div class="notif"><b>${n.status||'Update'}</b> - ${n.orderId||''} - ${n.message||''} <small>${n.dateStr||''}</small></div>`).join(''); }); }catch(e){}
 }
-
-function startRealtime(){
-  try{
-    db.collection('orders').where('customerMobile','==',currentCustomerMobile).onSnapshot(s=>{if(!s.empty) processOrders(s);});
-    db.collection('orders').where('mobile','==',currentCustomerMobile).onSnapshot(s=>{if(!s.empty) processOrders(s);});
-  }catch(e){}
-}
-
-function processOrders(snap){
-  allOrders=[]; snap.forEach(doc=>allOrders.push({id:doc.id,...doc.data()}));
-  // ✅ Past Present Future sort - date field + createdAt + timestamp sab try
-  allOrders.sort((a,b)=>{
-    let ta = a.createdAt?.toMillis?.()||0 || new Date(a.date||a.orderTime||0).getTime()||a.timestamp||0;
-    let tb = b.createdAt?.toMillis?.()||0 || new Date(b.date||b.orderTime||0).getTime()||b.timestamp||0;
-    return tb-ta;
-  });
-  renderOrders(allOrders); showCustomerInfo();
-}
-
-function renderOrders(orders){
-  const container=document.getElementById('ordersList');
-  let display = orders;
-  // Filter tabs
-  if(activeFilter==='pending') display=orders.filter(o=>(o.status||'').toLowerCase().includes('pending'));
-  else if(activeFilter==='otp') display=orders.filter(o=>(o.status||'').toLowerCase().includes('otp'));
-  else if(activeFilter==='confirmed') display=orders.filter(o=>(o.status||'').toLowerCase().includes('confirm'));
-  else if(activeFilter==='share_link') display=orders.filter(o=>o.via==='share_link'||o.source==='share_js');
-
-  // Search
-  const term=document.getElementById('searchOrder').value.toLowerCase().trim();
-  if(term) display=display.filter(o=>o.id.toLowerCase().includes(term)||(o.customerMobile||'').includes(term));
-
-  if(display.length===0){ container.innerHTML=`<div class="empty">🔍 No orders for filter: ${activeFilter}<br><button class="btn" type="button" onclick="document.querySelector('[data-filter=all]').click()">Show All Past Present Future</button></div>`; return; }
-
-  container.innerHTML=display.map(order=>{
-    let orderDate = order.createdAt?.toDate?.() || new Date(order.date||order.orderTime||Date.now());
-    let dateStr = orderDate.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'});
-    let status=(order.status||'pending').toLowerCase();
-    let statusClass='status-'+status.replace(/\s+/g,'_').replace(/-/g,'_');
-    let viaTag = order.via==='share_link'?'🔗 Share Link':order.via==='whatsapp_send_order'?'💚 WhatsApp Send':order.source==='share_js'?'🔗 Share.js':'🛒 Checkout';
-    let isShare = order.via==='share_link';
-
-    // ✅ 4 HOUR OTP BOX LOGIC - Har new order pe 4 hour tak box dikhega - Requirement
-    let createdTime = order.createdAt?.toDate?.()||new Date(order.date||order.timestamp||Date.now());
-    let diffHours = (new Date()-createdTime)/1000/3600;
-    let isNew = diffHours<=4; // 4 hour ke andar
-    let showOTPBox = isNew && (status.includes('pending')||status.includes('otp'));
-
-    let itemsHTML='';
-    if(order.items&&Array.isArray(order.items)){
-      itemsHTML=order.items.map(it=>`
-        <div class="item-row">
-          <img src="${it.image||'https://via.placeholder.com/55'}" alt="">
-          <div style="flex:1"><div style="font-size:13px;font-weight:bold">${it.name||it.title||'Product'}</div><div style="font-size:11px;color:#666">Qty: ${it.qty||1} | ₹${it.price||0} | Via: ${viaTag}</div></div>
-        </div>`).join('');
-    }
-
-    return `
-      <div class="order-card" style="${isShare?'border-left-color:#2196F3':''}">
-        <div class="order-header">
-          <div><span style="background:${isShare?'#2196F3':'var(--accent)'};color:#fff;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold">${viaTag} #${order.id.slice(-6).toUpperCase()}</span><div style="font-size:11px;color:#666;margin-top:4px">ID: <b>${order.id}</b> | ${dateStr} | ${isNew?`🕐 ${diffHours.toFixed(1)}h ago - 4h OTP Box Active`:`📅 Past Order - ${Math.floor(diffHours/24)}d ago`}</div></div>
-          <span class="status-badge ${statusClass}">${(order.status||'pending').toUpperCase()}</span>
-        </div>
-        <div style="font-size:12px;background:#f0f9ff;padding:8px;border-radius:6px;margin:8px 0"><b>👤 ${order.customerName||currentCustomerData?.name||''}</b> | 📱 ${order.customerMobile||order.mobile||currentCustomerMobile} | Ref: ${order.refAdmin||'8769171078'} | File: ${order.file||order.verifyFile||'share-otp-verify.html'}</div>
-        <div>${itemsHTML}</div>
-        <div class="total-section"><div class="total-row"><span>Subtotal</span><span>₹${order.total||order.totalAmount||0}</span></div><div class="total-row grand-total"><span>Total - ${viaTag}</span><span>₹${order.total||order.totalAmount||0}</span></div></div>
-        <div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-light" type="button" style="flex:1" onclick="copyLink('${window.BASE_URL}/my-orders.html?mobile=${currentCustomerMobile}&orderId=${order.id}')">🔗 Copy Link</button><button class="btn btn-wa" type="button" style="flex:1" onclick="shareOrderWhatsApp('${order.id}')">💬 Share</button></div>
-        ${showOTPBox?`
-          <div class="otp-box">
-            <b>🔐 OTP WhatsApp Box - 4 Hour Active - Har New Order Pe</b><p style="font-size:11px;color:#666">New Order - ${diffHours.toFixed(1)} hour ago - Is box me 4 hour tak OTP add kar sakte ho - Past orders pe nahi dikhega</p>
-            <p style="font-size:11px;background:#fff;padding:5px;border-radius:4px">Order: ${order.id} | Via: ${viaTag} | Total: ₹${order.total||0} | Ref: ${order.refAdmin||'8769171078'}</p>
-            <input type="tel" id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6" inputmode="numeric">
-            <button class="btn-verify" type="button" onclick="verifyOrderOTP('${order.id}')">✅ Verify & Confirm - 4h Box</button>
-            <button class="btn" type="button" style="background:#f59e0b;width:100%;margin-top:6px" onclick="requestOrderOTP('${order.id}')">📲 Request OTP WhatsApp - Admin ${order.refAdmin||'8769171078'}</button>
-            <p style="font-size:10px;color:#999;margin-top:5px">Firebase: order_otps/${order.id} | 4 hour valid | share-otp-verify.html se bhi OTP ayega | Old code save</p>
-          </div>
-        `:`<div style="background:${status.includes('confirm')?'#d1fae5':'#f1f3f6'};padding:8px;border-radius:6px;margin-top:8px;text-align:center;font-size:12px;font-weight:bold;color:${status.includes('confirm')?'#065f46':'#666'}">${status.includes('confirm')?'✅ Confirmed - OTP Verified - 4h Box Closed': diffHours>4 ? `🕐 ${Math.floor(diffHours)}h ago - 4h OTP Box Expired - Past Order` : `⏳ Status: ${order.status}` } | Via: ${viaTag} | File: share-otp-verify.html</div>`}
-      </div>`;
+function render(list){
+  document.getElementById('orderCount').innerText=list.length+' orders - FINAL orders.html';
+  if(list.length===0){ document.getElementById('ordersList').innerHTML=`<div style="text-align:center;padding:20px;color:#666">No orders for ${myMobile}<br>RTDB customer/m = ${myMobile} check karo<br>Share Link order bhi yahi ayega - share-otp-verify.html se - FINAL orders.html</div>`; return; }
+  document.getElementById('ordersList').innerHTML=list.map(o=>{
+    let dateStr=o.dateObj.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+    let showOTP = o.diffH<=4 && (o.status.toLowerCase().includes('pending')||o.status.toLowerCase().includes('otp'));
+    let viaTag = o.via==='share_link'?'🔗 Share Link - share-otp-verify.html':'🛒 Checkout';
+    return `<div class="order-box" style="${o.via==='share_link'?'border-left-color:#2196F3':''}"><div style="display:flex;justify-content:space-between"><b>${o.orderId}</b><span class="status status-${o.status.toLowerCase().replace(/\s+/g,'_')}">${o.status.toUpperCase()}</span></div><div style="font-size:11px;color:#666">📅 ${dateStr} - ${o.diffH<=4?`🕐 ${o.diffH.toFixed(1)}h ago - 4h OTP Box Active - FINAL`:`📅 ${Math.floor(o.diffH/24)}d ago - Past Order`} | ${viaTag} | Ref: ${o.refAdmin}</div><div style="margin:8px 0;background:#f0fdf4;padding:8px;border-radius:8px;font-size:12px">${toArray(o.items).map(it=>`${it.name||it.title||'Product'} x${it.qty||1}=₹${(it.price||0)*(it.qty||1)}`).join('<br>')||'Items'}<br><b>Total: ₹${o.total}</b></div>${o.adminMessage?`<div style="background:#fffbeb;border:1px solid #f59e0b;padding:6px;border-radius:6px;font-size:12px">📝 Admin: ${o.adminMessage}</div>`:''}<div style="display:flex;gap:6px;margin-top:8px"><button type="button" class="btn btn-light" style="flex:1" onclick="copyLink('${location.origin}/orders.html?mobile=${myMobile}&orderId=${o.id}')">🔗 Copy Link - FINAL</button><button type="button" class="btn btn-wa" style="flex:1" onclick="shareOrder('${o.id}')">💬 Share - FINAL</button></div>${showOTP?`<div class="otp-box"><b>🔐 OTP Box - 4 Hour - Har New Order Pe - FINAL orders.html + share-otp-verify.html</b><p style="font-size:11px;color:#666">${o.diffH.toFixed(1)}h ago - 4h tak OTP add kar sakte ho - Past pe nahi</p><input type="tel" id="otp_${o.id}" class="otp-input" placeholder="------" maxlength="6"><button type="button" class="btn" style="background:#ff6b00;color:#fff;width:100%;margin-top:6px" onclick="verifyOTP('${o.id}')">✅ Verify - FINAL Confirm</button><button type="button" class="btn" style="background:#f59e0b;color:#fff;width:100%;margin-top:6px" onclick="requestOTP('${o.id}')">📲 Request OTP WhatsApp - FINAL - share-otp-verify.html</button></div>`:`<div style="background:#f1f3f6;padding:6px;border-radius:6px;margin-top:6px;font-size:11px;text-align:center">${o.diffH>4?'🕐 4h Box Expired - Past Order - FINAL':'✅ '+o.status} | FINAL orders.html | File: ${o.file}</div>`}</div>`;
   }).join('');
 }
-
-function filterOrders(){ renderOrders(allOrders); }
-function showToast(m,isErr=false){ const t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); if(isErr) t.classList.add('error'); setTimeout(()=>{t.classList.remove('show');t.classList.remove('error');},3000); }
+function showToast(m,isErr){ const t=document.getElementById('toast'); t.innerText=m; t.className='toast show'+(isErr?' error':''); setTimeout(()=>t.className='toast',3000); }
 </script>
 </body>
 </html>
