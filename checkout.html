@@ -11,6 +11,14 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="time-fix.js"></script>
+<script>
+// Bas ye 1 line kahi bhi add karo - Sahi IST Time mil jayega
+let t = getISTNow();
+console.log(t.presentTime, t.presentDate, t.istDateKey, t.dateTimeIST);
+// Output: 07:27 pm, 17/7/2026, 2026-07-17, 17/7/2026, 7:27:53 pm
+</script>
+    <script src="time-fix.html"></script>
 
     <!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE -->
     <script src="constants.js?v=1"></script>
