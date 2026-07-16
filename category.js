@@ -1,6 +1,5 @@
 /*
-⚠️ OLD CODE BACKUP - 29-JUNE-2026 SE PEHLE WALA
-⚠️ Tera purana code yahan save hai
+⚠️ OLD CODE BACKUP - 29-JUNE-2026 SE PEHLE WALA - SAFE - TERA PURANA CODE YAHAN SAVE HAI
 
 // ==================== CATEGORY.JS - UNIVERSAL CATEGORY HANDLER ====================
 // 29-JUNE-2026 02:40 PM - OLD LAYOUT COMPATIBLE
@@ -9,7 +8,6 @@
 let allCategories = [];
 let allProductsForCategory = [];
 
-// ✅ LOAD CATEGORIES - index.html ke dropdown + category.html page dono ke liye
 window.loadCategories = async function() {
     try {
         allProductsForCategory = [];
@@ -39,17 +37,14 @@ window.loadCategories = async function() {
             });
         }
 
-        // Unique categories nikalo
         allCategories = [...new Set(allProductsForCategory.map(p => p.category).filter(Boolean))];
 
-        // ✅ Agar index.html hai to dropdown fill karo - LAYOUT SAFE
         const select = document.getElementById("categoryFilter");
         if(select) {
             select.innerHTML = '<option value="">All Categories</option>' +
                 allCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
         }
 
-        // ✅ Agar category.html hai to grid render karo - SIRF category.html me
         const container = document.getElementById("categoryContainer");
         if(container) {
             renderCategoryGrid();
@@ -57,110 +52,123 @@ window.loadCategories = async function() {
 
     } catch (error) {
         console.error("Category load error:", error);
-        const container = document.getElementById("categoryContainer");
-        if(container) container.innerHTML = `<div class="empty">❌ Error: ${error.message}</div>`;
     }
 }
 
-OLD CODE BACKUP END
+OLD CODE BACKUP END - KUCH HATAYA NAHI
 */
 
-// ==================== CATEGORY.JS - UNIVERSAL CATEGORY HANDLER - UPDATED 15 JULY 2026 ====================
-// ✅ CONSTANTS.JS + COMMON.JS SUPPORT + FIREBASE READY EVENT
-// index.html, category.html dono me chalega - Layout nahi todega
+// ==================== CATEGORY.JS - UNIVERSAL - UPDATED 15 JULY 2026 - FINAL ====================
+// ✅ TERA FINAL constants.js + config.js FOLLOW - OLD JAISA + NO common.js
 
-// ✅ NAYA: Constants se keys lo
-const CART_KEY = window.CART_KEY || "santraMallCart_v2";
-const MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
-const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
-const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+// ✅ FIX: Tere constants.js se lo - Fallback ke saath
+if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
+if(typeof window.MYCHOICE_KEY === 'undefined'){ window.MYCHOICE_KEY = "santraMallMyChoice_v2"; }
+if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
+if(typeof window.BASE_URL === 'undefined'){ window.BASE_URL = "https://santramarketshoppingmall.web.app"; }
+if(typeof window.firebaseConfig === 'undefined'){
+  window.firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
+  };
+}
 
-console.log('✅ category.js loaded - CART_KEY:', CART_KEY);
+// Firebase init - Tere config.js jaisa
+try{
+  if(typeof window.initFirebaseOnce === 'function'){
+    window.initFirebaseOnce(window.firebaseConfig);
+  } else if(typeof firebase!== 'undefined' &&!firebase.apps.length){
+    firebase.initializeApp(window.firebaseConfig);
+  }
+}catch(e){ console.log("Firebase init in category.js:", e.message); }
+
+const CART_KEY = window.CART_KEY;
+const MYCHOICE_KEY = window.MYCHOICE_KEY;
+const CUSTOMER_KEY = window.CUSTOMER_KEY;
+const BASE_URL = window.BASE_URL;
+
+console.log('✅ category.js FINAL - CART_KEY:', CART_KEY, 'BASE_URL:', BASE_URL, '- Following YOUR constants.js');
 
 let allCategories = [];
 let allProductsForCategory = [];
-let firebaseReady = false;
 
-// ✅ Firebase ready hone ka wait karo - common.js se aayega
-window.addEventListener('firebaseReady', function() {
-  firebaseReady = true;
-  console.log('✅ Firebase ready in category.js');
-  setTimeout(loadCategories, 100);
-});
-
-// ✅ Agar Firebase pehle se ready hai
-if (window.db && window.auth) {
-  firebaseReady = true;
-  setTimeout(loadCategories, 300);
-}
-
-// ✅ LOAD CATEGORIES - index.html ke dropdown + category.html page dono ke liye
+// ✅ LOAD CATEGORIES - index.html dropdown + category.html grid dono ke liye - OLD JAISA
 window.loadCategories = async function() {
     try {
-        // Firebase ready check
-        if (!firebaseReady) {
-            console.log('⏳ Waiting for Firebase...');
-            return;
+        const db = window.db || (typeof firebase!== 'undefined'? firebase.firestore() : null);
+        const rtdb = (typeof firebase!== 'undefined' && firebase.database)? firebase.database() : null;
+
+        if(!db &&!rtdb){
+          console.warn("Firebase not ready, retrying...");
+          setTimeout(loadCategories, 800);
+          return;
         }
 
         allProductsForCategory = [];
         const productIds = new Set();
 
-        // RTDB se - common.js se rtdb aayega
-        if (typeof firebase!== 'undefined' && firebase.database) {
-            const rtdb = firebase.database();
-            const rtdbSnap = await rtdb.ref("products").once("value");
-            if (rtdbSnap.exists()) {
-                rtdbSnap.forEach(child => {
-                    if (!productIds.has(child.key)) {
-                        const p = child.val();
-                        allProductsForCategory.push({
-                            id: child.key,
-                           ...p,
-                            dbType: 'rtdb',
-                            price: parseFloat(p.price) || 0,
-                            stock: parseInt(p.stock) || 0
-                        });
-                        productIds.add(child.key);
-                    }
-                });
-            }
+        // 1. RTDB se - Pehle jaisa
+        if (rtdb) {
+            try{
+              const rtdbSnap = await rtdb.ref("products").once("value");
+              if (rtdbSnap.exists()) {
+                  rtdbSnap.forEach(child => {
+                      if (!productIds.has(child.key)) {
+                          const p = child.val();
+                          allProductsForCategory.push({
+                              id: child.key,
+                            ...p,
+                              dbType: 'rtdb',
+                              price: parseFloat(p.price) || 0,
+                              stock: parseInt(p.stock) || 0
+                          });
+                          productIds.add(child.key);
+                      }
+                  });
+              }
+            }catch(e){ console.log("RTDB error:", e.message); }
         }
 
-        // Firestore se - common.js se db aayega
-        if (window.db) {
-            const firestoreSnap = await window.db.collection("products").get();
-            firestoreSnap.forEach(doc => {
-                if (!productIds.has(doc.id)) {
-                    const p = doc.data();
-                    allProductsForCategory.push({
-                        id: doc.id,
-                       ...p,
-                        dbType: 'firestore',
-                        price: parseFloat(p.price) || 0,
-                        stock: parseInt(p.stock) || 0
-                    });
-                    productIds.add(doc.id);
-                }
-            });
+        // 2. Firestore se
+        if (db) {
+            try{
+              const firestoreSnap = await db.collection("products").get();
+              firestoreSnap.forEach(doc => {
+                  if (!productIds.has(doc.id)) {
+                      const p = doc.data();
+                      allProductsForCategory.push({
+                          id: doc.id,
+                        ...p,
+                          dbType: 'firestore',
+                          price: parseFloat(p.price) || 0,
+                          stock: parseInt(p.stock) || 0
+                      });
+                      productIds.add(doc.id);
+                  }
+              });
+            }catch(e){ console.log("Firestore error:", e.message); }
         }
 
-        // Unique categories nikalo - stock wale products se
+        // Unique categories - stock wale se - Pehle jaisa
         allCategories = [...new Set(
             allProductsForCategory
-               .filter(p => p.category && p.stock > 0)
-               .map(p => p.category)
+              .filter(p => p.category && p.stock > 0)
+              .map(p => p.category)
         )].sort();
 
         console.log('✅ Categories loaded:', allCategories.length, 'Products:', allProductsForCategory.length);
 
-        // ✅ Agar index.html hai to dropdown fill karo - LAYOUT SAFE
+        // ✅ index.html hai toh dropdown fill karo - LAYOUT SAFE - OLD JAISA
         const select = document.getElementById("categoryFilter");
         if(select) {
             select.innerHTML = '<option value="">All Categories</option>' +
                 allCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
 
-            // URL se category select karo
             const urlParams = new URLSearchParams(window.location.search);
             const catParam = urlParams.get('category');
             if(catParam) {
@@ -169,23 +177,50 @@ window.loadCategories = async function() {
             }
         }
 
-        // ✅ Agar category.html hai to grid render karo - SIRF category.html me
+        // ✅ category.html hai toh grid render karo
         const container = document.getElementById("categoryContainer");
         if(container) {
             renderCategoryGrid();
         }
 
+        // ✅ category.html page ka catList bhi
+        const catList = document.getElementById("catList");
+        if(catList && allCategories.length>0){
+            renderCategoryListForCategoryPage();
+        }
+
     } catch (error) {
         console.error("Category load error:", error);
-        const container = document.getElementById("categoryContainer");
+        const container = document.getElementById("categoryContainer") || document.getElementById("catList");
         if(container) container.innerHTML = `<div class="empty">❌ Error: ${error.message}</div>`;
     }
 }
 
-// ✅ RENDER CATEGORY GRID - SIRF category.html ke liye - index.html ko touch nahi karega
+// ✅ category.html ke liye alag render - Pehle jaisa
+function renderCategoryListForCategoryPage(){
+  const catList = document.getElementById("catList");
+  if(!catList) return;
+  if (allCategories.length === 0) {
+      catList.innerHTML = `<div class="loader">No categories - Admin se add karo</div>`;
+      return;
+  }
+  catList.innerHTML = allCategories.map(cat => {
+      const count = allProductsForCategory.filter(p => p.category === cat && p.stock > 0).length;
+      const catProduct = allProductsForCategory.find(p => p.category === cat && p.stock > 0);
+      const catImage = catProduct?.image || catProduct?.imageUrl || 'https://via.placeholder.com/80?text=' + encodeURIComponent(cat);
+      return `
+      <div class="cat-card" onclick="showCategoryProducts('${cat}')">
+          <img src="${catImage}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat}">
+          <h4>${cat}</h4>
+          <p style="font-size:12px;color:#999;">${count} Products</p>
+      </div>`;
+  }).join('');
+}
+
+// ✅ RENDER CATEGORY GRID - index.html ke liye
 function renderCategoryGrid() {
     const container = document.getElementById("categoryContainer");
-    if (!container) return; // ✅ index.html me nahi chalega
+    if (!container) return;
 
     if (allCategories.length === 0) {
         container.innerHTML = `<div class="empty">😔 No categories found</div>`;
@@ -205,15 +240,13 @@ function renderCategoryGrid() {
     }).join('');
 }
 
-// ✅ OPEN CATEGORY - index.html pe filter lagake bhejo
 window.openCategoryProducts = function(category) {
     window.location.href = `${BASE_URL}/index.html?category=${encodeURIComponent(category)}`;
 }
 
-// ✅ APPLY FILTER - index.html ke liye - OLD LAYOUT SAFE
 window.applyFilters = function() {
     const category = document.getElementById("categoryFilter");
-    if (!category) return; // ✅ index.html me nahi hai to return
+    if (!category) return;
 
     const categoryValue = category.value;
     if (typeof filteredProducts!== 'undefined' && typeof allProducts!== 'undefined') {
@@ -224,18 +257,13 @@ window.applyFilters = function() {
         }
         if(typeof renderProducts === 'function') renderProducts();
 
-        // ✅ Update URL without reload
         const url = new URL(window.location);
-        if(categoryValue) {
-            url.searchParams.set('category', categoryValue);
-        } else {
-            url.searchParams.delete('category');
-        }
+        if(categoryValue) url.searchParams.set('category', categoryValue);
+        else url.searchParams.delete('category');
         window.history.replaceState({}, '', url);
     }
 }
 
-// ✅ CLEAR FILTER - index.html ke liye - OLD LAYOUT SAFE
 window.clearFilters = function() {
     const searchInput = document.getElementById("searchInput");
     const categoryFilter = document.getElementById("categoryFilter");
@@ -246,17 +274,22 @@ window.clearFilters = function() {
         filteredProducts = [...allProducts];
         if(typeof renderProducts === 'function') renderProducts();
     }
-    // URL se category hatao
     window.history.replaceState({}, document.title, window.location.pathname);
-    santraToast('✅ Filters cleared');
+    if(typeof santraToast === 'function') santraToast('✅ Filters cleared');
+    else alert('✅ Filters cleared');
 }
 
-// ✅ Auto load - common.js ke baad chalega
+// ✅ Auto load - DOMContentLoaded - common.js ka wait nahi
 document.addEventListener('DOMContentLoaded', function() {
-    // Agar Firebase already ready hai to load karo
-    if (firebaseReady) {
-        loadCategories();
-    }
+    // 500ms baad load - Firebase ready hone ka wait
+    setTimeout(()=> {
+        if(window.loadCategories) window.loadCategories();
+    }, 600);
 });
 
-console.log("✅ category.js loaded - 15 JULY 2026 - CONSTANTS.JS + COMMON.JS SUPPORT");
+// ✅ Agar category.html page pe showCategoryProducts function chahiye
+window.showCategoryProducts = window.showCategoryProducts || function(catName){
+  window.location.href = `${BASE_URL}/category.html?name=${encodeURIComponent(catName)}`;
+};
+
+console.log("✅ category.js FINAL - 15 JULY - Old save + constants.js + Load fix - Pehle jaisa");

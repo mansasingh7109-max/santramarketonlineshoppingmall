@@ -13,8 +13,6 @@
 .back-btn{color:var(--accent);text-decoration:none;font-size:24px;}
 .filter-toggle{background:var(--accent);color:white;border:none;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer}
 .container{padding:15px;display:flex;gap:15px;max-width:1400px;margin:auto}
-
-    /* SIDEBAR FILTERS */
 .filters-sidebar{width:280px;background:var(--card);border-radius:8px;padding:15px;height:fit-content;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto}
 .filters-sidebar h3{color:var(--accent);font-size:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #f1f3f6}
 .filter-group{margin-bottom:18px;padding-bottom:15px;border-bottom:1px solid #f1f3f6}
@@ -24,11 +22,10 @@
 .filter-group input{margin-right:0;accent-color:var(--accent)}
 .clear-filter{background:#64748b;color:white;border:none;padding:8px;width:100%;border-radius:6px;margin-top:10px;cursor:pointer;font-size:13px}
 .filter-count{background:var(--accent);color:white;padding:2px 6px;border-radius:10px;font-size:11px;margin-left:5px}
-
-    /* MAIN CONTENT */
 .main-content{flex:1}
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
-.cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;}
+.cat-card{background:var(--card);border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer;transition:0.2s}
+.cat-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .cat-card img{width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;}
 .cat-card h4{font-size:14px;color:#333;}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:15px;}
@@ -51,10 +48,10 @@
 .mobile-filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none}
 .mobile-filter-overlay.show{display:block}
     @media(max-width:768px){
- .container{flex-direction:column}
- .filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}
- .filters-sidebar.show{left:0}
- .close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px}
+.container{flex-direction:column}
+.filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}
+.filters-sidebar.show{left:0}
+.close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;display:block!important}
     }
   </style>
 </head>
@@ -63,27 +60,25 @@
 <div class="header">
   <a href="index.html" class="back-btn">←</a>
   <h1 id="pageTitle">📱 Categories</h1>
-  <button class="filter-toggle" id="filterToggle" onclick="toggleMobileFilter()" style="display:none">🔍 Filters</button>
+  <button class="filter-toggle" id="filterToggle" type="button" style="display:none">🔍 Filters</button>
 </div>
 
-<div class="mobile-filter-overlay" id="filterOverlay" onclick="toggleMobileFilter()"></div>
+<div class="mobile-filter-overlay" id="filterOverlay"></div>
 
 <div class="container">
-  <!-- FILTER SIDEBAR -->
   <div class="filters-sidebar" id="filtersSidebar">
-    <button class="close-filter" onclick="toggleMobileFilter()" style="display:none">×</button>
+    <button class="close-filter" type="button" style="display:none">×</button>
     <h3>🔍 Filters <span class="filter-count" id="filterCount">0</span></h3>
-    <button class="clear-filter" onclick="clearAllFilters()">Clear All</button>
+    <button class="clear-filter" type="button">Clear All</button>
     <div id="dynamicFilters"></div>
   </div>
 
-  <!-- MAIN CONTENT -->
   <div class="main-content">
     <div id="catView">
-      <button class="all-prod-btn" onclick="showAllProducts()">🛍️ All Products</button>
+      <button class="all-prod-btn" type="button" id="allProdBtn">🛍️ All Products</button>
       <h3 style="margin:15px 0;">Shop by Category</h3>
       <div id="catList" class="cat-grid">
-        <div class="loader">Loading...</div>
+        <div class="loader">⏳ Loading categories - Pehle jaisa...</div>
       </div>
     </div>
 
@@ -91,7 +86,7 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
         <h3 id="catTitle"></h3>
         <div>
-          <button class="all-prod-btn" onclick="backToCategories()">← Categories</button>
+          <button class="all-prod-btn" type="button" id="backToCatBtn">← Categories</button>
         </div>
       </div>
       <div id="activeFiltersChips" style="margin-bottom:10px"></div>
@@ -101,64 +96,67 @@
 </div>
 
 <div class="bottom-nav">
-  <a href="index.html" class="nav-item">
-    <div>🏠</div><span>Home</span>
-  </a>
-  <a href="category.html" class="nav-item active">
-    <div>📱</div><span>Categories</span>
-  </a>
-  <a href="cart.html" class="nav-item">
-    <div>🛒</div><span>Cart</span>
-    <span class="cart-badge" id="cartCount">0</span>
-  </a>
-  <a href="customer-account.html" class="nav-item">
-    <div>👤</div><span>Account</span>
-  </a>
+  <a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a>
+  <a href="category.html" class="nav-item active"><div>📱</div><span>Categories</span></a>
+  <a href="cart.html" class="nav-item"><div>🛒</div><span>Cart</span><span class="cart-badge" id="cartCount">0</span></a>
+  <a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a>
 </div>
 
-<!-- ✅ NAYA: COMMON.JS SABSE PEHLE - CONSTANTS + FIREBASE AUTO LOAD -->
-<script src="common.js"></script>
-<script src="cache-buster.js"></script>
+<!-- ✅ TERA FINAL - constants.js + config.js - OLD SAVE -->
+<script src="constants.js?v=3"></script>
+<script src="config.js?v=8"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
-/* ==================== OLD CODE BACKUP - 09/06/2026 ====================
-PURANA CODE - RTDB ONLY - REALTIME LISTENER NAHI THA - secrets.js use karta tha
-
+/* ==================== OLD CODE BACKUP - 09/06/2026 - SAFE ====================
 if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
 const rtdb = firebase.database();
-
 function loadCategories() {
-  rtdb.ref("categories").once('value', snap => {
-    //... once se load karta tha
-  });
+  rtdb.ref("categories").once('value', snap => {... });
 }
-
 function loadProducts() {
-  rtdb.ref('products').once('value', snap => {
-    //... once se load karta tha - admin se update turant nahi dikhta tha
-  });
+  rtdb.ref('products').once('value', snap => {... });
 }
+================== OLD CODE END - SAVE HAI ================== */
 
-================== OLD CODE END ================== */
+// ✅ FINAL - NO DUPLICATE const - window se lo - ERROR FIX
+if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
+if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
+if(typeof window.MYCHOICE_KEY === 'undefined'){ window.MYCHOICE_KEY = "santraMallMyChoice_v2"; }
+if(typeof window.BASE_URL === 'undefined'){ window.BASE_URL = "https://santramarketshoppingmall.web.app"; }
+if(typeof window.firebaseConfig === 'undefined'){
+  window.firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
+  };
+}
+try{
+  if(typeof window.initFirebaseOnce === 'function'){
+    window.initFirebaseOnce(window.firebaseConfig);
+  } else if(!firebase.apps.length){
+    firebase.initializeApp(window.firebaseConfig);
+  }
+}catch(e){}
 
-// ===== CATEGORY PAGE - UPDATED 15 JULY 2026 =====
-// ✅ CONSTANTS.JS + COMMON.JS SUPPORT + REALTIME FIREBASE
+const db = window.db || firebase.firestore();
+const rtdb = firebase.database();
+const auth = firebase.auth();
 
-// ✅ NAYA: Firebase common.js se aayega - wait karo
-let db, rtdb, auth;
-window.addEventListener('firebaseReady', function() {
-  db = window.db;
-  rtdb = firebase.database();
-  auth = window.auth;
-  console.log('✅ Firebase ready in category.html');
-  initCategoryPage();
-});
+// ✅ FIX - CART_KEY already declared in constants.js - Isliye _VAL use karo - Error khatam
+const CART_KEY_VAL = window.CART_KEY;
+const MYCHOICE_KEY_VAL = window.MYCHOICE_KEY;
+const CUSTOMER_KEY_VAL = window.CUSTOMER_KEY;
+const BASE_URL_VAL = window.BASE_URL;
 
-// ✅ CONSTANTS.JS se keys lo
-const CART_KEY = window.CART_KEY || "santraMallCart_v2";
-const MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
-const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
-const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+console.log("✅ Category FINAL - CART_KEY_VAL:", CART_KEY_VAL, "- Duplicate fix");
 
 let allProducts = [];
 let allCategories = [];
@@ -166,31 +164,35 @@ let currentCategory = '';
 let showAll = false;
 let categoryStructure = { types: [], variants: [], activeFilters: [], typeImages: {} };
 let appliedFilters = { type: [], variants: {} };
-let currentUser = null;
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('allProdBtn').onclick = showAllProducts;
+  document.getElementById('backToCatBtn').onclick = backToCategories;
+  document.getElementById('filterToggle').onclick = toggleMobileFilter;
+  document.getElementById('filterOverlay').onclick = toggleMobileFilter;
+  document.querySelector('.close-filter').onclick = toggleMobileFilter;
+  document.querySelector('.clear-filter').onclick = clearAllFilters;
+  initCategoryPage();
+});
 
 function initCategoryPage() {
-  auth.onAuthStateChanged((user) => {
-    currentUser = user;
+  if(auth){
+    auth.onAuthStateChanged(() => { updateCartCount(); });
+  } else {
     updateCartCount();
-  });
-
+  }
   loadProducts();
   loadCategories();
-
   let urlParams = new URLSearchParams(window.location.search);
   let catName = urlParams.get('name');
-  if(catName) {
-    setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 800);
-  }
+  if(catName) setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 1000);
 }
 
-// ✅ LOAD PRODUCTS - FIRESTORE + RTDB BOTH - REALTIME
 function loadProducts() {
   allProducts = [];
   const productIds = new Set();
-
-  // 1. RTDB se load karo
   rtdb.ref('products').on('value', snap => {
+    const newList = [];
     snap.forEach((child) => {
       let p = child.val();
       p.id = child.key;
@@ -198,111 +200,68 @@ function loadProducts() {
       p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
       p.mrp = parseFloat(p.mrp) || p.price;
       p.dbType = 'rtdb';
-      if(!productIds.has(p.id)) {
-        allProducts.push(p);
-        productIds.add(p.id);
-      }
+      if(!productIds.has(p.id)) { newList.push(p); productIds.add(p.id); }
     });
-    console.log('✅ RTDB Products loaded:', allProducts.length);
-    if(currentCategory || showAll) renderProducts();
+    // Merge
+    allProducts = [...allProducts.filter(x=>x.dbType!=='rtdb'),...newList];
+    if(document.getElementById('catView').classList.contains('hide')) renderProducts();
+    else renderCategories();
   });
-
-  // 2. Firestore se bhi load karo
   db.collection('products').onSnapshot(snap => {
     snap.forEach((doc) => {
-      let p = doc.data();
-      p.id = doc.id;
+      let p = doc.data(); p.id = doc.id;
+      if(productIds.has(p.id)) return;
       p.price = parseFloat(p.price) || 0;
       p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
       p.mrp = parseFloat(p.mrp) || p.price;
       p.dbType = 'firestore';
-      if(!productIds.has(p.id)) {
-        allProducts.push(p);
-        productIds.add(p.id);
-      }
+      allProducts.push(p); productIds.add(p.id);
     });
-    console.log('✅ Firestore Products loaded:', allProducts.length);
-    if(currentCategory || showAll) renderProducts();
-  }, err => {
-    console.error('Product Error:', err);
+    if(document.getElementById('catView').classList.contains('hide')) renderProducts();
+    else renderCategories();
   });
 }
 
-// ✅ LOAD CATEGORIES - FIRESTORE + RTDB BOTH - REALTIME
 function loadCategories() {
   allCategories = [];
   const catIds = new Set();
-
-  // 1. RTDB se
   rtdb.ref("categories").on('value', snap => {
+    const temp = [];
     snap.forEach((child) => {
       const data = child.val();
-      if(!catIds.has(child.key)) {
-        allCategories.push({
-          id: child.key,
-          name: data.name,
-          image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat',
-          dbType: 'rtdb'
-        });
-        catIds.add(child.key);
-      }
+      temp.push({ id: child.key, name: data.name, image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat' });
     });
-    console.log('✅ RTDB Categories loaded:', allCategories.length);
+    allCategories = []; catIds.clear();
+    temp.forEach(c=>{ if(!catIds.has(c.name)){ allCategories.push(c); catIds.add(c.name); } });
     renderCategories();
   });
-
-  // 2. Firestore se
   db.collection("categories").onSnapshot(snap => {
     snap.forEach((doc) => {
       const data = doc.data();
-      if(!catIds.has(doc.id)) {
-        allCategories.push({
-          id: doc.id,
-          name: data.name,
-          image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat',
-          dbType: 'firestore'
-        });
-        catIds.add(doc.id);
+      if(!catIds.has(data.name)) {
+        allCategories.push({ id: doc.id, name: data.name, image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat' });
+        catIds.add(data.name);
       }
     });
-    console.log('✅ Firestore Categories loaded:', allCategories.length);
     renderCategories();
   }, err => {
-    console.error('Category Error:', err);
-    document.getElementById('catList').innerHTML = '<p class="loader">Error: ' + err.message + '</p>';
+    document.getElementById('catList').innerHTML = '<p class="loader">Error: ' + err.message + '<br>Firestore Rules me categories: allow read true karo</p>';
   });
 }
 
 function renderCategories() {
   const catList = document.getElementById('catList');
-  const unique = [];
-  const seen = new Set();
-  allCategories.forEach(c => {
-    if (!seen.has(c.name)) {
-      seen.add(c.name);
-      unique.push(c);
-    }
-  });
-
-  if(unique.length === 0){
-    catList.innerHTML = '<p class="loader">No categories yet. Add from Admin Panel</p>';
-    return;
-  }
-
+  const unique = []; const seen = new Set();
+  allCategories.forEach(c => { if (!seen.has(c.name)) { seen.add(c.name); unique.push(c); } });
+  if(unique.length === 0){ catList.innerHTML = '<p class="loader">No categories yet. Admin Panel se add karo</p>'; return; }
   catList.innerHTML = '';
   unique.forEach(cat => {
     const count = allProducts.filter(p => p.category && p.category.toLowerCase() === cat.name.toLowerCase() && p.stock > 0).length;
-    catList.innerHTML += `
-      <div class="cat-card" onclick="showCategoryProducts('${cat.name}')">
-        <img src="${cat.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}">
-        <h4>${cat.name}</h4>
-        <p style="font-size:12px;color:#999;">${count} Products</p>
-      </div>
-    `;
+    catList.innerHTML += `<div class="cat-card" onclick="showCategoryProducts('${cat.name}')"><img src="${cat.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
   });
 }
 
-window.showAllProducts = function(){
+function showAllProducts(){
   showAll = true; currentCategory = '';
   document.getElementById('catView').classList.add('hide');
   document.getElementById('productView').classList.remove('hide');
@@ -313,18 +272,14 @@ window.showAllProducts = function(){
   renderProducts();
 }
 
-window.showCategoryProducts = function(catName){
-  showAll = false;
-  currentCategory = catName;
-  appliedFilters = { type: [], variants: {} };
+function showCategoryProducts(catName){
+  showAll = false; currentCategory = catName; appliedFilters = { type: [], variants: {} };
   document.getElementById('catView').classList.add('hide');
   document.getElementById('productView').classList.remove('hide');
   document.getElementById('catTitle').innerText = catName;
   document.getElementById('pageTitle').innerText = catName;
   document.getElementById('filtersSidebar').style.display = 'block';
   document.getElementById('filterToggle').style.display = 'block';
-
-  // ✅ Load category_structure from RTDB first, then Firestore
   rtdb.ref('category_structure/' + catName).once('value', snap => {
     if(snap.exists()) {
       categoryStructure = snap.val();
@@ -332,57 +287,38 @@ window.showCategoryProducts = function(catName){
       categoryStructure.variants = categoryStructure.variants || [];
       categoryStructure.activeFilters = categoryStructure.activeFilters || [];
       categoryStructure.typeImages = categoryStructure.typeImages || {};
+      renderFilters(); renderProducts();
     } else {
-      // Try Firestore if not in RTDB
       db.collection('category_structure').doc(catName).get().then(doc => {
-        if(doc.exists) {
-          categoryStructure = doc.data();
-          categoryStructure.types = categoryStructure.types || [];
-          categoryStructure.variants = categoryStructure.variants || [];
-          categoryStructure.activeFilters = categoryStructure.activeFilters || [];
-          categoryStructure.typeImages = categoryStructure.typeImages || {};
-        } else {
-          categoryStructure = { types: [], variants: ['Brand', 'Price Range'], activeFilters: ['Brand'], typeImages: {} };
-        }
-        renderFilters();
-        renderProducts();
+        if(doc.exists) categoryStructure = doc.data();
+        else categoryStructure = { types: [], variants: [], activeFilters: [], typeImages: {} };
+        renderFilters(); renderProducts();
       });
-      return;
     }
-    renderFilters();
-    renderProducts();
   });
 }
 
-// ✅ RENDER DYNAMIC FILTERS - WITH IMGBB IMAGES FROM ADMIN
 function renderFilters() {
   const container = document.getElementById('dynamicFilters');
   let html = '';
-
-  // 1. Type Filter with Images from Admin
   if(categoryStructure.types && categoryStructure.types.length > 0) {
     html += `<div class="filter-group"><h4>Type</h4>`;
     categoryStructure.types.forEach(t => {
       const imgUrl = categoryStructure.typeImages?.[t] || '';
-      html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t}')">
-        ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''}
-        ${t}</label>`;
+      html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t}')"> ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''} ${t}</label>`;
     });
     html += `</div>`;
   }
-
-  // 2. Variant Filters - Only Active ones from Admin
-  categoryStructure.activeFilters.forEach(filterName => {
-    const values = getFilterValues(filterName);
-    if(values.length > 0) {
-      html += `<div class="filter-group"><h4>${filterName}</h4>`;
-      values.forEach(v => {
-        html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName}','${v}')"> ${v}</label>`;
-      });
-      html += `</div>`;
-    }
-  });
-
+  if(categoryStructure.activeFilters) {
+    categoryStructure.activeFilters.forEach(filterName => {
+      const values = getFilterValues(filterName);
+      if(values.length > 0) {
+        html += `<div class="filter-group"><h4>${filterName}</h4>`;
+        values.forEach(v => { html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName}','${v}')"> ${v}</label>`; });
+        html += `</div>`;
+      }
+    });
+  }
   container.innerHTML = html || '<p style="color:#999;font-size:13px">No filters set by admin</p>';
   updateFilterCount();
 }
@@ -390,130 +326,78 @@ function renderFilters() {
 function getFilterValues(filterName) {
   const products = allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase() && p.stock > 0);
   const values = new Set();
-
   products.forEach(p => {
-    if(p.variants && p.variants[filterName]) {
-      values.add(p.variants[filterName]);
-    }
-    else if(p[filterName.toLowerCase()]) {
-      values.add(p[filterName.toLowerCase()]);
-    }
+    if(p.variants && p.variants[filterName]) values.add(p.variants[filterName]);
+    else if(p[filterName.toLowerCase()]) values.add(p[filterName.toLowerCase()]);
   });
-
   return Array.from(values).sort();
 }
 
 function toggleTypeFilter(type) {
-  if(appliedFilters.type.includes(type)) {
-    appliedFilters.type = appliedFilters.type.filter(t => t!== type);
-  } else {
-    appliedFilters.type.push(type);
-  }
-  renderProducts();
-  updateFilterChips();
+  if(appliedFilters.type.includes(type)) appliedFilters.type = appliedFilters.type.filter(t => t!== type);
+  else appliedFilters.type.push(type);
+  renderProducts(); updateFilterChips();
 }
 
 function toggleVariantFilter(key, value) {
   if(!appliedFilters.variants[key]) appliedFilters.variants[key] = [];
-  if(appliedFilters.variants[key].includes(value)) {
-    appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
-  } else {
-    appliedFilters.variants[key].push(value);
-  }
-  renderProducts();
-  updateFilterChips();
+  if(appliedFilters.variants[key].includes(value)) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
+  else appliedFilters.variants[key].push(value);
+  renderProducts(); updateFilterChips();
 }
 
 function updateFilterChips() {
   let chips = [];
-  appliedFilters.type.forEach(t => {
-    chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t}')">${t} ×</span>`);
-  });
-  Object.keys(appliedFilters.variants).forEach(k => {
-    appliedFilters.variants[k].forEach(v => {
-      chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k}','${v}')">${k}: ${v} ×</span>`);
-    });
-  });
+  appliedFilters.type.forEach(t => chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t}')">${t} ×</span>`));
+  Object.keys(appliedFilters.variants).forEach(k => { appliedFilters.variants[k].forEach(v => chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k}','${v}')">${k}: ${v} ×</span>`)); });
   document.getElementById('activeFiltersChips').innerHTML = chips.join('');
   updateFilterCount();
 }
 
-window.removeTypeFilter = function(type) {
+function removeTypeFilter(type) {
   appliedFilters.type = appliedFilters.type.filter(t => t!== type);
-  document.querySelector(`#dynamicFilters input[value="${type}"]`).checked = false;
-  renderProducts();
-  updateFilterChips();
+  const el = document.querySelector(`#dynamicFilters input[value="${type}"]`);
+  if(el) el.checked = false;
+  renderProducts(); updateFilterChips();
 }
-
-window.removeVariantFilter = function(key, value) {
-  appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
-  document.querySelector(`#dynamicFilters input[value="${value}"]`).checked = false;
-  renderProducts();
-  updateFilterChips();
+function removeVariantFilter(key, value) {
+  if(appliedFilters.variants[key]) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
+  const el = document.querySelector(`#dynamicFilters input[value="${value}"]`);
+  if(el) el.checked = false;
+  renderProducts(); updateFilterChips();
 }
-
 function updateFilterCount() {
   let count = appliedFilters.type.length;
   Object.keys(appliedFilters.variants).forEach(k => count += appliedFilters.variants[k].length);
   document.getElementById('filterCount').innerText = count;
 }
-
-window.clearAllFilters = function() {
+function clearAllFilters() {
   appliedFilters = { type: [], variants: {} };
   document.querySelectorAll('#dynamicFilters input[type="checkbox"]').forEach(cb => cb.checked = false);
-  renderProducts();
-  updateFilterChips();
+  renderProducts(); updateFilterChips();
 }
 
 function renderProducts(){
   const container = document.getElementById('productList');
   let products = showAll? [...allProducts] : allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
   products = products.filter(p => p.stock > 0);
-
-  // Apply Type Filter
-  if(appliedFilters.type.length > 0) {
-    products = products.filter(p => appliedFilters.type.includes(p.type || p.subCategory));
-  }
-
-  // Apply Variant Filters
+  if(appliedFilters.type.length > 0) products = products.filter(p => appliedFilters.type.includes(p.type || p.subCategory));
   Object.keys(appliedFilters.variants).forEach(key => {
     if(appliedFilters.variants[key].length > 0) {
-      products = products.filter(p => {
-        const val = p.variants?.[key] || p[key.toLowerCase()];
-        return appliedFilters.variants[key].includes(val);
-      });
+      products = products.filter(p => { const val = p.variants?.[key] || p[key.toLowerCase()]; return appliedFilters.variants[key].includes(val); });
     }
   });
-
-  if(products.length === 0){
-    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found</p>';
-    return;
-  }
-
+  if(products.length === 0){ container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found in '+ (currentCategory||'All') +'</p>'; return; }
   container.innerHTML = '';
   products.forEach(p => {
-    // ✅ IMAGE PRIORITY: 1. Type Image from Admin, 2. Product Image, 3. Placeholder
     const typeImg = categoryStructure.typeImages?.[p.type || p.subCategory];
     const finalImg = typeImg || p.imageUrl || p.image || 'https://via.placeholder.com/140?text=No+Image';
-
-    container.innerHTML += `
-      <div class="product-card">
-        <img src="${finalImg}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}" onclick="window.location.href='product.html?id=${p.id}'">
-        <h4>${p.name}</h4>
-        <div>
-          <span class="price">₹${p.price}</span>
-          ${p.mrp > p.price? `<span class="mrp">₹${p.mrp}</span>` : ''}
-        </div>
-        <p style="font-size:11px;color:#666;margin:4px 0;">Stock: ${p.stock}</p>
-        <button onclick="addToCart('${p.id}')">Add to Cart</button>
-      </div>
-    `;
+    container.innerHTML += `<div class="product-card"><img src="${finalImg}" onerror="this.src='https://via.placeholder.com/140?text=No+Image'" alt="${p.name}" onclick="window.location.href='product.html?id=${p.id}'"><h4>${p.name}</h4><div><span class="price">₹${p.price}</span> ${p.mrp > p.price? `<span class="mrp">₹${p.mrp}</span>` : ''}</div><p style="font-size:11px;color:#666;margin:4px 0;">Stock: ${p.stock}</p><button type="button" onclick="addToCart('${p.id}')">Add to Cart</button></div>`;
   });
 }
 
-window.backToCategories = function(){
-  showAll = false; currentCategory = '';
-  appliedFilters = { type: [], variants: {} };
+function backToCategories(){
+  showAll = false; currentCategory = ''; appliedFilters = { type: [], variants: {} };
   document.getElementById('productView').classList.add('hide');
   document.getElementById('catView').classList.remove('hide');
   document.getElementById('pageTitle').innerText = '📱 Categories';
@@ -521,59 +405,33 @@ window.backToCategories = function(){
   document.getElementById('filterToggle').style.display = 'none';
 }
 
-window.toggleMobileFilter = function() {
+function toggleMobileFilter() {
   document.getElementById('filtersSidebar').classList.toggle('show');
   document.getElementById('filterOverlay').classList.toggle('show');
 }
 
-window.addToCart = async function(pid){
-  if(!currentUser){
-    santraToast('Please login first!', true);
-    setTimeout(() => window.location.href = 'customer-account.html', 1000);
-    return;
-  }
+function addToCart(pid){
   const product = allProducts.find(p => p.id == pid);
-  if(!product || product.stock <= 0) {
-    santraToast('Product out of stock!', true);
-    return;
-  }
-
-  // ✅ santraAddToCart from common.js - CONSTANTS.JS use karega
-  const success = window.santraAddToCart(product);
-  if(success) {
-    santraToast('✅ Added to cart!');
-    updateCartCount();
-  } else {
-    santraToast('Error adding to cart', true);
-  }
+  if(!product || product.stock <= 0) { alert('Product out of stock!'); return; }
+  let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || "[]");
+  let existing = cart.find(item=> item && item.id==pid);
+  if(existing){ existing.qty = (existing.qty||1)+1; }
+  else { cart.push({...product, qty:1}); }
+  localStorage.setItem(CART_KEY_VAL, JSON.stringify(cart));
+  localStorage.setItem('santra_cart', JSON.stringify(cart));
+  alert('✅ Added to cart!'); updateCartCount();
 }
 
 function updateCartCount(){
-  if(!currentUser) {
-    // ✅ GUEST CART - CONSTANTS.JS se CART_KEY lo
-    let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+  try{
+    let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || localStorage.getItem('santra_cart') || "[]");
     cart = cart.filter(item => item!== null && item!== undefined);
     let total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
     document.getElementById('cartCount').innerText = total;
-    return;
-  }
-  db.collection('users').doc(currentUser.uid).collection('cart').onSnapshot(snap => {
-    let total = 0;
-    snap.forEach(doc => {
-      total += doc.data().qty || 0;
-    });
-    document.getElementById('cartCount').innerText = total;
-  });
+  }catch(e){ document.getElementById('cartCount').innerText = '0'; }
 }
 
-console.log("✅ category.html loaded - 15 JULY 2026 - CONSTANTS.JS + COMMON.JS SUPPORT");
-</script>
-
-<!-- ==================== BACKUP PROTECTION - 15/07/2026 ==================== -->
-<script>
-console.log('%c🔒 SANTRA MALL CATEGORY BACKUP - CONSTANTS.JS', 'color:#e40046;font-size:16px;font-weight:bold');
-console.log('%cBackup Time: 15 July 2026', 'color:#10b981;font-weight:bold');
-console.log('%c✅ Common.js + Constants.js Integration', 'color:#3b82f6;font-weight:bold');
+console.log("✅ category.html FINAL - Old save + CART_KEY duplicate fix - Pehle jaisa load hoga");
 </script>
 </body>
 </html>
