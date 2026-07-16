@@ -10,16 +10,14 @@ body{background:transparent;padding:25px;min-height:500px}
 .form-group label{font-weight:bold;color:#333;font-size:14px;display:block;margin-bottom:5px}
 .form-group input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:16px;text-align:center}
 .btn-request{width:100%;padding:12px;background:#25D366;color:white;border:none;border-radius:8px;font-weight:bold;font-size:15px;cursor:pointer}
-.btn-request:disabled{background:#ccc}
+.btn-request:active{background:#128C7E}
 .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
 .toast.show{display:block}
 .toast.error{background:#f44336}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center}
-.modal-box{background:white;padding:25px;border-radius:15px;width:90%;max-width:350px;text-align:center;max-height:90vh;overflow-y:auto}
+.modal-box{background:white;padding:25px;border-radius:15px;width:90%;max-width:350px;text-align:center}
 .modal-box h3{color:#e40046;margin-bottom:10px}
-.modal-box p{font-size:13px;color:#666;margin-bottom:15px}
 .modal-box input,.modal-box textarea{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;margin:6px 0;text-align:left}
-.modal-box textarea{resize:none}
 .btn-verify{width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-weight:bold;font-size:15px;cursor:pointer;margin-top:10px}
 .btn-cancel{width:100%;padding:10px;background:#ccc;color:#333;border:none;border-radius:8px;font-weight:bold;font-size:14px;cursor:pointer;margin-top:8px}
 #loginSuccess{display:none;text-align:center;padding:20px;color:#10b981;font-weight:bold}
@@ -33,7 +31,7 @@ body{background:transparent;padding:25px;min-height:500px}
 <label>WhatsApp Mobile Number *</label>
 <input type="tel" id="loginMobile" placeholder="10 digit mobile" maxlength="10">
 </div>
-<button class="btn-request" id="requestOtpBtn">📲 Request OTP on WhatsApp</button>
+<button class="btn-request" id="requestOtpBtn" type="button">📲 Request OTP on WhatsApp</button>
 <p style="font-size:12px;color:#666;text-align:center;margin-top:10px">Admin aapko WhatsApp pe OTP bhejega</p>
 </div>
 
@@ -41,86 +39,90 @@ body{background:transparent;padding:25px;min-height:500px}
 <div style="font-size:40px">✅</div>
 <div>Login Successful!</div>
 <div id="loginNumber" style="margin-top:10px;color:#333"></div>
-<button class="btn-cancel" id="logoutBtn" style="margin-top:15px;background:#ef4444;color:white">🚪 Logout</button>
+<button class="btn-cancel" id="logoutBtn" type="button" style="margin-top:15px;background:#ef4444;color:white">🚪 Logout</button>
 </div>
 
 <div class="modal" id="profileModal">
 <div class="modal-box">
 <h3>📝 Profile Detail Bharo</h3>
-<p>OTP request ke liye ye detail jaruri hai</p>
+<p style="font-size:13px;color:#666;margin-bottom:10px">OTP request ke liye ye detail jaruri hai</p>
 <input type="text" id="popupName" placeholder="Full Name *" required>
 <input type="email" id="popupEmail" placeholder="Email (Optional)">
 <input type="tel" id="popupDeliveryMobile" placeholder="Delivery Mobile *" maxlength="10" required>
 <textarea id="popupLocation" placeholder="Full Address *" rows="2" required></textarea>
-<button class="btn-verify" id="sendRequestBtn">💾 Save & Request OTP</button>
-<button class="btn-cancel" id="cancelProfileBtn">Cancel</button>
+<button class="btn-verify" id="sendRequestBtn" type="button">💾 Save & Request OTP</button>
+<button class="btn-cancel" id="cancelProfileBtn" type="button">Cancel</button>
 </div>
 </div>
 
 <div class="modal" id="otpModal">
 <div class="modal-box">
 <h3>🔐 Enter OTP</h3>
-<p>Admin ne aapke WhatsApp pe 6 digit OTP bheja hai</p>
+<p style="font-size:13px;color:#666;margin-bottom:10px">Admin ne WhatsApp pe OTP bheja hai</p>
 <input type="tel" id="otpInput" placeholder="------" maxlength="6" style="letter-spacing:8px;text-align:center;font-size:18px">
-<button class="btn-verify" id="verifyOtpBtn">✅ Verify OTP</button>
-<button class="btn-cancel" id="cancelOtpBtn">Cancel</button>
-<button class="btn-cancel" id="resendOtpBtn" style="background:#f59e0b;color:white">🔄 Resend Request</button>
-<p style="font-size:11px;color:#999;margin-top:10px">OTP 4 hours me expire hoga</p>
+<button class="btn-verify" id="verifyOtpBtn" type="button">✅ Verify OTP</button>
+<button class="btn-cancel" id="cancelOtpBtn" type="button">Cancel</button>
+<button class="btn-cancel" id="resendOtpBtn" type="button" style="background:#f59e0b;color:white">🔄 Resend Request</button>
 </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script src="constants.js?v=1"></script>
-<script src="config.js?v=6"></script>
+<script src="constants.js?v=3"></script>
+<script src="config.js?v=8"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
-/*
-⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA - SAFE HIDE
-const firebaseConfig = { apiKey: "AIzaSyApX...", ... };
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const ADMIN_WHATSAPP = "918769171078"; 
-const CUSTOMER_KEY = "santra_customer";
-... purana saveProfileAndRequest wala code ...
-OLD CODE BACKUP END
-*/
+// ✅ TERA constants.js + config.js FOLLOW - No duplicate
+if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
+if(typeof window.ADMIN_WHATSAPP === 'undefined'){ window.ADMIN_WHATSAPP = "918769171078"; }
+if(typeof window.COLLECTIONS === 'undefined'){ window.COLLECTIONS = { CUSTOMERS: 'customers', LOGIN_REQUESTS: 'login_requests', LOGIN_OTPS: 'login_otps' }; }
+if(typeof window.firebaseConfig === 'undefined'){
+  window.firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
+  };
+}
+try{
+  if(typeof window.initFirebaseOnce === 'function'){
+    window.initFirebaseOnce(window.firebaseConfig);
+  } else if(!firebase.apps.length){
+    firebase.initializeApp(window.firebaseConfig);
+  }
+}catch(e){ console.log("Firebase:", e.message); }
 
-// ✅ NAYA CODE: 15 JULY 2026 - PERMISSION ERROR FIX + LOCAL FALLBACK
-const firebaseConfig = window.firebaseConfig || {
- apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
- authDomain: "santramarketshoppingmall.firebaseapp.com",
- projectId: "santramarketshoppingmall",
- storageBucket: "santramarketshoppingmall.firebasestorage.app",
- messagingSenderId: "398490252924",
- appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
-};
+const db = window.db || firebase.firestore();
+const CUSTOMER_KEY = window.CUSTOMER_KEY;
+const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || window.SANTRA?.ADMIN?.WHATSAPP || "918769171078";
+const COLLECTIONS = window.COLLECTIONS;
 
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
-const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+console.log("✅ Login - CART_KEY:", window.CART_KEY, "BASE_URL:", window.BASE_URL);
 
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function(){
     checkLoginStatus();
-    document.getElementById('requestOtpBtn').addEventListener('click', openProfilePopup);
-    document.getElementById('sendRequestBtn').addEventListener('click', saveProfileAndRequest);
-    document.getElementById('cancelProfileBtn').addEventListener('click', () => {
-        document.getElementById('profileModal').style.display = 'none';
-    });
-    document.getElementById('verifyOtpBtn').addEventListener('click', verifyOtp);
-    document.getElementById('cancelOtpBtn').addEventListener('click', () => {
-        document.getElementById('otpModal').style.display = 'none';
-    });
-    document.getElementById('resendOtpBtn').addEventListener('click', resendRequest);
-    document.getElementById('logoutBtn').addEventListener('click', logout);
+    document.getElementById('requestOtpBtn').onclick = openProfilePopup;
+    document.getElementById('sendRequestBtn').onclick = saveProfileAndRequest;
+    document.getElementById('cancelProfileBtn').onclick = ()=> document.getElementById('profileModal').style.display='none';
+    document.getElementById('verifyOtpBtn').onclick = verifyOtp;
+    document.getElementById('cancelOtpBtn').onclick = ()=> document.getElementById('otpModal').style.display='none';
+    document.getElementById('resendOtpBtn').onclick = resendRequest;
+    document.getElementById('logoutBtn').onclick = logout;
 });
 
 function checkLoginStatus() {
-    const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
-    if (mobile) showLoginSuccess(mobile);
+    const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem('santra_whatsapp_mobile');
+    const loginMobile = localStorage.getItem(CUSTOMER_KEY + '_login_mobile');
+    if (mobile) {
+        showLoginSuccess(mobile);
+    } else if (loginMobile) {
+        document.getElementById('loginMobile').value = loginMobile;
+        document.getElementById('otpModal').style.display = 'flex';
+    }
 }
 
 function openProfilePopup() {
@@ -128,6 +130,14 @@ function openProfilePopup() {
     if (!mobile || mobile.length !== 10) return showToast('❌ 10 digit mobile daalo!', true);
     localStorage.setItem(CUSTOMER_KEY + '_login_mobile', mobile);
     document.getElementById('popupDeliveryMobile').value = mobile;
+    db.collection(COLLECTIONS.CUSTOMERS).doc(mobile).get().then(doc=>{
+        if(doc.exists){
+            const d = doc.data();
+            document.getElementById('popupName').value = d.name || '';
+            document.getElementById('popupEmail').value = d.email || '';
+            document.getElementById('popupLocation').value = d.location || d.address || '';
+        }
+    });
     document.getElementById('profileModal').style.display = 'flex';
 }
 
@@ -137,124 +147,114 @@ function saveProfileAndRequest() {
     const email = document.getElementById('popupEmail').value.trim();
     const deliveryMobile = document.getElementById('popupDeliveryMobile').value.trim();
     const location = document.getElementById('popupLocation').value.trim();
-    
     if (!name) return showToast('❌ Name daalo!', true);
-    if (!deliveryMobile || deliveryMobile.length !== 10) return showToast('❌ Delivery Mobile daalo!', true);
+    if (!deliveryMobile || deliveryMobile.length !== 10) return showToast('❌ 10 digit Delivery Mobile!', true);
     if (!location) return showToast('❌ Address daalo!', true);
-    
     const btn = document.getElementById('sendRequestBtn');
-    btn.disabled = true;
-    btn.innerText = '⏳ Saving...';
-    
+    btn.disabled = true; btn.innerText = '⏳ Saving...';
     const profileData = {
-        name: name,
-        loginMobile: whatsappMobile,
-        mobile: deliveryMobile,
-        email: email,
-        location: location,
-        photo: '',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        name, loginMobile: whatsappMobile, mobile: deliveryMobile, email, location,
+        photo: '', updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    
-    // ✅ LOCAL me bhi save karo - Firebase fail bhi ho to kaam chalega
-    localStorage.setItem('temp_profile_' + whatsappMobile, JSON.stringify(profileData));
-
-    db.collection('customers').doc(whatsappMobile).set(profileData, { merge: true }).then(() => {
-        afterProfileSaved(whatsappMobile, profileData, btn);
-    }).catch(err => {
-        console.error("Firebase error:", err);
-        // ✅ Agar permission error bhi aaye to bhi aage badho - Local se kaam chalao
-        if(err.code === 'permission-denied' || err.message.includes('permissions')){
-          showToast('⚠️ Firebase Rule pending hai - Local se request bhej raha hu', false);
-          afterProfileSaved(whatsappMobile, profileData, btn);
-        } else {
-          showToast('❌ Error: ' + err.message, true);
-          btn.disabled = false;
-          btn.innerText = '💾 Save & Request OTP';
-        }
-    });
-}
-
-function afterProfileSaved(whatsappMobile, profileData, btn){
-    document.getElementById('profileModal').style.display = 'none';
-    const requestId = whatsappMobile + '_' + Date.now();
-    db.collection('login_requests').doc(requestId).set({
-        mobile: whatsappMobile,
-        profile: profileData,
-        status: 'pending',
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    db.collection(COLLECTIONS.CUSTOMERS).doc(whatsappMobile).set(profileData, { merge: true }).then(() => {
+        document.getElementById('profileModal').style.display = 'none';
+        const requestId = whatsappMobile + '_' + Date.now();
+        return db.collection(COLLECTIONS.LOGIN_REQUESTS).doc(requestId).set({
+            mobile: whatsappMobile, profile: profileData, status: 'pending',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
     }).then(() => {
-        sendRequestToAdmin(whatsappMobile, profileData);
-        btn.disabled = false;
-        btn.innerText = '💾 Save & Request OTP';
-    }).catch(()=>{
-        // Request fail bhi ho to WhatsApp to khulega hi
-        sendRequestToAdmin(whatsappMobile, profileData);
-        btn.disabled = false;
-        btn.innerText = '💾 Save & Request OTP';
+        sendRequestToAdmin(whatsappMobile, {name, email, mobile: deliveryMobile, location});
+        btn.disabled = false; btn.innerText = '💾 Save & Request OTP';
+    }).catch(err => {
+        showToast('❌ '+err.message, true);
+        btn.disabled = false; btn.innerText = '💾 Save & Request OTP';
     });
 }
 
 function sendRequestToAdmin(mobile, profileData) {
     const btn = document.getElementById('requestOtpBtn');
-    btn.disabled = true;
-    btn.innerText = '⏳ Request Bheja Ja Raha...';
-    let message = `🔐 *LOGIN OTP REQUEST*\n\nCustomer Mobile: ${mobile}\nTime: ${new Date().toLocaleString('en-IN')}\n\n*Profile:*\nName: ${profileData.name}\nEmail: ${profileData.email || 'N/A'}\nDelivery: ${profileData.mobile}\nAddress: ${profileData.location}\n\nKripya OTP bheje.`;
+    btn.disabled = true; btn.innerText = '⏳ Request Bheja...';
+    let message = `🔐 *LOGIN OTP REQUEST*\n\nMobile: ${mobile}\nName: ${profileData.name}\nDelivery: ${profileData.mobile}\nAddress: ${profileData.location}`;
     const waLink = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(waLink, '_blank');
     showToast('✅ Admin ko request bhej di!');
     setTimeout(() => {
         document.getElementById('otpModal').style.display = 'flex';
-        btn.disabled = false;
-        btn.innerText = '📲 Request OTP on WhatsApp';
-    }, 1500);
+        btn.disabled = false; btn.innerText = '📲 Request OTP on WhatsApp';
+    }, 1000);
 }
 
-function resendRequest(){ /* same as before */ 
+function resendRequest() {
     const mobile = localStorage.getItem(CUSTOMER_KEY + '_login_mobile');
     if (!mobile) return;
-    let p = localStorage.getItem('temp_profile_' + mobile);
-    if(p) sendRequestToAdmin(mobile, JSON.parse(p));
+    db.collection(COLLECTIONS.CUSTOMERS).doc(mobile).get().then(doc => {
+        if (doc.exists) {
+            const requestId = mobile + '_' + Date.now();
+            return db.collection(COLLECTIONS.LOGIN_REQUESTS).doc(requestId).set({
+                mobile, profile: doc.data(), status: 'pending',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(()=> sendRequestToAdmin(mobile, doc.data()));
+        }
+    });
 }
 
 function verifyOtp() {
-    const mobile = document.getElementById('loginMobile').value.trim();
+    const mobile = document.getElementById('loginMobile').value.trim() || localStorage.getItem(CUSTOMER_KEY+'_login_mobile');
     const otp = document.getElementById('otpInput').value.trim();
-    if (!otp || otp.length !== 6) return showToast('❌ 6 digit OTP daalo!', true);
+    if (!otp || otp.length !== 6) return showToast('❌ 6 digit OTP!', true);
     const btn = document.getElementById('verifyOtpBtn');
-    btn.disabled = true;
-    btn.innerText = '⏳ Verifying...';
-    db.collection('login_otps').doc(mobile).get({source: 'server'}).then(doc => {
-        if (!doc.exists) { showToast('❌ OTP nahi mila! Admin se contact karo', true); btn.disabled=false; btn.innerText='✅ Verify OTP'; return; }
+    btn.disabled = true; btn.innerText = '⏳ Verifying...';
+    db.collection(COLLECTIONS.LOGIN_OTPS).doc(mobile).get().then(doc => {
+        if (!doc.exists) {
+            showToast('❌ OTP nahi mila! Admin se bolo', true);
+            btn.disabled = false; btn.innerText = '✅ Verify OTP'; return;
+        }
         const data = doc.data();
-        const savedOtp = data.otp;
-        const otpTime = data.timestamp.toDate();
-        const now = new Date();
-        const diffHours = (now - otpTime) / 1000 / 60 / 60;
-        if (diffHours > 4) { showToast('❌ OTP expire! Resend dabao', true); btn.disabled=false; btn.innerText='✅ Verify OTP'; return; }
-        if (otp === savedOtp) {
+        const diffHours = (new Date() - data.timestamp.toDate()) / 1000 / 60 / 60;
+        if (diffHours > 4) {
+            showToast('❌ OTP expire! Resend karo', true);
+            btn.disabled = false; btn.innerText = '✅ Verify OTP'; return;
+        }
+        if (otp === data.otp) {
             localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', mobile);
-            localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', mobile);
+            localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', data.mobile || mobile);
+            localStorage.setItem('santra_whatsapp_mobile', mobile);
             localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
             document.getElementById('otpModal').style.display = 'none';
             showLoginSuccess(mobile);
             showToast('✅ Login Successful!');
-            window.parent.postMessage({type: 'loginSuccess'}, '*');
-        } else { showToast('❌ Galat OTP!', true); }
-        btn.disabled = false; btn.innerText = '✅ Verify OTP'; document.getElementById('otpInput').value = '';
-    }).catch(err => { showToast('❌ Error: ' + err.message, true); btn.disabled=false; btn.innerText='✅ Verify OTP'; });
+            window.parent.postMessage({type: 'loginSuccess', mobile: mobile}, '*');
+        } else {
+            showToast('❌ Galat OTP!', true);
+        }
+        btn.disabled = false; btn.innerText = '✅ Verify OTP';
+        document.getElementById('otpInput').value = '';
+    }).catch(err => {
+        showToast('❌ '+err.message, true);
+        btn.disabled = false; btn.innerText = '✅ Verify OTP';
+    });
 }
 
 function showLoginSuccess(mobile) {
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('loginSuccess').style.display = 'block';
     document.getElementById('loginNumber').innerText = `Mobile: ${mobile}`;
+    setTimeout(() => {
+        window.parent.postMessage({type: 'resizeIframe', height: document.body.scrollHeight, iframeId: 'loginFrame'}, '*');
+    }, 100);
 }
+
 function logout() {
     localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
     localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
+    localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
+    localStorage.removeItem('santra_whatsapp_mobile');
+    localStorage.setItem(CUSTOMER_KEY + '_logout_signal', Date.now());
+    window.parent.postMessage({type: 'logout'}, '*');
     location.reload();
 }
+
 function showToast(message, isError = false) {
     const toast = document.getElementById('toast');
     toast.innerText = message;
