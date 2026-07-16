@@ -35,6 +35,14 @@ iframe{width:100%;border:none;border-radius:12px;margin-bottom:18px;background:w
 <script src="config.js?v=8"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+        <script src="time-fix.html"></script>
+<script src="time-fix.js"></script>
+<script>
+// Bas ye 1 line kahi bhi add karo - Sahi IST Time mil jayega
+let t = getISTNow();
+console.log(t.presentTime, t.presentDate, t.istDateKey, t.dateTimeIST);
+// Output: 07:27 pm, 17/7/2026, 2026-07-17, 17/7/2026, 7:27:53 pm
+</script>
 
 <script>
 /*
