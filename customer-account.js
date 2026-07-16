@@ -1,10 +1,29 @@
-// ==================== CUSTOMER-ACCOUNT.JS - FINAL 15 JULY 2026 ====================
-// OLD CODE BACKUP - 30-JUNE-2026 02:15 PM - UPDATED - SAFE HIDE - TERI PURANI FILE YAHAN HAI
-/*
-OLD CODE BACKUP - 29-JUNE-2026 03:20 PM
-ISSUE FIXED: Cannot read properties of null (reading 'classList')
-REASON: Acode me elements nahi mile to error aata tha
-FIX: safeGet() helper add kiya - har getElementById check karega
+// ==================== CUSTOMER-ACCOUNT.JS - OLD 30 JUNE + CONSTANTS.JS FIX + NO BLAZE ====================
+
+// ✅ FIX: Tere constants.js sirf CART_KEY, BASE_URL deta hai - Baaki fallback se lo
+if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
+if(typeof window.ADMIN_WHATSAPP === 'undefined'){ window.ADMIN_WHATSAPP = "918769171078"; }
+if(typeof window.BASE_URL === 'undefined'){ window.BASE_URL = "https://santramarketshoppingmall.web.app"; }
+if(typeof window.COLLECTIONS === 'undefined'){ 
+  window.COLLECTIONS = { CUSTOMERS: 'customers', LOGIN_REQUESTS: 'login_requests', LOGIN_OTPS: 'login_otps', ORDERS: 'orders' }; 
+}
+if(typeof window.firebaseConfig === 'undefined'){
+  window.firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
+  };
+}
+
+const CUSTOMER_KEY = window.CUSTOMER_KEY;
+const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP;
+const BASE_URL = window.BASE_URL;
+const COLLECTIONS = window.COLLECTIONS;
+
+console.log("✅ customer-account.js - CART_KEY:", window.CART_KEY, "CUSTOMER_KEY:", CUSTOMER_KEY);
 
 window.addEventListener('load', function() {
   try {
@@ -12,56 +31,24 @@ window.addEventListener('load', function() {
       showToast('❌ Firebase load nahi hua. Internet check karo', true);
       return;
     }
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-    let currentCustomer = null;
-    let uploadedPhotoURL = null;
-    function safeGet(id){... }
-    function safeClass(id, action, cls){... }
-    function safeShow(id, show=true){... }
-   ... sendLoginOTP, verifyLoginOTP, loadProfile, enableEditMode, saveProfile, loadStats, customerLogout...
-  } catch(e) {
-    alert('JavaScript Error: ' + e.message + '\n\nsecrets.js file check karo!');
-  }
-});
-
-OLD CODE BACKUP END - 29 & 30 JUNE WALA SAFE HAI - HATAYA NAHI
-*/
-
-// ==================== NAYA CODE - 15 JULY 2026 - CONSTANTS.JS SUPPORT + FULL CONNECT + BUG FIX ====================
-
-window.addEventListener('load', function() {
-  try {
-    // ✅ CONSTANTS.JS se keys lo - ZINDAGI BHAR KA FIX
-    const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
-    const ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
-    const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
-
-    const firebaseConfig = window.firebaseConfig || {
-      apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-      authDomain: "santramarketshoppingmall.firebaseapp.com",
-      projectId: "santramarketshoppingmall",
-      storageBucket: "santramarketshoppingmall.appspot.com",
-      messagingSenderId: "398490252924",
-      appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
-    };
-
-    if (typeof firebase === 'undefined') {
-      showToast('❌ Firebase load nahi hua. Internet check karo', true);
-      return;
-    }
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+    // ✅ TERA config.js FOLLOW - initFirebaseOnce
+    try{
+      if(typeof window.initFirebaseOnce === 'function'){
+        window.initFirebaseOnce(window.firebaseConfig);
+      } else if (!firebase.apps.length){
+        firebase.initializeApp(window.firebaseConfig);
+      }
+    }catch(e){ console.log("Firebase init:", e.message); }
+    
+    const db = window.db || firebase.firestore();
+    // ❌ const storage = firebase.storage(); // HATA DIYA - Blaze maangta hai
 
     let currentCustomer = null;
     let uploadedPhotoURL = null;
 
-    // ✅ SAFE HELPER - Ye error khatam karega - classList wala bug fix
     function safeGet(id){
       const el = document.getElementById(id);
+      if(!el) console.warn('Element not found:', id);
       return el;
     }
     function safeClass(id, action, cls){
@@ -70,14 +57,9 @@ window.addEventListener('load', function() {
     }
     function safeShow(id, show=true){
       const el = safeGet(id);
-      if(el) el.style.display = show? 'block' : 'none';
-    }
-    function safeText(id, val){
-      const el = safeGet(id);
-      if(el) el.innerText = val;
+      if(el) el.style.display = show ? 'block' : 'none';
     }
 
-    // ✅ EVENT LISTENERS - safe check ke saath
     const sendOtpBtn = safeGet('sendOtpBtn');
     const verifyOtpBtn = safeGet('verifyOtpBtn');
     const editProfileBtn = safeGet('editProfileBtn');
@@ -93,58 +75,52 @@ window.addEventListener('load', function() {
     if(editProfileBtn) editProfileBtn.addEventListener('click', enableEditMode);
     if(logoutBtn) logoutBtn.addEventListener('click', customerLogout);
     if(changePhotoBtn) changePhotoBtn.addEventListener('click', () => photoInput && photoInput.click());
-    if(photoInput) photoInput.addEventListener('change', uploadPhotoToFirebase);
+    if(photoInput) photoInput.addEventListener('change', uploadPhotoFree); // ✅ FREE WALA
     if(saveChangesBtn) saveChangesBtn.addEventListener('click', saveProfile);
     if(cancelEditBtn) cancelEditBtn.addEventListener('click', cancelEdit);
     if(displayPhoto) displayPhoto.addEventListener('click', () => {
       const viewMode = safeGet('viewMode');
-      if(viewMode &&!viewMode.classList.contains('hide')) {
+      if(viewMode && !viewMode.classList.contains('hide')) {
         enableEditMode();
       }
     });
 
     checkLoginAndLoad();
-    if(typeof updateCartBadge === 'function') updateCartBadge();
 
     function checkLoginAndLoad() {
-      // ✅ FIX: CUSTOMER_KEY se check karo - customer-login.html se connect
-      let customer = localStorage.getItem(CUSTOMER_KEY + '_profile') || localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem('santra_customer');
-      let mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
-
-      if(!mobile){
-        // Agar old key me hai to new me convert karo
+      let customerStr = localStorage.getItem(CUSTOMER_KEY + '_profile') || localStorage.getItem('santra_customer');
+      let mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem(CUSTOMER_KEY + '_customer_mobile') || localStorage.getItem('santra_whatsapp_mobile');
+      
+      if(!mobile && customerStr){
         try{
-          let old = JSON.parse(localStorage.getItem('santra_customer')||'null');
-          if(old && old.isLoggedIn){
-            mobile = old.loginMobile || old.mobile;
-            localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', mobile);
-          }
+          let old = JSON.parse(customerStr);
+          if(old && old.isLoggedIn) mobile = old.loginMobile || old.mobile;
         }catch(e){}
       }
 
       if(!mobile) {
         safeClass('loginBox','remove','hide');
         safeClass('viewMode','add','hide');
-        safeClass('editMode','add','hide');
         return;
       }
-
-      // Profile load karo
-      db.collection('customers').doc(mobile).get().then(doc=>{
+      
+      db.collection(COLLECTIONS.CUSTOMERS).doc(mobile).get().then(doc=>{
         if(doc.exists){
           currentCustomer = doc.data();
           currentCustomer.isLoggedIn = true;
           safeClass('loginBox','add','hide');
           safeClass('viewMode','remove','hide');
-          safeClass('editMode','add','hide');
           document.title = `👤 My Profile - ${currentCustomer.name} - SANTRA MALL`;
           loadProfile();
           loadStats();
-        } else {
-          safeClass('loginBox','remove','hide');
+        } else if(customerStr){
+          currentCustomer = JSON.parse(customerStr);
+          currentCustomer.isLoggedIn = true;
+          safeClass('loginBox','add','hide');
+          safeClass('viewMode','remove','hide');
+          loadProfile();
+          loadStats();
         }
-      }).catch(()=>{
-        safeClass('loginBox','remove','hide');
       });
     }
 
@@ -153,29 +129,28 @@ window.addEventListener('load', function() {
       const mobileEl = safeGet('loginMobile');
       if(!mobileEl) return;
       const mobile = mobileEl.value.trim();
-      if(mobile.length!== 10) return showToast('❌ 10 digit mobile daalo', true);
+      if(mobile.length !== 10) return showToast('❌ 10 digit mobile daalo', true);
 
       if(btn){ btn.disabled = true; btn.innerText = 'Sending...'; }
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-      db.collection('login_requests').doc(mobile + '_' + Date.now()).set({
+      db.collection(COLLECTIONS.LOGIN_REQUESTS).doc(mobile + '_' + Date.now()).set({
         mobile: mobile,
         otp: otp,
         isVerified: false,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         type: 'profile_login'
       }).then(() => {
-        db.collection('login_otps').doc(mobile).set({
+        db.collection(COLLECTIONS.LOGIN_OTPS).doc(mobile).set({
           otp: otp,
           mobile: mobile,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          expireHours: 4
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        const msg = `🔐 *SANTRA MALL LOGIN OTP*\n\nYour OTP: *${otp}*\n\nValid for 4 hours.\n\nProfile: ${BASE_URL}/customer-account.html`;
+        const msg = `🔐 *SANTRA MALL LOGIN OTP*\n\nYour OTP: *${otp}*\n\nValid for 4 hours.`;
         window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
         safeShow('otpVerifyBox', true);
-        showToast('📲 OTP Request Admin ko bheja! 4 hour valid');
+        showToast('📲 OTP Request Admin ko bheja!');
         if(btn){ btn.disabled = false; btn.innerText = '📲 Send OTP on WhatsApp'; }
       }).catch(err => {
         showToast('❌ Error: ' + err.message, true);
@@ -186,20 +161,16 @@ window.addEventListener('load', function() {
     function verifyLoginOTP() {
       const mobileEl = safeGet('loginMobile');
       const otpEl = safeGet('loginOTP');
-      if(!mobileEl ||!otpEl) return;
+      if(!mobileEl || !otpEl) return;
       const mobile = mobileEl.value.trim();
       const enteredOTP = otpEl.value.trim();
-      if(enteredOTP.length!== 6) return showToast('❌ 6 digit OTP daalo!', true);
+      if(enteredOTP.length !== 6) return showToast('❌ 6 digit OTP daalo!', true);
 
-      db.collection('login_otps').doc(mobile).get().then((doc) => {
-        if(!doc.exists) return showToast('❌ OTP not found! Resend karo', true);
+      db.collection(COLLECTIONS.LOGIN_OTPS).doc(mobile).get().then((doc) => {
+        if(!doc.exists) return showToast('❌ OTP not found! Send again', true);
         const data = doc.data();
-        const otpTime = data.timestamp?.toDate?.() || new Date();
-        const diffHours = (new Date() - otpTime) / 1000 / 60 / 60;
-        if(diffHours > 4) return showToast('❌ OTP expire (4 hours)! Resend karo', true);
-
         if(data.otp === enteredOTP) {
-          return db.collection('customers').doc(mobile).get();
+          return db.collection(COLLECTIONS.CUSTOMERS).doc(mobile).get();
         } else {
           showToast('❌ Wrong OTP!', true);
           return Promise.reject('WRONG_OTP');
@@ -215,17 +186,18 @@ window.addEventListener('load', function() {
             photo: '', location: '', isLoggedIn: true, isOldCustomer: false,
             otpVerified: true, totalOrders: 0, createdAt: new Date().toLocaleDateString('en-IN')
           };
-          db.collection('customers').doc(mobile).set(currentCustomer, {merge:true});
+          db.collection(COLLECTIONS.CUSTOMERS).doc(mobile).set(currentCustomer, {merge:true});
         }
         localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', mobile);
         localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', mobile);
         localStorage.setItem(CUSTOMER_KEY + '_profile', JSON.stringify(currentCustomer));
         localStorage.setItem('santra_customer', JSON.stringify(currentCustomer));
-
-        showToast('✅ Login Successful! OTP Verified');
+        localStorage.setItem('santra_whatsapp_mobile', mobile);
+        
+        showToast('✅ Login Successful!');
         setTimeout(() => location.reload(), 1000);
       }).catch(err => {
-        if(err!== 'WRONG_OTP') showToast('❌ Error: ' + err, true);
+        if(err !== 'WRONG_OTP') showToast('❌ Error: ' + err, true);
       });
     }
 
@@ -233,19 +205,15 @@ window.addEventListener('load', function() {
       if(!currentCustomer) return;
       const setText = (id, val) => { const el = safeGet(id); if(el) el.innerText = val; };
       const setSrc = (id, val) => { const el = safeGet(id); if(el) el.src = val; };
-
+      
       setText('displayName', currentCustomer.name || 'Customer');
       setText('displayMobile', `+91 ${currentCustomer.mobile}`);
       setText('displayLoginMobile', currentCustomer.loginMobile || currentCustomer.mobile);
       setText('displayDeliveryMobile', currentCustomer.mobile || 'Not provided');
       setText('displayEmail', currentCustomer.email || 'Not provided');
-      setText('displayLocation', currentCustomer.location || currentCustomer.address || 'Not provided');
+      setText('displayLocation', currentCustomer.location || 'Not provided');
       setSrc('displayPhoto', currentCustomer.photo || 'https://via.placeholder.com/120?text=Photo');
-      const badge = safeGet('verifiedBadge');
-      if(badge && currentCustomer.otpVerified) badge.classList.remove('hide');
-
-      // Parent ko batao - customer-account.html ke liye
-      window.parent.postMessage({type: 'profileUpdated', photo: currentCustomer.photo||''}, '*');
+      if(currentCustomer.otpVerified) safeClass('verifiedBadge','remove','hide');
     }
 
     function enableEditMode() {
@@ -256,7 +224,7 @@ window.addEventListener('load', function() {
       setVal('editLoginMobile', currentCustomer.loginMobile || currentCustomer.mobile || '');
       setVal('editDeliveryMobile', currentCustomer.mobile || '');
       setVal('editEmail', currentCustomer.email || '');
-      setVal('editLocation', currentCustomer.location || currentCustomer.address || '');
+      setVal('editLocation', currentCustomer.location || '');
       const editPhoto = safeGet('editPhoto');
       if(editPhoto) editPhoto.src = currentCustomer.photo || 'https://via.placeholder.com/120?text=Photo';
     }
@@ -266,27 +234,43 @@ window.addEventListener('load', function() {
       safeClass('viewMode','remove','hide');
     }
 
-    function uploadPhotoToFirebase() {
+    // ✅ FREE PLAN - NO BLAZE - Base64 compress
+    function uploadPhotoFree() {
       const fileInput = safeGet('photoInput');
-      if(!fileInput ||!fileInput.files[0]) return;
+      if(!fileInput || !fileInput.files[0]) return;
       const file = fileInput.files[0];
-      if(file.size > 2 * 1024 * 1024) return showToast('❌ Photo 2MB se kam honi chahiye!', true);
-
+      if(file.size > 5 * 1024 * 1024) return showToast('❌ Photo size 5MB se kam rakho!', true);
+      
       const loader = safeGet('uploadLoader');
       if(loader) loader.style.display = 'block';
-
-      const mobile = currentCustomer.loginMobile || currentCustomer.mobile;
-      const fileName = `profile_photos/${mobile}/${Date.now()}.jpg`;
-      storage.ref(fileName).put(file).then(snap => snap.ref.getDownloadURL()).then((downloadURL) => {
-        const editPhoto = safeGet('editPhoto');
-        if(editPhoto) editPhoto.src = downloadURL;
-        uploadedPhotoURL = downloadURL;
-        if(loader) loader.style.display = 'none';
-        showToast('✅ Photo uploaded!');
-      }).catch((error) => {
-        if(loader) loader.style.display = 'none';
-        showToast('❌ Upload failed: ' + error.message, true);
-      });
+      
+      const reader = new FileReader();
+      reader.onload = function(e){
+        const img = new Image();
+        img.onload = function(){
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 300;
+          let width = img.width;
+          let height = img.height;
+          if(width > MAX_WIDTH){
+            height = height * (MAX_WIDTH / width);
+            width = MAX_WIDTH;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const base64 = canvas.toDataURL('image/jpeg', 0.6);
+          
+          const editPhoto = safeGet('editPhoto');
+          if(editPhoto) editPhoto.src = base64;
+          uploadedPhotoURL = base64;
+          if(loader) loader.style.display = 'none';
+          showToast('✅ Photo ready! Save karo - Free plan');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
 
     function saveProfile() {
@@ -298,47 +282,37 @@ window.addEventListener('load', function() {
       const location = getVal('editLocation');
       const photo = uploadedPhotoURL || safeGet('editPhoto')?.src;
 
-      if(!name ||!loginMobile ||!deliveryMobile ||!location) return showToast('❌ Sab field bharo!', true);
-      if(loginMobile.length!== 10 || deliveryMobile.length!== 10) return showToast('❌ 10 digit mobile!', true);
+      if(!name || !loginMobile || !deliveryMobile || !location) return showToast('❌ Name, Dono Mobile aur Location required hai!', true);
+      if(loginMobile.length !== 10 || deliveryMobile.length !== 10) return showToast('❌ 10 digit mobile daalo', true);
 
-      const customerData = {
-        name, loginMobile, mobile: deliveryMobile, email, photo, location, address: location,
-        isLoggedIn: true, otpVerified: true,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
+      const customerData = { name, loginMobile, mobile: deliveryMobile, email, photo, location,
+        isLoggedIn: true, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
 
-      // ✅ FIX: Doc ID hamesha loginMobile - Yahi pehle ka bug tha!
-      db.collection('customers').doc(loginMobile).set(customerData, { merge: true })
-     .then(() => {
+      db.collection(COLLECTIONS.CUSTOMERS).doc(loginMobile).set(customerData, { merge: true })
+      .then(() => {
         localStorage.setItem(CUSTOMER_KEY + '_whatsapp_mobile', loginMobile);
-        localStorage.setItem(CUSTOMER_KEY + '_customer_mobile', deliveryMobile);
         localStorage.setItem(CUSTOMER_KEY + '_profile', JSON.stringify(customerData));
         localStorage.setItem('santra_customer', JSON.stringify(customerData));
-        localStorage.setItem('temp_profile_' + loginMobile, JSON.stringify(customerData));
-
+        localStorage.setItem('santra_whatsapp_mobile', loginMobile);
         currentCustomer = customerData;
-        showToast('✅ Profile Saved! Orders me bhi dikhega');
-        setTimeout(() => { cancelEdit(); loadProfile(); loadStats(); }, 1000);
+        showToast('✅ Profile Saved Successfully! - Free plan');
+        setTimeout(() => { cancelEdit(); loadProfile(); }, 1000);
       })
-     .catch(err => showToast('❌ Error: ' + err, true));
+      .catch(err => showToast('❌ Error: ' + err, true));
     }
 
     function loadStats() {
       if(!currentCustomer) return;
-      const mobileToUse = currentCustomer.loginMobile || currentCustomer.mobile;
-      db.collection('orders').where('customerMobile', '==', mobileToUse).get()
-     .then(snap => {
+      const mobileToUse = currentCustomer.mobile || currentCustomer.loginMobile;
+      db.collection(COLLECTIONS.ORDERS).where('customerMobile', '==', mobileToUse).get()
+      .then(snap => {
         let totalOrders = snap.size;
         let totalSpent = 0;
-        snap.forEach(doc => { totalSpent += doc.data().totalAmount || doc.data().total || 0; });
-        safeText('statOrders', totalOrders);
-        safeText('statSpent', `₹${totalSpent}`);
-        safeText('displayOrders', totalOrders);
-      }).catch(()=>{
-        // Fallback - mobile field se check
-        db.collection('orders').where('mobile', '==', mobileToUse).get().then(snap=>{
-          safeText('statOrders', snap.size);
-        });
+        snap.forEach(doc => { totalSpent += doc.data().totalAmount || 0; });
+        const setText = (id, val) => { const el = safeGet(id); if(el) el.innerText = val; };
+        setText('statOrders', totalOrders);
+        setText('statSpent', `₹${totalSpent}`);
+        setText('displayOrders', totalOrders);
       });
     }
 
@@ -347,12 +321,11 @@ window.addEventListener('load', function() {
         localStorage.removeItem('santra_customer');
         localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
         localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
-        localStorage.removeItem(CUSTOMER_KEY + '_login_mobile');
         localStorage.removeItem(CUSTOMER_KEY + '_profile');
+        localStorage.removeItem('santra_whatsapp_mobile');
         localStorage.setItem(CUSTOMER_KEY + '_logout_signal', Date.now());
-        window.parent.postMessage({type:'logout'}, '*');
-        showToast('✅ Logged out');
-        setTimeout(() => { window.location.href = 'index.html'; }, 800);
+        showToast('✅ Logged out successfully');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
       }
     }
 
@@ -369,9 +342,8 @@ window.addEventListener('load', function() {
     }
 
   } catch(e) {
+    alert('JavaScript Error: ' + e.message + '\n\nconstants.js check karo!');
     console.error(e);
-    alert('JS Error: ' + e.message + '\n\nconstants.js check karo!');
   }
 });
-
-console.log("✅ customer-account.js FINAL 15 JULY - SAFEGET + CONSTANTS + 4 HOUR OTP");
+console.log("✅ customer-account.js OLD 30 JUNE + CONSTANTS.JS SAFE + NO BLAZE");

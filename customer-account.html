@@ -7,155 +7,123 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f1f3f6;display:flex;flex-direction:column;min-height:100vh}
-.header{background:#1a1a2e;color:white;padding:15px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.2);position:sticky;top:0;z-index:10}
-.header img{width:45px;height:45px;border-radius:50%;border:2px solid #e94560;object-fit:cover;background:#f0f0f0}
-.header h1{color:#e94560;font-size:22px}
-.container{padding:15px;max-width:600px;margin:0 auto;flex:1;width:100%}
-.footer{background:#1a1a2e;color:white;text-align:center;padding:15px;font-size:14px;margin-top:auto}
+.header{background:#1a1a2e;color:white;padding:12px;display:flex;align-items:center;justify-content:center;gap:10px}
+.header img{width:40px;height:40px;border-radius:50%;border:2px solid #e94560;object-fit:cover;background:#fff}
+.header h1{color:#e94560;font-size:20px}
+.container{padding:15px;max-width:650px;margin:0 auto;flex:1;width:100%}
+.footer{background:#1a1a2e;color:white;text-align:center;padding:12px;font-size:13px;margin-top:auto}
 .footer span{color:#e94560;font-weight:bold}
-iframe{width:100%;border:none;border-radius:15px;margin-bottom:15px;background:white;box-shadow:0 5px 20px rgba(0,0,0,0.1);min-height:400px;transition:height 0.3s}
-.hide{display:none !important}
-.otp-badge{background:#fff3cd;padding:10px;border-radius:8px;text-align:center;font-size:12px;color:#92400e;margin-bottom:12px;border-left:4px solid #f59e0b}
+iframe{width:100%;border:none;border-radius:12px;margin-bottom:18px;background:white;box-shadow:0 4px 15px rgba(0,0,0,0.08);min-height:350px}
 </style>
 </head>
 <body>
-
 <div class="header">
-<img id="headerPhoto" src="https://via.placeholder.com/45?text=👤">
+<img id="headerPhoto" src="https://via.placeholder.com/40?text=👤">
 <h1>Customer Profile</h1>
 </div>
 
 <div class="container">
-<div class="otp-badge" id="loginBadge">🔐 Login OTP 4 hours valid - Har Order pe naya OTP</div>
-
-<!-- ✅ 1ST POPUP: Customer Login -->
-<iframe id="loginFrame" src="customer-login.html?v=7" onload="resizeIframe(this)"></iframe>
-
-<!-- ✅ 2ND POPUP: Profile Details -->
-<iframe id="profileFrame" src="profile.html?v=7" onload="resizeIframe(this)"></iframe>
+<!-- Photo 1 jaisa - 2 iframe simple - Pehle jaisa -->
+<iframe id="loginFrame" src="customer-login.html?v=3" onload="resizeIframe(this)"></iframe>
+<iframe id="profileFrame" src="profile.html?v=3" onload="resizeIframe(this)"></iframe>
 </div>
 
-<div class="footer">
-Powered by <span>santrajet mall</span>
-</div>
+<div class="footer">Powered by <span>santrajet mall</span></div>
 
-<!-- ✅ CONSTANTS.JS SABSE PEHLE -->
-<script src="constants.js?v=1"></script>
-<script src="config.js?v=6"></script>
+<!-- ✅ ORDER: constants.js -> config.js - Tere master files -->
+<script src="constants.js?v=3"></script>
+<script src="config.js?v=8"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
 /*
-⚠️ OLD CODE BACKUP - 14 JULY 2026 SE PEHLE WALA - SAFE HIDE - TERI PURANI FILE YAHAN HAI
-const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.appspot.com",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
-};
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+⚠️ OLD CODE SAVE - 25 JUNE WALA - KUCH HATAYA NAHI
+if (!firebase.apps.length) firebase.initializeApp(window.firebaseConfig);
 const db = firebase.firestore();
-function resizeIframe(obj) { obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px'; }
-OLD CODE BACKUP END - SAFE HAI
+const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
+OLD CODE END
 */
 
-// ✅ NAYA CODE - 15 JULY 2026 - FINAL CLEAN - LOGIN + PROFILE FULL CONNECT
-const firebaseConfig = window.firebaseConfig || {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.appspot.com",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
-};
+// ✅ NAYA - TERA constants.js + config.js FOLLOW - FINAL 15 JULY
+if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
+if(typeof window.firebaseConfig === 'undefined'){
+  window.firebaseConfig = {
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
+  };
+}
+try{
+  if(typeof window.initFirebaseOnce === 'function'){
+    window.initFirebaseOnce(window.firebaseConfig);
+  } else if(!firebase.apps.length){
+    firebase.initializeApp(window.firebaseConfig);
+  }
+}catch(e){ console.log("Firebase:", e.message); }
 
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db = window.db || firebase.firestore();
+const CUSTOMER_KEY = window.CUSTOMER_KEY;
 
-const CUSTOMER_KEY = window.CUSTOMER_KEY || "santra_customer";
-const BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
+console.log("✅ Account - Following YOUR constants.js - CART_KEY:", window.CART_KEY, "BASE_URL:", window.BASE_URL);
 
-// ✅ Single resize function - Duplicate hata diya
 function resizeIframe(obj){
   setTimeout(()=>{
     try{
       let h = obj.contentWindow.document.documentElement.scrollHeight;
-      if(h>100) obj.style.height = h + 30 + 'px';
+      if(h>100) obj.style.height = (h+40)+'px';
     }catch(e){}
-  }, 400);
+  },400);
 }
-
-function checkLoginAndToggle(){
-  const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile') || localStorage.getItem(CUSTOMER_KEY + '_customer_mobile');
-  const loginFrame = document.getElementById('loginFrame');
-  const profileFrame = document.getElementById('profileFrame');
-  const badge = document.getElementById('loginBadge');
-  
-  if(mobile){
-    loginFrame.classList.add('hide');
-    profileFrame.classList.remove('hide');
-    badge.innerHTML = `✅ Logged in: ${mobile} | <a href="orders.html" style="color:#e40046;font-weight:bold">📦 My Orders</a> | OTP 4 hours valid`;
-    loadHeaderPhoto();
-    profileFrame.src = 'profile.html?v=' + Date.now();
-  } else {
-    loginFrame.classList.remove('hide');
-    profileFrame.classList.remove('hide');
-    badge.innerHTML = `🔐 Login OTP 4 hours valid - Har Order pe naya OTP - Pehle Login karo`;
-    document.getElementById('headerPhoto').src = 'https://via.placeholder.com/45?text=👤';
-  }
-}
+window.resizeIframe = resizeIframe;
 
 window.addEventListener('message', function(e){
-  if(e.data.type === 'loginSuccess'){
-    setTimeout(()=>{ checkLoginAndToggle(); }, 800);
-  }
-  if(e.data.type === 'profileUpdated'){
+  if(e.data.type==='loginSuccess' || e.data.type==='profileUpdated'){
     loadHeaderPhoto();
-    checkLoginAndToggle();
+    try{ 
+      const pf = document.getElementById('profileFrame');
+      if(pf && pf.contentWindow) pf.contentWindow.location.reload(); 
+    }catch(err){}
+    // Login iframe bhi reload karo - Success dikhane ke liye
+    try{
+      const lf = document.getElementById('loginFrame');
+      if(lf && e.data.type==='loginSuccess') lf.contentWindow.location.reload();
+    }catch(err){}
   }
-  if(e.data.type === 'logout'){
-    localStorage.removeItem(CUSTOMER_KEY + '_whatsapp_mobile');
-    localStorage.removeItem(CUSTOMER_KEY + '_customer_mobile');
-    checkLoginAndToggle();
-    document.getElementById('loginFrame').src = 'customer-login.html?v=' + Date.now();
+  if(e.data.type==='logout'){
+    localStorage.removeItem(CUSTOMER_KEY+'_whatsapp_mobile');
+    localStorage.removeItem(CUSTOMER_KEY+'_customer_mobile');
+    localStorage.removeItem(CUSTOMER_KEY+'_profile');
+    localStorage.removeItem('santra_whatsapp_mobile');
+    localStorage.removeItem('santra_customer_mobile');
+    document.getElementById('headerPhoto').src = "https://via.placeholder.com/40?text=👤";
+    setTimeout(()=> location.reload(), 500);
   }
-  if(e.data.type === 'resizeIframe' && e.data.height){
-    let iframe = document.getElementById(e.data.iframeId);
-    if(iframe) iframe.style.height = e.data.height + 'px';
+  if(e.data.type==='resizeIframe' && e.data.height){
+    let f = document.getElementById(e.data.iframeId) || document.getElementById('profileFrame');
+    if(e.data.iframeId){
+      f = document.getElementById(e.data.iframeId);
+    }
+    if(f && e.data.height > 100) f.style.height = e.data.height+'px';
   }
 });
 
 function loadHeaderPhoto(){
-  const mobile = localStorage.getItem(CUSTOMER_KEY + '_whatsapp_mobile');
-  if(!mobile) return;
-  db.collection('customers').doc(mobile).get().then(doc=>{
-    if(doc.exists && doc.data().photo){
-      document.getElementById('headerPhoto').src = doc.data().photo;
+  const m = localStorage.getItem(CUSTOMER_KEY+'_whatsapp_mobile') || localStorage.getItem('santra_whatsapp_mobile');
+  if(!m) return;
+  db.collection('customers').doc(m).get().then(d=>{
+    if(d.exists && d.data().photo){
+      document.getElementById('headerPhoto').src = d.data().photo; // Base64 bhi chalega - Free plan!
     }
   }).catch(()=>{});
 }
-
-window.addEventListener('load', ()=>{
-  checkLoginAndToggle();
+window.addEventListener('load', function(){
   loadHeaderPhoto();
-  setInterval(()=>{
-    document.querySelectorAll('iframe').forEach(f=>{
-      try{ 
-        let h = f.contentWindow.document.documentElement.scrollHeight;
-        if(h>150) f.style.height = h+30+'px';
-      }catch(e){}
-    });
-  }, 1200);
+  console.log("✅ Customer account loaded - Photo 1 jaisa");
 });
-
-console.log("✅ customer-account.html FINAL CLEAN 15 JULY - NO DUPLICATE");
 </script>
 </body>
 </html>
