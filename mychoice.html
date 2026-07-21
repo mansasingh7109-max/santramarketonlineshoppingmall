@@ -2,25 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>😍 My Choice - SANTRA MALL</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-
-    <!-- ✅ NAYA: CONSTANTS.JS SABSE PEHLE -->
     <script src="constants.js?v=1"></script>
-
-    <!-- ✅ NAYA: CONFIG.JS - initFirebaseOnce ke liye -->
     <script src="config.js?v=6"></script>
-
-    <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-    <!-- ✅ NAYA: Firebase init -->
     <script>
         if (typeof window.initFirebaseOnce === 'function') {
             window.initFirebaseOnce({
@@ -30,232 +20,248 @@
                 projectId: "santramarketshoppingmall",
                 storageBucket: "santramarketshoppingmall.appspot.com",
                 messagingSenderId: "398490252924",
-                appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-                measurementId: "G-ZW1ZR8HETY"
+                appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
             });
         }
     </script>
-
-    <!-- secrets.js aur cart.js -->
     <script src="secrets.js?v=8"></script>
     <script src="cart.js?v=6"></script>
-
     <style>
-        :root { --bg: #f1f3f6; --card: #ffffff; --accent: #e40046; --text: #212121; --green: #10b981; --orange: #f59e0b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", Arial, sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 85px; }
-   .header { background: var(--accent); color: white; padding: 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
-   .back-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
-   .header h1 { font-size: 18px; flex: 1; }
-   .header-icons { display: flex; align-items: center; gap: 15px; }
-   .header-icon { color: white; text-decoration: none; font-size: 24px; position: relative; }
-   .header-badge { position: absolute; top: -8px; right: -8px; background: #ffeb3b; color: #000; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: bold; display: none; align-items: center; justify-content: center; }
-   .guest-note { background: #fff3cd; padding: 12px 15px; margin: 15px; border-radius: 8px; border: 1px solid #ffc107; font-size: 13px; text-align: center; }
-   .guest-note a { color: var(--accent); font-weight: 600; text-decoration: none; }
-   .choice-card { background: var(--card); margin: 15px; border-radius: 12px; padding: 15px; display: flex; gap: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
-   .choice-card img { width: 90px; height: 90px; object-fit: contain; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; cursor: pointer; }
-   .item-info { flex: 1; }
-   .item-info h3 { font-size: 15px; margin-bottom: 6px; line-height: 1.3; cursor: pointer; }
-   .item-price { color: var(--accent); font-weight: 700; font-size: 16px; margin: 5px 0; }
-   .item-size { font-size: 12px; color: #666; margin: 3px 0; font-weight: 500; }
-   .item-code { font-size: 11px; color: #666; margin-top: 4px; }
-   .item-actions { display: flex; gap: 8px; margin-top: 10px; }
-   .btn-move-cart,.btn-remove { color: white; border: none; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; flex: 1; }
-   .btn-move-cart { background: var(--green); }
-   .btn-remove { background: #ef4444; }
-   .empty { text-align: center; padding: 80px 20px; color: #999; }
-   .empty h3 { font-size: 20px; margin-bottom: 10px; color: #666; }
-   .empty p { font-size: 14px; margin-bottom: 20px; }
-   .empty button { margin-top: 20px; padding: 14px 32px; background: var(--accent); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 15px; }
-   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); z-index: 100; }
-   .nav-item { text-align: center; text-decoration: none; color: #666; flex: 1; padding: 5px; position: relative; }
-   .nav-item.active { color: var(--accent); }
-   .nav-item div { font-size: 22px; }
-   .nav-item span { font-size: 11px; display: block; margin-top: 2px; }
-   .nav-badge { border-radius: 50%; width: 18px; height: 18px; font-size: 10px; position: absolute; top: 0px; right: 20px; display: none; align-items: center; justify-content: center; background: #d32f2f; color: white; font-weight: bold; }
-   .loader { text-align: center; padding: 100px 20px; color: var(--accent); font-size: 18px; }
+        :root { --bg: #f1f3f6; --card: #ffffff; --accent: #e40046; --text: #212121; --green: #10b981; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+        body { background: var(--bg); padding-bottom: 85px; }
+  .header { background: var(--accent); color: white; padding: 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+  .back-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
+  .header h1 { font-size: 18px; flex: 1; }
+  .choice-card { background: var(--card); margin: 12px 15px; border-radius: 12px; padding: 12px; display: flex; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); align-items:center; }
+  .choice-card img { width: 90px; height: 90px; object-fit: contain; background: #f9f9f9; border-radius: 8px; }
+  .item-info { flex: 1; }
+  .item-info h3 { font-size: 14px; margin-bottom: 4px; }
+  .item-price { color: var(--accent); font-weight: 700; font-size: 15px; }
+  .item-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .btn-move-cart,.btn-remove { color: white; border: none; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; flex: 1; }
+  .btn-move-cart { background: var(--green); }
+  .btn-remove { background: #ef4444; }
+  .empty { text-align: center; padding: 80px 20px; color: #999; }
+  .top-bar { background:white; margin:15px 15px 0 15px; padding:10px 12px; border-radius:10px; display:none; align-items:center; gap:10px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+  .top-bar button { padding:8px 12px; border:none; border-radius:6px; font-weight:600; font-size:12px; cursor:pointer; }
     </style>
 </head>
 <body>
     <div class="header">
-        <button class="back-btn" onclick="window.location.href = 'index.html'">←</button>
-        <h1>😍 My Choice</h1>
-        <div class="header-icons">
-            <a href="cart.html" class="header-icon">🛒<span class="header-badge" id="cartBadge">0</span></a>
+        <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+        <h1>😍 My Choice (<span id="myChoiceCount">0</span>)</h1>
+        <a href="cart.html" style="color:white; text-decoration:none;">🛒<span id="cartBadge" style="background:#ffeb3b;color:#000;padding:2px 6px;border-radius:50%;font-size:11px;display:none">0</span></a>
+    </div>
+
+    <div class="top-bar" id="topBar">
+        <label style="font-size:13px;display:flex;align-items:center;gap:6px"><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this.checked)"> Select All</label>
+        <button onclick="moveSelectedToCart()" style="background:#10b981;color:white;margin-left:auto">Move to Cart →</button>
+        <button onclick="removeSelected()" style="background:#fee2e2;color:#e40046">Remove</button>
+    </div>
+
+    <div id="myChoiceList"><div style="text-align:center;padding:50px">Loading...</div></div>
+
+<script>
+/* ==================== OLD MYCHOICE.HTML BACKUP - 25 JUNE 2026 - HIDE NOT DELETE ====================
+const rtdb = window.rtdb; const db = window.db; const auth = window.auth;
+const MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
+const CART_KEY = window.CART_KEY || "santraMallCart_v2";
+const OLD_WISH_KEYS = ["santraMallMyChoice_v2","sm_wishlist_v1","sm_wishlist","myChoice","wishlist","santrajet_mychoice"];
+function cleanDuplicateWishlist(){
+  let all=[]; OLD_WISH_KEYS.forEach(k=>{ try{let d=JSON.parse(localStorage.getItem(k)||'[]'); if(Array.isArray(d)) all=[...all,...d];}catch{}});
+  let seen={}; let uniq=[];
+  all.forEach(it=>{
+    let id=String(it.id||"").replace(/^home_/,'').toLowerCase().trim();
+    let sz=String(it.size||it.variant||"M").toUpperCase();
+    let key=id+"_"+sz;
+    if(!id || seen[key]) return;
+    seen[key]=1; it.id=id; it.code=id; uniq.push(it);
+  });
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(uniq));
+  return uniq;
+}
+function loadMyChoice(){ myChoice = cleanDuplicateWishlist(); auth.onAuthStateChanged... }
+function renderMyChoice(){...}
+function moveToCart(idx){...}
+function removeFromChoice(idx){...}
+OLD BACKUP END - Safe hai
+*/
+
+// ==================== MYCHOICE.HTML - FINAL FIXED 21 JULY 2026 - LOADING + HOME TAB + SELECT FIX ====================
+var rtdb = window.rtdb;
+var db = window.db;
+var auth = window.auth;
+var MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
+var CART_KEY = window.CART_KEY || "santraMallCart_v2";
+var OLD_WISH_KEYS = ["santraMallMyChoice_v2","santrajet_mychoice","santraMyChoice_v2","santraMallWishlist","sm_wishlist_v1","myChoice","wishlist"];
+
+function getThumb(p){
+  if(!p) return "https://via.placeholder.com/90?text=No+Image";
+  if(p.image &&!String(p.image).includes("placeholder")) return p.image;
+  if(p.imageUrl) return p.imageUrl;
+  if(p.thumbnail) return p.thumbnail;
+  if(p.img) return p.img;
+  if(p.media && p.media[0]) return p.media[0].url||p.media[0];
+  if(p.images && p.images[0]) return typeof p.images[0]==="string"?p.images[0]:p.images[0].url||p.images[0].imageUrl;
+  try{
+    let cache=JSON.parse(localStorage.getItem('santra_all_products_cache')||"[]");
+    let f=cache.find(x=>String(x.id).toLowerCase()===String(p.id).toLowerCase());
+    if(f && f.image) return f.image;
+  }catch{}
+  return "https://via.placeholder.com/90?text=No+Image";
+}
+
+function cleanDuplicateWishlist(){
+  let merged=[];
+  let seen={};
+  // ✅ Saare keys ko merge karo, khali [] ko ignore nahi karo
+  for(let k of OLD_WISH_KEYS){
+    try{
+      let raw=localStorage.getItem(k);
+      if(!raw) continue;
+      let arr=JSON.parse(raw);
+      if(!Array.isArray(arr)) arr=Object.values(arr);
+      arr.forEach(it=>{
+        if(!it||!it.id) return;
+        let id=String(it.id).replace(/^home_/,'').toLowerCase().trim();
+        if(!id) return; // ✅ length>35 filter hata diya - yahi bug tha
+        let sz=String(it.size||it.variant||"M").toUpperCase();
+        let key=id+"_"+sz;
+        if(seen[key]) return;
+        seen[key]=1;
+        it.id=id; it.code=id;
+        if(!it.image || String(it.image).includes('placeholder')){
+          let img=getThumb(it);
+          if(img &&!img.includes('No+Image')) it.image=img;
+        }
+        merged.push(it);
+      });
+    }catch{}
+  }
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(merged));
+  localStorage.setItem("santrajet_mychoice", JSON.stringify(merged));
+  console.log("✅ cleanDuplicateWishlist merged count:",merged.length);
+  return merged;
+}
+
+let myChoice=[];
+function loadMyChoice(){
+  console.log("✅ loadMyChoice called");
+  myChoice = cleanDuplicateWishlist();
+  renderMyChoice(); // ✅ Pehle local se turant dikhao, Loading khatam
+
+  // Firebase se sync - agar hai to update karo
+  if(auth && typeof auth.onAuthStateChanged === 'function'){
+    auth.onAuthStateChanged(user=>{
+      if(user && rtdb){
+        rtdb.ref('users/'+user.uid+'/myChoice').once('value').then(snap=>{
+          if(snap.exists()){
+            let fbList=[];
+            snap.forEach(c=>{ fbList.push(c.val()); });
+            if(fbList.length>myChoice.length){
+              myChoice=cleanDuplicateWishlist(fbList);
+              localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
+              renderMyChoice();
+            }
+          }
+        }).catch(()=>{});
+      }
+    });
+  }
+}
+
+function renderMyChoice(){
+  let c=document.getElementById("myChoiceList");
+  let topBar=document.getElementById("topBar");
+  if(!c) return;
+  document.getElementById("myChoiceCount").innerText=myChoice.length;
+  let choiceBadge=document.getElementById("homeChoiceBadge");
+  if(choiceBadge){ choiceBadge.innerText=myChoice.length; choiceBadge.style.display=myChoice.length>0?"flex":"none"; }
+
+  if(myChoice.length===0){
+    c.innerHTML=`<div class="empty"><h3>😍 My Choice is Empty</h3><p>Add products you love</p><button onclick="window.location.href='index.html'" style="margin-top:15px;padding:12px 24px;background:#e40046;color:white;border:none;border-radius:8px">Start Shopping</button></div>`;
+    if(topBar) topBar.style.display="none";
+    updateBadge(); return;
+  }
+  if(topBar) topBar.style.display="flex";
+  c.innerHTML=myChoice.map((item,idx)=>{
+    let price=item.price||0;
+    let img=getThumb(item);
+    let size=item.size||item.variant||'M';
+    return `<div class="choice-card">
+      <input type="checkbox" class="choice-check" data-idx="${idx}" style="width:18px;height:18px">
+      <img src="${img}" onerror="this.src='https://via.placeholder.com/90?text=No+Image'" onclick="location.href='product.html?id=${item.id}'">
+      <div class="item-info">
+        <h3>${item.name||"Product"}</h3>
+        <div class="item-price">₹${price}</div>
+        <div style="font-size:11px;color:#666">Size: ${size} | Code: ${item.code||item.id}</div>
+        <div class="item-actions">
+          <button class="btn-move-cart" onclick="moveToCart(${idx})">🛒 Move to Cart</button>
+          <button class="btn-remove" onclick="removeFromChoice(${idx})">🗑️</button>
         </div>
-    </div>
+      </div>
+    </div>`;
+  }).join("");
+  updateBadge();
+}
 
-    <div id="guestNote" class="guest-note" style="display: none;">
-        <strong>👋 Guest Mode:</strong> Login karo to wishlist save rahegi. <a href="customer-login.html">Login Now</a>
-    </div>
+function moveToCart(idx){
+  let item=myChoice[idx]; if(!item) return;
+  let cart=[]; try{cart=JSON.parse(localStorage.getItem(CART_KEY)||"[]"); if(!Array.isArray(cart)) cart=Object.values(cart);}catch{cart=[];}
+  let exist=cart.findIndex(x=>String(x.id).toLowerCase()===String(item.id).toLowerCase() && (x.size||"M")===(item.size||"M"));
+  if(exist>=0) cart[exist].qty=(cart[exist].qty||1)+1;
+  else cart.push({...item,qty:1,image:getThumb(item)});
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem("santraMallCart_v2", JSON.stringify(cart));
+  removeFromChoice(idx);
+}
 
-    <div id="myChoiceList"><div class="loader">Loading your wishlist...</div></div>
+function removeFromChoice(idx){
+  myChoice.splice(idx,1);
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
+  localStorage.setItem("santrajet_mychoice", JSON.stringify(myChoice));
+  renderMyChoice();
+  if(window.SM_LOCK?.backup) window.SM_LOCK.backup();
+}
 
-    <div class="bottom-nav">
-        <a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a>
-        <a href="mychoice.html" class="nav-item active"><div>😍</div><span>My Choice</span></a>
-        <a href="categories.html" class="nav-item"><div>📱</div><span>Categories</span></a>
-        <a href="cart.html" class="nav-item"><div>🛒</div><span>Cart</span><span class="nav-badge" id="bottomCartBadge">0</span></a>
-        <a href="my-orders.html" class="nav-item"><div>📦</div><span>Orders</span></a>
-    </div>
+function toggleSelectAll(checked){
+  document.querySelectorAll(".choice-check").forEach(ch=> ch.checked = checked);
+}
+function moveSelectedToCart(){
+  let checks = [...document.querySelectorAll(".choice-check:checked")];
+  if(!checks.length) return alert("Pehle item select karo");
+  let idxs = checks.map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a);
+  let cart=[]; try{cart=JSON.parse(localStorage.getItem(CART_KEY)||"[]"); if(!Array.isArray(cart)) cart=Object.values(cart);}catch{cart=[];}
+  idxs.forEach(i=>{ let item=myChoice[i]; if(item) cart.push({...item,qty:1,image:getThumb(item)}); });
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem("santraMallCart_v2", JSON.stringify(cart));
+  myChoice = myChoice.filter((_,i)=>!idxs.includes(i));
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
+  localStorage.setItem("santrajet_mychoice", JSON.stringify(myChoice));
+  renderMyChoice();
+}
+function removeSelected(){
+  let checks = [...document.querySelectorAll(".choice-check:checked")];
+  if(!checks.length) return alert("Pehle item select karo");
+  let idxs = checks.map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a);
+  idxs.forEach(i=> myChoice.splice(i,1));
+  localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
+  localStorage.setItem("santrajet_mychoice", JSON.stringify(myChoice));
+  renderMyChoice();
+}
 
-    <script>
-        // ✅ PURANA CODE COMMENT OUT - constants.js se aa raha hai
-        // const firebaseConfig = {... }; // config.js me chala gaya
-        // if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); // config.js kar dega
-        // const rtdb = firebase.database(); // window.rtdb use karo
-        // const db = firebase.firestore(); // window.db use karo
-        // const auth = firebase.auth(); // window.auth use karo
-        // const MYCHOICE_KEY = "santraMallMyChoice_v2"; // constants.js se aa raha hai
-        // const CART_KEY = "santraMallCart_v2"; // constants.js se aa raha hai
+function updateBadge(){
+  let cart=[]; try{cart=JSON.parse(localStorage.getItem(CART_KEY)||"[]"); if(!Array.isArray(cart)) cart=Object.values(cart);}catch{cart=[];}
+  let qty=cart.reduce((s,i)=>s+(i.qty||1),0);
+  let b=document.getElementById("cartBadge");
+  if(b){b.innerText=qty; b.style.display=qty>0?"inline-block":"none";}
+}
 
-        // ✅ NAYA CODE: window se direct use karo
-        const rtdb = window.rtdb;
-        const db = window.db;
-        const auth = window.auth;
-        const MYCHOICE_KEY = window.MYCHOICE_KEY;
-        const CART_KEY = window.CART_KEY;
-
-        // ✅ ADDED: Purani keys support
-        const OLD_WISH_KEYS = ["santraMallMyChoice_v2","sm_wishlist_v1","sm_wishlist","myChoice","wishlist"];
-        const OLD_CART_KEYS = ["santraMallCart_v2","sm_cart_v1","sm_cart","cart"];
-
-        let myChoice = [];
-
-        // ✅ ADDED: Sab keys ko merge karo
-        function migrateAllKeys(){
-          try{
-            let allW=[]; OLD_WISH_KEYS.forEach(k=>{try{let d=JSON.parse(localStorage.getItem(k)||'[]');if(Array.isArray(d))allW=[...allW,...d];}catch(e){}});
-            let uniqW = allW.filter((it,i,arr)=> i===arr.findIndex(x=>x.id===it.id && (x.size||x.variant||'M')===(it.size||it.variant||'M')));
-            if(uniqW.length) localStorage.setItem(MYCHOICE_KEY, JSON.stringify(uniqW));
-
-            let allC=[]; OLD_CART_KEYS.forEach(k=>{try{let d=JSON.parse(localStorage.getItem(k)||'[]');if(Array.isArray(d))allC=[...allC,...d];}catch(e){}});
-            let uniqC = allC.filter((it,i,arr)=> i===arr.findIndex(x=>x.id===it.id && (x.size||'M')===(it.size||'M')));
-            if(uniqC.length) localStorage.setItem(CART_KEY, JSON.stringify(uniqC));
-
-            if(window.SM_LOCK?.backup) window.SM_LOCK.backup();
-          }catch(e){}
-        }
-
-        function getProductThumbnail(p) {
-            if (p && p.image && p.image.trim()!=="") return p.image;
-            if (p && p.images && p.images.length > 0) return p.images[0];
-            return "https://via.placeholder.com/90x90?text=No+Image";
-        }
-
-        function loadMyChoice() {
-            migrateAllKeys(); // ✅ Pehle merge karo
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    document.getElementById('guestNote').style.display = 'none';
-                    rtdb.ref('users/' + user.uid + '/myChoice').on('value', (snapshot) => {
-                        myChoice = [];
-                        if (snapshot.exists()) snapshot.forEach(child => { myChoice.push({key: child.key,...child.val()}); });
-                        renderMyChoice(); updateHeaderBadges();
-                    });
-                } else {
-                    document.getElementById('guestNote').style.display = 'block';
-                    try {
-                        myChoice = JSON.parse(localStorage.getItem(MYCHOICE_KEY) || "[]");
-                    } catch (e) { myChoice = []; }
-                    renderMyChoice(); updateHeaderBadges();
-                }
-            });
-        }
-
-        function renderMyChoice() {
-            let container = document.getElementById("myChoiceList");
-            if (myChoice.length === 0) {
-                container.innerHTML = `<div class="empty"><h3>😍 My Choice is Empty</h3><p>Add products you love to buy later!</p><button onclick="window.location.href='index.html'">Start Shopping</button></div>`;
-                return;
-            }
-            container.innerHTML = myChoice.map((item, idx) => {
-                let price = parseFloat(item.price) || 0;
-                let productId = item.id;
-                let img = getProductThumbnail(item);
-                let size = item.size || item.variant || 'M';
-                return `<div class="choice-card">
-                    <img src="${img}" onclick="openProduct('${productId}')" onerror="this.src='https://via.placeholder.com/90x90'">
-                    <div class="item-info">
-                        <h3 onclick="openProduct('${productId}')">${item.name || "Product"}</h3>
-                        <div class="item-price">₹${price}</div>
-                        <div class="item-size">Size: ${size}</div>
-                        <div class="item-code">Code: ${item.code || productId}</div>
-                        <div class="item-actions">
-                            <button class="btn-move-cart" onclick="moveToCart(${idx})">🛒 Move to Cart</button>
-                            <button class="btn-remove" onclick="removeFromChoice(${idx})">🗑️ Remove</button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join("");
-        }
-
-        function openProduct(id) { window.location.href = `product.html?id=${id}`; }
-
-        function moveToCart(idx) {
-            let item = myChoice[idx]; if (!item) return;
-            const user = auth.currentUser;
-            let cartItem = {...item, qty: 1 };
-            if (user) {
-                let key = item.id + '_' + (item.size||'M');
-                rtdb.ref('users/' + user.uid + '/cart/' + key).set(cartItem).then(() => {
-                    rtdb.ref('users/' + user.uid + '/myChoice/' + (item.key||key)).remove();
-                    showToast("✅ Moved to Cart!");
-                });
-            } else {
-                let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-                cart.push(cartItem);
-                localStorage.setItem(CART_KEY, JSON.stringify(cart));
-                removeFromChoice(idx);
-                showToast("✅ Moved to Cart!");
-                if(window.SM_LOCK?.backup) window.SM_LOCK.backup();
-            }
-        }
-
-        function removeFromChoice(idx) {
-            const user = auth.currentUser;
-            if (user) {
-                let item = myChoice[idx];
-                rtdb.ref('users/' + user.uid + '/myChoice/' + (item.key||item.id)).remove().then(() => showToast("❌ Removed"));
-            } else {
-                myChoice.splice(idx,1);
-                localStorage.setItem(MYCHOICE_KEY, JSON.stringify(myChoice));
-                renderMyChoice(); updateHeaderBadges(); showToast("❌ Removed from My Choice");
-                if(window.SM_LOCK?.backup) window.SM_LOCK.backup();
-            }
-        }
-
-        function updateHeaderBadges() {
-            const user = auth.currentUser;
-            if (!user) {
-                let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-                let totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-                document.getElementById('cartBadge').innerText = totalQty;
-                document.getElementById('cartBadge').style.display = totalQty > 0? 'flex' : 'none';
-                document.getElementById('bottomCartBadge').innerText = totalQty;
-                document.getElementById('bottomCartBadge').style.display = totalQty > 0? 'flex' : 'none';
-                return;
-            }
-            rtdb.ref('users/' + user.uid + '/cart').on('value', (snapshot) => {
-                let totalQty = 0; if (snapshot.exists()) snapshot.forEach((child) => { totalQty += (child.val().qty || 1); });
-                document.getElementById('cartBadge').innerText = totalQty;
-                document.getElementById('cartBadge').style.display = totalQty > 0? 'flex' : 'none';
-                document.getElementById('bottomCartBadge').innerText = totalQty;
-                document.getElementById('bottomCartBadge').style.display = totalQty > 0? 'flex' : 'none';
-            });
-        }
-
-        function showToast(message) {
-            const toast = document.createElement("div");
-            toast.innerText = message;
-            toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-size:15px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3)";
-            document.body.appendChild(toast); setTimeout(() => document.body.removeChild(toast), 3000);
-        }
-
-        // ✅ ADDED: Home/Product se change suno
-        window.addEventListener('storage', (e)=>{ if(e.key===MYCHOICE_KEY || OLD_WISH_KEYS.includes(e.key)) loadMyChoice(); });
-
-        window.onload = function() { loadMyChoice(); };
-    </script>
+document.addEventListener('DOMContentLoaded', loadMyChoice);
+window.addEventListener('load', loadMyChoice);
+// Safety - agar Firebase late ho to bhi 1 sec me render karo
+setTimeout(loadMyChoice, 1000);
+</script>
 </body>
 </html>
