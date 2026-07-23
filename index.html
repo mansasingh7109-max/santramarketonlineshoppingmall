@@ -19,6 +19,7 @@ if (location.protocol === "http:" &&!location.hostname.includes("localhost")) {
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
 <!-- 2. Boss files BAAD me -->
+  <script src="santra-safe-start.js?v=1"></script>
 <script src="constants.js?v=1"></script>
 <script src="config.js?v=1"></script>
 <script src="./secrets.js"></script>
@@ -227,8 +228,17 @@ body > div:nth-child(2),
 
 </style> 
 
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script src="auto-loader.js"></script>
+<script src="share.js?v=24july-final"></script>
+<script src="santra-image-link-fix.js?v=23july"></script>
+
 </head>
 <body>
+  <script src="santra-products-fix.js"></script>
+<div id="otpNotifyLine" style="display:none;background:#e40046;color:white;padding:10px;text-align:center;font-weight:bold;position:sticky;top:0;z-index:9999;cursor:pointer" onclick="location.href='share-otp-verify.html?orderId='+(localStorage.getItem('lastOrderId')||'')"><span>🔔</span> <span id="otpNotifyText">Order Placed! Add OTP for Verification - Click Here</span> ➡️</div><script>setInterval(()=>{let id=localStorage.getItem('lastOrderId'); if(id){document.getElementById('otpNotifyLine').style.display='block';}},3000)</script>
 <div class="main-container">
 <div class="left-sidebar">
 <div id="userInfo" class="hide"><div>Hi,</div><b id="userName"></b><span id="oldCustomerBadge" class="hide" style="background:#ff6b00;color:white;padding:2px 4px;border-radius:3px;font-size:8px;margin-top:2px;display:block;"></span></div>
@@ -318,7 +328,19 @@ function loadProducts(){
   });
  });
 }
-function getProductImage(p){ if(p.media&&p.media[0]?.url) return p.media[0].url; if(p.images&&p.images[0]) return p.images[0]; if(p.image) return p.image; return "https://via.placeholder.com/300?text=No+Image"; }
+function getProductImage(p){
+  if(!p) return "";
+  if(p.image && p.image.startsWith('http')) return p.image;
+  if(p.thumbnail && p.thumbnail.startsWith('http')) return p.thumbnail;
+  if(p.media && p.media[0]?.url) return p.media[0].url;
+  if(p.images && p.images[0]){
+    let first = p.images[0];
+    if(typeof first==='string' && first.startsWith('http')) return first;
+    if(first && first.url && first.url.startsWith('http')) return first.url;
+  }
+  if(p.photo && p.photo.startsWith('http')) return p.photo;
+  return "https://via.placeholder.com/300?text=No+Image";
+}
 </script>
 
 <script>
@@ -406,6 +428,11 @@ function addToCart(product){
  if(window._addingToCart) return;
  window._addingToCart=true; setTimeout(()=>window._addingToCart=false,700);
  if(!product||!product.id){ showToast("❌ Product data missing"); return; }
+ if(!product.image){
+  if(product.images && product.images[0]){
+    product.image = typeof product.images[0]==='string'? product.images[0] : product.images[0].url;
+  } else if(product.thumbnail){ product.image = product.thumbnail; }
+}
  const CART=getCartKey();
  let cartArray=JSON.parse(localStorage.getItem(CART)||"[]");
  let idx=cartArray.findIndex(item=>item.id===product.id);
@@ -515,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }, 500);
 });
 </script>
-<script src="santra-products-fix.js"></script>
+
 </body>
 </html>
 
