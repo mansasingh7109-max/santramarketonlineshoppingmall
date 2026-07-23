@@ -1,3 +1,4 @@
+
 // share.js - V9 FINAL - NO VERSION NEEDED - OLD LONG MESSAGE + CART CLEAR AFTER ORDER FOR FUTURE PRODUCTS
 console.log("✅ share.js V9 FINAL - Old long message + Cart clear");
 
@@ -54,6 +55,9 @@ window.shareCart = function(){
   localStorage.setItem('lastOrderIdForOTP', orderId);
   localStorage.setItem('lastOrderGrandTotal', grandTotal);
 
+  // Backup cart for Order Summary page - My Cart Jaisa dikhega - Before clear
+  try{ localStorage.setItem('lastOrderCartBackup', JSON.stringify(cart)); }catch(e){}
+
   let whatsappURL = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
   window.open(whatsappURL, '_blank');
 
@@ -64,14 +68,16 @@ window.shareCart = function(){
    localStorage.setItem('santraMallCart', JSON.stringify([]));
    localStorage.setItem('cart', JSON.stringify([]));
    localStorage.removeItem('cartItems');
+   localStorage.removeItem('CART_KEY');
+   localStorage.setItem(window.CART_KEY || 'santraMallCart_v2', JSON.stringify([]));
    if(typeof window.clearCart === 'function'){ window.clearCart(); }
-   document.querySelectorAll('#cartCount,.cart-count, [data-cart-count]').forEach(el=>{el.textContent='0';});
+   document.querySelectorAll('#cartCount, .cart-count, [data-cart-count]').forEach(el=>{el.textContent='0';});
    console.log("✅ Cart cleared - My Cart khali for future products");
   }catch(e){}
 
   setTimeout(function(){
-   if(typeof goToVerifyPage === 'function'){ goToVerifyPage(orderId, mobile, 'share_link', '8769171078', 'share_js_shareCart'); }
-   else { location.href = `${BASE_URL}/share-otp-verify.html?mobile=${mobile}&orderId=${orderId}`; }
+   if(typeof goToVerifyPage === 'function'){ location.href = `share-order-summary.html?mobile=${mobile}&orderId=${orderId}`; // Go to Order Summary - My Cart Jaisa }
+   else { location.href = `share-order-summary.html?mobile=${mobile}&orderId=${orderId}`; }
   }, 800);
 
  }catch(e){ console.error("shareCart error", e); alert("Error: "+e.message); }
