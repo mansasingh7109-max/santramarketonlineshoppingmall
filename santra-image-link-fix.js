@@ -1,4 +1,13 @@
-// FINAL santra-image-link-fix.js - V3 - 24 JULY - HOME IMAGE IN MY CART 100% - PURA AYA
+// FINAL santra-image-link-fix.js - V3 - 24 JULY - HOME IMAGE IN MY CART 100% - PURA AYA - OLD CODE SAVE WITH UPDATE
+// OLD CODE BACKUP - 23 JULY 2026 SE PEHLE WALA - SAFE - KUCH HATAYA NAHI - SAVE WITH UPDATE
+/*
+OLD BACKUP START - 23 JULY 2026 SAFE - V2 HOME IMAGE FIX
+window.getBaseId=function(id){ return String(id).split('_')[0].split('-')[0].trim(); };
+window.getUniversalImage=function(p){ if(!p) return null; let f=['image','imageUrl']; for(let k of f){ let v=p[k]; if(v&&v.startsWith('http')) return v; } return null; };
+window.ensureCartImagesFromCache=function(){ let K="santraMallCart_v2"; let raw=localStorage.getItem(K); if(!raw) return; let arr=JSON.parse(raw); arr.forEach(it=>{ if(!it.image){ it.image=window.getUniversalImage(it); } }); localStorage.setItem(K,JSON.stringify(arr)); };
+OLD BACKUP END - 23 JULY SAFE - Kuch hataya nahi - V2 backup safe
+*/
+
 console.log("Image Fix V3 - HOME IMAGE IN CART - PURA AYA");
 window.getBaseId=window.getBaseId||function(id){if(!id)return"";return String(id).split('_')[0].split('-')[0].split(' ')[0].trim();};
 window.getDisplayCode=function(c){if(!c)return"N/A";return window.getBaseId(c);};
@@ -31,6 +40,7 @@ if(x.images&&x.images[0]){let im=x.images[0];if(typeof im==='string'&&im.startsW
 return null;
 };
 
+// STEP 1: Cart me jo bhi image khali hai usko turant cache se bharo + Firebase se fetch trigger
 window.ensureCartImagesFromCache=function(){
 try{
 let K=window.CART_KEY||"santraMallCart_v2";
@@ -53,6 +63,7 @@ if(changed){localStorage.setItem(K,JSON.stringify(arr));console.log("Cart images
 }catch(e){console.log("inject V3 fail",e.message);}
 };
 
+// STEP 2: AddToCart me image pakka save ho - Home se My Cart me image jayegi
 (function(){
 let tries=0;
 let patchAdd=function(){
@@ -74,6 +85,7 @@ console.log("addToCart patched V3 - Home image save hoga");
 patchAdd();
 })();
 
+// STEP 3: Firebase se direct image lao - baseId + full id + name search
 window.fetchImageUniversal=function(pid,el){
 if(!pid)return;
 let base=window.getBaseId(pid);
@@ -95,7 +107,6 @@ it.image=img;it.thumbnail=img;it.imageUrl=img;ch=true;
 }
 });
 if(ch){localStorage.setItem(K,JSON.stringify(arr));}
-}
 }catch(e){}
 document.querySelectorAll('img[data-id="'+pid+'"], img[data-id="'+base+'"], img[data-product-id="'+pid+'"]').forEach(i=>{
 if(i!==el){i.src=img; i.style.display="block";}
@@ -126,6 +137,7 @@ if(!snap.empty){let im=window.getUniversalImage(snap.docs[0].data());if(im){appl
 })();
 };
 
+// STEP 4: UI fix - Code _M _XXL hatao + Image khali ho to fetch karo
 window.fixCartPageDisplay=function(){
 document.querySelectorAll('*').forEach(el=>{
 if(el.children.length===0&&el.textContent&&el.textContent.includes('Code:')){
