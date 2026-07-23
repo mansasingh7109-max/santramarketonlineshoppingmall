@@ -1,0 +1,6 @@
+// time-fix.html - FINAL - SIRF JS - NO HTML TAG - NO <!doctype> - NO <script>
+function getISTNow(){let now=new Date();let istDateKey=now.toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).split('/').reverse().join('-');let presentDate=now.toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'});let presentTime=now.toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true});let presentYear=now.getFullYear();let dateTimeIST=now.toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});let timestamp=Date.now();return {date:timestamp,createdAt:timestamp,timestamp:timestamp,istDateKey:istDateKey,presentDate:presentDate,presentTime:presentTime,presentYear:presentYear,dateTimeIST:dateTimeIST,fullIST:dateTimeIST};}
+function getOrderTimeData(){return getISTNow();}
+function getCustomerLoginTime(){let t=getISTNow();return {loginTime:t.date,loginDate:t.presentDate,loginTimeStr:t.presentTime,loginDateTimeIST:t.dateTimeIST,istDateKey:t.istDateKey};}
+function getPresentActionTime(){let t=getISTNow();return {actionTime:t.date,actionDate:t.presentDate,actionTimeStr:t.presentTime,actionDateTimeIST:t.dateTimeIST,istDateKey:t.istDateKey,presentDate:t.presentDate,presentTime:t.presentTime};}
+console.log('✅ time-fix.html Loaded as JS - No SyntaxError');
