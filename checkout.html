@@ -53,6 +53,11 @@
 <p>Order confirm karne ke liye hum aapko WhatsApp pe OTP bhejenge.</p>
 <p><b>OTP milne ke baad wapis isi WhatsApp number pe reply karein.</b></p>
 <p style="margin-top:15px;color:#d32f2f;font-weight:600">Bina OTP ke order confirm nahi hoga!</p>
+<div style="margin-top:12px;background:#fff;padding:10px;border-radius:8px;border:1px dashed #ccc">
+<div style="font-size:12px;color:#666">Paid Amount:</div>
+<div style="font-weight:800;font-size:20px;color:#e91e63">₹<span id="otpGrandTotal">0</span></div>
+<div style="font-size:11px;color:#666">Order ID: <span id="otpOrderId"></span></div>
+</div>
 <a href="https://wa.me/918769171078" class="whatsapp-btn" target="_blank">📱 Open WhatsApp</a>
 </div>
 </div>
@@ -156,7 +161,6 @@ function finishLoad(){
   renderOrderSummary();
 }
 
-/* MY CART Jaisa - Image + Detail + Quantity Remove Link Total Amount - Same As Screenshot */
 function renderOrderSummary() {
   document.getElementById("orderId").innerText = orderId;
   var container = document.getElementById("orderItems");
@@ -259,6 +263,15 @@ async function sendOrder() {
   var delivery = window._totals? window._totals.delivery : 0;
   var grandTotal = window._totals? window._totals.grandTotal : 0;
 
+  // ✅ GRAND TOTAL SAVE - Message ke baad 0 nahi ayega - FIX 23 JULY 2026
+  try{
+    sessionStorage.setItem('lastOrderGrandTotal', grandTotal);
+    sessionStorage.setItem('lastOrderSubtotal', subtotal);
+    sessionStorage.setItem('lastOrderDelivery', delivery);
+    sessionStorage.setItem('lastOrderId', orderId);
+    localStorage.setItem('lastOrderGrandTotal', grandTotal);
+  }catch(e){}
+
   var t = {date:Date.now(), presentDate:new Date().toLocaleDateString('en-IN'), presentTime:new Date().toLocaleTimeString('en-IN'), dateTimeIST:new Date().toLocaleString('en-IN'), istDateKey:new Date().toISOString().split('T')[0]};
   try{ if(typeof getISTNow === 'function'){ t=getISTNow(); } }catch(e){}
 
@@ -296,7 +309,6 @@ async function sendOrder() {
   };
 
   try {
-    /* PLACE ORDER FIX - saveOrderSafely nahi hai toh direct save */
     if(typeof saveOrderSafely === 'function'){
       await saveOrderSafely(orderId, orderData, text);
     } else {
@@ -319,15 +331,25 @@ async function sendOrder() {
       sendBtn.innerText = "✅ Order Placed - OTP Sent on WhatsApp";
     },800);
     try{ var u=auth.currentUser; if(u){ rtdb.ref("users/"+u.uid+"/cart").remove(); } }catch(e){}
+
+    // ✅ FIX - Grand Total 0 nahi hoga - Sahi total dikhega - My Cart jaisa - 23 JULY 2026
     document.getElementById("formCard").style.display="none";
     document.getElementById("otpBox").style.display="block";
-    document.getElementById("orderItems").innerHTML="";
-    document.getElementById("grandTotal").innerText="0";
+    // Items hide mat karo - Grand Total sahi rakho
+    document.getElementById("grandTotal").innerText = grandTotal;
+    document.getElementById("subTotal").innerText = subtotal;
+    document.getElementById("deliveryCharge").innerText = delivery===0?"FREE":"₹"+delivery;
+    // OTP Box me bhi sahi total
+    document.getElementById("otpGrandTotal").innerText = grandTotal;
+    document.getElementById("otpOrderId").innerText = orderId;
+    // Order Items ko hide nahi karna - Total dikhna chahiye
+    // document.getElementById("orderItems").innerHTML=""; // ❌ Ye line hata di - Isi se 0 aa raha tha
+
     window.scrollTo({top:0,behavior:"smooth"});
     alert("✅ Order Placed Successfully! Amount: ₹"+grandTotal+" - My Cart wala item - Date: "+t.presentDate+" "+(t.presentTime||''));
   } catch (error) {
     console.error(error);
-    if(errBox){ errBox.innerText="❌ Order failed: "+error.message+" - Place Order Fix - Check Firebase Rules - RTDB /orders allow write true karo"; errBox.style.display='block'; }
+    if(errBox){ errBox.innerText="❌ Order failed: "+error.message; errBox.style.display='block'; }
     else alert("❌ Order failed: "+error.message);
     sendBtn.disabled = false;
     sendBtn.innerText = "📱 SEND ORDER - Place Order";
@@ -354,5 +376,7 @@ document.addEventListener("DOMContentLoaded", function(){
   loadOrder();
 });
 </script>
+<script src="otp-connect.js"></script>
+<script>async function placeOrderCheckout(){ let cust={name:custName.value,mobile:custMobile.value,address:custAddress.value}; let cart=JSON.parse(localStorage.getItem('cart')||'[]'); let total=cart.reduce((s,i)=>s+i.price*i.qty,0); let oid=await saveOrderBoth(cust,cart,total,'checkout'); location.href='share-otp-verify.html?orderId='+oid; }</script>
 </body>
 </html>
