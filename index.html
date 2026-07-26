@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <title>🛒 SANTRAJET MALL online</title>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="layout.css" />
@@ -18,6 +20,8 @@ if (location.protocol === "http:" &&!location.hostname.includes("localhost")) {
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+<!--?v= mat lagao -->
 <!-- 2. Boss files BAAD me -->
   <script src="santra-safe-start.js?v=1"></script>
 <script src="constants.js?v=1"></script>
@@ -37,7 +41,7 @@ document.addEventListener("error", function (e) {
  if (e.target.tagName === "IMG") { e.target.src = "https://via.placeholder.com/300?text=No+Image"; }
 }, true);
 // OLD CODE SAVED - purana mychoice.html as script galat tha
-// <script src="mychoice.html"></script> 
+// <script src="mychoice.html">/script> 
 </script>
 <style>
 .main-container{display:flex;min-height:100vh;background:#e8f5e9;}
@@ -228,12 +232,11 @@ body > div:nth-child(2),
 
 </style> 
 
- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script src="auto-loader.js"></script>
+
 <script src="share.js?v=24july-final"></script>
-<script src="santra-image-link-fix.js?v=23july"></script>
+<script src="santra-image-link-fix.js"></script>
+<script src="santra-mychoice-sync-fix.js"></script>
+
 
 </head>
 <body>
@@ -411,7 +414,10 @@ function renderProducts(products){
   }
   html+=`<div class="product-card">
    <div class="image-slider" style="position:relative;">
-    <button onclick="event.stopPropagation(); toggleMyChoice('${p.id}')" id="heart-${p.id}" style="position:absolute;top:8px;right:8px;background:white;border:none;border-radius:50%;width:32px;height:32px;font-size:18px;z-index:999">🤍</button>
+   
+   <button id="heart-${p.id}" data-id="${p.id}" onclick="event.stopPropagation(); toggleMyChoice('${p.id}',event)" style="position:absolute;top:8px;right:8px;border:none;background:white;border-radius:50%;width:32px;height:32px;font-size:18px;z-index:10">🤍</button>
+   
+   
     ${images.map((img,idx)=>`<img src="${img}" style="display:${idx===0?"block":"none"};width:100%;height:140px;object-fit:contain;" onclick="window.location.href='product.html?id=${p.id}'">`).join("")}
    </div>
    <div class="product-info"><h3>${p.name}</h3><span class="price">₹${p.price}</span><p>Stock: ${p.stock}</p></div>
@@ -481,11 +487,11 @@ function searchProducts(){ let q=document.getElementById("searchInput").value.to
 window.addEventListener("load", updateCartCount);
 window.addEventListener("storage", updateCartCount);
 </script>
-<!-- OLD CODE SAVED - NOT DELETED -->
-<script src="cart.js?v=6"></script>
-<script src="mychoice.js?v=6"></script>
-<script src="category.js"></script>
-<script src="customer-account.js"></script>
+<!-- OLD CODE SAVED - NOT DELETED --><script src="cart.js?v=6"></script><!-- <script src="mychoice.s?v=6"></script> OLD - mychoicesame.js se clash - OLD SAVE -->
+
+<script src="mychoice.js?v=6"></script><script src="category.js"></script>
+<script src="customer-account.js"></script>  <!-- ✅ sahi - yahi replace karna hai -->
+
 <script src="login.js"></script>
 <!-- OLD SAVED: <script src="./secrets.js"></script> duplicate tha - comment me rakha -->
 <!-- OLD SAVED: <script src="cache-buster.js"></script> duplicate tha -->
@@ -541,7 +547,11 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }, 500);
 });
+
+
 </script>
+
+<script src="cart.js"></script>
 
 </body>
 </html>
