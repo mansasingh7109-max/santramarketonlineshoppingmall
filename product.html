@@ -12,13 +12,6 @@
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script src="auto-loader.js"></script>
-
-
         <!-- 2. CONSTANTS.JS - SABSE PEHLE ⚠️ YE ADD KIYA -->
         <script src="constants.js?v=1"></script>
 
@@ -49,7 +42,7 @@
 
         <!-- 6. cart.js sabse last -->
         <script src="cart.js?v=6"></script>
-
+        <script src="mychoice.js"></script>
         <style>
             :root {
                 --accent: #e40046;
@@ -378,7 +371,7 @@
             }
         </style>
         <script src="santra-image-link-fix.js?v=23july"></script>
-        
+       <script src="santra-mychoice-sync-fix.js"></script> 
     </head>
 
     <body>
@@ -766,5 +759,16 @@
                     `<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p><p><a href="index.html">← Back to Home</a></p></div>`;
             }
         </script>
+        <script src="mychoicesame.js"></script>
+<script>
+<!-- Header me Cart Icon -->
+<a href="mychoice-same.html">
+  <span id="cart-count">0</span> Cart
+</a>
+
+<!-- My Choice Button kahi bhi -->
+<a href="mychoice-same.html#mychoice-tab">My Choice</a>
+
+</script>
     </body>
 </html>
