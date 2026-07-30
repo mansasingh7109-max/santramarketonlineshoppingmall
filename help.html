@@ -47,14 +47,14 @@
 
   <div class="helpdesk-box" style="text-align: left; margin: 20px auto; padding: 30px; background: #ffffff; border-radius: 12px; max-width: 850px; line-height: 1.8; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
     <h2 style="color: #1e8449; text-align: center; margin-bottom: 25px; font-size: 28px;">HELP DESK - SANTRAJET MALL</h2>
-    <p style="text-align: center; color: #666; margin-bottom: 30px;">We are here to help you from 10 AM to 8 PM, Monday to Sunday</p>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">We are here to help you from 10 AM to 6 PM, Monday to Sunday</p>
 
     <h3 style="color: #ff6b35; border-bottom: 2px solid #1e8449; padding-bottom: 8px; margin-top: 30px;">1. Quick Contact Options:</h3>
     <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0;">
         <div style="flex: 1; min-width: 250px; padding: 15px; background: #e8f5e8; border-radius: 8px;">
             <b style="color: #1e8449;">📞 Call Support</b><br>
             +91 8769171078<br>
-            <small>10 AM - 8 PM | Mon-Sun</small>
+            <small>10 AM - 6 PM | Mon-Sun</small>
         </div>
         <div style="flex: 1; min-width: 250px; padding: 15px; background: #fff3e0; border-radius: 8px;">
             <b style="color: #ff6b35;">💬 WhatsApp Chat</b><br>
@@ -93,7 +93,7 @@
 
     <div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #1e8449; border-radius: 5px;">
         <b>Q3. What are the delivery charges?</b><br>
-        Ans: FREE delivery on orders above Rs. 499. Below that Rs. 30 delivery charge applies.
+        Ans: FREE delivery on orders above Rs. 499. Below that Rs.  delivery charge applies.
     </div>
 
     <div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #1e8449; border-radius: 5px;">
@@ -125,7 +125,7 @@
     <h3 style="color: #ff6b35; border-bottom: 2px solid #1e8449; padding-bottom: 8px; margin-top: 30px;">5. Service Areas & Timing:</h3>
     <p>
         <b>Delivery Cities:</b> all over India<br>
-        <b>Delivery Time:</b> Morning 9 AM - 1 PM | Evening 4 PM - 8 PM<br>
+        <b>Delivery Time:</b> Morning 9 AM - 1 PM | Evening 4 PM - 6 PM<br>
         <b>Order Cut-off Time:</b> Orders before 7 PM delivered same day<br>
         <b>Sunday:</b> Closed - No delivery<br>
         <b>Festival Days:</b> Timing may vary, please check on WhatsApp
@@ -169,12 +169,13 @@
   // STEP 1: REAL FIREBASE CONFIG - admin.html se copy karke yahan paste kar
      const firebaseConfig = {
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
 };
 
   // STEP 2: Firebase Start Kar
@@ -199,7 +200,7 @@
       } else {
         // Firebase me data nahi mila to default dikha de
         document.getElementById("phone").innerText = "8769171078";
-        document.getElementById("email").innerText = "mansasingh7109@gmail.com";
+        document.getElementById("email").innerText = "santramarketshoppingmall@gmail.com";
         document.getElementById("whatsapp").innerText = "8769171078";
       }
     } catch (error) {
@@ -217,13 +218,13 @@
 <script>
 console.log('%c🔒 SANTRA MALL BACKUP PROTECTION', 'color:#e40046;font-size:16px;font-weight:bold');
 console.log('%cBackup Time: 4 June 2026, 4:34 PM IST', 'color:#10b981;font-weight:bold');
-console.log('%cLocation: Pilibanga, Rajasthan', 'color:#3b82f6;font-weight:bold');
+console.log('%cLocation: Mumbai, India', 'color:#3b82f6;font-weight:bold');
 
 // ✅ AUTO BACKUP EVERY ORDER
 window.santraBackup = {
   version: '1.0',
   timestamp: '2026-06-04T16:34:00+05:30',
-  location: 'Pilibanga, Rajasthan',
+  location: 'Mumbai, India',
 
   // Backup localStorage data
   backupLocalStorage: function() {
