@@ -7,7 +7,7 @@
 const EMAILJS_SERVICE_ID = 'service_xxxxxxx'; // Yahan apni Service ID daalo
 const EMAILJS_TEMPLATE_ID = 'template_xxxxxxx'; // Yahan Template ID daalo
 const EMAILJS_PUBLIC_KEY = 'xxxxxxxxxxxxxxx'; // Yahan Public Key daalo
-const ADMIN_EMAIL = 'admin@santramall.com'; // Admin ka email
+const ADMIN_EMAIL = 'santramarketshoppingmall@gmail.com'; // Admin ka email
 
 // EmailJS Initialize - Ek baar hi chalega
 emailjs.init(EMAILJS_PUBLIC_KEY);

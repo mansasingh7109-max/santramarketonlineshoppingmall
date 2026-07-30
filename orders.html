@@ -126,7 +126,17 @@ if(typeof window.COLLECTIONS==='undefined') window.COLLECTIONS={CUSTOMERS:'custo
 if(typeof window.ADMIN_WHATSAPP==='undefined') window.ADMIN_WHATSAPP="918769171078";
 if(typeof window.BASE_URL==='undefined') window.BASE_URL="https://santramarketshoppingmall.web.app";
 if(typeof window.firebaseConfig==='undefined'){
-  window.firebaseConfig={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com"};
+  window.firebaseConfig={
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+    
+  };
 }
 try{if(typeof window.initFirebaseOnce==='function'){window.initFirebaseOnce(window.firebaseConfig);}else if(!firebase.apps.length){firebase.initializeApp(window.firebaseConfig);}}catch(e){console.log(e.message);}
 const db = window.db || firebase.firestore();
