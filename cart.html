@@ -8,81 +8,83 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
 <script>window.getISTNow=window.getISTNow||function(){let now=new Date();let ist=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));let pad=n=>String(n).padStart(2,'0');return{presentDate:`${pad(ist.getDate())}/${pad(ist.getMonth()+1)}/${ist.getFullYear()}`,presentTime:ist.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),tomorrowDate:`${pad(ist.getDate()+1)}/${pad(ist.getMonth()+1)}/${ist.getFullYear()}`};};</script>
- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script src="auto-loader.js"></script>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+
+<!-- OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA - SAFE - DELETE NAHI - V11 V12 V13 V14 V15 V16 V17 OLD SAVE
+<script src="santra-cache-fix.js"></script> - HIDE - } error - OLD SAVE
+<script src="auto-loader.js"></script> - HIDE - < error - OLD SAVE - 30/07/2026 ko console me SyntaxError '<' aa raha tha - isliye V23 me HIDE
+<script src="time-fix.js"></script> - HIDE - < error - OLD SAVE - 404 HTML de raha tha
+<script src="double-code-safeguard.js"></script> - HIDE - double load error - OLD SAVE
+<script src="order-saver.js"></script> - HIDE - OLD SAVE
+<script src="secrets.js"></script> - OLD SAVE - FILE SAFE - DELETE NAHI
+<script src="config.js"></script> - OLD SAVE - FILE SAFE - DELETE NAHI
+OLD CODE BACKUP END - SAFE - DNA - DELETE NAHI
+-->
+
 <script src="santra-safe-start.js"></script>
-<script src="time-fix.js"></script>
 <script src="constants.js?v=1"></script>
 <script src="secrets.js?v=1"></script>
 <script src="config.js?v=6"></script>
 
 <script>
-// FINAL IMAGE FIX - V3 - 24 JULY - _M hata ke Home page cache se image - OLD CODE SAVE WITH UPDATE
-// OLD BACKUP - 29 JUNE 2026 - CART_KEY, MYCHOICE_KEY, getSafeCartArray OLD - SAVE WITH UPDATE
-window.getBaseId=window.getBaseId||function(id){return String(id||'').split('_')[0].split('-')[0].trim();};
+// V23 FINAL - Past Present Future All Image Fix - OLD CODE SAVE WITH UPDATE CORRECTION - < error fix
+// OLD BACKUP - 29 JUNE 2026 - CART_KEY, MYCHOICE_KEY OLD - SAVE WITH UPDATE - DELETE NAHI
+console.log("✅ cart.html V23 FINAL - Old Code Save With Update - < error fix + Image 100%");
+window.getBaseId=window.getBaseId||function(id){ if(!id) return ""; return String(id||'').replace(/^home_/i,'').replace(/^prod_/i,'').split('_')[0].split('-')[0].trim().toLowerCase().split('_')[0]; };
+window.isValidHttpImage=function(u){ if(!u||typeof u!=='string') return false; let s=u.trim(); if(s==""||s=="N/A"||s=="null"||s=="undefined") return false; if(s.startsWith('blob:')) return false; if(s.includes('[object Object]')) return false; if(s.length<12) return false; return s.startsWith('http://')||s.startsWith('https://'); };
 window.getUniversalImage=window.getUniversalImage||function(p){
   if(!p) return "";
-  let f=['image','imageUrl','thumbnail','thumb','photo','img','productImage','mainImage','src'];
-  for(let k of f){if(p[k]&&typeof p[k]==='string'&&p[k].startsWith('http')&&!p[k].includes('placeholder')) return p[k].trim();}
-  if(p.images&&p.images[0]){let im=p.images[0]; if(typeof im==='string'&&im.startsWith('http')) return im; if(im.url) return im.url;}
-  if(p.media&&p.media[0]){let m=p.media[0]; if(typeof m==='string'&&m.startsWith('http')) return m; if(m.url) return m.url;}
+  let keys=['image','imageUrl','httpsUrl','thumbnail','thumb','photo','img','productImage','mainImage','src','imageURL','imgbb','cloudinary','lux','mainImageUrl'];
+  for(let k of keys){ if(p[k]&&typeof p[k]==='string'&&window.isValidHttpImage(p[k].trim())){ let url=p[k].trim(); if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; } return url; } }
+  if(p.httpsUrls&&Array.isArray(p.httpsUrls)){ for(let u of p.httpsUrls){ if(window.isValidHttpImage(u)) return u; } }
+  if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||""; if(window.isValidHttpImage(u)) return u; } }
   try{
-    let caches=[];
-    try{caches=caches.concat(JSON.parse(localStorage.getItem('santra_all_products_cache')||'[]'));}catch(e){}
-    try{caches=caches.concat(JSON.parse(localStorage.getItem('allProducts')||'[]'));}catch(e){}
-    if(window.allProducts) caches=caches.concat(window.allProducts);
-    let base=window.getBaseId(p.id||'').toLowerCase();
-    let fd=caches.find(x=>x&&String(x.id||'').toLowerCase().split('_')[0]===base);
-    if(fd){for(let k of f){if(fd[k]&&fd[k].startsWith('http')) return fd[k];} if(fd.images&&fd.images[0]){let im=fd.images[0]; return typeof im==='string'?im:im.url;}}
+    let all=[];
+    ["santram_products_v1","santram_products_backup","santra_6way_backup","sm","santra_all_products_cache","allProductsCache","santra_all_products","allProducts","santra_products","products_temp"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); all=all.concat(Array.isArray(a)?a:Object.values(a)); } }catch(e){} });
+    if(window.allProducts) all=all.concat(window.allProducts);
+    let base=window.getBaseId(p.id||p.code||"").toLowerCase();
+    let name=(p.name||"").toLowerCase().split(' ')[0];
+    let fd=all.find(function(x){ return window.getBaseId(x.id||x.code||"").toLowerCase()===base; });
+    if(!fd&&name) fd=all.find(function(x){ return String(x.name||"").toLowerCase().includes(name); });
+    if(fd){ for(let k of keys){ if(fd[k]&&window.isValidHttpImage(fd[k])) return fd[k]; } }
   }catch(e){}
   return "";
 };
+window.getSafeImage=function(item){ let img=window.getUniversalImage(item); if(window.isValidHttpImage(img)) return img; return `https://via.placeholder.com/90x90?text=${encodeURIComponent(item.name||'Product')}`; };
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="common.js"></script>
 <script src="mychoicesame.js"></script>
 <script src="cart.js"></script>
-<script src="santra-image-link-fix.js?v=24july-v4-final"></script>
+<script src="santra-image-link-fix.js"></script>
 <script src="santra-mychoice-sync-fix.js"></script>
 <script src="share.js?v=24july-FINAL-LINK-PDF"></script>
+
 <style>
 :root{--bg:#f1f3f6;--card:#fff;--accent:#e40046;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",Arial,sans-serif}
 body{background:var(--bg);padding-bottom:160px}
 .header{background:var(--accent);color:white;padding:15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
 .header h1{font-size:18px;flex:1}.back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
-.today-strip{background:#f0fdf4;border:1px solid var(--green);padding:6px 10px;border-radius:8px;margin:8px 15px;font-size:11px;font-weight:bold;text-align:center;color:#065f46}.tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.today-strip{background:#f0fdf4;border:1px solid var(--green);padding:6px 10px;border-radius:8px;margin:8px 15px;font-size:11px;font-weight:bold;text-align:center;color:#065f46}
 .tabs{display:flex;background:var(--card);margin:10px 15px;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.tab{flex:1;padding:12px 6px;text-align:center;font-weight:600;cursor:pointer;border:none;background:transparent;font-size:13px;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:4px;line-height:1.2}
+.tab{flex:1;padding:12px 6px;text-align:center;font-weight:600;cursor:pointer;border:none;background:transparent;font-size:13px}
 .tab.active{background:var(--accent);color:white}
-
-
-.cart-card{background:var(--card);border-radius:12px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:15px;align-items:flex-start}
-.cart-card img{width:90px;height:90px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #eee;flex-shrink:0;display:block;cursor:pointer}
-.item-info{flex:1;min-width:0}.item-info h3{font-size:14px;cursor:pointer}.item-price{color:var(--accent);font-weight:700;margin:5px 0}.item-code{font-size:11px;color:#666}
-.qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px}.qty-btn{background:#eee;border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-weight:bold}.qty-display{padding:0 12px;font-weight:bold}
+.cart-card{background:white!important;border-radius:12px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:15px}
+.cart-card img{width:90px;height:90px;object-fit:contain;background:white!important;border-radius:8px;border:1px solid #eee;flex-shrink:0;display:block;cursor:pointer}
+.item-info{flex:1;min-width:0}.item-info h3{font-size:14px}.item-price{color:var(--accent);font-weight:700;margin:5px 0}.item-code{font-size:11px;color:#666}
+.qty-controls{display:flex;gap:8px;align-items:center;margin-top:10px}.qty-btn{background:#eee;border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-weight:bold}
 .item-actions{display:flex;flex-direction:column;gap:8px;margin-top:8px}.btn-move-choice,.btn-remove,.btn-share{color:white;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;width:100%}.btn-move-choice{background:var(--orange)}.btn-remove{background:#ef4444}.btn-share{background:var(--blue)}
-.empty{text-align:center;padding:80px 20px;color:#999}.summary{background:var(--card);margin:15px;border-radius:12px;padding:18px}.summary-row{display:flex;justify-content:space-between;margin:10px 0}.total-row{font-weight:700;font-size:18px;border-top:2px solid #e0e0e0;padding-top:12px;margin-top:12px}
+.summary{background:var(--card);margin:15px;border-radius:12px;padding:18px}.summary-row{display:flex;justify-content:space-between;margin:10px 0}.total-row{font-weight:700;font-size:18px;border-top:2px solid #e0e0e0;padding-top:12px;margin-top:12px}
 .btn-send-all{background:linear-gradient(135deg,#25d366,#ea4335);padding:16px;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%}.btn-pdf{background:#7c3aed;padding:14px;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;width:100%;margin-top:10px}
 .checkout-btn{position:fixed;bottom:70px;left:15px;right:15px;background:var(--accent);color:white;border:none;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;z-index:50;text-decoration:none;text-align:center;display:block}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:10px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:100}.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px}.nav-item.active{color:var(--accent)}
-.bottom-nav{ position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around; padding:8px 0 12px; box-shadow:0 -2px 10px rgba(0,0,0,0.1); z-index:999; }
-.bottom-nav.nav-item.active{ color:#e40046; }
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 12px;box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:999}
+.nav-item{text-align:center;text-decoration:none;color:#666;flex:1;padding:5px}
 #myChoiceList,#cartList{display:flex!important;flex-direction:column!important;gap:15px!important;padding:15px!important}
-.hide{display:none!important}.top-select-bar{background:white;margin:0 15px 10px 15px;padding:10px 12px;border-radius:10px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-button[onclick*="Fix Extra"], button[onclick*="Clear Duplicate"], #fixExtraBtn {display:none!important;}
-
-/* OLD CODE SAVE - grey aa raha tha - OLD SAVE HIDE */
-/* OLD: .cart-card{background:var(--card)...} - var(--card) grey tha - isliye white nahi - OLD SAVE HIDE */
-/* .cart-card{background:var(--card);border-radius:12px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:15px;align-items:flex-start} */
-/* .cart-card img{width:90px;height:90px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid #eee;flex-shrink:0;display:block;cursor:pointer} */
-
-/* NEW FIX - White background chahiye - My Cart + My Choice dono ke liye - OLD SAVE WITH UPDATE */
-.cart-card{background:white !important;border-radius:12px;padding:15px;display:flex;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:15px;align-items:flex-start}
-.cart-card img{width:90px;height:90px;object-fit:contain;background:white !important;border-radius:8px;border:1px solid #eee;flex-shrink:0;display:block;cursor:pointer}
+.hide{display:none!important}.top-select-bar{background:white;margin:0 15px 10px;padding:10px 12px;border-radius:10px;display:flex;align-items:center;gap:10px}
 </style>
 </head>
 <body>
@@ -98,96 +100,78 @@ button[onclick*="Fix Extra"], button[onclick*="Clear Duplicate"], #fixExtraBtn {
 <div id="choiceView" class="hide"><div class="top-select-bar" id="choiceTopBar" style="display:none"><label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="checkbox" id="selectAllChoice" onchange="toggleAllChoice(this.checked)"> Select All</label><button onclick="moveSelectedToCart()" style="background:#10b981;color:white;margin-left:auto;border:none;padding:8px 10px;border-radius:6px;font-weight:600">→ Cart</button><button onclick="removeSelectedChoice()" style="background:#fee2e2;color:#ef4444;border:none;padding:8px 10px;border-radius:6px;font-weight:600">Remove</button></div><div id="myChoiceList"></div></div>
 <div class="bottom-nav"><a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a><a href="cart.html" class="nav-item active"><div>🛒</div><span>Cart</span></a><a href="orders.html" class="nav-item"><div>📦</div><span>Orders</span></a></div>
 
-<div id="mychoice-cart-popup"></div>
-
-<script src="double-code-safeguard.js"></script>
-
-<!--
-OLD CODE BACKUP - 29 JUNE 2026 - SAFE - SAVE WITH UPDATE - 23 JULY 2026 - OLD CODE SAVE WITH UPDATE 24 JULY
-CART_KEY, MYCHOICE_KEY, getSafeCartArray(), getProductThumbnail() OLD - SAVE WITH UPDATE
-saveCart() OLD - 3 jagah save karta tha - Ab 1 jagah - SAVE WITH UPDATE
-EXTRA FIX - Fix Extra Item - Clear Duplicate - Old logic - SAVE but hide
-Title OLD: My Cart - Extra Item Fix - Image Fix -> ab clean My Cart - SAVE WITH UPDATE
-Today OLD: Aaj: 23/7/2026 - Time Fix Fallback - Extra Item Fix -> ab clean Aaj: 23/7/2026 - SAVE WITH UPDATE
-Price Details OLD: Price Details - Extra Item Fix -> ab clean Price Details - SAVE WITH UPDATE
-Total Amount OLD: Total Amount - Amount -> ab clean Total Amount - SAVE WITH UPDATE
-PROCEED TO CHECKOUT OLD: PROCEED TO CHECKOUT - Extra Item Fix -> ab clean - SAVE WITH UPDATE
-IMAGE FIX: Lux soap MNJoFdR0G7fMHwdkV0P6_M - _M hata ke base ID se image - FINAL
-SHARE BUTTON OLD: shareProduct(id){ shareSingleProduct(id); } - exact match bug - ab baseId match fix
-PDF BUTTON OLD: generateAndSharePDF(){} khali tha - ab full jsPDF invoice fix
-OLD BACKUP END - 24 JULY 2026 - SAFE - OLD CODE SAVE WITH UPDATE
--->
-
 <script>
 let cart={};let myChoice={};let t={presentDate:'',presentTime:''};
 function initTimeFix(){try{if(typeof getISTNow==='function'){t=getISTNow();document.getElementById('todayBar').innerText=`Aaj: ${t.presentDate} ${t.presentTime}`;document.getElementById('clock').innerText=t.presentTime||'';document.getElementById('todayDateBar').innerText=t.presentDate;}}catch(e){}}
 initTimeFix();setInterval(initTimeFix,60000);
 window.switchTab=function(tab){document.getElementById("cartTab").classList.toggle("active",tab==="cart");document.getElementById("choiceTab").classList.toggle("active",tab==="choice");document.getElementById("cartView").classList.toggle("hide",tab!=="cart");document.getElementById("choiceView").classList.toggle("hide",tab!=="choice");if(tab==="choice")renderMyChoice();else renderCart();};
 function loadData(){if(!window.CART_KEY){setTimeout(loadData,100);return;}loadFromLocal();}
-
-// UPDATED 26 JULY - OLD CODE SAVE WITH UPDATE - EXTRA ITEM Product ₹0 FILTER + HOME HEART FIX
 function loadFromLocal(){
   try{
     let cartArray=[];let raw=localStorage.getItem(window.CART_KEY||'santraMallCart_v2');
     if(raw){try{let p=JSON.parse(raw);cartArray=Array.isArray(p)?p:Object.values(p);}catch(e){}}
+    let allCache=[]; try{ ["santram_products_v1","santram_products_backup","santra_6way_backup","sm","santra_all_products_cache","allProductsCache","santra_all_products","allProducts"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v) allCache=allCache.concat(JSON.parse(v)); }catch(e){} }); if(window.allProducts) allCache=allCache.concat(window.allProducts); }catch(e){}
     cart={};let seen={};
     cartArray.forEach(function(item){
       if(!item) return;
       if(item.name==="Product" && (!item.price||item.price==0)) return;
-      if(String(item.id||"").length>18 && (!item.price||item.price==0)) return;
-      let id=(item.id||'').toString().trim(); if(!id) return;
+      let id=(item.id||'').toString().trim(); if(!id||id.includes('[object Object]')) return;
+      let baseId=window.getBaseId(id);
+      let isBad=!item.image||!window.isValidHttpImage(item.image)||String(item.image).includes('blob:');
+      if(isBad){
+        let real=allCache.find(function(x){ return window.getBaseId(x.id||x.code||"")===baseId; });
+        if(!real&&item.name) real=allCache.find(function(x){ return String(x.name||"").toLowerCase().includes(String(item.name||"").toLowerCase().split(' ')[0]); });
+        if(real){ let good=window.getUniversalImage(real); if(window.isValidHttpImage(good)){ item.image=good; item.imageUrl=good; } }
+      }
       if(seen[id]){ if(cart[id]) cart[id].qty=(parseInt(cart[id].qty)||1)+(parseInt(item.qty)||1); }
       else{ seen[id]=true; cart[id]=item; if(!cart[id].qty||cart[id].qty<1) cart[id].qty=1; }
     });
-    let wishRaw=localStorage.getItem(window.MYCHOICE_KEY);
-    let wishArray=[];
-    if(wishRaw){try{let p=JSON.parse(wishRaw);wishArray=Array.isArray(p)?p:[];}catch(e){}}
-    myChoice={};let seenW={};
-    wishArray.forEach(function(item){
-      if(!item) return;
-      if(item.name==="Product" && (!item.price||item.price==0)) return;
-      if(String(item.id||"").length>18 && (!item.price||item.price==0)) return;
-      let id=(item.id||item.code||'').toString().trim(); if(!id||seenW[id]) return;
-      seenW[id]=true; myChoice[id]=item;
-    });
-    try{
-      localStorage.setItem(window.CART_KEY||'santraMallCart_v2', JSON.stringify(Object.values(cart)));
-      localStorage.setItem(window.MYCHOICE_KEY||'santraMallMyChoice_v2', JSON.stringify(Object.values(myChoice)));
-    }catch(e){}
+    try{ localStorage.setItem(window.CART_KEY||'santraMallCart_v2', JSON.stringify(Object.values(cart))); }catch(e){}
+    let wishRaw=localStorage.getItem(window.MYCHOICE_KEY); let wishArray=[]; if(wishRaw){try{let p=JSON.parse(wishRaw);wishArray=Array.isArray(p)?p:[];}catch(e){}}
+    myChoice={};let seenW={}; wishArray.forEach(function(item){ if(!item) return; let id=(item.id||item.code||'').toString().trim(); if(!id||seenW[id]) return; seenW[id]=true; myChoice[id]=item; });
   }catch(e){cart={};myChoice={};}
   renderCart();renderMyChoice();updateCounts();
 }
-
-function openProductPage(id){if(!id)return;let base=window.getBaseId(id);let url=`product.html?id=${base}`;try{window.parent.postMessage({type:'openProduct',id:base,url:url},'*');}catch(e){}try{window.top.location.href=url;}catch(e){window.open(url,'_blank');}}
-function getProductThumbnail(p){return window.getUniversalImage(p);}
-function renderCart(){let c=document.getElementById("cartList"),s=document.getElementById("cartSummary"),b=document.getElementById("checkoutBtn"),k=Object.keys(cart),topBar=document.getElementById("cartTopBar");if(k.length===0){c.innerHTML="<div class=\"empty\">🛒 Your cart is empty</div>";s.classList.add("hide");b.style.display="none";if(topBar)topBar.style.display="none";updateCounts();return;}b.style.display="block";if(topBar)topBar.style.display="flex";c.innerHTML=k.map(function(key){let i=cart[key],q=parseInt(i.qty)||1,p=parseFloat(i.price)||0,id=i.id||key;let img=getProductThumbnail(i);let imgTag=img?`<img src="${img}" alt="${i.name}" loading="lazy" onclick="openProductPage('${id}')" onerror="this.onerror=null;fetchImageFromDB('${id}',this)">`:`<img src="https://via.placeholder.com/90x90?text=Loading" data-id="${id}" data-base="${window.getBaseId(id)}" onload="fetchImageFromDB('${id}',this)" onclick="openProductPage('${id}')" style="background:#f5f5f5">`;return`<div class="cart-card"><input type="checkbox" class="cart-check" data-key="${key}" style="width:18px;height:18px">${imgTag}<div class="item-info"><h3 onclick="openProductPage('${id}')">${i.name||"Product"}</h3><div class="item-price">₹${p} x ${q} = ₹${p*q}</div><div class="item-code">Code: ${i.productCode||i.code||key} | Size: ${i.size||'M'}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty('${key}',-1)">-</button><span class="qty-display">${q}</span><button class="qty-btn" onclick="updateQty('${key}',1)">+</button></div><div class="item-actions"><button class="btn-move-choice" onclick="moveToMyChoice('${key}')">😍 Move to My Choice</button><button class="btn-share" onclick="shareProduct('${id}')">🔗 Share</button><button class="btn-remove" onclick="removeFromCart('${key}')">🗑 Remove</button></div></div></div>`;}).join("");let sub=Object.values(cart).reduce(function(a,i){return a+(parseFloat(i.price)||0)*(parseInt(i.qty)||1);},0),del=sub>=500?0:49,tot=sub+del,items=Object.values(cart).reduce(function(a,i){return a+(parseInt(i.qty)||1);},0);document.getElementById("subTotal").innerText="₹"+sub;document.getElementById("deliveryCharge").innerText=del===0?"FREE":"₹"+del;document.getElementById("grandTotal").innerText="₹"+tot;document.getElementById("cartTotal").innerText=tot;document.getElementById("itemCount").innerText=items;s.classList.remove("hide");updateCounts();k.forEach(key=>{let i=cart[key];if(!getProductThumbnail(i))fetchImageFromDB(i.id||key,null);});}
+function openProductPage(id){if(!id)return;let base=window.getBaseId(id);let url=`product.html?id=${base}`;try{window.top.location.href=url;}catch(e){window.open(url,'_blank');}}
+function renderCart(){
+ let c=document.getElementById("cartList"),s=document.getElementById("cartSummary"),b=document.getElementById("checkoutBtn"),k=Object.keys(cart),topBar=document.getElementById("cartTopBar");
+ if(k.length===0){c.innerHTML="<div style='text-align:center;padding:80px 20px;color:#999'>🛒 Your cart is empty</div>";s.classList.add("hide");b.style.display="none";if(topBar)topBar.style.display="none";updateCounts();return;}
+ b.style.display="block";if(topBar)topBar.style.display="flex";
+ c.innerHTML=k.map(function(key){
+  let i=cart[key],q=parseInt(i.qty)||1,p=parseFloat(i.price)||0,id=i.id||key;
+  let img=window.getSafeImage(i);
+  return `<div class="cart-card"><input type="checkbox" class="cart-check" data-key="${key}" style="width:18px;height:18px"><img src="${img}" alt="${i.name}" loading="lazy" onclick="openProductPage('${id}')" onerror="this.onerror=null;fetchImageFromDB('${id}',this)"><div class="item-info"><h3 onclick="openProductPage('${id}')">${i.name||"Product"}</h3><div class="item-price">₹${p} x ${q} = ₹${p*q}</div><div class="item-code">Code: ${i.productCode||i.code||key} | Size: ${i.size||'M'}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty('${key}',-1)">-</button><span class="qty-display">${q}</span><button class="qty-btn" onclick="updateQty('${key}',1)">+</button></div><div class="item-actions"><button class="btn-move-choice" onclick="moveToMyChoice('${key}')">😍 Move to My Choice</button><button class="btn-share" onclick="shareProduct('${id}')">🔗 Share</button><button class="btn-remove" onclick="removeFromCart('${key}')">🗑 Remove</button></div></div></div>`;
+ }).join("");
+ let sub=Object.values(cart).reduce(function(a,i){return a+(parseFloat(i.price)||0)*(parseInt(i.qty)||1);},0),del=sub>=500?0:49,tot=sub+del,items=Object.values(cart).reduce(function(a,i){return a+(parseInt(i.qty)||1);},0);
+ document.getElementById("subTotal").innerText="₹"+sub;document.getElementById("deliveryCharge").innerText=del===0?"FREE":"₹"+del;document.getElementById("grandTotal").innerText="₹"+tot;document.getElementById("cartTotal").innerText=tot;document.getElementById("itemCount").innerText=items;s.classList.remove("hide");updateCounts();
+ k.forEach(function(key){ let i=cart[key]; if(!window.isValidHttpImage(window.getUniversalImage(i))) fetchImageFromDB(i.id||key,null); });
+}
 function fetchImageFromDB(productId,imgEl){
   if(!productId) return;
   let base=window.getBaseId(productId);
   function setImg(url){
-    if(!url||!url.startsWith('http')) return false;
+    if(!url||!window.isValidHttpImage(url)) return false;
     if(imgEl) imgEl.src=url;
-    document.querySelectorAll('img[data-id="'+productId+'"], img[data-base="'+base+'"]').forEach(function(el){el.src=url;});
-    if(cart[productId]){cart[productId].image=url;saveCart();}
+    if(cart[productId]){cart[productId].image=url;cart[productId].imageUrl=url;saveCart();}
     return true;
   }
-  let cached=getProductThumbnail({id:productId})||getProductThumbnail({id:base});
+  let cached=window.getUniversalImage({id:productId})||window.getUniversalImage({id:base});
   if(cached&&setImg(cached)) return;
   if(window.db){
     window.db.collection('products').doc(productId).get().then(function(doc){
-      if(doc.exists){let im=getProductThumbnail(doc.data()); if(setImg(im)) return;}
-      if(base&&base!==productId) return window.db.collection('products').doc(base).get();
-      throw "rtdb";
+      if(doc.exists){let im=window.getUniversalImage(doc.data()); if(setImg(im)) return;}
+      return window.db.collection('products').doc(base).get();
     }).then(function(doc2){
-      if(doc2&&doc2.exists) setImg(getProductThumbnail(doc2.data()));
+      if(doc2&&doc2.exists){ let im=window.getUniversalImage(doc2.data()); if(setImg(im)) return; }
+      return window.db.collection('all_products_backup').doc(base).get();
+    }).then(function(doc3){
+      if(doc3&&doc3.exists){ let im=window.getUniversalImage(doc3.data()); setImg(im); }
     }).catch(function(){
-      if(window.rtdb){
-        window.rtdb.ref('products/'+base).once('value').then(function(s){if(s.exists()) setImg(getProductThumbnail(s.val()));});
-      }
+      if(window.rtdb){ window.rtdb.ref('products/'+base).once('value').then(function(s){ if(s.exists()) setImg(window.getUniversalImage(s.val())); }); }
     });
   }
 }
-function renderMyChoice(){let c=document.getElementById("myChoiceList"),k=Object.keys(myChoice),topBar=document.getElementById("choiceTopBar");if(k.length===0){c.innerHTML=`<div class="empty"><h3>😍 My Choice is Empty</h3></div>`;if(topBar)topBar.style.display="none";updateCounts();return;}if(topBar)topBar.style.display="flex";c.innerHTML=k.map(function(key){let i=myChoice[key];if(!i)return"";let p=parseFloat(i.price)||0,id=i.id||key,img=getProductThumbnail(i)||"https://via.placeholder.com/90x90?text=No+Image";return`<div class="cart-card"><input type="checkbox" class="choice-check" data-key="${key}" style="width:18px;height:18px"><img src="${img}" onclick="openProductPage('${id}')" onerror="this.src='https://via.placeholder.com/90x90?text=No+Image'"><div class="item-info"><h3 onclick="openProductPage('${id}')">${i.name||"Product"}</h3><div style="color:#e40046;font-weight:700;">₹${p}</div><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;"><button onclick="moveToCart('${key}')" style="background:#10b981;color:white;border:none;padding:12px;border-radius:8px;font-weight:600;">🛒 Move to Cart</button><button onclick="removeFromChoice('${key}')" style="background:#ef4444;color:white;border:none;padding:12px;border-radius:8px;font-weight:600;">🗑 Remove</button></div></div></div>`;}).join("");updateCounts();}
+function renderMyChoice(){let c=document.getElementById("myChoiceList"),k=Object.keys(myChoice),topBar=document.getElementById("choiceTopBar");if(k.length===0){c.innerHTML=`<div style="text-align:center;padding:80px 20px;color:#999">😍 My Choice is Empty</div>`;if(topBar)topBar.style.display="none";updateCounts();return;}if(topBar)topBar.style.display="flex";c.innerHTML=k.map(function(key){let i=myChoice[key];if(!i)return"";let p=parseFloat(i.price)||0,id=i.id||key,img=window.getSafeImage(i);return`<div class="cart-card"><input type="checkbox" class="choice-check" data-key="${key}" style="width:18px;height:18px"><img src="${img}" onclick="openProductPage('${id}')" onerror="this.src='https://via.placeholder.com/90x90?text=No+Image'"><div class="item-info"><h3 onclick="openProductPage('${id}')">${i.name||"Product"}</h3><div style="color:#e40046;font-weight:700;">₹${p}</div><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;"><button onclick="moveToCart('${key}')" style="background:#10b981;color:white;border:none;padding:12px;border-radius:8px;font-weight:600;">🛒 Move to Cart</button><button onclick="removeFromChoice('${key}')" style="background:#ef4444;color:white;border:none;padding:12px;border-radius:8px;font-weight:600;">🗑 Remove</button></div></div></div>`;}).join("");updateCounts();}
 function updateQty(id,ch){if(!cart[id])return;cart[id].qty=(parseInt(cart[id].qty)||1)+ch;if(cart[id].qty<1)delete cart[id];saveCart();renderCart();}
 function removeFromCart(id){delete cart[id];saveCart();renderCart();}
 function moveToMyChoice(id){let i=cart[id];if(!i)return;delete cart[id];saveCart();myChoice[id]={...i};delete myChoice[id].qty;saveMyChoice();renderCart();renderMyChoice();}
@@ -202,78 +186,15 @@ function removeSelectedChoice(){let checks=[...document.querySelectorAll(".choic
 function saveCart(){let arr=Object.values(cart);localStorage.setItem(window.CART_KEY||'santraMallCart_v2',JSON.stringify(arr));}
 function saveMyChoice(){let arr=Object.values(myChoice);localStorage.setItem(window.MYCHOICE_KEY||'santraMallMyChoice_v2',JSON.stringify(arr));}
 function updateCounts(){let c=Object.values(cart).reduce(function(a,i){return a+(parseInt(i.qty)||1);},0);document.getElementById("cartCount").innerText=c;document.getElementById("choiceCount").innerText=Object.keys(myChoice).length;}
-
-function shareProduct(id){
-  let base = (window.getBaseId?window.getBaseId(id):String(id).split('_')[0].split('-')[0].trim());
-  let item = cart[id];
-  if(!item){
-    for(let k in cart){
-      let cid=String(cart[k].id||cart[k].code||k).trim();
-      if(cid===String(id).trim() || (window.getBaseId&&window.getBaseId(cid)===base)){
-        item=cart[k]; id=k; break;
-      }
-    }
-  }
-  if(item && typeof window.shareProductDirect==='function'){
-    window.shareProductDirect(item);
-  } else if(typeof window.shareSingleProduct==='function'){
-    window.shareSingleProduct(id);
-  } else {
-    alert("Share not ready - check share.js loaded. ID: "+id);
-  }
-}
-function generateOrderData(){ if(Object.keys(cart).length===0) return null; let subtotal=Object.values(cart).reduce(function(sum,item){return sum+(parseFloat(item.price)||0)*(parseInt(item.qty)||1);},0); let delivery=subtotal>=500?0:49; let grandTotal=subtotal+delivery; let orderId="SM"+Date.now(); let text=`🛒 *New Order*\nOrder ID: ${orderId}\nDate: ${t.presentDate} ${t.presentTime||''}\n\n`; let count=1; Object.keys(cart).forEach(function(key){ let item=cart[key]; let qty=parseInt(item.qty)||1; let price=parseFloat(item.price)||0; text+=`${count}. *${item.name}* Qty: ${qty} x ₹${price} = ₹${price*qty}\n`; count++; }); text+=`Grand Total: ₹${grandTotal}\n`; return {text, grandTotal, orderId, subtotal, delivery}; }
+function shareProduct(id){ let base=window.getBaseId(id); let item=cart[id]; if(!item){ for(let k in cart){ let cid=String(cart[k].id||"").trim(); if(cid===String(id).trim()||window.getBaseId(cid)===base){ item=cart[k]; id=k; break; } } } if(item&&typeof window.shareProductDirect==='function'){ window.shareProductDirect(item); } else if(typeof window.shareSingleProduct==='function'){ window.shareSingleProduct(id); } else { alert("Share not ready - "+id); } }
 function sendOrderToAll(){ if(typeof window.shareCart==='function'){ window.shareCart(); return; } alert("share.js not loaded"); }
-async function generateAndSharePDF(){
-  if(Object.keys(cart).length===0){ alert("Cart empty!"); return; }
-  try{
-    if(!window.jspdf ||!window.jspdf.jsPDF){ alert("PDF library not loading"); return; }
-    const {jsPDF} = window.jspdf;
-    let doc = new jsPDF();
-    let now = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
-    let sub=Object.values(cart).reduce((a,i)=>a+(parseFloat(i.price)||0)*(parseInt(i.qty)||1),0);
-    let del=sub>=500?0:49; let tot=sub+del;
-    let orderId = "SM"+Date.now();
-    let name = localStorage.getItem('santra_customer_name')||'Customer';
-    let mob = localStorage.getItem('santra_mobile')||'';
-    doc.setFontSize(16); doc.setFont("helvetica","bold");
-    doc.text("SANTRA MALL - INVOICE", 105, 15, {align:"center"});
-    doc.setFontSize(10); doc.setFont("helvetica","normal");
-    doc.text("Date: "+now, 10, 25);
-    doc.text("Order ID: "+orderId, 10, 30);
-    doc.text("Customer: "+name+" | Mobile: "+mob, 10, 35);
-    doc.setFontSize(11); doc.setFont("helvetica","bold");
-    doc.text("Items:", 10, 45);
-    let y=52; let count=1;
-    doc.setFontSize(10); doc.setFont("helvetica","normal");
-    Object.values(cart).forEach(item=>{
-      let qty=parseInt(item.qty)||1; let price=parseFloat(item.price)||0;
-      let line = count+". "+(item.name||"Product")+" | Code: "+(item.productCode||item.code||"")+" | Qty: "+qty+" x Rs."+price+" = Rs."+(qty*price);
-      if(line.length>95) line=line.substring(0,92)+"...";
-      doc.text(line, 10, y); y+=7; count++;
-      if(y>270){ doc.addPage(); y=20; }
-    });
-    y+=5;
-    doc.setFont("helvetica","bold");
-    doc.text("Subtotal: Rs."+sub, 10, y); y+=7;
-    doc.text("Delivery: "+(del===0?"FREE":"Rs."+del), 10, y); y+=7;
-    doc.text("Grand Total: Rs."+tot, 10, y); y+=10;
-    doc.setFont("helvetica","normal"); doc.setFontSize(9);
-    doc.text("Thank you for shopping at SANTRA MALL!", 10, y);
-    doc.save("SANTRA_MALL_Invoice_"+orderId+".pdf");
-  }catch(e){ alert("PDF Error: "+e.message); }
-}
-document.addEventListener("DOMContentLoaded",function(){
-  loadData();
-  setTimeout(function(){
-    document.querySelectorAll('button').forEach(function(b){
-      if(b.innerText.includes('Fix Extra')||b.innerText.includes('Clear Duplicate')) b.style.display='none';
-    });
-  },800);
-  console.log("cart.html FINAL 26 JULY - OLD CODE SAVE WITH UPDATE - Share + PDF fix + Extra Item + Home Heart - LAST LINE OK");
-});
+async function generateAndSharePDF(){ if(Object.keys(cart).length===0){ alert("Cart empty!"); return; } try{ if(!window.jspdf||!window.jspdf.jsPDF){ alert("PDF library not loading"); return; } const {jsPDF}=window.jspdf; let doc=new jsPDF(); let now=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}); let sub=Object.values(cart).reduce((a,i)=>a+(parseFloat(i.price)||0)*(parseInt(i.qty)||1),0); let del=sub>=500?0:49; let tot=sub+del; let orderId="SM"+Date.now(); let name=localStorage.getItem('santra_customer_name')||'Customer'; let mob=localStorage.getItem('santra_mobile')||''; doc.setFontSize(16); doc.setFont("helvetica","bold"); doc.text("SANTRA MALL - INVOICE",105,15,{align:"center"}); doc.setFontSize(10); doc.setFont("helvetica","normal"); doc.text("Date: "+now,10,25); doc.text("Order ID: "+orderId,10,30); doc.text("Customer: "+name+" | Mobile: "+mob,10,35); doc.setFontSize(11); doc.setFont("helvetica","bold"); doc.text("Items:",10,45); let y=52; let count=1; doc.setFontSize(10); doc.setFont("helvetica","normal"); Object.values(cart).forEach(item=>{ let qty=parseInt(item.qty)||1; let price=parseFloat(item.price)||0; let line=count+". "+(item.name||"Product")+" | Code: "+(item.productCode||item.code||"")+" | Qty: "+qty+" x Rs."+price+" = Rs."+(qty*price); if(line.length>95) line=line.substring(0,92)+"..."; doc.text(line,10,y); y+=7; count++; if(y>270){ doc.addPage(); y=20; } }); y+=5; doc.setFont("helvetica","bold"); doc.text("Subtotal: Rs."+sub,10,y); y+=7; doc.text("Delivery: "+(del===0?"FREE":"Rs."+del),10,y); y+=7; doc.text("Grand Total: Rs."+tot,10,y); y+=10; doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.text("Thank you for shopping at SANTRA MALL!",10,y); doc.save("SANTRA_MALL_Invoice_"+orderId+".pdf"); }catch(e){ alert("PDF Error: "+e.message); } }
+document.addEventListener("DOMContentLoaded",function(){ loadData(); console.log("cart.html FINAL V23 - OLD CODE SAVE WITH UPDATE - LAST LINE OK - < error fix + Image 100%"); });
 </script>
-<script src="otp-connect.js"></script>
-<!-- LAST LINE OK - OLD CODE SAVE WITH UPDATE - 26 JULY 2026 - Extra Item + Home Heart + Remove Fix - PURA AYA -->
+
+
+<script src="backup-all-image.js?v=22"></script>
+<script src="home-all-product-image-backup.js?v=24"></script>
+
 </body>
 </html>

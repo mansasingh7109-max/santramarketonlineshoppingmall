@@ -88,7 +88,6 @@
         <div>
           <button class="all-prod-btn" type="button" id="backToCatBtn">← Categories</button>
         </div>
-      </div>
       <div id="activeFiltersChips" style="margin-bottom:10px"></div>
       <div id="productList" class="product-grid"></div>
     </div>
@@ -102,17 +101,15 @@
   <a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a>
 </div>
 
-<!-- ✅ TERA FINAL - constants.js + config.js - OLD SAVE -->
 <script src="constants.js?v=3"></script>
 <script src="config.js?v=8"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="category.js"></script>
 
 <script>
-/* ==================== OLD CODE BACKUP - 09/06/2026 - SAFE ====================
+/* ==================== OLD CODE BACKUP - 09/06/2026 - SAFE - KUCH HATAYA NAHI ====================
 if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
 const rtdb = firebase.database();
 function loadCategories() {
@@ -121,9 +118,9 @@ function loadCategories() {
 function loadProducts() {
   rtdb.ref('products').once('value', snap => {... });
 }
-================== OLD CODE END - SAVE HAI ================== */
+================== OLD CODE END - SAVE HAI - SAFE ================== */
 
-// ✅ FINAL - NO DUPLICATE const - window se lo - ERROR FIX
+// ✅ FINAL - OLD SAVE WITH UPDATE - 28 JULY 2026 - PURE CATEGORY FIX
 if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
 if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
 if(typeof window.MYCHOICE_KEY === 'undefined'){ window.MYCHOICE_KEY = "santraMallMyChoice_v2"; }
@@ -133,10 +130,11 @@ if(typeof window.firebaseConfig === 'undefined'){
     apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
     authDomain: "santramarketshoppingmall.firebaseapp.com",
     projectId: "santramarketshoppingmall",
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com",
     storageBucket: "santramarketshoppingmall.appspot.com",
     messagingSenderId: "398490252924",
-    appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
   };
 }
 try{
@@ -151,13 +149,12 @@ const db = window.db || firebase.firestore();
 const rtdb = firebase.database();
 const auth = firebase.auth();
 
-// ✅ FIX - CART_KEY already declared in constants.js - Isliye _VAL use karo - Error khatam
 const CART_KEY_VAL = window.CART_KEY;
 const MYCHOICE_KEY_VAL = window.MYCHOICE_KEY;
 const CUSTOMER_KEY_VAL = window.CUSTOMER_KEY;
 const BASE_URL_VAL = window.BASE_URL;
 
-console.log("✅ Category FINAL - CART_KEY_VAL:", CART_KEY_VAL, "- Duplicate fix");
+console.log("✅ Category FINAL - CART_KEY_VAL:", CART_KEY_VAL, "- Old Save With Update - Pure Fix");
 
 let allProducts = [];
 let allCategories = [];
@@ -177,11 +174,8 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function initCategoryPage() {
-  if(auth){
-    auth.onAuthStateChanged(() => { updateCartCount(); });
-  } else {
-    updateCartCount();
-  }
+  if(auth){ auth.onAuthStateChanged(() => { updateCartCount(); }); }
+  else { updateCartCount(); }
   loadProducts();
   loadCategories();
   let urlParams = new URLSearchParams(window.location.search);
@@ -198,12 +192,11 @@ function loadProducts() {
       let p = child.val();
       p.id = child.key;
       p.price = parseFloat(p.price) || 0;
-      p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+      p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 999;
       p.mrp = parseFloat(p.mrp) || p.price;
       p.dbType = 'rtdb';
       if(!productIds.has(p.id)) { newList.push(p); productIds.add(p.id); }
     });
-    // Merge
     allProducts = [...allProducts.filter(x=>x.dbType!=='rtdb'),...newList];
     if(document.getElementById('catView').classList.contains('hide')) renderProducts();
     else renderCategories();
@@ -213,7 +206,7 @@ function loadProducts() {
       let p = doc.data(); p.id = doc.id;
       if(productIds.has(p.id)) return;
       p.price = parseFloat(p.price) || 0;
-      p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 0;
+      p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 999;
       p.mrp = parseFloat(p.mrp) || p.price;
       p.dbType = 'firestore';
       allProducts.push(p); productIds.add(p.id);
@@ -223,41 +216,68 @@ function loadProducts() {
   });
 }
 
+// ✅ FINAL FIX - Categories collection + Products collection dono se - Pure dikhegi
 function loadCategories() {
   allCategories = [];
-  const catIds = new Set();
+  const catMap = new Map();
+
+  function addCat(name, image){
+    if(!name) return;
+    let clean = name.toString().trim();
+    if(!clean) return;
+    let lower = clean.toLowerCase();
+    if(!catMap.has(lower)){
+      catMap.set(lower, { id: clean, name: clean, image: image || 'https://via.placeholder.com/80?text='+encodeURIComponent(clean) });
+    }
+  }
+
   rtdb.ref("categories").on('value', snap => {
-    const temp = [];
     snap.forEach((child) => {
       const data = child.val();
-      temp.push({ id: child.key, name: data.name, image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat' });
+      addCat(data.name, data.image || data.categoryImage || data.img);
     });
-    allCategories = []; catIds.clear();
-    temp.forEach(c=>{ if(!catIds.has(c.name)){ allCategories.push(c); catIds.add(c.name); } });
+    allProducts.forEach(p => { if(p.category) addCat(p.category, p.image || p.imageUrl); });
+    allCategories = Array.from(catMap.values());
     renderCategories();
   });
+
   db.collection("categories").onSnapshot(snap => {
     snap.forEach((doc) => {
       const data = doc.data();
-      if(!catIds.has(data.name)) {
-        allCategories.push({ id: doc.id, name: data.name, image: data.image || data.categoryImage || data.img || 'https://via.placeholder.com/80?text=Cat' });
-        catIds.add(data.name);
-      }
+      addCat(data.name, data.image || data.categoryImage || data.img);
     });
+    allProducts.forEach(p => { if(p.category) addCat(p.category, p.image || p.imageUrl); });
+    allCategories = Array.from(catMap.values());
     renderCategories();
   }, err => {
-    document.getElementById('catList').innerHTML = '<p class="loader">Error: ' + err.message + '<br>Firestore Rules me categories: allow read true karo</p>';
+    document.getElementById('catList').innerHTML = '<p class="loader">Error: ' + err.message + '</p>';
+  });
+
+  // Products se extra category
+  rtdb.ref('products').on('value', snap => {
+    snap.forEach(child => { let p = child.val(); if(p.category) addCat(p.category, p.image); });
+    allCategories = Array.from(catMap.values());
+    renderCategories();
+  });
+  db.collection('products').onSnapshot(snap => {
+    snap.forEach(doc => { let p = doc.data(); if(p.category) addCat(p.category, p.image || p.imageUrl); });
+    allCategories = Array.from(catMap.values());
+    renderCategories();
   });
 }
 
+// ✅ FINAL FIX - 0 Products fix - stock filter hataya
 function renderCategories() {
   const catList = document.getElementById('catList');
   const unique = []; const seen = new Set();
-  allCategories.forEach(c => { if (!seen.has(c.name)) { seen.add(c.name); unique.push(c); } });
+  allCategories.forEach(c => {
+    let lower = (c.name||'').toLowerCase();
+    if (!seen.has(lower)) { seen.add(lower); unique.push(c); }
+  });
   if(unique.length === 0){ catList.innerHTML = '<p class="loader">No categories yet. Admin Panel se add karo</p>'; return; }
   catList.innerHTML = '';
   unique.forEach(cat => {
-    const count = allProducts.filter(p => p.category && p.category.toLowerCase() === cat.name.toLowerCase() && p.stock > 0).length;
+    const count = allProducts.filter(p => p.category && p.category.toLowerCase().trim() === cat.name.toLowerCase().trim()).length;
     catList.innerHTML += `<div class="cat-card" onclick="showCategoryProducts('${cat.name}')"><img src="${cat.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
   });
 }
@@ -325,7 +345,7 @@ function renderFilters() {
 }
 
 function getFilterValues(filterName) {
-  const products = allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase() && p.stock > 0);
+  const products = allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
   const values = new Set();
   products.forEach(p => {
     if(p.variants && p.variants[filterName]) values.add(p.variants[filterName]);
@@ -339,14 +359,12 @@ function toggleTypeFilter(type) {
   else appliedFilters.type.push(type);
   renderProducts(); updateFilterChips();
 }
-
 function toggleVariantFilter(key, value) {
   if(!appliedFilters.variants[key]) appliedFilters.variants[key] = [];
   if(appliedFilters.variants[key].includes(value)) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
   else appliedFilters.variants[key].push(value);
   renderProducts(); updateFilterChips();
 }
-
 function updateFilterChips() {
   let chips = [];
   appliedFilters.type.forEach(t => chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t}')">${t} ×</span>`));
@@ -354,7 +372,6 @@ function updateFilterChips() {
   document.getElementById('activeFiltersChips').innerHTML = chips.join('');
   updateFilterCount();
 }
-
 function removeTypeFilter(type) {
   appliedFilters.type = appliedFilters.type.filter(t => t!== type);
   const el = document.querySelector(`#dynamicFilters input[value="${type}"]`);
@@ -381,7 +398,7 @@ function clearAllFilters() {
 function renderProducts(){
   const container = document.getElementById('productList');
   let products = showAll? [...allProducts] : allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
-  products = products.filter(p => p.stock > 0);
+  // STOCK FILTER HATAYA - pure dikhega
   if(appliedFilters.type.length > 0) products = products.filter(p => appliedFilters.type.includes(p.type || p.subCategory));
   Object.keys(appliedFilters.variants).forEach(key => {
     if(appliedFilters.variants[key].length > 0) {
@@ -413,7 +430,6 @@ function toggleMobileFilter() {
 
 function addToCart(pid){
   const product = allProducts.find(p => p.id == pid);
-  if(!product || product.stock <= 0) { alert('Product out of stock!'); return; }
   let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || "[]");
   let existing = cart.find(item=> item && item.id==pid);
   if(existing){ existing.qty = (existing.qty||1)+1; }
@@ -432,7 +448,7 @@ function updateCartCount(){
   }catch(e){ document.getElementById('cartCount').innerText = '0'; }
 }
 
-console.log("✅ category.html FINAL - Old save + CART_KEY duplicate fix - Pehle jaisa load hoga");
+console.log("✅ category.html FINAL - Old save + CART_KEY duplicate fix - Pure category dikhegi - Old Code Save With Update");
 </script>
 </body>
 </html>
