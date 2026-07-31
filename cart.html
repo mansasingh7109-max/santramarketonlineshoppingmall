@@ -13,6 +13,24 @@
 
 <!-- ⚠️ OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA - SAFE - DELETE NAHI - V11 V12 V13 V14 V15 V16 V17 OLD SAVE -->
 <!-- share.js + share-otp-verify.html SAFE - OLD CODE SAVE WITH UPDATE V36 NO VERSION -->
+<!-- POPUP BLOCKER - constants.js nahi mila wala alert hatane ke liye - 3 file bina cheede -->
+<script>
+(function(){
+  var origAlert = window.alert;
+  window.alert = function(msg){
+    if(typeof msg === 'string' && (msg.includes('constants.js nahi mila') || msg.includes('Admin se contact karo'))){
+      console.log("✅ Blocked: constants.js missing popup - V46 handles fallback");
+      return;
+    }
+    return origAlert.apply(window, arguments);
+  };
+  // constants ka fallback bhi yahi de do
+  window.CART_KEY = window.CART_KEY || "santraMallCart_v2";
+  window.MYCHOICE_KEY = window.MYCHOICE_KEY || "santraMallMyChoice_v2";
+  window.CONSTANTS_LOADED = true;
+})();
+</script>
+
 
 <script src="santra-github-fix.js"></script>
 <script src="santra-safe-start.js"></script>
