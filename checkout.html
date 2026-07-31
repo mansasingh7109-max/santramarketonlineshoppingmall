@@ -379,5 +379,9 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 <script src="otp-connect.js"></script>
 <script>async function placeOrderCheckout(){ let cust={name:custName.value,mobile:custMobile.value,address:custAddress.value}; let cart=JSON.parse(localStorage.getItem('cart')||'[]'); let total=cart.reduce((s,i)=>s+i.price*i.qty,0); let oid=await saveOrderBoth(cust,cart,total,'checkout'); location.href='share-otp-verify.html?orderId='+oid; }</script>
+<script src="santra-master-image-urls.js?v=32"></script>
+<script src="santra-image-url-system.js?v=32"></script>
+<script src="santra-all-url-one-file.js?v=33"></script>
 </body>
+
 </html>
