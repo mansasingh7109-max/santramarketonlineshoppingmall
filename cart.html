@@ -2,36 +2,28 @@
 <html>
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>🛒 My Cart - SANTRA MALL</title>
+<title>🛒 My Cart - SANTRA MALL - ONE FILE URL - NO VERSION</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
 <script>window.getISTNow=window.getISTNow||function(){let now=new Date();let ist=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));let pad=n=>String(n).padStart(2,'0');return{presentDate:`${pad(ist.getDate())}/${pad(ist.getMonth()+1)}/${ist.getFullYear()}`,presentTime:ist.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),tomorrowDate:`${pad(ist.getDate()+1)}/${pad(ist.getMonth()+1)}/${ist.getFullYear()}`};};</script>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 
-<!-- OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA - SAFE - DELETE NAHI - V11 V12 V13 V14 V15 V16 V17 OLD SAVE
-<script src="santra-cache-fix.js"></script> - HIDE - } error - OLD SAVE
-<script src="auto-loader.js"></script> - HIDE - < error - OLD SAVE - 30/07/2026 ko console me SyntaxError '<' aa raha tha - isliye V23 me HIDE
-<script src="time-fix.js"></script> - HIDE - < error - OLD SAVE - 404 HTML de raha tha
-<script src="double-code-safeguard.js"></script> - HIDE - double load error - OLD SAVE
-<script src="order-saver.js"></script> - HIDE - OLD SAVE
-<script src="secrets.js"></script> - OLD SAVE - FILE SAFE - DELETE NAHI
-<script src="config.js"></script> - OLD SAVE - FILE SAFE - DELETE NAHI
-OLD CODE BACKUP END - SAFE - DNA - DELETE NAHI
--->
+<!-- ⚠️ OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA - SAFE - DELETE NAHI - V11 V12 V13 V14 V15 V16 V17 OLD SAVE -->
+<!-- share.js + share-otp-verify.html SAFE - OLD CODE SAVE WITH UPDATE V36 NO VERSION -->
 
+<script src="santra-github-fix.js"></script>
 <script src="santra-safe-start.js"></script>
-<script src="constants.js?v=1"></script>
-<script src="secrets.js?v=1"></script>
-<script src="config.js?v=6"></script>
+<script src="constants.js"></script>
+<script src="secrets.js"></script>
+<script src="config.js"></script>
+<script src="category.js"></script>
 
 <script>
-// V23 FINAL - Past Present Future All Image Fix - OLD CODE SAVE WITH UPDATE CORRECTION - < error fix
-// OLD BACKUP - 29 JUNE 2026 - CART_KEY, MYCHOICE_KEY OLD - SAVE WITH UPDATE - DELETE NAHI
-console.log("✅ cart.html V23 FINAL - Old Code Save With Update - < error fix + Image 100%");
+// V36 FINAL - Old Code Save With Update - ONE FILE URL - No Version - Half Fix
+console.log("✅ cart.html V36 FINAL - Old Code Save With Update - ONE FILE URL - No Version - Half Fix");
 window.getBaseId=window.getBaseId||function(id){ if(!id) return ""; return String(id||'').replace(/^home_/i,'').replace(/^prod_/i,'').split('_')[0].split('-')[0].trim().toLowerCase().split('_')[0]; };
 window.isValidHttpImage=function(u){ if(!u||typeof u!=='string') return false; let s=u.trim(); if(s==""||s=="N/A"||s=="null"||s=="undefined") return false; if(s.startsWith('blob:')) return false; if(s.includes('[object Object]')) return false; if(s.length<12) return false; return s.startsWith('http://')||s.startsWith('https://'); };
 window.getUniversalImage=window.getUniversalImage||function(p){
@@ -42,8 +34,8 @@ window.getUniversalImage=window.getUniversalImage||function(p){
   if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||""; if(window.isValidHttpImage(u)) return u; } }
   try{
     let all=[];
-    ["santram_products_v1","santram_products_backup","santra_6way_backup","sm","santra_all_products_cache","allProductsCache","santra_all_products","allProducts","santra_products","products_temp"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); all=all.concat(Array.isArray(a)?a:Object.values(a)); } }catch(e){} });
-    if(window.allProducts) all=all.concat(window.allProducts);
+    ["santram_products_v1","santram_products_backup","santra_6way_backup","sm","santra_all_products_cache","allProductsCache","santra_all_products","allProducts","santra_all_url_one_file_v32"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); if(typeof a==='object' &&!Array.isArray(a)){ for(let mk in a){ if(window.isValidHttpImage(a[mk])) all.push({id:mk, image:a[mk]}); } } else { all=all.concat(Array.isArray(a)?a:Object.values(a)); } } }catch(e){} });
+    if(window.SANTRA_ALL_URL_MAP){ for(let mk in window.SANTRA_ALL_URL_MAP){ let u=window.SANTRA_ALL_URL_MAP[mk]; if(window.isValidHttpImage(u)) all.push({id:mk, image:u}); } }
     let base=window.getBaseId(p.id||p.code||"").toLowerCase();
     let name=(p.name||"").toLowerCase().split(' ')[0];
     let fd=all.find(function(x){ return window.getBaseId(x.id||x.code||"").toLowerCase()===base; });
@@ -52,7 +44,21 @@ window.getUniversalImage=window.getUniversalImage||function(p){
   }catch(e){}
   return "";
 };
-window.getSafeImage=function(item){ let img=window.getUniversalImage(item); if(window.isValidHttpImage(img)) return img; return `https://via.placeholder.com/90x90?text=${encodeURIComponent(item.name||'Product')}`; };
+window.getSafeImage=function(item){
+  try{
+    if(window.SANTRA_ALL_URL_MAP){
+      let code=(item.code||item.productCode||item.id||"").toString().toLowerCase();
+      let shortCode=code.split('_')[0].split('-')[0];
+      let nameKey=(item.name||"").toLowerCase();
+      let found = window.SANTRA_ALL_URL_MAP[code]||window.SANTRA_ALL_URL_MAP[shortCode]||window.SANTRA_ALL_URL_MAP[nameKey]||"";
+      if(!found){ for(let k in window.SANTRA_ALL_URL_MAP){ if(nameKey&&k.includes(nameKey.substring(0,6))){ found=window.SANTRA_ALL_URL_MAP[k]; break; } } }
+      if(window.isValidHttpImage(found)) return found;
+    }
+  }catch(e){}
+  let img=window.getUniversalImage(item);
+  if(window.isValidHttpImage(img)) return img;
+  return `https://via.placeholder.com/90x90?text=${encodeURIComponent(item.name||'Product')}`;
+};
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -61,7 +67,7 @@ window.getSafeImage=function(item){ let img=window.getUniversalImage(item); if(w
 <script src="cart.js"></script>
 <script src="santra-image-link-fix.js"></script>
 <script src="santra-mychoice-sync-fix.js"></script>
-<script src="share.js?v=24july-FINAL-LINK-PDF"></script>
+<script src="share.js"></script>
 
 <style>
 :root{--bg:#f1f3f6;--card:#fff;--accent:#e40046;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
@@ -88,8 +94,8 @@ body{background:var(--bg);padding-bottom:160px}
 </style>
 </head>
 <body>
-<div class="header"><button class="back-btn" onclick="location.href='index.html'">←</button><h1>🛒 My Cart</h1><span id="clock" style="margin-left:auto;background:black;color:#0f0;padding:4px 6px;border-radius:5px;font-size:9px">IST</span></div>
-<div class="today-strip" id="todayBar">Loading...</div>
+<div class="header"><button class="back-btn" onclick="location.href='index.html'">←</button><h1>🛒 My Cart - ONE FILE URL</h1><span id="clock" style="margin-left:auto;background:black;color:#0f0;padding:4px 6px;border-radius:5px;font-size:9px">IST</span></div>
+<div class="today-strip" id="todayBar">Loading... ONE FILE URL System - Past Present Future - No Version</div>
 <div class="tabs"><button class="tab active" id="cartTab" onclick="switchTab('cart')">🛒 Cart (<span id="cartCount">0</span>)</button><button class="tab" id="choiceTab" onclick="switchTab('choice')">😍 My Choice (<span id="choiceCount">0</span>)</button></div>
 <div id="cartView">
 <div class="top-select-bar" id="cartTopBar" style="display:none"><label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="checkbox" id="selectAllCart" onchange="toggleAllCart(this.checked)"> Select All</label><button onclick="moveSelectedToChoice()" style="background:#f59e0b;color:white;margin-left:auto;border:none;padding:8px 10px;border-radius:6px;font-weight:600">→ My Choice</button><button onclick="removeSelectedCart()" style="background:#fee2e2;color:#ef4444;border:none;padding:8px 10px;border-radius:6px;font-weight:600">Remove</button></div>
@@ -102,7 +108,7 @@ body{background:var(--bg);padding-bottom:160px}
 
 <script>
 let cart={};let myChoice={};let t={presentDate:'',presentTime:''};
-function initTimeFix(){try{if(typeof getISTNow==='function'){t=getISTNow();document.getElementById('todayBar').innerText=`Aaj: ${t.presentDate} ${t.presentTime}`;document.getElementById('clock').innerText=t.presentTime||'';document.getElementById('todayDateBar').innerText=t.presentDate;}}catch(e){}}
+function initTimeFix(){try{if(typeof getISTNow==='function'){t=getISTNow();document.getElementById('todayBar').innerText=`Aaj: ${t.presentDate} ${t.presentTime} - ONE FILE ${Object.keys(window.SANTRA_ALL_URL_MAP||{}).length} URLs - No Version`;document.getElementById('clock').innerText=t.presentTime||'';document.getElementById('todayDateBar').innerText=t.presentDate;}}catch(e){}}
 initTimeFix();setInterval(initTimeFix,60000);
 window.switchTab=function(tab){document.getElementById("cartTab").classList.toggle("active",tab==="cart");document.getElementById("choiceTab").classList.toggle("active",tab==="choice");document.getElementById("cartView").classList.toggle("hide",tab!=="cart");document.getElementById("choiceView").classList.toggle("hide",tab!=="choice");if(tab==="choice")renderMyChoice();else renderCart();};
 function loadData(){if(!window.CART_KEY){setTimeout(loadData,100);return;}loadFromLocal();}
@@ -110,7 +116,7 @@ function loadFromLocal(){
   try{
     let cartArray=[];let raw=localStorage.getItem(window.CART_KEY||'santraMallCart_v2');
     if(raw){try{let p=JSON.parse(raw);cartArray=Array.isArray(p)?p:Object.values(p);}catch(e){}}
-    let allCache=[]; try{ ["santram_products_v1","santram_products_backup","santra_6way_backup","sm","santra_all_products_cache","allProductsCache","santra_all_products","allProducts"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v) allCache=allCache.concat(JSON.parse(v)); }catch(e){} }); if(window.allProducts) allCache=allCache.concat(window.allProducts); }catch(e){}
+    let allCache=[]; try{ ["santram_products_v1","santram_products_backup","santra_6way_backup","sm","santra_all_products_cache","allProductsCache","santra_all_products","allProducts"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v) allCache=allCache.concat(JSON.parse(v)); }catch(e){} }); if(window.allProducts) allCache=allCache.concat(window.allProducts); if(window.SANTRA_ALL_URL_MAP){ for(let mk in window.SANTRA_ALL_URL_MAP){ allCache.push({id:mk, code:mk, name:mk, image:window.SANTRA_ALL_URL_MAP[mk]}); } } }catch(e){}
     cart={};let seen={};
     cartArray.forEach(function(item){
       if(!item) return;
@@ -122,6 +128,14 @@ function loadFromLocal(){
         let real=allCache.find(function(x){ return window.getBaseId(x.id||x.code||"")===baseId; });
         if(!real&&item.name) real=allCache.find(function(x){ return String(x.name||"").toLowerCase().includes(String(item.name||"").toLowerCase().split(' ')[0]); });
         if(real){ let good=window.getUniversalImage(real); if(window.isValidHttpImage(good)){ item.image=good; item.imageUrl=good; } }
+        if(!item.image||!window.isValidHttpImage(item.image)){
+          try{
+            let code=(item.code||item.productCode||item.id||"").toString().toLowerCase();
+            let map=window.SANTRA_ALL_URL_MAP||{};
+            let found = map[code]||map[code.split('_')[0]]||map[code.split('-')[0]]||"";
+            if(window.isValidHttpImage(found)){ item.image=found; item.imageUrl=found; }
+          }catch(e){}
+        }
       }
       if(seen[id]){ if(cart[id]) cart[id].qty=(parseInt(cart[id].qty)||1)+(parseInt(item.qty)||1); }
       else{ seen[id]=true; cart[id]=item; if(!cart[id].qty||cart[id].qty<1) cart[id].qty=1; }
@@ -135,7 +149,7 @@ function loadFromLocal(){
 function openProductPage(id){if(!id)return;let base=window.getBaseId(id);let url=`product.html?id=${base}`;try{window.top.location.href=url;}catch(e){window.open(url,'_blank');}}
 function renderCart(){
  let c=document.getElementById("cartList"),s=document.getElementById("cartSummary"),b=document.getElementById("checkoutBtn"),k=Object.keys(cart),topBar=document.getElementById("cartTopBar");
- if(k.length===0){c.innerHTML="<div style='text-align:center;padding:80px 20px;color:#999'>🛒 Your cart is empty</div>";s.classList.add("hide");b.style.display="none";if(topBar)topBar.style.display="none";updateCounts();return;}
+ if(k.length===0){c.innerHTML="<div style='text-align:center;padding:80px 20px;color:#999'>🛒 Your cart is empty - ONE FILE READY - No Version</div>";s.classList.add("hide");b.style.display="none";if(topBar)topBar.style.display="none";updateCounts();return;}
  b.style.display="block";if(topBar)topBar.style.display="flex";
  c.innerHTML=k.map(function(key){
   let i=cart[key],q=parseInt(i.qty)||1,p=parseFloat(i.price)||0,id=i.id||key;
@@ -155,20 +169,29 @@ function fetchImageFromDB(productId,imgEl){
     if(cart[productId]){cart[productId].image=url;cart[productId].imageUrl=url;saveCart();}
     return true;
   }
+  try{
+    let map=window.SANTRA_ALL_URL_MAP||{};
+    let code=productId.toString().toLowerCase();
+    let found=map[code]||map[code.split('_')[0]]||"";
+    if(found&&setImg(found)) return;
+  }catch(e){}
   let cached=window.getUniversalImage({id:productId})||window.getUniversalImage({id:base});
   if(cached&&setImg(cached)) return;
-  if(window.db){
-    window.db.collection('products').doc(productId).get().then(function(doc){
-      if(doc.exists){let im=window.getUniversalImage(doc.data()); if(setImg(im)) return;}
-      return window.db.collection('products').doc(base).get();
-    }).then(function(doc2){
-      if(doc2&&doc2.exists){ let im=window.getUniversalImage(doc2.data()); if(setImg(im)) return; }
-      return window.db.collection('all_products_backup').doc(base).get();
-    }).then(function(doc3){
-      if(doc3&&doc3.exists){ let im=window.getUniversalImage(doc3.data()); setImg(im); }
-    }).catch(function(){
-      if(window.rtdb){ window.rtdb.ref('products/'+base).once('value').then(function(s){ if(s.exists()) setImg(window.getUniversalImage(s.val())); }); }
-    });
+  if(window.getDBV36){
+    let db=window.getDBV36();
+    if(db){
+      db.collection('imageRegistry').doc(productId).get().then(function(doc){
+        if(doc.exists&&doc.data().imageUrl&&setImg(doc.data().imageUrl)) return;
+        return db.collection('products').doc(productId).get();
+      }).then(function(doc){
+        if(doc&&doc.exists){let im=window.getUniversalImage(doc.data()); if(setImg(im)) return;}
+        return db.collection('products').doc(base).get();
+      }).then(function(doc2){
+        if(doc2&&doc2.exists){ let im=window.getUniversalImage(doc2.data()); if(setImg(im)) return; }
+        let rtdb=window.getRTDBV36?window.getRTDBV36():null;
+        if(rtdb){ rtdb.ref('products/'+base).once('value').then(function(s){ if(s.exists()) setImg(window.getUniversalImage(s.val())); }); }
+      }).catch(function(){});
+    }
   }
 }
 function renderMyChoice(){let c=document.getElementById("myChoiceList"),k=Object.keys(myChoice),topBar=document.getElementById("choiceTopBar");if(k.length===0){c.innerHTML=`<div style="text-align:center;padding:80px 20px;color:#999">😍 My Choice is Empty</div>`;if(topBar)topBar.style.display="none";updateCounts();return;}if(topBar)topBar.style.display="flex";c.innerHTML=k.map(function(key){let i=myChoice[key];if(!i)return"";let p=parseFloat(i.price)||0,id=i.id||key,img=window.getSafeImage(i);return`<div class="cart-card"><input type="checkbox" class="choice-check" data-key="${key}" style="width:18px;height:18px"><img src="${img}" onclick="openProductPage('${id}')" onerror="this.src='https://via.placeholder.com/90x90?text=No+Image'"><div class="item-info"><h3 onclick="openProductPage('${id}')">${i.name||"Product"}</h3><div style="color:#e40046;font-weight:700;">₹${p}</div><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;"><button onclick="moveToCart('${key}')" style="background:#10b981;color:white;border:none;padding:12px;border-radius:8px;font-weight:600;">🛒 Move to Cart</button><button onclick="removeFromChoice('${key}')" style="background:#ef4444;color:white;border:none;padding:12px;border-radius:8px;font-weight:600;">🗑 Remove</button></div></div></div>`;}).join("");updateCounts();}
@@ -188,13 +211,62 @@ function saveMyChoice(){let arr=Object.values(myChoice);localStorage.setItem(win
 function updateCounts(){let c=Object.values(cart).reduce(function(a,i){return a+(parseInt(i.qty)||1);},0);document.getElementById("cartCount").innerText=c;document.getElementById("choiceCount").innerText=Object.keys(myChoice).length;}
 function shareProduct(id){ let base=window.getBaseId(id); let item=cart[id]; if(!item){ for(let k in cart){ let cid=String(cart[k].id||"").trim(); if(cid===String(id).trim()||window.getBaseId(cid)===base){ item=cart[k]; id=k; break; } } } if(item&&typeof window.shareProductDirect==='function'){ window.shareProductDirect(item); } else if(typeof window.shareSingleProduct==='function'){ window.shareSingleProduct(id); } else { alert("Share not ready - "+id); } }
 function sendOrderToAll(){ if(typeof window.shareCart==='function'){ window.shareCart(); return; } alert("share.js not loaded"); }
-async function generateAndSharePDF(){ if(Object.keys(cart).length===0){ alert("Cart empty!"); return; } try{ if(!window.jspdf||!window.jspdf.jsPDF){ alert("PDF library not loading"); return; } const {jsPDF}=window.jspdf; let doc=new jsPDF(); let now=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}); let sub=Object.values(cart).reduce((a,i)=>a+(parseFloat(i.price)||0)*(parseInt(i.qty)||1),0); let del=sub>=500?0:49; let tot=sub+del; let orderId="SM"+Date.now(); let name=localStorage.getItem('santra_customer_name')||'Customer'; let mob=localStorage.getItem('santra_mobile')||''; doc.setFontSize(16); doc.setFont("helvetica","bold"); doc.text("SANTRA MALL - INVOICE",105,15,{align:"center"}); doc.setFontSize(10); doc.setFont("helvetica","normal"); doc.text("Date: "+now,10,25); doc.text("Order ID: "+orderId,10,30); doc.text("Customer: "+name+" | Mobile: "+mob,10,35); doc.setFontSize(11); doc.setFont("helvetica","bold"); doc.text("Items:",10,45); let y=52; let count=1; doc.setFontSize(10); doc.setFont("helvetica","normal"); Object.values(cart).forEach(item=>{ let qty=parseInt(item.qty)||1; let price=parseFloat(item.price)||0; let line=count+". "+(item.name||"Product")+" | Code: "+(item.productCode||item.code||"")+" | Qty: "+qty+" x Rs."+price+" = Rs."+(qty*price); if(line.length>95) line=line.substring(0,92)+"..."; doc.text(line,10,y); y+=7; count++; if(y>270){ doc.addPage(); y=20; } }); y+=5; doc.setFont("helvetica","bold"); doc.text("Subtotal: Rs."+sub,10,y); y+=7; doc.text("Delivery: "+(del===0?"FREE":"Rs."+del),10,y); y+=7; doc.text("Grand Total: Rs."+tot,10,y); y+=10; doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.text("Thank you for shopping at SANTRA MALL!",10,y); doc.save("SANTRA_MALL_Invoice_"+orderId+".pdf"); }catch(e){ alert("PDF Error: "+e.message); } }
-document.addEventListener("DOMContentLoaded",function(){ loadData(); console.log("cart.html FINAL V23 - OLD CODE SAVE WITH UPDATE - LAST LINE OK - < error fix + Image 100%"); });
+async function generateAndSharePDF(){ if(Object.keys(cart).length===0){ alert("Cart empty!"); return; } try{ if(!window.jspdf||!window.jspdf.jsPDF){ alert("PDF library not loading"); return; } const {jsPDF}=window.jspdf; let doc=new jsPDF(); let now=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}); let sub=Object.values(cart).reduce((a,i)=>a+(parseFloat(i.price)||0)*(parseInt(i.qty)||1),0); let del=sub>=500?0:49; let tot=sub+del; let orderId="SM"+Date.now(); let name=localStorage.getItem('santra_customer_name')||'Customer'; let mob=localStorage.getItem('santra_mobile')||''; doc.setFontSize(16); doc.setFont("helvetica","bold"); doc.text("SANTRA MALL - INVOICE - ONE FILE URL - NO VERSION",105,15,{align:"center"}); doc.setFontSize(10); doc.setFont("helvetica","normal"); doc.text("Date: "+now,10,25); doc.text("Order ID: "+orderId,10,30); doc.text("Customer: "+name+" | Mobile: "+mob,10,35); doc.setFontSize(11); doc.setFont("helvetica","bold"); doc.text("Items:",10,45); let y=52; let count=1; doc.setFontSize(10); doc.setFont("helvetica","normal"); Object.values(cart).forEach(item=>{ let qty=parseInt(item.qty)||1; let price=parseFloat(item.price)||0; let line=count+". "+(item.name||"Product")+" | Code: "+(item.productCode||item.code||"")+" | Qty: "+qty+" x Rs."+price+" = Rs."+(qty*price); if(line.length>95) line=line.substring(0,92)+"..."; doc.text(line,10,y); y+=7; count++; if(y>270){ doc.addPage(); y=20; } }); y+=5; doc.setFont("helvetica","bold"); doc.text("Subtotal: Rs."+sub,10,y); y+=7; doc.text("Delivery: "+(del===0?"FREE":"Rs."+del),10,y); y+=7; doc.text("Grand Total: Rs."+tot,10,y); y+=10; doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.text("Thank you for shopping at SANTRA MALL! - ONE FILE URL - No Version",10,y); doc.save("SANTRA_MALL_Invoice_"+orderId+".pdf"); }catch(e){ alert("PDF Error: "+e.message); } }
+document.addEventListener("DOMContentLoaded",function(){ loadData(); console.log("cart.html FINAL - OLD CODE SAVE WITH UPDATE - ONE FILE URL - No Version - LAST LINE OK"); });
 </script>
 
+<!-- OLD CODE BACKUP - V22 V24 V29 V32 V33 - SAFE - DELETE NAHI - OLD CODE SAVE WITH UPDATE NO VERSION -->
+<script src="backup-all-image.js"></script>
+<script src="home-all-product-image-backup.js"></script>
+<script src="cart-all-image-fix.js"></script>
 
-<script src="backup-all-image.js?v=22"></script>
-<script src="home-all-product-image-backup.js?v=24"></script>
+<!-- ✅ FINAL - ONE FILE = Past Present Future - ONE LINE CONNECT - NO VERSION - Ek Line Code - No Version -->
 
+<script src="santra-firebase-url-push.js"></script>
+
+<script>
+// HALF PHOTO FIX - V36 - OLD CODE SAVE WITH - NO VERSION - ONE LINE
+window.getDBV36 = window.getDBV36 || function(){ try{ if(window.db) return window.db; if(typeof firebase!=='undefined' && firebase.firestore) return firebase.firestore(); }catch(e){} return null; };
+window.getRTDBV36 = window.getRTDBV36 || function(){ try{ if(window.rtdb) return window.rtdb; if(typeof firebase!=='undefined' && firebase.database) return firebase.database(); }catch(e){} return null; };
+
+function fixCartHalfImageV36(){
+  try{
+    let map = window.SANTRA_ALL_URL_MAP || JSON.parse(localStorage.getItem('santra_all_url_one_file_v32')||'{}');
+    let key = window.CART_KEY || "santraMallCart_v2";
+    let raw = localStorage.getItem(key) || "[]";
+    let cartArr = JSON.parse(raw);
+    if(!Array.isArray(cartArr)) cartArr = Object.values(cartArr);
+    let changed = false;
+    cartArr = cartArr.map(item=>{
+      let cur = item.image || item.imageUrl || item.url || "";
+      if(!cur ||!cur.startsWith('http') || cur.startsWith('blob:')){
+        let code = (item.code || item.productCode || item.id || "").toString().toLowerCase();
+        let shortCode = code.split('_')[0].split('-')[0];
+        let found = map[code] || map[shortCode] || "";
+        if(!found){
+          let nameKey = (item.name||"").toLowerCase();
+          for(let k in map){ if(nameKey && k.includes(nameKey.substring(0,8))) { found = map[k]; break; } }
+        }
+        if(found && found.startsWith('http')){ item.image = found; item.imageUrl = found; item.url = found; changed = true; console.log("✅ Fixed: "+item.name); }
+      }
+      return item;
+    });
+    if(changed){ localStorage.setItem(key, JSON.stringify(cartArr)); console.log("✅ Cart Half Fixed - reload - No Version"); }
+  }catch(e){ console.log("Cart fix error", e.message); }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(fixCartHalfImageV36, 1500);
+  setTimeout(fixCartHalfImageV36, 3500);
+  setTimeout(function(){ try{ loadFromLocal(); }catch(e){} }, 3600);
+});
+
+// ✅ ONE LINE CODE - Ek Line Connect - No Version - Lifetime
+// if(window.addToMasterImageRegistry) window.addToMasterImageRegistry(productId, imageUrl, productName);
+
+console.log("✅ cart.html - ONE FILE URL - No Version - LAST LINE OK - Old Code Save With Update - Half Fix");
+</script>
+
+<script src="santra-all-url-one-file.js?v=46"></script>
 </body>
 </html>
