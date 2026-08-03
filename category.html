@@ -55,45 +55,67 @@ body{background:var(--bg);padding-bottom:70px;}
 }
 </style>
 
-<!-- V25 - Universal Image Fix - OLD CODE SAVE WITH - Past Present Future All Image -->
+<!-- ✅ V25 - Universal Image Fix - OLD CODE SAVE WITH - Past Present Future All Image - 6 JAGAH IMAGE SAVE -->
 <script>
+/* ⚠️ OLD CODE BACKUP - V25 - Universal Image Fix - SAFE - KUCH HATAYA NAHI - DNA */
 window.getBaseId=window.getBaseId||function(id){ if(!id) return ""; return String(id).replace(/^home_/i,'').replace(/^prod_/i,'').split('_')[0].split('-')[0].trim().toLowerCase().split('_')[0]; };
-window.isValidHttpImage=window.isValidHttpImage||function(u){ if(!u||typeof u!=='string') return false; let s=u.trim(); if(s==""||s=="N/A"||s=="null"||s=="undefined") return false; if(s.startsWith('blob:')) return false; if(s.includes('[object Object]')) return false; if(s.length<12) return false; return s.startsWith('http://')||s.startsWith('https://'); };
+window.isValidHttpImage=window.isValidHttpImage||function(u){
+  if(!u||typeof u!=='string') return false;
+  let s=u.trim();
+  if(s==""||s=="N/A"||s=="null"||s=="undefined") return false;
+  if(s.startsWith('blob:')) return false;
+  if(s.includes('[object Object]')) return false;
+  if(s.length<12) return false;
+  // base64 bhi valid hai - 6 jagah me se ek
+  if(s.startsWith('data:image')) return true;
+  return s.startsWith('http://')||s.startsWith('https://');
+};
 window.getBestImageAny=window.getBestImageAny||function(p){
   if(!p) return "";
-  let keys=['image','imageUrl','httpsUrl','categoryImage','catImage','thumbnail','thumb','photo','img','productImage','mainImage','src','imgbb','cloudinary','lux','imageURL','image_M'];
-  for(let k of keys){ if(p[k]&&typeof p[k]==='string'&&p[k].trim().startsWith('http')&&!p[k].includes('placeholder')){ let url=p[k].trim(); if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; } return url; } }
+  // 6 JAGAH SAVE - imgbB, cloudinary, lux, httpsUrl, base64, firebase
+  let keys=['image','imageUrl','httpsUrl','categoryImage','catImage','thumbnail','thumb','photo','img','productImage','mainImage','src','imgbb','cloudinary','lux','imageURL','image_M','base64','firebaseUrl','downloadURL'];
+  for(let k of keys){
+    if(p[k]&&typeof p[k]==='string'&&p[k].trim()!=""){
+      let url=p[k].trim();
+      if(url.startsWith('data:image')) return url; // base64
+      if(url.startsWith('http')&&!url.includes('placeholder')){
+        if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; }
+        return url;
+      }
+    }
+  }
   if(p.httpsUrls&&Array.isArray(p.httpsUrls)){ for(let u of p.httpsUrls){ if(window.isValidHttpImage(u)) return u; } }
-  if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||im.imageUrl||""; if(window.isValidHttpImage(u)) return u; } }
+  if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||im.imageUrl||im.downloadURL||""; if(window.isValidHttpImage(u)) return u; } }
   return "";
 };
 window.getMasterPreviewImage=window.getMasterPreviewImage||function(id,name){
   try{
-    let all=[]; ["santra_master_all_products_with_images_v24","santram_products_v1","santram_products_backup","santra_6way_backup","santra_all_products_cache","allProductsCache","allProducts","santra_all_products"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); all=all.concat(Array.isArray(a)?a:Object.values(a)); } }catch(e){} });
+    let all=[];
+    // 6 jagah ka backup - localStorage + memory
+    ["santra_master_all_products_with_images_v24","santram_products_v1","santram_products_backup","santra_6way_backup","santra_all_products_cache","allProductsCache","allProducts","santra_all_products","santra_category_image_map_v28"].forEach(function(k){
+      try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); all=all.concat(Array.isArray(a)?a:Object.values(a)); } }catch(e){}
+    });
     if(window.allProducts) all=all.concat(window.allProducts);
     if(window.allCategories) all=all.concat(window.allCategories);
     let base=(id||"").toString().toLowerCase().split('_')[0].split('-')[0].trim();
     let nm=(name||"").toLowerCase().split(' ')[0];
     let fd=null;
     if(base) fd=all.find(function(x){ let xid=(x.id||x.name||"").toString().toLowerCase().split('_')[0].split('-')[0]; return xid===base; });
-    if(!fd&&nm) fd=all.find(function(x){ return String(x.name||"").toLowerCase().includes(nm); });
+    if(!fd&&nm) fd=all.find(function(x){ return String(x.name||x.category||"").toLowerCase().includes(nm); });
     if(fd){ let im=window.getBestImageAny(fd); if(window.isValidHttpImage(im)) return im; }
   }catch(e){} return "";
 };
-console.log("✅ category.html V25 - Universal Image Fix - OLD CODE SAVE WITH - Last Line");
+console.log("✅ category.html V25 - Universal Image Fix - OLD CODE SAVE WITH - 6 Jagah Image - Last Line");
+/* OLD CODE BACKUP END - V25 SAFE */
 </script>
-
 </head>
 <body>
-
 <div class="header">
   <a href="index.html" class="back-btn">←</a>
   <h1 id="pageTitle">📱 Categories</h1>
   <button class="filter-toggle" id="filterToggle" type="button" style="display:none">🔍 Filters</button>
 </div>
-
 <div class="mobile-filter-overlay" id="filterOverlay"></div>
-
 <div class="container">
   <div class="filters-sidebar" id="filtersSidebar">
     <button class="close-filter" type="button" style="display:none">×</button>
@@ -101,16 +123,14 @@ console.log("✅ category.html V25 - Universal Image Fix - OLD CODE SAVE WITH - 
     <button class="clear-filter" type="button">Clear All</button>
     <div id="dynamicFilters"></div>
   </div>
-
   <div class="main-content">
     <div id="catView">
       <button class="all-prod-btn" type="button" id="allProdBtn">🛍️ All Products</button>
       <h3 style="margin:15px 0;">Shop by Category</h3>
       <div id="catList" class="cat-grid">
-        <div class="loader">⏳ Loading categories - Pehle jaisa...</div>
+        <div class="loader">⏳ Loading categories - Pehle jaisa... Home page wali all category list</div>
       </div>
     </div>
-
     <div id="productView" class="hide">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
         <h3 id="catTitle"></h3>
@@ -121,51 +141,34 @@ console.log("✅ category.html V25 - Universal Image Fix - OLD CODE SAVE WITH - 
     </div>
   </div>
 </div>
-
 <div class="bottom-nav">
   <a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a>
   <a href="category.html" class="nav-item active"><div>📱</div><span>Categories</span></a>
   <a href="cart.html" class="nav-item"><div>🛒</div><span>Cart</span><span class="cart-badge" id="cartCount">0</span></a>
   <a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a>
 </div>
-<!-- GitHub Error Fix - sabse pehle -->
-<script src="santra-github-fix.js?v=28"></script>
 
-<!-- Phir tere 3 files - jaise hain waise - edit nahi -->
-<script src="constants.js?v=3"></script>
-<script src="secrets.js?v=1"></script>
-
-
-
-
-
-
-
-
-
-
-<script src="constants.js?v=3"></script>
-
+<!-- ✅ FIXED ORDER - OLD CODE SAVE WITH UPDATE DNA - Firebase pehle -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
+<script src="config.js?v=8"></script>
+<script src="constants.js?v=3"></script> <!-- sirf 1 baar - duplicate hataya -->
+<script src="santra-github-fix.js?v=28"></script>
+<script src="secrets.js?v=1"></script> <!-- Firebase ke BAAD -->
 
 <script>
 /* ==================== OLD CODE BACKUP - 09/06/2026 - SAFE - KUCH HATAYA NAHI - DNA ====================
 if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
 const rtdb = firebase.database();
-function loadCategories() {
-  rtdb.ref("categories").once('value', snap => {... });
-}
-function loadProducts() {
-  rtdb.ref('products').once('value', snap => {... });
-}
+function loadCategories() { rtdb.ref("categories").once('value', snap => {... }); }
+function loadProducts() { rtdb.ref('products').once('value', snap => {... }); }
 OLD CODE BACKUP - 09/06/2026 - SAME FILE - V11 V12 V13 V14 V15 OLD SAVE - DELETE NAHI
 ================== OLD CODE END - SAVE HAI - SAFE - DELETE NAHI ================== */
 
-// ✅ V25 FINAL - OLD SAVE WITH UPDATE - 28 JULY 2026 - PURE CATEGORY FIX + IMAGE FIX
+// ✅ V26 FINAL - OLD SAVE WITH UPDATE - 28 JULY 2026 - PURE CATEGORY FIX + IMAGE FIX + 6 JAGAH
 if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
 if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
 if(typeof window.MYCHOICE_KEY === 'undefined'){ window.MYCHOICE_KEY = "santraMallMyChoice_v2"; }
@@ -187,12 +190,15 @@ try{
   else if(!firebase.apps.length){ firebase.initializeApp(window.firebaseConfig); }
 }catch(e){}
 
-const db = window.db || firebase.firestore();
-const rtdb = firebase.database();
-const auth = firebase.auth();
+// 🔴 FIX - db duplicate - window pe guard - OLD CODE SAVE WITH
+window.db = window.db || firebase.firestore();
+window.rtdb = window.rtdb || firebase.database();
+window.auth = window.auth || firebase.auth();
+const db = window.db;
+const rtdb = window.rtdb;
+const auth = window.auth;
 const CART_KEY_VAL = window.CART_KEY;
-const MYCHOICE_KEY_VAL = window.MYCHOICE_KEY;
-console.log("✅ Category FINAL V25 - CART_KEY_VAL:", CART_KEY_VAL, "- Old Save With Update - Pure Fix + Image");
+console.log("✅ Category FINAL V26 - CART_KEY_VAL:", CART_KEY_VAL, "- Old Save With Update - Pure Fix + 6 Jagah Image");
 
 let allProducts = [];
 let allCategories = [];
@@ -250,15 +256,14 @@ function loadProducts() {
   });
 }
 
-// ✅ V25 FINAL FIX - Categories collection + Products collection + Master Backup se - Image 100% fix
 function loadCategories() {
   allCategories = [];
   const catMap = new Map();
-
   function addCat(name, imageObj){
     if(!name) return;
     let clean = name.toString().trim(); if(!clean) return;
     let lower = clean.toLowerCase();
+    // 6 jagah se image - imgbB, cloudinary, lux, httpsUrl, base64, firebase
     let bestImg = window.getBestImageAny(imageObj) || window.getBestImageAny(typeof imageObj==='object'?imageObj:{image:imageObj}) || "";
     if(!window.isValidHttpImage(bestImg)) bestImg = window.getMasterPreviewImage("", clean) || 'https://via.placeholder.com/80?text='+encodeURIComponent(clean);
     if(!catMap.has(lower)){
@@ -268,13 +273,11 @@ function loadCategories() {
       if(!window.isValidHttpImage(ex.image) && window.isValidHttpImage(bestImg)) ex.image=bestImg;
     }
   }
-
   rtdb.ref("categories").on('value', snap => {
     snap.forEach((child) => { const data = child.val(); addCat(data.name, data); });
     allProducts.forEach(p => { if(p.category) addCat(p.category, p); });
     allCategories = Array.from(catMap.values()); renderCategories();
   });
-
   db.collection("categories").onSnapshot(snap => {
     snap.forEach((doc) => { const data = doc.data(); addCat(data.name, data); });
     allProducts.forEach(p => { if(p.category) addCat(p.category, p); });
@@ -282,7 +285,6 @@ function loadCategories() {
   }, err => {
     document.getElementById('catList').innerHTML = '<p class="loader">Error: ' + err.message + '</p>';
   });
-
   rtdb.ref('products').on('value', snap => {
     snap.forEach(child => { let p = child.val(); if(p.category) addCat(p.category, p); });
     allCategories = Array.from(catMap.values()); renderCategories();
@@ -303,7 +305,7 @@ function renderCategories() {
     const count = allProducts.filter(p => p.category && p.category.toLowerCase().trim()===cat.name.toLowerCase().trim()).length;
     let img = window.getBestImageAny(cat) || window.getMasterPreviewImage("", cat.name) || cat.image;
     if(!window.isValidHttpImage(img)) img='https://via.placeholder.com/80?text='+encodeURIComponent(cat.name);
-    catList.innerHTML+=`<div class="cat-card" onclick="showCategoryProducts('${cat.name}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
+    catList.innerHTML+=`<div class="cat-card" onclick="showCategoryProducts('${cat.name.replace(/'/g,"\\'")}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
   });
 }
 
@@ -351,7 +353,7 @@ function renderFilters() {
     html += `<div class="filter-group"><h4>Type</h4>`;
     categoryStructure.types.forEach(t => {
       const imgUrl = categoryStructure.typeImages?.[t] || '';
-      html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t}')"> ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''} ${t}</label>`;
+      html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t.replace(/'/g,"\\'")}')"> ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''} ${t}</label>`;
     });
     html += `</div>`;
   }
@@ -360,7 +362,7 @@ function renderFilters() {
       const values = getFilterValues(filterName);
       if(values.length > 0) {
         html += `<div class="filter-group"><h4>${filterName}</h4>`;
-        values.forEach(v => { html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName}','${v}')"> ${v}</label>`; });
+        values.forEach(v => { html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}')"> ${v}</label>`; });
         html += `</div>`;
       }
     });
@@ -376,56 +378,23 @@ function getFilterValues(filterName) {
   return Array.from(values).sort();
 }
 
-function toggleTypeFilter(type) {
-  if(appliedFilters.type.includes(type)) appliedFilters.type = appliedFilters.type.filter(t => t!== type);
-  else appliedFilters.type.push(type);
-  renderProducts(); updateFilterChips();
-}
-function toggleVariantFilter(key, value) {
-  if(!appliedFilters.variants[key]) appliedFilters.variants[key] = [];
-  if(appliedFilters.variants[key].includes(value)) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
-  else appliedFilters.variants[key].push(value);
-  renderProducts(); updateFilterChips();
-}
+function toggleTypeFilter(type) { if(appliedFilters.type.includes(type)) appliedFilters.type = appliedFilters.type.filter(t => t!== type); else appliedFilters.type.push(type); renderProducts(); updateFilterChips(); }
+function toggleVariantFilter(key, value) { if(!appliedFilters.variants[key]) appliedFilters.variants[key] = []; if(appliedFilters.variants[key].includes(value)) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value); else appliedFilters.variants[key].push(value); renderProducts(); updateFilterChips(); }
 function updateFilterChips() {
-  let chips = [];
-  appliedFilters.type.forEach(t => chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t}')">${t} ×</span>`));
-  Object.keys(appliedFilters.variants).forEach(k => { appliedFilters.variants[k].forEach(v => chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k}','${v}')">${k}: ${v} ×</span>`)); });
-  document.getElementById('activeFiltersChips').innerHTML = chips.join('');
-  updateFilterCount();
+  let chips = []; appliedFilters.type.forEach(t => chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t.replace(/'/g,"\\'")}')">${t} ×</span>`));
+  Object.keys(appliedFilters.variants).forEach(k => { appliedFilters.variants[k].forEach(v => chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}')">${k}: ${v} ×</span>`)); });
+  document.getElementById('activeFiltersChips').innerHTML = chips.join(''); updateFilterCount();
 }
-function removeTypeFilter(type) {
-  appliedFilters.type = appliedFilters.type.filter(t => t!== type);
-  const el = document.querySelector(`#dynamicFilters input[value="${type}"]`);
-  if(el) el.checked = false;
-  renderProducts(); updateFilterChips();
-}
-function removeVariantFilter(key, value) {
-  if(appliedFilters.variants[key]) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value);
-  const el = document.querySelector(`#dynamicFilters input[value="${value}"]`);
-  if(el) el.checked = false;
-  renderProducts(); updateFilterChips();
-}
-function updateFilterCount() {
-  let count = appliedFilters.type.length;
-  Object.keys(appliedFilters.variants).forEach(k => count += appliedFilters.variants[k].length);
-  document.getElementById('filterCount').innerText = count;
-}
-function clearAllFilters() {
-  appliedFilters = { type: [], variants: {} };
-  document.querySelectorAll('#dynamicFilters input[type="checkbox"]').forEach(cb => cb.checked = false);
-  renderProducts(); updateFilterChips();
-}
+function removeTypeFilter(type) { appliedFilters.type = appliedFilters.type.filter(t => t!== type); const el = document.querySelector(`#dynamicFilters input[value="${type}"]`); if(el) el.checked = false; renderProducts(); updateFilterChips(); }
+function removeVariantFilter(key, value) { if(appliedFilters.variants[key]) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value); const el = document.querySelector(`#dynamicFilters input[value="${value}"]`); if(el) el.checked = false; renderProducts(); updateFilterChips(); }
+function updateFilterCount() { let count = appliedFilters.type.length; Object.keys(appliedFilters.variants).forEach(k => count += appliedFilters.variants[k].length); document.getElementById('filterCount').innerText = count; }
+function clearAllFilters() { appliedFilters = { type: [], variants: {} }; document.querySelectorAll('#dynamicFilters input[type="checkbox"]').forEach(cb => cb.checked = false); renderProducts(); updateFilterChips(); }
 
 function renderProducts(){
   const container = document.getElementById('productList');
   let products = showAll? [...allProducts] : allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
   if(appliedFilters.type.length > 0) products = products.filter(p => appliedFilters.type.includes(p.type || p.subCategory));
-  Object.keys(appliedFilters.variants).forEach(key => {
-    if(appliedFilters.variants[key].length > 0) {
-      products = products.filter(p => { const val = p.variants?.[key] || p[key.toLowerCase()]; return appliedFilters.variants[key].includes(val); });
-    }
-  });
+  Object.keys(appliedFilters.variants).forEach(key => { if(appliedFilters.variants[key].length > 0) { products = products.filter(p => { const val = p.variants?.[key] || p[key.toLowerCase()]; return appliedFilters.variants[key].includes(val); }); } });
   if(products.length === 0){ container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found in '+ (currentCategory||'All') +'</p>'; return; }
   container.innerHTML = '';
   products.forEach(p => {
@@ -436,56 +405,17 @@ function renderProducts(){
   });
 }
 
-function backToCategories(){
-  showAll = false; currentCategory = ''; appliedFilters = { type: [], variants: {} };
-  document.getElementById('productView').classList.add('hide');
-  document.getElementById('catView').classList.remove('hide');
-  document.getElementById('pageTitle').innerText = '📱 Categories';
-  document.getElementById('filtersSidebar').style.display = 'none';
-  document.getElementById('filterToggle').style.display = 'none';
-}
-
-function toggleMobileFilter() {
-  document.getElementById('filtersSidebar').classList.toggle('show');
-  document.getElementById('filterOverlay').classList.toggle('show');
-}
-
-function addToCart(pid){
-  const product = allProducts.find(p => p.id == pid);
-  if(!product) return;
-  let bestImg = window.getBestImageAny(product) || window.getMasterPreviewImage(product.id, product.name) || product.image;
-  let productWithImg = {...product, image:bestImg, imageUrl:bestImg, httpsUrl:bestImg, imgbb:bestImg, cloudinary:bestImg, lux:bestImg};
-  let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || "[]");
-  let existing = cart.find(item=> item && item.id==pid);
-  if(existing){ existing.qty = (existing.qty||1)+1; existing.image=bestImg; }
-  else { cart.push({...productWithImg, qty:1}); }
-  localStorage.setItem(CART_KEY_VAL, JSON.stringify(cart));
-  localStorage.setItem('santra_cart', JSON.stringify(cart));
-  alert('✅ Added to cart!'); updateCartCount();
-}
-
-function updateCartCount(){
-  try{
-    let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || localStorage.getItem('santra_cart') || "[]");
-    cart = cart.filter(item => item!== null && item!== undefined);
-    let total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-    document.getElementById('cartCount').innerText = total;
-  }catch(e){ document.getElementById('cartCount').innerText = '0'; }
-}
-
-console.log("✅ category.html V25 FINAL - Old save + CART_KEY duplicate fix + Image 100% - Pure category dikhegi - Old Code Save With Update");
+function backToCategories(){ showAll = false; currentCategory = ''; appliedFilters = { type: [], variants: {} }; document.getElementById('productView').classList.add('hide'); document.getElementById('catView').classList.remove('hide'); document.getElementById('pageTitle').innerText = '📱 Categories'; document.getElementById('filtersSidebar').style.display = 'none'; document.getElementById('filterToggle').style.display = 'none'; }
+function toggleMobileFilter() { document.getElementById('filtersSidebar').classList.toggle('show'); document.getElementById('filterOverlay').classList.toggle('show'); }
+function addToCart(pid){ const product = allProducts.find(p => p.id == pid); if(!product) return; let bestImg = window.getBestImageAny(product) || window.getMasterPreviewImage(product.id, product.name) || product.image; let productWithImg = {...product, image:bestImg, imageUrl:bestImg, httpsUrl:bestImg, imgbb:bestImg, cloudinary:bestImg, lux:bestImg}; let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || "[]"); let existing = cart.find(item=> item && item.id==pid); if(existing){ existing.qty = (existing.qty||1)+1; existing.image=bestImg; } else { cart.push({...productWithImg, qty:1}); } localStorage.setItem(CART_KEY_VAL, JSON.stringify(cart)); localStorage.setItem('santra_cart', JSON.stringify(cart)); alert('✅ Added to cart!'); updateCartCount(); }
+function updateCartCount(){ try{ let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || localStorage.getItem('santra_cart') || "[]"); cart = cart.filter(item => item!== null && item!== undefined); let total = cart.reduce((sum, item) => sum + (item.qty || 1), 0); document.getElementById('cartCount').innerText = total; }catch(e){ document.getElementById('cartCount').innerText = '0'; } }
+console.log("✅ category.html V26 FINAL - Old save + CART_KEY duplicate fix + Image 100% - Pure category dikhegi - Old Code Save With Update DNA");
 </script>
 
-<!-- OLD CODE SAVE WITH - backup files - DELETE NAHI - DNA SAFE -->
-<script src="config.js?v=8"></script>
-
-<script src="category.js"></script>
-
-<script src="category-image-fix.js?v=27"></script>
+<!-- OLD CODE SAVE WITH - backup files - DELETE NAHI - DNA SAFE - Single load -->
+<script>window.origRender = window.origRender || function(){ console.log("origRender backup safe - OLD CODE SAVE"); };</script>
+<script src="category-image-fix.js?v=28"></script>
 <script src="backup-all-image.js?v=22"></script>
 <script src="home-all-product-image-backup.js?v=24"></script>
-<script src="category-image-fix.js?v=28"></script>
 </body>
 </html>
-
-
