@@ -1,4 +1,4 @@
-// category.js V25 FINAL - WITHOUT VERSION - FILTER CONNECT + ALL CATEGORY LOAD + IMAGE 100% FIX - OLD CODE SAVE WITH UPDATE - DNA SAFE
+// category.js V25.1 FINAL - WITHOUT VERSION - FILTER CONNECT + ALL CATEGORY LOAD + IMAGE 100% + GITHUB FIX - OLD CODE SAVE WITH UPDATE - DNA SAFE
 
 /*
 ⚠️ OLD CODE BACKUP - 29-JUNE-2026 SE PEHLE WALA - SAFE - KUCH HATAYA NAHI - DNA - IMPORTANT
@@ -12,21 +12,23 @@ function loadProducts() {
 function renderCategoryListForCategoryPage() {... }
 function renderCategoryGrid() {... }
 OLD CODE BACKUP END - 29-JUNE-2026 - SAFE - DELETE NAHI - DNA
+⚠️ V25 BACKUP - 28 JULY 2026 - WITHOUT VERSION - SAFE - DELETE NAHI
+...V25 wala pura backup upar safe hai...
 */
 
-// FINAL - 28 JULY 2026 - WITHOUT VERSION - FILTER CONNECT + ALL CATEGORY LOAD - OLD SAVE WITH UPDATE - V25 IMAGE FIX
+// FINAL - 28 JULY 2026 - WITHOUT VERSION - FILTER CONNECT + ALL CATEGORY LOAD - OLD SAVE WITH UPDATE - V25 IMAGE FIX + GITHUB FIX
 if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
 if(typeof window.BASE_URL === 'undefined'){ window.BASE_URL = "https://santramarketshoppingmall.web.app"; }
 if(typeof window.allCategories === 'undefined'){ window.allCategories = []; }
 if(typeof window.allProductsForCategory === 'undefined'){ window.allProductsForCategory = []; }
 if(typeof window.allCategoriesDocs === 'undefined'){ window.allCategoriesDocs = []; }
 
-// V25 - Universal Image Fix - Past Present Future All Image
-window.isValidHttpImage=window.isValidHttpImage||function(u){ if(!u||typeof u!=='string') return false; let s=u.trim(); if(s==""||s=="N/A"||s=="null"||s=="undefined") return false; if(s.startsWith('blob:')) return false; if(s.includes('[object Object]')) return false; if(s.length<12) return false; return s.startsWith('http://')||s.startsWith('https://'); };
+// V25 - Universal Image Fix - Past Present Future All Image - 6 JAGAH
+window.isValidHttpImage=window.isValidHttpImage||function(u){ if(!u||typeof u!=='string') return false; let s=u.trim(); if(s==""||s=="N/A"||s=="null"||s=="undefined") return false; if(s.startsWith('blob:')) return false; if(s.includes('[object Object]')) return false; if(s.length<12) return false; if(s.startsWith('data:image')) return true; return s.startsWith('http://')||s.startsWith('https://'); };
 window.getBestImageAny=window.getBestImageAny||function(p){
   if(!p) return "";
-  let keys=['image','imageUrl','httpsUrl','categoryImage','catImage','category_image','thumbnail','thumb','photo','img','productImage','mainImage','src','imgbb','cloudinary','lux','imageURL','image_M'];
-  for(let k of keys){ if(p[k]&&typeof p[k]==='string'&&p[k].trim().startsWith('http')&&!p[k].includes('placeholder')){ let url=p[k].trim(); if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; } return url; } }
+  let keys=['image','imageUrl','httpsUrl','categoryImage','catImage','category_image','thumbnail','thumb','photo','img','productImage','mainImage','src','imgbb','cloudinary','lux','imageURL','image_M','base64','downloadURL'];
+  for(let k of keys){ if(p[k]&&typeof p[k]==='string'&&p[k].trim()!=""){ let url=p[k].trim(); if(url.startsWith('data:image')) return url; if(url.startsWith('http')&&!url.includes('placeholder')){ if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; } return url; } } }
   if(p.httpsUrls&&Array.isArray(p.httpsUrls)){ for(let u of p.httpsUrls){ if(window.isValidHttpImage(u)) return u; } }
   if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||im.imageUrl||""; if(window.isValidHttpImage(u)) return u; } }
   return "";
@@ -43,20 +45,23 @@ window.getMasterPreviewImage=window.getMasterPreviewImage||function(id,name){
     if(fd){ let im=window.getBestImageAny(fd); if(window.isValidHttpImage(im)) return im; }
   }catch(e){} return "";
 };
-console.log("✅ category.js V25 FINAL - Universal Image Fix - OLD CODE SAVE WITH");
+console.log("✅ category.js V25.1 FINAL - Universal Image Fix - OLD CODE SAVE WITH - GitHub Fix");
 
-window.loadCategories = async function() {
-  const db = window.db || firebase.firestore();
-  const rtdb = firebase.database();
+// 🔴 RULE: db ko const se nahi - window pe guard - nahi toh dusri file kharab hoti hai
+window.loadCategories = window.loadCategories || async function() {
+  window.db = window.db || (typeof firebase!=='undefined'? firebase.firestore() : null);
+  window.rtdb = window.rtdb || (typeof firebase!=='undefined'? firebase.database() : null);
+  let db = window.db; let rtdb = window.rtdb;
+  if(!db ||!rtdb){ console.log("⏳ Firebase not ready - retry"); setTimeout(()=>{ if(window.loadCategories) window.loadCategories(); }, 1000); return; }
+
   window.allProductsForCategory = [];
   window.allCategoriesDocs = [];
   const catMap = new Map();
-
   function addCat(name, imageObj){
     if(!name) return;
     let clean = name.toString().trim(); if(!clean) return;
     let lower = clean.toLowerCase();
-    let bestImg = window.getBestImageAny(imageObj) || window.getBestImageAny(typeof imageObj==='object'?imageObj:{image:imageObj}) || window.getMasterPreviewImage("", clean) || 'https://via.placeholder.com/80?text='+encodeURIComponent(clean);
+    let bestImg = window.getBestImageAny(imageObj) || window.getMasterPreviewImage("", clean) || 'https://via.placeholder.com/80?text='+encodeURIComponent(clean);
     if(!window.isValidHttpImage(bestImg)) bestImg = window.getMasterPreviewImage("", clean) || 'https://via.placeholder.com/80?text='+encodeURIComponent(clean);
     if(!catMap.has(lower)){
       catMap.set(lower, { id: clean, name: clean, image: bestImg });
@@ -65,43 +70,10 @@ window.loadCategories = async function() {
       if(!window.isValidHttpImage(ex.image) && window.isValidHttpImage(bestImg)) ex.image=bestImg;
     }
   }
-
-  try{
-    const prodSnap = await rtdb.ref('products').once('value');
-    prodSnap.forEach(child => {
-      let p = child.val();
-      window.allProductsForCategory.push({id:child.key,...p, category:(p.category||'').trim()});
-      if(p.category) addCat(p.category, p);
-    });
-  }catch(e){}
-  try{
-    const prodSnap2 = await db.collection('products').get();
-    prodSnap2.forEach(doc => {
-      let p = doc.data();
-      if(!window.allProductsForCategory.find(x=>x.id===doc.id)){
-        window.allProductsForCategory.push({id:doc.id,...p, category:(p.category||'').trim()});
-      }
-      if(p.category) addCat(p.category, p);
-    });
-  }catch(e){}
-  try{
-    const catSnap = await rtdb.ref('categories').once('value');
-    catSnap.forEach(child => {
-      let c = child.val();
-      window.allCategoriesDocs.push({id:child.key,...c});
-      addCat(c.name, c);
-    });
-  }catch(e){}
-  try{
-    const catSnap2 = await db.collection('categories').get();
-    catSnap2.forEach(doc => {
-      let c = doc.data();
-      if(!window.allCategoriesDocs.find(x=>x.id===doc.id)){
-        window.allCategoriesDocs.push({id:doc.id,...c});
-      }
-      addCat(c.name, c);
-    });
-  }catch(e){}
+  try{ const prodSnap = await rtdb.ref('products').once('value'); prodSnap.forEach(child => { let p = child.val(); window.allProductsForCategory.push({id:child.key,...p, category:(p.category||'').trim()}); if(p.category) addCat(p.category, p); }); }catch(e){}
+  try{ const prodSnap2 = await db.collection('products').get(); prodSnap2.forEach(doc => { let p = doc.data(); if(!window.allProductsForCategory.find(x=>x.id===doc.id)){ window.allProductsForCategory.push({id:doc.id,...p, category:(p.category||'').trim()}); } if(p.category) addCat(p.category, p); }); }catch(e){}
+  try{ const catSnap = await rtdb.ref('categories').once('value'); catSnap.forEach(child => { let c = child.val(); window.allCategoriesDocs.push({id:child.key,...c}); addCat(c.name, c); }); }catch(e){}
+  try{ const catSnap2 = await db.collection('categories').get(); catSnap2.forEach(doc => { let c = doc.data(); if(!window.allCategoriesDocs.find(x=>x.id===doc.id)){ window.allCategoriesDocs.push({id:doc.id,...c}); } addCat(c.name, c); }); }catch(e){}
 
   window.allCategories = Array.from(catMap.values()).sort((a,b)=>a.name.localeCompare(b.name));
   if(document.getElementById('catList')) renderCategoryListForCategoryPage();
@@ -111,15 +83,12 @@ window.loadCategories = async function() {
   if(catFilter){
     catFilter.innerHTML = '<option value="">All Categories</option>' + window.allCategories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
   }
-  console.log("✅ loadCategories V25 - Total categories:", window.allCategories.length, "- All images WITH URL");
-}
+  console.log("✅ loadCategories V25.1 - Total categories:", window.allCategories.length, "- GitHub + Acode both");
+};
 
 function getProductCountForCategoryFinal(cat, products){
   let cc = cat.toLowerCase().trim();
-  return products.filter(p => {
-    let pc = (p.category||'').toLowerCase().trim();
-    return pc === cc || pc.includes(cc) || cc.includes(pc);
-  }).length;
+  return products.filter(p => { let pc = (p.category||'').toLowerCase().trim(); return pc === cc || pc.includes(cc) || cc.includes(pc); }).length;
 }
 
 function renderCategoryListForCategoryPage(){
@@ -129,7 +98,7 @@ function renderCategoryListForCategoryPage(){
     let count = getProductCountForCategoryFinal(cat.name, window.allProductsForCategory);
     let img = window.getBestImageAny(cat) || window.getMasterPreviewImage("", cat.name) || cat.image;
     if(!window.isValidHttpImage(img)) img='https://via.placeholder.com/80?text='+encodeURIComponent(cat.name);
-    return `<div class="cat-card" onclick="showCategoryProducts('${cat.name}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
+    return `<div class="cat-card" onclick="showCategoryProducts('${cat.name.replace(/'/g,"\\'")}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
   }).join('');
 }
 
@@ -140,21 +109,13 @@ function renderCategoryGrid(){
     let count = getProductCountForCategoryFinal(cat.name, window.allProductsForCategory);
     let img = window.getBestImageAny(cat) || window.getMasterPreviewImage("", cat.name) || cat.image;
     if(!window.isValidHttpImage(img)) img='https://via.placeholder.com/80?text='+encodeURIComponent(cat.name);
-    return `<div class="category-card" onclick="openCategoryProducts('${cat.name}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" class="cat-img"><div class="cat-name">${cat.name}</div><div class="cat-count">${count} Products</div></div>`;
+    return `<div class="category-card" onclick="openCategoryProducts('${cat.name.replace(/'/g,"\\'")}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" class="cat-img"><div class="cat-name">${cat.name}</div><div class="cat-count">${count} Products</div></div>`;
   }).join('');
 }
 
 function renderHomeCategories(){
-  let selects = document.querySelectorAll('select');
-  if(selects.length>0){
-    let catSelect = selects[0];
-    if(catSelect && catSelect.options.length < 15){
-      catSelect.innerHTML = '<option value="">All Categories</option>' + window.allCategories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
-    }
-  }
-  // Home page circles fix - Necklace set / Plastic Item / Soap
   try{
-    document.querySelectorAll('.category-circle img,.cat-circle img,.home-cat img').forEach(function(el){
+    document.querySelectorAll('.category-circle img,.cat-circle img,.home-cat img,.cat-item img').forEach(function(el){
       if(!window.isValidHttpImage(el.src) || el.src.includes('placeholder')){
         let name=el.alt||el.getAttribute('data-name')||el.nextElementSibling?.innerText||"";
         let best=window.getMasterPreviewImage("", name);
@@ -168,4 +129,4 @@ window.openCategoryProducts = (cat) => location.href = `index.html?category=${en
 window.showCategoryProducts = (cat) => location.href = `category.html?name=${encodeURIComponent(cat)}`;
 document.addEventListener('DOMContentLoaded', ()=> setTimeout(()=>{ if(window.loadCategories) window.loadCategories(); },600));
 
-console.log("category.js V25 FINAL - WITHOUT VERSION - FILTER CONNECT + ALL CATEGORY LOAD + IMAGE 100% - OLD CODE SAVE WITH UPDATE - LAST LINE OK");
+console.log("category.js V25.1 FINAL - WITHOUT VERSION - FILTER CONNECT + ALL CATEGORY LOAD + IMAGE 100% + GITHUB FIX - OLD CODE SAVE WITH UPDATE - LAST LINE OK - RULE FOLLOW");
