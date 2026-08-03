@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Categories - SANTRA MALL</title>
 <style>
 :root{--accent:#e40046;--bg:#f1f3f6;--card:#fff}
@@ -47,165 +46,71 @@ body{background:var(--bg);padding-bottom:70px;}
 .active-chip{display:inline-block;background:#e40046;color:white;padding:4px 10px;border-radius:15px;font-size:12px;margin:3px;cursor:pointer}
 .mobile-filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none}
 .mobile-filter-overlay.show{display:block}
-@media(max-width:768px){
-.container{flex-direction:column}
-.filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}
-.filters-sidebar.show{left:0}
-.close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;display:block!important}
-}
+@media(max-width:768px){.container{flex-direction:column}.filters-sidebar{position:fixed;left:-300px;top:0;bottom:0;width:280px;z-index:201;transition:0.3s;border-radius:0}.filters-sidebar.show{left:0}.close-filter{position:absolute;top:10px;right:10px;background:var(--accent);color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;display:block!important}}
 </style>
-
-<!-- ✅ V25 - Universal Image Fix - OLD CODE SAVE WITH - Past Present Future All Image - 6 JAGAH IMAGE SAVE -->
 <script>
 /* ⚠️ OLD CODE BACKUP - V25 - Universal Image Fix - SAFE - KUCH HATAYA NAHI - DNA */
 window.getBaseId=window.getBaseId||function(id){ if(!id) return ""; return String(id).replace(/^home_/i,'').replace(/^prod_/i,'').split('_')[0].split('-')[0].trim().toLowerCase().split('_')[0]; };
-window.isValidHttpImage=window.isValidHttpImage||function(u){
-  if(!u||typeof u!=='string') return false;
-  let s=u.trim();
-  if(s==""||s=="N/A"||s=="null"||s=="undefined") return false;
-  if(s.startsWith('blob:')) return false;
-  if(s.includes('[object Object]')) return false;
-  if(s.length<12) return false;
-  // base64 bhi valid hai - 6 jagah me se ek
-  if(s.startsWith('data:image')) return true;
-  return s.startsWith('http://')||s.startsWith('https://');
-};
-window.getBestImageAny=window.getBestImageAny||function(p){
-  if(!p) return "";
-  // 6 JAGAH SAVE - imgbB, cloudinary, lux, httpsUrl, base64, firebase
-  let keys=['image','imageUrl','httpsUrl','categoryImage','catImage','thumbnail','thumb','photo','img','productImage','mainImage','src','imgbb','cloudinary','lux','imageURL','image_M','base64','firebaseUrl','downloadURL'];
-  for(let k of keys){
-    if(p[k]&&typeof p[k]==='string'&&p[k].trim()!=""){
-      let url=p[k].trim();
-      if(url.startsWith('data:image')) return url; // base64
-      if(url.startsWith('http')&&!url.includes('placeholder')){
-        if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; }
-        return url;
-      }
-    }
-  }
-  if(p.httpsUrls&&Array.isArray(p.httpsUrls)){ for(let u of p.httpsUrls){ if(window.isValidHttpImage(u)) return u; } }
-  if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||im.imageUrl||im.downloadURL||""; if(window.isValidHttpImage(u)) return u; } }
-  return "";
-};
-window.getMasterPreviewImage=window.getMasterPreviewImage||function(id,name){
-  try{
-    let all=[];
-    // 6 jagah ka backup - localStorage + memory
-    ["santra_master_all_products_with_images_v24","santram_products_v1","santram_products_backup","santra_6way_backup","santra_all_products_cache","allProductsCache","allProducts","santra_all_products","santra_category_image_map_v28"].forEach(function(k){
-      try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); all=all.concat(Array.isArray(a)?a:Object.values(a)); } }catch(e){}
-    });
-    if(window.allProducts) all=all.concat(window.allProducts);
-    if(window.allCategories) all=all.concat(window.allCategories);
-    let base=(id||"").toString().toLowerCase().split('_')[0].split('-')[0].trim();
-    let nm=(name||"").toLowerCase().split(' ')[0];
-    let fd=null;
-    if(base) fd=all.find(function(x){ let xid=(x.id||x.name||"").toString().toLowerCase().split('_')[0].split('-')[0]; return xid===base; });
-    if(!fd&&nm) fd=all.find(function(x){ return String(x.name||x.category||"").toLowerCase().includes(nm); });
-    if(fd){ let im=window.getBestImageAny(fd); if(window.isValidHttpImage(im)) return im; }
-  }catch(e){} return "";
-};
-console.log("✅ category.html V25 - Universal Image Fix - OLD CODE SAVE WITH - 6 Jagah Image - Last Line");
+window.isValidHttpImage=window.isValidHttpImage||function(u){ if(!u||typeof u!=='string') return false; let s=u.trim(); if(s==""||s=="N/A"||s=="null"||s=="undefined") return false; if(s.startsWith('blob:')) return false; if(s.includes('[object Object]')) return false; if(s.length<12) return false; if(s.startsWith('data:image')) return true; return s.startsWith('http://')||s.startsWith('https://'); };
+window.getBestImageAny=window.getBestImageAny||function(p){ if(!p) return ""; let keys=['image','imageUrl','httpsUrl','categoryImage','catImage','thumbnail','thumb','photo','img','productImage','mainImage','src','imgbb','cloudinary','lux','imageURL','image_M','base64','firebaseUrl','downloadURL']; for(let k of keys){ if(p[k]&&typeof p[k]==='string'&&p[k].trim()!=""){ let url=p[k].trim(); if(url.startsWith('data:image')) return url; if(url.startsWith('http')&&!url.includes('placeholder')){ if(url.includes('_M')){ let w=url.replace(/_M/g,''); if(window.isValidHttpImage(w)) return w; } return url; } } } if(p.httpsUrls&&Array.isArray(p.httpsUrls)){ for(let u of p.httpsUrls){ if(window.isValidHttpImage(u)) return u; } } if(p.images&&Array.isArray(p.images)){ for(let im of p.images){ let u=typeof im==='string'?im:im.url||im.imageUrl||im.downloadURL||""; if(window.isValidHttpImage(u)) return u; } } return ""; };
+window.getMasterPreviewImage=window.getMasterPreviewImage||function(id,name){ try{ let all=[]; ["santra_master_all_products_with_images_v24","santram_products_v1","santram_products_backup","santra_6way_backup","santra_all_products_cache","allProductsCache","allProducts","santra_all_products","santra_category_image_map_v28"].forEach(function(k){ try{ let v=localStorage.getItem(k)||sessionStorage.getItem(k); if(v){ let a=JSON.parse(v); all=all.concat(Array.isArray(a)?a:Object.values(a)); } }catch(e){} }); if(window.allProducts) all=all.concat(window.allProducts); if(window.allCategories) all=all.concat(window.allCategories); let base=(id||"").toString().toLowerCase().split('_')[0].split('-')[0].trim(); let nm=(name||"").toLowerCase().split(' ')[0]; let fd=null; if(base) fd=all.find(function(x){ let xid=(x.id||x.name||"").toString().toLowerCase().split('_')[0].split('-')[0]; return xid===base; }); if(!fd&&nm) fd=all.find(function(x){ return String(x.name||x.category||"").toLowerCase().includes(nm); }); if(fd){ let im=window.getBestImageAny(fd); if(window.isValidHttpImage(im)) return im; } }catch(e){} return ""; };
 /* OLD CODE BACKUP END - V25 SAFE */
 </script>
 </head>
 <body>
-<div class="header">
-  <a href="index.html" class="back-btn">←</a>
-  <h1 id="pageTitle">📱 Categories</h1>
-  <button class="filter-toggle" id="filterToggle" type="button" style="display:none">🔍 Filters</button>
-</div>
+<div class="header"><a href="index.html" class="back-btn">←</a><h1 id="pageTitle">📱 Categories</h1><button class="filter-toggle" id="filterToggle" type="button" style="display:none">🔍 Filters</button></div>
 <div class="mobile-filter-overlay" id="filterOverlay"></div>
 <div class="container">
-  <div class="filters-sidebar" id="filtersSidebar">
-    <button class="close-filter" type="button" style="display:none">×</button>
-    <h3>🔍 Filters <span class="filter-count" id="filterCount">0</span></h3>
-    <button class="clear-filter" type="button">Clear All</button>
-    <div id="dynamicFilters"></div>
-  </div>
-  <div class="main-content">
-    <div id="catView">
-      <button class="all-prod-btn" type="button" id="allProdBtn">🛍️ All Products</button>
-      <h3 style="margin:15px 0;">Shop by Category</h3>
-      <div id="catList" class="cat-grid">
-        <div class="loader">⏳ Loading categories - Pehle jaisa... Home page wali all category list</div>
-      </div>
-    </div>
-    <div id="productView" class="hide">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;">
-        <h3 id="catTitle"></h3>
-        <div><button class="all-prod-btn" type="button" id="backToCatBtn">← Categories</button></div>
-      </div>
-      <div id="activeFiltersChips" style="margin-bottom:10px"></div>
-      <div id="productList" class="product-grid"></div>
-    </div>
-  </div>
+<div class="filters-sidebar" id="filtersSidebar"><button class="close-filter" type="button" style="display:none">×</button><h3>🔍 Filters <span class="filter-count" id="filterCount">0</span></h3><button class="clear-filter" type="button">Clear All</button><div id="dynamicFilters"></div></div>
+<div class="main-content"><div id="catView"><button class="all-prod-btn" type="button" id="allProdBtn">🛍️ All Products</button><h3 style="margin:15px 0;">Shop by Category</h3><div id="catList" class="cat-grid"><div class="loader">⏳ Loading categories</div></div></div><div id="productView" class="hide"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:8px;"><h3 id="catTitle"></h3><div><button class="all-prod-btn" type="button" id="backToCatBtn">← Categories</button></div></div><div id="activeFiltersChips" style="margin-bottom:10px"></div><div id="productList" class="product-grid"></div></div></div>
 </div>
-<div class="bottom-nav">
-  <a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a>
-  <a href="category.html" class="nav-item active"><div>📱</div><span>Categories</span></a>
-  <a href="cart.html" class="nav-item"><div>🛒</div><span>Cart</span><span class="cart-badge" id="cartCount">0</span></a>
-  <a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a>
-</div>
+<div class="bottom-nav"><a href="index.html" class="nav-item"><div>🏠</div><span>Home</span></a><a href="category.html" class="nav-item active"><div>📱</div><span>Categories</span></a><a href="cart.html" class="nav-item"><div>🛒</div><span>Cart</span><span class="cart-badge" id="cartCount">0</span></a><a href="customer-account.html" class="nav-item"><div>👤</div><span>Account</span></a></div>
 
-<!-- ✅ FIXED ORDER - OLD CODE SAVE WITH UPDATE DNA - Firebase pehle -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
 <script src="config.js?v=8"></script>
-<script src="constants.js?v=3"></script> <!-- sirf 1 baar - duplicate hataya -->
+<script src="constants.js?v=3"></script>
 <script src="santra-github-fix.js?v=28"></script>
-<script src="secrets.js?v=1"></script> <!-- Firebase ke BAAD -->
+<script src="secrets.js?v=1"></script>
 
 <script>
-/* ==================== OLD CODE BACKUP - 09/06/2026 - SAFE - KUCH HATAYA NAHI - DNA ====================
-if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-const rtdb = firebase.database();
-function loadCategories() { rtdb.ref("categories").once('value', snap => {... }); }
-function loadProducts() { rtdb.ref('products').once('value', snap => {... }); }
-OLD CODE BACKUP - 09/06/2026 - SAME FILE - V11 V12 V13 V14 V15 OLD SAVE - DELETE NAHI
-================== OLD CODE END - SAVE HAI - SAFE - DELETE NAHI ================== */
-
-// ✅ V26 FINAL - OLD SAVE WITH UPDATE - 28 JULY 2026 - PURE CATEGORY FIX + IMAGE FIX + 6 JAGAH
+/* OLD CODE BACKUP - 09/06/2026 - SAFE - KUCH HATAYA NAHI - DNA */
 if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
 if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
 if(typeof window.MYCHOICE_KEY === 'undefined'){ window.MYCHOICE_KEY = "santraMallMyChoice_v2"; }
 if(typeof window.BASE_URL === 'undefined'){ window.BASE_URL = "https://santramarketshoppingmall.web.app"; }
-if(typeof window.firebaseConfig === 'undefined'){
-  window.firebaseConfig = {
-    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-    authDomain: "santramarketshoppingmall.firebaseapp.com",
-    projectId: "santramarketshoppingmall",
-    storageBucket: "santramarketshoppingmall.appspot.com",
-    messagingSenderId: "398490252924",
-    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY",
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
-  };
-}
-try{
-  if(typeof window.initFirebaseOnce === 'function'){ window.initFirebaseOnce(window.firebaseConfig); }
-  else if(!firebase.apps.length){ firebase.initializeApp(window.firebaseConfig); }
-}catch(e){}
+if(typeof window.firebaseConfig === 'undefined'){ window.firebaseConfig = { apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA", authDomain: "santramarketshoppingmall.firebaseapp.com", projectId: "santramarketshoppingmall", storageBucket: "santramarketshoppingmall.appspot.com", messagingSenderId: "398490252924", appId: "1:398490252924:web:d1b6348b549183b93b7bf9", measurementId: "G-ZW1ZR8HETY", databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" }; }
+try{ if(typeof window.initFirebaseOnce === 'function'){ window.initFirebaseOnce(window.firebaseConfig); } else if(!firebase.apps.length){ firebase.initializeApp(window.firebaseConfig); } }catch(e){}
 
-// 🔴 FIX - db duplicate - window pe guard - OLD CODE SAVE WITH
 window.db = window.db || firebase.firestore();
 window.rtdb = window.rtdb || firebase.database();
 window.auth = window.auth || firebase.auth();
-const db = window.db;
-const rtdb = window.rtdb;
-const auth = window.auth;
-const CART_KEY_VAL = window.CART_KEY;
-console.log("✅ Category FINAL V26 - CART_KEY_VAL:", CART_KEY_VAL, "- Old Save With Update - Pure Fix + 6 Jagah Image");
+var db = window.db; var rtdb = window.rtdb; var auth = window.auth;
+var CART_KEY_VAL = window.CART_KEY;
 
-let allProducts = [];
-let allCategories = [];
-let currentCategory = '';
-let showAll = false;
+let allProducts = []; let allCategories = []; let currentCategory = ''; let showAll = false;
 let categoryStructure = { types: [], variants: [], activeFilters: [], typeImages: {} };
 let appliedFilters = { type: [], variants: {} };
+
+window.showCategoryProducts = function(catName){
+  showAll = false; currentCategory = catName; appliedFilters = { type: [], variants: {} };
+  document.getElementById('catView').classList.add('hide');
+  document.getElementById('productView').classList.remove('hide');
+  document.getElementById('catTitle').innerText = catName + " - Products";
+  document.getElementById('pageTitle').innerText = catName;
+  document.getElementById('filtersSidebar').style.display = 'block';
+  document.getElementById('filterToggle').style.display = 'block';
+  document.getElementById('productList').innerHTML = '<p class="loader">⏳ Loading '+catName+' products...</p>';
+  renderProducts();
+  rtdb.ref('category_structure/' + catName).once('value', snap => {
+    if(snap.exists()) { categoryStructure = snap.val(); categoryStructure.types = categoryStructure.types || []; categoryStructure.variants = categoryStructure.variants || []; categoryStructure.activeFilters = categoryStructure.activeFilters || []; categoryStructure.typeImages = categoryStructure.typeImages || {}; renderFilters(); renderProducts(); }
+    else { db.collection('category_structure').doc(catName).get().then(doc => { if(doc.exists) categoryStructure = doc.data(); else categoryStructure = { types: [], variants: [], activeFilters: [], typeImages: {} }; renderFilters(); renderProducts(); }).catch(()=>{ renderFilters(); renderProducts(); }); }
+  });
+  history.pushState(null,'','category.html?name='+encodeURIComponent(catName));
+  window.scrollTo(0,0);
+};
 
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('allProdBtn').onclick = showAllProducts;
@@ -218,185 +123,116 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function initCategoryPage() {
-  if(auth){ auth.onAuthStateChanged(() => { updateCartCount(); }); }
-  else { updateCartCount(); }
+  if(auth){ auth.onAuthStateChanged(() => { updateCartCount(); }); } else { updateCartCount(); }
   loadProducts(); loadCategories();
   let urlParams = new URLSearchParams(window.location.search);
   let catName = urlParams.get('name');
-  if(catName) setTimeout(() => showCategoryProducts(decodeURIComponent(catName)), 1000);
+  if(catName) setTimeout(() => window.showCategoryProducts(decodeURIComponent(catName)), 1500);
 }
 
 function loadProducts() {
-  allProducts = [];
-  const productIds = new Set();
-  rtdb.ref('products').on('value', snap => {
-    const newList = [];
-    snap.forEach((child) => {
-      let p = child.val(); p.id = child.key;
-      p.price = parseFloat(p.price) || 0;
-      p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 999;
-      p.mrp = parseFloat(p.mrp) || p.price;
-      p.dbType = 'rtdb';
-      if(!productIds.has(p.id)) { newList.push(p); productIds.add(p.id); }
-    });
-    allProducts = [...allProducts.filter(x=>x.dbType!=='rtdb'),...newList];
-    if(document.getElementById('catView').classList.contains('hide')) renderProducts(); else renderCategories();
-  });
-  db.collection('products').onSnapshot(snap => {
-    snap.forEach((doc) => {
-      let p = doc.data(); p.id = doc.id;
-      if(productIds.has(p.id)) return;
-      p.price = parseFloat(p.price) || 0;
-      p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 999;
-      p.mrp = parseFloat(p.mrp) || p.price;
-      p.dbType = 'firestore';
-      allProducts.push(p); productIds.add(p.id);
-    });
-    if(document.getElementById('catView').classList.contains('hide')) renderProducts(); else renderCategories();
-  });
+  allProducts = []; const productIds = new Set();
+  rtdb.ref('products').on('value', snap => { const newList = []; snap.forEach((child) => { let p = child.val(); p.id = child.key; p.price = parseFloat(p.price) || 0; p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 999; p.mrp = parseFloat(p.mrp) || p.price; p.dbType = 'rtdb'; if(!productIds.has(p.id)) { newList.push(p); productIds.add(p.id); } }); allProducts = [...allProducts.filter(x=>x.dbType!=='rtdb'),...newList]; renderCategories(); if(!document.getElementById('productView').classList.contains('hide')) renderProducts(); });
+  db.collection('products').onSnapshot(snap => { snap.forEach((doc) => { let p = doc.data(); p.id = doc.id; if(productIds.has(p.id)) return; p.price = parseFloat(p.price) || 0; p.stock = p.stock!== undefined && p.stock!== null? parseInt(p.stock) : 999; p.mrp = parseFloat(p.mrp) || p.price; p.dbType = 'firestore'; allProducts.push(p); productIds.add(p.id); }); renderCategories(); if(!document.getElementById('productView').classList.contains('hide')) renderProducts(); });
+}
+
+// ✅ V28.5 - OLD SAVE WITH UPDATE - All Category With Products Load - Frock/Gown Fix
+function getEffectiveCategory(p){
+  let c = (p.category||p.type||p.subCategory||'').toString().trim();
+  if(c) return c.toLowerCase();
+  let n = (p.name||'').toLowerCase();
+  if(n.includes('frock')) return 'frock';
+  if(n.includes('gown')) return 'gown';
+  if(n.includes('jeans')||n.includes('denim')) return 'jeans';
+  if(n.includes('saree')) return 'saree dress';
+  if(n.includes('soap')||n.includes('lux')) return 'soap';
+  if(n.includes('jewellery')||n.includes('necklace')||n.includes('bangles')||n.includes('combo')) return 'jewellery';
+  if(n.includes('oil')||n.includes('mustard')) return 'oil';
+  if(n.includes('vegetable')||n.includes('brinjal')||n.includes('beet')) return 'vegetables';
+  if(n.includes('plant')) return 'plant';
+  if(n.includes('home wear')) return 'home wear';
+  if(n.includes('sandle')) return 'sandle';
+  if(n.includes('gallery')) return 'gallery';
+  if(n.includes('fashion')) return 'fashion';
+  if(n.includes('liquid')) return 'liquid';
+  if(n.includes('western')) return 'western dress';
+  return 'fashion';
 }
 
 function loadCategories() {
-  allCategories = [];
-  const catMap = new Map();
+  allCategories = []; const catMap = new Map();
   function addCat(name, imageObj){
-    if(!name) return;
-    let clean = name.toString().trim(); if(!clean) return;
+    if(!name) return; let clean = name.toString().trim(); if(!clean) return;
     let lower = clean.toLowerCase();
-    // 6 jagah se image - imgbB, cloudinary, lux, httpsUrl, base64, firebase
-    let bestImg = window.getBestImageAny(imageObj) || window.getBestImageAny(typeof imageObj==='object'?imageObj:{image:imageObj}) || "";
+    let bestImg = window.getBestImageAny(imageObj) || "";
     if(!window.isValidHttpImage(bestImg)) bestImg = window.getMasterPreviewImage("", clean) || 'https://via.placeholder.com/80?text='+encodeURIComponent(clean);
-    if(!catMap.has(lower)){
-      catMap.set(lower, { id: clean, name: clean, image: bestImg });
-    } else {
-      let ex=catMap.get(lower);
-      if(!window.isValidHttpImage(ex.image) && window.isValidHttpImage(bestImg)) ex.image=bestImg;
-    }
+    if(!catMap.has(lower)){ catMap.set(lower, { id: clean, name: clean, image: bestImg }); }
+    else { let ex=catMap.get(lower); if(!window.isValidHttpImage(ex.image) && window.isValidHttpImage(bestImg)) ex.image=bestImg; }
   }
-  rtdb.ref("categories").on('value', snap => {
-    snap.forEach((child) => { const data = child.val(); addCat(data.name, data); });
-    allProducts.forEach(p => { if(p.category) addCat(p.category, p); });
-    allCategories = Array.from(catMap.values()); renderCategories();
-  });
-  db.collection("categories").onSnapshot(snap => {
-    snap.forEach((doc) => { const data = doc.data(); addCat(data.name, data); });
-    allProducts.forEach(p => { if(p.category) addCat(p.category, p); });
-    allCategories = Array.from(catMap.values()); renderCategories();
-  }, err => {
-    document.getElementById('catList').innerHTML = '<p class="loader">Error: ' + err.message + '</p>';
-  });
-  rtdb.ref('products').on('value', snap => {
-    snap.forEach(child => { let p = child.val(); if(p.category) addCat(p.category, p); });
-    allCategories = Array.from(catMap.values()); renderCategories();
-  });
-  db.collection('products').onSnapshot(snap => {
-    snap.forEach(doc => { let p = doc.data(); if(p.category) addCat(p.category, p); });
-    allCategories = Array.from(catMap.values()); renderCategories();
-  });
+  rtdb.ref("categories").on('value', snap => { snap.forEach((child) => { const data = child.val(); addCat(data.name, data); }); allProducts.forEach(p => { addCat(getEffectiveCategory(p), p); if(p.category) addCat(p.category, p); }); allCategories = Array.from(catMap.values()); renderCategories(); });
+  db.collection("categories").onSnapshot(snap => { snap.forEach((doc) => { const data = doc.data(); addCat(data.name, data); }); allProducts.forEach(p => { addCat(getEffectiveCategory(p), p); if(p.category) addCat(p.category, p); }); allCategories = Array.from(catMap.values()); renderCategories(); });
+  rtdb.ref('products').on('value', snap => { snap.forEach(child => { let p = child.val(); addCat(getEffectiveCategory(p), p); }); allCategories = Array.from(catMap.values()); renderCategories(); });
+  db.collection('products').onSnapshot(snap => { snap.forEach(doc => { let p = doc.data(); addCat(getEffectiveCategory(p), p); }); allCategories = Array.from(catMap.values()); renderCategories(); });
 }
 
 function renderCategories() {
-  const catList = document.getElementById('catList');
-  const unique = []; const seen = new Set();
-  allCategories.forEach(c => { let lower=(c.name||'').toLowerCase(); if(!seen.has(lower)){ seen.add(lower); unique.push(c); } });
-  if(unique.length===0){ catList.innerHTML='<p class="loader">No categories yet. Admin Panel se add karo</p>'; return; }
-  catList.innerHTML='';
-  unique.forEach(cat => {
-    const count = allProducts.filter(p => p.category && p.category.toLowerCase().trim()===cat.name.toLowerCase().trim()).length;
+  const catList = document.getElementById('catList'); if(!catList) return;
+  const unique = []; const seen = new Set(); allCategories.forEach(c => { let lower=(c.name||'').toLowerCase(); if(!seen.has(lower)){ seen.add(lower); unique.push(c); } });
+  if(unique.length===0) return;
+  catList.innerHTML=''; unique.sort((a,b)=>a.name.localeCompare(b.name)).forEach(cat => {
+    let cc = cat.name.toLowerCase().trim();
+    let count = allProducts.filter(p => {
+      let eff = getEffectiveCategory(p);
+      if(!eff) return false;
+      return eff===cc || eff.includes(cc) || cc.includes(eff);
+    }).length;
     let img = window.getBestImageAny(cat) || window.getMasterPreviewImage("", cat.name) || cat.image;
     if(!window.isValidHttpImage(img)) img='https://via.placeholder.com/80?text='+encodeURIComponent(cat.name);
-    catList.innerHTML+=`<div class="cat-card" onclick="showCategoryProducts('${cat.name.replace(/'/g,"\\'")}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
+    catList.innerHTML+=`<div class="cat-card" onclick="window.showCategoryProducts('${cat.name.replace(/'/g,"\\'")}')"><img src="${img}" onerror="this.onerror=null; this.src=window.getMasterPreviewImage('','${cat.name}')||'https://via.placeholder.com/80?text=No+Image'" alt="${cat.name}"><h4>${cat.name}</h4><p style="font-size:12px;color:#999;">${count} Products</p></div>`;
   });
 }
 
-function showAllProducts(){
-  showAll = true; currentCategory = '';
-  document.getElementById('catView').classList.add('hide');
-  document.getElementById('productView').classList.remove('hide');
-  document.getElementById('catTitle').innerText = 'All Products';
-  document.getElementById('pageTitle').innerText = 'All Products';
-  document.getElementById('filtersSidebar').style.display = 'none';
-  document.getElementById('filterToggle').style.display = 'none';
-  renderProducts();
-}
-
-function showCategoryProducts(catName){
-  showAll = false; currentCategory = catName; appliedFilters = { type: [], variants: {} };
-  document.getElementById('catView').classList.add('hide');
-  document.getElementById('productView').classList.remove('hide');
-  document.getElementById('catTitle').innerText = catName;
-  document.getElementById('pageTitle').innerText = catName;
-  document.getElementById('filtersSidebar').style.display = 'block';
-  document.getElementById('filterToggle').style.display = 'block';
-  rtdb.ref('category_structure/' + catName).once('value', snap => {
-    if(snap.exists()) {
-      categoryStructure = snap.val();
-      categoryStructure.types = categoryStructure.types || [];
-      categoryStructure.variants = categoryStructure.variants || [];
-      categoryStructure.activeFilters = categoryStructure.activeFilters || [];
-      categoryStructure.typeImages = categoryStructure.typeImages || {};
-      renderFilters(); renderProducts();
-    } else {
-      db.collection('category_structure').doc(catName).get().then(doc => {
-        if(doc.exists) categoryStructure = doc.data();
-        else categoryStructure = { types: [], variants: [], activeFilters: [], typeImages: {} };
-        renderFilters(); renderProducts();
-      });
-    }
-  });
-}
-
+function showAllProducts(){ showAll = true; currentCategory = ''; document.getElementById('catView').classList.add('hide'); document.getElementById('productView').classList.remove('hide'); document.getElementById('catTitle').innerText = 'All Products'; document.getElementById('pageTitle').innerText = 'All Products'; document.getElementById('filtersSidebar').style.display = 'none'; document.getElementById('filterToggle').style.display = 'none'; renderProducts(); }
 function renderFilters() {
-  const container = document.getElementById('dynamicFilters');
-  let html = '';
-  if(categoryStructure.types && categoryStructure.types.length > 0) {
-    html += `<div class="filter-group"><h4>Type</h4>`;
-    categoryStructure.types.forEach(t => {
-      const imgUrl = categoryStructure.typeImages?.[t] || '';
-      html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t.replace(/'/g,"\\'")}')"> ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''} ${t}</label>`;
-    });
-    html += `</div>`;
-  }
-  if(categoryStructure.activeFilters) {
-    categoryStructure.activeFilters.forEach(filterName => {
-      const values = getFilterValues(filterName);
-      if(values.length > 0) {
-        html += `<div class="filter-group"><h4>${filterName}</h4>`;
-        values.forEach(v => { html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}')"> ${v}</label>`; });
-        html += `</div>`;
-      }
-    });
-  }
-  container.innerHTML = html || '<p style="color:#999;font-size:13px">No filters set by admin</p>';
-  updateFilterCount();
+  const container = document.getElementById('dynamicFilters'); let html = '';
+  if(categoryStructure.types && categoryStructure.types.length > 0) { html += `<div class="filter-group"><h4>Type</h4>`; categoryStructure.types.forEach(t => { const imgUrl = categoryStructure.typeImages?.[t] || ''; html += `<label><input type="checkbox" value="${t}" onchange="toggleTypeFilter('${t.replace(/'/g,"\\'")}')"> ${imgUrl? `<img src="${imgUrl}" onerror="this.style.display='none'">` : ''} ${t}</label>`; }); html += `</div>`; }
+  if(categoryStructure.activeFilters) { categoryStructure.activeFilters.forEach(filterName => { const values = getFilterValues(filterName); if(values.length > 0) { html += `<div class="filter-group"><h4>${filterName}</h4>`; values.forEach(v => { html += `<label><input type="checkbox" value="${v}" onchange="toggleVariantFilter('${filterName.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}')"> ${v}</label>`; }); html += `</div>`; } }); }
+  container.innerHTML = html || '<p style="color:#999;font-size:13px">No filters set by admin</p>'; updateFilterCount();
 }
-
 function getFilterValues(filterName) {
-  const products = allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
-  const values = new Set();
-  products.forEach(p => { if(p.variants && p.variants[filterName]) values.add(p.variants[filterName]); else if(p[filterName.toLowerCase()]) values.add(p[filterName.toLowerCase()]); });
-  return Array.from(values).sort();
+  let cc = currentCategory.toLowerCase().trim();
+  const products = allProducts.filter(p => {
+    let eff = getEffectiveCategory(p);
+    if(!eff) return false;
+    return eff===cc || eff.includes(cc) || cc.includes(eff);
+  });
+  const values = new Set(); products.forEach(p => { if(p.variants && p.variants[filterName]) values.add(p.variants[filterName]); else if(p[filterName.toLowerCase()]) values.add(p[filterName.toLowerCase()]); }); return Array.from(values).sort();
 }
-
 function toggleTypeFilter(type) { if(appliedFilters.type.includes(type)) appliedFilters.type = appliedFilters.type.filter(t => t!== type); else appliedFilters.type.push(type); renderProducts(); updateFilterChips(); }
 function toggleVariantFilter(key, value) { if(!appliedFilters.variants[key]) appliedFilters.variants[key] = []; if(appliedFilters.variants[key].includes(value)) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value); else appliedFilters.variants[key].push(value); renderProducts(); updateFilterChips(); }
-function updateFilterChips() {
-  let chips = []; appliedFilters.type.forEach(t => chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t.replace(/'/g,"\\'")}')">${t} ×</span>`));
-  Object.keys(appliedFilters.variants).forEach(k => { appliedFilters.variants[k].forEach(v => chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}')">${k}: ${v} ×</span>`)); });
-  document.getElementById('activeFiltersChips').innerHTML = chips.join(''); updateFilterCount();
-}
+function updateFilterChips() { let chips = []; appliedFilters.type.forEach(t => chips.push(`<span class="active-chip" onclick="removeTypeFilter('${t.replace(/'/g,"\\'")}')">${t} ×</span>`)); Object.keys(appliedFilters.variants).forEach(k => { appliedFilters.variants[k].forEach(v => chips.push(`<span class="active-chip" onclick="removeVariantFilter('${k.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}')">${k}: ${v} ×</span>`)); }); document.getElementById('activeFiltersChips').innerHTML = chips.join(''); updateFilterCount(); }
 function removeTypeFilter(type) { appliedFilters.type = appliedFilters.type.filter(t => t!== type); const el = document.querySelector(`#dynamicFilters input[value="${type}"]`); if(el) el.checked = false; renderProducts(); updateFilterChips(); }
 function removeVariantFilter(key, value) { if(appliedFilters.variants[key]) appliedFilters.variants[key] = appliedFilters.variants[key].filter(v => v!== value); const el = document.querySelector(`#dynamicFilters input[value="${value}"]`); if(el) el.checked = false; renderProducts(); updateFilterChips(); }
 function updateFilterCount() { let count = appliedFilters.type.length; Object.keys(appliedFilters.variants).forEach(k => count += appliedFilters.variants[k].length); document.getElementById('filterCount').innerText = count; }
 function clearAllFilters() { appliedFilters = { type: [], variants: {} }; document.querySelectorAll('#dynamicFilters input[type="checkbox"]').forEach(cb => cb.checked = false); renderProducts(); updateFilterChips(); }
 
 function renderProducts(){
-  const container = document.getElementById('productList');
-  let products = showAll? [...allProducts] : allProducts.filter(p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase());
+  const container = document.getElementById('productList'); if(!container) return;
+  let products = [];
+  if(showAll){
+    products = [...allProducts];
+  } else {
+    let cc = currentCategory.toLowerCase().trim();
+    products = allProducts.filter(p => {
+      let eff = getEffectiveCategory(p);
+      if(!eff) return false;
+      return eff===cc || eff.includes(cc) || cc.includes(eff);
+    });
+  }
   if(appliedFilters.type.length > 0) products = products.filter(p => appliedFilters.type.includes(p.type || p.subCategory));
   Object.keys(appliedFilters.variants).forEach(key => { if(appliedFilters.variants[key].length > 0) { products = products.filter(p => { const val = p.variants?.[key] || p[key.toLowerCase()]; return appliedFilters.variants[key].includes(val); }); } });
   if(products.length === 0){ container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No products found in '+ (currentCategory||'All') +'</p>'; return; }
-  container.innerHTML = '';
+  container.innerHTML = '<p style="grid-column:1/-1;color:#e40046;font-weight:bold;margin-bottom:8px;">🛍️ '+currentCategory+' - '+products.length+' Products</p>';
   products.forEach(p => {
     const typeImg = categoryStructure.typeImages?.[p.type || p.subCategory];
     let finalImg = window.getBestImageAny(p) || window.getMasterPreviewImage(p.id, p.name) || typeImg || 'https://via.placeholder.com/140?text=No+Image';
@@ -405,17 +241,13 @@ function renderProducts(){
   });
 }
 
-function backToCategories(){ showAll = false; currentCategory = ''; appliedFilters = { type: [], variants: {} }; document.getElementById('productView').classList.add('hide'); document.getElementById('catView').classList.remove('hide'); document.getElementById('pageTitle').innerText = '📱 Categories'; document.getElementById('filtersSidebar').style.display = 'none'; document.getElementById('filterToggle').style.display = 'none'; }
+function backToCategories(){ showAll = false; currentCategory = ''; appliedFilters = { type: [], variants: {} }; document.getElementById('productView').classList.add('hide'); document.getElementById('catView').classList.remove('hide'); document.getElementById('pageTitle').innerText = '📱 Categories'; document.getElementById('filtersSidebar').style.display = 'none'; document.getElementById('filterToggle').style.display = 'none'; history.pushState(null,'','category.html'); }
 function toggleMobileFilter() { document.getElementById('filtersSidebar').classList.toggle('show'); document.getElementById('filterOverlay').classList.toggle('show'); }
 function addToCart(pid){ const product = allProducts.find(p => p.id == pid); if(!product) return; let bestImg = window.getBestImageAny(product) || window.getMasterPreviewImage(product.id, product.name) || product.image; let productWithImg = {...product, image:bestImg, imageUrl:bestImg, httpsUrl:bestImg, imgbb:bestImg, cloudinary:bestImg, lux:bestImg}; let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || "[]"); let existing = cart.find(item=> item && item.id==pid); if(existing){ existing.qty = (existing.qty||1)+1; existing.image=bestImg; } else { cart.push({...productWithImg, qty:1}); } localStorage.setItem(CART_KEY_VAL, JSON.stringify(cart)); localStorage.setItem('santra_cart', JSON.stringify(cart)); alert('✅ Added to cart!'); updateCartCount(); }
 function updateCartCount(){ try{ let cart = JSON.parse(localStorage.getItem(CART_KEY_VAL) || localStorage.getItem('santra_cart') || "[]"); cart = cart.filter(item => item!== null && item!== undefined); let total = cart.reduce((sum, item) => sum + (item.qty || 1), 0); document.getElementById('cartCount').innerText = total; }catch(e){ document.getElementById('cartCount').innerText = '0'; } }
-console.log("✅ category.html V26 FINAL - Old save + CART_KEY duplicate fix + Image 100% - Pure category dikhegi - Old Code Save With Update DNA");
+console.log("✅ V28.5 FINAL - All Category With Products - Frock/Gown Fix - Old Code Save With Update");
 </script>
-
-<!-- OLD CODE SAVE WITH - backup files - DELETE NAHI - DNA SAFE - Single load -->
-<script>window.origRender = window.origRender || function(){ console.log("origRender backup safe - OLD CODE SAVE"); };</script>
-<script src="category-image-fix.js?v=28"></script>
-<script src="backup-all-image.js?v=22"></script>
-<script src="home-all-product-image-backup.js?v=24"></script>
+<script>window.origRender = window.origRender || function(){ console.log("origRender backup safe"); };</script>
+<script src="category-image-fix.js?v=33"></script>
 </body>
 </html>
