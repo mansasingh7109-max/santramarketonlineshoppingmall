@@ -1,0 +1,78 @@
+// order-save.js - v3.0 - Santra Safe - Old Code Preserved + New Firebase Dual Save - Permanent
+(function(){
+  console.log('📦 Order Saver v3 Loaded - Old Safe + New Dual Save - Permanent');
+
+  async function saveOrderSafely(orderId, orderData, fullText) {
+    try {
+      if (window.db) {
+        await window.db.collection('orders').doc(orderId).set({...orderData, fullMessage: fullText, createdAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge:true});
+      } else if(window.firebase && firebase.firestore){
+        let db = firebase.firestore();
+        await db.collection('orders').doc(orderId).set({...orderData, fullMessage: fullText, createdAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge:true});
+      }
+      if (window.rtdb) {
+        await window.rtdb.ref('orders/' + orderId).set({...orderData, fullMessage: fullText, timestamp: Date.now()});
+      } else if(window.firebase && firebase.database){
+        let rdb = firebase.database();
+        await rdb.ref('orders/' + orderId).set({...orderData, fullMessage: fullText, timestamp: Date.now()});
+        let mobile = orderData.customerMobile || orderData.mobile || '';
+        if(mobile){
+          await rdb.ref('customer_orders/'+mobile+'/'+orderId).set({...orderData, fullMessage: fullText});
+          await rdb.ref('my_orders_updates/'+mobile).set({lastOrderId: orderId, status: orderData.status || 'Pending', time: Date.now()});
+          await rdb.ref('admin_orders_backup/'+orderId).set({...orderData, fullMessage: fullText});
+          await rdb.ref('orders_page_updates/'+mobile).set({lastOrderId: orderId, time: Date.now()});
+        }
+      }
+      if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined') {
+        try{ await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {order_id: orderId, customer_name: orderData.customerName || orderData.name, customer_mobile: orderData.customerMobile || orderData.mobile, order_total: orderData.total, full_message: fullText, to_email: 'santramarketshoppingmall@gmail.com'}); }catch(e){}
+      }
+      return true;
+    } catch (err) {
+      localStorage.setItem("pending_order_" + orderId, JSON.stringify({...orderData, fullMessage: fullText}));
+      return false;
+    }
+  }
+
+  window.saveOrder = async function(orderData){
+    const orderId = 'ORD' + Date.now();
+    const fullText = `New Order ${orderId}\nName: ${orderData.customerName || orderData.name}\nTotal: ₹${orderData.total}\nItems: ${(orderData.items||[]).length}`;
+    await saveOrderSafely(orderId, orderData, fullText);
+    const orders = JSON.parse(localStorage.getItem('santraOrders')||'[]');
+    orders.unshift({...orderData, id:orderId, time:new Date().toISOString()});
+    localStorage.setItem('santraOrders', JSON.stringify(orders.slice(0,100)));
+    if(window.SantraLock) try{ SantraLock.sendAlert('ORDER', `${orderId} - ₹${orderData.total}`); }catch(e){}
+    return orderId;
+  };
+
+  window.saveOrderBoth = async function(customer, cart, grandTotal, source){
+    source = source || 'unknown';
+    let name = customer.name || localStorage.getItem('santra_customer_name') || 'Customer';
+    let mobile = (customer.mobile || localStorage.getItem('santra_mobile') || '9660834888').toString().replace(/\D/g,'').slice(-10);
+    let email = customer.email || '';
+    let address = customer.address || 'Address';
+    let orderId = "SM" + Date.now();
+    let dateStr = new Date().toLocaleString('en-IN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
+    let orderData = {
+      orderId, oid: orderId, id: orderId,
+      customerName: name, name, customerMobile: mobile, mobile, customerEmail: email, email, customerAddress: address, address, deliveryAddress: address,
+      items: cart.map(it=>({name: it.name, size: it.size||'M', qty: parseInt(it.qty)||1, price: parseFloat(it.price)||0, total: (parseInt(it.qty)||1)*(parseFloat(it.price)||0)})),
+      cart, total: grandTotal, grandTotal, status: 'Pending - OTP Wait', source, otp: '123456', otpVerified: false, date: new Date().toISOString(), dateStr
+    };
+    let fullText = `🛒 NEW ORDER ${orderId}\nName: ${name}\nMobile: ${mobile}\nTotal: ₹${grandTotal}\nSource: ${source}\nItems: ${cart.length}`;
+    await saveOrderSafely(orderId, orderData, fullText);
+    try{ let db = window.db || firebase.firestore(); if(db){ await db.collection('customer_orders').doc(mobile).collection('orders').doc(orderId).set(orderData, {merge:true}); } }catch(e){}
+    localStorage.setItem('lastOrderId', orderId);
+    localStorage.setItem('lastOrderGrandTotal', grandTotal.toString());
+    return orderId;
+  };
+
+  window.retryPendingOrders = async function(){
+    Object.keys(localStorage).forEach(async key=>{
+      if(key.startsWith('pending_order_')){
+        try{ const data = JSON.parse(localStorage.getItem(key)); const id = key.replace('pending_order_',''); const ok = await saveOrderSafely(id, data, data.fullMessage); if(ok) localStorage.removeItem(key); }catch(e){}
+      }
+    });
+  };
+  setInterval(window.retryPendingOrders, 30000);
+  window.saveOrderSafely = saveOrderSafely;
+})();
