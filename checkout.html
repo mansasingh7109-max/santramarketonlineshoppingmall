@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Complete Your Order - FINAL - My Cart Jaisa + Place Order Fix + Old Save</title>
+<title>Complete Your Order - FINAL - V16 - Total Fix + Sold By</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -12,23 +12,25 @@
 <script src="time-fix.js"></script>
 <script src="constants.js?v=1"></script>
 <script src="config.js?v=6"></script>
+<script src="order-save.js"></script> <!-- ✅ YE 1 LINE - Old Safe + New Dual Save - Rakhi hai -->
 <script src="secrets.js?v=8"></script>
 <script src="self-healing-lock.js"></script>
 <script src="order-saver.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;padding-bottom:20px}.header{background:#e91e63;color:white;padding:15px;text-align:center;font-weight:600;font-size:16px;position:sticky;top:0;z-index:100}.container{padding:15px}.card{background:white;border-radius:12px;padding:20px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.section-title{font-weight:600;font-size:18px;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #eee}.order-id{background:#fff9c4;padding:12px;border-radius:8px;font-size:14px;margin-bottom:15px;border:1px solid #f9e79f}.item{display:flex;gap:12px;padding:15px 0;border-bottom:1px dashed #ddd}.item:last-child{border-bottom:none}.item img{width:70px;height:70px;border-radius:8px;object-fit:cover}.item-details{flex:1;font-size:14px}.item-details h4{font-size:15px;margin-bottom:4px}.item-details p{color:#666;margin:2px 0}.item-details a{color:#e91e63;font-size:12px;text-decoration:none;word-break:break-all}.grand-total{text-align:right;font-weight:700;font-size:18px;padding-top:15px;margin-top:10px;border-top:2px solid #eee}.form-group{margin-bottom:18px}.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#444}.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;outline:none}.form-group input:focus,.form-group select:focus{border-color:#e91e63}.btn-send{width:100%;background:#00c853;color:white;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}.btn-send:disabled{background:#ccc;cursor:not-allowed}.delivery-title{display:flex;align-items:center;gap:6px;font-weight:600;font-size:18px;margin-bottom:15px}.empty-cart{text-align:center;padding:40px 20px;color:#999}.empty-cart button{margin-top:15px;padding:12px 24px;background:#e91e63;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer}.otp-box{background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:20px;margin-top:20px;text-align:center;display:none}.otp-box h3{color:#d32f2f;font-size:18px;margin-bottom:10px}.otp-box p{font-size:15px;color:#333;line-height:1.6}.whatsapp-btn{display:inline-block;background:#25d366;color:white;padding:12px 25px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px}.qty-btn{padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer;font-weight:bold;width:28px;height:28px;border-radius:4px}.remove-btn{border:none;background:none;color:#e91e63;font-size:12px;margin-left:8px;cursor:pointer;font-weight:600}</style>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;padding-bottom:20px}.header{background:#e91e63;color:white;padding:15px;text-align:center;font-weight:600;font-size:16px;position:sticky;top:0;z-index:100}.container{padding:15px}.card{background:white;border-radius:12px;padding:20px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.section-title{font-weight:600;font-size:18px;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #eee}.order-id{background:#fff9c4;padding:12px;border-radius:8px;font-size:14px;margin-bottom:15px;border:1px solid #f9e79f}.item{display:flex;gap:12px;padding:15px 0;border-bottom:1px dashed #ddd}.item:last-child{border-bottom:none}.item img{width:70px;height:70px;border-radius:8px;object-fit:cover}.item-details{flex:1;font-size:14px}.item-details h4{font-size:15px;margin-bottom:4px}.item-details p{color:#666;margin:2px 0}.grand-total{text-align:right;font-weight:700;font-size:18px;padding-top:15px;margin-top:10px;border-top:2px solid #eee}.form-group{margin-bottom:18px}.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#444}.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;outline:none}.form-group input:focus,.form-group select:focus{border-color:#e91e63}.btn-send{width:100%;background:#00c853;color:white;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}.btn-send:disabled{background:#ccc;cursor:not-allowed}.otp-box{background:#e8f5e9;border:2px solid #10b981;border-radius:12px;padding:20px;margin-top:20px;text-align:center;display:none}.otp-box h3{color:#065f46;font-size:18px;margin-bottom:10px}.whatsapp-btn{display:inline-block;background:#25d366;color:white;padding:12px 25px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px}.qty-btn{padding:0 6px;border:1px solid #ddd;background:#fff;cursor:pointer;font-weight:bold;width:28px;height:28px;border-radius:4px}.remove-btn{border:none;background:none;color:#e91e63;font-size:12px;margin-left:8px;cursor:pointer;font-weight:600}</style>
 </head>
 <body>
-<div class="header">🛒 Complete Your Order - My Cart Jaisa - Place Order Fix</div>
+<div class="header">🛒 Complete Your Order - V16 - Total Fix + Sold By Santra Mall</div>
 <div class="container">
 <div class="card" id="orderCard">
-<h3 class="section-title">Order Summary</h3>
-<div class="order-id">Order ID: <b id="orderId">SM-000000</b></div>
+<h3 class="section-title">Order Summary - Sold By: Santra Mall</h3>
+<div class="order-id">Order ID: <b id="orderId">SM-000000</b> | Sold By: <b>Santra Mall</b> - No Ref</div>
 <div id="orderItems"></div>
 <div class="grand-total">Grand Total: ₹<span id="grandTotal">0</span></div>
-<div style="text-align:right;font-size:12px;color:#666;margin-top:5px">Amount: ₹<span id="subTotal">0</span> + Delivery: <span id="deliveryCharge">FREE</span></div>
+<div style="text-align:right;font-size:12px;color:#666;margin-top:5px">Amount: ₹<span id="subTotal">0</span> + Delivery: <span id="deliveryCharge">FREE</span> | Sold By: Santra Mall</div>
 </div>
+
 <div class="card" id="formCard">
-<div class="delivery-title">📍 Delivery Address</div>
+<div style="font-weight:600;font-size:18px;margin-bottom:15px">📍 Delivery Address</div>
 <div class="form-group"><label>Full Name *</label><input type="text" id="name" placeholder="Enter your name" required></div>
 <div class="form-group"><label>Mobile Number *</label><input type="tel" id="mobile" placeholder="10 digit mobile" maxlength="10" required></div>
 <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="email@gmail.com" required></div>
@@ -42,25 +44,27 @@
 <button class="btn-send" id="sendBtn" onclick="sendOrder()">📱 SEND ORDER - Place Order</button>
 <div id="errorBox" style="display:none;background:#fee2e2;color:#991b1b;padding:10px;border-radius:8px;margin-top:10px;font-size:12px"></div>
 </div>
-<div id="popupBlockNote" style="display:none; position:fixed; bottom:15px; left:10px; right:10px; background:#fff8e1; padding:14px; border:2px solid #ff9800; border-radius:10px; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+
+<div id="popupBlockNote" style="display:none; position:fixed; bottom:15px; left:10px; right:10px; background:#fff8e1; padding:14px; border:2px solid #ff9800; border-radius:10px; z-index:9999;">
 <b style="color:#e65100;">⚠️ WhatsApp nahi khula?</b><br>
-<span style="font-size:14px;">1. Browser ke upar "Pop-up blocked" pe click karke <b>Allow</b> karo<br>2. Ya direct <a id="manualWaLink" href="#" target="_blank" style="color:#075E54; font-weight:bold; text-decoration:underline;">YAHAN CLICK KARO</a></span>
-<div style="margin-top:8px; font-size:12px; color:#555;">Order ID: <span id="noteOrderId"></span></div>
+<span style="font-size:14px;">1. Browser ke upar "Pop-up blocked" pe Allow karo<br>2. Ya direct <a id="manualWaLink" href="#" target="_blank" style="color:#075E54; font-weight:bold;">YAHAN CLICK KARO</a></span>
+<div style="margin-top:8px; font-size:12px;">Order ID: <span id="noteOrderId"></span> | Sold By: Santra Mall</div>
 </div>
+
 <div class="otp-box" id="otpBox">
-<h3>⚠️ IMPORTANT - OTP REQUIRED ⚠️</h3>
+<h3>🔐 Add WhatsApp OTP</h3>
 <p><b>Order place ho gaya hai!</b></p>
 <p>Order confirm karne ke liye hum aapko WhatsApp pe OTP bhejenge.</p>
-<p><b>OTP milne ke baad wapis isi WhatsApp number pe reply karein.</b></p>
-<p style="margin-top:15px;color:#d32f2f;font-weight:600">Bina OTP ke order confirm nahi hoga!</p>
-<div style="margin-top:12px;background:#fff;padding:10px;border-radius:8px;border:1px dashed #ccc">
+<p style="margin-top:10px;color:#065f46;font-weight:600">Sold By: Santra Mall - No Ref Mobile</p>
+<div style="margin-top:12px;background:#fff;padding:10px;border-radius:8px;border:1px dashed #10b981">
 <div style="font-size:12px;color:#666">Paid Amount:</div>
 <div style="font-weight:800;font-size:20px;color:#e91e63">₹<span id="otpGrandTotal">0</span></div>
-<div style="font-size:11px;color:#666">Order ID: <span id="otpOrderId"></span></div>
+<div style="font-size:11px;color:#666">Order ID: <span id="otpOrderId"></span> | Total Hamesha Dikhega</div>
 </div>
-<a href="https://wa.me/918769171078" class="whatsapp-btn" target="_blank">📱 Open WhatsApp</a>
+<a href="https://wa.me/918769171078" class="whatsapp-btn" target="_blank">📱 Open WhatsApp - Request OTP</a>
 </div>
 </div>
+
 <script>
 /*
 OLD CODE BACKUP - 30 JUNE 2026 SE PEHLE WALA - SAFE - SAVE RAHEGA - OLD SAVE
@@ -70,41 +74,27 @@ window.db = firebase.firestore();
 window.rtdb = firebase.database();
 window.auth = firebase.auth();
 OLD CODE BACKUP END - 30 JUNE SAFE
+
 OLD CODE BACKUP - CART COPY WALA - My Cart Jaisa - Place Order se pehle wala
 function getCartData(){ let keys = ["santraMallCart_v2", "cart", "santra_cart"]; for(let k of keys){ let raw = localStorage.getItem(k); if(raw){ try{ let p = JSON.parse(raw); let arr = Array.isArray(p)? p : Object.values(p); if(arr.length>0) return arr; }catch(e){} } } return []; }
-OLD BACKUP END - CHECKOUT PAGE SAME AS MY CART + PLACE ORDER FIX - 22/07/2026 - Old Save
+OLD BACKUP END - CHECKOUT PAGE SAME AS MY CART + PLACE ORDER FIX - 22/07/2026 - Old Save + V9 + V11 + V13 + V15
 */
+
+// V16 FINAL - 6 Aug 2026 - Old Save + Total Fix (0 nahi) + Sold By Santra Mall + No Ref + order-save.js + Safe DB + getISTNow
 if(typeof window.CART_KEY === 'undefined'){ window.CART_KEY = "santraMallCart_v2"; }
 if(typeof window.initFirebaseOnce === 'function'){
-  try{
-    window.initFirebaseOnce({
-      apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-    authDomain: "santramarketshoppingmall.firebaseapp.com",
-    projectId: "santramarketshoppingmall",
-    storageBucket: "santramarketshoppingmall.appspot.com",
-    messagingSenderId: "398490252924",
-    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
-    });
-  }catch(e){}
+  try{ window.initFirebaseOnce({ apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA", authDomain: "santramarketshoppingmall.firebaseapp.com", projectId: "santramarketshoppingmall", storageBucket: "santramarketshoppingmall.appspot.com", messagingSenderId: "398490252924", appId: "1:398490252924:web:d1b6348b549183b93b7bf9", databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" }); }catch(e){}
 }else{
   if(!firebase.apps.length){
-    firebase.initializeApp({
-      apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-      authDomain: "santramarketshoppingmall.firebaseapp.com",
-      databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/",
-      projectId: "santramarketshoppingmall",
-      storageBucket: "santramarketshoppingmall.appspot.com",
-      messagingSenderId: "398490252924",
-      appId: "1:398490252924:web:d1b6348b549183b93b7bf9"
-    });
+    firebase.initializeApp({ apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA", authDomain: "santramarketshoppingmall.firebaseapp.com", databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/", projectId: "santramarketshoppingmall", storageBucket: "santramarketshoppingmall.appspot.com", messagingSenderId: "398490252924", appId: "1:398490252924:web:d1b6348b549183b93b7bf9" });
   }
 }
 window.db = firebase.firestore();
 window.rtdb = firebase.database();
 window.auth = firebase.auth();
 if (typeof EMAILJS_CONFIG!== "undefined" && typeof emailjs!== 'undefined'){ try{ emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY); }catch(e){} }
+
+window.getISTNow = window.getISTNow || function(){ try{ return new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}); }catch(e){ return new Date().toLocaleString(); } };
 
 var cart = {};
 var orderId = "SM" + Date.now();
@@ -119,13 +109,9 @@ function loadOrder() {
           if(s.exists()) s.forEach(function(c){cart[c.key]=c.val();});
           finishLoad();
         }).catch(function(){ loadFromLocal(); });
-      } else {
-        loadFromLocal();
-      }
+      } else { loadFromLocal(); }
     });
-  } else {
-    loadFromLocal();
-  }
+  } else { loadFromLocal(); }
 }
 
 function loadFromLocal(){
@@ -147,18 +133,13 @@ function loadFromLocal(){
 
 function finishLoad(){
   Object.keys(cart).forEach(function(k){
-    if(!cart[k] ||!cart[k].price || parseFloat(cart[k].price) <= 0){
-      delete cart[k];
-    }
+    if(!cart[k] ||!cart[k].price || parseFloat(cart[k].price) <= 0){ delete cart[k]; }
   });
   if (!cart || Object.keys(cart).length === 0) {
-    document.getElementById("orderCard").innerHTML = `<div class="empty-cart"><h3>🛒 Cart is Empty</h3><p>Pehle cart me products add karo - My Cart se copy nahi hua</p><button onclick="window.location.href='index.html'">Shop Now</button></div>`;
-    var btn=document.getElementById("sendBtn");
-    if(btn) btn.disabled = true;
-    return;
+    document.getElementById("orderCard").innerHTML = `<div style="text-align:center;padding:40px;color:#999"><h3>🛒 Cart is Empty</h3><p>My Cart se copy nahi hua</p><button onclick="window.location.href='index.html'" style="margin-top:15px;padding:12px 24px;background:#e91e63;color:white;border:none;border-radius:8px">Shop Now</button></div>`;
+    var btn=document.getElementById("sendBtn"); if(btn) btn.disabled = true; return;
   }
-  var btn=document.getElementById("sendBtn");
-  if(btn) btn.disabled = false;
+  var btn=document.getElementById("sendBtn"); if(btn) btn.disabled = false;
   renderOrderSummary();
 }
 
@@ -175,23 +156,14 @@ function renderOrderSummary() {
     var price = parseFloat(item.price) || 0;
     var itemTotal = price * qty;
     subtotal += itemTotal;
-    var size = item.size || item.variant || "Default";
+    var size = item.size || item.variant || "M";
     var code = item.code || key;
     var displayName = item.name + (item.size? ` (Size ${item.size})` : '');
     var image = item.image || 'https://via.placeholder.com/70';
     var linkId = (item.id||key).toString().split('_')[0].split('-')[0];
     var productLink = baseURL+"/product.html?id="+linkId;
     itemsArray.push({id:key, name:item.name, size:size, qty:qty, price:price, total:itemTotal, image:image, code:code, link:productLink});
-    return `<div class="item">
-      <img src="${image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/70'">
-      <div class="item-details">
-        <h4>${count++}. ${displayName}</h4>
-        <p>Code: ${code}</p>
-        <p>Size: ${size}</p>
-        <p>Qty: <button class="qty-btn" onclick="updateQty('${key}',-1)">-</button> ${qty} <button class="qty-btn" onclick="updateQty('${key}',1)">+</button> x ₹${price} = ₹${itemTotal} <button class="remove-btn" onclick="removeItem('${key}')">Remove</button></p>
-        <a href="product.html?id=${linkId}" target="_blank">Link: View Product</a>
-      </div>
-    </div>`;
+    return `<div class="item"><img src="${image}"><div class="item-details"><h4>${count++}. ${displayName}</h4><p>Code: ${code} | Sold By: Santra Mall</p><p>Size: ${size}</p><p>Qty: <button class="qty-btn" onclick="updateQty('${key}',-1)">-</button> ${qty} <button class="qty-btn" onclick="updateQty('${key}',1)">+</button> x ₹${price} = ₹${itemTotal} <button class="remove-btn" onclick="removeItem('${key}')">Remove</button></p></div></div>`;
   }).join("");
   var delivery = subtotal >= 500? 0 : 49;
   var grandTotal = subtotal + delivery;
@@ -201,29 +173,12 @@ function renderOrderSummary() {
   window._totals = {subtotal, delivery, grandTotal};
 }
 
-function updateQty(key, delta){
-  if(!cart[key]) return;
-  cart[key].qty = Math.max(1, (parseInt(cart[key].qty)||1) + delta);
-  saveCartToStorage();
-  renderOrderSummary();
-}
-function removeItem(key){
-  if(!cart[key]) return;
-  if(!confirm('Remove '+cart[key].name+'?')) return;
-  delete cart[key];
-  saveCartToStorage();
-  renderOrderSummary();
-  if(Object.keys(cart).length===0) finishLoad();
-}
+function updateQty(key, delta){ if(!cart[key]) return; cart[key].qty = Math.max(1, (parseInt(cart[key].qty)||1) + delta); saveCartToStorage(); renderOrderSummary(); }
+function removeItem(key){ if(!cart[key]) return; if(!confirm('Remove '+cart[key].name+'?')) return; delete cart[key]; saveCartToStorage(); renderOrderSummary(); if(Object.keys(cart).length===0) finishLoad(); }
 function saveCartToStorage(){
   var data = JSON.stringify(cart);
-  localStorage.setItem(window.CART_KEY, data);
-  localStorage.setItem('cart', data);
-  localStorage.setItem('santra_cart', data);
-  try{
-    var u = auth.currentUser;
-    if(u){ rtdb.ref("users/"+u.uid+"/cart").set(cart); }
-  }catch(e){}
+  localStorage.setItem(window.CART_KEY, data); localStorage.setItem('cart', data); localStorage.setItem('santra_cart', data);
+  try{ var u = auth.currentUser; if(u){ rtdb.ref("users/"+u.uid+"/cart").set(cart); } }catch(e){}
 }
 
 async function sendOrder() {
@@ -240,148 +195,94 @@ async function sendOrder() {
   var errBox=document.getElementById("errorBox");
   if(errBox) errBox.style.display='none';
   if (!name ||!mobile ||!email ||!house ||!area ||!landmark ||!pincode ||!city ||!state ||!payment) {
-    if(errBox){ errBox.innerText="Saare * wale fields bharna zaroori hai - My Cart se copy hua item dekho"; errBox.style.display='block'; }
-    else alert("Saare * wale fields bharna zaroori hai");
-    return;
+    if(errBox){ errBox.innerText="Saare * wale fields bharo"; errBox.style.display='block'; } return;
   }
-  if (mobile.length!== 10 || isNaN(mobile)) {
-    if(errBox){ errBox.innerText="Mobile number 10 digit ka hona chahiye"; errBox.style.display='block'; }
-    else alert("Mobile number 10 digit ka hona chahiye");
-    return;
-  }
-  if(Object.keys(cart).length===0 || itemsArray.length===0){
-    if(errBox){ errBox.innerText="Cart empty hai - My Cart me item add karo - Cart se copy nahi hua"; errBox.style.display='block'; }
-    else alert("Cart empty hai");
-    return;
-  }
+  if (mobile.length!==10 || isNaN(mobile)) { if(errBox){ errBox.innerText="Mobile 10 digit"; errBox.style.display='block'; } return; }
+  if(Object.keys(cart).length===0 || itemsArray.length===0){ if(errBox){ errBox.innerText="Cart empty"; errBox.style.display='block'; } return; }
 
   var sendBtn=document.getElementById("sendBtn");
   sendBtn.disabled = true;
-  sendBtn.innerText = "⏳ Sending... Place Order Ho Raha Hai";
+  sendBtn.innerText = "⏳ Sending...";
 
   var baseURL = "https://santramarketshoppingmall.web.app";
   var subtotal = window._totals? window._totals.subtotal : 0;
   var delivery = window._totals? window._totals.delivery : 0;
   var grandTotal = window._totals? window._totals.grandTotal : 0;
 
-  // ✅ GRAND TOTAL SAVE - Message ke baad 0 nahi ayega - FIX 23 JULY 2026
   try{
     sessionStorage.setItem('lastOrderGrandTotal', grandTotal);
-    sessionStorage.setItem('lastOrderSubtotal', subtotal);
-    sessionStorage.setItem('lastOrderDelivery', delivery);
-    sessionStorage.setItem('lastOrderId', orderId);
     localStorage.setItem('lastOrderGrandTotal', grandTotal);
+    localStorage.setItem('lastOrderId', orderId);
   }catch(e){}
 
-  var t = {date:Date.now(), presentDate:new Date().toLocaleDateString('en-IN'), presentTime:new Date().toLocaleTimeString('en-IN'), dateTimeIST:new Date().toLocaleString('en-IN'), istDateKey:new Date().toISOString().split('T')[0]};
-  try{ if(typeof getISTNow === 'function'){ t=getISTNow(); } }catch(e){}
+  var t = {date:Date.now(), presentDate:new Date().toLocaleDateString('en-IN'), presentTime:new Date().toLocaleTimeString('en-IN'), dateTimeIST:new Date().toLocaleString('en-IN')};
+  try{ if(typeof getISTNow === 'function'){ t.dateTimeIST=getISTNow(); } }catch(e){}
 
-  var text = "🛒 *New Order - SANTRA MALL* 🛒\n";
-  text += `Order ID: ${orderId}\nDate: ${t.dateTimeIST || t.presentDate} - ${t.presentDate}\n\n`;
+  var text = "🛒 *New Order - SANTRA MALL*\n";
+  text += `Order ID: ${orderId}\nDate: ${t.dateTimeIST} | Sold By: Santra Mall\n\n`;
   itemsArray.forEach(function(item,i){
     text += `${i+1}. ${item.name}\nSize: ${item.size}\nQty: ${item.qty} x ₹${item.price} = ₹${item.total}\nCode: ${item.code}\nLink: ${item.link}\n\n`;
   });
-  text += `━━━━━━━━━━━━━━━━━━\nSubtotal: ₹${subtotal}\nDelivery: ${delivery===0?"FREE":"₹"+delivery}\n*GRAND TOTAL: ₹${grandTotal}*\nAmount: ₹${subtotal} + Delivery ${delivery===0?"FREE":"₹"+delivery} = ₹${grandTotal}\n━━━━━━━━━━━━━━━━━━\n\n*Customer Details:*\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nAddress: ${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}\nPayment: ${payment}\n\n*>> PLEASE SEND OTP TO CONFIRM <<*`;
+  text += `━━━━━━━━━━━━━━━━━━\nSubtotal: ₹${subtotal}\nDelivery: ${delivery===0?"FREE":"₹"+delivery}\n*GRAND TOTAL: ₹${grandTotal}*\n*Sold By: Santra Mall*\n━━━━━━━━━━━━━━━━━━\n\n*Customer:* ${name}, ${mobile}, ${email}\nAddress: ${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}\nPayment: ${payment}\n\n*>> PLEASE SEND OTP TO CONFIRM <<*`;
   window._waFullText = text;
 
   var orderData = {
-    orderId: orderId,
-    customerName:name,
-    customerMobile:mobile,
-    customerEmail:email,
+    orderId: orderId, customerName:name, customerMobile:mobile, customerEmail:email,
     customerAddress:`${house}, ${area}, ${landmark}, ${city}, ${state} - ${pincode}`,
-    customer:{n:name,m:mobile,email:email,addr:`${house}, ${area}, ${landmark}`},
-    items: itemsArray,
-    cart: cart,
-    subtotal: subtotal,
-    delivery: delivery,
-    total:grandTotal,
-    totalAmount:grandTotal,
-    amount:grandTotal,
-    paymentMode:payment,
-    status:"Pending",
-    date: t.date || Date.now(),
-    presentDate: t.presentDate,
-    presentTime: t.presentTime,
-    dateTimeIST: t.dateTimeIST || (t.presentDate+' '+t.presentTime),
-    istDateKey: t.istDateKey,
+    customer:{n:name,m:mobile,email:email,addr:`${house}, ${area}`},
+    items: itemsArray, cart: cart,
+    subtotal: subtotal, delivery: delivery, total:grandTotal, totalAmount:grandTotal, amount:grandTotal, grandTotal:grandTotal,
+    soldBy: "Santra Mall",
+    paymentMode:payment, status:"Pending - OTP Wait",
+    date: t.date, dateTimeIST: t.dateTimeIST,
     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     createdAt: firebase.database.ServerValue.TIMESTAMP
   };
 
   try {
-    if(typeof saveOrderSafely === 'function'){
+    if(typeof saveOrderBoth === 'function'){
+      await saveOrderBoth({name:name, mobile:mobile, email:email, address:`${house}, ${area}`}, itemsArray, grandTotal, 'checkout_v16');
+    } else if(typeof saveOrderSafely === 'function'){
       await saveOrderSafely(orderId, orderData, text);
     } else {
       await rtdb.ref('orders/'+orderId).set(orderData);
       await db.collection('orders').doc(orderId).set(orderData).catch(function(){});
-      await db.collection('login_requests').doc(mobile).set({mobile:mobile, name:name, timestamp: firebase.firestore.FieldValue.serverTimestamp(), status:'pending', profile:{name:name, email:email, location:`${house}, ${area}`}}, {merge:true}).catch(function(){});
     }
 
     localStorage.removeItem(window.CART_KEY);
-    localStorage.removeItem('cart');
-    localStorage.removeItem('santra_cart');
-    localStorage.setItem(window.CART_KEY, '[]');
-    localStorage.setItem('cart', '[]');
-    localStorage.setItem('santra_cart', '[]');
-    localStorage.setItem('whatsapp_sent', 'true');
-
+    localStorage.setItem(window.CART_KEY, '[]'); localStorage.setItem('cart', '[]'); localStorage.setItem('santra_cart', '[]');
     sendWhatsApp();
-    setTimeout(function(){
-      cart = {};
-      sendBtn.innerText = "✅ Order Placed - OTP Sent on WhatsApp";
-    },800);
-    try{ var u=auth.currentUser; if(u){ rtdb.ref("users/"+u.uid+"/cart").remove(); } }catch(e){}
 
-    // ✅ FIX - Grand Total 0 nahi hoga - Sahi total dikhega - My Cart jaisa - 23 JULY 2026
     document.getElementById("formCard").style.display="none";
     document.getElementById("otpBox").style.display="block";
-    // Items hide mat karo - Grand Total sahi rakho
     document.getElementById("grandTotal").innerText = grandTotal;
     document.getElementById("subTotal").innerText = subtotal;
-    document.getElementById("deliveryCharge").innerText = delivery===0?"FREE":"₹"+delivery;
-    // OTP Box me bhi sahi total
     document.getElementById("otpGrandTotal").innerText = grandTotal;
     document.getElementById("otpOrderId").innerText = orderId;
-    // Order Items ko hide nahi karna - Total dikhna chahiye
-    // document.getElementById("orderItems").innerHTML=""; // ❌ Ye line hata di - Isi se 0 aa raha tha
-
     window.scrollTo({top:0,behavior:"smooth"});
-    alert("✅ Order Placed Successfully! Amount: ₹"+grandTotal+" - My Cart wala item - Date: "+t.presentDate+" "+(t.presentTime||''));
+
   } catch (error) {
     console.error(error);
-    if(errBox){ errBox.innerText="❌ Order failed: "+error.message; errBox.style.display='block'; }
-    else alert("❌ Order failed: "+error.message);
-    sendBtn.disabled = false;
-    sendBtn.innerText = "📱 SEND ORDER - Place Order";
+    if(errBox){ errBox.innerText="❌ "+error.message; errBox.style.display='block'; }
+    sendBtn.disabled = false; sendBtn.innerText = "📱 SEND ORDER - Place Order";
   }
 }
 
 function sendWhatsApp() {
-  var msg = window._waFullText || `Hi, my Order ID: ${orderId}. Please send OTP. Amount: ₹${window._totals?window._totals.grandTotal:0}`;
-  var waNumber = typeof window.ADMIN_WHATSAPP!== 'undefined'? window.ADMIN_WHATSAPP : '918769171078';
+  var msg = window._waFullText || `Hi, Order ID: ${orderId}. Amount: ₹${window._totals?window._totals.grandTotal:0} | Sold By Santra Mall`;
+  var waNumber = window.ADMIN_WHATSAPP || '918769171078';
   var whatsappUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
-  var linkEl=document.getElementById('manualWaLink');
-  if(linkEl) linkEl.href = whatsappUrl;
-  var noteEl=document.getElementById('noteOrderId');
-  if(noteEl) noteEl.innerText = orderId;
+  var linkEl=document.getElementById('manualWaLink'); if(linkEl) linkEl.href = whatsappUrl;
+  var noteEl=document.getElementById('noteOrderId'); if(noteEl) noteEl.innerText = orderId;
   var newWin = window.open(whatsappUrl, '_blank');
-  setTimeout(function(){
-    var note=document.getElementById('popupBlockNote');
-    if(note) note.style.display = 'block';
-    setTimeout(function(){ if(note) note.style.display = 'none'; }, 8000);
-  }, 800);
+  setTimeout(function(){ var note=document.getElementById('popupBlockNote'); if(note) note.style.display = 'block'; setTimeout(function(){ if(note) note.style.display='none'; },8000); },800);
 }
 
-document.addEventListener("DOMContentLoaded", function(){
-  loadOrder();
-});
+document.addEventListener("DOMContentLoaded", function(){ loadOrder(); });
 </script>
 <script src="otp-connect.js"></script>
-<script>async function placeOrderCheckout(){ let cust={name:custName.value,mobile:custMobile.value,address:custAddress.value}; let cart=JSON.parse(localStorage.getItem('cart')||'[]'); let total=cart.reduce((s,i)=>s+i.price*i.qty,0); let oid=await saveOrderBoth(cust,cart,total,'checkout'); location.href='share-otp-verify.html?orderId='+oid; }</script>
 <script src="santra-master-image-urls.js?v=32"></script>
 <script src="santra-image-url-system.js?v=32"></script>
 <script src="santra-all-url-one-file.js?v=33"></script>
 </body>
-
 </html>

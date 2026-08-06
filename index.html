@@ -33,7 +33,7 @@ if (location.protocol === "http:" &&!location.hostname.includes("localhost")) {
 <script src="constants.js?v=1"></script>
 <script src="secrets.js"></script>
 <script src="config.js?v=1"></script>
-
+<script src="order-save.js"></script>  <!-- ✅ YE 1 LINE -->
 <!-- 3. Helpers -->
 <script src="cache-buster.js"></script>
 <script src="order-saver.js"></script>
@@ -466,7 +466,7 @@ function updateCartCount(){
  updateHeartIcons();
 }
 function buyNow(id,e){ e.stopPropagation(); let p=allProducts.find(x=>x.id===id); if(p){ addToCart({id:p.id,name:p.name,price:p.price,image:getProductImage(p)}); setTimeout(()=>location.href="cart.html",500);} }
-function goHome(){window.scrollTo(0,0);} function openCategories(){location.href="category.html";} function openCart(){location.href="cart.html";} function openOrders(){let c=localStorage.getItem("santra_customer"); if(!c){alert("Login first"); location.href="customer-account.html";} else location.href="orders.html";}
+function goHome(){window.scrollTo(0,0);} function openCategories(){location.href="category.html";} function openCart(){location.href="cart.html";} function openOrders(){let c=localStorage.getItem("santra_customer"); if(!c){alert("Login first"); location.href="orders.html";} else location.href="orders.html";}
 function showToast(m){let t=document.createElement("div"); t.innerText=m; t.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 20px;border-radius:8px;z-index:9999"; document.body.appendChild(t); setTimeout(()=>t.remove(),2500);}
 function toggleMyChoice(productId){
  const CHOICE=getChoiceKey();
