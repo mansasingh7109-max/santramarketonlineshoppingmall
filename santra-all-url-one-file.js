@@ -5,7 +5,7 @@ V36: only cart
 V45: image2,3 only cart
 OLD CODE BACKUP END - SAFE
 */
-console.log("✅ SANTRA - OLD CODE SAVE - 3 FILE SAFE - Past Present Future - FAST");
+console.log("✅ SANTRA - OLD CODE SAVE - 3 FILE SAFE - Past Present Future - FAST - Bina Version");
 window.CART_KEY = window.CART_KEY || "santraMallCart_v2";
 window.BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 window.SANTRA_ALL_URL_MAP = window.SANTRA_ALL_URL_MAP || {};
@@ -23,18 +23,18 @@ window.getOneFileBaseId = function(id){ return String(id||"").trim(); };
 window.buildOneFile = function(){
   return new Promise(async(res)=>{
     let all=[]; try{ let db=window.db||firebase.firestore(); if(db){ let snap=await db.collection('products').limit(500).get(); snap.forEach(d=>all.push({id:d.id,...d.data()})); } }catch(e){}
-    let map={}; all.forEach(p=>{ let img=window.getOneFileImage(p); if(!img) return; [p.id,p.code,p.name].filter(Boolean).forEach(k=>{ map[String(k).trim().toLowerCase()]=img; map[String(k).trim()]=img; }); });
+    let map={}; all.forEach(p=>{ let img=window.getOneFileImage(p); if(!img) return; [p.id,p.code,p.name].filter(Boolean).forEach(k=>{ let kk=String(k).trim(); if(!kk) return; map[kk]=img; map[kk.toLowerCase()]=img; }); });
     window.SANTRA_ALL_URL_MAP=map; window.SANTRA_ALL_URLS=map;
     try{ localStorage.setItem('santra_one_file_map', JSON.stringify(map)); }catch(e){}
-    console.log(`✅ ONE FILE = ${Object.keys(map).length} URLs - Old Code Save - Other File Safe`);
+    console.log(`✅ ONE FILE = ${Object.keys(map).length} URLs - Old Code Save - Bina Version - Fast`);
     res(map);
   });
 };
 window.fixAllImagesPastPresentFuture = function(){
-  let map=window.SANTRA_ALL_URL_MAP; try{ if(!map||Object.keys(map).length<10) map=JSON.parse(localStorage.getItem('santra_one_file_map')||"{}"); }catch(e){} window.SANTRA_ALL_URLS=map;
+  let map=window.SANTRA_ALL_URL_MAP; try{ if(!map||Object.keys(map).length<10) map=JSON.parse(localStorage.getItem('santra_one_file_map')||"{}"); }catch(e){} window.SANTRA_ALL_URLS=map; window.SANTRA_ALL_URL_MAP=map;
   let key=window.CART_KEY||'santraMallCart_v2';
-  try{ let arr=JSON.parse(localStorage.getItem(key)||"[]"); if(Array.isArray(arr)&&arr.length){ arr.forEach(it=>{ let url=map[String(it.id||"").toLowerCase()]||map[String(it.code||"").toLowerCase()]; if(url){ it.image=url; } }); localStorage.setItem(key, JSON.stringify(arr)); } }catch(e){}
+  try{ let arr=JSON.parse(localStorage.getItem(key)||"[]"); if(Array.isArray(arr)&&arr.length){ arr.forEach(it=>{ let url=map[String(it.id||"").trim()]||map[String(it.id||"").toLowerCase()]||map[String(it.code||"").trim()]||map[String(it.code||"").toLowerCase()]; if(url) it.image=url; }); localStorage.setItem(key, JSON.stringify(arr)); } }catch(e){}
 };
 setTimeout(()=>{ if(typeof firebase!=='undefined') window.buildOneFile().then(()=>window.fixAllImagesPastPresentFuture()); },900);
 setTimeout(()=>{ window.fixAllImagesPastPresentFuture(); },2200);
-console.log("LAST LINE OK - Old Code Save - 3 File Safe - Past Present Future - Other File Safe - Bina Version");
+console.log("LAST LINE OK - Old Code Save - 3 File Safe - Past Present Future - Other File Safe - Bina Version - No Error");
