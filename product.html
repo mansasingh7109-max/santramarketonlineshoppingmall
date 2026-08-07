@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Product - SANTRA MALL - V33 FINAL Layout Fix</title>
+<title>Product - SANTRA MALL - V34 FINAL - Old Save + ID Hide</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="constants.js?v=1"></script>
-<script src="config.js?v=6"></script>
+<script src="constants.js"></script>
+<script src="config.js"></script>
 <script>
 if (typeof window.initFirebaseOnce === 'function') {
   window.initFirebaseOnce({
@@ -25,8 +25,8 @@ if (typeof window.initFirebaseOnce === 'function') {
   });
 }
 </script>
-<script src="secrets.js?v=8"></script>
-<script src="cart.js?v=6"></script>
+<script src="secrets.js"></script>
+<script src="cart.js"></script>
 <script src="mychoice.js"></script>
 <style>
 :root { --accent: #e40046; --text: #212121; --green: #10b981; }
@@ -62,7 +62,6 @@ body{background:#f1f3f6;padding-bottom:90px}
 .qty-box span{font-size:16px;font-weight:bold;min-width:24px;text-align:center}
 .features{background:#f9f9f9;padding:14px;border-radius:8px;margin:12px 0;border:1px solid #eee;font-size:13px;line-height:1.8}
 .loader{padding:40px;text-align:center}
-/* V33 FINAL FIX - Heart bahar + Buy Now body se nikal raha tha - FIXED - Old Save */
 .action-btns{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;background:white;padding:8px 6px;display:flex;align-items:center;gap:6px;box-sizing:border-box;border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,0.08);z-index:999}
 .btn-wish{width:42px;min-width:42px;height:42px;background:#fff0f5;color:var(--accent);font-size:20px;border:none;border-radius:8px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .btn-wish.active{color:#ef4444}
@@ -72,7 +71,7 @@ body{background:#f1f3f6;padding-bottom:90px}
 </head>
 <body>
 <!--
-⚠️ OLD CODE BACKUP - 09/07/2026 + V23 + V24 + V25 + V26 + V27 + V28 + V29 + V30 + V31 + V32 - SAFE - KUCH HATAYA NAHI
+⚠️ OLD CODE BACKUP - 09/07/2026 + V23 + V24 + V25 + V26 + V27 + V28 + V29 + V30 + V31 + V32 + V33 - SAFE - KUCH HATAYA NAHI
 V23: Header + cart badge - SAFE
 V24: Slider + dots + count - SAFE
 V25: Variant + qty + add to cart - SAFE
@@ -83,11 +82,8 @@ V29: Image hamesha - SANTRA_IMAGES + all-url - SAFE
 V30 FINAL: Home + Product + Past Present Future - Full Image - AAPKA BHEJA HUA - SAFE
 V31: Firebase Permanent + 6 Jagah Universal - AAPKA BHEJA HUA - SAFE
 V32 FINAL: Layout Fix + My Cart Link Fix - Heart bahar + Buy Now cut - AAPKA BHEJA HUA - SAFE
-OLD BACKUP END - AB V33 FINAL - Old Save + Update DNA - Heart + Buy Now Body Ke Andar Fix
-- Heart bahar fix - left:50% + transform + 42px + flex-shrink:0 + box-sizing
-- Buy Now body se nikal raha tha fix - width:100% + white-space:nowrap + flex:1 + overflow hidden
-- My Cart / My Choice se link error fix - SANTRA_COMBO_SOAP_-Free → base ID
-- Firebase permanent priority - No payment - 6 jagah universal
+V33 FINAL: Layout Fix + My Cart Link Fix - Heart + Buy Now Body Ke Andar Fix - AAPKA BHEJA HUA - SAFE
+OLD BACKUP END - AB V34 FINAL - Old Save + ID Hide + Base ID Auto Fix - Dress_001_M -> Dress_001
 -->
 <div class="header">
 <button class="back-btn" onclick="history.back()">←</button>
@@ -97,7 +93,7 @@ OLD BACKUP END - AB V33 FINAL - Old Save + Update DNA - Heart + Buy Now Body Ke 
 <a href="cart.html" class="header-icon">🛒<span class="header-badge" id="cartBadge">0</span></a>
 </div>
 </div>
-<div id="productContainer"><div class="loader">Loading product... V33 FINAL - Layout Fixed...</div></div>
+<div id="productContainer"><div class="loader">Loading product... V34 FINAL - Old Save + ID Hide...</div></div>
 <div class="action-btns" id="actionBtns" style="display:none">
 <button class="btn-wish" id="wishBtn">🤍</button>
 <button class="btn-cart" id="cartBtn">🛒 ADD TO CART</button>
@@ -111,23 +107,34 @@ function getIdFromURL(){
   return (p.get('id')||p.get('productId')||p.get('code')||'').toString().trim();
 }
 const productId = getIdFromURL();
-if (!productId) { showError("Product ID missing", "URL me?id= add karo"); }
+if (!productId) { showError("Product ID missing"); }
 else { loadProduct(productId); }
 
 function getBaseIds(fullId){
   let clean=String(fullId).trim();
   let ids=[clean];
+  // V34 FIX - Dress_001_M -> Dress_001 - _M / -M / _L / _XL hatao
+  let m1 = clean.match(/^(.+)[_-](XS|S|M|L|XL|XXL|XXXL)$/i);
+  if(m1) ids.push(m1[1]);
   if(clean.includes('-')){
     let base=clean.substring(0, clean.lastIndexOf('-'));
-    if(base.length>5) ids.push(base);
+    if(base.length>3) ids.push(base);
+  }
+  if(clean.includes('_')){
+    let parts = clean.split('_');
+    let last = parts[parts.length-1];
+    if(/^(XS|S|M|L|XL|XXL|XXXL|\d+)$/i.test(last) && parts.length>1){
+      ids.push(parts.slice(0,-1).join('_'));
+    }
   }
   ids.push(clean.toLowerCase(), clean.toUpperCase());
-  return [...new Set(ids)];
+  return [...new Set(ids)].filter(Boolean);
 }
 
 async function loadProduct(id){
   try{
     let tryIds=getBaseIds(id);
+    console.log("✅ V34 - Trying IDs:", tryIds);
     currentProduct=null;
     for(let clean of tryIds){
       if(currentProduct) break;
@@ -163,11 +170,12 @@ async function loadProduct(id){
         }
       }catch(e){}
     }
-    if(!currentProduct) return showError("Product Not Found","ID: "+id+" - Firestore me base ID check karo");
+    // V34 FIX - ID wala message customer ko mat dikhao - Friendly message
+    if(!currentProduct) return showError("Product Available Nahi Hai");
     document.getElementById("headerTitle").innerText=currentProduct.name;
     renderProduct(currentProduct);
     document.getElementById("actionBtns").style.display="flex";
-  }catch(e){ showError("Error",e.message); }
+  }catch(e){ showError("Product Available Nahi Hai"); }
 }
 
 function getProductImages(p){
@@ -207,7 +215,7 @@ function renderProduct(p){
     let n=typeof v==="object"?v.name||v.size:v;
     return `<button class="variant-btn" data-variant='${JSON.stringify(v).replace(/'/g,"&apos;")}' >${n}</button>`;
   }).join("");
-  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span><span>🔗 ${p.dbType} Firebase Permanent</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span>Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Description:</h3><div class="desc">${p.description||"Premium quality product - Firebase Permanent Link."}</div></div><div class="features"><p>✅ Firebase Storage Permanent - No Payment</p><p>✅ Past Present Future - 6 Jagah Universal</p><p>🚚 Free Delivery Above ₹500</p></div></div>`;
+  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span><span>🔗 ${p.dbType} Permanent</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span>Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Description:</h3><div class="desc">${p.description||"Premium quality product - Firebase Permanent Link."}</div></div><div class="features"><p>✅ Firebase Storage Permanent</p><p>✅ Past Present Future - 6 Jagah Universal</p><p>🚚 Free Delivery Above ₹500</p></div></div>`;
   window.productImages=images; window.currentSlideIndex=0;
   setTimeout(()=>{
     document.querySelectorAll(".variant-btn").forEach(b=>{ b.onclick=e=>{ selectVariant(JSON.parse(b.dataset.variant),b); }; });
@@ -242,13 +250,21 @@ function addToMyChoice(){
     showToast("✓ Added to My Choice");
   } else { showToast("Already in My Choice"); }
 }
-function showError(t,m){ document.getElementById("productContainer").innerHTML=`<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p><p><a href="index.html">← Home</a></p></div>`; }
+// V34 FINAL - Old Save + ID Hide - Customer ko ID nahi dikhega
+function showError(t){
+  document.getElementById("productContainer").innerHTML=`<div style="padding:50px 20px;text-align:center;background:white;border-radius:12px;max-width:500px;margin:20px auto">
+  <div style="font-size:70px">🛍️</div>
+  <h2 style="margin:15px 0;color:#333">${t}</h2>
+  <p style="color:#666;margin-bottom:20px">Ye product abhi available nahi hai ya stock khatam ho gaya hai</p>
+  <a href="index.html" style="background:#e40046;color:#fff;padding:12px 28px;border-radius:25px;text-decoration:none;display:inline-block;font-weight:bold">← Home Pe Jao</a>
+  <div style="margin-top:15px"><a href="cart.html" style="color:#e40046;text-decoration:none;font-weight:600">🛒 My Cart Dekho</a></div>
+  </div>`;
+}
 </script>
-
 
 <script src="mychoicesame.js"></script>
 
-<!-- OLD HIDE - V32 V47 V48 - Version wale - Error dete the - Old ko hide m kr do -->
+<!-- OLD HIDE - V32 V47 V48 - Version wale - Error dete the - Old ko hide m kr do - SAFE -->
 <!--
 <script src="santra-master-image-urls.js?v=32"></script>
 <script src="santra-image-url-system.js?v=32"></script>
