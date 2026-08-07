@@ -3,15 +3,19 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Complete Your Order Sold By Santra Mall</title>
+<title>Complete Your Order Sold By Santra Mall - V24 FINAL</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="config.js"></script>
+<!-- OLD HIDE - V32 V48 - Version wale - Error dete the - Old ko hide m kr do - V24 DNA -->
+<!--
 <script src="santra-master-image-urls.js?v=32"></script>
 <script src="santra-image-url-system.js?v=32"></script>
 <script src="santra-all-url-one-file.js?v=48"></script>
+<script src="santra-universal-image-sync.js?v=48"></script>
+-->
 <style>
 body{margin:0;font-family:Roboto,sans-serif;background:#f5f5f5}
 .header{background:#e91e63;color:#fff;padding:14px;text-align:center;font-weight:700;position:sticky;top:0;z-index:10}
@@ -32,18 +36,23 @@ body{margin:0;font-family:Roboto,sans-serif;background:#f5f5f5}
 </head>
 <body>
 <!--
-⚠️ OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA + V11 + V12 + V13 + V20 + V21 + V22 - SAFE - KUCH HATAYA NAHI
+⚠️ OLD CODE BACKUP - 09/07/2026 SE PEHLE WALA + V11 + V12 + V13 + V20 + V21 + V22 + V23 - SAFE - KUCH HATAYA NAHI
 V11: simple cart + orderId + subtotal only
 V12: full ID fix - trim() - Dress_001_M pura - past present future
 V13: Image URL add in WhatsApp
 V20: Full Long Message + Full ID + Full Address + v47
 V21: Product page link se image nahi dikha - FIX - getCleanImage + master files + clean button - No cloudinary/imgbb/firebase/base64 naam
 V22: My link par click karne par image + pura product detail fix - Home page + past present future running
-OLD CODE END - SAFE - AB V23 FINAL - Old Save + Update DNA - Cart Khali Fix
-- Product sent ke baad cart khali ho jana chahiye tha khali nahi hua - FIXED
+V23 FINAL: Cart Khali Fix - Product sent ke baad cart khali - V23 - AAPKA BHEJA HUA - SAFE
+OLD CODE END - SAFE - AB V24 FINAL - Old Save + Update DNA - Old ko hide m kr do + ID Hide + Base ID Auto
+- BASE_URL already been declared fix - bina version - one file only - Fast
+- Dress_001_M -> Dress_001 auto base ID - product.html V34 me fix
+- Name hamesha jo new add kare wo Customer Profile me auto update
+- Mobile number Order Detail me with Address + Extra Delivery No.
+- Image blank fix + Fast Loading + Customer ko ID check wala msg nahi dikhega
 -->
 
-<div class="header">🛒 Complete Your Order Sold By Santra Mall</div>
+<div class="header">🛒 Complete Your Order Sold By Santra Mall - V24</div>
 <div class="container">
 <div class="card">
 <h3 style="font-size:16px;margin-bottom:8px">Order Summary - Sold By: Santra Mall <span class="lock">🔒 Screenshot - No Edit</span></h3>
@@ -53,9 +62,9 @@ OLD CODE END - SAFE - AB V23 FINAL - Old Save + Update DNA - Cart Khali Fix
 </div>
 
 <div class="card">
-<div style="font-weight:700;margin-bottom:12px">📍 Delivery Address</div>
+<div style="font-weight:700;margin-bottom:12px">📍 Delivery Address - Name Auto Update in Profile</div>
 <div class="form-group"><label>Full Name *</label><input id="name" placeholder="Full Name"></div>
-<div class="form-group"><label>Login mobile number *</label><input id="mobile" type="tel" placeholder="Login mobile number" maxlength="10"></div>
+<div class="form-group"><label>Login mobile number * (OTP isi pe)</label><input id="mobile" type="tel" placeholder="Login mobile number" maxlength="10"></div>
 <div class="form-group"><label>Extra mobile number for Delivery</label><input id="deliveryMobile" type="tel" placeholder="Extra mobile number for Delivery" maxlength="10"></div>
 <div class="form-group"><label>Email *</label><input id="email" placeholder="Email"></div>
 <div class="form-group"><label>House No / Building *</label><input id="house"></div>
@@ -74,17 +83,25 @@ var orderId="SM"+Date.now();
 var BASE_URL="https://santramarketshoppingmall.web.app";
 function getCart(){ try{ let r=localStorage.getItem("santraMallCart_v2")||localStorage.getItem("cart")||"{}"; let d=JSON.parse(r); if(Array.isArray(d)){let t={};d.forEach((it,i)=>{t[it.id||it.code||i]=it;});return t;} if(d.cart) return d.cart; return d; }catch(e){return {};} }
 function getCleanImage(it){
-  let f=['image','imageUrl','productImage','thumbnail','photo','img','picture','src','mainImage','productImg','imgbb','cloudinary','lux'];
-  for(let k of f){ let v=it[k]; if(v && typeof v==='string' && v.length>8 && (v.startsWith('http')||v.startsWith('data:'))) return v; }
-  if(it.images && Array.isArray(it.images) && it.images[0]) return it.images[0];
+  let ff=['image','imageUrl','productImage','thumbnail','firebaseImage'];
+  for(let f of ff){ let v=it[f]; if(v && typeof v==='string' && v.includes('firebasestorage.googleapis.com') && v.startsWith('http')) return v; }
+  let f2=['image','img','imageUrl','productImage','thumbnail','photo','picture','src','mainImage'];
+  for(let k of f2){ let v=it[k]; if(v && typeof v==='string' && v.length>15 && v.startsWith('http') &&!v.includes('ibb.co')) return v; }
   try{
-    let keys=[it.id,it.code,it.productId,(it.name||'').toLowerCase()];
+    let keys=[it.id,it.code,it.productId,(it.name||'').toLowerCase(), String(it.id||'').toLowerCase()];
     for(let key of keys){
       if(!key) continue;
-      if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[key]) return window.SANTRA_IMAGES[key];
-      if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[key.toLowerCase()]) return window.SANTRA_IMAGES[key.toLowerCase()];
       if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[key]) return window.SANTRA_ALL_URLS[key];
+      if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[key]) return window.SANTRA_IMAGES[key];
+      if(window.SANTRA_ALL_URL_MAP && window.SANTRA_ALL_URL_MAP[key]) return window.SANTRA_ALL_URL_MAP[key];
       if(window.getProductImageUrl){ let u=window.getProductImageUrl(key); if(u && u.startsWith('http')) return u; }
+    }
+    // V24 FIX - Base ID se bhi try karo - Dress_001_M -> Dress_001
+    let full = String(it.id||'').trim();
+    let base = full.replace(/[_-](XS|S|M|L|XL|XXL|XXXL)$/i,'');
+    if(base && base!==full){
+      if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[base]) return window.SANTRA_ALL_URLS[base];
+      if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[base]) return window.SANTRA_IMAGES[base];
     }
   }catch(e){}
   return 'https://via.placeholder.com/85?text=No+Image';
@@ -109,11 +126,11 @@ function render(){
  cont.innerHTML=keys.map((k,i)=>{
   let it=cart[k]; if(!it) return '';
   let qty=parseInt(it.qty)||1; let price=parseFloat(it.price)||0; let tot=qty*price; sub+=tot;
-  let size=it.size||'M'; let code=it.code||it.id||k; let name=it.name||'Product';
+  let size=it.size||it.variant||'M'; let code=it.code||it.id||k; let name=it.name||'Product';
   let img=getCleanImage(it);
   let fullId=(it.id||it.productId||code||k).toString().trim();
   let link=BASE_URL+"/product.html?id="+encodeURIComponent(fullId);
-  return `<div class="item"><img src="${img}" onerror="this.src='https://via.placeholder.com/85'"><div class="item-details"><b>${i+1}. ${name} (Size ${size})</b><br>Qty: ${qty} x ₹${price} = ₹${tot}<br>Code: ${code} | Sold By: Santra Mall<br>Size: ${size}<br><a class="link" href="${link}" target="_blank" style="text-decoration:none;background:#e0f2fe;padding:4px 10px;border-radius:12px;display:inline-block;margin-top:4px">🔗 View Product</a></div></div>`;
+  return `<div class="item"><img src="${img}" onerror="this.src='https://via.placeholder.com/85'"><div class="item-details"><b>${i+1}. ${name} (Size ${size})</b><br>Qty: ${qty} x ₹${price} = ₹${tot}<br>Code: ${code} | Sold By: Santra Mall<br>Size: ${size}<br><a class="link" href="${link}" target="_blank" style="text-decoration:none;background:#e0f2fe;padding:4px 10px;border-radius:12px;display:inline-block;margin-top:4px">🔗 View Product - Home Image Wala</a></div></div>`;
  }).join("");
  let del=sub>=500?0:49; let grand=sub+del;
  document.getElementById("subTotal").innerText=sub;
@@ -134,8 +151,7 @@ function clearCartCompletely(){
     if(typeof window.clearCart==='function'){ window.clearCart(); }
     if(window.CART_KEY) localStorage.setItem(window.CART_KEY, JSON.stringify([]));
     document.querySelectorAll('#cartCount,.cart-count,[data-cart-count],#choiceBadge').forEach(el=>{ if(el.id!=='choiceBadge') el.textContent='0'; });
-    console.log("✅ Cart Khali Done");
-  }catch(e){ console.log("Cart clear err",e); }
+  }catch(e){}
 }
 
 function sendOrder(){
@@ -169,7 +185,7 @@ function sendOrder(){
  keys.forEach((k,i)=>{
    let it=cart[k]; if(!it) return;
    let qty=parseInt(it.qty)||1; let price=parseFloat(it.price)||0; let tot=qty*price; subtotal+=tot;
-   let size=it.size||'M'; let code=it.code||it.id||k; let nameP=it.name||'Product';
+   let size=it.size||it.variant||'M'; let code=it.code||it.id||k; let nameP=it.name||'Product';
    let cleanId=(it.id||code||k).toString().trim();
    let link=BASE_URL+"/product.html?id="+encodeURIComponent(cleanId);
    productLines+=`${i+1}. ${nameP} (Size ${size})\nSize: ${size}\nQty: ${qty} x ₹${price} = ₹${tot}\nCode: ${code}\nView: ${link}\n\n`;
@@ -183,6 +199,8 @@ function sendOrder(){
    localStorage.setItem('santra_customer', JSON.stringify(cust));
    localStorage.setItem('santra_mobile', login);
    localStorage.setItem('santra_deliveryMobile', extra);
+   // V24 DNA - Name hamesha jo new add kare wo Profile me auto update
+   if(window.db) window.db.collection('customers').doc(login).set({name:name, loginMobile:login, deliveryMobile:extra, address:fullAddress, email:email},{merge:true});
  }catch(e){}
 
  localStorage.setItem('lastOrderId', orderId);
@@ -209,7 +227,6 @@ function sendOrder(){
    }
  }catch(e){}
 
- // FIXED V23 - Cart khali hona chahiye tha - Ab 100% khali hoga
  setTimeout(()=>{
    clearCartCompletely();
    btn.innerText="✅ Sent - Cart Khali";
@@ -219,9 +236,8 @@ function sendOrder(){
 }
 if(!firebase.apps.length){ firebase.initializeApp({apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9"}); }
 document.addEventListener("DOMContentLoaded", load);
-console.log("✅ Checkout.html V23 FINAL - Old Save + Update DNA - Cart Khali Fix - LAST LINE OK");
+console.log("✅ Checkout.html V24 FINAL - Old Save + DNA - Bina Version - Fast - LAST LINE OK");
 </script>
 <script src="santra-all-url-one-file.js"></script>
-<script src="santra-universal-image-sync.js?v=48"></script>
 </body>
 </html>
