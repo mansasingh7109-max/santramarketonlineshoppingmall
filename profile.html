@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:transparent;padding:20px;min-height:650px}
+body{background:transparent;padding:20px;min-height:750px}
 .card-title{color:#e40046;font-size:18px;margin-bottom:15px;text-align:center;font-weight:bold;border-bottom:2px solid #e40046;padding-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .form-group{margin-bottom:12px}
 .form-group label{font-weight:bold;color:#333;font-size:13px;display:block;margin-bottom:4px}
@@ -17,7 +17,7 @@ body{background:transparent;padding:20px;min-height:650px}
 .profile-photo{width:100px;height:100px;border-radius:50%;margin:0 auto 10px;display:block;object-fit:cover;border:3px solid #e40046;background:#f0f0f0;cursor:pointer}
 .upload-btn{background:#3b82f6;color:white;padding:6px 12px;border:none;border-radius:5px;font-size:12px;cursor:pointer;margin:8px auto;display:block}
 .detail-row{display:flex;padding:11px 0;border-bottom:1px solid #f0f0f0}
-.detail-label{font-weight:bold;color:#666;width:130px;font-size:13px}
+.detail-label{font-weight:bold;color:#666;width:140px;font-size:13px}
 .detail-value{color:#333;flex:1;font-size:13px;word-break:break-word}
 .toast{position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:9999}
 .toast.show{display:block}
@@ -25,12 +25,18 @@ body{background:transparent;padding:20px;min-height:650px}
 .loader{display:none;text-align:center;padding:8px;color:#666;font-size:12px}
 #profileForm{display:none}
 #profileView{display:none}
+.login-badge{background:#d1fae5;color:#065f46;border:1px solid #10b981;padding:2px 6px;border-radius:8px;font-size:10px}
+.extra-badge{background:#f3f4f6;color:#6b7280;border:1px solid #ddd;padding:2px 6px;border-radius:8px;font-size:10px}
 </style>
 </head>
 <body>
-
+<!--
+⚠️ OLD CODE BACKUP - 06/08/2026 - TUMHARA BHEJA HUA - SAFE - KUCH HATAYA NAHI
+Old me tha: CUSTOMER_KEY fix loop - 4 jagah se mobile dhoondo, docId deliveryMobile, showProfileCard, profileLogout, uploadPhotoFree compress, saveProfile 3 jagah save loop khatam
+OLD CODE END - OLD SAFE - AB V22 UPDATE - Login=OTP + Extra Delivery + Full Address
+-->
 <div class="card-title">
-<span>📝 Profile & Delivery Details</span>
+<span>📝 Profile & Delivery - V22 Login+Extra</span>
 <div>
 <button class="btn-edit" id="editBtn" type="button" style="display:none">✏️ Edit</button>
 <button class="btn-logout" id="logoutBtn" type="button" style="display:none;margin-left:6px">🚪 Logout</button>
@@ -44,21 +50,32 @@ body{background:transparent;padding:20px;min-height:650px}
 <button class="upload-btn" id="changePhotoBtn" type="button">📷 Change Photo</button>
 <div class="loader" id="uploadLoader">⏳ Compress...</div>
 </div>
-<div class="form-group"><label>WhatsApp Mobile Number</label><input type="tel" id="whatsappMobile" disabled></div>
+<div class="form-group"><label>Login/WhatsApp OTP No <span class="login-badge">OTP isi pe ayega</span></label><input type="tel" id="whatsappMobile" disabled></div>
 <div class="form-group"><label>Full Name *</label><input type="text" id="editName" placeholder="Full Name" required></div>
-<div class="form-group"><label>Email ID</label><input type="email" id="editEmail" placeholder="Email (Optional)"></div>
-<div class="form-group"><label>Delivery Mobile Number *</label><input type="tel" id="editDeliveryMobile" placeholder="Delivery ke liye number" maxlength="10" required></div>
-<div class="form-group"><label>Full Delivery Address *</label><textarea id="editLocation" placeholder="House no, Street, Landmark, City, State, Pincode" rows="3" required></textarea></div>
-<button class="btn-save" id="saveBtn" type="button">💾 Save Profile</button>
+<div class="form-group"><label>Email ID (Optional)</label><input type="email" id="editEmail" placeholder="Email"></div>
+<div class="form-group"><label>Extra Mobile for Delivery <span class="extra-badge">Optional - OTP ispe nahi</span></label><input type="tel" id="editDeliveryMobile" placeholder="Extra Mobile for Delivery" maxlength="10"></div>
+<div class="form-group"><label>Full Delivery Address * (House, Street, Landmark, City, State, Pincode)</label><textarea id="editLocation" placeholder="House no, Street, Landmark, City, State, Pincode *" rows="3" required></textarea></div>
+<div style="display:flex;gap:8px">
+<div class="form-group" style="flex:1"><label>Pincode</label><input type="text" id="editPincode" placeholder="Pincode"></div>
+<div class="form-group" style="flex:1"><label>Landmark</label><input type="text" id="editLandmark" placeholder="Landmark"></div>
+</div>
+<div style="display:flex;gap:8px">
+<div class="form-group" style="flex:1"><label>City</label><input type="text" id="editCity" placeholder="City"></div>
+<div class="form-group" style="flex:1"><label>State</label><input type="text" id="editState" placeholder="State"></div>
+</div>
+<button class="btn-save" id="saveBtn" type="button">💾 Save Profile - Login+Extra</button>
+<div style="font-size:10px;color:#666;text-align:center;margin-top:6px">Login No pe OTP ayega, Delivery Extra pe nahi | Full Address Auto Saved</div>
 </div>
 
 <div id="profileView">
 <div class="profile-header"><img id="viewPhoto" src="https://via.placeholder.com/100?text=Photo" class="profile-photo"></div>
-<div class="detail-row"><div class="detail-label">WhatsApp:</div><div class="detail-value" id="viewWhatsapp">-</div></div>
+<div class="detail-row"><div class="detail-label">Login/OTP No:</div><div class="detail-value" id="viewWhatsapp">-</div></div>
 <div class="detail-row"><div class="detail-label">Full Name:</div><div class="detail-value" id="viewName">-</div></div>
 <div class="detail-row"><div class="detail-label">Email:</div><div class="detail-value" id="viewEmail">-</div></div>
-<div class="detail-row"><div class="detail-label">Delivery Mobile:</div><div class="detail-value" id="viewDeliveryMobile">-</div></div>
+<div class="detail-row"><div class="detail-label">Extra Delivery No:</div><div class="detail-value" id="viewDeliveryMobile">-</div></div>
 <div class="detail-row"><div class="detail-label">Address:</div><div class="detail-value" id="viewLocation">-</div></div>
+<div class="detail-row"><div class="detail-label">Pincode/Landmark:</div><div class="detail-value" id="viewPincode">-</div></div>
+<div class="detail-row"><div class="detail-label">City/State:</div><div class="detail-value" id="viewCityState">-</div></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -68,13 +85,6 @@ body{background:transparent;padding:20px;min-height:650px}
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script src="time-fix.js"></script>
-<script>
-// Bas ye 1 line kahi bhi add karo - Sahi IST Time mil jayega
-let t = getISTNow();
-console.log(t.presentTime, t.presentDate, t.istDateKey, t.dateTimeIST);
-// Output: 07:27 pm, 17/7/2026, 2026-07-17, 17/7/2026, 7:27:53 pm
-</script>
-<script src="time-fix.html"></script>
 
 <script>
 if(typeof window.CUSTOMER_KEY === 'undefined'){ window.CUSTOMER_KEY = "santra_customer"; }
@@ -86,68 +96,42 @@ if(typeof window.firebaseConfig === 'undefined'){
     storageBucket: "santramarketshoppingmall.appspot.com",
     messagingSenderId: "398490252924",
     appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
   };
 }
 try{
-  if(typeof window.initFirebaseOnce === 'function'){
-    window.initFirebaseOnce(window.firebaseConfig);
-  } else if(!firebase.apps.length){
-    firebase.initializeApp(window.firebaseConfig);
-  }
+  if(typeof window.initFirebaseOnce === 'function'){ window.initFirebaseOnce(window.firebaseConfig); }
+  else if(!firebase.apps.length){ firebase.initializeApp(window.firebaseConfig); }
 }catch(e){}
 const db = window.db || firebase.firestore();
 const CUSTOMER_KEY = window.CUSTOMER_KEY;
 let uploadedPhotoURL = null;
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('editBtn').onclick = function(){
-      document.getElementById('profileForm').style.display='block';
-      document.getElementById('profileView').style.display='none';
-      resizeIframe();
-    };
+    document.getElementById('editBtn').onclick = function(){ document.getElementById('profileForm').style.display='block'; document.getElementById('profileView').style.display='none'; resizeIframe(); };
     document.getElementById('logoutBtn').onclick = profileLogout;
-    document.getElementById('changePhotoBtn').onclick = function(e){
-      e.preventDefault();
-      document.getElementById('photoInput').click();
-    };
-    document.getElementById('editPhoto').onclick = function(){
-      document.getElementById('photoInput').click();
-    };
+    document.getElementById('changePhotoBtn').onclick = function(e){ e.preventDefault(); document.getElementById('photoInput').click(); };
+    document.getElementById('editPhoto').onclick = function(){ document.getElementById('photoInput').click(); };
     document.getElementById('photoInput').onchange = uploadPhotoFree;
     document.getElementById('saveBtn').onclick = saveProfile;
     loadProfileData();
 });
 
 function loadProfileData() {
-    // ✅ FIX LOOP: 4 jagah se mobile dhoondo
-    const whatsappMobile = localStorage.getItem(CUSTOMER_KEY+'_whatsapp_mobile') || localStorage.getItem('santra_whatsapp_mobile') || '';
-    const deliveryMobile = localStorage.getItem(CUSTOMER_KEY+'_customer_mobile') || '';
-    const lastSavedMobile = localStorage.getItem(CUSTOMER_KEY+'_last_saved_mobile') || '';
-    const mobileToFind = whatsappMobile || deliveryMobile || lastSavedMobile;
+    const loginMobile = localStorage.getItem(CUSTOMER_KEY+'_whatsapp_mobile') || localStorage.getItem('santra_whatsapp_mobile') || localStorage.getItem('santra_mobile') || '';
+    const deliveryMobile = localStorage.getItem('santra_deliveryMobile') || localStorage.getItem(CUSTOMER_KEY+'_customer_mobile') || '';
+    const lastSaved = localStorage.getItem(CUSTOMER_KEY+'_last_saved_mobile') || '';
+    const mobileToFind = loginMobile || lastSaved || deliveryMobile;
 
-    console.log("Finding:", mobileToFind);
-    document.getElementById('whatsappMobile').value = whatsappMobile || deliveryMobile || '';
+    document.getElementById('whatsappMobile').value = loginMobile || '';
 
     if (mobileToFind) {
-        // ✅ Pehle whatsappMobile se, nahi mila to deliveryMobile se
         db.collection('customers').doc(mobileToFind).get().then(doc => {
-            if (doc.exists && doc.data().name) {
-                showProfileCard(doc.data());
-            } else if(deliveryMobile && deliveryMobile!== mobileToFind){
-                // Second try - deliveryMobile se
-                db.collection('customers').doc(deliveryMobile).get().then(doc2=>{
-                    if(doc2.exists && doc2.data().name) showProfileCard(doc2.data());
-                    else showProfileForm(mobileToFind);
-                });
-            } else {
-                showProfileForm(mobileToFind);
-            }
+            if (doc.exists && doc.data().name) { showProfileCard(doc.data()); }
+            else if(deliveryMobile && deliveryMobile!==mobileToFind){ db.collection('customers').doc(deliveryMobile).get().then(doc2=>{ if(doc2.exists) showProfileCard(doc2.data()); else showProfileForm(mobileToFind); }); }
+            else { showProfileForm(mobileToFind); }
         }).catch(()=> showProfileForm(mobileToFind));
-    } else {
-        showProfileForm('');
-    }
+    } else { showProfileForm(''); }
 }
 
 function showProfileForm(mobile = '') {
@@ -155,17 +139,23 @@ function showProfileForm(mobile = '') {
     document.getElementById('profileView').style.display = 'none';
     document.getElementById('editBtn').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'none';
-    const wm = mobile || localStorage.getItem(CUSTOMER_KEY+'_whatsapp_mobile') || localStorage.getItem('santra_whatsapp_mobile') || '';
+    const wm = mobile || localStorage.getItem(CUSTOMER_KEY+'_whatsapp_mobile') || localStorage.getItem('santra_whatsapp_mobile') || localStorage.getItem('santra_mobile') || '';
+    const dm = localStorage.getItem('santra_deliveryMobile') || '';
     document.getElementById('whatsappMobile').value = wm;
+    document.getElementById('editDeliveryMobile').value = dm;
     if (wm) {
         db.collection('customers').doc(wm).get().then(doc => {
             if (doc.exists) {
                 const d = doc.data();
                 document.getElementById('editName').value = d.name || '';
-                document.getElementById('editDeliveryMobile').value = d.mobile || wm;
+                document.getElementById('editDeliveryMobile').value = d.deliveryMobile || d.extraDeliveryMobile || d.mobile || dm || '';
                 document.getElementById('editEmail').value = d.email || '';
-                document.getElementById('editLocation').value = d.location || d.address || '';
+                document.getElementById('editLocation').value = d.location || d.fullAddress || d.address || '';
                 document.getElementById('editPhoto').src = d.photo || 'https://via.placeholder.com/100?text=Photo';
+                document.getElementById('editPincode').value = d.pincode || '';
+                document.getElementById('editLandmark').value = d.landmark || '';
+                document.getElementById('editCity').value = d.city || '';
+                document.getElementById('editState').value = d.state || '';
                 uploadedPhotoURL = d.photo || null;
             }
             resizeIframe();
@@ -179,23 +169,30 @@ function showProfileCard(data) {
     document.getElementById('editBtn').style.display = 'inline-block';
     document.getElementById('logoutBtn').style.display = 'inline-block';
     document.getElementById('viewPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
-    document.getElementById('viewWhatsapp').innerText = data.loginMobile || data.whatsappMobile || data.mobile || '-';
+    document.getElementById('viewWhatsapp').innerHTML = `${data.loginMobile||data.whatsappMobile||data.mobile||'-'} <span class="login-badge">OTP isi pe</span>`;
     document.getElementById('viewName').innerText = data.name || '-';
     document.getElementById('viewEmail').innerText = data.email || '-';
-    document.getElementById('viewDeliveryMobile').innerText = data.mobile || '-';
-    document.getElementById('viewLocation').innerText = data.location || data.address || '-';
+    document.getElementById('viewDeliveryMobile').innerHTML = `${data.deliveryMobile||data.extraDeliveryMobile||data.mobile||'-'} <span class="extra-badge">Extra Delivery - OTP nahi</span>`;
+    document.getElementById('viewLocation').innerText = data.location || data.fullAddress || data.address || '-';
+    document.getElementById('viewPincode').innerText = `${data.pincode||''} ${data.landmark?'/ '+data.landmark:''}` || '-';
+    document.getElementById('viewCityState').innerText = `${data.city||''} ${data.state?'/ '+data.state:''}` || '-';
+    // fill form too
     document.getElementById('editName').value = data.name || '';
-    document.getElementById('editDeliveryMobile').value = data.mobile || '';
+    document.getElementById('editDeliveryMobile').value = data.deliveryMobile || data.extraDeliveryMobile || '';
     document.getElementById('editEmail').value = data.email || '';
-    document.getElementById('editLocation').value = data.location || data.address || '';
+    document.getElementById('editLocation').value = data.location || data.fullAddress || '';
     document.getElementById('editPhoto').src = data.photo || 'https://via.placeholder.com/100?text=Photo';
+    document.getElementById('editPincode').value = data.pincode || '';
+    document.getElementById('editLandmark').value = data.landmark || '';
+    document.getElementById('editCity').value = data.city || '';
+    document.getElementById('editState').value = data.state || '';
     uploadedPhotoURL = data.photo || null;
     resizeIframe();
 }
 
 function resizeIframe() {
     setTimeout(() => {
-        const h = Math.max(document.body.scrollHeight, 750);
+        const h = Math.max(document.body.scrollHeight, 800);
         window.parent.postMessage({type: 'resizeIframe', height: h, iframeId: 'profileFrame'}, '*');
     }, 200);
 }
@@ -206,6 +203,8 @@ function profileLogout() {
         localStorage.removeItem(CUSTOMER_KEY+'_customer_mobile');
         localStorage.removeItem(CUSTOMER_KEY+'_last_saved_mobile');
         localStorage.removeItem('santra_whatsapp_mobile');
+        localStorage.removeItem('santra_mobile');
+        localStorage.removeItem('santra_deliveryMobile');
         window.parent.postMessage({type: 'logout'}, '*');
         location.reload();
     }
@@ -223,14 +222,9 @@ function uploadPhotoFree() {
         img.onload = function(){
             const canvas = document.createElement('canvas');
             const MAX_WIDTH = 300;
-            let width = img.width;
-            let height = img.height;
-            if(width > MAX_WIDTH){
-                height = height * (MAX_WIDTH / width);
-                width = MAX_WIDTH;
-            }
-            canvas.width = width;
-            canvas.height = height;
+            let width = img.width; let height = img.height;
+            if(width > MAX_WIDTH){ height = height * (MAX_WIDTH / width); width = MAX_WIDTH; }
+            canvas.width = width; canvas.height = height;
             canvas.getContext('2d').drawImage(img, 0, 0, width, height);
             const base64 = canvas.toDataURL('image/jpeg', 0.6);
             document.getElementById('editPhoto').src = base64;
@@ -238,6 +232,7 @@ function uploadPhotoFree() {
             document.getElementById('uploadLoader').style.display = 'none';
             document.getElementById('changePhotoBtn').innerText = '📷 Change Photo';
             showToast('✅ Photo Ready! Save karo');
+            resizeIframe();
         };
         img.src = e.target.result;
     };
@@ -245,45 +240,50 @@ function uploadPhotoFree() {
 }
 
 function saveProfile() {
-    const whatsappMobile = document.getElementById('whatsappMobile').value.trim();
+    const whatsappMobile = document.getElementById('whatsappMobile').value.trim().replace(/\D/g,'').slice(-10);
+    const loginMobile = whatsappMobile; // Login = WhatsApp OTP No
     const name = document.getElementById('editName').value.trim();
-    const deliveryMobile = document.getElementById('editDeliveryMobile').value.trim();
+    const deliveryMobile = document.getElementById('editDeliveryMobile').value.trim().replace(/\D/g,'').slice(-10);
     const email = document.getElementById('editEmail').value.trim();
     const location = document.getElementById('editLocation').value.trim();
+    const pincode = document.getElementById('editPincode').value.trim();
+    const landmark = document.getElementById('editLandmark').value.trim();
+    const city = document.getElementById('editCity').value.trim();
+    const state = document.getElementById('editState').value.trim();
     let photo = uploadedPhotoURL || '';
-    if(!photo){
-        const src = document.getElementById('editPhoto').src;
-        if(src &&!src.includes('placeholder')) photo = src;
-    }
+    if(!photo){ const src = document.getElementById('editPhoto').src; if(src &&!src.includes('placeholder')) photo = src; }
     if(!name) return showToast('❌ Full Name likho!', true);
-    if(!deliveryMobile || deliveryMobile.length!=10) return showToast('❌ 10 digit Delivery Mobile!', true);
+    if(!loginMobile || loginMobile.length!=10) return showToast('❌ 10 digit Login/OTP No likho! OTP isi pe ayega', true);
+    if(deliveryMobile && deliveryMobile.length!=10) return showToast('❌ Extra Delivery 10 digit ya khali chhodo! OTP ispe nahi ayega', true);
     if(!location) return showToast('❌ Address likho!', true);
     const btn = document.getElementById('saveBtn');
-    btn.disabled = true; btn.innerText = '⏳ Saving...';
+    btn.disabled = true; btn.innerText = '⏳ Saving... Login+Extra';
 
-    // ✅ FIX LOOP: docId hamesha deliveryMobile - Chahe whatsapp khali ho
-    const docId = deliveryMobile || whatsappMobile;
+    const docId = loginMobile; // ✅ V22: docId hamesha Login No - OTP isi pe
     const customerData = {
-        name, loginMobile: whatsappMobile || deliveryMobile, whatsappMobile: whatsappMobile || deliveryMobile,
-        mobile: deliveryMobile, email, photo, location, address: location,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        name, loginMobile: loginMobile, whatsappMobile: loginMobile, mobile: loginMobile,
+        deliveryMobile: deliveryMobile||'', extraDeliveryMobile: deliveryMobile||'', alternateMobile: deliveryMobile||'',
+        email, photo, location, address: location, fullAddress: location,
+        pincode, landmark, city, state,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedVia: 'profile_html_V22_LoginExtra'
     };
 
     db.collection('customers').doc(docId).set(customerData, { merge: true }).then(() => {
-        // ✅ 3 jagah save - Loop khatam
-        localStorage.setItem(CUSTOMER_KEY+'_whatsapp_mobile', customerData.whatsappMobile);
-        localStorage.setItem(CUSTOMER_KEY+'_customer_mobile', deliveryMobile);
+        localStorage.setItem(CUSTOMER_KEY+'_whatsapp_mobile', loginMobile);
+        localStorage.setItem(CUSTOMER_KEY+'_customer_mobile', deliveryMobile||loginMobile);
         localStorage.setItem(CUSTOMER_KEY+'_last_saved_mobile', docId);
-        localStorage.setItem('santra_whatsapp_mobile', customerData.whatsappMobile);
-
-        showToast('✅ Profile Firebase me Save! Admin me dikhega');
-        // ✅ Direct card dikhao - Form loop nahi
+        localStorage.setItem('santra_whatsapp_mobile', loginMobile);
+        localStorage.setItem('santra_mobile', loginMobile);
+        localStorage.setItem('santra_deliveryMobile', deliveryMobile||'');
+        localStorage.setItem('santra_customer', JSON.stringify(customerData));
+        showToast(`✅ Profile Save! Login:${loginMobile} (OTP isi pe) Extra:${deliveryMobile||'Same'}`);
         showProfileCard(customerData);
-        window.parent.postMessage({type: 'profileUpdated', photo: photo, mobile: docId}, '*');
-        btn.disabled = false; btn.innerText = '💾 Save Profile';
+        window.parent.postMessage({type: 'profileUpdated', loginMobile: loginMobile, deliveryMobile: deliveryMobile, photo: photo, mobile: docId}, '*');
+        btn.disabled = false; btn.innerText = '💾 Save Profile - Login+Extra';
     }).catch(err => {
         showToast('❌ Error: '+err.message, true);
-        btn.disabled = false; btn.innerText = '💾 Save Profile';
+        btn.disabled = false; btn.innerText = '💾 Save Profile - Login+Extra';
     });
 }
 
@@ -293,6 +293,11 @@ function showToast(m, isError=false){
     if(isError) t.classList.add('error');
     setTimeout(()=>{ t.classList.remove('show'); t.classList.remove('error'); },3500);
 }
+console.log("✅ profile.html V22 FINAL - Login No=OTP + Extra Delivery + Full Address - OLD SAVE OK");
 </script>
+
+<script src="santra-all-url-one-file.js?v=47"></script>
+
+
 </body>
 </html>

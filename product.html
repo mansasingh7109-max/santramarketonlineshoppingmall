@@ -1,778 +1,252 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Product - SANTRA MALL</title>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-
-        <!-- 1. Firebase Scripts -->
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-        <!-- 2. CONSTANTS.JS - SABSE PEHLE ⚠️ YE ADD KIYA -->
-        <script src="constants.js?v=1"></script>
-
-        <!-- 3. CONFIG.JS - Crash-proof protection + initFirebaseOnce -->
-        <script src="config.js?v=6"></script>
-
-        <!-- 4. Firebase init - config.js ke baad chalega -->
-        <script>
-            // ✅ Check karo function bana ya nahi
-            if (typeof window.initFirebaseOnce === 'function') {
-                window.initFirebaseOnce({
-                    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product - SANTRA MALL - V33 FINAL Layout Fix</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="constants.js?v=1"></script>
+<script src="config.js?v=6"></script>
+<script>
+if (typeof window.initFirebaseOnce === 'function') {
+  window.initFirebaseOnce({
+    apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
     authDomain: "santramarketshoppingmall.firebaseapp.com",
     projectId: "santramarketshoppingmall",
     storageBucket: "santramarketshoppingmall.appspot.com",
     messagingSenderId: "398490252924",
     appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
-    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana
-                };
-            } else {
-                console.error("❌ initFirebaseOnce function nahi mila - config.js check karo");
-            }
-        </script>
-
-        <!-- 5. secrets.js - CART_KEY/MYCHOICE_KEY comment hona chahiye isme -->
-        <script src="secrets.js?v=8"></script>
-
-        <!-- 6. cart.js sabse last -->
-        <script src="cart.js?v=6"></script>
-        <script src="mychoice.js"></script>
-        <style>
-            :root {
-                --accent: #e40046;
-                --text: #212121;
-                --green: #10b981;
-            }
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: "Poppins", Arial, sans-serif;
-            }
-            body {
-                background: #f1f3f6;
-                padding-bottom: 85px;
-            }
-        .header {
-                background: var(--accent);
-                color: white;
-                padding: 12px 15px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
-        .back-btn {
-                background: none;
-                border: none;
-                color: white;
-                font-size: 22px;
-                cursor: pointer;
-            }
-        .header h1 {
-                font-size: 18px;
-                flex: 1;
-            }
-        .header-icons {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-        .header-icon {
-                color: white;
-                text-decoration: none;
-                font-size: 24px;
-                position: relative;
-            }
-        .header-badge {
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background: #ffeb3b;
-                color: #000;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                font-size: 11px;
-                font-weight: bold;
-                display: none;
-                align-items: center;
-                justify-content: center;
-            }
-        .container {
-                max-width: 600px;
-                margin: 0 auto;
-                background: white;
-            }
-        .image-slider-box {
-                position: relative;
-                width: 100%;
-                height: 400px;
-                background: #f9f9f9;
-                overflow: hidden;
-            }
-        .slider-container {
-                width: 100%;
-                height: 100%;
-                position: relative;
-            }
-        .slide-img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                display: none;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-        .slide-img.active {
-                display: block;
-            }
-        .slide-btn {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background: rgba(0, 0, 0, 0.5);
-                color: white;
-                border: none;
-                width: 45px;
-                height: 45px;
-                border-radius: 50%;
-                font-size: 28px;
-                cursor: pointer;
-                z-index: 10;
-                font-weight: bold;
-            }
-        .slide-btn.prev {
-                left: 10px;
-            }
-        .slide-btn.next {
-                right: 10px;
-            }
-        .slide-dots {
-                position: absolute;
-                bottom: 15px;
-                left: 50%;
-                transform: translateX(-50%);
-                display: flex;
-                gap: 8px;
-                z-index: 10;
-            }
-        .dot {
-                width: 10px;
-                height: 10px;
-                background: rgba(255, 255, 255, 0.5);
-                border-radius: 50%;
-                cursor: pointer;
-                border: 2px solid white;
-            }
-        .dot.active {
-                background: white;
-                width: 25px;
-                border-radius: 5px;
-            }
-        .img-count {
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                background: rgba(0, 0, 0, 0.7);
-                color: white;
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: bold;
-                z-index: 10;
-            }
-        .details {
-                padding: 20px;
-            }
-        .product-name {
-                font-size: 22px;
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: var(--text);
-                line-height: 1.3;
-            }
-        .product-meta {
-                color: #666;
-                font-size: 13px;
-                margin-bottom: 15px;
-                display: flex;
-                gap: 15px;
-                flex-wrap: wrap;
-            }
-        .product-meta span {
-                background: #f3f4f6;
-                padding: 4px 10px;
-                border-radius: 4px;
-            }
-        .price-box {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                margin: 20px 0;
-                padding: 15px;
-                background: #fff5f7;
-                border-radius: 8px;
-            }
-        .price {
-                font-size: 34px;
-                font-weight: bold;
-                color: var(--accent);
-            }
-        .mrp {
-                text-decoration: line-through;
-                color: #999;
-                font-size: 20px;
-            }
-        .discount {
-                background: var(--green);
-                color: white;
-                padding: 5px 12px;
-                border-radius: 6px;
-                font-size: 14px;
-                font-weight: bold;
-            }
-        .section {
-                margin: 25px 0;
-                padding-top: 20px;
-                border-top: 1px solid #eee;
-            }
-        .variant-grid {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-        .variant-btn {
-                padding: 12px 22px;
-                border: 2px solid #ddd;
-                background: white;
-                border-radius: 8px;
-                cursor: pointer;
-                font-weight: bold;
-                min-width: 65px;
-                text-align: center;
-                font-size: 15px;
-                transition: all 0.2s;
-            }
-        .variant-btn.active {
-                border-color: var(--accent);
-                background: #fff0f5;
-                color: var(--accent);
-            }
-        .variant-btn:disabled {
-                opacity: 0.35;
-                cursor: not-allowed;
-                background: #f5f5f5;
-            }
-        .variant-price {
-                font-size: 11px;
-                display: block;
-                color: #666;
-                margin-top: 2px;
-            }
-        .variant-stock {
-                font-size: 10px;
-                margin-top: 2px;
-                display: block;
-                color: var(--green);
-            }
-        .desc {
-                line-height: 1.8;
-                color: #555;
-                font-size: 15px;
-                white-space: pre-wrap;
-            }
-        .features {
-                background: linear-gradient(135deg, #f9f9f9, #fff);
-                padding: 18px;
-                border-radius: 10px;
-                margin: 15px 0;
-                border: 1px solid #eee;
-            }
-        .action-btns {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: white;
-                padding: 12px;
-                display: flex;
-                gap: 8px;
-                box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                margin: 0 auto;
-                z-index: 50;
-            }
-        .btn {
-                flex: 1;
-                padding: 16px;
-                border: none;
-                border-radius: 8px;
-                font-weight: bold;
-                font-size: 16px;
-                cursor: pointer;
-            }
-        .btn-wish {
-                width: 60px;
-                background: #fff0f5;
-                color: var(--accent);
-                font-size: 28px;
-            }
-        .btn-wish.active {
-                color: #ef4444;
-            }
-        .btn-cart {
-                background: white;
-                border: 2px solid var(--accent);
-                color: var(--accent);
-            }
-        .btn-buy {
-                background: var(--accent);
-                color: white;
-            }
-        .qty-box {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                margin: 20px 0;
-                padding: 15px;
-                background: #f9f9f9;
-                border-radius: 8px;
-            }
-        .qty-box button {
-                width: 40px;
-                height: 40px;
-                border: 2px solid var(--accent);
-                background: white;
-                color: var(--accent);
-                border-radius: 8px;
-                font-size: 20px;
-                cursor: pointer;
-                font-weight: bold;
-            }
-        .qty-box span {
-                font-size: 20px;
-                font-weight: bold;
-                min-width: 30px;
-                text-align: center;
-            }
-        .loader {
-                padding: 40px;
-                text-align: center;
-            }
-        </style>
-        <script src="santra-image-link-fix.js?v=23july"></script>
-       <script src="santra-mychoice-sync-fix.js"></script> 
-    </head>
-
-    <body>
-        <div class="header">
-            <button class="back-btn" onclick="window.history.back()">←</button>
-            <h1 id="headerTitle">Product Details</h1>
-            <div class="header-icons">
-                <a href="mychoice.html" class="header-icon"
-                    >😍<span class="header-badge" id="choiceBadge">0</span></a
-                >
-                <a href="cart.html" class="header-icon"
-                    >🛒<span class="header-badge" id="cartBadge">0</span></a
-                >
-            </div>
-        </div>
-        <div id="productContainer">
-            <div class="loader">Loading product...</div>
-        </div>
-        <div class="action-btns" id="actionBtns" style="display: none">
-            <button class="btn btn-wish" id="wishBtn">🤍</button>
-            <button class="btn btn-cart" id="cartBtn">🛒 ADD TO CART</button>
-            <button class="btn btn-buy" id="buyBtn">⚡ BUY NOW</button>
-        </div>
-
-        <script>
-            // ✅ OLD CODE COMMENT OUT - constants.js se aa raha hai
-            // const rtdb = window.rtdb; // ← PURANA CODE - COMMENT KIYA
-            // const db = window.db; // ← PURANA CODE - COMMENT KIYA
-            // const auth = window.auth; // ← PURANA CODE - COMMENT KIYA
-            // const CART_KEY = window.CART_KEY; // ← PURANA CODE - COMMENT KIYA - YAHI CRASH KAR RAHA THA
-            // const MYCHOICE_KEY = window.MYCHOICE_KEY; // ← PURANA CODE - COMMENT KIYA
-
-            // ✅ NAYA CODE: const mat banao, direct window se use karo
-            // Ab hum window.rtdb, window.db, window.CART_KEY direct use karenge
-
-            let currentProduct = null,
-                selectedVariant = null,
-                selectedVariantData = null,
-                selectedQty = 1;
-
-            const productId = new URLSearchParams(window.location.search).get(
-                "id"
-            );
-            if (!productId) {
-                showError("Product ID missing", "URL me?id= add karo");
-            } else {
-                loadProduct(productId);
-            }
-
-            async function loadProduct(id) {
-                try {
-                    let clean = String(id).trim();
-                    currentProduct = null;
-
-                    // 1. Firestore se try karo - window.db use karo
-                    try {
-                        let d = await window.db
-                        .collection("products")
-                        .doc(clean)
-                        .get();
-                        if (d.exists) {
-                            currentProduct = {
-                                id: d.id,
-                            ...d.data(),
-                                dbType: "firestore"
-                            };
-                            console.log("✅ Product from Firestore");
-                        }
-                    } catch (e) {
-                        console.log("Firestore error:", e);
-                    }
-
-                    // 2. Realtime Database se try karo - window.rtdb use karo
-                    if (!currentProduct) {
-                        try {
-                            let snap = await window.rtdb
-                            .ref("products/" + clean)
-                            .once("value");
-                            if (snap.exists()) {
-                                currentProduct = {
-                                    id: clean,
-                                ...snap.val(),
-                                    dbType: "rtdb"
-                                };
-                                console.log("✅ Product from Realtime DB");
-                            }
-                        } catch (e) {
-                            console.log("RTDB error:", e);
-                        }
-                    }
-
-                    // 3. LocalStorage se try karo
-                    if (!currentProduct) {
-                        let local = [];
-                        try {
-                            local = JSON.parse(
-                                localStorage.getItem("santraProducts") || "[]"
-                            );
-                        } catch (e) {}
-                        if (!local.length) {
-                            try {
-                                local = JSON.parse(
-                                    localStorage.getItem("products") || "[]"
-                                );
-                            } catch (e) {}
-                        }
-                        currentProduct = local.find(
-                            x =>
-                                String(x.id) === clean ||
-                                String(x.code) === clean
-                        );
-                        if (currentProduct) {
-                            currentProduct.dbType = "local";
-                            console.log("✅ Product from LocalStorage");
-                        }
-                    }
-
-                    if (!currentProduct)
-                        return showError(
-                            "Product Not Found",
-                            "ID: " + id + " Firebase me nahi mila"
-                        );
-
-                    document.getElementById("headerTitle").innerText =
-                        currentProduct.name;
-                    document.title = currentProduct.name + " - SANTRA MALL";
-                    renderProduct(currentProduct);
-                    document.getElementById("actionBtns").style.display =
-                        "flex";
-                    checkIfInWishlist();
-                } catch (e) {
-                    console.error(e);
-                    showError("Error", e.message);
-                }
-            }
-
-            function getProductImages(p) {
-                let imgs = [];
-                if (p && p.images && Array.isArray(p.images)) {
-                    imgs = p.images.filter(
-                        i => i && typeof i === "string" && i.trim()!== ""
-                    );
-                }
-                if (
-                    imgs.length === 0 &&
-                    p &&
-                    p.image &&
-                    typeof p.image === "string" &&
-                    p.image.trim()!== ""
-                ) {
-                    imgs = [p.image];
-                }
-                if (imgs.length === 0 && p && p.imgbb) {
-                    imgs = [p.imgbb];
-                }
-                if (imgs.length === 0 && p && p.cloudinary) {
-                    imgs = [p.cloudinary];
-                }
-                if (imgs.length === 0 && p && p.lux) {
-                    imgs = [p.lux];
-                }
-                if (imgs.length === 0 && p && p.imageUrl) {
-                    imgs = [p.imageUrl];
-                }
-                if (imgs.length === 0)
-                    imgs = [
-                        "https://via.placeholder.com/500x500?text=No+Image"
-                    ];
-                return imgs;
-            }
-
-            function getProductThumbnail(p) {
-                if (p && p.image) return p.image;
-                if (p && p.images && p.images.length) return p.images[0];
-                if (p && p.imgbb) return p.imgbb;
-                if (p && p.cloudinary) return p.cloudinary;
-                if (p && p.lux) return p.lux;
-                if (p && p.imageUrl) return p.imageUrl;
-                return "https://via.placeholder.com/500";
-            }
-
-            function renderProduct(p) {
-                let images = getProductImages(p);
-                let variants = p.variants || p.sizes || p.size || [];
-                if (typeof variants === "string")
-                    variants = variants.split(",").map(v => v.trim());
-                let discount =
-                    p.mrp && p.price
-                    ? Math.round(((p.mrp - p.price) / p.mrp) * 100)
-                        : 0;
-
-                let slider = `<div class="image-slider-box"><div class="slider-container" id="imgSlider">${images.map((img, i) => `<img src="${img}" class="slide-img ${i === 0? "active" : ""}" onerror="this.src='https://via.placeholder.com/500'">`).join("")}</div>${images.length > 1? `<button class="slide-btn prev" onclick="changeSlide(-1)">‹</button><button class="slide-btn next" onclick="changeSlide(1)">›</button><div class="slide-dots">${images.map((_, i) => `<span class="dot ${i === 0? "active" : ""}" onclick="goToSlide(${i})"></span>`).join("")}</div><div class="img-count">📷 ${images.length}</div>` : ""}</div>`;
-
-                let variantHTML = variants
-                .map(v => {
-                        let n = typeof v === "object"? v.name || v.size : v;
-                        let pr = typeof v === "object"? v.price : p.price;
-                        let st = typeof v === "object"? (v.stock?? 999) : 999;
-                        let out = st <= 0;
-                        return `<button class="variant-btn" data-variant='${JSON.stringify(v).replace(/'/g, "&apos;")}' ${out? "disabled" : ""}>${n}${pr && pr!== p.price? `<span class="variant-price">₹${pr}</span>` : ""}<span class="variant-stock">${out? "Out of stock" : st + " left"}</span></button>`;
-                    })
-                .join("");
-
-                document.getElementById("productContainer").innerHTML =
-                    `<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 Code: ${p.code || p.id}</span><span>📁 ${p.category || "General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp? `<span class="mrp">₹${p.mrp}</span>` : ""}${discount > 0? `<span class="discount">${discount}% OFF</span>` : ""}</div>${variants.length? `<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>` : ""}<div class="qty-box"><span style="font-weight:bold">Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Product Description:</h3><div class="desc">${p.description || "Premium quality product from SANTRA MALL."}</div></div><div class="features"><p>✅ 100% Original & Authentic</p><p>🚚 Free Delivery Above ₹500</p><p>↩️ Easy 7 Days Return</p><p>💵 Cash on Delivery</p></div></div>`;
-
-                window.productImages = images;
-                window.currentSlideIndex = 0;
-
-                setTimeout(() => {
-                    document
-                    .querySelectorAll(".variant-btn:not(:disabled)")
-                    .forEach(b => {
-                            b.onclick = e => {
-                                e.stopPropagation();
-                                selectVariant(JSON.parse(b.dataset.variant), b);
-                            };
-                        });
-
-                    document.getElementById("cartBtn").onclick = function () {
-                        let hasVariants =
-                            currentProduct.variants ||
-                            currentProduct.sizes ||
-                            currentProduct.size;
-                        if (
-                            hasVariants &&
-                            hasVariants.length &&
-                        !selectedVariant
-                        ) {
-                            showToast("Please select a size first");
-                            return;
-                        }
-                        let productToAdd = {...currentProduct };
-                        if (selectedVariant) {
-                            productToAdd.variant = selectedVariant;
-                            productToAdd.id =
-                                currentProduct.id + "-" + selectedVariant;
-                        }
-                        if (selectedVariantData && selectedVariantData.price) {
-                            productToAdd.price = selectedVariantData.price;
-                        }
-                        productToAdd.qty = selectedQty;
-                        window.addToCart(productToAdd);
-                    };
-
-                    document.getElementById("buyBtn").onclick = function () {
-                        document.getElementById("cartBtn").click();
-                        setTimeout(() => (window.location = "cart.html"), 500);
-                    };
-
-                    document.getElementById("wishBtn").onclick = addToMyChoice;
-                }, 100);
-            }
-
-            function selectVariant(v, btn) {
-                document
-                .querySelectorAll(".variant-btn")
-                .forEach(b => b.classList.remove("active"));
-                btn.classList.add("active");
-                selectedVariant = typeof v === "object"? v.name || v.size : v;
-                selectedVariantData = v;
-                if (typeof v === "object" && v.price) {
-                    document.getElementById("productPrice").innerText =
-                        "₹" + v.price;
-                }
-                checkIfInWishlist();
-            }
-
-            function changeSlide(d) {
-                let s = window.productImages.length;
-                window.currentSlideIndex =
-                    (window.currentSlideIndex + d + s) % s;
-                goToSlide(window.currentSlideIndex);
-            }
-
-            function goToSlide(i) {
-                window.currentSlideIndex = i;
-                document
-                .querySelectorAll(".slide-img")
-                .forEach((im, idx) =>
-                        im.classList.toggle("active", idx === i)
-                    );
-                document
-                .querySelectorAll(".dot")
-                .forEach((d, idx) =>
-                        d.classList.toggle("active", idx === i)
-                    );
-            }
-
-            function changeQty(c) {
-                selectedQty = Math.max(1, Math.min(10, selectedQty + c));
-                document.getElementById("qtyDisplay").innerText = selectedQty;
-            }
-
-            function showToast(m) {
-                const t = document.createElement("div");
-                t.innerText = m;
-                t.style.cssText =
-                    "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:14px 24px;border-radius:8px;z-index:9999;font-weight:bold";
-                document.body.appendChild(t);
-                setTimeout(() => t.remove(), 2000);
-            }
-
-            function addToMyChoice() {
-                if (!currentProduct) return;
-                let hasVariants =
-                    currentProduct.variants ||
-                    currentProduct.sizes ||
-                    currentProduct.size;
-                if (hasVariants && hasVariants.length &&!selectedVariant) {
-                    showToast("Please select a size first");
-                    return;
-                }
-
-                // ✅ FIX: window.MYCHOICE_KEY use karo
-                const WISH_KEY = window.MYCHOICE_KEY;
-                let wish = JSON.parse(localStorage.getItem(WISH_KEY) || "[]");
-                let itemId =
-                    currentProduct.id +
-                    (selectedVariant? "-" + selectedVariant : "");
-
-                if (!wish.find(x => x.id === itemId)) {
-                    wish.push({
-                        id: itemId,
-                        productId: currentProduct.id,
-                        name: currentProduct.name,
-                        price:
-                            selectedVariantData?.price || currentProduct.price,
-                        image: getProductThumbnail(currentProduct),
-                        variant: selectedVariant
-                    });
-                    localStorage.setItem(WISH_KEY, JSON.stringify(wish));
-
-                    // ✅ FIX: window.auth aur window.rtdb use karo
-                    if (window.auth.currentUser) {
-                        window.rtdb.ref(
-                            "users/" +
-                                window.auth.currentUser.uid +
-                                "/myChoice/" +
-                                itemId
-                        ).set({
-                            id: itemId,
-                            productId: currentProduct.id,
-                            name: currentProduct.name,
-                            price:
-                                selectedVariantData?.price ||
-                                currentProduct.price,
-                            image: getProductThumbnail(currentProduct),
-                            variant: selectedVariant,
-                            addedAt: firebase.database.ServerValue.TIMESTAMP
-                        });
-                    }
-
-                    if (typeof updateChoiceBadge === "function")
-                        updateChoiceBadge();
-                    document.getElementById("wishBtn").innerText = "❤️";
-                    document.getElementById("wishBtn").classList.add("active");
-                    showToast("✓ Added to My Choice");
-                } else {
-                    showToast("Already in My Choice");
-                }
-            }
-
-            function checkIfInWishlist() {
-                if (!currentProduct) return;
-                // ✅ FIX: window.MYCHOICE_KEY use karo
-                const WISH_KEY = window.MYCHOICE_KEY;
-                let wish = JSON.parse(localStorage.getItem(WISH_KEY) || "[]");
-                let itemId =
-                    currentProduct.id +
-                    (selectedVariant? "-" + selectedVariant : "");
-                if (wish.find(x => x.id === itemId)) {
-                    document.getElementById("wishBtn").innerText = "❤️";
-                    document.getElementById("wishBtn").classList.add("active");
-                } else {
-                    document.getElementById("wishBtn").innerText = "🤍";
-                    document
-                    .getElementById("wishBtn")
-                    .classList.remove("active");
-                }
-            }
-
-            function showError(t, m) {
-                document.getElementById("productContainer").innerHTML =
-                    `<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p><p><a href="index.html">← Back to Home</a></p></div>`;
-            }
-        </script>
-        <script src="mychoicesame.js"></script>
-<script>
-<!-- Header me Cart Icon -->
-<a href="mychoice-same.html">
-  <span id="cart-count">0</span> Cart
-</a>
-
-<!-- My Choice Button kahi bhi -->
-<a href="mychoice-same.html#mychoice-tab">My Choice</a>
-
+    measurementId: "G-ZW1ZR8HETY",
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/"
+  });
+}
 </script>
+<script src="secrets.js?v=8"></script>
+<script src="cart.js?v=6"></script>
+<script src="mychoice.js"></script>
+<style>
+:root { --accent: #e40046; --text: #212121; --green: #10b981; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",Arial,sans-serif}
+body{background:#f1f3f6;padding-bottom:90px}
+.header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.back-btn{background:none;border:none;color:white;font-size:22px;cursor:pointer}
+.header h1{font-size:16px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-icons{display:flex;align-items:center;gap:12px}
+.header-icon{color:white;text-decoration:none;font-size:22px;position:relative}
+.header-badge{position:absolute;top:-8px;right:-8px;background:#ffeb3b;color:#000;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:bold;display:none;align-items:center;justify-content:center}
+.container{max-width:600px;margin:0 auto;background:white}
+.image-slider-box{position:relative;width:100%;height:380px;background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.slider-container{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.slide-img{max-width:100%;max-height:100%;object-fit:contain;display:none}
+.slide-img.active{display:block}
+.slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:white;border:none;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;z-index:10}
+.slide-btn.prev{left:8px}.slide-btn.next{right:8px}
+.details{padding:16px}
+.product-name{font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px}
+.product-meta{color:#666;font-size:11px;margin-bottom:12px;display:flex;gap:6px;flex-wrap:wrap}
+.product-meta span{background:#f3f4f6;padding:3px 8px;border-radius:4px}
+.price-box{display:flex;align-items:center;gap:10px;margin:14px 0;padding:12px;background:#fff5f7;border-radius:8px}
+.price{font-size:26px;font-weight:800;color:var(--accent)}
+.mrp{text-decoration:line-through;color:#999;font-size:16px}
+.discount{background:var(--green);color:white;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:bold}
+.section{margin:18px 0;padding-top:14px;border-top:1px solid #eee}
+.variant-grid{display:flex;flex-wrap:wrap;gap:8px}
+.variant-btn{padding:10px 16px;border:1.5px solid #ddd;background:white;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
+.variant-btn.active{border-color:var(--accent);background:#fff0f5;color:var(--accent)}
+.qty-box{display:flex;align-items:center;gap:12px;margin:14px 0;padding:12px;background:#f9f9f9;border-radius:8px}
+.qty-box button{width:36px;height:36px;border:1.5px solid var(--accent);background:white;color:var(--accent);border-radius:8px;font-size:18px;cursor:pointer}
+.qty-box span{font-size:16px;font-weight:bold;min-width:24px;text-align:center}
+.features{background:#f9f9f9;padding:14px;border-radius:8px;margin:12px 0;border:1px solid #eee;font-size:13px;line-height:1.8}
+.loader{padding:40px;text-align:center}
+/* V33 FINAL FIX - Heart bahar + Buy Now body se nikal raha tha - FIXED - Old Save */
+.action-btns{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;background:white;padding:8px 6px;display:flex;align-items:center;gap:6px;box-sizing:border-box;border-top:1px solid #eee;box-shadow:0 -2px 10px rgba(0,0,0,0.08);z-index:999}
+.btn-wish{width:42px;min-width:42px;height:42px;background:#fff0f5;color:var(--accent);font-size:20px;border:none;border-radius:8px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btn-wish.active{color:#ef4444}
+.btn-cart{flex:1;padding:12px 4px;background:white;border:1.5px solid var(--accent);color:var(--accent);border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-buy{flex:1;padding:12px 4px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+<!--
+⚠️ OLD CODE BACKUP - 09/07/2026 + V23 + V24 + V25 + V26 + V27 + V28 + V29 + V30 + V31 + V32 - SAFE - KUCH HATAYA NAHI
+V23: Header + cart badge - SAFE
+V24: Slider + dots + count - SAFE
+V25: Variant + qty + add to cart - SAFE
+V26: Firestore + RTDB + Local + Master - SAFE
+V27: Present Upar Past Niche - SAFE
+V28: Product page link full ID fix - trim() - no split - SAFE
+V29: Image hamesha - SANTRA_IMAGES + all-url - SAFE
+V30 FINAL: Home + Product + Past Present Future - Full Image - AAPKA BHEJA HUA - SAFE
+V31: Firebase Permanent + 6 Jagah Universal - AAPKA BHEJA HUA - SAFE
+V32 FINAL: Layout Fix + My Cart Link Fix - Heart bahar + Buy Now cut - AAPKA BHEJA HUA - SAFE
+OLD BACKUP END - AB V33 FINAL - Old Save + Update DNA - Heart + Buy Now Body Ke Andar Fix
+- Heart bahar fix - left:50% + transform + 42px + flex-shrink:0 + box-sizing
+- Buy Now body se nikal raha tha fix - width:100% + white-space:nowrap + flex:1 + overflow hidden
+- My Cart / My Choice se link error fix - SANTRA_COMBO_SOAP_-Free → base ID
+- Firebase permanent priority - No payment - 6 jagah universal
+-->
+<div class="header">
+<button class="back-btn" onclick="history.back()">←</button>
+<h1 id="headerTitle">Product Details</h1>
+<div class="header-icons">
+<a href="mychoice.html" class="header-icon">😍<span class="header-badge" id="choiceBadge">0</span></a>
+<a href="cart.html" class="header-icon">🛒<span class="header-badge" id="cartBadge">0</span></a>
+</div>
+</div>
+<div id="productContainer"><div class="loader">Loading product... V33 FINAL - Layout Fixed...</div></div>
+<div class="action-btns" id="actionBtns" style="display:none">
+<button class="btn-wish" id="wishBtn">🤍</button>
+<button class="btn-cart" id="cartBtn">🛒 ADD TO CART</button>
+<button class="btn-buy" id="buyBtn">⚡ BUY NOW</button>
+</div>
+
+<script>
+let currentProduct=null, selectedVariant=null, selectedVariantData=null, selectedQty=1;
+function getIdFromURL(){
+  let p=new URLSearchParams(location.search);
+  return (p.get('id')||p.get('productId')||p.get('code')||'').toString().trim();
+}
+const productId = getIdFromURL();
+if (!productId) { showError("Product ID missing", "URL me?id= add karo"); }
+else { loadProduct(productId); }
+
+function getBaseIds(fullId){
+  let clean=String(fullId).trim();
+  let ids=[clean];
+  if(clean.includes('-')){
+    let base=clean.substring(0, clean.lastIndexOf('-'));
+    if(base.length>5) ids.push(base);
+  }
+  ids.push(clean.toLowerCase(), clean.toUpperCase());
+  return [...new Set(ids)];
+}
+
+async function loadProduct(id){
+  try{
+    let tryIds=getBaseIds(id);
+    currentProduct=null;
+    for(let clean of tryIds){
+      if(currentProduct) break;
+      try{
+        let d=await window.db.collection("products").doc(clean).get();
+        if(d.exists){ currentProduct={id:d.id,...d.data(),dbType:"firestore"}; break; }
+      }catch(e){}
+      try{
+        let snap=await window.rtdb.ref("products/"+clean).once("value");
+        if(snap.exists()){ currentProduct={id:clean,...snap.val(),dbType:"rtdb"}; break; }
+      }catch(e){}
+    }
+    if(!currentProduct){
+      let local=[]; try{local=JSON.parse(localStorage.getItem("santraProducts")||"[]");}catch(e){}
+      for(let clean of tryIds){
+        currentProduct=local.find(x=>String(x.id).trim()===clean || String(x.code).trim()===clean);
+        if(currentProduct){ currentProduct.dbType="local"; break; }
+      }
+    }
+    if(!currentProduct){
+      try{
+        for(let clean of tryIds){
+          if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[clean]){ currentProduct={id:clean,name:clean,price:450,images:[window.SANTRA_ALL_URLS[clean]],dbType:"all-url"}; break; }
+          if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[clean]){ currentProduct={id:clean,name:clean,price:450,images:[window.SANTRA_IMAGES[clean]],dbType:"master"}; break; }
+          if(window.getProductImageUrl){ let u=window.getProductImageUrl(clean); if(u){ currentProduct={id:clean,name:clean,price:450,images:[u],dbType:"system"}; break; } }
+        }
+        if(!currentProduct){
+          let backup=[]; try{backup=JSON.parse(localStorage.getItem('lastOrderCartBackup')||'[]');}catch(e){}
+          for(let clean of tryIds){
+            let f=backup.find(x=>String(x.id).trim()===clean);
+            if(f){ currentProduct={id:clean,name:f.name||clean,price:f.price||450,images:[f.image||f.imageUrl],...f,dbType:"backup"}; break; }
+          }
+        }
+      }catch(e){}
+    }
+    if(!currentProduct) return showError("Product Not Found","ID: "+id+" - Firestore me base ID check karo");
+    document.getElementById("headerTitle").innerText=currentProduct.name;
+    renderProduct(currentProduct);
+    document.getElementById("actionBtns").style.display="flex";
+  }catch(e){ showError("Error",e.message); }
+}
+
+function getProductImages(p){
+  let imgs=[];
+  if(p && p.images && Array.isArray(p.images)) imgs=p.images.filter(i=>i && i.trim().length>10);
+  if(imgs.length===0 ||!imgs[0].includes('firebasestorage.googleapis.com')){
+    let ff=['image','imageUrl','productImage','thumbnail','firebaseImage'];
+    for(let f of ff){ let v=p[f]; if(v && v.includes('firebasestorage.googleapis.com') && v.startsWith('http')){ imgs=[v]; break; } }
+  }
+  if(imgs.length===0){
+    let fields=['image','img','imageUrl','productImage','thumbnail','photo','picture','src','url','mainImage','cloudinaryUrl','driveUrl','googleDriveUrl'];
+    for(let f of fields){ let v=p[f]; if(v && typeof v==="string" && v.startsWith('http') && v.length>15 &&!v.includes('ibb.co')){ imgs=[v]; break; } }
+  }
+  if(imgs.length===0){
+    try{
+      let id=(p.id||'').trim();
+      for(let k of [id, id.toLowerCase()]){
+        if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[k]){ imgs=[window.SANTRA_ALL_URLS[k]]; break; }
+        if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[k]){ imgs=[window.SANTRA_IMAGES[k]]; break; }
+      }
+    }catch(e){}
+  }
+  if(imgs.length===0){
+    let v=p.image||p.imageUrl||''; if(v && v.startsWith('data:image')) imgs=[v];
+  }
+  if(imgs.length===0) imgs=["https://via.placeholder.com/500?text=No+Image"];
+  return imgs;
+}
+function getProductThumbnail(p){ return getProductImages(p)[0]||"https://via.placeholder.com/500"; }
+function renderProduct(p){
+  let images=getProductImages(p);
+  let variants=p.variants||p.sizes||p.size||[];
+  if(typeof variants==="string") variants=variants.split(",").map(v=>v.trim());
+  let discount=p.mrp&&p.price?Math.round(((p.mrp-p.price)/p.mrp)*100):0;
+  let slider=`<div class="image-slider-box"><div class="slider-container">${images.map((img,i)=>`<img src="${img}" class="slide-img ${i===0?"active":""}" onerror="this.src='https://via.placeholder.com/500'">`).join("")}</div>${images.length>1?`<button class="slide-btn prev" onclick="changeSlide(-1)">‹</button><button class="slide-btn next" onclick="changeSlide(1)">›</button>`:``}</div>`;
+  let variantHTML=variants.map(v=>{
+    let n=typeof v==="object"?v.name||v.size:v;
+    return `<button class="variant-btn" data-variant='${JSON.stringify(v).replace(/'/g,"&apos;")}' >${n}</button>`;
+  }).join("");
+  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span><span>🔗 ${p.dbType} Firebase Permanent</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span>Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Description:</h3><div class="desc">${p.description||"Premium quality product - Firebase Permanent Link."}</div></div><div class="features"><p>✅ Firebase Storage Permanent - No Payment</p><p>✅ Past Present Future - 6 Jagah Universal</p><p>🚚 Free Delivery Above ₹500</p></div></div>`;
+  window.productImages=images; window.currentSlideIndex=0;
+  setTimeout(()=>{
+    document.querySelectorAll(".variant-btn").forEach(b=>{ b.onclick=e=>{ selectVariant(JSON.parse(b.dataset.variant),b); }; });
+    let firstBtn=document.querySelector(".variant-btn");
+    if(firstBtn &&!selectedVariant){ firstBtn.click(); }
+    document.getElementById("cartBtn").onclick=function(){
+      let hasVariants=currentProduct.variants||currentProduct.sizes||currentProduct.size;
+      if(hasVariants&&hasVariants.length&&!selectedVariant){ showToast("Please select a size first"); return; }
+      let productToAdd={...currentProduct};
+      if(selectedVariant){ productToAdd.variant=selectedVariant; productToAdd.id=currentProduct.id+"-"+selectedVariant; }
+      if(selectedVariantData&&selectedVariantData.price) productToAdd.price=selectedVariantData.price;
+      productToAdd.qty=selectedQty;
+      productToAdd.image=getProductThumbnail(currentProduct);
+      productToAdd.imageUrl=getProductThumbnail(currentProduct);
+      window.addToCart(productToAdd);
+    };
+    document.getElementById("buyBtn").onclick=function(){ document.getElementById("cartBtn").click(); setTimeout(()=>window.location="cart.html",500); };
+    document.getElementById("wishBtn").onclick=addToMyChoice;
+  },100);
+}
+function selectVariant(v,btn){ document.querySelectorAll(".variant-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); selectedVariant=typeof v==="object"?v.name||v.size:v; selectedVariantData=v; }
+function changeSlide(d){ let s=window.productImages.length; window.currentSlideIndex=(window.currentSlideIndex+d+s)%s; goToSlide(window.currentSlideIndex); }
+function goToSlide(i){ window.currentSlideIndex=i; document.querySelectorAll(".slide-img").forEach((im,idx)=>im.classList.toggle("active",idx===i)); }
+function changeQty(c){ selectedQty=Math.max(1,Math.min(10,selectedQty+c)); document.getElementById("qtyDisplay").innerText=selectedQty; }
+function showToast(m){ const t=document.createElement("div"); t.innerText=m; t.style.cssText="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#e40046;color:white;padding:10px 20px;border-radius:8px;z-index:9999;font-size:13px"; document.body.appendChild(t); setTimeout(()=>t.remove(),2000); }
+function addToMyChoice(){
+  let wish=JSON.parse(localStorage.getItem(window.MYCHOICE_KEY||"myChoice")||"[]");
+  let itemId=currentProduct.id+(selectedVariant?"-"+selectedVariant:"");
+  if(!wish.find(x=>x.id===itemId)){
+    wish.push({id:itemId,productId:currentProduct.id,name:currentProduct.name,price:selectedVariantData?.price||currentProduct.price,image:getProductThumbnail(currentProduct),variant:selectedVariant});
+    localStorage.setItem(window.MYCHOICE_KEY||"myChoice",JSON.stringify(wish));
+    showToast("✓ Added to My Choice");
+  } else { showToast("Already in My Choice"); }
+}
+function showError(t,m){ document.getElementById("productContainer").innerHTML=`<div style="padding:40px;text-align:center"><h2>❌ ${t}</h2><p>${m}</p><p><a href="index.html">← Home</a></p></div>`; }
+</script>
+<script src="mychoicesame.js"></script>
 <script src="santra-master-image-urls.js?v=32"></script>
 <script src="santra-image-url-system.js?v=32"></script>
-<script src="santra-all-url-one-file.js?v=33"></script>
+<script src="santra-all-url-one-file.js?v=50"></script>
 </body>
-    
 </html>

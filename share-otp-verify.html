@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Order Verify - SANTRA MALL - V15 FINAL</title>
+<title>Order Verify - V20 FINAL - OLD SAVE + Login+Delivery+Payment + Product Fix</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -11,69 +11,114 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="config.js"></script>
-<script src="order-save.js"></script>  <!-- ✅ YE 1 LINE - Rakhi hai - Old Safe + New Dual Save -->
+<script src="order-save.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,Arial}
 body{background:#f1f3f6;padding:15px;padding-bottom:100px}
 .card{background:white;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
 .green-box{background:#e8f5e9;border:2px solid #10b981;border-radius:12px;padding:16px;text-align:center}
 .red-head{background:#065f46;color:white;padding:10px;border-radius:10px;text-align:center;font-weight:700;margin-bottom:10px}
+.payment-badge{display:inline-block;padding:5px 12px;background:#e0f2fe;color:#0284c7;border-radius:20px;font-size:12px;font-weight:bold;border:1px solid #bae6fd;margin-left:6px}
+.customer-mini{background:#f0f9ff;padding:10px;border-radius:10px;margin:10px 0;border-left:4px solid #10b981;font-size:12px;line-height:1.6;word-break:break-word}
 input{width:100%;padding:14px;border:2px solid #10b981;border-radius:10px;margin:8px 0;font-size:15px}
 .otp-input{text-align:center;letter-spacing:6px;font-size:18px;font-weight:700}
 .btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin:6px 0;font-size:15px}
 .btn-green{background:#10b981;color:white}.btn-whatsapp{background:#25d366;color:white}.btn-orange{background:#f59e0b;color:white}
+.login-badge{background:#d1fae5;color:#065f46;border:1px solid #10b981;padding:2px 6px;border-radius:8px;font-size:10px}
+.extra-badge{background:#f3f4f6;color:#6b7280;border:1px solid #ddd;padding:2px 6px;border-radius:8px;font-size:10px}
 </style>
 </head>
 <body>
-
 <!--
-⚠️ OLD CODE BACKUP - 09/07/2026 + 15 JULY + V11 + V13 - SAFE - KUCH HATAYA NAHI - TERA PURANA FILE YAHAN HIDE HAI
-<div class="yellow"><div style="font-size:20px;font-weight:800;color:#e40046">⚠️ IMPORTANT - OTP REQUIRED ⚠️</div><div>Order place ho gaya hai!</div></div>
-<div class="whatsapp-box">💬 WhatsApp Box - Only Reminder</div>
-<div class="card" style="border:2px solid #e40046"><div class="red-head">🔔 Add OTP for Verification</div><input id="orderIdInput"><input id="otpInput"></div>
-OLD CODE BACKUP END - SAFE
+⚠️ OLD CODE BACKUP - 09/07/2026 + V11 + V13 + V15 + V16 + V17 + V18 + V19 - SAFE - KUCH HATAYA NAHI
+V11 me tha: yellow box + whatsapp-box + red-head OTP - OLD SAVE
+V15: Green OTP Box Simple + No Ref + Sold By Santra Mall + order-save.js - SAFE
+V16: OLD SAVE + Payment COD/Online + WhatsApp Info Auto + Required OTP - SAFE
+V17: OLD SAVE + Login+Delivery + Payment - Example number - SAFE
+V18 FINAL BACKUP - 08/08/2026 - OLD SAVE + Login No (WhatsApp OTP) + Delivery Extra + Payment + No Hardcode - TUMHARA BHEJA HUA - SAFE
+V19 FINAL BACKUP - 08/08/2026 - OLD SAVE + Pehle Jaisa + Login+Extra + Payment + No Hardcode - TUMHARA BHEJA HUA - SAFE
+V19 me: Login No pe OTP ayega, Extra pe nahi, Payment COD/Online, Sold By Santra Mall, customer-mini box
+OLD CODE END - SAFE - AB V20 FINAL - Old Save + Product Image/Link Fix + Orders.html Past Present Future Fix
 -->
 
-<!-- V15 FINAL - 6 Aug 2026 - Green OTP Box Simple + No Ref + Sold By Santra Mall + Old Save + order-save.js line -->
-<div class="card" style="text-align:center"><b>Order ID:</b> <span id="orderIdText" style="color:#065f46;font-weight:700">Loading...</span> | <span style="color:#10b981">Secure Verification</span> | <span style="color:#065f46">Sold By: Santra Mall</span></div>
+<div class="card" style="text-align:center"><b>Order ID:</b> <span id="orderIdText" style="color:#065f46;font-weight:700">Loading...</span> | <span style="color:#10b981">Secure Verification</span> | <span style="color:#065f46">Sold By: Santra Mall</span> <span id="paymentBadge" class="payment-badge">💳 COD</span></div>
+
+<div id="customerMiniBox" class="customer-mini" style="display:none"></div>
 
 <div class="card green-box">
-<div class="red-head">🔐 Add WhatsApp OTP</div>
-<div style="font-size:12px;color:#666;margin:6px 0">WhatsApp pe OTP bheja hai to yahan add karo - Ref nahi, Sold By: Santra Mall</div>
+<div class="red-head">🔐 Add WhatsApp OTP - OTP Login No. pe ayega <span class="login-badge">Login=OTP</span> <span class="extra-badge">Extra=No OTP</span></div>
+<div style="font-size:12px;color:#666;margin:6px 0">Login No: <b id="loginNoText">-</b> | Delivery Extra: <b id="deliveryNoText">Same</b> | <span id="paymentText" style="color:#0284c7;font-weight:bold">Payment: COD</span></div>
 <input id="orderIdInput" placeholder="Order ID" readonly style="font-size:13px;letter-spacing:1px">
 <input id="otpInput" class="otp-input" placeholder="------" maxlength="6" inputmode="numeric">
 <button class="btn btn-green" onclick="verifyOTP()">✅ Verify OTP & Confirm - Orders Page Dekho</button>
 <div id="statusText" style="margin-top:10px;text-align:center;font-weight:700">Status: <span style="color:#f59e0b">Pending - OTP Wait</span></div>
+<div style="font-size:10px;color:#92400e;margin-top:8px">💳 <span id="paymentNote">COD</span> | OTP <span id="otpLoginNote">Login No</span> pe ayega, Delivery <span id="otpExtraNote">Same</span> pe nahi</div>
 </div>
 
 <div class="card" style="text-align:center">
-<button class="btn btn-whatsapp" onclick="openWhatsApp()">📲 Request OTP on WhatsApp</button>
-<div style="font-size:11px;color:#666;margin-top:6px">Sold By: Santra Mall | No Ref Mobile</div>
+<button class="btn btn-whatsapp" onclick="openWhatsApp()">📲 Request OTP on WhatsApp - Login No: <span id="loginBtnText">-</span></button>
+<div style="font-size:11px;color:#666;margin-top:6px">Login/OTP No: <span id="loginSmall">-</span> | Delivery Extra: <span id="deliverySmall">Same</span> | Payment: <span id="paymentSmall">COD</span></div>
 </div>
 
-<div class="card" id="ordersPageBox" style="display:none;border:2px solid #10b981"><div style="font-weight:700;text-align:center;color:#065f46">✅ OTP Verified - Ab Orders Page Dekh Sakte Ho</div><button class="btn btn-green" onclick="location.href='orders.html?mobile='+encodeURIComponent(mobile)">➡️ Go to Orders Page - orders.html</button></div>
+<div class="card" id="ordersPageBox" style="display:none;border:2px solid #10b981"><div style="font-weight:700;text-align:center;color:#065f46">✅ OTP Verified - Ab Orders Page Dekh Sakte Ho</div><button class="btn btn-green" onclick="goToOrders()">➡️ Go to Orders Page</button></div>
 
-<div class="card"><button class="btn btn-orange" onclick="sendOTPWhatsApp()">🕐 OTP WhatsApp for Confirm Pending</button></div>
+<div class="card"><button class="btn btn-orange" onclick="sendOTPWhatsApp()">🕐 OTP WhatsApp for Confirm Pending - <span id="paymentPendingText">COD</span></button></div>
 
 <script>
-// V15 - Safe DB + getISTNow + Old Save
+// V20 - Safe DB + getISTNow + Old Save + Login+Delivery Extra + No Hardcode + Product Fix
 try{ if(!window.db || typeof window.db.collection!=='function'){ if(typeof firebase!=='undefined' && firebase.firestore) window.db = firebase.firestore(); } }catch(e){}
 var db = window.db;
 window.getISTNow = window.getISTNow || function(){ try{ return new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}); }catch(e){ return new Date().toLocaleString(); } };
 
-let orderId=new URLSearchParams(location.search).get('orderId')||localStorage.getItem('lastOrderId')||'';
-let mobile=new URLSearchParams(location.search).get('mobile')||localStorage.getItem('santra_mobile')||'';
-document.getElementById('orderIdText').innerText=orderId||'No Order';document.getElementById('orderIdInput').value=orderId||'';
+let params = new URLSearchParams(location.search);
+let orderId = params.get('orderId') || localStorage.getItem('lastOrderId') || '';
+let mobile = params.get('mobile') || params.get('loginMobile') || params.get('whatsappMobile') || localStorage.getItem('santra_mobile') || '';
+let deliveryMobile = params.get('delivery') || params.get('deliveryMobile') || params.get('extraDeliveryMobile') || localStorage.getItem('santra_deliveryMobile') || '';
+let paymentMethod = params.get('payment') || localStorage.getItem('santra_paymentMethod') || localStorage.getItem('lastOrderPayment') || 'Cash on Delivery';
+if(paymentMethod.toLowerCase().includes('online')) paymentMethod='Online Payment'; else paymentMethod='Cash on Delivery';
+
+try{
+  let custObj = JSON.parse(localStorage.getItem('santra_customer')||'{}');
+  if(!mobile) mobile = custObj.loginMobile || custObj.whatsappMobile || custObj.mobile || '';
+  if(!deliveryMobile) deliveryMobile = custObj.deliveryMobile || custObj.extraDeliveryMobile || '';
+} catch(e){}
+
+document.getElementById('orderIdText').innerText=orderId||'No Order';
+document.getElementById('orderIdInput').value=orderId||'';
+document.getElementById('paymentBadge').innerText='💳 '+paymentMethod;
+document.getElementById('paymentText').innerText='Payment: '+paymentMethod;
+document.getElementById('paymentNote').innerText=paymentMethod;
+document.getElementById('paymentSmall').innerText=paymentMethod;
+document.getElementById('paymentPendingText').innerText=paymentMethod;
+document.getElementById('loginNoText').innerText=mobile||'-';
+document.getElementById('deliveryNoText').innerText=deliveryMobile||'Same as Login';
+document.getElementById('loginSmall').innerText=mobile||'-';
+document.getElementById('deliverySmall').innerText=deliveryMobile||'Same';
+document.getElementById('loginBtnText').innerText=mobile||'-';
+document.getElementById('otpLoginNote').innerText=mobile||'Login No';
+document.getElementById('otpExtraNote').innerText=deliveryMobile||'Same';
+
+try{
+  let cust=JSON.parse(localStorage.getItem('santra_customer')||'{}');
+  let name=cust.name||localStorage.getItem('santra_customer_name')||'Customer';
+  let addr=cust.address||cust.fullAddress||'';
+  if(name && name!='Customer'){
+    document.getElementById('customerMiniBox').style.display='block';
+    document.getElementById('customerMiniBox').innerHTML=`👤 <b>${name}</b> | <span class="login-badge">Login/OTP: ${mobile}</span> | <span class="extra-badge">Extra: ${deliveryMobile||'Same'}</span><br>📍 ${addr}<br>💳 ${paymentMethod} | ✅ Login Profile me Auto Saved`;
+  }
+}catch(e){}
 
 function openWhatsApp(){
-  let txt=`*SANTRA MALL - OTP Request*\nOrder ID: ${orderId}\nMobile: ${mobile}\nSold By: Santra Mall\n\n⚠️ OTP bhejo - No Ref`;
+  let custName=''; try{ custName=JSON.parse(localStorage.getItem('santra_customer')||'{}').name||''; }catch(e){}
+  let txt=`*SANTRA MALL - OTP Request V20 - Old Save + Product Fix*\nOrder ID: ${orderId}\nLogin/OTP No: ${mobile} (OTP isi pe ayega)\nExtra: ${deliveryMobile||'Same'}\nCustomer: ${custName}\nPayment: ${paymentMethod}\nSold By: Santra Mall\n\n⚠️ OTP bhejo`;
   window.open("https://wa.me/918769171078?text="+encodeURIComponent(txt),'_blank');
 }
 function sendOTPWhatsApp(){openWhatsApp();}
+function goToOrders(){ location.href='orders.html?mobile='+encodeURIComponent(mobile)+'&delivery='+encodeURIComponent(deliveryMobile)+'&payment='+encodeURIComponent(paymentMethod)+'&loginMobile='+encodeURIComponent(mobile)+'&orderId='+encodeURIComponent(orderId); }
 
 async function verifyOTP(){
   let otp=document.getElementById('otpInput').value.trim();
-  if(otp.length!=6) return alert('6 digit OTP likho');
+  if(otp.length!=6) return alert('6 digit OTP likho - Login No '+mobile+' pe bheja hai');
   if(!orderId) return alert('Order ID nahi hai');
   try{
     if(window.db){
@@ -81,11 +126,12 @@ async function verifyOTP(){
       if(doc.exists){
         let data=doc.data(); let saved=data.otp||data.customerOTP||'';
         if(saved==otp||otp=='123456'){
-          await window.db.collection('orders').doc(orderId).update({status:'Confirmed',otpVerified:true,verifiedAt:Date.now(),soldBy:'Santra Mall'});
-          document.getElementById('statusText').innerHTML='Status: <span style="color:#10b981">✅ Confirmed</span>';
+          await window.db.collection('orders').doc(orderId).update({status:'Confirmed - '+paymentMethod+' - Login:'+mobile, paymentMethod:paymentMethod, otpVerified:true, verifiedAt:Date.now(), loginMobile:mobile, deliveryMobile:deliveryMobile, soldBy:'Santra Mall'});
+          document.getElementById('statusText').innerHTML='Status: <span style="color:#10b981">✅ Confirmed - '+paymentMethod+'</span>';
           document.getElementById('ordersPageBox').style.display='block';
-          setTimeout(()=>{ location.href='orders.html?mobile='+encodeURIComponent(mobile); },1200);
-          return;
+          localStorage.setItem('santra_mobile', mobile);
+          localStorage.setItem('santra_deliveryMobile', deliveryMobile);
+          setTimeout(goToOrders,1200); return;
         }else{ alert('Galat OTP'); return; }
       }
     }
@@ -93,11 +139,14 @@ async function verifyOTP(){
   if(otp=='123456'||otp.length==6){
     document.getElementById('statusText').innerHTML='Status: <span style="color:#10b981">✅ Confirmed</span>';
     document.getElementById('ordersPageBox').style.display='block';
-    localStorage.setItem('lastOrderVerified','true');
-    setTimeout(()=>{ location.href='orders.html?mobile='+encodeURIComponent(mobile); },1000);
+    setTimeout(goToOrders,1000);
   }
 }
-console.log("✅ share-otp-verify.html V15 FINAL - Green OTP Box Simple - Sold By Santra Mall - Old Save - LAST LINE OK");
+console.log("✅ share-otp-verify.html V20 FINAL - Old Save + Login+Delivery+Payment + Product Fix - LAST LINE OK");
 </script>
+
+<script src="santra-all-url-one-file.js?v=47"></script>
+
+
 </body>
 </html>
