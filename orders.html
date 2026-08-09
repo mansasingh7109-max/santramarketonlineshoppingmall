@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 My Orders </title>
+<title>📦 My Orders - V32 FINAL - Old Save + Admin Live</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--bg:#f1f3f6;--card:#fff;--accent:#e40046;--green:#10b981}
@@ -14,46 +14,50 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 .back-btn,.logout-btn,.profile-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold}
 .container{max-width:900px;margin:12px auto;padding:0 10px}
 .customer-profile{background:var(--card);padding:12px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);border-left:5px solid var(--green);display:flex;gap:10px;align-items:center}
-.order-card{background:var(--card);margin:12px 0;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:5px solid var(--accent)}
-.order-header{padding-bottom:10px;border-bottom:2px solid #f1f3f6;margin-bottom:10px}
+.order-card{background:var(--card);margin:14px 0;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:5px solid var(--accent)}
+.order-header{padding-bottom:10px;border-bottom:2px dashed #f1f3f6;margin-bottom:10px}
 .order-header-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
 .order-id-badge{background:var(--accent);color:#fff;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
-.serial-badge{background:#0f172a;color:#fff;padding:5px 10px;border-radius:12px;font-size:12px;font-weight:bold}
-.order-id-line{font-size:11px;color:#666;margin-top:8px;line-height:1.5}
-.status-wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.status-badge{padding:5px 10px;border-radius:20px;font-size:11px;font-weight:bold}
-.payment-badge{padding:5px 10px;border-radius:20px;font-size:11px;font-weight:bold;background:#e0f2fe;color:#0284c7;border:1px solid #bae6fd}
+.serial-badge{background:#0f172a;color:#fff;padding:5px 10px;border-radius:12px;font-size:11px;font-weight:bold}
+.order-id-line{font-size:11px;color:#333;margin-top:8px;line-height:1.6;background:#fff9c4;padding:6px 8px;border-radius:8px;border:1px solid #fde68a}
+.status-wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold}
+.payment-badge{padding:5px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+.payment-cod{background:#e0f2fe;color:#0284c7;border:1px solid #bae6fd}
+.payment-online{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
 .status-pending{background:#fef3c7;color:#92400e}.status-confirmed{background:#d1fae5;color:#065f46}.status-shipped{background:#dbeafe;color:#1e40af}.status-cancelled{background:#fee2e2;color:#991b1b}
-.btn-cancel-top{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;border:1px solid #fecaca;background:#fee2e2;color:#991b1b;cursor:pointer;margin-left:4px}
-.customer-box{font-size:12px;background:#f0f9ff;padding:10px;border-radius:10px;margin:8px 0;border-left:4px solid #10b981;line-height:1.6;word-break:break-word;white-space:pre-wrap}
-.item-row{display:flex;gap:10px;margin:8px 0;padding:10px;background:#f9f9f9;border-radius:10px;align-items:center}
-.item-img-wrap{width:62px;height:62px;border-radius:10px;background:#fff;border:1px solid #eee;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:bold;color:var(--accent);font-size:18px}
+.btn-cancel-top{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;border:1px solid #fecaca;background:#fee2e2;color:#991b1b;cursor:pointer}
+.item-row{display:flex;gap:10px;margin:8px 0;padding:10px;background:#fafafa;border-radius:10px;align-items:center;border:1px solid #f1f3f6}
+.item-img-wrap{width:58px;height:58px;border-radius:10px;background:#fff;border:1px solid #eee;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .item-img-wrap img{width:100%;height:100%;object-fit:cover}
-.item-details{flex:1;min-width:0}.item-details h4{font-size:13px;margin-bottom:3px}
-.prod-link-btn{display:inline-block;margin-top:5px;padding:4px 10px;background:#e0f2fe;color:#0284c7;border-radius:20px;font-size:10px;font-weight:bold;text-decoration:none}
-.total-section{border-top:2px solid #f1f3f6;margin-top:10px;padding-top:10px}
+.prod-link-btn{display:inline-block;margin-top:4px;padding:3px 8px;background:#e0f2fe;color:#0284c7;border-radius:20px;font-size:10px;font-weight:bold;text-decoration:none}
+.screenshot-box{background:#fffff7;border:1.5px dashed #f59e0b;border-radius:10px;padding:10px;margin:10px 0;font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.total-section{border-top:2px solid #f1f3f6;margin-top:8px;padding-top:8px}
 .total-row{display:flex;justify-content:space-between;margin:3px 0;font-size:13px}.grand-total{font-size:15px;font-weight:bold;color:var(--accent)}
-.otp-box{background:#e8f5e9;padding:12px;border-radius:12px;margin:12px 0;border:2px solid #10b981}
-.cancel-box{background:#fef2f2;padding:12px;border-radius:12px;margin:12px 0;border:2px solid #ef4444}
-.otp-input{width:100%;padding:11px;margin:8px 0;border:2px solid #10b981;border-radius:8px;font-size:16px;text-align:center;letter-spacing:5px;font-weight:bold}
-.cancel-input{width:100%;padding:10px;margin:8px 0;border:2px solid #ef4444;border-radius:8px;font-size:13px;min-height:70px}
-.btn-verify{width:100%;background:#10b981;color:#fff;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer}
+.otp-box{background:#f0fdf4;padding:12px;border-radius:12px;margin:10px auto;border:1.8px solid #10b981;max-width:360px}
+.otp-input{width:100%;max-width:200px;padding:10px;margin:8px auto;border:2px solid #10b981;border-radius:8px;font-size:18px;text-align:center;letter-spacing:6px;font-weight:bold;display:block}
+.btn-verify{width:100%;max-width:300px;background:#10b981;color:#fff;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin:6px auto;display:block}
+.cancel-box{background:#fef2f2;padding:12px;border-radius:12px;margin:10px auto;border:2px solid #ef4444;max-width:380px}
+.cancel-input{width:100%;padding:10px;margin:8px 0;border:2px solid #ef4444;border-radius:8px;font-size:13px;min-height:65px}
 .btn-cancel-confirm{width:100%;background:#ef4444;color:#fff;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer}
 .btn-whatsapp-cancel{width:100%;background:#25d366;color:#fff;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:6px}
-.extra-delivery{font-size:10px;color:#6b7280;background:#f3f4f6;padding:3px 8px;border-radius:10px;margin-left:6px}
-.addr-full{font-size:12px;color:#111;background:#fff;padding:6px 8px;border-radius:6px;margin-top:6px;border:1px dashed #10b981;white-space:pre-wrap;word-break:break-word}
+.small-tab{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid #bae6fd;background:#e0f2fe;color:#0284c7;cursor:pointer}
+.addr-full{font-size:11px;color:#111;background:#fff;padding:6px 8px;border-radius:6px;margin-top:6px;border:1px dashed #10b981;white-space:pre-wrap;word-break:break-word;display:none}
+.extra-delivery{font-size:10px;color:#6b7280;background:#f3f4f6;padding:2px 7px;border-radius:10px;margin-left:6px}
+.live-dot{width:8px;height:8px;background:#10b981;border-radius:50%;display:inline-block;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 </style>
 </head>
 <body>
 <div class="header">
 <button id="backBtn" class="back-btn">← Back</button>
-<h1>📦 My Orders </h1>
+<h1>📦 My Orders <span class="live-dot"></span></h1>
 <button id="profileBtn" class="profile-btn">👤 Profile</button>
 <button id="logoutBtnTop" class="logout-btn">🚪 Logout</button>
 </div>
 <div class="container">
 <div id="customerProfileBox"></div>
-<div id="ordersList"><div style="text-align:center;padding:30px;color:#e40046;font-weight:bold">⏳ Loading Orders... Present 3 Days + Old Image + Profile Auto Update</div></div>
+<div id="ordersList"><div style="text-align:center;padding:30px;color:#e40046;font-weight:bold">⏳ Loading Orders... Present Upar Past Niche + Admin Live</div></div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -73,16 +77,17 @@ V28: Present Upar Past Niche - Serial Upar 2 Niche 1 - Product link full ID - Im
 V29: Full Address Fix + Image past present future + Product page fix
 V30: Firebase Permanent + 6 Jagah Universal + Variant Fix
 V31: Extra header hata + Cancel Box Reason + WhatsApp OTP Request Fix
-OLD BACKUP END - SAFE - AB FINAL - Bina Version - Old Save + Update DNA
-- Present order 3 ddya ni dika fix - Present upar + Past niche + 3 din ka present show - Fast
-- Profile automatically update - Name hamesa jo bhi new add kare wo Customer Profile me update - Firebase + localStorage sync
-- Old order image ni diki fix - 6 Jagah Universal - Firebase Permanent Priority 1 - productCache + SANTRA_ALL_URLS + SANTRA_ALL_URL_MAP
-- Mobile number order Detail me dike with address ar delivery other mb. No. B dike - Requirement
-- santra-master-image-urls.js?v=32 + santra-image-url-system.js?v=32 hata - sirf santra-all-url-one-file.js - Bina version - No BASE_URL error
+OLD BACKUP END - SAFE - AB V32 FINAL - Bina Version - Old Save + Update DNA - Customer Admin Useful + Running
+- Present order upar Past niche - Present 3 din ka - Fast - Admin Live Update onSnapshot - Admin jo update kare customer ko dikhe
+- Profile ek baar - 1st time add - Order card me bar bar mobile/email/address nahi - Header me mobile hamesa with name
+- Screenshot jesa order - Share js + Checkout WhatsApp wala - total + subtotal + delivery + grand total + payment
+- Delivery profile view chhota tab - Firebase date time - WhatsApp OTP box chhota medium 360px Amazon jesa - Cancel popup old jesa
+- Delivery + Online Payment badge - COD / Online - Status Pending Confirmed Shipped Cancelled sab show - Admin update customer ko dikhe
 */
 window.BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 const MY_FIREBASE_CONFIG={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/"};
-function getDB(){try{if(!firebase.apps.length)firebase.initializeApp(MY_FIREBASE_CONFIG);return firebase.firestore();}catch(e){return null;}}var db=getDB();let allOrders=[],currentCustomerMobile=null,currentCustomerData=null,currentDeliveryMobile=null,productCache={},productCacheLoaded=false;
+function getDB(){try{if(!firebase.apps.length)firebase.initializeApp(MY_FIREBASE_CONFIG);return firebase.firestore();}catch(e){return null;}}var db=getDB();
+let allOrders=[],currentCustomerMobile=null,currentCustomerData=null,currentDeliveryMobile=null,productCache={},productCacheLoaded=false,unsubscribeOrders=null;
 document.getElementById('backBtn').onclick=()=>location.href='index.html';
 document.getElementById('profileBtn').onclick=()=>location.href='customer-account.html';
 document.getElementById('logoutBtnTop').onclick=()=>{if(confirm('Logout?')){localStorage.clear();location.href='customer-account.html';}};
@@ -103,7 +108,6 @@ function checkLoginAndLoad(){
 }
 function showCustomerProfile(){
   let box=document.getElementById('customerProfileBox');
-  // Requirement: Name hamesa jo bhi new add kare wo Customer Profile me update dike
   let latestName = currentCustomerData?.name || '';
   if(allOrders.length>0){
     let latestOrder = allOrders[0];
@@ -112,17 +116,18 @@ function showCustomerProfile(){
       currentCustomerData = currentCustomerData||{};
       currentCustomerData.name = latestName;
       localStorage.setItem('santra_customer', JSON.stringify(currentCustomerData));
-      // Firestore profile auto update
       if(currentCustomerMobile) db.collection('customers').doc(currentCustomerMobile).set({name:latestName}, {merge:true});
     }
   }
   let name=latestName||'Customer';
   let mob=currentCustomerData?.loginMobile||currentCustomerData?.mobile||currentCustomerMobile||'';
   let extra=currentCustomerData?.deliveryMobile||currentDeliveryMobile||'';
-  let addr=currentCustomerData?.address||currentCustomerData?.fullAddress||currentCustomerData?.customerAddress||'';
+  let addr=currentCustomerData?.address||currentCustomerData?.fullAddress||'';
+  let email=currentCustomerData?.email||'';
   if(mob) localStorage.setItem('santra_mobile', mob);
   if(extra) localStorage.setItem('santra_deliveryMobile', extra);
-  box.innerHTML=`<div class="customer-profile"><div style="width:40px;height:40px;border-radius:50%;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold">${name[0]}</div><div><div style="font-weight:bold">👤 ${name} - Auto Updated</div><div style="font-size:11px;color:#666">📱 Login/OTP No: ${mob} ${extra?`<span class="extra-delivery">Extra Delivery: ${extra}</span>`:''}</div>${addr?`<div class="addr-full">📍 ${addr}</div>`:''}</div></div>`;
+  // Profile ek baar - 1st time add - Requirement
+  box.innerHTML=`<div class="customer-profile"><div style="width:42px;height:42px;border-radius:50%;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px">${name[0]}</div><div style="flex:1"><div style="font-weight:bold">👤 ${name} - Auto Updated - 1st Time Add</div><div style="font-size:11px;color:#444;margin-top:3px">📱 <b>Login/OTP No: ${mob}</b> ${extra?`<span class="extra-delivery">Extra: ${extra}</span>`:''} ${email?`| ✉️ ${email}`:''}</div>${addr?`<div style="font-size:11px;background:#f0fdf4;padding:5px 8px;border-radius:6px;margin-top:5px;border:1px dashed #10b981">📍 ${addr}</div>`:''}<div style="font-size:10px;color:#10b981;margin-top:4px">🔴 Live - Admin jo update kare yaha dikhega</div></div></div>`;
 }
 async function loadProductCacheThenOrders(){
   try{
@@ -130,31 +135,32 @@ async function loadProductCacheThenOrders(){
       Object.entries(window.SANTRA_ALL_URL_MAP).forEach(([k,v])=>{ productCache[k.toLowerCase()]=v; productCache[k]=v; });
     }
     if(!productCacheLoaded){
-      let snap=await db.collection('products').limit(500).get();
+      let snap=await db.collection('products').limit(400).get();
       snap.forEach(d=>{
-        let data=d.data();
-        let img=data.image||data.imageUrl||data.thumbnail||data.firebaseImage||'';
-        if(img){
-          productCache[d.id]=img; productCache[d.id.toLowerCase()]=img;
-          if(data.code){ productCache[data.code]=img; productCache[data.code.toLowerCase()]=img; }
-          if(data.name){ productCache[data.name.toLowerCase()]=img; }
-        }
+        let data=d.data(); let img=data.image||data.imageUrl||data.thumbnail||data.firebaseImage||'';
+        if(img){ productCache[d.id]=img; productCache[d.id.toLowerCase()]=img; if(data.code){ productCache[data.code]=img; productCache[data.code.toLowerCase()]=img; } if(data.name){ productCache[data.name.toLowerCase()]=img; } }
       });
       productCacheLoaded=true;
     }
   }catch(e){}
-  loadOrders();
+  loadOrdersLive();
 }
 function loadOrderById(id){db.collection('orders').doc(id).get().then(doc=>{if(doc.exists)processOrders({forEach:cb=>cb(doc)});});}
-function loadOrders(){
+function loadOrdersLive(){
+  if(unsubscribeOrders) unsubscribeOrders();
   if(!currentCustomerMobile){let last=localStorage.getItem('lastOrderId');if(last)return loadOrderById(last);return;}
-  db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{
-    if(!s.empty) processOrders(s);
-    else db.collection('orders').where('mobile','==',currentCustomerMobile).get().then(s2=>{
-      if(!s2.empty) processOrders(s2);
-      else{let last=localStorage.getItem('lastOrderId');if(last)loadOrderById(last); else processOrders({forEach:()=>{}});}
+  // Admin live update - onSnapshot - Admin jo update kare customer ko dikhe
+  try{
+    let q = db.collection('orders').where('customerMobile','==',currentCustomerMobile).orderBy('createdAt','desc');
+    unsubscribeOrders = q.onSnapshot(s=>{
+      if(!s.empty) processOrders(s);
+      else db.collection('orders').where('mobile','==',currentCustomerMobile).orderBy('createdAt','desc').onSnapshot(s2=>{ if(!s2.empty) processOrders(s2); });
+    }, err=>{
+      db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{ if(!s.empty) processOrders(s); else db.collection('orders').where('mobile','==',currentCustomerMobile).get().then(s2=>{ if(!s2.empty) processOrders(s2); }); });
     });
-  }).catch(()=>{let last=localStorage.getItem('lastOrderId');if(last)loadOrderById(last);});
+  }catch(e){
+    db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{ if(!s.empty) processOrders(s); });
+  }
 }
 function processOrders(snap){
   allOrders=[];snap.forEach(d=>allOrders.push({id:d.id,...d.data()}));
@@ -170,7 +176,7 @@ function getCleanProductId(it){let raw=(it.id||it.productId||it.code||it.product
 function getProductImage(it){
   let fbFields=['image','img','imageUrl','productImage','thumbnail','firebaseImage','firebaseUrl'];
   for(let f of fbFields){let v=it[f];if(v&&typeof v==='string'&&v.includes('firebasestorage.googleapis.com')&&v.startsWith('http')) return v;}
-  let fields=['image','img','imageUrl','productImage','thumbnail','thumb','photo','picture','src','url','productImg','mainImage','cloudinaryUrl','driveUrl'];
+  let fields=['image','img','imageUrl','productImage','thumbnail','thumb','photo','picture','src','url','productImg','mainImage'];
   for(let f of fields){let v=it[f];if(v&&typeof v==='string'&&v.length>15&&v.startsWith('http')&&!v.includes('ibb.co')) return v;}
   try{
     let tryIds=getBaseIds(it.id||it.productId||it.code||it.name||'');
@@ -183,13 +189,11 @@ function getProductImage(it){
       if(window.getProductImageUrl){ let u=window.getProductImageUrl(k); if(u && u.startsWith('http')) return u; }
     }
   }catch(e){}
-  let v=it.imgbb||it.imgbbUrl||'';if(v&&v.startsWith('http')) return v;
-  if(it.images&&Array.isArray(it.images)&&it.images[0]&&it.images[0].startsWith('http')) return it.images[0];
   return 'https://via.placeholder.com/100?text='+encodeURIComponent((it.name||'Product').substring(0,10));
 }
 function getFullAddress(order){return order.address||order.customerAddress||order.fullAddress||order.shippingAddress||'';}
-function getShortStatus(s){s=(s||'Pending').toLowerCase();if(s.includes('cancel'))return 'Cancelled';if(s.includes('ship'))return 'Shipped';if(s.includes('confirm'))return 'Confirmed';return 'Pending';}
-function getPaymentMethod(o){return o.paymentMethod||o.paymentMode||'Cash on Delivery';}
+function getShortStatus(s){s=(s||'Pending').toLowerCase();if(s.includes('cancel'))return 'Cancelled';if(s.includes('delivered'))return 'Delivered';if(s.includes('out for'))return 'Out for Delivery';if(s.includes('ship'))return 'Shipped';if(s.includes('confirm'))return 'Confirmed';return 'Pending';}
+function getPaymentMethod(o){let p=(o.paymentMethod||o.paymentMode||'Cash on Delivery'); if(p.toLowerCase().includes('online')) return 'Online Payment'; return 'Cash on Delivery';}
 function renderOrders(orders){
   if(!orders||orders.length===0){document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:30px">📦 No Orders Found</div>';return;}
   document.getElementById('ordersList').innerHTML=orders.map((order)=>{
@@ -198,51 +202,54 @@ function renderOrders(orders){
     let dateStr=d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
     let total=calculateTotal(order);
     let payment=getPaymentMethod(order);
+    let isOnline=payment.toLowerCase().includes('online');
     let loginMob=order.loginMobile||order.mobile||order.customerMobile||currentCustomerMobile||'';
-    let deliveryMob=order.deliveryMobile||order.extraDeliveryMobile||currentDeliveryMobile||'';
+    let deliveryMob=order.deliveryMobile||order.extraDeliveryMobile||'';
     let fullAddr=getFullAddress(order);
+    let name=order.customerName||order.name||'Customer';
     let items=order.items||order.cart||[];if(!Array.isArray(items))try{items=Object.values(items);}catch(e){items=[];}
+    let sub=0; items.forEach(it=>sub+=(parseInt(it.qty||1)||1)*(parseFloat(it.price||0)||0));
+    let del=sub>=500?0:49; let grand=sub+del;
+    let itemsText=items.map((it,i)=>`${i+1}. ${it.name||'Product'} (Size ${it.size||'M'}) - Qty: ${it.qty||1} x ₹${it.price||0} = ₹${(it.qty||1)*(it.price||0)}`).join('\n');
+    // Screenshot jesa order - Share js + Checkout WhatsApp wala
+    let screenshotBox=`<div class="screenshot-box">🛒 <b>SANTRA MALL - Order Screenshot - Same as WhatsApp</b>\nOrder ID: ${order.id}\nDate: ${dateStr}\nSold By: Santra Mall\n\n${itemsText}\n\nSubtotal: ₹${sub}\nDelivery: ${del===0?'FREE':'₹'+del}\n<b>Grand Total: ₹${grand||total}</b>\nPayment: ${payment}\nCustomer: ${name} | 📱 ${loginMob}</div>`;
     let itemsHTML=items.map(it=>{
-      let q=parseInt(it.qty||1)||1,p=parseFloat(it.price||0)||0,name=it.name||'Product';
+      let q=parseInt(it.qty||1)||1,p=parseFloat(it.price||0)||0,nameP=it.name||'Product';
       let img=getProductImage(it);let cleanId=getCleanProductId(it);
       let link=`product.html?id=${encodeURIComponent(cleanId)}`;
-      let imgDiv=`<img src="${img}" onerror="this.src='https://via.placeholder.com/100?text=${encodeURIComponent(name.substring(0,8))}'">`;
-      return `<div class="item-row"><div class="item-img-wrap">${imgDiv}</div><div class="item-details"><h4>${name}</h4><p>Qty: ${q} | ₹${p}</p><a class="prod-link-btn" href="${link}" target="_blank">🔗 View Product - FULL ID: ${cleanId}</a></div></div>`;
+      return `<div class="item-row"><div class="item-img-wrap"><img src="${img}" onerror="this.src='https://via.placeholder.com/100'"></div><div class="item-details"><h4>${nameP}</h4><p style="font-size:11px;color:#666">Qty: ${q} | ₹${p} = ₹${q*p}</p><a class="prod-link-btn" href="${link}" target="_blank">🔗 View Product - ${cleanId}</a></div></div>`;
     }).join('');
     let status=getShortStatus(order.status);
     let statusClass=status==='Confirmed'?'status-confirmed':status==='Cancelled'?'status-cancelled':status==='Shipped'?'status-shipped':'status-pending';
     let shortId=order.id.slice(-6).toUpperCase();
+    let isPresent=(Date.now()-d.getTime())<3*24*60*60*1000;
+    let presentTag=isPresent?'<span style="background:#10b981;color:#fff;padding:2px 6px;border-radius:10px;font-size:9px;margin-left:6px">Present 3 Days</span>':'<span style="background:#e5e7eb;color:#666;padding:2px 6px;border-radius:10px;font-size:9px;margin-left:6px">Old</span>';
     let isPending=status==='Pending';
-    // Requirement: mobile number order Detail me dike with address ar delivery other mb. No. B dike
-    return `<div class="order-card">
+    return `<div class="order-card" style="border-left:5px solid ${status==='Cancelled'?'#ef4444':status==='Confirmed'?'#10b981':'#e40046'}">
       <div class="order-header">
         <div class="order-header-top">
           <div style="display:flex;gap:6px;align-items:center"><span class="serial-badge">#${serial}</span><div class="order-id-badge">Order #${shortId}</div></div>
-          <div class="status-wrap"><span class="status-badge ${statusClass}">${status}</span><span class="payment-badge">💳 ${payment}</span>
-          ${status!=='Cancelled'?`<button class="btn-cancel-top" onclick="showCancelBox('${order.id}')">❌ Cancel</button>`:''}</div>
+          <div class="status-wrap"><span class="status-badge ${statusClass}">${status}</span><span class="payment-badge ${isOnline?'payment-online':'payment-cod'}">${isOnline?'💳 Online':'💵 COD'}</span>${status!=='Cancelled'?`<button class="btn-cancel-top" onclick="showCancelBox('${order.id}')">❌ Cancel</button>`:''}</div>
         </div>
-        <div class="order-id-line">ID: <b>${order.id}</b> | ${dateStr} | Present 3 Days</div>
+        <div class="order-id-line">ID: <b>${order.id}</b> | ${dateStr} ${presentTag} | 📱 <b>${loginMob}</b> | 👤 ${name}</div>
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="small-tab" onclick="toggleAddr('addr_${order.id}')">📍 Delivery Profile View - Chhota Tab</button><span class="small-tab" style="background:#f0fdf4;border-color:#10b981;color:#065f46">Firebase: ${order.createdAt?'Live':order.dateStr||'Manual'}</span>${order.cancelReason?`<span class="small-tab" style="background:#fee2e2;border-color:#fecaca;color:#991b1b">Reason: ${order.cancelReason.slice(0,20)}</span>`:''}</div>
+        <div id="addr_${order.id}" class="addr-full">👤 Name: ${name}\n📱 Login/OTP No: ${loginMob}\n📦 Extra Delivery No: ${deliveryMob||'Same as Login'}\n📍 Address: ${fullAddr}\n✉️ Email: ${order.email||''}\n💳 Payment: ${payment}\n${order.cancelReason?'❌ Cancel Reason: '+order.cancelReason:''}</div>
       </div>
-      <div class="customer-box">👤 <b>${order.customerName||'Customer'}</b><br>📱 <b>Login/OTP No: ${loginMob}</b> (OTP isi pe)<br>📦 <b>Extra Delivery No: ${deliveryMob||'Same as Login'}</b> (OTP nahi)<br>📍 <b>Address:</b> ${fullAddr||'__________'}</div>
       ${itemsHTML}
-      <div class="total-section"><div class="total-row grand-total"><span>Total</span><span>₹${total}</span></div></div>
-      <div id="cancelBox_${order.id}" class="cancel-box" style="display:none">
-        <div style="font-weight:bold;color:#991b1b;text-align:center">❌ Cancel Reason + WhatsApp OTP Request</div>
-        <textarea id="cancel_reason_${order.id}" class="cancel-input" placeholder="Cancel reason likho"></textarea>
-        <button class="btn-cancel-confirm" onclick="confirmCancel('${order.id}')">❌ Confirm Cancel</button>
-        <button class="btn-whatsapp-cancel" onclick="whatsappCancel('${order.id}')">📲 WhatsApp Cancel + OTP Request</button>
-      </div>
-      ${isPending?`<div class="otp-box"><div style="font-weight:bold;color:#065f46;text-align:center">Add WhatsApp Order OTP - Auto Update Profile</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6"><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Confirm</button></div>`:''}
+      ${screenshotBox}
+      <div class="total-section"><div class="total-row"><span>Subtotal</span><span>₹${sub}</span></div><div class="total-row"><span>Delivery</span><span>${del===0?'FREE':'₹'+del}</span></div><div class="total-row grand-total"><span>Grand Total - ${payment}</span><span>₹${grand||total}</span></div></div>
+      <div id="cancelBox_${order.id}" class="cancel-box" style="display:none"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">❌ Cancel Reason + WhatsApp - Old Popup Jesa</div><textarea id="cancel_reason_${order.id}" class="cancel-input" placeholder="Cancel reason likho - jaise: size issue, late delivery..."></textarea><button class="btn-cancel-confirm" onclick="confirmCancel('${order.id}')">❌ Confirm Cancel</button><button class="btn-whatsapp-cancel" onclick="whatsappCancel('${order.id}')">📲 WhatsApp Cancel + OTP Request</button></div>
+      ${isPending?`<div class="otp-box"><div style="font-weight:bold;color:#065f46;text-align:center;font-size:12px">Add WhatsApp OTP - Chhota Medium Box - Amazon Jesa</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6"><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Confirm</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: Pending - OTP Wait | Admin Live Update | ${payment}</div></div>`:status==='Cancelled'?`<div style="background:#fee2e2;padding:8px;border-radius:8px;text-align:center;color:#991b1b;font-size:12px;margin-top:8px">❌ Cancelled - Reason: ${order.cancelReason||'No reason'}</div>`:`<div style="background:#d1fae5;padding:8px;border-radius:8px;text-align:center;color:#065f46;font-size:12px;margin-top:8px">✅ ${status} - Payment: ${payment} - Admin Update: ${order.status||''}</div>`}
     </div>`;
   }).join('');
 }
+function toggleAddr(id){let el=document.getElementById(id);if(el) el.style.display = el.style.display==='block'?'none':'block';}
 function showCancelBox(id){let el=document.getElementById('cancelBox_'+id);if(el) el.style.display = el.style.display==='none'? 'block' : 'none';}
-function confirmCancel(id){let reason=document.getElementById('cancel_reason_'+id).value.trim()||'No reason';if(!confirm('Cancel Order? Reason: '+reason)) return;db.collection('orders').doc(id).update({status:'Cancelled',cancelReason:reason,cancelledAt:Date.now()}).then(()=>{alert('Cancelled');location.reload();});}
-function whatsappCancel(id){let reason=document.getElementById('cancel_reason_'+id).value.trim()||'Customer cancel';let txt=`*SANTRA MALL - Cancel Request*\nOrder ID: ${id}\nReason: ${reason}\n\n❌ *Cancel + WhatsApp OTP Request Box*`;window.open('https://wa.me/918769171078?text='+encodeURIComponent(txt),'_blank');}
-function verifyOTP(id){let otp=document.getElementById('order_otp_'+id).value.trim();if(otp.length!=6)return alert('6 digit');db.collection('orders').doc(id).update({status:'Confirmed',otp:otp,otpVerified:true}).then(()=>location.reload());}
+function confirmCancel(id){let reason=document.getElementById('cancel_reason_'+id).value.trim()||'No reason';if(!confirm('Cancel Order? Reason: '+reason)) return;db.collection('orders').doc(id).update({status:'Cancelled',cancelReason:reason,cancelledAt:Date.now(),cancelledBy:'customer'}).then(()=>{alert('Cancelled - Admin ko dikhega');});}
+function whatsappCancel(id){let reason=document.getElementById('cancel_reason_'+id).value.trim()||'Customer cancel';let txt=`*SANTRA MALL - Cancel Request*\nOrder ID: ${id}\nReason: ${reason}\nMobile: ${currentCustomerMobile}\n\n❌ *Cancel + WhatsApp OTP Request Box - Old Jesa*`;window.open('https://wa.me/918769171078?text='+encodeURIComponent(txt),'_blank');}
+function verifyOTP(id){let otp=document.getElementById('order_otp_'+id).value.trim();if(otp.length!=6)return alert('6 digit OTP likho');db.collection('orders').doc(id).update({status:'Confirmed',otp:otp,otpVerified:true,verifiedAt:Date.now()}).then(()=>{alert('Verified - Admin ko dikhega');});}
 waitForDBAndLoad();
 </script>
 <script src="santra-all-url-one-file.js"></script>
-<script src="santra-universal-image-sync.js?v=48"></script>
 </body>
 </html>
