@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 My Orders SANTRAJET Live - V36 FINAL Old Save</title>
+<title>📦 My Orders SANTRAJET Live - V37 FINAL Present Fix</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--bg:#f1f3f6;--card:#fff;--accent:#e40046;--green:#10b981}
@@ -61,7 +61,7 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 </div>
 <div class="container">
 <div id="customerProfileBox"></div>
-<div id="ordersList"><div style="text-align:center;padding:30px;color:#e40046;font-weight:bold">⏳ Loading Orders... Present Upar Past Niche + Live V36</div></div>
+<div id="ordersList"><div style="text-align:center;padding:30px;color:#e40046;font-weight:bold">⏳ Loading Orders... Present Upar Past Niche + Live V37</div></div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -71,13 +71,13 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 <script src="santra-all-url-one-file.js"></script>
 <script>
 /*
-⚠️ OLD CODE BACKUP - V23+V24+V25+V26+V27+V28+V29+V30+V31+V32+V33+V34+V35 - SAFE - KUCH HATAYA NAHI
+⚠️ OLD CODE BACKUP - V23+V24+V25+V26+V27+V28+V29+V30+V31+V32+V33+V34+V35+V36 - SAFE - KUCH HATAYA NAHI
 V35: Add Cancel OTP popup Cancel Request ke baad - 2 button tha - Customer Firebase + Admin Verify
-OLD BACKUP END - SAFE - AB V36 FINAL - Old Save + Update DNA - Customer Admin Useful + Running
-- Add Cancel OTP me Firebase/Admin word hataya - Customer ko sirf Santrajet word - submit in santrajet
-- Bas 1 Save button - Customer Firebase me save + Admin panel me show - Customer ko Firebase word nahi
-- Header me address + Mb No With - Susika blank fix - ID Date Present Mb No upar Address niche
-- Profile View small popup me Present Delivery Form Detail - Cancel button gap 12px - Demo hata
+V36: Add Cancel OTP me Firebase/Admin word hataya - Customer ko sirf Santrajet word - submit in santrajet - Bas 1 Save button - Header me address + Mb No With - Susika blank fix - ID Date Present Mb No upar Address niche - Profile small popup - Cancel gap 12px
+OLD BACKUP END - SAFE - AB V37 FINAL - Old Save + Update DNA - Customer Admin Useful + Running - Present Fix
+- Present order aside Play/Test me nahi dikha - Fix - loadOrderById me mobile check hataya - lastOrderId se bhi Present dikhega
+- loadOrdersLive me lastId fallback - GitHub me dono code me Present + Present update admin se live dikhega
+- Bas 1 Save button - Customer ko Firebase/Admin word nahi - submit in santrajet - Firebase me save + Admin me show
 */
 window.BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 const MY_FIREBASE_CONFIG={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/"};
@@ -149,25 +149,49 @@ async function loadProductCacheThenOrders(){
   loadOrdersLive();
 }
 function loadOrderById(id){
-  if(!currentCustomerMobile){
-    document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 Login karo - Apna Order dekho</div>';
-    return;
-  }
-  db.collection('orders').doc(id).get().then(doc=>{if(doc.exists){ let data=doc.data(); if((data.customerMobile||data.mobile)==currentCustomerMobile) processOrders({forEach:cb=>cb(doc)}); }});
+  if(!id){ document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders</div>'; return; }
+  // FIX V37 - Mobile check hataya - Present order aside Play/Test me bhi dikhega bina login ke lastId se
+  db.collection('orders').doc(id).get().then(doc=>{
+    if(doc.exists){
+      processOrders({forEach:cb=>cb(doc)});
+    } else {
+      document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 Order not found - '+id+'</div>';
+    }
+  }).catch(()=>{
+    document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 Loading...</div>';
+  });
 }
 function loadOrdersLive(){
   if(unsubscribeOrders) unsubscribeOrders();
-  if(!currentCustomerMobile){document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders - Login karo</div>';return;}
+  let lastId = localStorage.getItem('lastOrderId') || new URLSearchParams(location.search).get('orderId') || '';
+  if(!currentCustomerMobile){
+    if(lastId) return loadOrderById(lastId); // FIX - Present aside me dikhega
+    document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders - Login karo</div>';
+    return;
+  }
   try{
     let q = db.collection('orders').where('customerMobile','==',currentCustomerMobile).orderBy('createdAt','desc');
     unsubscribeOrders = q.onSnapshot(s=>{
       if(!s.empty) processOrders(s);
-      else db.collection('orders').where('mobile','==',currentCustomerMobile).orderBy('createdAt','desc').onSnapshot(s2=>{ if(!s2.empty) processOrders(s2); else document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 Aapka koi Order nahi hai - Khud ka Order hi dikhega</div>'; });
+      else {
+        db.collection('orders').where('mobile','==',currentCustomerMobile).orderBy('createdAt','desc').onSnapshot(s2=>{
+          if(!s2.empty) processOrders(s2);
+          else if(lastId) loadOrderById(lastId); // FIX - GitHub dono code me Present dikhega
+          else document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 Aapka koi Order nahi hai - Khud ka Order hi dikhega</div>';
+        });
+      }
     }, err=>{
-      db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{ if(!s.empty) processOrders(s); else db.collection('orders').where('mobile','==',currentCustomerMobile).get().then(s2=>{ if(!s2.empty) processOrders(s2); else document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders</div>'; }); });
+      db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{
+        if(!s.empty) processOrders(s);
+        else db.collection('orders').where('mobile','==',currentCustomerMobile).get().then(s2=>{
+          if(!s2.empty) processOrders(s2);
+          else if(lastId) loadOrderById(lastId);
+          else document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders</div>';
+        });
+      });
     });
   }catch(e){
-    db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{ if(!s.empty) processOrders(s); });
+    db.collection('orders').where('customerMobile','==',currentCustomerMobile).get().then(s=>{ if(!s.empty) processOrders(s); else if(lastId) loadOrderById(lastId); });
   }
 }
 function processOrders(snap){
@@ -202,6 +226,7 @@ function getProductImage(it){
 function getFullAddress(order){return order.address||order.customerAddress||order.fullAddress||order.shippingAddress||'';}
 function getShortStatus(s){s=(s||'Pending').toLowerCase();if(s.includes('cancel request'))return 'Cancel Requested';if(s.includes('cancel'))return 'Cancelled';if(s.includes('delivered'))return 'Delivered';if(s.includes('out for'))return 'Out for Delivery';if(s.includes('ship'))return 'Shipped';if(s.includes('confirm'))return 'Confirmed';return 'Pending';}
 function getPaymentMethod(o){let p=(o.paymentMethod||o.paymentMode||'Cash on Delivery'); if(p.toLowerCase().includes('online')) return 'Online Payment'; return 'Cash on Delivery';}
+
 function renderOrders(orders){
   if(!orders||orders.length===0){document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:30px">📦 No Orders Found - Customer ko sirf apna Order dikhega</div>';return;}
   document.getElementById('ordersList').innerHTML=orders.map((order)=>{
@@ -211,7 +236,7 @@ function renderOrders(orders){
     let total=calculateTotal(order);
     let payment=getPaymentMethod(order);
     let isOnline=payment.toLowerCase().includes('online');
-    let loginMob=order.loginMobile||order.mobile||order.customerMobile||currentCustomerMobile||'';
+    let loginMob=order.loginMobile||order.customerMobile||order.mobile||currentCustomerMobile||'';
     let deliveryMob=order.deliveryMobile||order.extraDeliveryMobile||'';
     let fullAddr=getFullAddress(order);
     let name=order.customerName||order.name||'Customer';
@@ -251,7 +276,6 @@ function renderOrders(orders){
       ${screenshotBox}
       <div class="total-section"><div class="total-row"><span>Subtotal</span><span>₹${sub}</span></div><div class="total-row"><span>Delivery</span><span>${del===0?'FREE':'₹'+del}</span></div><div class="total-row grand-total"><span>Grand Total - ${payment}</span><span>₹${grand||total}</span></div></div>
       <div id="cancelBox_${order.id}" class="cancel-box" style="display:none"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">❌ Cancel Reason + WhatsApp - Old Popup Jesa</div><textarea id="cancel_reason_${order.id}" class="cancel-input" placeholder="Cancel reason likho - jaise: size issue, late delivery, Want to other..."></textarea><button class="btn-cancel-confirm" onclick="confirmCancel('${order.id}')">❌ Confirm Cancel</button><button class="btn-whatsapp-cancel" onclick="whatsappCancel('${order.id}')">📲 WhatsApp Cancel + OTP Request</button></div>
-      <!-- Add Cancel OTP - Customer ko Firebase/Admin word nahi - Bas Santrajet word - 1 Save Button Only - Save info Firebase + Admin par show -->
       <div id="cancelOtpBox_${order.id}" class="otp-cancel-box" style="display:${showCancelOtp};max-width:360px;margin:10px auto;background:#fef2f2"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">🔐 Add Cancel WhatsApp OTP</div><div style="font-size:11px;color:#666;text-align:center;margin:4px 0">save WhatsApp cancel OTP - submit in santrajet</div><input id="cancel_otp_${order.id}" class="otp-input-cancel" placeholder="------" maxlength="6" value="${order.cancelOTP||''}"><button class="btn-save-cancel" onclick="saveCancelOTP('${order.id}')">💾 Save Cancel OTP</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: ${status} - Santrajet verify karega</div></div>
       <div id="mainOtpBox_${order.id}" class="otp-box" style="display:${showMainOtp}"><div style="font-weight:bold;color:#065f46;text-align:center;font-size:12px">Add WhatsApp OTP - Chhota Medium Box 360px</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6"><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Confirm</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: Pending - OTP Wait | Live | ${payment}</div></div>
       ${status==='Cancel Requested'?`<div style="background:#fef3c7;padding:8px;border-radius:8px;text-align:center;color:#92400e;font-size:12px;margin-top:8px">🕒 Cancel Requested - Reason: ${order.cancelReason||'Want to other'} - Save OTP after - It will be cancel by Santrajet</div>`:status==='Cancelled'?`<div style="background:#fee2e2;padding:8px;border-radius:8px;text-align:center;color:#991b1b;font-size:12px;margin-top:8px">❌ Cancelled - Reason: ${order.cancelReason||'No reason'}</div>`:`<div style="background:#d1fae5;padding:8px;border-radius:8px;text-align:center;color:#065f46;font-size:12px;margin-top:8px;display:${status==='Pending'?'none':'block'}">✅ ${status} - Payment: ${payment}</div>`}
@@ -282,4 +306,3 @@ waitForDBAndLoad();
 <script src="santra-all-url-one-file.js"></script>
 </body>
 </html>
-
