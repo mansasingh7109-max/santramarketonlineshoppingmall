@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 My Orders SANTRAJET Live - V37 FINAL Present Fix</title>
+<title>📦 My Orders SANTRAJET Live - V38 FINAL Present Fix + OTP + Cancel + Invoice</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--bg:#f1f3f6;--card:#fff;--accent:#e40046;--green:#10b981}
@@ -55,13 +55,13 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 <body>
 <div class="header">
 <button id="backBtn" class="back-btn">← Back</button>
-<h1>📦 My Orders <span class="live-dot"></span></h1>
+<h1>📦 My Orders <span class="live-dot"></span> V38</h1>
 <button id="profileBtn" class="profile-btn">👤 Profile</button>
 <button id="logoutBtnTop" class="logout-btn">🚪 Logout</button>
 </div>
 <div class="container">
 <div id="customerProfileBox"></div>
-<div id="ordersList"><div style="text-align:center;padding:30px;color:#e40046;font-weight:bold">⏳ Loading Orders... Present Upar Past Niche + Live V37</div></div>
+<div id="ordersList"><div style="text-align:center;padding:30px;color:#e40046;font-weight:bold">⏳ Loading Orders... Present Upar Past Niche + Live V38 OTP Fix</div></div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -71,13 +71,15 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 <script src="santra-all-url-one-file.js"></script>
 <script>
 /*
-⚠️ OLD CODE BACKUP - V23+V24+V25+V26+V27+V28+V29+V30+V31+V32+V33+V34+V35+V36 - SAFE - KUCH HATAYA NAHI
+⚠️ OLD CODE BACKUP - V23+V24+V25+V26+V27+V28+V29+V30+V31+V32+V33+V34+V35+V36+V37 - SAFE - KUCH HATAYA NAHI
 V35: Add Cancel OTP popup Cancel Request ke baad - 2 button tha - Customer Firebase + Admin Verify
 V36: Add Cancel OTP me Firebase/Admin word hataya - Customer ko sirf Santrajet word - submit in santrajet - Bas 1 Save button - Header me address + Mb No With - Susika blank fix - ID Date Present Mb No upar Address niche - Profile small popup - Cancel gap 12px
-OLD BACKUP END - SAFE - AB V37 FINAL - Old Save + Update DNA - Customer Admin Useful + Running - Present Fix
-- Present order aside Play/Test me nahi dikha - Fix - loadOrderById me mobile check hataya - lastOrderId se bhi Present dikhega
-- loadOrdersLive me lastId fallback - GitHub me dono code me Present + Present update admin se live dikhega
-- Bas 1 Save button - Customer ko Firebase/Admin word nahi - submit in santrajet - Firebase me save + Admin me show
+V37: Present Fix - loadOrderById me mobile check hataya - lastOrderId se bhi Present dikhega - loadOrdersLive me lastId fallback - GitHub me dono code me Present + Present update admin se live dikhega - V37 FINAL Present Fix - SAFE - AAPKI FILE
+OLD BACKUP END - SAFE - AB V38 FINAL - Old Save + Update DNA - Customer Admin Useful + Running - OTP Fix + Cancel + Invoice
+- V37 me Present Fix tha - Ab V38 me Update: Customer OTP Save ni hota WhatsApp otp box m - Fix - orders + order_otps dono me save + otpSavedByCustomer + presentTag + otpSaveTime
+- Cancel krna chahe tb Cancel whatsapp otp b Save ho Cancel Box m ar admin list customer order otp html m update har information update dike - Fix - cancelOTP + cancelOTPSavedByCustomer + order_otps me bhi save + presentTag
+- Dono order page ar admin list me Pdf invoice update ki download ho with order Detail ar santrajet Mall lik Date time ar customer detail with chota tab ho download invoice Present update - Fix - downloadInvoice() jsPDF small tab
+- Present order save hamesha - customerMobile + mobile + loginMobile + deliveryMobile + extraDeliveryMobile - Firebase me hamesha save - onSnapshot Live
 */
 window.BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 const MY_FIREBASE_CONFIG={apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/"};
@@ -130,7 +132,7 @@ function showCustomerProfile(){
   let email=latestEmail||'';
   if(mob) localStorage.setItem('santra_mobile', mob);
   if(extra) localStorage.setItem('santra_deliveryMobile', extra);
-  box.innerHTML=`<div class="customer-profile"><div style="width:42px;height:42px;border-radius:50%;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px">${name[0]||'S'}</div><div style="flex:1"><div style="font-weight:bold">👤 ${name} - Auto Updated - 1st Time Add</div><div style="font-size:11px;color:#444;margin-top:3px">📱 <b>Login/OTP No: ${mob}</b> ${extra?`<span class="extra-delivery">Extra: ${extra}</span>`:''} ${email?`| ✉️ ${email}`:''}</div><div style="font-size:11px;background:#f0fdf4;padding:6px 8px;border-radius:6px;margin-top:5px;border:1px dashed #10b981">📍 ${addr} | Mb No: ${mob} With</div><div style="font-size:10px;color:#10b981;margin-top:4px">🔴 Live - SANTRAJET MALL INFORMATION LIVE UPDATE</div></div></div>`;
+  box.innerHTML=`<div class="customer-profile"><div style="width:42px;height:42px;border-radius:50%;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px">${name[0]||'S'}</div><div style="flex:1"><div style="font-weight:bold">👤 ${name} - Auto Updated - Present</div><div style="font-size:11px;color:#444;margin-top:3px">📱 <b>Login/OTP No: ${mob}</b> ${extra?`<span class="extra-delivery">Extra: ${extra}</span>`:''} ${email?`| ✉️ ${email}`:''}</div><div style="font-size:11px;background:#f0fdf4;padding:6px 8px;border-radius:6px;margin-top:5px;border:1px dashed #10b981">📍 ${addr} | Mb No: ${mob} With</div><div style="font-size:10px;color:#10b981;margin-top:4px">🔴 Live - SANTRAJET MALL INFORMATION LIVE UPDATE - V38</div></div></div>`;
 }
 async function loadProductCacheThenOrders(){
   try{
@@ -150,7 +152,6 @@ async function loadProductCacheThenOrders(){
 }
 function loadOrderById(id){
   if(!id){ document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders</div>'; return; }
-  // FIX V37 - Mobile check hataya - Present order aside Play/Test me bhi dikhega bina login ke lastId se
   db.collection('orders').doc(id).get().then(doc=>{
     if(doc.exists){
       processOrders({forEach:cb=>cb(doc)});
@@ -165,7 +166,7 @@ function loadOrdersLive(){
   if(unsubscribeOrders) unsubscribeOrders();
   let lastId = localStorage.getItem('lastOrderId') || new URLSearchParams(location.search).get('orderId') || '';
   if(!currentCustomerMobile){
-    if(lastId) return loadOrderById(lastId); // FIX - Present aside me dikhega
+    if(lastId) return loadOrderById(lastId);
     document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders - Login karo</div>';
     return;
   }
@@ -176,7 +177,7 @@ function loadOrdersLive(){
       else {
         db.collection('orders').where('mobile','==',currentCustomerMobile).orderBy('createdAt','desc').onSnapshot(s2=>{
           if(!s2.empty) processOrders(s2);
-          else if(lastId) loadOrderById(lastId); // FIX - GitHub dono code me Present dikhega
+          else if(lastId) loadOrderById(lastId);
           else document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 Aapka koi Order nahi hai - Khud ka Order hi dikhega</div>';
         });
       }
@@ -244,7 +245,7 @@ function renderOrders(orders){
     let sub=0; items.forEach(it=>sub+=(parseInt(it.qty||1)||1)*(parseFloat(it.price||0)||0));
     let del=sub>=500?0:49; let grand=sub+del;
     let itemsText=items.map((it,i)=>`${i+1}. ${it.name||'Product'} (Size ${it.size||'M'}) - Qty: ${it.qty||1} x ₹${it.price||0} = ₹${(it.qty||1)*(it.price||0)}`).join('\n');
-    let screenshotBox=`<div class="screenshot-box">🛒 <b>SANTRA MALL - Order Screenshot - Same as WhatsApp</b>\nOrder ID: ${order.id}\nDate: ${dateStr}\nSold By: Santra Mall\n\n${itemsText}\n\nSubtotal: ₹${sub}\nDelivery: ${del===0?'FREE':'₹'+del}\n<b>Grand Total: ₹${grand||total}</b>\nPayment: ${payment}\nCustomer: ${name} | 📱 ${loginMob}</div>`;
+    let screenshotBox=`<div class="screenshot-box">🛒 <b>SANTRA MALL - Order Screenshot - Same as WhatsApp - V38 Present</b>\nOrder ID: ${order.id}\nDate: ${dateStr}\nSold By: Santrajet Mall\n\n${itemsText}\n\nSubtotal: ₹${sub}\nDelivery: ${del===0?'FREE':'₹'+del}\n<b>Grand Total: ₹${grand||total}</b>\nPayment: ${payment}\nCustomer: ${name} | Login: ${loginMob} | Extra: ${deliveryMob||'Same'} | OTP: ${order.otp||''} | CustOTP: ${order.customerOTP||''}</div>`;
     let itemsHTML=items.map(it=>{
       let q=parseInt(it.qty||1)||1,p=parseFloat(it.price||0)||0,nameP=it.name||'Product';
       let img=getProductImage(it);let cleanId=getCleanProductId(it);
@@ -257,7 +258,7 @@ function renderOrders(orders){
     let isPresent=(Date.now()-d.getTime())<3*24*60*60*1000;
     let presentTag=isPresent?'<span style="background:#10b981;color:#fff;padding:2px 6px;border-radius:10px;font-size:9px;margin-left:6px">Present 3 Days</span>':'<span style="background:#e5e7eb;color:#666;padding:2px 6px;border-radius:10px;font-size:9px;margin-left:6px">Old</span>';
     let isCancelRequested = status==='Cancel Requested' || order.cancelRequest;
-    let topLine=`ID: <b>${order.id}</b> | ${dateStr} ${presentTag} | 📱 <b>${loginMob}</b>`;
+    let topLine=`ID: <b>${order.id}</b> | ${dateStr} ${presentTag} | 📱 <b>${loginMob}</b> | OTP:${order.otp||''} Cust:${order.customerOTP||''}`;
     let addrLine=fullAddr?`📍 ${fullAddr} | Mb No: ${loginMob} With`:'';
     let showCancelOtp = isCancelRequested? 'block' : 'none';
     let showMainOtp = (status==='Pending' &&!isCancelRequested)? 'block' : 'none';
@@ -269,22 +270,26 @@ function renderOrders(orders){
         </div>
         <div class="order-id-line">${topLine}</div>
         ${addrLine?`<div class="order-addr-line">${addrLine}</div>`:''}
-        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="small-tab" onclick="toggleAddr('addr_${order.id}')">📍 Delivery Profile View - small popup</button><span class="small-tab" style="background:#f0fdf4;border-color:#10b981;color:#065f46">Live</span>${order.cancelReason?`<span class="small-tab" style="background:#fee2e2;border-color:#fecaca;color:#991b1b">❌ Cancel Requested: ${order.cancelReason.slice(0,25)}</span>`:''}${order.cancelRequest?`<span class="small-tab" style="background:#fef3c7">🕒 Cancel Request Sent</span>`:''}</div>
-        <div id="addr_${order.id}" class="addr-full">👤 Name: ${name}\n📱 Login/OTP No: ${loginMob} - Jo Login No H\n📦 Extra Delivery No: ${deliveryMob||'Same as Login'}\n📍 Address: ${fullAddr} - Present Delivery Form Detail\n✉️ Email: ${order.email||''}\n💳 Payment: ${payment}\n📅 Date: ${dateStr}\n${order.cancelReason?'❌ Cancel Reason: '+order.cancelReason:''}</div>
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="small-tab" onclick="toggleAddr('addr_${order.id}')">📍 Delivery Profile View - small popup</button><button class="small-tab" onclick="downloadInvoice('${order.id}')">📄 Invoice PDF - Present Update</button><span class="small-tab" style="background:#f0fdf4;border-color:#10b981;color:#065f46">Live V38</span>${order.cancelReason?`<span class="small-tab" style="background:#fee2e2;border-color:#fecaca;color:#991b1b">❌ Cancel: ${order.cancelReason.slice(0,25)}</span>`:''}</div>
+        <div id="addr_${order.id}" class="addr-full">👤 Name: ${name}\n📱 Login/OTP No: ${loginMob} - Jo Login No H\n📦 Extra Delivery No: ${deliveryMob||'Same as Login'}\n📍 Address: ${fullAddr} - Present Delivery Form Detail\n✉️ Email: ${order.email||''}\n💳 Payment: ${payment}\n📅 Date: ${dateStr}\nOTP: ${order.otp||''} | CustOTP: ${order.customerOTP||''} | CancelOTP: ${order.cancelOTP||''}\n${order.cancelReason?'❌ Cancel Reason: '+order.cancelReason:''}</div>
       </div>
       ${itemsHTML}
       ${screenshotBox}
       <div class="total-section"><div class="total-row"><span>Subtotal</span><span>₹${sub}</span></div><div class="total-row"><span>Delivery</span><span>${del===0?'FREE':'₹'+del}</span></div><div class="total-row grand-total"><span>Grand Total - ${payment}</span><span>₹${grand||total}</span></div></div>
+      
+      <button onclick="window.open('tracking-order-page-product.html?orderId=${order.id}','_blank')" style="width:100%;padding:10px;background:#0ea5e9;color:#fff;border:none;border-radius:8px;font-weight:700;margin-top:8px">📦📍  Tracking Order Location Invoice PDF  </button>
+      
+      
       <div id="cancelBox_${order.id}" class="cancel-box" style="display:none"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">❌ Cancel Reason + WhatsApp - Old Popup Jesa</div><textarea id="cancel_reason_${order.id}" class="cancel-input" placeholder="Cancel reason likho - jaise: size issue, late delivery, Want to other..."></textarea><button class="btn-cancel-confirm" onclick="confirmCancel('${order.id}')">❌ Confirm Cancel</button><button class="btn-whatsapp-cancel" onclick="whatsappCancel('${order.id}')">📲 WhatsApp Cancel + OTP Request</button></div>
-      <div id="cancelOtpBox_${order.id}" class="otp-cancel-box" style="display:${showCancelOtp};max-width:360px;margin:10px auto;background:#fef2f2"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">🔐 Add Cancel WhatsApp OTP</div><div style="font-size:11px;color:#666;text-align:center;margin:4px 0">save WhatsApp cancel OTP - submit in santrajet</div><input id="cancel_otp_${order.id}" class="otp-input-cancel" placeholder="------" maxlength="6" value="${order.cancelOTP||''}"><button class="btn-save-cancel" onclick="saveCancelOTP('${order.id}')">💾 Save Cancel OTP</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: ${status} - Santrajet verify karega</div></div>
-      <div id="mainOtpBox_${order.id}" class="otp-box" style="display:${showMainOtp}"><div style="font-weight:bold;color:#065f46;text-align:center;font-size:12px">Add WhatsApp OTP - Chhota Medium Box 360px</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6"><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Confirm</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: Pending - OTP Wait | Live | ${payment}</div></div>
-      ${status==='Cancel Requested'?`<div style="background:#fef3c7;padding:8px;border-radius:8px;text-align:center;color:#92400e;font-size:12px;margin-top:8px">🕒 Cancel Requested - Reason: ${order.cancelReason||'Want to other'} - Save OTP after - It will be cancel by Santrajet</div>`:status==='Cancelled'?`<div style="background:#fee2e2;padding:8px;border-radius:8px;text-align:center;color:#991b1b;font-size:12px;margin-top:8px">❌ Cancelled - Reason: ${order.cancelReason||'No reason'}</div>`:`<div style="background:#d1fae5;padding:8px;border-radius:8px;text-align:center;color:#065f46;font-size:12px;margin-top:8px;display:${status==='Pending'?'none':'block'}">✅ ${status} - Payment: ${payment}</div>`}
+      <div id="cancelOtpBox_${order.id}" class="otp-cancel-box" style="display:${showCancelOtp};max-width:360px;margin:10px auto;background:#fef2f2"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">🔐 Add Cancel WhatsApp OTP - Save ho Cancel Box m</div><div style="font-size:11px;color:#666;text-align:center;margin:4px 0">save WhatsApp cancel OTP - submit in santrajet - Admin me update dikhe</div><input id="cancel_otp_${order.id}" class="otp-input-cancel" placeholder="------" maxlength="6" value="${order.cancelOTP||''}"><button class="btn-save-cancel" onclick="saveCancelOTP('${order.id}')">💾 Save Cancel OTP - Admin me update</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: ${status} - Santrajet verify karega</div></div>
+      <div id="mainOtpBox_${order.id}" class="otp-box" style="display:${showMainOtp}"><div style="font-weight:bold;color:#065f46;text-align:center;font-size:12px">Add WhatsApp OTP - Customer OTP Save Fix - 360px White</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6" value="${order.otp||order.customerOTP||''}"><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Save OTP - Admin me update</button><div style="font-size:10px;color:#666;text-align:center;margin-top:4px">Status: Pending - OTP Wait | Live | ${payment} | Present Save Hamesha</div></div>
+      ${status==='Cancel Requested'?`<div style="background:#fef3c7;padding:8px;border-radius:8px;text-align:center;color:#92400e;font-size:12px;margin-top:8px">🕒 Cancel Requested - Reason: ${order.cancelReason||'Want to other'} - Save OTP after - It will be cancel by Santrajet</div>`:status==='Cancelled'?`<div style="background:#fee2e2;padding:8px;border-radius:8px;text-align:center;color:#991b1b;font-size:12px;margin-top:8px">❌ Cancelled - Reason: ${order.cancelReason||'No reason'} | CancelOTP: ${order.cancelOTP||''}</div>`:`<div style="background:#d1fae5;padding:8px;border-radius:8px;text-align:center;color:#065f46;font-size:12px;margin-top:8px;display:${status==='Pending'?'none':'block'}">✅ ${status} - Payment: ${payment} | Present Update</div>`}
     </div>`;
   }).join('');
 }
 function toggleAddr(id){let el=document.getElementById(id);if(el) el.style.display = el.style.display==='block'?'none':'block';}
 function showCancelBox(id){let el=document.getElementById('cancelBox_'+id);if(el) el.style.display = el.style.display==='none'? 'block' : 'none';}
-function confirmCancel(id){let reason=document.getElementById('cancel_reason_'+id).value.trim()||'No reason';if(!confirm('Cancel Order? Reason: '+reason)) return;db.collection('orders').doc(id).update({status:'Cancelled',cancelReason:reason,cancelledAt:Date.now(),cancelledBy:'customer'}).then(()=>{alert('Cancelled');});}
+function confirmCancel(id){let reason=document.getElementById('cancel_reason_'+id).value.trim()||'No reason';if(!confirm('Cancel Order? Reason: '+reason)) return;db.collection('orders').doc(id).update({status:'Cancelled',cancelReason:reason,cancelledAt:Date.now(),cancelledBy:'customer',presentTag:true}).then(()=>{alert('Cancelled - Present Update');});}
 function whatsappCancel(id){
   let reason=document.getElementById('cancel_reason_'+id).value.trim()||'I want to other';
   let txt=`*SANTRA MALL - Cancel Request*\nOrder ID: ${id}\nReason: ${reason}\nMobile: ${currentCustomerMobile}\n\n❌ *Cancel OTP bhejo*`;
@@ -293,15 +298,49 @@ function whatsappCancel(id){
   document.getElementById('cancelOtpBox_'+id).style.display='block';
   let mainOtp=document.getElementById('mainOtpBox_'+id);
   if(mainOtp) mainOtp.style.display='none';
-  db.collection('orders').doc(id).update({cancelRequest:true,cancelReason:reason,cancelRequestedAt:Date.now(),status:'Cancel Requested'});
+  db.collection('orders').doc(id).update({cancelRequest:true,cancelReason:reason,cancelRequestedAt:Date.now(),status:'Cancel Requested',presentTag:true,presentUpdate:true});
 }
+// V38 FIX - Customer OTP Save - orders + order_otps dono me save - Admin me update dikhe
+function verifyOTP(id){
+  let otp=document.getElementById('order_otp_'+id).value.trim();
+  if(otp.length!=6) return alert('6 digit OTP likho - WhatsApp se mila hua');
+  let order=allOrders.find(o=>o.id===id)||{}; let login=order.loginMobile||order.customerMobile||order.mobile||currentCustomerMobile||'';
+  db.collection('orders').doc(id).update({otp:otp,customerOTP:otp,otpSavedByCustomer:true,otpSaveTime:new Date().toLocaleString('en-IN'),verifiedAt:Date.now(),status:'OTP Saved - Present',presentTag:true,presentUpdate:true}).then(()=>{
+    db.collection('order_otps').doc(id).set({orderId:id,otp:otp,customerOTP:otp,loginMobile:login,customerMobile:login,otpSavedByCustomer:true,timestamp:firebase.firestore.FieldValue.serverTimestamp(),presentTag:true},{merge:true}).then(()=>alert('✅ OTP Save ho gaya - Admin panel me update dikhega - Santrajet verify karega'));
+  });
+}
+// V38 FIX - Cancel OTP Save - orders + order_otps dono me save - Admin list me update har information dikhe
 function saveCancelOTP(id){
   let otp=document.getElementById('cancel_otp_'+id).value.trim();
   if(otp.length!=6) return alert('6 digit Cancel OTP likho - WhatsApp se mila hua');
-  db.collection('orders').doc(id).update({cancelOTP:otp,cancelOTPSavedByCustomer:true,cancelOTPSavedAt:Date.now(),status:'Cancel Requested - OTP Saved',updateInfo:'Firebase + Admin par save - Customer ko Santrajet word'}).then(()=>{alert('✅ OTP Save ho gaya - Santrajet verify karke Cancel karega');});
+  let order=allOrders.find(o=>o.id===id)||{}; let login=order.loginMobile||order.customerMobile||order.mobile||currentCustomerMobile||'';
+  db.collection('orders').doc(id).update({cancelOTP:otp,cancelOTPSavedByCustomer:true,cancelOTPSavedAt:Date.now(),status:'Cancel Requested - OTP Saved',presentTag:true,presentUpdate:true}).then(()=>{
+    db.collection('order_otps').doc(id).set({orderId:id,cancelOTP:otp,loginMobile:login,cancelOTPSavedByCustomer:true,timestamp:firebase.firestore.FieldValue.serverTimestamp(),presentTag:true},{merge:true}).then(()=>alert('✅ Cancel OTP Save ho gaya - Admin list me update dikhega - Santrajet cancel karega'));
+  });
 }
-function verifyOTP(id){let otp=document.getElementById('order_otp_'+id).value.trim();if(otp.length!=6)return alert('6 digit OTP likho');db.collection('orders').doc(id).update({status:'Confirmed',otp:otp,otpVerified:true,verifiedAt:Date.now()}).then(()=>{alert('Verified');});}
+// V38 FIX - Invoice PDF - chota tab - Date Time + Santrajet Mall + Customer Detail + Order Detail + Present Update
+function downloadInvoice(id){
+  let order=allOrders.find(o=>o.id===id)||{}; if(!order.id) return;
+  let d=order.createdAt?.toDate?.()||new Date(order.date||Date.now());
+  let dateStr=d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+  let items=order.items||order.cart||[]; if(!Array.isArray(items)) try{items=Object.values(items);}catch(e){items=[];}
+  let sub=0; items.forEach(it=>sub+=(parseInt(it.qty||1)||1)*(parseFloat(it.price||0)||0)); let del=sub>=500?0:49; let grand=sub+del;
+  let isPresent=(Date.now()-d.getTime())<3*24*60*60*1000;
+  let {jsPDF}=window.jspdf; let doc=new jsPDF();
+  doc.setFillColor(228,0,70); doc.rect(0,0,210,28,'F'); doc.setTextColor(255,255,255); doc.setFontSize(13); doc.text('SANTRAJET MALL - INVOICE - Present Update V38',10,16);
+  doc.setFontSize(8); doc.text(`Order: ${order.id} | Date: ${dateStr} | ${isPresent?'Present 3 Days':'Old'} | Payment: ${getPaymentMethod(order)} | Status: ${order.status||''}`,10,22);
+  doc.setTextColor(0,0,0); doc.setFontSize(11); let y=36;
+  doc.text(`Customer: ${order.customerName||order.name||''}`,10,y); y+=7;
+  doc.text(`Login/OTP No: ${order.loginMobile||order.customerMobile||order.mobile||''} | Extra: ${order.deliveryMobile||order.extraDeliveryMobile||'Same'} | OTP: ${order.otp||''} | CustOTP: ${order.customerOTP||''}`,10,y); y+=7;
+  doc.text(`Address: ${(order.customerAddress||order.address||'').substring(0,95)}`,10,y); y+=10;
+  doc.setFontSize(10); doc.text('Order Detail - Firebase Permanent - Present - Screenshot Same as WhatsApp:',10,y); y+=6;
+  items.forEach((it,i)=>{ if(y>270){ doc.addPage(); y=10; } doc.text(`${i+1}. ${it.name||'Product'} (Size ${it.size||'M'}) Qty:${it.qty||1} x ₹${it.price||0}=₹${(it.qty||1)*(it.price||0)} Code:${it.code||it.id||''}`,10,y); y+=6; });
+  y+=4; doc.text(`Subtotal: ₹${sub} | Delivery: ${del===0?'FREE':'₹'+del} | Grand: ₹${grand||calculateTotal(order)} | Sold By: Santrajet Mall | ${window.BASE_URL}`,10,y); y+=6;
+  doc.text(`Present Update: ${isPresent?'Present 3 Days':'Old'} | Invoice - Chhota Tab - Date Time - Customer Detail - Present`,10,y);
+  doc.save(`Invoice_${id}_${isPresent?'Present':'Old'}_${dateStr.replace(/[/, :]/g,'-')}_V38_Santrajet.pdf`);
+}
 waitForDBAndLoad();
+console.log("✅ orders.html V38 FINAL - Old Save V23-V37 Safe + OTP Fix + Cancel OTP Fix + Invoice PDF + Present - GitHub Ready - LAST LINE OK");
 </script>
 <script src="santra-all-url-one-file.js"></script>
 </body>
