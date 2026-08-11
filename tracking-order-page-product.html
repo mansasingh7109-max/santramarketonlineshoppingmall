@@ -1,0 +1,124 @@
+<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tracking Order Page - Product - SANTRAJET MALL</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:#f1f3f6;padding:10px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.h{background:#e40046;color:#fff;padding:12px;border-radius:10px;text-align:center;font-weight:700}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:700;margin:6px 0;cursor:pointer}
+.green{background:#10b981;color:#fff}
+.follow-header{background:#2d2d2d;color:#fff;padding:12px 16px;border-radius:10px 10px 0 0;font-weight:700;letter-spacing:1px}
+.follow-box{background:#fff;border-radius:0 0 10px 10px;padding:16px}
+.step{display:flex;align-items:center;gap:12px;position:relative;padding:10px 0}
+.step-line{position:absolute;left:22px;top:50px;width:4px;height:24px;background:#22c55e}
+.step-line.pending{background:#d1d5db}
+.circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.circle.done{background:#22c55e;color:#fff;border:3px solid #22c55e}
+.circle.pending{background:#e5e7eb;color:#9ca3af;border:3px solid #d1d5db}
+.label.done{color:#16a34a;font-weight:700}.label.pending{color:#9ca3af}
+.track-detail{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px;margin-top:4px;font-size:13px}
+.dash{border:2px dashed #f59e0b;padding:10px;border-radius:10px;background:#fffbeb;margin-top:8px}
+</style></head><body>
+
+<div class="card" style="text-align:center"><b>Order:</b> <span id="oid" style="color:#e40046">Loading...</span> | SANTRAJET MALL</div>
+
+<div class="card" style="padding:0;overflow:hidden">
+<div class="follow-header">FOLLOW YOUR ORDER</div>
+<div class="follow-box" id="followBox">Loading Tracking...</div>
+</div>
+
+<div class="card"><div class="h">📄 INVOICE - SANTRAJET MALL - Sold By: Santra Mall - Customer Profile Detail</div>
+<div id="invoiceBox" style="margin-top:10px">Loading invoice...</div>
+<button class="btn green" onclick="downloadInvoicePDF()">📄 Download Invoice PDF - Santrajet Mall Bill - Customer Profile</button>
+</div>
+
+<script>
+let orderId=new URLSearchParams(location.search).get('orderId')||localStorage.getItem('lastOrderId')||'';
+document.getElementById('oid').innerText=orderId||'No Order';
+let orderData=null;
+function getDB(){try{if(window.db) return window.db; if(window.firebase&&firebase.firestore) return firebase.firestore();}catch(e){} return null;}
+
+const STEPS=[
+ {key:'confirmed',label:'Order Confirmed',icon:'📋✅'},
+ {key:'packed',label:'Order Packed',icon:'📦'},
+ {key:'shipped',label:'Package Shipped',icon:'🚚'},
+ {key:'out',label:'Out For Delivery',icon:'🏃‍♂️📦'},
+ {key:'delivered',label:'Order Delivered',icon:'📦'}
+];
+function getStepIndex(status){
+ let s=(status||'').toLowerCase();
+ if(s.includes('deliver') &&!s.includes('out')) return 4;
+ if(s.includes('out for')) return 3;
+ if(s.includes('ship')) return 2;
+ if(s.includes('pack')) return 1;
+ return 0;
+}
+function renderFollow(status,loc){
+ let idx=getStepIndex(status);
+ let html='';
+ STEPS.forEach((st,i)=>{
+  let done=i<=idx;
+  let isLast=i==STEPS.length-1;
+  html+=`<div class="step">
+   <div class="circle ${done?'done':'pending'}">${done?'✔':'○'}</div>
+   <div style="font-size:28px">${st.icon}</div>
+   <div class="label ${done?'done':'pending'}">${st.label}</div>
+   ${!isLast?`<div class="step-line ${i<idx?'':'pending'}"></div>`:''}
+  </div>
+  ${i==idx?`<div class="track-detail">📍 <b>Tracking Location:</b> ${loc||'Santrajet Mall Warehouse, Jaipur - Ready to Ship'}<br>
+  <b>Status:</b> ${status} | <b>Courier:</b> ${orderData?.courierName||'Delhivery / Ekart - Information from Santrajet Mall'} | <b>AWB:</b> ${orderData?.trackingNumber||'Santrajet Mall team will update shortly'}<br>
+  <b>Present Status:</b> ${orderData?.present||'Present - 3 Days'} | <b>Date:</b> ${new Date().toLocaleString('en-IN')}<br>
+  <span style="color:#065f46">ℹ️ You will receive every update from Santrajet Mall</span></div>`:''}
+  `;
+ });
+ document.getElementById('followBox').innerHTML=html;
+}
+
+function render(d){
+ orderData=d;
+ let name=d.customerName||d.name||'Donamu'; let mob=d.loginMobile||d.deliveryMobile||d.mobile||'9829508335';
+ let addr=d.address||'45, Sastri Nagar, Ajmer'; let date=d.dateStr||new Date().toLocaleString('en-IN');
+ let status=d.status||'Confirmed - Online Payment'; let present=d.present||'Present - 3 Days';
+ let curLoc=d.currentTrackingLocation||d.presentLocation||'Santrajet Mall Warehouse, Jaipur - Ready to Ship';
+ let courier=d.courierName||'Delhivery / Ekart - Information from Santrajet Mall';
+ let tNo=d.trackingNumber||'Santrajet Mall team will update shortly';
+ let cart=d.cart||[{name:'Frock',qty:1,price:600,id:'cuPi3WhNupWuDnRglvyA-XL'}];
+
+ renderFollow(status,curLoc);
+
+ let inv=`<div class="dash"><b>SANTRAJET MALL - Bill Generated from Checkout share.js - In the name of Santrajet Mall</b><br>
+ Order ID: ${d.orderId||orderId} | Date: ${date} | Present: ${present} | Date Time Present Mentioned<br>
+ Sold By: <b>Santrajet Mall</b><br><br>
+ <b>Customer Profile:</b> ${name} | Login: ${mob}<br>Address: ${addr}<br>
+ Payment: ${d.paymentMethod||'Online Payment'} | Status: ${status}<br><br>`;
+ cart.forEach((it,i)=>{let pid=(it.id||'').split('-')[0]; inv+=`${i+1}. ${it.name||'Frock'} - Qty:${it.qty||1} x ₹${it.price||600} | <a href="product.html?id=${pid}" style="color:#0ea5e9">View Product</a><br>`;});
+ inv+=`<br>Subtotal: ₹${d.subtotal||600} | Delivery: FREE | <b>Grand Total: ₹${d.grandTotal||600}</b><br><br>
+ <b>Information from Santrajet Mall:</b><br>Your product has left ${curLoc} towards Jaipur - Courier: ${courier} - ${tNo}<br>
+ <span style="color:#065f46">Santrajet Mall will provide you with every update</span></div>`;
+ document.getElementById('invoiceBox').innerHTML=inv;
+}
+
+function load(){
+ if(!orderId){document.getElementById('followBox').innerHTML='Please open from My Orders page';return;}
+ let db=getDB();
+ if(!db){
+  let fb={orderId:orderId,customerName:'Donamu',loginMobile:'9829508335',address:'45, Sastri Nagar',dateStr:new Date().toLocaleString('en-IN'),status:'Confirmed - Online Payment',present:'Present - 3 Days',currentTrackingLocation:'Santrajet Mall Warehouse, Jaipur - Ready to Ship',courierName:'Delhivery / Ekart - Information from Santrajet Mall',trackingNumber:'Santrajet Mall team will update shortly',grandTotal:600,cart:[{name:'Frock',qty:1,price:600,id:'cuPi3WhNupWuDnRglvyA-XL'}]};
+  render(fb);return;
+ }
+ db.collection('orders').doc(orderId).onSnapshot(doc=>{if(doc.exists) render(doc.data());});
+}
+function downloadInvoicePDF(){
+ if(!orderData) return alert('Loading, please wait');
+ let d=orderData; let pdf=new jspdf.jsPDF(); let y=10;
+ pdf.setFontSize(12); pdf.setFont('helvetica','bold'); pdf.text('SANTRAJET MALL - INVOICE - FOLLOW YOUR ORDER',10,y); y+=8;
+ pdf.setFontSize(9); pdf.setFont('helvetica','normal');
+ pdf.text(`Order ID: ${d.orderId||orderId}\nDate: ${d.dateStr||''}\nCustomer: ${d.customerName||''} | ${d.loginMobile||''}\nStatus: ${d.status||''} | Location: ${d.currentTrackingLocation||''}\nCourier: ${d.courierName||''}\nTotal: Rs ${d.grandTotal||''}\nYou will receive every update from Santrajet Mall`,10,y,{maxWidth:190});
+ pdf.save('Invoice_'+orderId+'_SantrajetMall.pdf');
+}
+load();
+</script></body></html>
