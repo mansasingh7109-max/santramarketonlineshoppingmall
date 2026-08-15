@@ -128,7 +128,7 @@ function render(){
   let link=BASE_URL+"/product.html?id="+encodeURIComponent(fullId);
   return `<div class="item"><img src="${img}" onerror="this.src='https://via.placeholder.com/85'"><div class="item-details"><b>${i+1}. ${name} (Size ${size})</b><br>Qty: ${qty} x ₹${price} = ₹${tot}<br>Code: ${code} | Sold By: Santra Mall<br>Size: ${size}<br><a class="link" href="${link}" target="_blank" style="text-decoration:none;background:#e0f2fe;padding:4px 10px;border-radius:12px;display:inline-block;margin-top:4px">🔗 View Product - Home Image Wala</a></div></div>`;
  }).join("");
- let del=sub>=500?0:49; let grand=sub+del;
+ let del=sub>=500000?0:150; let grand=sub+del;
  document.getElementById("subTotal").innerText=sub;
  document.getElementById("grandTotal").innerText=grand;
  document.getElementById("deliveryCharge").innerText=del===0?"FREE":"₹"+del;
@@ -188,7 +188,7 @@ function sendOrder(){
    let link=BASE_URL+"/product.html?id="+encodeURIComponent(cleanId);
    productLines+=`${i+1}. ${nameP} (Size ${size})\nSize: ${size}\nQty: ${qty} x ₹${price} = ₹${tot}\nCode: ${code}\nView: ${link}\n\n`;
  });
- let delivery=subtotal>=500?0:49; let grand=subtotal+delivery;
+ let delivery=subtotal>=500000?0:150; let grand=subtotal+delivery;
  let text=`*New Order - SANTRA MALL*\nOrder ID: ${orderId}\nDate: ${dateStr}\n\n${productLines}━━━━━━━━━━━━━━━━━━\nSubtotal: ₹${subtotal}\nDelivery: ${delivery===0?'FREE':'₹'+delivery}\n*GRAND TOTAL: ₹${grand}*\n━━━━━━━━━━━━━━━━━━\n\n*Customer Details:*\nName: ${name}\nMobile: ${login}\n${extra?`Extra: ${extra}\n`:''}Email: ${email||'-'}\nAddress: ${fullAddress}\nPayment: ${payment}`;
  try{
    let cust={name:name, loginMobile:login, mobile:login, extraMobileNumberForDelivery:extra, deliveryMobile:extra, email:email, address:fullAddress, fullAddress:fullAddress, house:house, area:area, landmark:landmark, pincode:pincode, city:city, state:state};
