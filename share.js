@@ -38,7 +38,7 @@ window.shareCart = function(){
   // TOTAL - function saath me
   let subtotal = 0;
   cart.forEach(it=>{ let q=parseInt(it.qty||1)||1, p=parseFloat(it.price||0)||0; subtotal+=q*p; });
-  let delivery = subtotal>=500?0:49;
+  let delivery = subtotal>=500000?0:150;
   let grandTotal = subtotal+delivery;
 
   // FIREBASE SAVE - CUSTOMER + ADMIN DONO KE LIYE - OLD SAVE WITH UPDATE
