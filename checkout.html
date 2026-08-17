@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Complete Your Order Sold By Santra Mall - V27 FINAL Cart Khali Fix + Old Save</title>
+<title>Complete Your Order Sold By Santra Mall - V28 FINAL Old Save + DNA Update</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -39,14 +39,13 @@ V23 FINAL: Cart Khali Fix - Product sent ke baad cart khali - V23 - AAPKA BHEJA 
 V24 FINAL: ID Hide + Base ID Auto + Name auto update + Mobile with Address + Extra Delivery No. + Image blank fix + Fast Loading
 V25 FINAL: customerMobile add - Present Order Order page me dikhega - Play/Test aside me bhi - Present update admin se live
 V26 FINAL: Product Page Link Function Wapas - getCleanProductId + getCleanImage + BASE_URL -? symbol hata - *>> <<* hata - View: https://... hamesha
-OLD CODE END - V26 SAFE - AB V27 FINAL - Old Save + Update DNA - Cart Khali Fix
+OLD CODE END - V26 SAFE - AB V28 FINAL - Old Save + Update DNA - Cart Khali Fix + Orders.html Detail + Admin Page Detail Fix
 - Checkout m khali ni hua cart WhatsApp m order sent k bad - Fix - V27
-- V26 me clear 500ms baad ho raha tha - redirect 1200ms me - isliye khali nahi hua - Ab WhatsApp se pehle backup + turant khali
-- clearCartCompletely me sab keys - santraMallCart_v2 + santraMallCart + cart + cartItems + CART_KEY + santra_cart - [] + {} + remove - final []
-- Product page link View: https://... hamesha -? aur *>> <<* hata - Present save hamesha
+- Orders.html me Order Detail nahi ja raha tha + Admin page me nahi ja raha - Fix V28
+- orders, adminOrders, customerOrders, customerOrderOtp, adminCustomerView - 5 jagah save - merge:true - Old data safe
+- clearCartCompletely me sab keys - santraMallCart_v2 + santraMallCart + cart + cartItems + CART_KEY + santra_cart - [] + final []
 -->
-
-<div class="header">🛒 Complete Your Order Sold By Santra Mall - V27 Cart Khali Fix</div>
+<div class="header">🛒 Complete Your Order Sold By Santra Mall - V28 Old Save + DNA Update</div>
 <div class="container">
 <div class="card">
 <h3 style="font-size:16px;margin-bottom:8px">Order Summary - Sold By: Santra Mall</h3>
@@ -74,86 +73,11 @@ OLD CODE END - V26 SAFE - AB V27 FINAL - Old Save + Update DNA - Cart Khali Fix
 var orderId="SM"+Date.now();
 var BASE_URL="https://santramarketshoppingmall.web.app";
 function getCart(){ try{ let r=localStorage.getItem("santraMallCart_v2")||localStorage.getItem("cart")||"{}"; let d=JSON.parse(r); if(Array.isArray(d)){let t={};d.forEach((it,i)=>{t[it.id||it.code||i]=it;});return t;} if(d.cart) return d.cart; return d; }catch(e){return {};} }
-function getCleanImage(it){
-  let ff=['image','imageUrl','productImage','thumbnail','firebaseImage'];
-  for(let f of ff){ let v=it[f]; if(v && typeof v==='string' && v.includes('firebasestorage.googleapis.com') && v.startsWith('http')) return v; }
-  let f2=['image','img','imageUrl','productImage','thumbnail','photo','picture','src','mainImage'];
-  for(let k of f2){ let v=it[k]; if(v && typeof v==='string' && v.length>15 && v.startsWith('http') &&!v.includes('ibb.co')) return v; }
-  try{
-    let keys=[it.id,it.code,it.productId,(it.name||'').toLowerCase(), String(it.id||'').toLowerCase()];
-    for(let key of keys){
-      if(!key) continue;
-      if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[key]) return window.SANTRA_ALL_URLS[key];
-      if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[key]) return window.SANTRA_IMAGES[key];
-      if(window.SANTRA_ALL_URL_MAP && window.SANTRA_ALL_URL_MAP[key]) return window.SANTRA_ALL_URL_MAP[key];
-      if(window.getProductImageUrl){ let u=window.getProductImageUrl(key); if(u && u.startsWith('http')) return u; }
-    }
-    let full = String(it.id||'').trim();
-    let base = full.replace(/[_-](XS|S|M|L|XL|XXL|XXXL)$/i,'');
-    if(base && base!==full){
-      if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[base]) return window.SANTRA_ALL_URLS[base];
-      if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[base]) return window.SANTRA_IMAGES[base];
-    }
-  }catch(e){}
-  return 'https://via.placeholder.com/85?text=No+Image';
-}
-function getCleanProductId(it){
-  let raw=(it.id||it.productId||it.code||'').toString().trim();
-  if(!raw) raw=(it.name||'').toString().trim();
-  return raw;
-}
-function load(){
- document.getElementById("orderId").innerText=orderId;
- try{
-  let cust=JSON.parse(localStorage.getItem('santra_customer')||'{}');
-  if(cust.loginMobile) document.getElementById('mobile').value=cust.loginMobile;
-  if(cust.extraMobileNumberForDelivery || cust.deliveryMobile) document.getElementById('deliveryMobile').value=cust.extraMobileNumberForDelivery||cust.deliveryMobile;
-  if(cust.name) document.getElementById('name').value=cust.name;
-  if(cust.email) document.getElementById('email').value=cust.email;
- }catch(e){}
- render();
-}
-function render(){
- let cart=getCart();
- let cont=document.getElementById("orderItems");
- let keys=Object.keys(cart);
- if(keys.length===0){ cont.innerHTML='<p style="text-align:center;color:#999">Cart empty</p>'; return; }
- let sub=0;
- cont.innerHTML=keys.map((k,i)=>{
-  let it=cart[k]; if(!it) return '';
-  let qty=parseInt(it.qty)||1; let price=parseFloat(it.price)||0; let tot=qty*price; sub+=tot;
-  let size=it.size||it.variant||'M'; let code=it.code||it.id||k; let name=it.name||'Product';
-  let img=getCleanImage(it);
-  let fullId=getCleanProductId(it);
-  let link=BASE_URL+"/product.html?id="+encodeURIComponent(fullId);
-  return `<div class="item"><img src="${img}" onerror="this.src='https://via.placeholder.com/85'"><div class="item-details"><b>${i+1}. ${name} (Size ${size})</b><br>Qty: ${qty} x ₹${price} = ₹${tot}<br>Code: ${code} | Sold By: Santra Mall<br>Size: ${size}<br><a class="link" href="${link}" target="_blank" style="text-decoration:none;background:#e0f2fe;padding:4px 10px;border-radius:12px;display:inline-block;margin-top:4px">🔗 View Product - Home Image Wala</a></div></div>`;
- }).join("");
- let del=sub>=500000?0:150; let grand=sub+del;
- document.getElementById("subTotal").innerText=sub;
- document.getElementById("grandTotal").innerText=grand;
- document.getElementById("deliveryCharge").innerText=del===0?"FREE":"₹"+del;
- window._tot={sub,del,grand};
-}
-function clearCartCompletely(){
-  try{
-    // V27 FIX - Cart Khali Fix - WhatsApp m order sent k bad khali ni hua tha - Ab sab keys khali
-    let emptyArr = JSON.stringify([]);
-    let allKeys = ["santraMallCart_v2","santraMallCart","cart","cartItems","santra_cart","CART_KEY"];
-    allKeys.forEach(k=>{
-      try{ localStorage.setItem(k, emptyArr); localStorage.removeItem(k); localStorage.setItem(k, emptyArr); }catch(e){}
-    });
-    if(window.CART_KEY){
-      try{ localStorage.setItem(window.CART_KEY, emptyArr); localStorage.removeItem(window.CART_KEY); localStorage.setItem(window.CART_KEY, emptyArr); }catch(e){}
-    }
-    try{ if(typeof window.clearCart==='function'){ window.clearCart(); } }catch(e){}
-    document.querySelectorAll('#cartCount,.cart-count,[data-cart-count],#choiceBadge').forEach(el=>{ if(el.id!=='choiceBadge') el.textContent='0'; });
-    // Final force
-    localStorage.setItem("santraMallCart_v2", emptyArr);
-    localStorage.setItem("cart", emptyArr);
-    localStorage.setItem("santraMallCart", emptyArr);
-    console.log("✅ Cart Khali V27 - Old Save Safe");
-  }catch(e){ console.log("Cart clear error",e); }
-}
+function getCleanImage(it){ let ff=['image','imageUrl','productImage','thumbnail','firebaseImage']; for(let f of ff){ let v=it[f]; if(v && typeof v==='string' && v.includes('firebasestorage.googleapis.com') && v.startsWith('http')) return v; } let f2=['image','img','imageUrl','productImage','thumbnail','photo','picture','src','mainImage']; for(let k of f2){ let v=it[k]; if(v && typeof v==='string' && v.length>15 && v.startsWith('http') &&!v.includes('ibb.co')) return v; } try{ let keys=[it.id,it.code,it.productId,(it.name||'').toLowerCase(), String(it.id||'').toLowerCase()]; for(let key of keys){ if(!key) continue; if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[key]) return window.SANTRA_ALL_URLS[key]; if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[key]) return window.SANTRA_IMAGES[key]; if(window.SANTRA_ALL_URL_MAP && window.SANTRA_ALL_URL_MAP[key]) return window.SANTRA_ALL_URL_MAP[key]; if(window.getProductImageUrl){ let u=window.getProductImageUrl(key); if(u && u.startsWith('http')) return u; } } let full = String(it.id||'').trim(); let base = full.replace(/[_-](XS|S|M|L|XL|XXL|XXXL)$/i,''); if(base && base!==full){ if(window.SANTRA_ALL_URLS && window.SANTRA_ALL_URLS[base]) return window.SANTRA_ALL_URLS[base]; if(window.SANTRA_IMAGES && window.SANTRA_IMAGES[base]) return window.SANTRA_IMAGES[base]; } }catch(e){} return 'https://via.placeholder.com/85?text=No+Image'; }
+function getCleanProductId(it){ let raw=(it.id||it.productId||it.code||'').toString().trim(); if(!raw) raw=(it.name||'').toString().trim(); return raw; }
+function load(){ document.getElementById("orderId").innerText=orderId; try{ let cust=JSON.parse(localStorage.getItem('santra_customer')||'{}'); if(cust.loginMobile) document.getElementById('mobile').value=cust.loginMobile; if(cust.extraMobileNumberForDelivery || cust.deliveryMobile) document.getElementById('deliveryMobile').value=cust.extraMobileNumberForDelivery||cust.deliveryMobile; if(cust.name) document.getElementById('name').value=cust.name; if(cust.email) document.getElementById('email').value=cust.email; }catch(e){} render(); }
+function render(){ let cart=getCart(); let cont=document.getElementById("orderItems"); let keys=Object.keys(cart); if(keys.length===0){ cont.innerHTML='<p style="text-align:center;color:#999">Cart empty</p>'; return; } let sub=0; cont.innerHTML=keys.map((k,i)=>{ let it=cart[k]; if(!it) return ''; let qty=parseInt(it.qty)||1; let price=parseFloat(it.price)||0; let tot=qty*price; sub+=tot; let size=it.size||it.variant||'M'; let code=it.code||it.id||k; let name=it.name||'Product'; let img=getCleanImage(it); let fullId=getCleanProductId(it); let link=BASE_URL+"/product.html?id="+encodeURIComponent(fullId); return `<div class="item"><img src="${img}" onerror="this.src='https://via.placeholder.com/85'"><div class="item-details"><b>${i+1}. ${name} (Size ${size})</b><br>Qty: ${qty} x ₹${price} = ₹${tot}<br>Code: ${code} | Sold By: Santra Mall<br>Size: ${size}<br><a class="link" href="${link}" target="_blank" style="text-decoration:none;background:#e0f2fe;padding:4px 10px;border-radius:12px;display:inline-block;margin-top:4px">🔗 View Product</a></div></div>`; }).join(""); let del=sub>=500000?0:150; let grand=sub+del; document.getElementById("subTotal").innerText=sub; document.getElementById("grandTotal").innerText=grand; document.getElementById("deliveryCharge").innerText=del===0?"FREE":"₹"+del; window._tot={sub,del,grand}; }
+function clearCartCompletely(){ try{ let emptyArr = JSON.stringify([]); let allKeys = ["santraMallCart_v2","santraMallCart","cart","cartItems","santra_cart","CART_KEY"]; allKeys.forEach(k=>{ try{ localStorage.setItem(k, emptyArr); localStorage.removeItem(k); localStorage.setItem(k, emptyArr); }catch(e){} }); if(window.CART_KEY){ try{ localStorage.setItem(window.CART_KEY, emptyArr); localStorage.removeItem(window.CART_KEY); localStorage.setItem(window.CART_KEY, emptyArr); }catch(e){} } try{ if(typeof window.clearCart==='function'){ window.clearCart(); } }catch(e){} document.querySelectorAll('#cartCount,.cart-count,[data-cart-count],#choiceBadge').forEach(el=>{ if(el.id!=='choiceBadge') el.textContent='0'; }); localStorage.setItem("santraMallCart_v2", emptyArr); localStorage.setItem("cart", emptyArr); localStorage.setItem("santraMallCart", emptyArr); }catch(e){} }
 function sendOrder(){
  let btn=document.getElementById('sendBtn');
  let name=document.getElementById('name').value.trim();
@@ -197,7 +121,6 @@ function sendOrder(){
    localStorage.setItem('santra_deliveryMobile', extra);
    if(window.db) window.db.collection('customers').doc(login).set({name:name, loginMobile:login, deliveryMobile:extra, address:fullAddress, email:email},{merge:true});
  }catch(e){}
- // V27 FIX - Cart Khali Fix - Pehle backup + turant khali - WhatsApp se pehle
  let arr=[];
  try{
    arr=Object.values(cart).map(it=>{ return {...it, image:getCleanImage(it), imageUrl:getCleanImage(it), productImage:getCleanImage(it)}; });
@@ -205,30 +128,41 @@ function sendOrder(){
    localStorage.setItem('lastOrderId', orderId);
    localStorage.setItem('lastOrderGrandTotal', grand.toString());
  }catch(e){}
- // Turant khali - WhatsApp open se pehle
  clearCartCompletely();
  window.open(`https://wa.me/918769171078?text=${encodeURIComponent(text)}`,'_blank');
  try{
-   if(window.db || firebase.firestore){
-     let db = window.db || firebase.firestore();
-     db.collection('orders').doc(orderId).set({
-       orderId:orderId, id:orderId,
-       mobile:login, customerMobile:login, loginMobile:login, deliveryMobile:extra, extraDeliveryMobile:extra,
-       name:name, customerName:name, email:email, address:fullAddress, customerAddress:fullAddress, fullAddress:fullAddress, shippingAddress:fullAddress,
-       cart:arr, items:arr,
-       paymentMethod:payment, total:grand, subtotal:subtotal, delivery:delivery,
-       status:'Pending - OTP Wait - '+payment, dateStr:dateStr,
-       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-       presentTag:true
-     },{merge:true});
+   let db = window.db || firebase.firestore();
+   let rdb = window.rtdb || firebase.database();
+   let orderData = {
+     orderId:orderId, id:orderId,
+     mobile:login, customerMobile:login, loginMobile:login, deliveryMobile:extra, extraDeliveryMobile:extra, extraMobileNumberForDelivery:extra,
+     name:name, customerName:name, email:email,
+     address:fullAddress, customerAddress:fullAddress, fullAddress:fullAddress, shippingAddress:fullAddress,
+     house:house, area:area, landmark:landmark, pincode:pincode, city:city, state:state,
+     cart:arr, items:arr, products:arr,
+     paymentMethod:payment, payment:payment, total:grand, subtotal:subtotal, delivery:delivery, grandTotal:grand,
+     status:'Pending - OTP Wait - '+payment, dateStr:dateStr, date:new Date().toISOString(),
+     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+     presentTag:true, presentUpdate:true, soldBy:'Santra Mall',
+     customerDetails:{name:name, mobile:login, extraMobile:extra, email:email, address:fullAddress}
+   };
+   if(db){
+     db.collection('orders').doc(orderId).set(orderData,{merge:true});
+     db.collection('adminOrders').doc(orderId).set({...orderData, adminNote:'New Order - '+orderId},{merge:true});
+     db.collection('customerOrders').doc(orderId).set(orderData,{merge:true});
+     db.collection('customerOrderOtp').doc(orderId).set({orderId:orderId, mobile:login, deliveryMobile:extra, cart:arr, total:grand, status:'Pending - OTP Wait', date:new Date().toISOString()},{merge:true});
+     db.collection('adminCustomerView').doc(orderId).set({orderId:orderId, mobile:login, name:name, address:fullAddress, total:grand, products:arr, status:'Pending', dateStr:dateStr},{merge:true});
    }
- }catch(e){}
+   if(rdb){
+     rdb.ref('orders/'+orderId).set({...orderData, createdAt:Date.now()});
+     rdb.ref('adminOrders/'+orderId).set({...orderData, createdAt:Date.now()});
+   }
+ }catch(e){ console.log('DNA save error',e); }
  btn.innerText="✅ Sent - Cart Khali";
  setTimeout(()=>{ clearCartCompletely(); location.href=`share-otp-verify.html?mobile=${login}&delivery=${extra}&orderId=${orderId}&payment=${encodeURIComponent(payment)}`; }, 800);
 }
 if(!firebase.apps.length){ firebase.initializeApp({apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",databaseURL:"https://santramarketshoppingmall-default-rtdb.firebaseio.com/",projectId:"santramarketshoppingmall",storageBucket:"santramarketshoppingmall.appspot.com",messagingSenderId:"398490252924",appId:"1:398490252924:web:d1b6348b549183b93b7bf9"}); }
 document.addEventListener("DOMContentLoaded", load);
-console.log("✅ Checkout.html V27 FINAL - Old Save + Product Link + Cart Khali Fix + Symbol Remove - LAST LINE OK");
 </script>
 <script src="santra-all-url-one-file.js"></script>
 </body>
