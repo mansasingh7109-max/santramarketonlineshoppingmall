@@ -5,10 +5,11 @@ V11 FINAL BACKUP - ORDER SUMMARY PAGE - SAFE
 V12-V15 BACKUP - FULL ID Fix - trim() - SAFE
 V16 FINAL BACKUP - Clean Buttons - No cloudinary/imgbb/firebase/base64 - AAPKA BHEJA HUA - SAFE
 V17 FINAL - Product Link Image + Full Detail Fix - AAPKA BHEJA HUA - SAFE
+OLD BACKUP END - SAFE
 */
 
-// V18 FINAL - OLD SAVE WITH UPDATE DNA - Customer Profile + Delivery Form Auto + Ecommerce Flow - Customer + Admin Useful
-console.log("✅ share.js V18 FINAL - Old Save With Update DNA");
+// V19 FINAL - OLD SAVE WITH UPDATE DNA - Delivery 150 Fix + Orders.html + Admin OTP Fix + Customer Profile Auto
+console.log("✅ share.js V19 FINAL - Old Save With Update DNA - Delivery 150 + Orders Fix");
 
 window.shareCart = window.shareCart || function(){};
 window.shareCart = function(){
@@ -21,7 +22,7 @@ window.shareCart = function(){
   let orderId = 'SM' + Date.now();
   let dateStr = new Date().toLocaleString('en-IN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
   
-  // CUSTOMER - FULL - OLD + NEW - function saath me
+  // CUSTOMER - FULL - OLD + NEW
   let customer = {};
   try{ customer = JSON.parse(localStorage.getItem('santra_customer')||'{}'); }catch(e){}
   let name = customer.name || customer.customerName || customer.fullName || "__________";
@@ -35,16 +36,15 @@ window.shareCart = function(){
   let BASE_URL = "https://santramarketshoppingmall.web.app";
   let ADMIN_WHATSAPP = window.ADMIN_WHATSAPP || "918769171078";
 
-  // TOTAL - function saath me
+  // TOTAL - V19 FIX - Hamesha ₹150 - FREE hata
   let subtotal = 0;
   cart.forEach(it=>{ let q=parseInt(it.qty||1)||1, p=parseFloat(it.price||0)||0; subtotal+=q*p; });
-  let delivery = subtotal>=500000?0:150;
+  let delivery = 150;
   let grandTotal = subtotal+delivery;
 
-  // FIREBASE SAVE - CUSTOMER + ADMIN DONO KE LIYE - OLD SAVE WITH UPDATE
+  // FIREBASE SAVE - 5 JAGAH - OLD SAVE WITH UPDATE - taaki orders.html + admin OTP dono me dikhe
   try{
    if(window.db){
-    // 1. Customer Profile Auto Update - taaki delivery form auto save ho
     if(loginMobile!=="__________"){
       window.db.collection('customers').doc(loginMobile).set({
         name: name, customerName: name, fullName: name,
@@ -55,33 +55,37 @@ window.shareCart = function(){
         lastOrderId: orderId, updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       },{merge:true});
     }
-    // 2. Order Save - OLD fields + NEW fields - taaki orders.html me turant detail dikhe - demo nahi
-    window.db.collection('orders').doc(orderId).set({
+    let orderData = {
      orderId: orderId, id: orderId,
-     mobile: loginMobile, customerMobile: loginMobile, loginMobile: loginMobile, // OLD + NEW - dono naam se
+     mobile: loginMobile, customerMobile: loginMobile, loginMobile: loginMobile,
      deliveryMobile: deliveryMobile, extraDeliveryMobile: deliveryMobile,
      name: name, customerName: name, fullName: name,
      email: email, address: finalAddr, fullAddress: finalAddr, customerAddress: finalAddr,
-     cart: cart, items: cart, orderItems: cart, // OLD + NEW
-     subtotal: subtotal, delivery: delivery, grandTotal: grandTotal, total: grandTotal, totalAmount: grandTotal,
+     cart: cart, items: cart, orderItems: cart, products: cart,
+     subtotal: subtotal, delivery: 150, grandTotal: grandTotal, total: grandTotal, totalAmount: grandTotal,
      status: 'Pending - OTP Wait', paymentMethod: 'Cash on Delivery',
      date: new Date().toISOString(), dateStr: dateStr,
      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-     file: 'share-otp-verify.html', finalFile: 'orders.html', website: 'santramarketshoppingmall.web.app'
-    },{merge:true});
+     presentTag:true, soldBy:'Santra Mall'
+    };
+    window.db.collection('orders').doc(orderId).set(orderData,{merge:true});
+    window.db.collection('adminOrders').doc(orderId).set({...orderData, adminNote:'New Order '+orderId},{merge:true});
+    window.db.collection('customerOrders').doc(orderId).set(orderData,{merge:true});
+    window.db.collection('customerOrderOtp').doc(orderId).set({orderId:orderId, mobile:loginMobile, deliveryMobile:deliveryMobile, cart:cart, total:grandTotal, status:'Pending - OTP Wait', date:new Date().toISOString()},{merge:true});
+    window.db.collection('adminCustomerView').doc(orderId).set({orderId:orderId, mobile:loginMobile, name:name, address:finalAddr, total:grandTotal, products:cart, status:'Pending', dateStr:dateStr},{merge:true});
    }
-  }catch(e){}
+  }catch(e){ console.log(e); }
 
-  // CLEAN MESSAGE - No cloudinary/imgbb/base64
-  let text = `🛒 *NEW ORDER - SANTRA MALL - V18* 🛒\nOrder ID: ${orderId}\nDate: ${dateStr}\n_________________________________\n\n`;
+  // CLEAN MESSAGE - FREE hata - ₹150 fix
+  let text = `🛒 *NEW ORDER - SANTRA MALL - V19* 🛒\nOrder ID: ${orderId}\nDate: ${dateStr}\n_________________________________\n\n`;
   cart.forEach(function(item, index){
    let size = item.size || item.variant || 'M'; let qty = parseInt(item.qty)||1; let price = parseFloat(item.price)||0;
    let code = item.code || item.productCode || item.id || 'N/A';
    let nameP = item.name || item.productName || 'Product';
-   let cleanId = (item.id || code || '').toString().trim(); // FULL ID - NO SPLIT - fCawrEJjpEoRkB0M5Ztu_M pura
+   let cleanId = (item.id || code || '').toString().trim();
    text += `${index + 1}. *${nameP}*\nSize: ${size} | Qty: ${qty} x ₹${price} = ₹${qty*price}\nCode: ${code}\n🔗 View: ${BASE_URL}/product.html?id=${encodeURIComponent(cleanId)}\n\n`;
   });
-  text += `_________________________________\n*Subtotal: ₹${subtotal}*\n*Delivery: ${delivery===0?"FREE":"₹"+delivery}*\n*🧾 GRAND TOTAL: ₹${grandTotal}*\n_________________________________\n\n`;
+  text += `_________________________________\n*Subtotal: ₹${subtotal}*\n*Delivery: ₹150*\n*🧾 GRAND TOTAL: ₹${grandTotal}*\n_________________________________\n\n`;
   text += `*♦️ Customer:*\nName: ${name}\nLogin/OTP No: ${loginMobile}\nExtra Delivery No: ${deliveryMobile}\nEmail: ${email||'-'}\nAddress: ${finalAddr}\n\n`;
   text += `*📝 Verify: ${BASE_URL}/share-otp-verify.html?mobile=${loginMobile}&orderId=${orderId}*\n*📦 Orders: ${BASE_URL}/orders.html?mobile=${loginMobile}*\n`;
 
@@ -99,7 +103,11 @@ window.shareCart = function(){
       return {...it, image:img, imageUrl:img, productImage:img};
     });
     localStorage.setItem('lastOrderCartBackup', JSON.stringify(arr));
-    localStorage.setItem('lastOrderFullBackup', JSON.stringify({orderId, customerName: name, loginMobile, deliveryMobile, address: finalAddr, items: arr, grandTotal, dateStr, status:'Pending'}));
+    localStorage.setItem('lastOrderFullBackup', JSON.stringify({orderId, customerName: name, loginMobile, deliveryMobile, address: finalAddr, items: arr, grandTotal, dateStr, status:'Pending', delivery:150}));
+    // ScreenshotBox - FREE hata
+    let itemsText = arr.map((it,i)=>`${i+1}. ${it.name} Qty:${it.qty} x ₹${it.price}`).join('\n');
+    let screenshotBox=`<div class="screenshot-box">🛒 <b>SANTRAJET MALL - V19 Present + Live</b>\nOrder ID: ${orderId}\nDate: ${dateStr}\n\n${itemsText}\n\nSubtotal: ₹${subtotal}\nDelivery: ₹150\n<b>Grand Total: ₹${grandTotal}</b>\nPayment: Cash on Delivery\nCustomer: ${name} | Login: ${loginMobile}</div>`;
+    localStorage.setItem('lastScreenshotBox', screenshotBox);
   }catch(e){}
 
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
@@ -117,6 +125,6 @@ window.shareCart = function(){
    location.href = `share-otp-verify.html?mobile=${loginMobile}&orderId=${orderId}`;
   }, 800);
 
- }catch(e){ console.error("shareCart V18 error", e); alert("Error: "+e.message); }
+ }catch(e){ console.error("shareCart V19 error", e); alert("Error: "+e.message); }
 };
-console.log("share.js V18 FINAL - Old Save With Update DNA - LAST LINE OK");
+console.log("share.js V19 FINAL - Old Save With Update DNA - LAST LINE OK");
