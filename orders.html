@@ -346,6 +346,34 @@ function renderOrders(orders){
       <div id="cancelOtpBox_${order.id}" class="otp-cancel-box" style="display:${showCancelOtp}"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">🔐 Add Cancel WhatsApp OTP</div><input id="cancel_otp_${order.id}" class="otp-input-cancel" placeholder="------" maxlength="6" value=""><button class="btn-save-cancel" onclick="saveCancelOTP('${order.id}')">💾 Save Cancel OTP - Santrajet Mall me update</button></div>
       ${savedOrderOTPBox}
       <div id="mainOtpBox_${order.id}" class="otp-box" style="display:${showMainOtp}"><div style="font-weight:bold;color:#065f46;text-align:center;font-size:12px">Add WhatsApp OTP - Box me show ho saved Order OTP</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6" value=""><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Save OTP - Santrajet Mall me update</button></div>
+
+
+
+
+
+  <!-- HELP TAB FOR INQUIRY - ALL ORDER PAR DIKE - V29 - SB ORDER KE LIYE - YAHAN PASTE KARO - LINE 348 KE BAAD -->
+  <div id="helpTab_${order.id}" style="border:1.5px solid #d81b60;border-radius:14px;background:#fff;padding:12px;margin:12px 0;">
+    <div style="text-align:center;font-weight:800;color:#d81b60;">🆘 Santrajet Mall Help Center - AI Help Box Inquiry - Formally Product</div>
+    <div style="display:flex;gap:6px;margin:6px 0;">
+      <select id="helpType_${order.id}" style="flex:1;padding:10px;border-radius:10px;border:1.5px solid #ddd;">
+        <option>Editing Message</option><option>Return Request</option><option>Exchange Request</option><option>Refund Request</option><option>Order Inquiry - Formally Product</option><option>Product Inquiry - AI Help Box</option>
+      </select>
+    </div>
+    <textarea id="helpMsg_${order.id}" rows="3" placeholder="Editing / Return / Exchange / Product Inquiry likho - ${order.id}" style="width:100%;padding:10px;border-radius:10px;border:1.5px solid #ddd;margin:6px 0;"></textarea>
+    <input type="file" id="helpFile_${order.id}" accept="image/*,video/*" multiple style="margin:6px 0;">
+    <div id="filePreview_${order.id}" style="font-size:11px;color:#666;"></div>
+    <button onclick="submitHelpInquiry('${order.id}','${order.mobile||order.loginMobile||'8003200377'}')" style="width:100%;padding:12px;background:#22c55e;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px;">📲 WhatsApp - Help - 8769171078 + Firebase Save + Photo/Video</button>
+    <div id="helpStatus_${order.id}" style="font-size:12px;color:#065f46;text-align:center;margin-top:6px;"></div>
+  </div>
+
+ 
+
+
+
+
+
+
+  
       ${status==='Cancel Requested'?`<div style="background:#fef3c7;padding:8px;border-radius:8px;text-align:center;color:#92400e;font-size:12px;margin-top:8px">🕒 Cancel Requested - ${order.cancelReason||''} - Santrajet Mall cancel karega</div>`:status==='Cancelled'?`<div style="background:#fee2e2;padding:8px;border-radius:8px;text-align:center;color:#991b1b;font-size:12px;margin-top:8px">❌ Cancelled - ${order.cancelReason||''}</div>`:`<div style="background:#d1fae5;padding:8px;border-radius:8px;text-align:center;color:#065f46;font-size:12px;margin-top:8px;display:${status==='Pending'?'none':'block'}">✅ ${status} - ${payment} | Present | Tracking: ${trackingLocation} | Santrajet Mall Live</div>`}
     </div>`;
   }).join('');
@@ -420,6 +448,56 @@ function saveCancelOTP(id){
 }
 // ✅ FIX: Invoice PDF - Santrajet Mall word only - Admin word nahi - Half cut fix - splitTextToSize se wrap - Chhota Tab
 // ✅ FINAL INVOICE FUNCTION - Aapka Format - SANTRAJET MALL Clean Table - Har Order Ke According - OTP Hide - No Admin Word - Half Cut Fix - Mumbai Warehouse
+
+
+
+
+async function submitHelpInquiry(orderId, mobile){
+  let typeEl = document.getElementById('helpType_'+orderId);
+  let msgEl = document.getElementById('helpMsg_'+orderId);
+  let fileEl = document.getElementById('helpFile_'+orderId);
+  let statusEl = document.getElementById('helpStatus_'+orderId);
+  let previewEl = document.getElementById('filePreview_'+orderId);
+  if(!typeEl) return;
+  let type = typeEl.value; let msg = msgEl.value || type;
+  let files = fileEl.files; let names=[], urls=[];
+  if(statusEl) statusEl.innerText='Uploading...';
+  try{
+    if(files.length>0 && firebase.storage){
+      for(let f of files){
+        let ref = firebase.storage().ref().child('helpRequests/'+orderId+'/'+Date.now()+'_'+f.name);
+        await ref.put(f); urls.push(await ref.getDownloadURL()); names.push(f.name);
+      }
+    }
+  }catch(e){ console.log(e); }
+  try{
+    if(window.db){
+      let nowStr = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+      await window.db.collection('orders').doc(orderId).set({helpRequested:true, helpRequestType:type, helpMessage:msg, helpFileNames:names, helpFileUrls:urls, helpRequestDateStr:nowStr, presentTag:true, formallyProduct:true, whatWasAsked:msg, whatWasSent:names.join(', ')},{merge:true});
+      await window.db.collection('helpRequests').doc(orderId+'_'+Date.now()).set({orderId:orderId, mobile:mobile, type:type, message:msg, fileNames:names, fileUrls:urls, date:new Date().toISOString(), presentTag:true, whatWasAsked:msg, whatWasSent:names.join(', '), formallyProduct:true});
+    }
+  }catch(e){ console.log(e); }
+  window.open("https://wa.me/918769171078?text="+encodeURIComponent(`*HELP - ${type}*\nOrder: ${orderId}\nMobile: ${mobile}\nMsg: ${msg}\nFiles: ${names.join(', ')}\nFormally Product - ${orderId}`),'_blank');
+  if(statusEl) statusEl.innerText='✅ Help Saved - '+type+' - Formally Product';
+}
+// file preview - all order
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id && e.target.id.startsWith('helpFile_')){
+    let orderId = e.target.id.replace('helpFile_','');
+    let t=''; for(let f of e.target.files) t+=f.name+' ';
+    let pv = document.getElementById('filePreview_'+orderId);
+    if(pv) pv.innerText = t?'Selected: '+t:'';
+  }
+});
+
+
+
+
+
+
+
+
+  
 function downloadInvoice(id){
   let order=allOrders.find(o=>o.id===id)||{}; if(!order.id) return;
   let d=order.createdAt?.toDate?.()||new Date(order.date||Date.now());
