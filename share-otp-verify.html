@@ -1,79 +1,49 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Order Verify - V23 FINAL - Box Gayab + Saved Fix</title><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script><script src="config.js"></script><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,Arial}body{background:#f1f3f6;padding:15px;padding-bottom:100px}.card{background:white;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.08)}.yellow{background:#fff9c4;border:2px solid #facc15;border-radius:14px;padding:16px;text-align:center;margin-bottom:14px}.red-head{background:#e40046;color:white;padding:12px;border-radius:10px;text-align:center;font-weight:700;margin-bottom:10px}.whatsapp-box{background:#dcf8c6;border:2px solid #25d366;border-radius:14px;padding:16px;text-align:center;margin-bottom:14px}input{width:100%;padding:14px;border:1.5px solid #ddd;border-radius:10px;margin:8px 0;font-size:15px}.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin:6px 0;font-size:15px}.btn-green{background:#10b981;color:white}.btn-whatsapp{background:#25d366;color:white}.btn-blue{background:#0ea5e9;color:white}.btn-orange{background:#f59e0b;color:white}.saved-box{border:2px solid #10b981;background:#f0fdf4;border-radius:12px;padding:16px;text-align:center;display:none}</style></head><body>
-<!--
-⚠️ OLD CODE BACKUP - V11 ORIGINAL - SAFE - KUCH HATAYA NAHI
-AB V23 - Box Gayab + Saved OTP by Customer Fix - Sirf isi file me
--->
-<div class="card" style="text-align:center"><b>Order ID:</b> <span id="orderIdText" style="color:#065f46;font-weight:700">Loading...</span> | <span style="color:#10b981">Secure Verification</span></div>
+<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Order Verify - V27 FINAL</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<script src="config.js"></script>
+</head><body>
+<div><b>Order ID:</b> <span id="orderIdText"></span></div>
+<div style="border:2px solid #e40046;padding:12px"><div>🔔 Add OTP - Admin OTP Match Only - 123 wala accept nahi</div>
+<input id="orderIdInput" readonly><input id="otpInput" placeholder="6 Digit OTP" maxlength="6" style="text-align:center;letter-spacing:6px">
+<button onclick="verifyOTP()">✅ Verify OTP - Admin Match Only</button>
+<div id="statusText">Status: Pending - OTP Wait</div></div>
 
-<div class="yellow" id="yellowBox"><div style="font-size:20px;font-weight:800;color:#e40046">⚠️ IMPORTANT - OTP REQUIRED ⚠️</div><div style="font-size:18px;font-weight:700;margin:8px 0">Order place ho gaya hai!</div><div>Order confirm karne ke liye hum aapko WhatsApp pe OTP bhejenge.</div><div style="font-weight:700;margin:8px 0">OTP milne ke baad wapis isi WhatsApp number pe reply karein.</div><div style="color:#e40046;font-weight:800">Bina OTP ke order confirm nahi hoga!</div><button class="btn btn-whatsapp" style="width:auto;padding:10px 20px;margin-top:10px" onclick="openWhatsApp()">📲 Open WhatsApp - Reminder Box</button></div>
+<div id="santrajetHelpCenter" style="border:1.5px solid #d81b60;border-radius:14px;padding:14px;margin:14px 0">
+<div style="text-align:center;font-weight:800;color:#d81b60">🆘 Santrajet Mall Help Center - AI Help Box - Formally Product</div>
+<select id="helpType"><option>Editing Message</option><option>Return Request</option><option>Exchange Request</option><option>Refund Request</option><option>Order Inquiry - Formally Product</option></select>
+<textarea id="helpMsg" rows="3" placeholder="Inquiry / Editing likho"></textarea>
+<input type="file" id="helpFile" accept="image/*,video/*" multiple><div id="filePreview"></div>
+<button onclick="submitHelpCenter()">📲 WhatsApp - Help - 8769171078 + Firebase Save</button><div id="helpStatus"></div></div>
 
-<div class="whatsapp-box" id="whatsappReminderBox"><div style="font-size:18px;font-weight:800;color:#075e54">💬 WhatsApp Box - Only Reminder</div><div style="margin:8px 0">Aapka Order <b id="reminderOrderId"></b> pending hai - WhatsApp pe OTP bhejo</div><div style="color:#e40046;font-weight:700">Orders page dekhne ke liye pehle OTP add karo</div><button class="btn btn-whatsapp" onclick="openWhatsApp()">📲 WhatsApp Box - OTP Bhejo</button></div>
-
-<div class="card" style="border:2px solid #e40046" id="otpCard"><div class="red-head">🔔 Add OTP for Verification</div><input id="orderIdInput" placeholder="Order ID" readonly><input id="otpInput" placeholder=" 6 Digit OTP" maxlength="6" style="text-align:center;letter-spacing:6px;font-size:18px;font-weight:700;border-color:#10b981;border-width:2px"><button class="btn btn-green" onclick="verifyOTP()">✅ Verify OTP & Confirm - Orders Page Dekho</button><div id="statusText" style="margin-top:10px;text-align:center;font-weight:700">Status: <span style="color:#f59e0b">Pending - OTP Wait</span></div></div>
-
-<div class="card saved-box" id="savedOtpBox"><div style="font-weight:800;color:#065f46;font-size:15px">✅ WhatsApp Order OTP Saved</div><div style="font-size:26px;font-weight:800;letter-spacing:8px;margin:10px 0;color:#065f46" id="savedOtpText">------</div><div style="font-size:12px;color:#065f46" id="savedOtpDate">Date: --</div><div style="font-size:11px;color:#065f46;margin-top:6px">Saved OTP by Customer - Firebase + Admin me update ho gaya - Order Page par bhi Saved dikhega</div></div>
-
-<div class="card" id="ordersPageBox" style="display:none;border:2px solid #10b981"><div style="font-weight:700;text-align:center;color:#065f46">✅ OTP Verified - Ab Orders Page Dekh Sakte Ho - WhatsApp OTP Added - Saved OTP by Customer</div><button class="btn btn-green" onclick="goToOrders()">➡️ Go to Orders Page - orders.html</button></div>
-
-<div class="card" id="requestCard"><button class="btn btn-orange" onclick="sendOTPWhatsApp()">🕐 OTP WhatsApp for Confirm Pending - Reminder</button></div>
+<div id="ordersPageBox" style="display:none">✅ OTP Verified - Go to Orders Page<br><button onclick="location.href='orders.html?mobile='+encodeURIComponent(mobile)+'&orderId='+encodeURIComponent(orderId)+'&verified=true'">Go to Orders</button></div>
 
 <script>
-try{ if(!window.db && firebase.firestore) window.db=firebase.firestore(); }catch(e){}
-try{ if(!window.rtdb && firebase.database) window.rtdb=firebase.database(); }catch(e){}
-let params=new URLSearchParams(location.search);
-let orderId=params.get('orderId')||localStorage.getItem('lastOrderId')||localStorage.getItem('lastOrderIdForOTP')||'';
-let mobile=params.get('mobile')||localStorage.getItem('santra_mobile')||localStorage.getItem('mobile')||'';
-document.getElementById('orderIdText').innerText=orderId||'No Order';
-document.getElementById('orderIdInput').value=orderId||'';
-let rem=document.getElementById('reminderOrderId'); if(rem) rem.innerText=orderId||'';
-
-function openWhatsApp(){
-  let txt=`*SANTRA MALL - OTP Request*\nOrder ID: ${orderId}\nMobile: ${mobile}\n\nOTP bhejo please - Santrajet Mall`;
-  window.open("https://wa.me/918769171078?text="+encodeURIComponent(txt),'_blank');
-}
-function sendOTPWhatsApp(){openWhatsApp();}
-function goToOrders(){ location.href='orders.html?mobile='+encodeURIComponent(mobile)+'&orderId='+encodeURIComponent(orderId)+'&verified=true'; }
-
+let orderId=new URLSearchParams(location.search).get('orderId')||localStorage.getItem('lastOrderId')||'';
+let mobile=new URLSearchParams(location.search).get('mobile')||localStorage.getItem('santra_mobile')||'9829508335';
+document.getElementById('orderIdText').innerText=orderId;document.getElementById('orderIdInput').value=orderId;
 async function verifyOTP(){
- let otp=document.getElementById('otpInput').value.trim();
- if(otp.length!=6) return alert('6 digit OTP likho');
- if(!orderId) return alert('Order ID nahi hai');
- let nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
- try{
-  if(window.db){
-   let ref=window.db.collection('orders').doc(orderId);
-   // OLD LOGIC SAME + NEW SAVE
-   await ref.set({
-    status:'Confirmed - OTP Saved by Customer: '+otp+' - Present',
-    otpVerified:true, verifiedAt:Date.now(), customerOTP:otp, savedOTP:otp,
-    saveByCustomer:true, savedOtpByCustomer:true, whatsappBox:'verified',
-    whatsappBoxStatus:'OTP Saved by Customer: '+otp, dateTimeHamesha:nowStr,
-    trackingHistory: firebase.firestore.FieldValue.arrayUnion({dateTime:nowStr,status:'OTP Saved by Customer: '+otp,location:'Confirmed - Saved by Customer'})
-   },{merge:true});
-   await window.db.collection('adminOrders').doc(orderId).set({orderId:orderId,mobile:mobile,otp:otp,savedOTP:otp,status:'OTP Saved by Customer: '+otp,saveByCustomer:true,savedOtpByCustomer:true,dateTimeHamesha:nowStr},{merge:true});
-   await window.db.collection('customerOrderOtp').doc(orderId).set({orderId:orderId,mobile:mobile,otp:otp,savedOTP:otp,status:'OTP Saved by Customer: '+otp,savedByCustomer:true,verified:true,dateTimeHamesha:nowStr},{merge:true});
-  }
-  try{
-    let rdb=window.rtdb||firebase.database();
-    await rdb.ref('orders/'+orderId).update({savedOTP:otp,otpVerified:true,status:'OTP Saved by Customer: '+otp,saveByCustomer:true});
-  }catch(e){}
- }catch(e){ console.log(e); }
-
- // ✅ YEHI TERA PROBLEM FIX KAREGA - Box gayab + Saved likha aayega
- document.getElementById('yellowBox').style.display='none';
- document.getElementById('whatsappReminderBox').style.display='none';
- document.getElementById('otpCard').style.display='none';
- 
- document.getElementById('savedOtpText').innerText=otp;
- document.getElementById('savedOtpDate').innerText='Date: '+nowStr+' - Saved OTP by Customer';
- document.getElementById('savedOtpBox').style.display='block';
- document.getElementById('statusText').innerHTML='Status: <span style="color:#10b981">✅ Saved OTP by Customer - '+otp+'</span>';
+ let otp=document.getElementById('otpInput').value.replace(/\D/g,'').trim();
+ if(otp.length!=6){alert('6 digit OTP likho - Admin ne jo diya wahi');return;}
+ let ref=window.db.collection('orders').doc(orderId);let doc=await ref.get();if(!doc.exists){alert('Order nahi mila');return;}
+ let data=doc.data();let adminOtp=(data.otp||data.adminOtp||'').toString().trim();
+ let cDoc=await window.db.collection('customerOrderOtp').doc(orderId).get();if(cDoc.exists)adminOtp=adminOtp||(cDoc.data().otp||cDoc.data().adminOtp||'').toString().trim();
+ let oDoc=await window.db.collection('order_otps').doc(orderId).get();if(oDoc.exists)adminOtp=adminOtp||(oDoc.data().otp||oDoc.data().adminOtp||'').toString().trim();
+ let finalOtp=adminOtp;
+ if(!finalOtp){alert('❌ Admin ne abhi Firebase me OTP save nahi kiya - admin-customer-order-otp.html me Generate karo - 123 accept nahi hoga');document.getElementById('statusText').innerText='❌ Admin OTP nahi hai - 123 accept nahi';return;}
+ if(otp!==finalOtp){alert('❌ Wrong OTP - Admin OTP ('+finalOtp+') wahi dalo - '+otp+' galat hai - Save nahi hoga');document.getElementById('statusText').innerText='❌ Wrong OTP - '+finalOtp+' dalo';return;}
+ await ref.set({status:'Confirmed - OTP Saved: '+otp+' - Present - Match Admin - WhatsApp Box Verified',otpVerified:true,customerOTP:otp,savedOTP:otp,presentTag:true,whatsappBox:'verified',lastWAMessage:'✅ WhatsApp Order OTP Saved - Date: '+new Date().toLocaleString('en-IN')},{merge:true});
+ document.getElementById('statusText').innerText='✅ Confirmed - Match Admin - WhatsApp Box Hat Gaya';
  document.getElementById('ordersPageBox').style.display='block';
- 
- localStorage.setItem('whatsappBoxVerified','true');
- localStorage.setItem('otp_'+orderId,otp);
- localStorage.setItem('orderStatus_'+orderId,'Confirmed - OTP Saved by Customer: '+otp);
- 
- setTimeout(goToOrders, 1000);
+ setTimeout(()=>{location.href='orders.html?mobile='+encodeURIComponent(mobile)+'&orderId='+encodeURIComponent(orderId)+'&verified=true';},1000);
+}
+async function submitHelpCenter(){
+ let type=document.getElementById('helpType').value;let msg=document.getElementById('helpMsg').value||type;
+ let files=document.getElementById('helpFile').files;let names=[];let urls=[];
+ try{if(files.length>0&&firebase.storage){for(let f of files){let r=firebase.storage().ref().child('helpRequests/'+orderId+'/'+Date.now()+'_'+f.name);await r.put(f);urls.push(await r.getDownloadURL());names.push(f.name);}}}catch(e){}
+ await window.db.collection('orders').doc(orderId).set({helpRequested:true,helpRequestType:type,helpMessage:msg,helpFileNames:names,helpFileUrls:urls,presentTag:true},{merge:true});
+ window.open("https://wa.me/918769171078?text="+encodeURIComponent(`*HELP - ${type}*\nOrder: ${orderId}\nMsg: ${msg}\nFiles: ${names.join(', ')}`),'_blank');
+ document.getElementById('helpStatus').innerText='✅ Help Saved - '+type;
 }
 </script></body></html>
