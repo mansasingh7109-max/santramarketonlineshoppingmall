@@ -71,6 +71,9 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="config.js"></script>
+<script src="otp-help-fix.js"></script>
+
+  
 <script src="santra-all-url-one-file.js"></script>
 <script>
 /*
@@ -81,13 +84,13 @@ AB V38 FINAL - Old Save + OTP Hide + Santrajet Mall Live + API KEY ADD
 window.BASE_URL = window.BASE_URL || "https://santramarketshoppingmall.web.app";
 const MY_FIREBASE_CONFIG={
   apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.appspot.com",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY",
-  databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com"
+    authDomain: "santramarketshoppingmall.firebaseapp.com",
+    projectId: "santramarketshoppingmall",
+    storageBucket: "santramarketshoppingmall.appspot.com",
+    messagingSenderId: "398490252924",
+    appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+    measurementId: "G-ZW1ZR8HETY",// ← Comma zaroori hai
+    databaseURL: "https://santramarketshoppingmall-default-rtdb.firebaseio.com/" // ← Last me / nahi lagana"
 };
 function getDB(){try{if(!firebase.apps.length)firebase.initializeApp(MY_FIREBASE_CONFIG);return firebase.firestore();}catch(e){return null;}}var db=getDB();
 let allOrders=[],currentCustomerMobile=null,currentCustomerData=null,currentDeliveryMobile=null,productCache={},productCacheLoaded=false,unsubscribeOrders=null;
@@ -100,14 +103,54 @@ function checkLoginAndLoad(){
   currentCustomerMobile=u.get('mobile')||localStorage.getItem('santra_mobile')||'';
   currentDeliveryMobile=u.get('delivery')||localStorage.getItem('santra_deliveryMobile')||'';
   try{let cust=JSON.parse(localStorage.getItem('santra_customer')||'{}');if(!currentCustomerMobile)currentCustomerMobile=cust.loginMobile||cust.mobile||'';if(!currentDeliveryMobile)currentDeliveryMobile=cust.deliveryMobile||'';currentCustomerData=cust;}catch(e){}
-  let last=localStorage.getItem('lastOrderId')||u.get('orderId')||'';
-  if(!currentCustomerMobile&&!last){document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders - Login karo</div>';return;}
+    // ✅ FIX - Order ID hamesha URL se lo - localStorage se nahi - tracking fix
+  let orderIdFromUrl = u.get('orderId') || u.get('order_id') || '';
+  let lastOrderIdFromStorage = localStorage.getItem('lastOrderId') || '';
+  let finalOrderId = orderIdFromUrl || lastOrderIdFromStorage || '';
+
+  if(!currentCustomerMobile &&!finalOrderId){
+    document.getElementById('ordersList').innerHTML='<div style="text-align:center;padding:20px">📦 No Orders - Login karo</div>';return;
+  }
+
+  // ✅ Firebase se direct order lo - localStorage lastOrderCartBackup mat lo
+  async function loadOrderByIdFixed(id){
+    if(!id) return;
+    try{
+      let db = getDB(); if(!db) return;
+      let doc = await db.collection('orders').doc(id).get();
+      if(doc.exists){
+        let data = doc.data();
+        console.log('✅ Sahi order Firebase se:', id, data.cart);
+        // Ab yahi data se render hoga - 150 ka order 150 hi dikhega
+        if(typeof renderSingleOrder === 'function'){
+          renderSingleOrder(data);
+        } else if(typeof showOrders === 'function'){
+          showOrders([data]);
+        } else {
+          // agar tera loadOrderById function hai to usko data bhej de
+          if(typeof loadProductCacheThenOrders === 'function'){
+            localStorage.setItem('tempOrderData', JSON.stringify(data));
+            loadProductCacheThenOrders();
+          }
+        }
+      } else {
+        // Order Firebase me nahi to purana method
+        if(typeof loadProductCacheThenOrders === 'function') loadProductCacheThenOrders();
+        else if(typeof loadOrderById === 'function' && id!== finalOrderId) loadOrderById(id);
+      }
+    }catch(e){ console.log(e); }
+  }
+
   if(currentCustomerMobile){
-    db.collection('customers').doc(currentCustomerMobile).get().then(d=>{
-      if(d.exists){currentCustomerData={...currentCustomerData,...d.data()}; localStorage.setItem('santra_customer', JSON.stringify(currentCustomerData));}
-      showCustomerProfile(); loadProductCacheThenOrders();
-    }).catch(()=>{showCustomerProfile(); loadProductCacheThenOrders();});
-  } else loadOrderById(last);
+    // Customer login hai to saare orders dikhao
+    if(finalOrderId){
+      loadOrderByIdFixed(finalOrderId); // ✅ pehle specific orderId wala
+    }
+    if(typeof loadProductCacheThenOrders === 'function') loadProductCacheThenOrders();
+  } else {
+    // Guest hai to sirf URL wale orderId se
+    loadOrderByIdFixed(finalOrderId);
+  }
 }
 function showCustomerProfile(){
   let box=document.getElementById('customerProfileBox');
@@ -283,9 +326,6 @@ function renderOrders(orders){
 
 
 
-
-
-
       <div id="cancelBox_${order.id}" class="cancel-box" style="display:none;border:2px solid #e40046;border-radius:12px;padding:14px;background:#fff5f5;position:relative;margin-top:12px">
   <button onclick="closeCancelBox('${order.id}')" style="position:absolute;top:6px;right:6px;background:#000;color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-weight:700;cursor:pointer;z-index:10">X</button>
   <div style="font-weight:700;color:#991b1b;text-align:center;font-size:13px;margin-bottom:8px">❌ Cancel Reason + WhatsApp</div>
@@ -344,19 +384,27 @@ function whatsappCancel(id){
   if(mainOtp) mainOtp.style.display='none';
   db.collection('orders').doc(id).update({cancelRequest:true,cancelReason:reason,cancelRequestedAt:Date.now(),status:'Cancel Requested',presentTag:true,presentUpdate:true});
 }
-function verifyOTP(id){
-  let otp=document.getElementById('order_otp_'+id).value.trim();
-  if(otp.length!=6) return alert('6 digit OTP likho');
-  let order=allOrders.find(o=>o.id===id)||{}; let login=order.loginMobile||order.customerMobile||order.mobile||currentCustomerMobile||'';
-  let nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
-  db.collection('orders').doc(id).update({otp:otp,customerOTP:otp,otpSavedByCustomer:true,otpSaveTime:nowStr,dateTimeHamesha:nowStr,verifiedAt:Date.now(),status:'OTP Saved - Present - Santrajet Mall Live',presentTag:true,presentUpdate:true,lastWAMessage:'✅ WhatsApp Order OTP Saved - Date: '+nowStr}).then(()=>{
-    db.collection('order_otps').doc(id).set({orderId:id,otp:otp,customerOTP:otp,loginMobile:login,customerMobile:login,otpSavedByCustomer:true,timestamp:firebase.firestore.FieldValue.serverTimestamp(),presentTag:true,dateTimeHamesha:nowStr},{merge:true}).then(()=>{
-      let mainBox=document.getElementById('mainOtpBox_'+id);
-      if(mainBox) mainBox.style.display='none';
-      alert('✅ WhatsApp Order OTP Saved - Old box hat gaya - Box me show ho gaya - Santrajet Mall me update');
-    });
-  });
+
+
+async function verifyOTP(id){
+  let otp=document.getElementById('order_otp_'+id).value.replace(/\D/g,'').trim();
+  if(otp.length!=6){alert('6 digit OTP likho');return;}
+  try{
+    let ref=db.collection('orders').doc(id);let doc=await ref.get();let data=doc.data();
+    let adminOtp=(data.otp||data.adminOtp||'').toString().trim();
+    let cDoc=await db.collection('customerOrderOtp').doc(id).get();if(cDoc.exists)adminOtp=adminOtp||cDoc.data().otp||'';
+    let oDoc=await db.collection('order_otps').doc(id).get();if(oDoc.exists)adminOtp=adminOtp||oDoc.data().otp||'';
+    if(!adminOtp){alert('❌ Admin ne OTP save nahi kiya - Generate karo');return;}
+    if(otp!==adminOtp){alert('❌ Wrong OTP - Admin OTP '+adminOtp+' dalo');return;}
+    let nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+    await ref.update({otp:otp,customerOTP:otp,otpSavedByCustomer:true,otpSaveTime:nowStr,dateTimeHamesha:nowStr,status:'OTP Saved - Present - Santrajet Mall Live',presentTag:true,lastWAMessage:'✅ WhatsApp Order OTP Saved - Date: '+nowStr});
+    alert('✅ WhatsApp Order OTP Saved - Old box hat gaya - Box me show ho gaya - Santrajet Mall me update');
+    document.getElementById('mainOtpBox_'+id).style.display='none';
+  }catch(e){alert(e.message);}
 }
+
+
+  
 function saveCancelOTP(id){
   let otp=document.getElementById('cancel_otp_'+id).value.trim();
   if(otp.length!=6) return alert('6 digit Cancel OTP likho');
@@ -458,5 +506,33 @@ console.log("✅ orders.html V38 FINAL - Old Save Safe + API KEY ADD + OTP Hide 
 <script src="santra-all-url-one-file.js"></script>
 <script src="santra-tracking-status-connector.js?v=39"></script>
 
+
+<!-- Line 498 ke baad, Line 500 </body> se pehle -->
+
+<!-- ✅ GLOBAL HELP BOX -->
+<div id="globalHelpBox" style="border:2px solid #e40046;background:white;border-radius:14px;padding:16px;margin:15px;text-align:center">
+  <div style="font-weight:800;color:#e40046;font-size:16px">🆘 Santrajet Mall Help Center</div>
+  <div style="font-size:12px;color:#666;margin:6px 0">Return / Exchange / Inquiry ke liye WhatsApp karo</div>
+  <button onclick="sendHelpWA('General Inquiry', 'General')" style="width:100%;padding:12px;background:#25d366;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px">📲 WhatsApp - Help - 8769171078</button>
+</div>
+
+<script>
+function sendHelpWA(type, orderId){
+  let mobile = localStorage.getItem('santra_mobile') || '';
+  let msg = `*SANTRAJET MALL - HELP REQUEST*\n\nType: ${type}\nOrder ID: ${orderId}\nMobile: ${mobile}\n\nMujhe is order me help chahiye - ${type} karna hai. Please reply.`;
+  window.open("https://wa.me/918769171078?text="+encodeURIComponent(msg), '_blank');
+  try{
+    if(window.db) window.db.collection('helpRequests').doc(orderId+'_'+Date.now()).set({
+      orderId: orderId, mobile: mobile, type: type, date: new Date().toISOString(), status: 'Help Requested'
+    },{merge:true});
+  }catch(e){}
+}
+</script>
+<div id="helpCenterMount"></div>
+<script src="santrajet-help-center.js"></script>
+
+  
 </body>
 </html>
+  
+
