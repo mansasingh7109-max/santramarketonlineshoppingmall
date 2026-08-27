@@ -359,10 +359,10 @@ function renderOrders(orders){
         <option>Editing Message</option><option>Return Request</option><option>Exchange Request</option><option>Refund Request</option><option>Order Inquiry - Formally Product</option><option>Product Inquiry - AI Help Box</option>
       </select>
     </div>
-    <textarea id="helpMsg_${order.id}" rows="3" placeholder="Editing / Return / Exchange / Product Inquiry likho - ${order.id}" style="width:100%;padding:10px;border-radius:10px;border:1.5px solid #ddd;margin:6px 0;"></textarea>
+    <textarea id="helpMsg_${order.id}" rows="3" placeholder="Editing / Return / Exchange / Product Inquiry  - ${order.id}" style="width:100%;padding:10px;border-radius:10px;border:1.5px solid #ddd;margin:6px 0;"></textarea>
     <input type="file" id="helpFile_${order.id}" accept="image/*,video/*" multiple style="margin:6px 0;">
     <div id="filePreview_${order.id}" style="font-size:11px;color:#666;"></div>
-    <button onclick="submitHelpInquiry('${order.id}','${order.mobile||order.loginMobile||'8003200377'}')" style="width:100%;padding:12px;background:#22c55e;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px;">📲 WhatsApp - Help - 8769171078 +  Save + Photo/Video</button>
+    <button onclick="submitHelpInquiry('${order.id}','${order.mobile||order.loginMobile||'8003200377'}')" style="width:100%;padding:12px;background:#22c55e;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px;">📲 WhatsApp - Help - 8769171078 +  Upload Photo/Video</button>
     <div id="helpStatus_${order.id}" style="font-size:12px;color:#065f46;text-align:center;margin-top:6px;"></div>
   </div>
 
@@ -422,7 +422,7 @@ async function verifyOTP(id){
     let adminOtp=(data.otp||data.adminOtp||'').toString().trim();
     let cDoc=await db.collection('customerOrderOtp').doc(id).get();if(cDoc.exists)adminOtp=adminOtp||cDoc.data().otp||'';
     let oDoc=await db.collection('order_otps').doc(id).get();if(oDoc.exists)adminOtp=adminOtp||oDoc.data().otp||'';
-    if(!adminOtp){alert('❌ Admin ne OTP save nahi kiya - Generate karo');return;}
+    if(!adminOtp){alert('❌ WAIT OTP VERIFY BY SANTRAJET ');return;}
     if(otp!==adminOtp){alert('❌ Wrong OTP - Admin OTP '+adminOtp+' dalo');return;}
     let nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
     await ref.update({otp:otp,customerOTP:otp,otpSavedByCustomer:true,otpSaveTime:nowStr,dateTimeHamesha:nowStr,status:'OTP Saved - Present - Santrajet Mall Live',presentTag:true,lastWAMessage:'✅ WhatsApp Order OTP Saved - Date: '+nowStr});
@@ -590,7 +590,7 @@ console.log("✅ orders.html V38 FINAL - Old Save Safe + API KEY ADD + OTP Hide 
 <!-- ✅ GLOBAL HELP BOX -->
 <div id="globalHelpBox" style="border:2px solid #e40046;background:white;border-radius:14px;padding:16px;margin:15px;text-align:center">
   <div style="font-weight:800;color:#e40046;font-size:16px">🆘 Santrajet Mall Help Center</div>
-  <div style="font-size:12px;color:#666;margin:6px 0">Return / Exchange / Inquiry ke liye WhatsApp karo</div>
+  <div style="font-size:12px;color:#666;margin:6px 0">Return / Exchange / Inquiry WhatsApp us</div>
   <button onclick="sendHelpWA('General Inquiry', 'General')" style="width:100%;padding:12px;background:#25d366;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px">📲 WhatsApp - Help - 8769171078</button>
 </div>
 
