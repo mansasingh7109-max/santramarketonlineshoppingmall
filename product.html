@@ -79,8 +79,8 @@ V26: Firestore + RTDB + Local + Master - SAFE
 V27: Present Upar Past Niche - SAFE
 V28: Product page link full ID fix - trim() - no split - SAFE
 V29: Image hamesha - SANTRA_IMAGES + all-url - SAFE
-V30 FINAL: Home + Product + Past Present Future - Full Image - AAPKA BHEJA HUA - SAFE
-V31: Firebase Permanent + 6 Jagah Universal - AAPKA BHEJA HUA - SAFE
+V30 FINAL: Home + Product - Full Image - AAPKA BHEJA HUA - SAFE
+V31:  Permanent +  Universal - AAPKA BHEJA HUA - SAFE
 V32 FINAL: Layout Fix + My Cart Link Fix - Heart bahar + Buy Now cut - AAPKA BHEJA HUA - SAFE
 V33 FINAL: Layout Fix + My Cart Link Fix - Heart + Buy Now Body Ke Andar Fix - AAPKA BHEJA HUA - SAFE
 OLD BACKUP END - AB V34 FINAL - Old Save + ID Hide + Base ID Auto Fix - Dress_001_M -> Dress_001
@@ -215,7 +215,7 @@ function renderProduct(p){
     let n=typeof v==="object"?v.name||v.size:v;
     return `<button class="variant-btn" data-variant='${JSON.stringify(v).replace(/'/g,"&apos;")}' >${n}</button>`;
   }).join("");
-  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span><span>🔗 ${p.dbType} Permanent</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span>Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Description:</h3><div class="desc">${p.description||"Premium quality product -   Link."}</div></div><div class="features"><p>✅ soon response</p><div></div>`;
+  document.getElementById("productContainer").innerHTML=`<div class="container">${slider}<div class="details"><h1 class="product-name">${p.name}</h1><div class="product-meta"><span>📦 ${p.code||p.id}</span><span>📁 ${p.category||"General"}</span></div><div class="price-box"><span class="price" id="productPrice">₹${p.price}</span>${p.mrp?`<span class="mrp">₹${p.mrp}</span>`:""}${discount>0?`<span class="discount">${discount}% OFF</span>`:""}</div>${variants.length?`<div class="section"><h3>Select Variant:</h3><div class="variant-grid">${variantHTML}</div></div>`:""}<div class="qty-box"><span>Quantity:</span><button onclick="changeQty(-1)">-</button><span id="qtyDisplay">1</span><button onclick="changeQty(1)">+</button></div><div class="section"><h3>Description:</h3><div class="desc">${p.description||"Premium quality product - Permanent Link."}</div></div><div class="features"><p>✅ soon response</p><div></div>`;
   window.productImages=images; window.currentSlideIndex=0;
   setTimeout(()=>{
     document.querySelectorAll(".variant-btn").forEach(b=>{ b.onclick=e=>{ selectVariant(JSON.parse(b.dataset.variant),b); }; });
