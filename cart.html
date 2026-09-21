@@ -133,7 +133,7 @@ body{background:var(--bg);padding-bottom:160px}
 
 <script>
 let cart={};let myChoice={};let t={presentDate:'',presentTime:''};
-function initTimeFix(){try{if(typeof getISTNow==='function'){t=getISTNow();document.getElementById('todayBar').innerText=`Aaj: ${t.presentDate} ${t.presentTime} - ONE FILE ${Object.keys(window.SANTRA_ALL_URL_MAP||{}).length} URLs - No Version`;document.getElementById('clock').innerText=t.presentTime||'';document.getElementById('todayDateBar').innerText=t.presentDate;}}catch(e){}}
+function initTimeFix(){try{if(typeof getISTNow==='function'){t=getISTNow();document.getElementById('todayBar').innerText=`Aaj: ${t.presentDate} ${t.presentTime} - All Inquiry And Online Order on Whatsapp, Customer Care Contact Number on Whatsapp 8769171078 ONE FILE ${Object.keys(window.SANTRA_ALL_URL_MAP||{}).length} URLs - No Version`;document.getElementById('clock').innerText=t.presentTime||'';document.getElementById('todayDateBar').innerText=t.presentDate;}}catch(e){}}
 initTimeFix();setInterval(initTimeFix,60000);
 window.switchTab=function(tab){document.getElementById("cartTab").classList.toggle("active",tab==="cart");document.getElementById("choiceTab").classList.toggle("active",tab==="choice");document.getElementById("cartView").classList.toggle("hide",tab!=="cart");document.getElementById("choiceView").classList.toggle("hide",tab!=="choice");if(tab==="choice")renderMyChoice();else renderCart();};
 function loadData(){if(!window.CART_KEY){setTimeout(loadData,100);return;}loadFromLocal();}
