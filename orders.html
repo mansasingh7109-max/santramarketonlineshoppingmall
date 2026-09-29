@@ -289,12 +289,14 @@ function renderOrders(orders){
     let isCancelRequested = status==='Cancel Requested' || order.cancelRequest;
     let topLine=`ID: <b>${order.id}</b> | ${dateStr} ${presentTag} | 📱 <b>${loginMob}</b>`;
     let addrLine=fullAddr?`📍 ${fullAddr} | Mb No: ${loginMob} With`:'';
-    let trackingLocation = order.currentTrackingLocation || order.trackingLocation || order.lastStatusSent || '';
+    let rawTracking = order.currentTrackingLocation || order.trackingLocation || order.lastStatusSent || '';
+let trackingLocation = rawTracking.replace(/Jaipur/gi,'').replace(/  +/g,' ').replace(/- -/g,'-').replace(/- Present/gi,'').replace(/- Delivery Done/gi,'').trim() || 'Santrajet Warehouse';
+if(trackingLocation==='-' || trackingLocation==='') trackingLocation='Santrajet Warehouse';
     let courierName = order.courierName || '';
     let trackingNumber = order.trackingNumber || '';
     let santrajetNote = order.adminNote || order.lastWAMessage || order.updateReason || '';
     let dateTimeHamesha = order.dateTimeHamesha || order.noteSaveTime || order.otpSaveTime || '';
-    let santrajetLiveBox = (trackingLocation || courierName || trackingNumber || santrajetNote || dateTimeHamesha)? `<div class="admin-live-box"><div style="font-weight:bold;color:#0284c7">📍 Santrajet Mall Live Update - ${order.status||'Pending'} - ${dateTimeHamesha}</div><div>📦 Tracking Location: <b>${trackingLocation||'Santrajet Mall Warehouse, Jaipur - Order Confirmed'}</b></div><div>🚚 Courier: <b>${courierName||'Delhivery / Ekart - Santrajet Mall team will update'}</b></div><div>🔢 Tracking No: <b>${trackingNumber||'Santrajet Mall team will update shortly'}</b></div>${santrajetNote?`<div>💬 Santrajet Mall Note: <b>${santrajetNote}</b></div>`:''}${dateTimeHamesha?`<div>🕐 Date Time Hamesha: <b>${dateTimeHamesha}</b></div>`:''}<div style="font-size:10px;color:#10b981;margin-top:4px">✅ Present: ${order.presentTag?'Yes':''} | Santrajet Mall se jo b update wo live dikhega - Tracking page me b show hoga</div></div>` : '';
+let santrajetLiveBox = (trackingLocation || courierName || trackingNumber)? `<div class="admin-live-box"><div style="font-weight:bold;color:#0284c7">📍 Santrajet Mall Live Update - ${order.status||'Pending'} - ${dateTimeHamesha}</div><div>📦 Tracking Location: <b>${trackingLocation||'Santrajet Warehouse'}</b></div><div>🚚 Courier: <b>${courierName||'Delhivery / Ekart'}</b></div><div>🔢 Tracking No: <b>${trackingNumber||'Team will update shortly'}</b></div><div style="font-size:10px;color:#10b981;margin-top:4px">✅ Present: Yes | Live - Tracking page me b show hoga</div></div>` : '';
     let hasOrderOTP =!!(order.otp || order.customerOTP);
     let hasCancelOTP =!!(order.cancelOTP);
     let showCancelOtp = (isCancelRequested &&!hasCancelOTP)? 'block' : 'none';
