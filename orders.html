@@ -71,9 +71,6 @@ body{background:var(--bg);padding-bottom:70px;overflow-x:hidden}
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="config.js"></script>
-<script src="otp-help-fix.js"></script>
-
-  
 <script src="santra-all-url-one-file.js"></script>
 <script>
 /*
@@ -326,6 +323,9 @@ function renderOrders(orders){
 
 
 
+
+
+
       <div id="cancelBox_${order.id}" class="cancel-box" style="display:none;border:2px solid #e40046;border-radius:12px;padding:14px;background:#fff5f5;position:relative;margin-top:12px">
   <button onclick="closeCancelBox('${order.id}')" style="position:absolute;top:6px;right:6px;background:#000;color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-weight:700;cursor:pointer;z-index:10">X</button>
   <div style="font-weight:700;color:#991b1b;text-align:center;font-size:13px;margin-bottom:8px">❌ Cancel Reason + WhatsApp</div>
@@ -346,34 +346,6 @@ function renderOrders(orders){
       <div id="cancelOtpBox_${order.id}" class="otp-cancel-box" style="display:${showCancelOtp}"><div style="font-weight:bold;color:#991b1b;text-align:center;font-size:13px">🔐 Add Cancel WhatsApp OTP</div><input id="cancel_otp_${order.id}" class="otp-input-cancel" placeholder="------" maxlength="6" value=""><button class="btn-save-cancel" onclick="saveCancelOTP('${order.id}')">💾 Save Cancel OTP - Santrajet Mall me update</button></div>
       ${savedOrderOTPBox}
       <div id="mainOtpBox_${order.id}" class="otp-box" style="display:${showMainOtp}"><div style="font-weight:bold;color:#065f46;text-align:center;font-size:12px">Add WhatsApp OTP - Box me show ho saved Order OTP</div><input id="order_otp_${order.id}" class="otp-input" placeholder="------" maxlength="6" value=""><button class="btn-verify" onclick="verifyOTP('${order.id}')">✅ Verify & Save OTP - Santrajet Mall me update</button></div>
-
-
-
-
-
-  <!-- HELP TAB FOR INQUIRY - ALL ORDER PAR DIKE - V29 - SB ORDER KE LIYE - YAHAN PASTE KARO - LINE 348 KE BAAD -->
-  <div id="helpTab_${order.id}" style="border:1.5px solid #d81b60;border-radius:14px;background:#fff;padding:12px;margin:12px 0;">
-    <div style="text-align:center;font-weight:800;color:#d81b60;">🆘 Santrajet Mall Help Center - AI Help Box Inquiry - Formally Product</div>
-    <div style="display:flex;gap:6px;margin:6px 0;">
-      <select id="helpType_${order.id}" style="flex:1;padding:10px;border-radius:10px;border:1.5px solid #ddd;">
-        <option>Editing Message</option><option>Return Request</option><option>Exchange Request</option><option>Refund Request</option><option>Order Inquiry - Formally Product</option><option>Product Inquiry - AI Help Box</option>
-      </select>
-    </div>
-    <textarea id="helpMsg_${order.id}" rows="3" placeholder="Editing / Return / Exchange / Product Inquiry  - ${order.id}" style="width:100%;padding:10px;border-radius:10px;border:1.5px solid #ddd;margin:6px 0;"></textarea>
-    <input type="file" id="helpFile_${order.id}" accept="image/*,video/*" multiple style="margin:6px 0;">
-    <div id="filePreview_${order.id}" style="font-size:11px;color:#666;"></div>
-    <button onclick="submitHelpInquiry('${order.id}','${order.mobile||order.loginMobile||'8003200377'}')" style="width:100%;padding:12px;background:#22c55e;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px;">📲 WhatsApp - Help - 8769171078 +  Upload Photo/Video</button>
-    <div id="helpStatus_${order.id}" style="font-size:12px;color:#065f46;text-align:center;margin-top:6px;"></div>
-  </div>
-
- 
-
-
-
-
-
-
-  
       ${status==='Cancel Requested'?`<div style="background:#fef3c7;padding:8px;border-radius:8px;text-align:center;color:#92400e;font-size:12px;margin-top:8px">🕒 Cancel Requested - ${order.cancelReason||''} - Santrajet Mall cancel karega</div>`:status==='Cancelled'?`<div style="background:#fee2e2;padding:8px;border-radius:8px;text-align:center;color:#991b1b;font-size:12px;margin-top:8px">❌ Cancelled - ${order.cancelReason||''}</div>`:`<div style="background:#d1fae5;padding:8px;border-radius:8px;text-align:center;color:#065f46;font-size:12px;margin-top:8px;display:${status==='Pending'?'none':'block'}">✅ ${status} - ${payment} | Present | Tracking: ${trackingLocation} | Santrajet Mall Live</div>`}
     </div>`;
   }).join('');
@@ -412,27 +384,19 @@ function whatsappCancel(id){
   if(mainOtp) mainOtp.style.display='none';
   db.collection('orders').doc(id).update({cancelRequest:true,cancelReason:reason,cancelRequestedAt:Date.now(),status:'Cancel Requested',presentTag:true,presentUpdate:true});
 }
-
-
-async function verifyOTP(id){
-  let otp=document.getElementById('order_otp_'+id).value.replace(/\D/g,'').trim();
-  if(otp.length!=6){alert('6 digit OTP likho');return;}
-  try{
-    let ref=db.collection('orders').doc(id);let doc=await ref.get();let data=doc.data();
-    let adminOtp=(data.otp||data.adminOtp||'').toString().trim();
-    let cDoc=await db.collection('customerOrderOtp').doc(id).get();if(cDoc.exists)adminOtp=adminOtp||cDoc.data().otp||'';
-    let oDoc=await db.collection('order_otps').doc(id).get();if(oDoc.exists)adminOtp=adminOtp||oDoc.data().otp||'';
-    if(!adminOtp){alert('❌ WAIT OTP VERIFY BY SANTRAJET ');return;}
-    if(otp!==adminOtp){alert('❌ Wrong OTP - Admin OTP '+adminOtp+' dalo');return;}
-    let nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
-    await ref.update({otp:otp,customerOTP:otp,otpSavedByCustomer:true,otpSaveTime:nowStr,dateTimeHamesha:nowStr,status:'OTP Saved - Present - Santrajet Mall Live',presentTag:true,lastWAMessage:'✅ WhatsApp Order OTP Saved - Date: '+nowStr});
-    alert('✅ WhatsApp Order OTP Saved - Old box hat gaya - Box me show ho gaya - Santrajet Mall me update');
-    document.getElementById('mainOtpBox_'+id).style.display='none';
-  }catch(e){alert(e.message);}
+function verifyOTP(id){
+  let otp=document.getElementById('order_otp_'+id).value.trim();
+  if(otp.length!=6) return alert('6 digit OTP likho');
+  let order=allOrders.find(o=>o.id===id)||{}; let login=order.loginMobile||order.customerMobile||order.mobile||currentCustomerMobile||'';
+  let nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+  db.collection('orders').doc(id).update({otp:otp,customerOTP:otp,otpSavedByCustomer:true,otpSaveTime:nowStr,dateTimeHamesha:nowStr,verifiedAt:Date.now(),status:'OTP Saved - Present - Santrajet Mall Live',presentTag:true,presentUpdate:true,lastWAMessage:'✅ WhatsApp Order OTP Saved - Date: '+nowStr}).then(()=>{
+    db.collection('order_otps').doc(id).set({orderId:id,otp:otp,customerOTP:otp,loginMobile:login,customerMobile:login,otpSavedByCustomer:true,timestamp:firebase.firestore.FieldValue.serverTimestamp(),presentTag:true,dateTimeHamesha:nowStr},{merge:true}).then(()=>{
+      let mainBox=document.getElementById('mainOtpBox_'+id);
+      if(mainBox) mainBox.style.display='none';
+      alert('✅ WhatsApp Order OTP Saved - Old box hat gaya - Box me show ho gaya - Santrajet Mall me update');
+    });
+  });
 }
-
-
-  
 function saveCancelOTP(id){
   let otp=document.getElementById('cancel_otp_'+id).value.trim();
   if(otp.length!=6) return alert('6 digit Cancel OTP likho');
@@ -448,56 +412,6 @@ function saveCancelOTP(id){
 }
 // ✅ FIX: Invoice PDF - Santrajet Mall word only - Admin word nahi - Half cut fix - splitTextToSize se wrap - Chhota Tab
 // ✅ FINAL INVOICE FUNCTION - Aapka Format - SANTRAJET MALL Clean Table - Har Order Ke According - OTP Hide - No Admin Word - Half Cut Fix - Mumbai Warehouse
-
-
-
-
-async function submitHelpInquiry(orderId, mobile){
-  let typeEl = document.getElementById('helpType_'+orderId);
-  let msgEl = document.getElementById('helpMsg_'+orderId);
-  let fileEl = document.getElementById('helpFile_'+orderId);
-  let statusEl = document.getElementById('helpStatus_'+orderId);
-  let previewEl = document.getElementById('filePreview_'+orderId);
-  if(!typeEl) return;
-  let type = typeEl.value; let msg = msgEl.value || type;
-  let files = fileEl.files; let names=[], urls=[];
-  if(statusEl) statusEl.innerText='Uploading...';
-  try{
-    if(files.length>0 && firebase.storage){
-      for(let f of files){
-        let ref = firebase.storage().ref().child('helpRequests/'+orderId+'/'+Date.now()+'_'+f.name);
-        await ref.put(f); urls.push(await ref.getDownloadURL()); names.push(f.name);
-      }
-    }
-  }catch(e){ console.log(e); }
-  try{
-    if(window.db){
-      let nowStr = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
-      await window.db.collection('orders').doc(orderId).set({helpRequested:true, helpRequestType:type, helpMessage:msg, helpFileNames:names, helpFileUrls:urls, helpRequestDateStr:nowStr, presentTag:true, formallyProduct:true, whatWasAsked:msg, whatWasSent:names.join(', ')},{merge:true});
-      await window.db.collection('helpRequests').doc(orderId+'_'+Date.now()).set({orderId:orderId, mobile:mobile, type:type, message:msg, fileNames:names, fileUrls:urls, date:new Date().toISOString(), presentTag:true, whatWasAsked:msg, whatWasSent:names.join(', '), formallyProduct:true});
-    }
-  }catch(e){ console.log(e); }
-  window.open("https://wa.me/918769171078?text="+encodeURIComponent(`*HELP - ${type}*\nOrder: ${orderId}\nMobile: ${mobile}\nMsg: ${msg}\nFiles: ${names.join(', ')}\nFormally Product - ${orderId}`),'_blank');
-  if(statusEl) statusEl.innerText='✅ Help Saved - '+type+' - Formally Product';
-}
-// file preview - all order
-document.addEventListener('change', function(e){
-  if(e.target && e.target.id && e.target.id.startsWith('helpFile_')){
-    let orderId = e.target.id.replace('helpFile_','');
-    let t=''; for(let f of e.target.files) t+=f.name+' ';
-    let pv = document.getElementById('filePreview_'+orderId);
-    if(pv) pv.innerText = t?'Selected: '+t:'';
-  }
-});
-
-
-
-
-
-
-
-
-  
 function downloadInvoice(id){
   let order=allOrders.find(o=>o.id===id)||{}; if(!order.id) return;
   let d=order.createdAt?.toDate?.()||new Date(order.date||Date.now());
@@ -590,7 +504,7 @@ console.log("✅ orders.html V38 FINAL - Old Save Safe + API KEY ADD + OTP Hide 
 <!-- ✅ GLOBAL HELP BOX -->
 <div id="globalHelpBox" style="border:2px solid #e40046;background:white;border-radius:14px;padding:16px;margin:15px;text-align:center">
   <div style="font-weight:800;color:#e40046;font-size:16px">🆘 Santrajet Mall Help Center</div>
-  <div style="font-size:12px;color:#666;margin:6px 0">Return / Exchange / Inquiry WhatsApp us</div>
+  <div style="font-size:12px;color:#666;margin:6px 0">Return / Exchange / Inquiry ke liye WhatsApp karo</div>
   <button onclick="sendHelpWA('General Inquiry', 'General')" style="width:100%;padding:12px;background:#25d366;color:white;border:none;border-radius:10px;font-weight:700;margin-top:8px">📲 WhatsApp - Help - 8769171078</button>
 </div>
 
@@ -606,10 +520,7 @@ function sendHelpWA(type, orderId){
   }catch(e){}
 }
 </script>
-<div id="helpCenterMount"></div>
-<script src="santrajet-help-center.js"></script>
 
-  
 </body>
 </html>
   
