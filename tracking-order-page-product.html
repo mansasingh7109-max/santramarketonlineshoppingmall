@@ -15,40 +15,104 @@ body{font-family:Arial;background:#f1f3f6;padding:8px}
 .line.green{background:#10b981}
 .info b{font-size:12px}
 .info small{font-size:11px;color:#555;display:block;margin-top:3px;line-height:1.6}
+
+
+
+
+
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}100%{box-shadow:0 0 0 14px rgba(16,185,129,0)}}
+.circle.active{animation:glow 1.5s infinite; width:44px !important; height:44px !important; font-size:20px !important;}
+.present-card{border:2px solid #10b981 !important; background:#f0fdf4 !important; transform:scale(1.02); box-shadow:0 4px 12px rgba(16,185,129,.2) !important;}
+.present-text{color:#10b981 !important; font-size:15px !important; font-weight:800 !important;}
+.moving-smile{font-size:22px; animation:bounce 1s infinite; display:inline-block; margin-left:6px;}
 </style>
+
+
+
 </head><body>
 <div id="root"><div class="card" style="text-align:center">Loading Tracking - V23...</div></div>
 <script>
+  
 function getDB(){try{if(window.db&&window.db.collection)return window.db;if(!firebase.apps.length){let c=window.firebaseConfig||window.SANTRA_CONFIG||{apiKey:"AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",authDomain:"santramarketshoppingmall.firebaseapp.com",projectId:"santramarketshoppingmall"};firebase.initializeApp(c);}return firebase.firestore();}catch(e){return firebase.firestore();}}
 var db=getDB();
+
 async function load(){
-let p=new URLSearchParams(location.search);let oid=p.get('orderId')||p.get('id')||localStorage.getItem('lastOrderId')||'';
-if(!oid){document.getElementById('root').innerHTML='<div class="card">Order ID nahi mila</div>';return;}
-let doc=await db.collection('orders').doc(oid).get();if(!doc.exists){document.getElementById('root').innerHTML='<div class="card">Order nahi mila</div>';return;}
+let p=new URLSearchParams(location.search);
+let oid=p.get('orderId')||p.get('id')||'';
+if(!oid){document.getElementById('root').innerHTML='<div class="card">Order ID nahi mila - My Orders se kholo</div>';return;}
+
+db.collection('orders').doc(oid).onSnapshot((doc)=>{
+if(!doc.exists){document.getElementById('root').innerHTML='<div class="card">Order nahi mila: '+oid+'</div>';return;}
 let o=doc.data();o.id=doc.id;
+
 let s=(o.status||'').toLowerCase();let idx=0;
-if(s.includes('pending')) idx=0; if(s.includes('confirm')) idx=1; if(s.includes('pack')) idx=2; if(s.includes('shipping')&&!s.includes('shipped')) idx=3; if(s.includes('shipped')) idx=4; if(s.includes('out for')) idx=5; if(s.includes('delivered')&&!s.includes('out')) idx=6;
+if(s.includes('pending')) idx=0; 
+if(s.includes('confirm') || s.includes('otp saved')) idx=1; 
+if(s.includes('pack')) idx=2; 
+if(s.includes('shipping')&&!s.includes('shipped')) idx=2;
+if(s.includes('shipped')) idx=3; 
+if(s.includes('out for')) idx=4; 
+if(s.includes('delivered')&&!s.includes('out')) idx=5;
+
 let safe = (v, fallback='Team will update shortly') => { if(v===undefined||v===null||v==''||v=='--'|| (typeof v==='string'&&v.includes('undefined'))) return fallback; return v; };
+
 let steps=[
-{title:'Order Confirmed',desc:`Tracking Location: ${safe(o.currentTrackingLocation,'Santrajet Mall Warehouse, Jaipur - Ready to Ship')}<br>Status: ${safe(o.status,'Pending - OTP Wait')} | Courier: ${safe(o.courierName,'Delhivery / Ekart')}<br>AWB: ${safe(o.trackingNumber,'Team will update shortly')}<br>Date: ${safe(o.dateTimeHamesha,'')}<br><span style="color:#10b981">You will receive every update</span>`},
+{title:'Order Confirmed',desc:`Tracking Location: ${safe(o.currentTrackingLocation||o.trackingLocation,'Santrajet Warehouse')}<br>Status: Confirmed | Courier: ${safe(o.courierName,'Delhivery / Ekart')}<br>AWB: ${safe(o.trackingNumber,'Team will update shortly')}<br>Date: ${safe(o.dateTimeHamesha,'')}`},
 {title:'Order Packed',desc: o.packedDate ? `${safe(o.packedDate)}<br>Location: ${safe(o.currentTrackingLocation)}` : `Team will update after packing`},
 {title:'Package Shipped',desc: o.shippedDate ? `${safe(o.shippedDate)}<br>Courier: ${safe(o.courierName)} | AWB: ${safe(o.trackingNumber)}` : `Team will update after shipping`},
 {title:'Out For Delivery',desc: o.outForDeliveryDate ? `${safe(o.outForDeliveryDate)}<br>City: ${safe(o.trackingCity)}` : `Team will update - Out for delivery soon`},
 {title:'Order Delivered',desc: o.deliveredDate ? `${safe(o.deliveredDate)}` : `Will update after delivery`},
 ];
-let html=`<div class="card"><b>Order: ${o.id}</b> | SANTRAJET MALL</div><div class="card" style="background:#111;color:#fff;font-weight:800;text-align:center">FOLLOW YOUR ORDER</div><div class="card">`;
+
+let html=`<div class="card"><b>Order: ${o.id}</b> | SANTRAJET MALL | ${o.customerName||''}</div><div class="card" style="background:#111;color:#fff;font-weight:800;text-align:center">FOLLOW YOUR ORDER - LIVE PRESENT</div>`;
+
 steps.forEach((st,i)=>{
-let green=i<=idx;let cls=green?'circle green'+(i==idx?' active':''):'circle';let tick=green?'✓':'○';
-let icons=['📋✅','📦','🚚','🏃📦','📦'];
-html+=`<div class="step"><div class="${cls}">${tick}</div><div class="info"><b style="color:${green?'#10b981':'#9ca3af'}">${icons[i]} ${st.title}</b><small>${st.desc}</small></div></div>`;
-if(i<steps.length-1) html+=`<div class="line ${i<idx?'green':''}"></div>`;
+let isPast = i < idx;
+let isPresent = i === idx;
+let isFuture = i > idx;
+
+let cls = isFuture ? 'circle' : 'circle green' + (isPresent ? ' active' : '');
+let tick = isFuture ? '○' : (isPast ? '✓' : '😃');
+
+let icons = ['📝✅', '📦🎁', '🚚💨', '🛵📦', '🏠✅'];
+
+let cardClass = isPresent ? 'card present-card' : 'card';
+let textColor = isFuture ? '#9ca3af' : (isPresent ? '#10b981' : '#065f46');
+
+html+=`<div class="${cardClass}" style="margin:8px 0; padding:12px;">
+<div class="step" style="margin:0">
+<div class="${cls}">${tick}</div>
+<div class="info">
+<b class="${isPresent?'present-text':''}" style="color:${textColor}; font-size:${isPresent?'15px':'13px'}">
+${icons[i]} ${st.title} 
+${isPresent ? '<span class="moving-smile">😃👉 Yaha hai abhi!</span>' : ''}
+${isPast ? ' ✅ Done' : ''}
+</b>
+<small style="color:${isPresent?'#065f46':'#666'}; font-weight:${isPresent?'700':'400'}; display:block; margin-top:4px; line-height:1.6">${st.desc}</small>
+${isPresent ? `<div style="background:#10b981; color:#fff; padding:5px 12px; border-radius:20px; font-size:11px; margin-top:8px; display:inline-block; font-weight:bold;">🔴 LIVE Present - ${safe(o.currentTrackingLocation,'Santrajet Mall Warehouse')}</div>` : ''}
+</div>
+</div>
+</div>`;
+
+if(i<steps.length-1){
+  html+=`<div style="text-align:center; font-size:14px; color:${isPast||isPresent?'#10b981':'#e5e7eb'}; margin:2px 0;">${isPresent ? '⬇️ 😃 ⬇️' : '⬇️'}</div>`;
+}
 });
-html+=`</div>`;
+
 let items=o.items||o.cart||[];let sub=0;let itemHtml='';
 if(Array.isArray(items)){items.forEach((it,k)=>{let q=it.qty||1;let pr=it.price||0;sub+=q*pr;let size=it.size||'M';itemHtml+=`${k+1}. ${it.name||'Product'} (Size ${size}) - Qty: ${q} x ₹${pr} = ₹${q*pr}<br>`;});}
-let infoMsg = safe(o.customerMessage||o.trackingAIMessage||o.adminNote||`Your product has left ${safe(o.currentTrackingLocation,'Santrajet Mall Warehouse')} - ${safe(o.trackingCity,'Jaipur')}`,'Your product has left warehouse - Team will update shortly');
-html+=`<div class="card" style="border:2px dashed #f59e0b;background:#fffbeb"><b>SANTRA MALL - Order Screenshot - V23 Per Customer</b><br>Order ID: ${o.id}<br>Date: ${safe(o.dateTimeHamesha)}<br>Sold By: Santra Mall<br><br>${itemHtml}<br>Subtotal: ₹${o.subtotal||sub} | Delivery: ₹${o.deliveryCharge||49} | <b>Grand Total: ₹${o.grandTotal||sub+49}</b><br>Payment: ${o.paymentMethod||'COD'}<br>Customer: ${o.customerName||''} | ${o.mobile||''}<br><br><b>Information from Santrajet Mall:</b><br>${infoMsg}</div>`;
+
+let cleanLoc = 'Santrajet Warehouse';
+let infoMsg = `Your product is at ${cleanLoc} - Ready to Ship - Team will update shortly`;
+
+html+=`<div class="card" style="border:2px dashed #f59e0b;background:#fffbeb; margin-top:12px;"><b>SANTRA MALL - Order Screenshot - V23 LIVE Present</b><br>Order ID: ${o.id}<br>Date: ${safe(o.dateTimeHamesha)}<br>Sold By: Santra Mall<br><br>${itemHtml}<br>Subtotal: ₹${o.subtotal||sub} | Delivery: ₹${o.deliveryCharge||49} | <b>Grand Total: ₹${o.grandTotal||sub+49}</b><br>Payment: ${o.paymentMethod||'COD'}<br>Customer: ${o.customerName||''} | ${o.mobile||o.customerMobile||''}<br><br><b>Information from Santrajet Mall:</b><br>${infoMsg}</div>`;
+
 document.getElementById('root').innerHTML=html;
+});
 }
 window.addEventListener('load',load);
-</script></body></html>
+</script>
+  
+</body>
+</html>
