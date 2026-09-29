@@ -313,7 +313,7 @@ let santrajetLiveBox = (trackingLocation || courierName || trackingNumber)? `<di
         ${addrLine?`<div class="order-addr-line">${addrLine}</div>`:''}
         ${santrajetLiveBox}
         <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="small-tab" onclick="toggleAddr('addr_${order.id}')">📍 Delivery Profile View</button><button class="small-tab" onclick="downloadInvoice('${order.id}')">📄 Invoice PDF - Santrajet Mall</button><span class="small-tab" style="background:#f0fdf4;border-color:#10b981;color:#065f46">Live Santrajet Mall - OTP Hide</span></div>
-<div id="addr_${order.id}" class="addr-full">👤 Name: ${name}\n📱 Mobile: ${loginMob}\n📦 Extra: ${deliveryMob}\n📍 Present Address: ${fullAddr}\n📦 Tracking: ${trackingLocation}\n🚚 Courier: ${courierName}\n🔢 No: ${trackingNumber}\n📅 Date: ${dateTimeHamesha}</div>
+<div id="addr_${order.id}" class="addr-full">👤 Name: ${name}\n📱 Mobile: ${loginMob}\n📦 Extra: ${deliveryMob}\n📍 Present Address: ${fullAddr}\n📅 Date: ${dateTimeHamesha}</div>
       </div>
       ${itemsHTML}
       ${screenshotBox}
