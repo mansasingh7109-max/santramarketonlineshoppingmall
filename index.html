@@ -259,7 +259,25 @@ body > div:nth-child(2),
 }
 
 
+/* Chhota patti - Welcome se thoda bada - Force chhota */
+.santra-patti{ background:#ff8c !important; height:72px !important; margin:0 !important; padding:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; }
+.santra-patti h1{ margin:0 !important; font-size:12px !important; line-height:16px !important; color: #81C7 !important; font-weight:900 !important; }
+.santra-patti p{ margin:0 !important; font-size:15px !important; line-height:10px !important; color:#004d00 !important; font-weight:700 !important; }
+
+
+/* Double layer hatao - Single dark bold h1 */
+h1{ text-shadow:none !important; -webkit-text-stroke:0 !important; filter:none !important; opacity:1 !important; }
+h1::before, h1::after{ display:none !important; content:none !important; }
+.santra-patti h1{ text-shadow:none !important; color:#F9A825 !important; font-weight:900 !important; position:relative !important; z-index:2 !important; }
+.santra-patti{ background:#dcf8c6 !important; height:72px !important; }
+
+
+
+
 </style> 
+<body>
+<div class="santra-patti"><h1>SANTRAJET MALL - Online Shopping</h1><p>   :🛒 Best Products, Best Prices! Your Order Send On SANTRAJET Whatsapp~ 8769171078</p></div>
+
 
 
 <script src="share.js?v=24july-final"></script>
@@ -270,6 +288,8 @@ body > div:nth-child(2),
 
 </head>
 <body>
+
+
   <script src="santra-products-fix.js"></script>
 <div id="otpNotifyLine" style="display:none;background:#e40046;color:white;padding:10px;text-align:center;font-weight:bold;position:sticky;top:0;z-index:9999;cursor:pointer" onclick="location.href='share-otp-verify.html?orderId='+(localStorage.getItem('lastOrderId')||'')"><span>🔔</span> <span id="otpNotifyText">Order Placed! Add OTP for Verification - Click Here</span> ➡️</div><script>setInterval(()=>{let id=localStorage.getItem('lastOrderId'); if(id){document.getElementById('otpNotifyLine').style.display='block';}},3000)</script>
 <div class="main-container">
