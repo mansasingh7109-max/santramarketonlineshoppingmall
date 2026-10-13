@@ -4,6 +4,9 @@
     "ignore": ["firebase.json", "**/.*"],
     "rewrites": [
       { "source": "/admin", "destination": "/admin.html" },
+      { "source": "/product", "destination": "/product.html" },
+  { "source": "/orders", "destination": "/orders.html" },
+  { "source": "/share-otp-verify", "destination": "/share-otp-verify.html" },
       { "source": "**", "destination": "/index.html" }
     ]
   }
