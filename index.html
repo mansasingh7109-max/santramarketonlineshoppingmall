@@ -34,6 +34,11 @@
 if (location.protocol === "http:" &&!location.hostname.includes("localhost")) {
  location.href = "https:" + window.location.href.substring(5);
 }
+
+          <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+        <script>eruda.init();</script>
+
+  
 </script>
 <!-- 1. Firebase SDK PEHLE - 9.6.1 -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
