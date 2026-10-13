@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help / Inquiry - SANTRAJET MALL</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f0f9ff;min-height:100vh;padding-bottom:30px}
+.header{background:linear-gradient(90deg,#0ea5e9,#6366f1);color:#fff;padding:14px 15px;display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:16px;flex:1}
+.back-btn{background:rgba(255,255,255,.25);border:none;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold}
+.container{max-width:480px;margin:14px auto;padding:0 12px}
+.order-info{background:#fff;border-radius:12px;padding:12px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:5px solid #0ea5e9;font-size:12px;line-height:1.8}
+.opt-btn{width:100%;padding:14px;border-radius:12px;font-weight:700;margin:6px 0;cursor:pointer;font-size:14px;border:1.5px solid;display:flex;align-items:center;gap:10px;text-align:left}
+.opt-btn .ico{font-size:20px}
+.opt-btn .txt{flex:1}
+.opt-btn .arr{font-size:16px;color:#999}
+.opt-return{background:#fff7ed;color:#c2410c;border-color:#fdba74}
+.opt-refund{background:#fefce8;color:#a16207;border-color:#fde047}
+.opt-exchange{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.opt-question{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}
+.opt-tracking{background:#e0f2fe;color:#0284c7;border-color:#7dd3fc}
+.opt-feedback{background:#faf5ff;color:#7c3aed;border-color:#c4b5fd}
+.star-box{display:none;background:#fff;border-radius:12px;padding:14px;margin:6px 0;border:2px solid #c4b5fd;text-align:center}
+.star-btn{font-size:34px;background:none;border:none;cursor:pointer;padding:4px;filter:grayscale(1);opacity:.5}
+.star-btn.lit{filter:none;opacity:1}
+.note{text-align:center;font-size:11px;color:#888;margin-top:12px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="header">
+<button class="back-btn" onclick="history.back()">Back</button>
+<h1>Help / Inquiry - SANTRAJET MALL</h1>
+</div>
+<div class="container">
+<div class="order-info" id="orderInfo">Loading...</div>
+<button class="opt-btn opt-return" onclick="sendReq('Return')"><span class="ico">🔄</span><span class="txt">Return Request</span><span class="arr">›</span></button>
+<button class="opt-btn opt-refund" onclick="sendReq('Refund')"><span class="ico">💰</span><span class="txt">Refund Request</span><span class="arr">›</span></button>
+<button class="opt-btn opt-exchange" onclick="sendReq('Exchange')"><span class="ico">♻️</span><span class="txt">Exchange Request</span><span class="arr">›</span></button>
+<button class="opt-btn opt-question" onclick="sendReq('Question')"><span class="ico">❓</span><span class="txt">I Have a Question</span><span class="arr">›</span></button>
+<button class="opt-btn opt-tracking" onclick="sendReq('Tracking')"><span class="ico">📦</span><span class="txt">Tracking Inquiry</span><span class="arr">›</span></button>
+<button class="opt-btn opt-feedback" onclick="toggleStars()"><span class="ico">⭐</span><span class="txt">Feedback - Rating Do</span><span class="arr">›</span></button>
+<div id="starBox" class="star-box">
+<div style="font-weight:bold;color:#7c3aed;margin-bottom:8px">Apna rating select karo:</div>
+<div>
+<button class="star-btn" id="st1" onclick="sendStar(1)">⭐</button>
+<button class="star-btn" id="st2" onclick="sendStar(2)">⭐</button>
+<button class="star-btn" id="st3" onclick="sendStar(3)">⭐</button>
+<button class="star-btn" id="st4" onclick="sendStar(4)">⭐</button>
+<button class="star-btn" id="st5" onclick="sendStar(5)">⭐</button>
+</div>
+<div style="font-size:11px;color:#888;margin-top:6px">Star dabate hi WhatsApp khul jayega</div>
+</div>
+<div class="note">Koi bhi option dabao — WhatsApp khul jayega<br>8769171078 par ready message ke saath</div>
+</div>
+<script>
+var q=new URLSearchParams(location.search);
+var orderId=q.get('orderId')||'';
+var mobile='';
+try{mobile=localStorage.getItem('santra_mobile')||localStorage.getItem('customer_mobile')||localStorage.getItem('restro_mobile')||'';}catch(e){}
+var name='';
+try{name=localStorage.getItem('santra_name')||localStorage.getItem('popup_name')||'';}catch(e){}
+document.getElementById('orderInfo').innerHTML='📦 <b>Order ID:</b> '+(orderId||'-')+'<br>👤 <b>Name:</b> '+(name||'Customer')+'<br>📱 <b>Mobile:</b> '+(mobile||'-');
+function sendReq(type){
+var msg='*SANTRAJET MALL - '+type.toUpperCase()+' REQUEST*%0A%0AOrder ID: '+encodeURIComponent(orderId)+'%0AName: '+encodeURIComponent(name)+'%0AMobile: '+encodeURIComponent(mobile)+'%0A%0AMujhe is order me *'+type+'* chahiye. Please reply.';
+window.open('https://wa.me/918769171078?text='+msg,'_blank');
+}
+function toggleStars(){var el=document.getElementById('starBox');el.style.display=(el.style.display==='block')?'none':'block';}
+function sendStar(n){
+for(var i=1;i<=5;i++){document.getElementById('st'+i).className='star-btn'+(i<=n?' lit':'');}
+var stars='';for(var j=0;j<n;j++){stars+='★';}
+var msg='*SANTRAJET MALL - FEEDBACK*%0A%0AOrder ID: '+encodeURIComponent(orderId)+'%0AName: '+encodeURIComponent(name)+'%0AMobile: '+encodeURIComponent(mobile)+'%0A%0A★ *Rating: '+n+'/5* '+encodeURIComponent(stars)+'%0A%0AMera feedback: ';
+window.open('https://wa.me/918769171078?text='+msg,'_blank');
+}
+</script>
+</body>
+</html>
