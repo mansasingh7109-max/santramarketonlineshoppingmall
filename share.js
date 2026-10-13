@@ -54,8 +54,8 @@ window.shareCart = async function(){
   }catch(e){ console.error("Firebase save fail - Rule deploy karo", e); }
 
   let text = `Product - SANTRA MALL - V34 FINAL - Old Save + ID Hide\n${BASE_URL}\n\nNew Order - SANTRA MALL - ONE FILE URL - V35\nOrder ID: ${orderId}\nDate: ${dateStr}\n\n`;
-  arr.forEach((it,i)=>{ let size=it.size||'M'; let qty=parseInt(it.qty)||1; let price=parseFloat(it.price)||0; text+=`${i+1}. ${it.name||'Product'} (Size ${size}) - Size:${size} Qty:${qty} x ₹${price}=₹${qty*price}\nCode:${it.id||'N/A'}\nView: ${BASE_URL}/product.html?id=${it.cleanId}\n\n`; });
-  text+=`Subtotal: ₹${subtotal}\nDelivery: ₹150\nGRAND TOTAL: ₹${grandTotal}\n\nCustomer Details:\nName: ${name}\nMobile: ${loginMobile}\nExtra: ${deliveryMobile}\n\nVerify: ${BASE_URL}/share-otp-verify.html?mobile=${loginMobile}&orderId=${orderId}\nOrders: ${BASE_URL}/orders.html?mobile=${loginMobile}\n`;
+  arr.forEach((it,i)=>{ let size=it.size||'M'; let qty=parseInt(it.qty)||1; let price=parseFloat(it.price)||0; text+=`${i+1}. ${it.name||'Product'} (Size ${size}) - Size:${size} Qty:${qty} x ₹${price}=₹${qty*price}\nCode:${it.id||'N/A'}\nView: ${BASE_URL}/product?id=${it.cleanId}\n\n`; });
+  text+=`Subtotal: ₹${subtotal}\nDelivery: ₹150\nGRAND TOTAL: ₹${grandTotal}\n\nCustomer Details:\nName: ${name}\nMobile: ${loginMobile}\nExtra: ${deliveryMobile}\n\nVerify: ${BASE_URL}/share-otp-verify?mobile=${loginMobile}&orderId=${orderId}\nOrders: ${BASE_URL}/orders?mobile=${loginMobile}\n`;
 
   window.open(`https://wa.me/918769171078?text=${encodeURIComponent(text)}`, '_blank');
 
