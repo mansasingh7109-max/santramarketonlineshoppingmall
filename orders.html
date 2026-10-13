@@ -227,6 +227,9 @@ function loadOrdersLive(){
 }
 function processOrders(snap){
   allOrders=[];snap.forEach(d=>allOrders.push({id:d.id,...d.data()}));
+
+allOrders=allOrders.filter(o=>{let id=String(o.id||o.orderId||'').toUpperCase();return o.isLocal||!id.startsWith('RESTRO');});
+  
   allOrders.sort((a,b)=>{let ta=a.createdAt?.toMillis?.()||new Date(a.date||0).getTime()||0;let tb=b.createdAt?.toMillis?.()||new Date(b.date||0).getTime()||0;return ta-tb;});
   allOrders.forEach((o,i)=>{o._serial=i+1;});
   allOrders.sort((a,b)=>{let ta=a.createdAt?.toMillis?.()||new Date(a.date||0).getTime()||0;let tb=b.createdAt?.toMillis?.()||new Date(b.date||0).getTime()||0;return tb-ta;});
