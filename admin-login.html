@@ -1,116 +1,47 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login - SANTRA MALL 4.0</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script>
-    const ADMIN_EMAIL = "mansasingh7109@gmail.com";
-    
-    // ⚠️ YAHAN APNI FIREBASE CONFIG DAAL ⚠️
-        const firebaseConfig = {
-  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
-  authDomain: "santramarketshoppingmall.firebaseapp.com",
-  projectId: "santramarketshoppingmall",
-  storageBucket: "santramarketshoppingmall.firebasestorage.app",
-  messagingSenderId: "398490252924",
-  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
-  measurementId: "G-ZW1ZR8HETY"
-};
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    function adminLogin() {
-      let email = document.getElementById('email').value.trim();
-      let pass = document.getElementById('pass').value;
-      
-      if(!email || !pass) {
-        showMsg('Email aur Password dono daalo', 'error');
-        return;
-      }
-      if(email !== ADMIN_EMAIL) {
-        showMsg('Access Denied! Sirf Admin login kar sakta hai', 'error');
-        return;
-      }
-
-      document.getElementById('loginBtn').disabled = true;
-      document.getElementById('loginBtn').innerText = 'Logging in...';
-
-      auth.signInWithEmailAndPassword(email, pass)
-      .then(() => {
-          showMsg('✅ Login Successful! Redirecting...', 'success');
-          setTimeout(() => {
-            window.location.href = 'admin.html'; // Dashboard pe jayega
-          }, 800);
-      })
-      .catch(e => {
-          document.getElementById('loginBtn').disabled = false;
-          document.getElementById('loginBtn').innerText = 'Login';
-          showMsg('Login Failed: ' + e.message, 'error');
-      });
-    }
-
-    function forgotPass() {
-      let email = document.getElementById('email').value.trim();
-      if(!email) {
-        showMsg('Pehle email daalo', 'error');
-        return;
-      }
-      if(email !== ADMIN_EMAIL) {
-        showMsg('Sirf admin ka email: mansasingh7109@gmail.com', 'error');
-        return;
-      }
-
-      document.getElementById('forgotBtn').disabled = true;
-      auth.sendPasswordResetEmail(email)
-      .then(() => {
-          showMsg('✅ Password reset link bhej diya! Gmail inbox/spam check karo', 'success');
-          document.getElementById('forgotBtn').disabled = false;
-        })
-      .catch(e => {
-        showMsg('Error: ' + e.message, 'error');
-        document.getElementById('forgotBtn').disabled = false;
-      });
-    }
-
-    function showMsg(text, type) {
-      let msgBox = document.getElementById('msgBox');
-      msgBox.innerText = text;
-      msgBox.className = 'msg-box ' + type;
-      msgBox.style.display = 'block';
-      setTimeout(() => { msgBox.style.display = 'none'; }, 6000);
-    }
-  </script>
-  <style>
-    body{font-family:Arial;background:#f1f5f9;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;}
-    .login-box{background:white;padding:30px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);width:100%;max-width:400px;}
-    h2{color:#e40046;text-align:center;margin-bottom:20px;font-size:24px;}
-    .msg-box{padding:12px;border-radius:6px;margin-bottom:15px;font-size:14px;display:none;}
-    .msg-box.success{background:#d1fae5;color:#065f46;border:1px solid #10b981;}
-    .msg-box.error{background:#fee2e2;color:#991b1b;border:1px solid #ef4444;}
-    input{width:100%;padding:12px;margin:10px 0;border:2px solid #e5e7eb;border-radius:8px;box-sizing:border-box;font-size:15px;}
-    input:focus{outline:none;border-color:#e40046;}
-    button{width:100%;padding:14px;background:#e40046;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:10px 0;font-size:16px;}
-    button:hover{opacity:0.9;}
-    button:disabled{background:#999;cursor:not-allowed;}
-    .forgot{color:#3b82f6;cursor:pointer;text-align:center;margin-top:15px;font-size:14px;display:block;text-decoration:none;background:none;border:none;width:auto;padding:0;margin:15px auto;}
-    .forgot:hover{text-decoration:underline;}
-    .back-link{color:#6b7280;text-align:center;margin-top:10px;font-size:14px;display:block;text-decoration:none;}
-    .back-link:hover{color:#e40046;}
-  </style>
+<html lang="en">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santra Mall</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#f8f8f8;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px}
+.card{background:#fff;border-radius:16px;padding:40px 30px;max-width:380px;width:100%;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+.logo{font-size:48px;margin-bottom:12px}
+h1{color:#d81b60;font-size:22px;margin-bottom:8px}
+p{color:#888;font-size:14px;margin-bottom:24px}
+a{display:inline-block;background:#d81b60;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px}
+a:active{opacity:.85}
+</style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>🛒 SANTRA MALL Admin 4.0</h2>
-    <div id="msgBox" class="msg-box"></div>
-    <input type="email" id="email" placeholder="Admin Email" value="mansasingh7109@gmail.com">
-    <input type="password" id="pass" placeholder="Password">
-    <button id="loginBtn" onclick="adminLogin()">Login</button>
-    <button class="forgot" id="forgotBtn" onclick="forgotPass()">🔒 Forgot Password?</button>
-    <a href="index.html" class="back-link">← Back to Website</a>
-  </div>
-</body>
+<div class="card">
+<div class="logo">🛍️</div>
+<h1>SANTRA MALL</h1>
+<p>Ye page uplabdh nahi hai.<br>Homepage par wapas jayein.</p>
+<a href="/index.html">← Back to Website</a>
+</div>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
