@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📦 Admin Orders - SANTRA MALL</title>
+  <style>
+    :root{--bg:#f1f3f6;--card:#ffffff;--accent:#e40046;--text:#212121;--border:#e0e0e0;--green:#10b981;--orange:#f59e0b;--blue:#3b82f6}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);color:var(--text);padding-bottom:70px}
+   .header{background:var(--accent);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+   .header h1{font-size:18px}
+   .back-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer}
+   .container{max-width:900px;margin:15px auto;padding:0 15px}
+   .top-card{background:var(--card);padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+   .filter-btn{padding:8px 14px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+   .filter-btn.active{background:var(--accent);color:white}
+   .filter-btn:not(.active){background:#e0e0e0;color:#333}
+   .search-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin:10px 0}
+   .order-card{background:var(--card);margin:15px 0;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+   .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:2px solid var(--border)}
+   .order-num{background:#e94560;color:white;padding:3px 8px;border-radius:5px;font-weight:bold;font-size:12px}
+   .status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;text-transform:uppercase}
+   .status-pending{background:#fef3c7;color:#92400e}
+   .status-confirmed{background:#d1fae5;color:#065f46}
+   .status-shipped{background:#dbeafe;color:#1e40af}
+   .status-delivered{background:#d1fae5;color:#065f46}
+   .status-cancelled{background:#fee2e2;color:#991b1b}
+   .btn{padding:10px 16px;background:var(--accent);color:white;border:none;border-radius:8px;font-weight:bold;font-size:14px;margin:5px;cursor:pointer}
+   .btn-blue{background:var(--blue)}
+   .btn-green{background:var(--green)}
+   .btn-orange{background:var(--orange)}
+   .btn:disabled{background:#ccc;cursor:not-allowed}
+   .msg-box{background:#fff3cd;padding:10px;border-radius:6px;margin:10px 0;border-left:4px solid #f59e0b}
+   .date-text{color:#6b7280;font-size:13px;margin:5px 0}
+   .id-badge{background:#f3f4f6;padding:4px 8px;border-radius:5px;font-size:12px;color:#6b7280;word-break:break-all}
+   .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+   .empty{text-align:center;padding:60px 20px;color:#999}
+   .loader{text-align:center;padding:40px;color:var(--accent);font-weight:bold}
+   select{padding:8px 12px;border:2px solid #e94560;border-radius:8px;font-weight:bold;background:white;cursor:pointer}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <button class="back-btn" onclick="window.location.href='admin.html'">←</button>
+  <h1>📦 All Orders - Admin</h1>
+</div>
+
+<div class="container">
+
+  <div class="top-card">
+    <h3>📋 SANTRA Admin - Orders</h3>
+    
+    <div class="flex" style="margin:15px 0">
+      <button class="btn btn-green" onclick="exportToExcel()">📊 Export Excel</button>
+      <button class="btn btn-orange" onclick="fixOldOrdersDate()">🔧 Fix Old Orders Date</button>
+    </div>
+
+    <h4 style="margin:15px 0 10px">📋 All Orders - Live</h4>
+    
+    <div class="filter-row">
+      <button class="filter-btn active" id="btnLatest" onclick="filterOrders('latest')">🔥 Latest</button>
+      <button class="filter-btn" id="btnPrevious" onclick="filterOrders('previous')">📜 Previous</button>
+      <button class="filter-btn" onclick="sortByDateTime()">🕐 Date-Time Sort</button>
+    </div>
+
+    <input type="text" class="search-input" id="searchOrder" placeholder="🔍 Search: Name, Mobile, Date..." oninput="searchOrders()">
+
+    <div class="filter-row" style="margin-top:10px">
+      <select id="statusFilter" onchange="filterByStatus(this.value)" style="flex:1">
+        <option value="">All Orders</option>
+        <option value="Pending">Pending - OTP Baki</option>
+        <option value="Confirmed">Confirmed - Pack Karna Hai</option>
+        <option value="Shipped">Shipped - Raste Me</option>
+        <option value="Delivered">Delivered - Complete</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+      
+      <select id="dateDay" onchange="filterByDate()" style="width:80px">
+        <option value="">Day</option>
+      </select>
+      
+      <select id="dateMonth" onchange="filterByDate()" style="width:100px">
+        <option value="">Month</option>
+        <option value="01">Jan</option>
+        <option value="02">Feb</option>
+        <option value="03">Mar</option>
+        <option value="04">Apr</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">Aug</option>
+        <option value="09">Sep</option>
+        <option value="10">Oct</option>
+        <option value="11">Nov</option>
+        <option value="12">Dec</option>
+      </select>
+      
+      <select id="dateYear" onchange="filterByDate()" style="width:90px">
+        <option value="">Year</option>
+        <option value="2026">2026</option>
+        <option value="2025">2025</option>
+      </select>
+      
+      <select id="timeFilter" onchange="filterByTime(this.value)" style="width:120px">
+        <option value="">All Time</option>
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+      </select>
+    </div>
+
+    <div class="flex" style="margin-top:10px">
+      <button class="btn btn-blue" onclick="loadAllOrders()">🔄 Refresh</button>
+      <span id="orderCount" style="font-weight:bold;color:#666">Total: 0</span>
+    </div>
+  </div>
+
+  <div id="ordersList">
+    <div class="loader">⏳ Loading all orders...</div>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="order-card.js"></script>
+
+<script>
+      const firebaseConfig = {
+  apiKey: "AIzaSyApXIGoX071cYEvGbfhBF69DB9Kv5YlSMA",
+  authDomain: "santramarketshoppingmall.firebaseapp.com",
+  projectId: "santramarketshoppingmall",
+  storageBucket: "santramarketshoppingmall.firebasestorage.app",
+  messagingSenderId: "398490252924",
+  appId: "1:398490252924:web:d1b6348b549183b93b7bf9",
+  measurementId: "G-ZW1ZR8HETY"
+};
+    // Tera config
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  let allOrders = [];
+  let currentFilter = 'latest';
+
+  // ✅ Day Dropdown Populate - 01 to 31
+  document.addEventListener('DOMContentLoaded', function() {
+    let daySelect = document.getElementById('dateDay');
+    for(let i = 1; i <= 31; i++) {
+      let day = String(i).padStart(2, '0');
+      let option = document.createElement('option');
+      option.value = day;
+      option.text = day;
+      daySelect.appendChild(option);
+    }
+  });
+
+  auth.onAuthStateChanged(user => {
+    if(!user || user.email!== "mansasingh7109@gmail.com") {
+      window.location.href = 'admin-login.html';
+    } else {
+      loadAllOrders();
+    }
+  });
+
+  async function loadAllOrders() {
+    try {
+      const snapshot = await db.collection('orders').orderBy('createdAt', 'desc').get();
+      allOrders = [];
+      snapshot.forEach(doc => {
+        allOrders.push({id: doc.id,...doc.data()});
+      });
+      filterOrders(currentFilter);
+    } catch(error) {
+      console.error('Error:', error);
+      document.getElementById('ordersList').innerHTML = `<div class="empty">❌ Error: ${error.message}</div>`;
+    }
+  }
+
+  /* ===== OLD CODE - SERIAL NO GALAT THA =====
+  function filterOrders(type) {
+    currentFilter = type;
+    document.getElementById('btnLatest').classList.toggle('active', type === 'latest');
+    document.getElementById('btnPrevious').classList.toggle('active', type === 'previous');
+    
+    let filtered = [];
+    if(type === 'latest') {
+      filtered = allOrders.slice(0, 50);
+    } else if(type === 'previous') {
+      filtered = allOrders.slice(50);
+    } else {
+      filtered = allOrders;
+    }
+    renderOrders(filtered);
+  }
+  ===== END OLD CODE ===== */
+
+  // ✅ NEW CODE - SERIAL NO FIX: Previous #1 se, Latest #18 se
+  function filterOrders(type) {
+    currentFilter = type;
+    document.getElementById('btnLatest').classList.toggle('active', type === 'latest');
+    document.getElementById('btnPrevious').classList.toggle('active', type === 'previous');
+    
+    let filtered = [];
+    let startSerialNo = 1;
+    
+    if(type === 'latest') {
+      filtered = allOrders.slice(0, 50);
+      startSerialNo = allOrders.slice(50).length + 1; // Previous count + 1
+    } else if(type === 'previous') {
+      filtered = allOrders.slice(50);
+      startSerialNo = 1; // 1 se start
+    } else {
+      filtered = allOrders;
+      startSerialNo = 1;
+    }
+    renderOrders(filtered, startSerialNo);
+  }
+
+  /* ===== OLD CODE - SLICE ERROR + N/A ISSUE =====
+  function renderOrders(orders) {
+    let container = document.getElementById('ordersList');
+    if(orders.length === 0) {
+      container.innerHTML = `<div class="empty">📦 No orders found</div>`;
+      document.getElementById('orderCount').innerText = `Total: 0`;
+      return;
+    }
+
+    document.getElementById('orderCount').innerText = `Total: ${orders.length}`;
+
+    container.innerHTML = orders.map((order, index) => {
+      let orderDate = order.createdAt? order.createdAt.toDate() : new Date();
+      let dateStr = orderDate.toLocaleDateString('en-IN', {dateStyle:'medium'});
+      let timeStr = orderDate.toLocaleTimeString('en-IN', {timeStyle:'short'});
+      let orderNum = order.orderNumber || 'SM0001';
+      let serialNo = index + 1; // ✅ FIX: Latest me #1, Previous me bhi #1 se start
+      let statusColor = 'status-' + order.status.toLowerCase().replace(' ', '_');
+
+      return renderAdminOrderCard({id: order.id}, order, orderNum, serialNo, dateStr, timeStr, statusColor);
+    }).join('');
+  }
+  ===== END OLD CODE ===== */
+
+  // ✅ NEW CODE - CRASH FIX + NAME + TOTAL + SERIAL NO FIX
+  function renderOrders(orders, startSerialNo = 1) {
+    let container = document.getElementById('ordersList');
+    if(orders.length === 0) {
+      container.innerHTML = `<div class="empty">📦 No orders found</div>`;
+      document.getElementById('orderCount').innerText = `Total: 0`;
+      return;
+    }
+
+    document.getElementById('orderCount').innerText = `Total: ${orders.length}`;
+
+    container.innerHTML = orders.map((order, index) => {
+      // ✅ FIX 1: Date/Time safe
+      let orderDate = order.createdAt? order.createdAt.toDate() : new Date();
+      let dateStr = orderDate.toLocaleDateString('en-IN', {dateStyle:'medium'});
+      let timeStr = orderDate.toLocaleTimeString('en-IN', {timeStyle:'short'});
+      
+      // ✅ FIX 2: Order ID crash fix - Number to String
+      let orderNum = order.orderNumber || order.orderId || String(order.id || "").slice(-6) || 'SM0001';
+      
+      // ✅ FIX 3: SerialNo Logic - Previous #1 se, Latest continue
+      let serialNo = startSerialNo + index;
+      
+      // ✅ FIX 4: Status color safe
+      let statusColor = 'status-' + (order.status || 'Pending').toLowerCase().replace(' ', '_');
+
+      return renderAdminOrderCard({id: order.id}, order, orderNum, serialNo, dateStr, timeStr, statusColor);
+    }).join('');
+  }
+
+  function searchOrders() {
+    const searchTerm = document.getElementById('searchOrder').value.toLowerCase().trim();
+    if(!searchTerm) {
+      filterOrders(currentFilter); // ✅ FIX: filterOrders call karo
+      return;
+    }
+    const filtered = allOrders.filter(order =>
+      (order.orderNumber && order.orderNumber.toLowerCase().includes(searchTerm)) ||
+      (order.mobile && order.mobile.includes(searchTerm)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(searchTerm)) ||
+      (order.name && order.name.toLowerCase().includes(searchTerm)) || // ✅ FIX: name field bhi search
+      (order.id && order.id.toLowerCase().includes(searchTerm))
+    );
+    renderOrders(filtered, 1); // Search me hamesha 1 se
+  }
+
+  function filterByStatus(status) {
+    if(!status) {
+      filterOrders(currentFilter); // ✅ FIX: filterOrders call karo
+      return;
+    }
+    const filtered = allOrders.filter(order => order.status === status);
+    renderOrders(filtered, 1);
+  }
+
+  function sortByDateTime() {
+    const sorted = [...allOrders].sort((a,b) => {
+      let dateA = a.createdAt? a.createdAt.toDate() : new Date(0);
+      let dateB = b.createdAt? b.createdAt.toDate() : new Date(0);
+      return dateB - dateA;
+    });
+    renderOrders(sorted, 1);
+  }
+
+  function filterByDate() {
+    let day = document.getElementById('dateDay').value;
+    let month = document.getElementById('dateMonth').value;
+    let year = document.getElementById('dateYear').value;
+    
+    if(!day && !month && !year) {
+      filterOrders(currentFilter); // ✅ FIX
+      return;
+    }
+    
+    const filtered = allOrders.filter(order => {
+      if(!order.createdAt) return false;
+      let d = order.createdAt.toDate();
+      let match = true;
+      if(day && String(d.getDate()).padStart(2,'0') !== day) match = false;
+      if(month && String(d.getMonth()+1).padStart(2,'0') !== month) match = false;
+      if(year && d.getFullYear() != year) match = false;
+      return match;
+    });
+    renderOrders(filtered, 1);
+  }
+
+  function filterByTime(range) {
+    if(!range) {
+      filterOrders(currentFilter); // ✅ FIX
+      return;
+    }
+    let now = new Date();
+    let filtered = allOrders.filter(order => {
+      if(!order.createdAt) return false;
+      let d = order.createdAt.toDate();
+      if(range === 'today') return d.toDateString() === now.toDateString();
+      if(range === 'yesterday') {
+        let y = new Date(now); y.setDate(y.getDate()-1);
+        return d.toDateString() === y.toDateString();
+      }
+      if(range === 'week') {
+        let w = new Date(now); w.setDate(w.getDate()-7);
+        return d >= w;
+      }
+      if(range === 'month') {
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      }
+      return true;
+    });
+    renderOrders(filtered, 1);
+  }
+
+  // ✅ STATUS UPDATE - Dropdown se
+  async function updateStatus(docId, newStatus) {
+    if(!newStatus) return;
+    if(!confirm(`Change status to ${newStatus}?`)) return;
+
+    try {
+      await db.collection('orders').doc(docId).update({
+        status: newStatus,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      alert('✅ Status updated to ' + newStatus);
+      loadAllOrders();
+    } catch(e) {
+      alert('❌ Error: ' + e.message);
+    }
+  }
+
+  // ✅ OTP VERIFY
+  function openOtpModal(docId) {
+    let otp = prompt('Enter Customer OTP:');
+    if(!otp) return;
+    verifyOTPAndConfirm(docId, otp);
+  }
+
+  async function verifyOTPAndConfirm(docId, otp) {
+    try {
+      let doc = await db.collection('orders').doc(docId).get();
+      if(!doc.exists) {
+        alert('❌ Order not found');
+        return;
+      }
+
+      let d = doc.data();
+      if(d.otp === otp) {
+        await db.collection('orders').doc(docId).update({
+          status: 'Confirmed',
+          otpVerified: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert('✅ OTP Verified! Order Confirmed');
+        loadAllOrders();
+      } else {
+        alert('❌ Invalid OTP');
+      }
+    } catch(e) {
+      alert('❌ Error: ' + e.message);
+    }
+  }
+
+  function exportToExcel() {
+    alert('Export feature - Add your code here');
+  }
+
+  function fixOldOrdersDate() {
+    alert('Fix dates feature - Add your code here');
+  }
+</script>
+
+</body>
+</html>
